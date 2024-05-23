@@ -1,0 +1,119 @@
+{
+    "families": [
+        {
+            "name":"MG24",
+            "isWiFi": false,
+            "boards" : [
+                {
+                    "name": "BRD2601B",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        }
+                        ],
+                    "isSQA": false
+                },
+                {
+                    "name": "BRD4186C",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        },
+                        {
+                            "name": "low_power_sleepy",
+                            "compilationFlags": "--icd --low-power"
+                        }
+                        ],
+                    "isSQA": true
+                },
+                {
+                    "name": "BRD4187C",
+                    "rcp": ["","rs9116", "SiWx917", "wf200"],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        },
+                        {
+                            "name": "sleepy",
+                            "compilationFlags": "--icd"
+                        },
+                        {
+                            "name": "release",
+                            "compilationFlags": "--release"
+                        }
+                        ],
+                    "isSQA": true
+                }
+            ]
+        },
+        {
+            "name":"MGM24",
+            "isWiFi": false,
+            "boards" : [
+                {
+                    "name": "BRD2703A",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        }
+                        ],
+                    "isSQA": false
+                },
+                {
+                    "name": "BRD4316A",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        }
+                        ],
+                    "isSQA": true
+                },
+                {
+                    "name": "BRD4317A",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        }
+                        ],
+                    "isSQA": false
+                }
+            ]
+        },
+        {
+            "name":"Si917",
+            "isWiFi": true,
+            "boards" : [
+                {
+                    "name": "BRD4338A",
+                    "rcp": [""],
+                    "options": [
+                        {
+                            "name": "standard",
+                            "compilationFlags": "chip_build_libshell=true"
+                        },
+                        {
+                            "name": "low_power_sleepy",
+                            "compilationFlags": "--icd --low-power"
+                        },
+                        {
+                            "name": "release",
+                            "compilationFlags": "--release "
+                        }
+                        ],
+                    "isSQA": true
+                }
+            ]
+        }
+    ]
+}

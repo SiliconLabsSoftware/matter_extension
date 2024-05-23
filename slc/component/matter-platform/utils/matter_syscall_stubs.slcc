@@ -1,0 +1,16 @@
+id: matter_syscall_stubs
+label: Utility
+description: Gcc toolchain unused function stubs
+package: "Matter"
+category: Platform|Utils
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+provides:
+  - name: matter_syscall_stubs
+source:
+- path: examples/platform/silabs/syscalls_stubs.cpp
+toolchain_settings:
+- option: gcc_linker_option
+  value: -Wl,--no-warn-rwx-segment

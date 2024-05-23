@@ -1,0 +1,30 @@
+# Avoid codeowners only for cherry-pick pull requests
+CODEOWNERS.source_branch_exclusion_pattern cherry-pick/**
+
+@@@MatterWatt @jumartin @jepenven @ricasall @makardou @selissia @rerasool @mirupp @sashaha @curahman @lobelive
+@@@Documentation @rerasool @curahman @berush
+@@@Unify @sushanka @naagarwa @mamehta @sabollim
+@@@CICD @gbash @yushu @shmakdis @jepenven
+
+# Pipeline rule
+Jenkinsfile @@MatterWatt @@CICD
+silabs_ci_scripts/ @@MatterWatt @@CICD
+
+# Documentation is everyone business
+**/*.md @@Documentation @@MatterWatt
+docs/silabs/ @@Documentation @@MatterWatt
+
+silabs_examples/unify-matter-bridge/ @@Unify
+silabs_examples/unify-matter-pc/ @@Unify
+silabs_examples/unify-matter-common/ @@Unify
+
+CODEOWNERS               @@MatterWatt
+
+
+
+# If a group is involved, at least one reviewer of the group must approve
+(Check(@@Unify >= 1))
+(Check(@@MatterWifi >= 1) | Check(@@MatterWatt >= 1))
+(Check(@@CICD >= 1) | Check(@@MatterWatt >= 2))
+
+OverallCheck(2)

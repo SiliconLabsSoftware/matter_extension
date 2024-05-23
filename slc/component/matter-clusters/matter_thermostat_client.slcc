@@ -1,0 +1,19 @@
+
+category: Clusters|HVAC
+description: >
+  Implementation of the Thermostat Client Cluster.
+  The user has to enable the Thermostat Client Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_thermostat_client
+package: Matter
+label: Thermostat Client Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_thermostat_client
+source:
+  - path: src/app/clusters/thermostat-client/thermostat-client.cpp
+template_contribution:
+  - name: component_catalog
+    value: matter_thermostat_client

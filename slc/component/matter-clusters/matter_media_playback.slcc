@@ -1,0 +1,24 @@
+
+category: Clusters|Media
+description: >
+  Implementation of the Media Playback Server Cluster.
+  The user has to enable the Media Playback Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_media_playback
+package: Matter
+label: Media Playback Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_media_playback
+source:
+  - path: src/app/clusters/media-playback-server/media-playback-server.cpp
+include:
+  - path: src/app/clusters/media-playback-server
+    file_list:
+      - path: media-playback-server.h
+      - path: media-playback-delegate.h
+template_contribution:
+  - name: component_catalog
+    value: matter_media_playback

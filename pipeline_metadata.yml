@@ -1,0 +1,31 @@
+---
+  toolchain_info:
+    iarToolLocation: '/opt/iar_bxarm_9204_linux'
+    gccToolLocation: '/opt/silabs/toolchain_arm_gnu/12.2.rel1/linux-x86'
+    gccRiscvToolLocation: '/opt/gcc-riscv32_9.3.0_linux'
+    java11Location: '/opt/coretto-11.0.8.10.1/bin'
+    studioVersion: 'v5'
+    studioBranch: 'master'
+    ucCliBranch: 'rel'
+    sisdk:
+      sisdkBranch: 'staging/2024.6/2024.6.0-rc2'
+      browserUrl: 'https://stash.silabs.com/scm/embsw/sisdk_release.git'
+      gitUrl: 'ssh://git@stash.silabs.com/embsw/sisdk_release.git'
+      sisdkTag: 'v2024.6.0-rc2'
+    zap:
+      zapBranch: 'master'
+      browserUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/zap'
+      gitUrl: 'ssh://git@stash.silabs.com/wmn_tools/zap.git'
+    wifi_sdk:
+      wifi_sdk_branch: 'release/v3.3.0'
+      browserUrl: 'https://stash.silabs.com/projects/REDPINE/repos/wifi_sdk'
+      gitUrl: 'ssh://git@stash.silabs.com/redpine/wifi_sdk.git'
+    simplicityCommanderPath: '/home/buildengineer/tools/simplicity_commander_linux_x64'
+    matterExtensionVersion: '2.3.0'
+    commander_info:
+      commanderBranch: 'master'
+      browserUrl: 'https://stash.silabs.com/projects/TOOLCHAIN_INTERNAL/repos/simplicity_commander_linux_x64'
+      gitUrl: 'ssh://git@stash.silabs.com/toolchain_internal/simplicity_commander_linux_x64.git'
+   
+    
+    

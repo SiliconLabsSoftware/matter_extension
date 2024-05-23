@@ -1,0 +1,385 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build efr32 examples",
+            "type": "shell",
+            "windows": {
+                "command": "./scripts/examples/gn_efr32_example.ps1"
+            },
+            "linux": {
+                "command": "./scripts/examples/gn_efr32_example.sh"
+            },
+            "osx": {
+                "command": "./scripts/examples/gn_efr32_example.sh"
+            },
+            "args": [
+                "examples/${input:efr32Examples}/efr32/",
+                "out/${input:efr32Examples}",
+                "${input:efr32Boards}",
+                "chip_build_libshell=false",
+                "enable_openthread_cli=true",
+                "show_qr_code=true"
+            ],
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}/out/"]
+            }
+        },
+        {
+            "label": "Windows setup",
+            "type": "shell",
+            "command": "./scripts/windows_setup.ps1",
+            "args": ["--${input:windowsSetupOptions}"],
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "base": "$gcc",
+                "fileLocation": ["relative", "${workspaceFolder}/out/"]
+            }
+        },
+        {
+            "label": "Bootstrap",
+            "type": "shell",
+            "command": "bash scripts/bootstrap.sh",
+            "group": "build",
+            "problemMatcher": ["$gcc"]
+        },
+        {
+            "label": "Flash EFR32 board",
+            "type": "shell",
+            "command": "python3",
+            "group": "build",
+            "args": [
+                "${workspaceFolder}/out/${input:efr32Examples}/${input:efr32Boards}/chip-efr32-*.flash.py"
+            ],
+            "problemMatcher": {
+                "base": "$gcc"
+            }
+        },
+        {
+            "label": "Copy Sample Application",
+            "type": "shell",
+            "linux": {
+                "command": "./scripts/sl_new_app.sh"
+            },
+            "osx": {
+                "command": "./scripts/sl_new_app.sh"
+            },
+            "args": [
+                "-s",
+                "examples/${input:efr32Examples}",
+                "-b",
+                "${input:efr32Boards}",
+                "-d",
+                "${input:dest}"
+            ],
+            "group": "build",
+            "isBackground": false,
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "type": "pickString",
+            "id": "efr32Examples",
+            "description": "What efr32 example do you want to copy or build?",
+            "options": [
+                "lock-app",
+                "lighting-app",
+                "window-app",
+                "light-switch-app",
+                "thermostat",
+                "shell"
+            ],
+            "default": "lighting-app"
+        },
+        {
+            "type": "pickString",
+            "id": "windowsSetupOptions",
+            "description": "What would you like to excecute?",
+            "options": ["setup", "cleanup"],
+            "default": "setup"
+        },
+        {
+            "type": "pickString",
+            "id": "efr32Boards",
+            "description": "What efr32 board do you want to use?",
+            "options": [
+                "BRD2601B",
+                "BRD2703A",
+                "BRD4161A",
+                "BRD4162A",
+                "BRD4163A",
+                "BRD4164A",
+                "BRD4166A",
+                "BRD4170A",
+                "BRD4304A",
+                "BRD4316A",
+                "BRD4317A",
+                "BRD4319A",
+                "BRD4186C",
+                "BRD4187C"
+            ],
+            "default": "BRD4164A"
+        },
+        {
+            "type": "pickString",
+            "id": "openiotsdkNetworkSetupCmd",
+            "description": "Which command do you wish to use?",
+            "options": ["up", "down", "restart"],
+            "default": "up"
+        },
+        {
+            "type": "promptString",
+            "id": "openiotsdkNetworkSetupName",
+            "description": "Type the network namespace name that you want to use.",
+            "default": "ARM"
+        },
+        {
+            "type": "pickString",
+            "id": "openiotsdkDebugMode",
+            "description": "Do you want to use debug mode?",
+            "options": ["false", "true"],
+            "default": "false"
+        },
+        {
+            "type": "pickString",
+            "id": "openiotsdkLwipDebug",
+            "description": "Do you want to use LwIP debug logs?",
+            "options": ["false", "true"],
+            "default": "false"
+        },
+        {
+            "type": "pickString",
+            "id": "openiotsdkCryptoBackend",
+            "description": "Which Crypto algorithm do you wish to use?",
+            "options": ["mbedtls", "psa"],
+            "default": "mbedtls"
+        },
+        {
+            "type": "command",
+            "id": "openiotsdkExample",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "cat examples/platform/openiotsdk/supported_examples.txt",
+                "description": "What Open IoT SDK example application do you want to use?"
+            }
+        },
+        {
+            "type": "command",
+            "id": "openiotsdkUnitTest",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "cat src/test_driver/openiotsdk/unit-tests/test_components.txt",
+                "description": "What Open IoT SDK unit test application do you want to use?"
+            }
+        },
+        {
+            "type": "promptString",
+            "id": "openiotsdkNetworkNamespace",
+            "description": "Type the network namespace that you want to use. \"default\" means host default network namespace",
+            "default": "default"
+        },
+        {
+            "type": "promptString",
+            "id": "openiotsdkNetworkInterface",
+            "description": "Type the network interface name that you want to use. \"user\" means user network mode",
+            "default": "user"
+        },
+        {
+            "type": "promptString",
+            "id": "exampleGlob",
+            "description": "What applications to build (e.g. '*m5stack*' or 'esp32-*')"
+        },
+        {
+            "type": "pickString",
+            "id": "imxExampleTarget",
+            "description": "What example application type do you want to build?",
+            "options": [
+                "examples/chip-tool",
+                "examples/lighting-app/linux",
+                "examples/thermostat/linux"
+            ],
+            "default": "examples/chip-tool"
+        },
+        {
+            "type": "pickString",
+            "id": "exampleTarget",
+            "description": "What target to build",
+            "options": [
+                "ameba-amebad-all-clusters",
+                "android-androidstudio-arm-chip-tool",
+                "android-androidstudio-arm64-chip-tool",
+                "android-androidstudio-x64-chip-tool",
+                "android-androidstudio-x86-chip-tool",
+                "android-arm-chip-tool",
+                "android-arm64-chip-test",
+                "android-arm64-chip-tool",
+                "android-arm64-chip-tvserver",
+                "android-x64-chip-tool",
+                "android-x86-chip-tool",
+                "bouffalolab-bl602-iot-matter-v1-light",
+                "bouffalolab-bl602-iot-matter-v1-light-rpc-115200",
+                "bouffalolab-bl602-night-light-light",
+                "bouffalolab-xt-zb6-devkit-light",
+                "bouffalolab-xt-zb6-devkit-light-rpc-115200",
+                "bouffalolab-bl706-night-light-light",
+                "efr32-brd4161a-light",
+                "efr32-brd4163a-light",
+                "efr32-brd4164a-light",
+                "efr32-brd4166a-light",
+                "efr32-brd4170a-light",
+                "efr32-brd4186a-light",
+                "efr32-brd4187a-light",
+                "efr32-brd4304a-light",
+                "efr32-brd4161a-light-rpc",
+                "efr32-brd4163a-light-rpc",
+                "efr32-brd4164a-light-rpc",
+                "efr32-brd4166a-light-rpc",
+                "efr32-brd4170a-light-rpc",
+                "efr32-brd4186a-light-rpc",
+                "efr32-brd4187a-light-rpc",
+                "efr32-brd4304a-light-rpc",
+                "efr32-brd4161a-lock",
+                "efr32-brd4163a-lock",
+                "efr32-brd4164a-lock",
+                "efr32-brd4166a-lock",
+                "efr32-brd4170a-lock",
+                "efr32-brd4186a-lock",
+                "efr32-brd4187a-lock",
+                "efr32-brd4304a-lock",
+                "efr32-brd4161a-unit-test",
+                "efr32-brd4163a-unit-test",
+                "efr32-brd4164a-unit-test",
+                "efr32-brd4166a-unit-test",
+                "efr32-brd4170a-unit-test",
+                "efr32-brd4186a-unit-test",
+                "efr32-brd4187a-unit-test",
+                "efr32-brd4304a-unit-test",
+                "efr32-brd4161a-switch",
+                "efr32-brd4163a-switch",
+                "efr32-brd4164a-switch",
+                "efr32-brd4166a-switch",
+                "efr32-brd4170a-switch",
+                "efr32-brd4186a-switch",
+                "efr32-brd4187a-switch",
+                "efr32-brd4304a-switch",
+                "efr32-brd4161a-window-covering",
+                "efr32-brd4163a-window-covering",
+                "efr32-brd4164a-window-covering",
+                "efr32-brd4166a-window-covering",
+                "efr32-brd4170a-window-covering",
+                "efr32-brd4186a-window-covering",
+                "efr32-brd4187a-window-covering",
+                "efr32-brd4304a-window-covering",
+                "efr32-brd4338a-light-wifi-917_soc-skip_rps_generation",
+                "esp32-c3devkit-all-clusters",
+                "esp32-devkitc-all-clusters",
+                "esp32-devkitc-all-clusters-ipv6only",
+                "esp32-devkitc-bridge",
+                "esp32-devkitc-lock",
+                "esp32-devkitc-shell",
+                "esp32-devkitc-temperature-measurement",
+                "esp32-m5stack-all-clusters",
+                "esp32-m5stack-all-clusters-ipv6only",
+                "esp32-m5stack-all-clusters-rpc",
+                "esp32-m5stack-all-clusters-rpc-ipv6only",
+                "infineon-psoc6-all-clusters",
+                "infineon-psoc6-lock",
+                "infineon-psoc6-light",
+                "linux-arm64-all-clusters",
+                "linux-arm64-all-clusters-ipv6only",
+                "linux-arm64-chip-tool",
+                "linux-arm64-chip-tool-ipv6only",
+                "linux-arm64-rpc-console",
+                "linux-arm64-thermostat",
+                "linux-arm64-thermostat-ipv6only",
+                "linux-x64-all-clusters",
+                "linux-x64-all-clusters-ipv6only",
+                "linux-x64-chip-tool",
+                "linux-x64-chip-tool-ipv6only",
+                "linux-x64-rpc-console",
+                "linux-x64-thermostat",
+                "linux-x64-thermostat-ipv6only",
+                "mbed-CY8CPROTO_062_4343W-all-clusters-debug",
+                "mbed-CY8CPROTO_062_4343W-all-clusters-develop",
+                "mbed-CY8CPROTO_062_4343W-all-clusters-release",
+                "mbed-CY8CPROTO_062_4343W-light-debug",
+                "mbed-CY8CPROTO_062_4343W-light-develop",
+                "mbed-CY8CPROTO_062_4343W-light-release",
+                "mbed-CY8CPROTO_062_4343W-lock-debug",
+                "mbed-CY8CPROTO_062_4343W-lock-develop",
+                "mbed-CY8CPROTO_062_4343W-lock-release",
+                "mbed-CY8CPROTO_062_4343W-pigweed-debug",
+                "mbed-CY8CPROTO_062_4343W-pigweed-develop",
+                "mbed-CY8CPROTO_062_4343W-pigweed-release",
+                "mbed-CY8CPROTO_062_4343W-shell-debug",
+                "mbed-CY8CPROTO_062_4343W-shell-develop",
+                "mbed-CY8CPROTO_062_4343W-shell-release",
+                "nrf-nrf52840dk-light",
+                "nrf-nrf52840dk-light-rpc",
+                "nrf-nrf52840dk-lock",
+                "nrf-nrf52840dk-pump",
+                "nrf-nrf52840dk-pump-controller",
+                "nrf-nrf52840dk-shell",
+                "nrf-nrf5340dk-light",
+                "nrf-nrf5340dk-light-rpc",
+                "nrf-nrf5340dk-lock",
+                "nrf-nrf5340dk-pump",
+                "nrf-nrf5340dk-pump-controller",
+                "nrf-nrf5340dk-shell",
+                "openiotsdk-lock",
+                "openiotsdk-shell",
+                "qpg-qpg6100-lock",
+                "telink-tlsr9518adk80d-air-quality-sensor",
+                "telink-tlsr9518adk80d-all-clusters",
+                "telink-tlsr9518adk80d-all-clusters-minimal",
+                "telink-tlsr9518adk80d-bridge",
+                "telink-tlsr9518adk80d-contact-sensor",
+                "telink-tlsr9518adk80d-light",
+                "telink-tlsr9518adk80d-light-switch",
+                "telink-tlsr9518adk80d-lock-app",
+                "telink-tlsr9518adk80d-ota-requestor",
+                "telink-tlsr9518adk80d-pump-app",
+                "telink-tlsr9518adk80d-pump-controller-app",
+                "telink-tlsr9518adk80d-resource-monitoring-app",
+                "telink-tlsr9518adk80d-shell",
+                "telink-tlsr9518adk80d-smoke-co-alarm-app",
+                "telink-tlsr9518adk80d-temperature-measurement",
+                "telink-tlsr9518adk80d-thermostat",
+                "telink-tlsr9518adk80d-window-covering",
+                "tizen-arm-light"
+            ]
+        },
+        {
+            "type": "promptString",
+            "id": "tizenTargetDeviceAddress",
+            "description": "Enter the target device address and port in format <address>:<port>"
+        },
+        {
+            "id": "tizenTargetDeviceAddressSdb",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "sdb devices | grep -v 'List of devices attached' |awk '{print $1 \"|\" $1, $3, \"(\" $2 \")\"}'",
+                "fieldSeparator": "|",
+                "description": "Select target device"
+            }
+        }
+    ]
+}

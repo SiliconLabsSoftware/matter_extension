@@ -1,0 +1,23 @@
+
+category: Clusters|General
+description: >
+  Implementation of the Groups Server Cluster.
+  The user has to enable the Groups Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_groups
+package: Matter
+label: Groups Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_groups
+source:
+  - path: src/app/clusters/groups-server/groups-server.cpp
+include:
+  - path: src/app/clusters/groups-server
+    file_list:
+      - path: groups-server.h
+template_contribution:
+  - name: component_catalog
+    value: matter_groups

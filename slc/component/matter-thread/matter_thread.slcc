@@ -1,0 +1,21 @@
+id: matter_thread
+label: Thread Network Layer
+description: Adds Thread network layer for Matter devices
+package: "Matter"
+category: Matter-Thread
+ui_hints:
+  visibility: never
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+requires:
+  - name: matter
+  - name: ot_stack
+provides:
+  - name: matter_thread
+define:
+  - name: SL_OPENTHREAD_CERT_LIB
+    value: 1
+    condition:
+      - ot_cert_libs

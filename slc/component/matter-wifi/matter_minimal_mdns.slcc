@@ -1,0 +1,32 @@
+id: matter_minimal_mdns
+package: Matter
+description: >
+  matter_minimal_mdns for wifi
+label: Matter Minimal mDNS
+category: Matter-WiFi|lwip
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+provides:
+  - name: matter_minimal_mdns
+define:
+-   name: CHIP_MINMDNS_USE_EPHEMERAL_UNICAST_PORT
+    value: 0
+-   name: CHIP_MINMDNS_HIGH_VERBOSITY
+    value: 0
+-   name: CHIP_MINMDNS_DEFAULT_POLICY
+    value: 1
+requires:
+  - name: matter_core
+  - name: matter_default_policy
+  - name: matter_records
+  - name: matter_responders
+  - name: matter_address_policy
+include:
+  - path: src/lib/dnssd/minimal_mdns
+source:
+-   path: src/lib/dnssd/minimal_mdns/Parser.cpp
+-   path: src/lib/dnssd/minimal_mdns/RecordData.cpp
+-   path: src/lib/dnssd/minimal_mdns/ResponseSender.cpp
+-   path: src/lib/dnssd/minimal_mdns/Server.cpp

@@ -1,0 +1,24 @@
+
+category: Clusters|Media
+description: >
+  Implementation of the Target Navigator Server Cluster.
+  The user has to enable the Target Navigator Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_target_navigator
+package: Matter
+label: Target Navigator Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_target_navigator
+source:
+  - path: src/app/clusters/target-navigator-server/target-navigator-server.cpp
+include:
+  - path: src/app/clusters/target-navigator-server
+    file_list:
+      - path: target-navigator-delegate.h
+      - path: target-navigator-server.h
+template_contribution:
+  - name: component_catalog
+    value: matter_target_navigator
