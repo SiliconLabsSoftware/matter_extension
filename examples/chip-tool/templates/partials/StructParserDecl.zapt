@@ -1,4 +1,0 @@
-static CHIP_ERROR Setup(const char * label, chip::app::Clusters::{{namespace}}::Structs::{{name}}::Type & request, Json::Value & value);
-
-static void Finalize(chip::app::Clusters::{{namespace}}::Structs::{{name}}::Type & request);
-

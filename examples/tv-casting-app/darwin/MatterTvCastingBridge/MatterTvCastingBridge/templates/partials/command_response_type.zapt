@@ -1,5 +1,0 @@
-{{#if command.hasSpecificResponse}}
-MC{{asUpperCamelCase command.parent.name preserveAcronyms=true}}Cluster{{asUpperCamelCase command.responseName preserveAcronyms=true}}Params
-{{else}}
-MCNullObjectType
-{{/if}}

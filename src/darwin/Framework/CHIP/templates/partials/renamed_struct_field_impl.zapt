@@ -1,9 +1,0 @@
-- (void)set{{asUpperCamelCase oldName}}:({{asObjectiveCType type cluster}}){{asStructPropertyName oldName}}
-{
-  self.{{asStructPropertyName newName}} = {{asStructPropertyName oldName}};
-}
-
-- ({{asObjectiveCType type cluster}}){{asGetterName oldName}}
-{
-  return self.{{asStructPropertyName newName}};
-}
