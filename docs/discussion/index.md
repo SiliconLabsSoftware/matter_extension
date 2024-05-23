@@ -1,7 +1,0 @@
-# Discussion
-
-```{toctree}
-:glob:
-
-*
-```

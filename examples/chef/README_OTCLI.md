@@ -1,1 +1,0 @@
-../shell/README_OTCLI.md

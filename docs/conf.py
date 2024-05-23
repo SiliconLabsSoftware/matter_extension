@@ -1,85 +1,103 @@
 # Configuration file for the Sphinx documentation builder.
-
-import sys
-from pathlib import Path
-
-# -- Paths -------------------------------------------------------------------
-
-MATTER_BASE = Path(__file__).resolve().parents[1]
-
-sys.path.insert(0, str(MATTER_BASE / "docs" / "_extensions"))
+#
+# For the full list of built-in configuration values, see the documentation:
+# https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Project information -----------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "Matter"
-copyright = "2020-2023, Matter Contributors"
-author = "Matter Contributors"
-version = "1.0.0"
+project = 'Matter'
+copyright = 'Copyright © 2023 Silicon Laboratories. All rights reserved.'
+author = 'Silicon Labs'
+release = '2.3.0-1.3-alpha.2'
+version = '2.3.0-1.3-alpha.2'
+
 
 # -- General configuration ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    "myst_parser",
-    "external_content",
-]
-exclude_patterns = [
-    "_build",
-    "examples/android/*",
-    "**/nxp/linux-imx/imx8m/README.md",
-    "examples/ota-requestor-app/efr32/README.md",
-    "**/android/App/app/libs*",
-    "examples/providers/README.md",
-    "examples/thermostat/nxp/linux-se05x/README.md",
-    "examples/common/m5stack-tft/repo",
-    "docs/guides/README.md",
-]
+extensions = ['myst_parser',
+              "sphinx_rtd_theme",
+              "sphinx_tabs.tabs"]
+
+
+source_suffix = ['.rst', '.md']
+templates_path = ['_templates']
+exclude_patterns = ['_build', 
+                    'Thumbs.db', 
+                    '.DS_Store', 
+                    'README.md', 
+                    'DOC_STANDARD.md', 
+                    'unify/matter-bridge/readme_chip_tool_testing.md']
+
 
 
 # -- Options for HTML output -------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "sphinx_book_theme"
-html_logo = "_static/images/logo.png"
-html_favicon = "_static/images/favicon.ico"
-html_static_path = ["_static"]
+html_theme = 'sphinx_rtd_theme'
 html_theme_options = {
-    "github_url": "https://github.com/project-chip/connectedhomeip",
-    "repository_url": "https://github.com/project-chip/connectedhomeip",
-    "use_edit_page_button": True,
-    "repository_branch": "master",
-    "path_to_docs": "docs",
-    "icon_links": [],
+    'analytics_id': 'G-XXXXXXXXXX',  #  Provided by Google in your dashboard
+    'analytics_anonymize_ip': False,
+    'logo_only': False,
+    'display_version': True,
+    'prev_next_buttons_location': 'bottom',
+    'style_external_links': False,
+    'vcs_pageview_mode': '',
+    'style_nav_header_background': '#3b82f6',
+    # Toc options
+    'collapse_navigation': True,
+    'sticky_navigation': True,
+    'navigation_depth': 3,
+    'includehidden': True,
+    'titles_only': False
+}
+html_static_path = ['_static']
+html_favicon = 'favicon.ico'
+html_logo = 'logo.png'
+html_css_files = ['custom_styles.css']
+myst_enable_extensions = [
+    "amsmath",
+    "attrs_inline",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "fieldlist",
+    "html_admonition",
+    "html_image",
+    "linkify",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+]
+myst_heading_anchors = 4
+
+# Setup the breathe extension
+breathe_projects = {
+    "My Project": "./_doxygen/xml"
+}
+breathe_default_project = "My Project"
+
+# Setup the exhale extension
+exhale_args = {
+    # These arguments are required
+    "containmentFolder":     "./dox",
+    "rootFileName":          "index.rst",
+    "doxygenStripFromPath":  "..",
+    # Heavily encouraged optional argument (see docs)
+    "rootFileTitle":         "Library API",
+    # Suggested optional arguments
+    "createTreeView":        True,
+    # TIP: if using the sphinx-bootstrap-theme, you need
+    # "treeViewIsBootstrap": True,
+    "exhaleExecutesDoxygen": True,
+    "exhaleDoxygenStdin":    "INPUT = ./src"
 }
 
-# -- Options for MyST --------------------------------------------------------
+# Tell sphinx what the primary language being documented is.
+primary_domain = 'cpp'
 
-myst_heading_anchors = 6
-suppress_warnings = [
-    "myst.header",
-    "myst.anchor",
-]
-myst_enable_extensions = ["html_image"]
-
-
-# -- Options for external_content --------------------------------------------
-
-external_content_contents = [
-    (MATTER_BASE / "docs", "[!_R]*"),
-    (MATTER_BASE, "data_model/**/*.md"),
-    (MATTER_BASE, "README.md"),
-    (MATTER_BASE, "examples/**/*.md"),
-    (MATTER_BASE, "examples/**/*.png"),
-    (MATTER_BASE, "examples/**/*.jpg"),
-    (MATTER_BASE, "examples/**/*.JPG"),
-    (MATTER_BASE, "src/tools/**/*.md"),
-    (MATTER_BASE, "scripts/tools/**/*.md"),
-]
-external_content_link_prefixes = [
-    "src/",
-    r"\.vscode/",
-    "CONTRIBUTING",  # cannot detect CONTRIBUTING.md
-    "README",  # cannot detect README.md
-    "scripts/",
-    "examples/android/",
-    "data_model/",
-]
-external_content_link_extensions = [".md", ".png", ".jpg", ".svg"]
+# Tell sphinx what the pygments highlight language should be.
+highlight_language = 'cpp'
