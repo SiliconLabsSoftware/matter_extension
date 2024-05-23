@@ -1,0 +1,13 @@
+[submodule "third_party/MatterSDK"]
+	path = third_party/MatterSDK
+	url = https://github.com/SiliconLabsInternal/MatterSDK.git
+	branch = main
+[submodule "third_party/simplicity_sdk"]
+	path = third_party/simplicity_sdk
+	url = https://stash.silabs.com/scm/embsw/sisdk_release.git
+	branch = staging/2024.6/2024.6.0-rc2
+[submodule "third_party/wifi_sdk"]
+	path = third_party/wifi_sdk
+	url = https://stash.silabs.com/scm/redpine/wifi_sdk.git
+	branch = release/v3.3.0
+	tag = v3.3.0-rc2
