@@ -1,0 +1,24 @@
+
+category: Clusters|General
+description: >
+  Implementation of the Wake On Lan Server Cluster.
+  The user has to enable the Wake On Lan Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_wake_on_lan
+package: Matter
+label: Wake On Lan Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_wake_on_lan
+source:
+  - path: src/app/clusters/wake-on-lan-server/wake-on-lan-server.cpp
+include:
+  - path: src/app/clusters/wake-on-lan-server
+    file_list:
+      - path: wake-on-lan-server.h
+      - path: wake-on-lan-delegate.h
+template_contribution:
+  - name: component_catalog
+    value: matter_wake_on_lan

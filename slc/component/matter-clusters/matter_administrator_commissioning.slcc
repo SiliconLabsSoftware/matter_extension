@@ -1,0 +1,19 @@
+
+category: Clusters|General
+description: >
+  Implementation of the Administrator Commissioning Server Cluster.
+  The user has to enable the Administrator Commissioning Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_administrator_commissioning
+package: Matter
+label: Administrator Commissioning Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_administrator_commissioning
+source:
+  - path: src/app/clusters/administrator-commissioning-server/administrator-commissioning-server.cpp
+template_contribution:
+  - name: component_catalog
+    value: matter_administrator_commissioning

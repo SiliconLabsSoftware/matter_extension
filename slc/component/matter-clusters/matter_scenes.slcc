@@ -1,0 +1,31 @@
+
+category: Clusters|General
+description: >
+  Implementation of the Scenes Server Cluster.
+  The user has to enable the Scenes Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_scenes
+package: Matter
+label: Scenes Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_scenes
+source:
+  - path: src/app/clusters/scenes-server/ExtensionFieldSetsImpl.cpp
+  - path: src/app/clusters/scenes-server/scenes-server.cpp
+  - path: src/app/clusters/scenes-server/SceneTableImpl.cpp
+  - path: src/app/clusters/scenes-server/SceneHandlerImpl.cpp
+include:
+  - path: src/app/clusters/scenes-server
+    file_list:
+      - path: SceneTableImpl.h
+      - path: SceneHandlerImpl.h
+      - path: scenes-server.h
+      - path: ExtensionFieldSets.h
+      - path: ExtensionFieldSetsImpl.h
+      - path: SceneTable.h
+template_contribution:
+  - name: component_catalog
+    value: matter_scenes

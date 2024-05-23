@@ -1,0 +1,23 @@
+
+category: Clusters|General
+description: >
+  Implementation of the Descriptor Cluster.
+  The user has to enable the Descriptor Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_descriptor
+package: Matter
+label: Descriptor Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_descriptor
+include:
+- path: src/app/clusters/descriptor
+  file_list:
+  - path: descriptor.h
+source:
+  - path: src/app/clusters/descriptor/descriptor.cpp
+template_contribution:
+  - name: component_catalog
+    value: matter_descriptor

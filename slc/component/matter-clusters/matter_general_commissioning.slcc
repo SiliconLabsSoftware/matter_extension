@@ -1,0 +1,23 @@
+
+category: Clusters|General
+description: >
+  Implementation of the General Commissioning Server Cluster.
+  The user has to enable the General Commissioning Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+id: matter_general_commissioning
+package: Matter
+label: General Commissioning Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_general_commissioning
+source:
+  - path: src/app/clusters/general-commissioning-server/general-commissioning-server.cpp
+include:
+  - path: src/app/clusters/general-commissioning-server
+    file_list:
+      - path: general-commissioning-server.h
+template_contribution:
+  - name: component_catalog
+    value: matter_general_commissioning

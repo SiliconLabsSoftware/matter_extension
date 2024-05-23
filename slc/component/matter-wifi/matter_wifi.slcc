@@ -1,0 +1,27 @@
+id: matter_wifi
+package: Matter
+description: >
+  matter wifi
+label: Matter WiFi
+category: Matter-WiFi
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+define: 
+  - name: SL_WIFI
+    value: 1
+  - name: SL_HEAP_SIZE
+    value: 0
+  - name: __STARTUP_CLEAR_BSS
+  - name: PLAT
+    value: EMBER_PLATFORM_CORTEXM3
+  - name: PLATFORM_HEADER
+    value: "platform-header.h"
+config_file:
+  - path: slc/config/sl_matter_wifi_config.h
+provides:
+  - name: matter_wifi
+requires:
+  - name: matter_lwip
+  - name: matter_minimal_mdns
