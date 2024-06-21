@@ -1,5 +1,5 @@
 [submodule "third_party/MatterSDK"]
-	path = third_party/MatterSDK
+	path = third_party/matter_sdk
 	url = https://github.com/SiliconLabsInternal/MatterSDK.git
 	branch = main
 [submodule "third_party/simplicity_sdk"]
