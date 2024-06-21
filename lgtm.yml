@@ -1,3 +1,0 @@
-queries:
-    - exclude: py/unused-import
-    - exclude: py/polluting-import
