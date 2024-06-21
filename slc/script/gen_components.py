@@ -19,8 +19,8 @@ sys.path.append(enable_copy_contents_path)
 import enable_copy_contents
 # If adding a new app, update this along with APP_NAME_THREAD
 APP_NAME = ['lock', 'lighting', 'light-switch', 'window', 'thermostat']
-APP_NAME_COMMON = ['silabs-lock', 'silabs-lighting', 'silabs-light-switch', 'silabs-window', 'silabs-thermostat']
-#APP_NAME_COMMON = [s + '-common' for s in APP_NAME]
+APP_NAME_COMMON = 'lock_common', 'lighting_common', 'thermostat_common', 'window_common'
+APP_NAME_SILABS = 'silabs_lock', 'silabs_lighting', 'silabs_thermostat', 'silabs_window'
 
 # If adding a new app, update this along with APP_NAME
 APP_NAME_THREAD = ['lock-app', 'lighting-app', 'light-switch-app', 'window-app', 'thermostat']
@@ -81,10 +81,6 @@ if __name__ == '__main__':
                 if 'src' in file.parts and 'app' in file.parts and 'clusters' in file.parts:
                     continue
 
-                # See if entries in APP_NAME_COMMON are part of the file path. If they are, skip them
-                if any(x in APP_NAME_COMMON for x in file.parts): 
-                    continue
-
                 # creates a dictionary with the following entries, checks if lib entry exists, if not, its added
                 if lib not in libs:
                     libs[lib] = {
@@ -141,6 +137,14 @@ if __name__ == '__main__':
                 # Rename app component to app-common 
                 if name in [s.lower().replace('-', '_') for s in APP_NAME_COMMON]: # check if name is in APP_NAME_COMMON (with '-' switch to '_')
                     name = 'app_common'
+
+                # Skip APP_NAME_COMMON
+                if name.startswith((APP_NAME_COMMON)):
+                    continue
+
+                # Skip APP_NAME_SILABS and matter_silabs and provision example
+                if name.startswith((APP_NAME_SILABS)) or name.startswith(('matter_silabs')) or name.startswith(('provision')):
+                    continue
 
                 # Create a separate wifi component for these components
                 if name in ['efr32', 'dnssd', 'libinetlayer', 'libdevicelayer'] and wifi == True:
@@ -206,7 +210,8 @@ if __name__ == '__main__':
                     for inc in sorted(data['inc']): # sorts the 'inc' set entry in the data dict and loops it
                         # Skip includes related to Gecko SDK and sample apps
                         if any(path in inc for path in ['openthread', compile_commands_file_path.replace('compile_commands.json', "", 1)+'gen/include', compile_commands_file_path.replace('compile_commands.json', "", 1)+'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/efr32/include"]): # For Python-3.8
-                        #if any(path in inc for path in ['openthread', sys.argv[1].removesuffix('compile_commands.json') + 'gen/include', sys.argv[1].removesuffix('compile_commands.json') + 'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/efr32/include"]):
+                            continue
+                        if any(path in inc for path in ['openthread', sys.argv[1].removesuffix('compile_commands.json') + 'gen/include', sys.argv[1].removesuffix('compile_commands.json') + 'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/include"]):
                             continue
                         if any(path in inc for path in ['openthread', compile_commands_file_path.replace('compile_commands.json', "", 1)+'gen/include', compile_commands_file_path.replace('compile_commands.json', "", 1)+'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/SiWx917/include"]):
                             continue
@@ -219,11 +224,19 @@ if __name__ == '__main__':
                             continue
 
                         # Skip any references to rs911x
-                        if 'examples/platform/silabs/efr32/rs911x' in inc or 'src/platform/silabs/efr32/rs911x' in inc:
+                        if 'examples/platform/silabs/efr32/rs911x' in inc or 'src/platform/silabs/rs911x' in inc:
                             continue
 
                         # Skip any references to rs911x
                         if 'silabs/efr32/include' in inc:
+                            continue
+
+                        # Skip any references to third_party/mbedtls
+                        if 'third_party/mbedtls' in inc:
+                            continue
+
+                        # Skip reference to examples/platform/silabs/display. Not sure why this is brought by 917 SoC
+                        if 'examples/platform/silabs/display' in inc:
                             continue
 
                         if 'out' == str(inc.split(os.sep)[0]):
@@ -258,21 +271,26 @@ if __name__ == '__main__':
                         value = None
                         if '=' in define: # looks for defines and splits the string to a define, value pair 
                             define, value = define.split('=')
+
+                        if define.startswith(('DISPLAY_ENABLED', 'QR_CODE_ENABLED'))
+                            # Skip defines related to LCD
+                            continue
                         
                         if define.startswith(('__', 'SL_', 'NVM3_', 'MBEDTLS_','SILABS_LOG', 'HARD_FAULT_LOG', 'EFR32', 'CORTEXM3', 'CONFIG', 'BOARD', 'BRD', 'PLATFORM', 'KVS', 'LWIP', 'WF200', 'CHIP_MINMDNS_', 'EFX32', 'RS911X', 'RSI', 'NDEBUG', 'CCP_', 'SIWX', 'TINYCRYPT', 'LITTLE_', 'OPTIMIZE_TINYCRYPT', 'CHIP_917', 'CHIP_9117', 'ENABLE_', 'BLE_', 'ROM_', 'DEBUG_', 'FLASH_', 'TA_DEEP_', 'ROM_WIRELESS' , 'EXECUTION_' , 'HARD_FAULT_LOG_ENABLE' , 'ROMDRIVER_PRESENT' , 'SILABS_LOG_ENABLED' , 'SI917' , 'SILABS_OTA_ENABLED' , '_CHIP_9118')) or define in ['USE_NVM3', 'MICRO', 'PLAT', 'PHY', 'CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI','ENABLE_WSTK_LEDS', 'OTA_PERIODIC_TIMEOUT']:
                             # Skip defines related to Gecko SDK and LWIP
                             continue
+
+                        if define.startswith(('DISPLAY_ENABLED', 'EXT_IRQ_COUNT', 'QR_CODE_ENABLED', 'SLI_', 'SI91X_', 'SPI_MULTI', 'SRAM_', 'SYSCALLS_', 'configUSE_', 'SiWG917', 'EXP_BOARD')):
+                            # Blanket skip all defines added by 917, this needs to be fixed in CSA eventually
+                            continue
+
+                        if define.startswith(('CHIP_CONFIG_SYNCHRONOUS')):
+                            # Blanket skip sleepy related defines that come from the lock-app
+                            continue
+
                         if value is not None: # if the value is not empty string, create a dict with the following keys and values and assigns it to the 'define' entry in the component dict
                             component['define'].append({'name': define, 'value': value}) 
                         else:
                             component['define'].append({'name': define})
                     yaml.dump(component, f, Dumper=yaml.SafeDumper, default_flow_style=False, indent=4) 
                     # inserts the data in the component dict to the open SLCC file passed as 'f' in YAML format 
-
-    # check if a 'zap_generated_dir' was passed as an argument 
-    idx = next((index for (index, d) in enumerate(sys.argv[1:]) if "zap_generated_dir=" in d), None)
-    if idx is not None:
-        # call enable_copy_contents 
-        enable_copy_contents.main(sys.argv[1:][idx].split("=")[1])   
-    else:
-         enable_copy_contents.main(params=None)

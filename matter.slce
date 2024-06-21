@@ -1,6 +1,6 @@
 id: matter
 version: 2.3.0
-description: "Matter extension for Gecko SDK Suite"
+description: "Matter extension for Simplicity SDK Suite"
 label: "Silicon Labs Matter"
 sdk:
   id: simplicity_sdk

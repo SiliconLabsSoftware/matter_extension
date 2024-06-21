@@ -382,7 +382,7 @@ CHIP_ERROR SilabsMatterConfig::InitWiFi(void)
 // ================================================================================
 extern "C" void vApplicationIdleHook(void)
 {
-#if SI917_M4_SLEEP_ENABLED && CHIP_CONFIG_ENABLE_ICD_SERVER
-    sl_wfx_host_si91x_sleep_wakeup();
+#if (SLI_SI91X_MCU_INTERFACE && CHIP_CONFIG_ENABLE_ICD_SERVER)
+    sl_si91x_invoke_btn_press_event();
 #endif
 }

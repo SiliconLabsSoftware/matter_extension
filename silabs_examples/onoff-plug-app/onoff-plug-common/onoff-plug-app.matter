@@ -1879,23 +1879,6 @@ endpoint 0 {
 
   binding cluster OtaSoftwareUpdateProvider;
 
-  server cluster Groups {
-    ram      attribute nameSupport;
-    ram      attribute featureMap default = 0;
-    ram      attribute clusterRevision default = 4;
-
-    handle command AddGroup;
-    handle command AddGroupResponse;
-    handle command ViewGroup;
-    handle command ViewGroupResponse;
-    handle command GetGroupMembership;
-    handle command GetGroupMembershipResponse;
-    handle command RemoveGroup;
-    handle command RemoveGroupResponse;
-    handle command RemoveAllGroups;
-    handle command AddGroupIfIdentifying;
-  }
-
   server cluster Descriptor {
     callback attribute deviceTypeList;
     callback attribute serverList;
@@ -2234,7 +2217,7 @@ endpoint 1 {
     ram      attribute offWaitTime default = 0x0000;
     persist  attribute startUpOnOff;
     ram      attribute featureMap default = 1;
-    ram      attribute clusterRevision default = 4;
+    ram      attribute clusterRevision default = 6;
 
     handle command Off;
     handle command On;

@@ -2,7 +2,8 @@
 
 #This script is creates cluster components from the src/app/clusters directory
 #USAGE : python3 slc/script/gen_cluster_components.py
-#Check for manual changes in matter_color_control.slcc, matter_icd_management.slcc, matter_level_control.slcc,matter_on_off.slcc
+#Check for manual changes in matter_icd_management.slcc
+# TODO: Update script to include src/app/icd files
 
 import os
 import pathlib
@@ -209,3 +210,4 @@ for clustercomponentname in cluster_data.keys():
 json_object = json.dumps(lst, indent=2)
 with open(jsonfilepath, "w") as outfile:
     outfile.write(json_object)
+print("Check for manual changes in matter_icd_management.slcc")

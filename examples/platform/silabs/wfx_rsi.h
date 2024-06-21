@@ -112,8 +112,10 @@ int32_t wfx_rsi_get_ap_ext(wfx_wifi_scan_ext_t * extra_info);
 int32_t wfx_rsi_reset_count();
 int32_t wfx_rsi_disconnect();
 int32_t wfx_wifi_rsi_init(void);
-#if SL_ICD_ENABLED
-void sl_wfx_host_si91x_sleep_wakeup();
+#if CHIP_CONFIG_ENABLE_ICD_SERVER
+#if SLI_SI91X_MCU_INTERFACE
+void sl_si91x_invoke_btn_press_event();
+#endif // SLI_SI91X_MCU_INTERFACE
 #if SLI_SI917
 int32_t wfx_rsi_power_save(rsi_power_save_profile_mode_t sl_si91x_ble_state, sl_si91x_performance_profile_t sl_si91x_wifi_state);
 #else

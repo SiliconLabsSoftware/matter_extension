@@ -17,8 +17,6 @@
 
 #include "app.h"
 extern "C" {
-#include <sl_si91x_button_instances.h>
-#include <sl_si91x_led_instances.h>
 #include <sl_wifi_callback_framework.h>
 #include <sl_wifi.h>
 #include <sl_wifi_device.h>
@@ -65,11 +63,6 @@ void app_platform_init()
 {
     sl_wifi_init(&_wifi_config, NULL, sl_wifi_default_event_handler);
     nvm3_open(nvm3_defaultHandle, nvm3_defaultInit);
-}
-
-
-void sl_si91x_button_isr(uint8_t pin, int8_t state)
-{
 }
 
 void setNvm3End(uint32_t end_addr)

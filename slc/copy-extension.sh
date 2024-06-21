@@ -169,10 +169,12 @@ cp -R $MATTER_ROOT/silabs_examples/dishwasher-app/silabs/include $EXT_DIR/silabs
 cp -R $MATTER_ROOT/silabs_examples/dishwasher-app/silabs/src $EXT_DIR/silabs_examples/dishwasher-app/silabs/
 
 cp $MATTER_ROOT/examples/light-switch-app/light-switch-common/light-switch-app.zap $EXT_DIR/examples/light-switch-app/light-switch-common/light-switch-app.zap
+cp $MATTER_ROOT/examples/light-switch-app/light-switch-common/light-switch-app-wifi.zap $EXT_DIR/examples/light-switch-app/light-switch-common/light-switch-app-wifi.zap
 cp -R $MATTER_ROOT/examples/light-switch-app/silabs/include $EXT_DIR/examples/light-switch-app/silabs
 cp -R $MATTER_ROOT/examples/light-switch-app/silabs/src $EXT_DIR/examples/light-switch-app/silabs
 
 cp $MATTER_ROOT/examples/lock-app/lock-common/lock-app.zap $EXT_DIR/examples/lock-app/lock-common/lock-app.zap
+cp $MATTER_ROOT/examples/lock-app/lock-common/lock-app-wifi.zap $EXT_DIR/examples/lock-app/lock-common/lock-app-wifi.zap
 cp -R $MATTER_ROOT/examples/lock-app/silabs/include $EXT_DIR/examples/lock-app/silabs
 cp -R $MATTER_ROOT/examples/lock-app/silabs/src $EXT_DIR/examples/lock-app/silabs
 
@@ -181,6 +183,7 @@ cp -R $MATTER_ROOT/examples/thermostat/silabs/include $EXT_DIR/examples/thermost
 cp -R $MATTER_ROOT/examples/thermostat/silabs/src $EXT_DIR/examples/thermostat/silabs
 
 cp $MATTER_ROOT/examples/window-app/common/window-app.zap $EXT_DIR/examples/window-app/common/window-app.zap
+cp $MATTER_ROOT/examples/window-app/common/window-app-wifi.zap $EXT_DIR/examples/window-app/common/window-app-wifi.zap
 cp -R $MATTER_ROOT/examples/window-app/silabs/include $EXT_DIR/examples/window-app/silabs
 cp -R $MATTER_ROOT/examples/window-app/silabs/src $EXT_DIR/examples/window-app/silabs
 cp -R $MATTER_ROOT/examples/window-app/common/include $EXT_DIR/examples/window-app/common
@@ -192,6 +195,22 @@ cp -R $MATTER_ROOT/silabs_utils $EXT_DIR/
 #zap script
 mkdir -p $EXT_DIR/scripts/tools/zap/
 cp $MATTER_ROOT/scripts/tools/zap/run_zaptool.sh $EXT_DIR/scripts/tools/zap/
+
+#Files for Provision
+mkdir -p $EXT_DIR/credentials/test/attestation/
+mkdir -p $EXT_DIR/scripts/tools/silabs/
+cp $MATTER_ROOT/scripts/tools/silabs/README.md $EXT_DIR/scripts/tools/silabs/
+cp $MATTER_ROOT/credentials/test/attestation/Chip-Test-PAA-NoVID-Cert.der $EXT_DIR/credentials/test/attestation/
+cp $MATTER_ROOT/credentials/test/attestation/Chip-Test-PAA-NoVID-Key.der $EXT_DIR/credentials/test/attestation/
+
+# multi-ota script
+mkdir -p $EXT_DIR/scripts/tools/silabs/ota/
+mkdir -p $EXT_DIR/scripts/tools/silabs/factory_data_generator/
+cp -R $MATTER_ROOT/scripts/tools/silabs/ota $EXT_DIR/scripts/tools/silabs/
+cp -R $MATTER_ROOT/scripts/tools/silabs/factory_data_generator $EXT_DIR/scripts/tools/silabs/
+
+#rename scripts/tools/silabs/ota/ota_image_tool.py to scripts/tools/silabs/ota/ota_multi_image_tool.py
+mv $EXT_DIR/scripts/tools/silabs/ota/ota_image_tool.py $EXT_DIR/scripts/tools/silabs/ota/ota_multi_image_tool.py
 
 # DIC_AWS_SDK_OTA
 mkdir -p $EXT_DIR/third_party/silabs/aws_ota_sdk

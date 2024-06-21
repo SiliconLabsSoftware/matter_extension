@@ -63,12 +63,37 @@ After 15 minutes, the advertisement stops. In addition, this button should also 
 
 You can provision and control the Matter device using the python controller, Chip tool standalone, Android, iOS app or the Matter Hub provided by Silicon Labs. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.3.0/matter-thread/raspi-img)
 
-The pre-built chip-tool instance ships with the Matter Hub image which is available from Silicon Labs here: [Silicon Labs Matter Hub](https://www.silabs.com/documents/public/software/SilabsMatterPi_2.2.1-1.2-extension.zip)
+The pre-built chip-tool instance ships with the Matter Hub image which is available from Silicon Labs here: [Silicon Labs Matter Hub](https://www.silabs.com/documents/public/software/SilabsMatterPi_2.3.0-1.3-extension.zip)
     
 More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 Here is an example for provisioning the thermostat application with the chip-tool:
 
+Pairing with chip-tool:
 ```shell
-chip-tool pairing ble-wifi 1122 $SSID $PSK 20202021 3840
+./chip-tool pairing ble-wifi <node-id> $SSID $PSK <PinCode> <Discriminator>
+
+./chip-tool pairing ble-wifi 1 $SSID $PSK 20202021 3840
+```
+
+Setting the occupied cooling setpoint:
+```shell
+./chip-tool thermostat write occupied-cooling-setpoint <temperature> <node-id> <endpoint-id>
+
+./chip-tool thermostat write occupied-cooling-setpoint 2500 1 1
+
+Note: On chip-tool verify that DUT sends a success response
+[1676031143.386639][19597:19599] CHIP:DMG:                         StatusIB =
+[1676031143.386683][19597:19599] CHIP:DMG:                         {
+[1676031143.386729][19597:19599] CHIP:DMG:                                 status = 0x00 (SUCCESS),
+[1676031143.386773][19597:19599] CHIP:DMG:                         },
+```
+Read thermostat attributes:
+```shell
+./chip-tool thermostat read occupied-cooling-setpoint <node-id> <endpoint-id>
+
+./chip-tool thermostat read occupied-cooling-setpoint 1 1
+
+Note: On chip-tool verify that the occupied cooling setpoint attribute value which is provided in previous step
+[1676028659.980049][19359:19361] CHIP:TOO:   OccupiedCoolingSetpoint: 2500
 ```
