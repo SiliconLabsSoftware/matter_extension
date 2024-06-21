@@ -160,6 +160,16 @@ for brd, val in demos_map['demos'].items():
                     elif "thermostat" in demo_name:
                         demo_name = "thermostat"
                         demo_name_ = "Thermostat"
+                    elif "lighting" in demo_name:
+                        demo_name_ = "Lighting"
+                    elif "switch" in demo_name:
+                        demo_name_ = "Light Switch"
+                    elif "dishwasher" in demo_name:
+                        demo_name_ = "Dishwasher"
+                    elif "lock" in demo_name:
+                        demo_name_ = "Lock"
+                    elif "onoff" in demo_name:
+                        demo_name_ = "Onoff Plug"
                     else:
                         demo_name_ = demo_name.strip()
 
@@ -181,7 +191,7 @@ for brd, val in demos_map['demos'].items():
                                 demo_name_ + " over Wi-Fi")
 
                     blurbProp.set('key', 'demos.blurb')
-                    blurbProp.set('value', "Matter"+ " - " + ("SoC" if "soc" in board_type else "NCP") + " " +
+                    blurbProp.set('value', "Matter"+ " - " + ("SiWx917 SoC" if "soc" in board_type else "NCP") + " " +
                                     demo_name_ + " app")
 
                     partCompatibilityProp.set('key', 'core.partCompatibility')
@@ -209,8 +219,8 @@ for brd, val in demos_map['demos'].items():
                     qualityProp.set('key', 'core.quality')
                     qualityProp.set('value', "PRODUCTION")
                     description.text = "".join("This is a Matter " + demo_name_ +
-                                                " Application for " + brd.upper() + " to be used with Wi-Fi " + 
-                                                ('SiWx917' if "soc" in board_type else ('RS9116' if board_type == 'rs911x' else board_type.upper())))
+                                                " Application for " + brd.upper() #+ " to be used with Wi-Fi " +
+                                                + (' with SiWx917 Wi-Fi SoC' if "soc" in board_type else (" to be used with Wi-Fi " + ('RS9116' if board_type == 'rs911x' else board_type.upper()))))
 
 outputString = ET.tostring(demos, encoding='UTF-8')
 dom = xml.dom.minidom.parseString(outputString)

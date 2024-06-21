@@ -12,7 +12,7 @@ def getThreadBoards(buildType='')
     if (buildType == "FULL") {
         // Only A00 revision of BRD4319A is supported, enforced at generation time 
         return ["BRD4116A", "BRD4117A", "BRD4118A", "BRD4121A", "BRD4186C", "BRD4187C", "BRD2703A", "BRD2704A", "BRD2601B",
-                "BRD4316A", "BRD4317A", "BRD4319A", "BRD4337A", "BRD4318A"]     
+                "BRD2608A", "BRD4316A", "BRD4317A", "BRD4319A", "BRD4337A", "BRD4318A"]     
     } 
     else if (buildType == "GBL")
     {
@@ -46,7 +46,7 @@ def getThreadApps()
 }
 def getBoardsWithInternalBootloader()
 {
-    return ["BRD4337A", "BRD2704A", "BRD2703A", "BRD4319A"]
+    return ["BRD4337A", "BRD2704A", "BRD2703A", "BRD4319A", "BRD4116A"]
 }
 def getNCPApps()
 {
@@ -120,7 +120,13 @@ def getPrjFileName(targetBoard, appName, useWorkspaces, ncp="")
             if (targetBoard in internalBootloaderBoards){
                 isInternalBootloader = "-internal"
             }
-            slcProjFileName = appName+"-thread${isInternalBootloader}-bootloader"
+            if (appName == "zigbee-matter-light"){
+                slcProjFileName = appName+"${isInternalBootloader}-bootloader"
+            }
+            else {
+                slcProjFileName = appName+"-thread${isInternalBootloader}-bootloader"
+            }
+
         }
         else{
             if (appName == "zigbee-matter-light"){
@@ -143,7 +149,7 @@ def getProtocol(ncp=""){
     }
 }
 def getSeries(brd){
-    seriesTwoBoards = ["BRD4116A", "BRD4117A", "BRD4118A", "BRD4121A", "BRD4186C", "BRD4187C", "BRD2703A", "BRD2704A", "BRD2601B", "BRD4316A", "BRD4317A", "BRD4318A","BRD4319A", "BRD4337A"]
+    seriesTwoBoards = ["BRD4116A", "BRD4117A", "BRD4118A", "BRD4121A", "BRD4186C", "BRD4187C", "BRD2608A", "BRD2703A", "BRD2704A", "BRD2601B", "BRD4316A", "BRD4317A", "BRD4318A","BRD4319A", "BRD4337A"]
     if(brd.toUpperCase() in seriesTwoBoards){
         return "series-2"
     }
@@ -169,9 +175,9 @@ def getBuildConfigs(board="", appName="", otaVersion="", ncp = "", configs = "",
 def testCopyContents(){
     def appsToBuild = []
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app", otaVersion="", ncp = "",        configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app", otaVersion="", ncp = "rs911x",  configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="thermostat",   otaVersion="", ncp = "rs911x",  configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
     appsToBuild += getBuildConfigs(board="BRD4338A", appName="lighting-app", otaVersion="", ncp = "917-soc", configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app", otaVersion="", ncp = "wf200",   configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",     otaVersion="", ncp = "wf200",   configs = "--copy-sources", useWorkspace = false, applicationComponents = "")
     slcBuild(appsToBuild, "Copy Contents")
 }
 def buildNoDebugImages(){
@@ -190,21 +196,21 @@ def buildCMP()
 {
     def appsToBuild = []
     // Sequential
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="silabs_examples/")
-    appsToBuild += getBuildConfigs(board="BRD4116A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="silabs_examples/")
-    appsToBuild += getBuildConfigs(board="BRD4121A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="silabs_examples/")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="")
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = true, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="")
+    appsToBuild += getBuildConfigs(board="BRD4118A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_sequential;matter", bootloaderComponents = "", customPath="")
     // Concurrent
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="silabs_examples/")
-    appsToBuild += getBuildConfigs(board="BRD4116A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="silabs_examples/")
-    appsToBuild += getBuildConfigs(board="BRD4121A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="silabs_examples/")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="")
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = true, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="")
+    appsToBuild += getBuildConfigs(board="BRD4117A", appName="zigbee-matter-light", otaVersion="", ncp = "", configs = "", useWorkspace = false, applicationComponents = ",matter_zigbee_concurrent;matter", bootloaderComponents = "", customPath="")
     slcBuild(appsToBuild, "CMP")
 }
-
-def buildOtaImages(){
+//Built in SQA Branches
+def buildThreadOTAImages(){
     def software_version_2 = '--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\\"2\\"'
     def software_version_3 = '--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\\"3\\"'
     def appsToBuild = []
-    
+
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",         otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="dishwasher-app",   otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
@@ -212,16 +218,73 @@ def buildOtaImages(){
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="thermostat",       otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="window-app",       otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="3", ncp = "",        configs = software_version_3, useWorkspace = true, applicationComponents = "")
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="2", ncp = "wf200",   configs = software_version_2, useWorkspace = true, applicationComponents = "")
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="2", ncp = "917-ncp", configs = software_version_2, useWorkspace = true, applicationComponents = "")
-    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="2", ncp = "rs911x",  configs = software_version_2, useWorkspace = true, applicationComponents = "")
-
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="lighting-app",     otaVersion="2", ncp = "",        configs = software_version_2, useWorkspace = true, applicationComponents = "")
     // LZ4 Images
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app", otaVersion="2-lz4", ncp = "", configs = software_version_2, useWorkspace = true, applicationComponents = "", bootloaderComponents = ",bootloader_gbl_compression_lz4")
     appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app", otaVersion="3-lz4", ncp = "", configs = software_version_3, useWorkspace = true, applicationComponents = "", bootloaderComponents = ",bootloader_gbl_compression_lz4")
 
-    slcBuild(appsToBuild, "OTA Images")
+    slcBuild(appsToBuild, "OTA Thread Images")
 }
+//Built in SQA Branches
+def buildWiFiOTAImages(){
+    def software_version_2 = '--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\\"2\\"'
+    def software_version_3 = '--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\\"3\\"'
+    def appsToBuild = []
+
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",     otaVersion="2", ncp = "wf200",   configs = software_version_2, useWorkspace = true, applicationComponents = "")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",     otaVersion="2", ncp = "917-ncp", configs = software_version_2, useWorkspace = true, applicationComponents = "")
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",     otaVersion="2", ncp = "rs911x",  configs = software_version_2, useWorkspace = true, applicationComponents = "")
+    appsToBuild += getBuildConfigs(board="BRD4338A", appName="lighting-app",     otaVersion="2", ncp = "917-soc",  configs = software_version_2, useWorkspace = false, applicationComponents = "")
+
+    slcBuild(appsToBuild, "OTA WiFi Images")
+}
+//Built in SQA Branches
+def buildLowPowerImages(){
+    def componentsToRemove = '--without "matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter"'
+    def appsToBuild = []
+    appsToBuild += getBuildConfigs("BRD4186C", appName="lighting-app", otaVersion="", ncp = "", configs = componentsToRemove, useWorkspace = true, applicationComponents = ",matter_platform_low_power;matter")
+    appsToBuild += getBuildConfigs("BRD4338A", appName="lock-app", otaVersion="", ncp = "917-soc", configs = componentsToRemove, useWorkspace = false, applicationComponents = ",matter_platform_low_power;matter")
+    slcBuild(appsToBuild, "Low Power Images")
+}
+def buildMultiOtaImages(){
+    def componentsToAdd = ',matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'
+    def componentsToRemove = '--without "matter_ota_support;matter"'
+
+    def appsToBuild = []
+
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",         otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="window-app",       otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="dishwasher-app",   otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="lighting-app",     otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="lock-app",         otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="window-app",       otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="dishwasher-app",   otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+
+    slcBuild(appsToBuild, "M-OTA Images")
+}
+
+def buildMultiOtaEncImages(){
+    def componentsToAdd = ',matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'
+    def componentsToRemove = '--without "matter_ota_support;matter"'
+
+    def appsToBuild = []
+
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lighting-app",     otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="lock-app",         otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="window-app",       otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4187C", appName="dishwasher-app",   otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="lighting-app",     otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="lock-app",         otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="window-app",       otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+    appsToBuild += getBuildConfigs(board="BRD4116A", appName="dishwasher-app",   otaVersion="", ncp = "",        configs = componentsToRemove, useWorkspace = true, applicationComponents = componentsToAdd)
+
+    slcBuild(appsToBuild, "M-OTA-enc Images")
+}
+
+
 // Builds all Wifi examples by board (depending on build type)
 def buildWifi(appsToBuild, boardToBuild, ncpToBuild, buildWithWorkspaces)
 {
@@ -302,8 +365,8 @@ def generateProjects(paramMap){
     def ncp = paramMap["ncp"]
     def ota = paramMap["otaVersion"]
     def parameters = paramMap["configs"]
-    def applicationComponents = paramMap["applicationComponents"]
-    def bootloaderComponents = paramMap["bootloaderComponents"]
+    def appComponents = paramMap["applicationComponents"]
+    def blComponents = paramMap["bootloaderComponents"]
     def useWorkspaces = paramMap["useWorkspace"]
     def slcPrjName = getPrjFileName(brd, app, useWorkspaces, ncp)
     def platform = "/efr32/"
@@ -352,13 +415,21 @@ def generateProjects(paramMap){
         output += tmpStr.replace(",","")
     }
 
-    if (bootloaderComponents && useWorkspaces){
+    if(appComponents.contains("matter_siwx917_m4_sleep")){
+        // Overriding the sleep mode for 917 SOC
+        sh """
+            mkdir -p ${output}/config/zcl
+            cp gsdk/extension/matter_extension/examples/lock-app/lock-common/lock-app.zap ${output}/config/zcl/zcl_config.zap
+        """
+    }
+
+    if ((blComponents || appComponents) && useWorkspaces){
         // Build for solutions
         sh """
             export POST_BUILD_EXE=${commanderPath}
             ${commanderPath} -version
-            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${bootloaderComponents}' -pids bootloader ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
-            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${applicationComponents}' -pids application ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
+            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${blComponents}' -pids bootloader ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
+            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${appComponents}' -pids application ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
         """
     }
     else{
@@ -366,7 +437,7 @@ def generateProjects(paramMap){
         sh """
             export POST_BUILD_EXE=${commanderPath}
             ${commanderPath} -version
-            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${applicationComponents}' ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
+            ${UC_CLI_DIR}slc generate --daemon -d ${output} ${projTypeFlag} ${projFilePath} --with '${brdLowerCase}${appComponents}' ${parameters} -data gsdk/out/dmp_uc.data --generator-timeout=1800
         """
     }
 
@@ -525,6 +596,29 @@ def validateComponents()
     }
 }
 
+// Validate Matter Templates
+def validate_matter_templates()
+{
+    catchError(buildResult: 'SUCCESS',
+                catchInterruptions: false,
+                message: "Validation warnings/errors caught!",
+                stageResult: 'UNSTABLE')
+    {
+        sh "python3 -u './slc/script/validate_matter_templates.py' | tee validate_matter_templates_result.log"
+        archiveArtifacts artifacts: "validate_matter_templates_result.log"
+    }
+}
+//This stage is used to validate metadata ( components and matter_templates.xml)
+def validateMetadata()
+{
+    stage('Validate Components') {
+        validateComponents()
+    }
+    stage('Validate Matter Templates')
+    {
+        validate_matter_templates()
+    }
+}
 def exportIoTReports()
 {
     def matterPath = env.WORKSPACE + "/matter"
@@ -596,72 +690,208 @@ def performCodeAnalysis(brd, app, protocol)
 def pushToUbai(matterBranchName=env.BRANCH_NAME,matterBuildNumber=env.BUILD_NUMBER)
 {
     def savedWorkspace = env.WORKSPACE + "/matter/" + savedDirectory
+    def errorOccurred = false
+    if (!env.BRANCH_NAME.startsWith('sqa_')) {
+        dir(env.WORKSPACE + "/matter/") {
+            withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')])
+            {
+                try {
+                    sh '''
+                        ls -al;pwd
+                        set -o pipefail
+                        set -x
 
-    dir(env.WORKSPACE + "/matter/") {
-        withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')])
-        {
-            sh '''
-                ls -al;pwd
-                set -o pipefail
-                set -x
+                        ota_file="ota-scripts.zip"
+                        zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
 
-                ota_file="ota-scripts.zip"
-                zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+                        echo 'UBAI uploading ......'
+                        ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path ota-scripts.zip  --metadata app_name matter \
+                            --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
 
-                echo 'UBAI uploading ......'
-                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path ota-scripts.zip  --metadata app_name matter \
-                    --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
-
-                if [ $? -eq 0 ]; then
-                    echo 'uploaded to UBAI successfully....... '
-                else
-                    echo FAIL
-                fi
-            '''
+                        if [ $? -eq 0 ]; then
+                            echo 'uploaded to UBAI successfully....... '
+                        else
+                            echo FAIL
+                        fi
+                    '''
+                } catch (e) {
+                    unstable("Failed to upload binaries to UBAI: ${e.message}")
+                    errorOccurred = true
+                }
+            }
         }
     }
     dir(savedWorkspace) {
         withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')])
         {
-            if (env.BRANCH_NAME.startsWith('sqa_')) {
-                sh '''
-                    ls -al;pwd
-                    set -o pipefail
-                    set -x
-                    file="sqa-build-binaries.zip"
+            try {
+                if (env.BRANCH_NAME.startsWith('sqa_')) {
+                    sh '''
+                        ls -al;pwd
+                        set -o pipefail
+                        set -x
+                        file="sqa-build-binaries.zip"
 
-                    mv ./ota_automation_out ./out/OTA
-                    zip -r "${file}" out
+                        if [ -e "./ota_automation_out" ]; then
+                            base_path="ota_automation_out"
+                            find ${base_path} -type f | while read filePath; do
+                                application=$(echo "$filePath" | awk -F'/' '{print $2}')
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                technology=$(echo "$filePath" | awk -F'/' '{print $4}')
+                                filename=$(basename "$filePath")
 
-                    echo 'UBAI uploading ......'
-                    ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path sqa-build-binaries.zip  --metadata app_name matter \
-                        --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                                appName="$board""-""$technology""-""$application""-ota"
+                                target=$board
 
-                    if [ $? -eq 0 ]; then
-                        echo 'uploaded to UBAI successfully....... '
-                    else
-                        echo FAIL
-                    fi
-                '''
-            } else {
-                sh '''
-                    ls -al;pwd
-                    set -o pipefail
-                    set -x
-                    file="build-binaries.zip"
+                                echo 'Uploading binary to UBAI.'
 
-                    zip -r "${file}" out
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                            done
+                            mv ./ota_automation_out ./out/OTA
+                        else
+                            echo "File ./ota_automation_out does not exist."
+                        fi
+                        if [ -e "./low_power_out" ]; then
+                            base_path="low_power_out"
+                            find ${base_path} -type f | while read filePath; do
+                                application=$(echo "$filePath" | awk -F'/' '{print $2}')
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                technology=$(echo "$filePath" | awk -F'/' '{print $4}')
+                                filename=$(basename "$filePath")
 
-                    echo 'UBAI uploading ......'
-                    ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path build-binaries.zip  --metadata app_name matter \
-                        --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                                appName="$board""-""$technology""-""$application""-low-power"
+                                target=$board
 
-                    if [ $? -eq 0 ]; then
-                        echo 'uploaded to UBAI successfully....... '
-                    else
-                        echo FAIL
-                    fi
-                '''
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                            done
+                            mv ./low_power_out ./out/LOW_POWER
+                        else
+                            echo "File ./low_power_out does not exist."
+                        fi
+                        if [ -e "./multi_ota_automation_out" ]; then
+                            base_path="multi_ota_automation_out"
+                            find ${base_path} -type f | while read filePath; do
+                                application=$(echo "$filePath" | awk -F'/' '{print $2}')
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                technology=$(echo "$filePath" | awk -F'/' '{print $4}')
+                                filename=$(basename "$filePath")
+
+                                appName="$board""-""$technology""-""$application""-m-ota"
+                                target=$board
+
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                            done
+                             mv ./multi_ota_automation_out ./out/M-OTA-V1
+                        else
+                            echo "File ./multi_ota_automation_out does not exist."
+                        fi
+                        if [ -e "./multi_ota_enc_automation_out" ]; then
+                            base_path="multi_ota_enc_automation_out"
+                            find ${base_path} -type f | while read filePath; do
+                                application=$(echo "$filePath" | awk -F'/' '{print $2}')
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                technology=$(echo "$filePath" | awk -F'/' '{print $4}')
+                                filename=$(basename "$filePath")
+
+                                appName="$board""-""$technology""-""$application""-m-ota-enc"
+                                target=$board
+
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                            done
+                            mv ./multi_ota_enc_automation_out ./out/M-OTA-V1-enc
+                        else
+                            echo "File ./multi_ota_enc_automation_out does not exist."
+                        fi
+                        # Zip all binaries and upload to UBAI
+                        zip -r "${file}" out
+
+                        echo 'UBAI uploading ......'
+                        ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path sqa-build-binaries.zip  --metadata app_name matter \
+                            --metadata branch ${matterBranchName} --metadata build_number ${matterBuildNumber} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+
+                        if [ $? -eq 0 ]; then
+                            echo 'uploaded to UBAI successfully....... '
+                        else
+                            echo FAIL
+                        fi
+                    '''
+                } else {
+                    sh '''
+                        ls -al;pwd
+                        set -o pipefail
+                        set -x
+                        file="build-binaries.zip"
+
+                        # Upload all binaries individually to UBAI
+                        base_path="out"
+                        find ${base_path} -type f | while read filePath; do
+                            buildType=$(echo "$filePath" | awk -F'/' '{print $2}')
+                            if [ "$buildType" == "release" ] || [ "$buildType" == "nodebug" ]; then
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                technology=$(echo "$filePath" | awk -F'/' '{print $4}')
+                                filename=$(basename "$filePath")
+
+                                appName="$board""-""$technology""-""$buildType"
+                                target=$board
+
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+
+                            elif [ "$buildType" == "Chiptool" ] || [ "$buildType" == "OTA" ]; then
+                                platform=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                filename=$(basename "$filePath")
+
+                                appName=$buildType
+                                target=$platform
+
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+
+                            elif [ "$buildType" == "WiFi-Firmware" ]; then
+                                board=$(echo "$filePath" | awk -F'/' '{print $3}')
+                                filename=$(basename "$filePath")
+
+                                appName="$buildType""-""$board"
+                                target=$board
+
+                                echo 'Uploading binary to UBAI.'
+
+                                ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path $filePath  --metadata app_name $appName \
+                                --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target $target  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                            fi
+                        done
+
+                        # Package all binaries in build-binaries.zip and upload to UBAI
+                        zip -r "${file}" out
+
+                        echo 'UBAI uploading ......'
+                        ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path build-binaries.zip  --metadata app_name matter \
+                            --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+
+                        if [ $? -eq 0 ]; then
+                            echo 'uploaded to UBAI successfully....... '
+                        else
+                            echo FAIL
+                        fi
+                    '''
+                }
+            } catch (e) {
+                unstable("Failed to upload binaries to UBAI: ${e.message}")
+                errorOccurred = true
             }
         }
     }
@@ -669,27 +899,35 @@ def pushToUbai(matterBranchName=env.BRANCH_NAME,matterBuildNumber=env.BUILD_NUMB
         dir(env.WORKSPACE + '/matter/gsdk/extension/matter_extension/') {
             withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')])
             {
-                sh '''
-                    echo 'Uploading provisioning tool to UBAI... '
+                try{
+                    sh '''
+                        echo 'Uploading provisioning tool to UBAI... '
 
-                    pwd
-                    file="provision.zip"
-                    ls -al;
-                    rm -f "${file}"
+                        pwd
+                        file="provision.zip"
+                        ls -al;
+                        rm -f "${file}"
 
-                    zip -r "${file}" "provision" -x "provision/config/latest.json" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*" -x "provision/temp/*"
+                        zip -r "${file}" "provision" -x "provision/config/latest.json" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*" -x "provision/temp/*"
 
-                    ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path "${file}"  --metadata app_name matter_provision\
-                        --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
+                        ubai_upload_cli --client-id jenkins-gsdk-pipelines-Matter --file-path "${file}"  --metadata app_name matter_provision\
+                            --metadata branch ${BRANCH_NAME} --metadata build_number ${BUILD_NUMBER} --metadata stack matter --metadata target matter  --username ${SL_USERNAME} --password ${SL_PASSWORD}
 
-                    if [ $? -eq 0 ]; then
-                            echo 'Provisioning tool successfully uploaded to UBAI... '
-                    else
-                            echo FAIL
-                    fi
-                '''
+                        if [ $? -eq 0 ]; then
+                                echo 'Provisioning tool successfully uploaded to UBAI... '
+                        else
+                                echo FAIL
+                        fi
+                    '''
+                } catch (e) {
+                    unstable("Failed to upload binaries to UBAI: ${e.message}")
+                    errorOccurred = true
+                }
             }
         }
+    }
+    if (errorOccurred) {
+        currentBuild.result = 'UNSTABLE'
     }
 }
 def pushToArtifactory()
@@ -732,7 +970,6 @@ def pushToArtifactory()
         }
     }
 }
-
 def triggerSqaSmokeAndRegressionTest(buildTool,matterBranchName=env.BRANCH_NAME,matterBuildNumber=env.BUILD_NUMBER)
 {
     node(buildFarmLabel)
@@ -740,147 +977,42 @@ def triggerSqaSmokeAndRegressionTest(buildTool,matterBranchName=env.BRANCH_NAME,
             def workspaceTmpDir = createWorkspaceOverlay(advanceStageMarker.getBuildStagesList(),
                                                             buildOverlayDir)
             def matterPath = workspaceTmpDir + createWorkspaceOverlay.overlayMatterPath
-            catchError(buildResult: 'SUCCESS',
-                        catchInterruptions: false,
-                        message: "[ERROR] SQA smoke trigger branch doesn't exist",
-                        stageResult: 'SUCCESS')
+
+            ws(workspaceTmpDir+createWorkspaceOverlay.overlaySqaPipelinesPath)
             {
-               
-                ws(workspaceTmpDir+createWorkspaceOverlay.overlaySqaPipelinesPath) 
-                { 
-                        sh 'pwd && ls -al'  
-                            if(sqaFunctions.isProductionJenkinsServer())
-                            {
-                                echo 'in product jenkin.... '
-                                //Regression triggered by SQA build branch
-                                if(env.BRANCH_NAME.startsWith('sqa_')){
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'regression-slc', matterBranchName, matterBuildNumber)
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'regression-ota', matterBranchName, matterBuildNumber)
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'endurance-customers-issues', matterBranchName, matterBuildNumber)
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'regression-enhanced-groups', matterBranchName, matterBuildNumber)
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'regression-binding-enhanced', matterBranchName, matterBuildNumber)
-                                } else {
-                                    sqaFunctions.commitToMatterSqaPipelines(buildTool, 'smoke', matterBranchName, matterBuildNumber)
-                                }
+                sh 'pwd && ls -al'
+                if(sqaFunctions.isProductionJenkinsServer())
+                {
+                    echo 'in product jenkin.... '
+                    //Regression triggered by SQA build branch
+                    def regressionList = ['regression-slc', 'regression-ota', 'regression-cmp', 'endurance-customers-issues', 'regression-enhanced-groups', 'regression-binding-enhanced']
+                    def errorOccurred = false
+                    if(env.BRANCH_NAME.startsWith('sqa_')){
+                        regressionList.each { regressionType ->
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(buildTool, regressionType, matterBranchName, matterBuildNumber)
+                            } catch (e) {
+                                unstable("Error when triggering ${regressionType}: ${e.message}")
+                                errorOccurred = true
                             }
+                        }
+                    } else {
+                        try{
+                            sqaFunctions.commitToMatterSqaPipelines(buildTool, 'smoke', matterBranchName, matterBuildNumber)
+                        } catch (e) {
+                                unstable("Error when triggering smoke: ${e.message}")
+                                errorOccurred = true
+                        }
+                    }
+                    if (errorOccurred) {
+                        currentBuild.result = 'UNSTABLE'
+                    }
                 }
             }
             deactivateWorkspaceOverlay(advanceStageMarker.getBuildStagesList(), workspaceTmpDir)
         }
 }
-def utfThreadTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,testSuite,manifestYaml,testSequenceYaml,buildTool)
-{
-    globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
-        node(nomadNode){
-            ws('/home/dockerUser/qaWorkspace/')
-            {
-                dir('utf_app_matter')
-                {   
-                    def commanderDir = ""
-                    sshagent(['svc_gsdk-ssh']) {
-                        checkout scm: [$class                            : 'GitSCM',
-                                        branches                         : [[name: 'silabs_slc_1.3']],
-                                        browser                          : [$class: 'Stash',
-                                        repoUrl                          : 'https://stash.silabs.com/scm/utf/utf_app_matter.git/'],
-                                        userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
-                                        url                              : 'ssh://git@stash.silabs.com/utf/utf_app_matter.git']]]
-
-                        sh ''' git submodule sync --recursive
-                            git submodule update --init --recursive -q '''
-                        sh 'git submodule foreach --recursive git fetch --tags'
-                        sh ''' git clean -ffdx
-                            git submodule foreach --recursive -q git reset --hard -q
-                            git submodule foreach --recursive -q git clean -ffdx -q '''
-                        dir('commander'){
-                            checkout scm: [$class               : 'GitSCM', 
-                                            branches            : [[name: pipelineMetadata.toolchain_info.commander_info.commanderBranch]],
-                                            browser             : [$class: 'Stash', repoUrl: pipelineMetadata.toolchain_info.commander_info.browserUrl], 
-                                            userRemoteConfigs   : [[credentialsId: 'svc_gsdk-ssh', url: pipelineMetadata.toolchain_info.commander_info.gitUrl]]]
-
-                            commanderPath = sh(script: "find " + pwd() + " -name 'commander' -type f -print",returnStdout: true).trim()
-                            echo commanderPath
-                            sh "${commanderPath} -v"
-                            commanderDir = commanderPath - "/commander"
-                            echo commanderDir
-                        }
-                    }
-                    dir('matter')
-                    {
-                            sh 'pwd '
-                            stashFolder = getStashName(board, appName)
-                            echo "unstash folder: "+stashFolder
-                            unstash stashFolder
-                            unstash 'ChipTool'
-
-                            chiptoolPath = sh(script: "find " + pwd() + " -name 'chip-tool' -print",returnStdout: true).trim()
-                            echo chiptoolPath
-
-                            sh "cp saved_workspace/out/release/${board}/OpenThread/${appName}*.s37 ../manifest"
-                    }
-
-                    withVault([vaultSecrets: secrets])
-                    {
-                        withEnv([
-                            // vars required for publish to database
-                            'UTF_QUEUE_SERVER_URL=amqps://' + SL_USERNAME + ':' + SL_PASSWORD + '@utf-queue-central.silabs.net:443/%2f',
-                            "UTF_PRODUCER_APP_ID=$BUILD_TAG",
-                            "RELEASE_NAME=$RELEASE_NAME",
-                            "TEST_SUITE=MatterCI", // ?
-                            "TEST_SCRIPT_REPO=utf-app-matter",
-                            "SDK_URL=N/A",        // ?
-                            "STUDIO_URL=N/A",     // ?
-                            "BRANCH_NAME=${env.BRANCH_NAME}", // ?
-                            "SDK_BUILD_NUM=$BUILD_NUMBER",
-                            "TESTBED_NAME=${testBedName}",
-                            "BUILD_URL=$BUILD_URL",
-                            "JENKIN_RUN_NUM=$BUILD_NUMBER",
-                            "JENKINS_JOB_NAME=$JOB_NAME",
-                            "JENKINS_SERVER_NAME=$JENKINS_URL",
-                            "JENKINS_TEST_RESULTS_URL=$JOB_URL$BUILD_NUMBER/testReport",
-                            "BOARD_ID=${board}",
-                            "MATTER_APP_EXAMPLE=${appName}",
-                            'RUN_SUITE=true',
-                            "MATTER_TYPE=${matterType}",
-                            "TEST_TYPE=ci",
-                            "BUILD_TOOL=${buildTool}",
-                            'PUBLISH_RESULTS=true', // unneeded?
-                            'RUN_TCM_SETUP=false',  // unneeded?
-                            "MATTER_CHIP_TOOL_PATH=${chiptoolPath}" ,
-                            'DEBUG=true',
-                            "UTF_COMMANDER_PATH=${commanderPath}",
-                            "TCM_SIMPLICITYCOMMANDER=${commanderPath}",
-                            "SECMGR_COMMANDER_PATH=${commanderPath}",
-                            "CSA_MATTER_VERSION=${_CSA_MATTER_VERSION}",
-                            "PATH+COMMANDER_PATH=${commanderDir}"
-                        ])
-                        {
-                            catchError(buildResult: 'UNSTABLE',
-                                        catchInterruptions: false,
-                                        message: "[ERROR] One or more tests have failed",
-                                        stageResult: 'UNSTABLE')
-                            {
-                                sh 'printenv'
-                                sh """
-                                    echo ${MATTER_CHIP_TOOL_PATH}
-                                    ls -al ${MATTER_CHIP_TOOL_PATH}
-                                    ./workspace_setup.sh
-                                    executor/launch_utf_tests.sh --publish_test_results true --harness  ${TESTBED_NAME}.yaml --executor_type local --pytest_command "pytest --tb=native tests${testSuite} --manifest manifest${manifestYaml}.yaml ${testSequenceYaml}"
-                                """
-                            }
-                        }
-                    }
-                    sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
-                    archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
-                    junit: 'reports/junit_report.xml'
-
-                    def branchName = BRANCH_NAME.replaceAll("/", "%252F")
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_CICD/job/${branchName}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
-                }
-            }
-        } 
-    }
-}
-def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,wifi_module,testSuite,manifestYaml,testSequenceYaml,buildTool)
+def runUTFTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,wifi_module,testSuite,manifestYaml,testSequenceYaml,buildTool)
 {
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
         node(nomadNode){
@@ -891,7 +1023,7 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                     def commanderDir = ""
                     sshagent(['svc_gsdk-ssh']) {
                         checkout scm: [$class                     : 'GitSCM',
-                                        branches                         : [[name: 'silabs_slc_1.3']],
+                                        branches                         : [[name: 'RC_slc_2.3.0-1.3']],
                                         browser                          : [$class: 'Stash',
                                         repoUrl: 'https://stash.silabs.com/scm/utf/utf_app_matter.git/'],
                                         userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
@@ -905,9 +1037,9 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                             git submodule foreach --recursive -q git reset --hard -q
                             git submodule foreach --recursive -q git clean -ffdx -q '''
                         dir('commander'){
-                            checkout scm: [$class               : 'GitSCM', 
+                            checkout scm: [$class               : 'GitSCM',
                                             branches            : [[name: pipelineMetadata.toolchain_info.commander_info.commanderBranch]],
-                                            browser             : [$class: 'Stash', repoUrl: pipelineMetadata.toolchain_info.commander_info.browserUrl], 
+                                            browser             : [$class: 'Stash', repoUrl: pipelineMetadata.toolchain_info.commander_info.browserUrl],
                                             userRemoteConfigs   : [[credentialsId: 'svc_gsdk-ssh', url: pipelineMetadata.toolchain_info.commander_info.gitUrl]]]
 
                             commanderPath = sh(script: "find " + pwd() + " -name 'commander' -type f -print",returnStdout: true).trim()
@@ -917,22 +1049,30 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                             echo commanderDir
                         }
                     }
-                
-
                     dir('matter')
                     {
-                        stashFolder = getStashName(board, appName, wifi_module)
+                        sh 'pwd'
+                        if(matterType == "wifi") {
+                            stashFolder = getStashName(board, appName, wifi_module)
+                        } else {
+                            stashFolder = getStashName(board, appName)
+                        }
+                        echo "unstash folder: "+stashFolder
                         unstash stashFolder
                         unstash 'ChipTool'
-                    
+
                         chiptoolPath = sh(script: "find " + pwd() + " -name 'chip-tool' -print",returnStdout: true).trim()
                         echo chiptoolPath
 
-                        if(board == "BRD4338A") {
-                            def rpsAppName = "SiWx917-lighting"
-                            sh "cp saved_workspace/out/release/${board}/WiFi/${rpsAppName}*.rps ../manifest"
+                        if(matterType == "wifi") {
+                            if(board == "BRD4338A") {
+                                def rpsAppName = "SiWx917-lighting"
+                                sh "cp saved_workspace/out/release/${board}/WiFi/${rpsAppName}*.rps ../manifest"
+                            } else {
+                                sh "cp saved_workspace/out/release/${board}/WiFi/${appName}*.s37 ../manifest"
+                            }
                         } else {
-                            sh "cp saved_workspace/out/release/${board}/WiFi/${appName}*.s37 ../manifest"
+                            sh "cp saved_workspace/out/release/${board}/OpenThread/${appName}*.s37 ../manifest"
                         }
                     }
 
@@ -983,8 +1123,6 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                                 sh """
                                     echo ${TESTBED_NAME}
                                     ${commanderPath} --version
-                                    pwd
-                                    ls
                                     ./workspace_setup.sh
                                     executor/launch_utf_tests.sh --publish_test_results true --harness  ${TESTBED_NAME}.yaml --executor_type local --pytest_command "pytest --tb=native tests${testSuite} --manifest manifest${manifestYaml}.yaml ${testSequenceYaml}"
                                 """
@@ -994,6 +1132,7 @@ def utfWiFiTestSuite(nomadNode,deviceGroup,testBedName,appName,matterType,board,
                     sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
                     archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
                     junit: 'reports/junit_report.xml'
+                    def branchName = BRANCH_NAME.replaceAll("/", "%252F")
                     echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
                 }
             }
@@ -1048,8 +1187,23 @@ def saveGeneratedBinaries(paramMap, gsdkPath, matterPath, buildDir){
         out_dir = 'ota_automation_out'
         buildType = appName
     }
-    if(applicationComponents.contains("matter_no_debug")){
-        buildType = 'nodebug'
+    if(applicationComponents.contains('multi_image_ota') && applicationComponents.contains('ota_encryption')){
+        out_dir = 'multi_ota_enc_automation_out'
+        buildType = appName
+    }
+    else if(applicationComponents.contains('multi_image_ota')){
+        out_dir = 'multi_ota_automation_out'
+        buildType = appName
+    }
+    if (env.BRANCH_NAME.startsWith("sqa_")){
+        if (applicationComponents.contains("matter_platform_low_power")) {
+            out_dir = 'low_power_out'
+            buildType = appName
+        }
+    } else {
+        if(applicationComponents.contains("matter_no_debug")){
+            buildType = 'nodebug'
+        }
     }
     if(ncp){
         binaryNamingHelper = ncp
@@ -1063,7 +1217,7 @@ def saveGeneratedBinaries(paramMap, gsdkPath, matterPath, buildDir){
         binaryNamingHelper = tmpStr.replace(",","")
     }
 
-    // Create designated standardized filepath for each binary and place outputted images there 
+    // Create designated standardized filepath for each binary and place outputted images there
     // For example:  release/BRD4187C/OpenThread/lighting-app-thread.s37
     def newBinaryLocation = "${savedDirectory}/${out_dir}/${buildType}${otaVersion}/${board}/${protocol}"
     if (otaVersion.contains("-lz4")){
@@ -1095,6 +1249,11 @@ def saveGeneratedBinaries(paramMap, gsdkPath, matterPath, buildDir){
         sh "cp ${buildDir}/build/debug/*.s37  ${newBinaryLocation}/SiWx917-${appNameStripped}-example.s37"
         sh "cp ${buildDir}/build/debug/*.map  ${newBinaryLocation}/SiWx917-${appNameStripped}-example.map"
         sh "cp ${buildDir}/build/debug/*.rps  ${stashFile}"
+
+        //If OTA build, create OTA image from rps file and pass in version number
+        if (otaVersion) {
+            sh "./src/app/ota_image_tool.py create -v 0xFFF1 -p 0x8005 -vn ${otaVersionOnly} -vs ${otaVersionOnly}.0 -da sha256 ${newBinaryLocation}/SiWx917-${appNameStripped}-example.rps ${newBinaryLocation}/SiWx917-${appNameStripped}-example.ota"
+        }
     }
     // Non-solution build (.slcp)
     else{
@@ -1128,8 +1287,8 @@ def copyWifiFirmware(){
     """
     // Copy over
     sh """
-        cp gsdk/extension/wifi_sdk/connectivity_firmware/SiWG917-B.*.*.*.*.0.*.rps ${savedDirectory}/out/WiFi-Firmware/BRD4338A/
-        cp gsdk/extension/wifi_sdk/connectivity_firmware/SiWG917-B.*.*.*.*.0.*.rps ${savedDirectory}/out/WiFi-Firmware/917-ncp/
+        cp gsdk/extension/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps ${savedDirectory}/out/WiFi-Firmware/BRD4338A/
+        cp gsdk/extension/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps ${savedDirectory}/out/WiFi-Firmware/917-ncp/
         cp third_party/silabs/wiseconnect-wifi-bt-sdk/firmware/RS9116W.2.*.rps ${savedDirectory}/out/WiFi-Firmware/rs911x/Evk_1.4/
         cp third_party/silabs/wiseconnect-wifi-bt-sdk/firmware/RS916W.2.*.rps ${savedDirectory}/out/WiFi-Firmware/rs911x/Evk_1.5/
     """
@@ -1176,7 +1335,7 @@ def createOrUpdateSQABuildPipeline()
                     git checkout -b ${sqaBranchName}
                     git config --global user.email "buildengineer@silabs.com"
                     git config --global user.name "Ember Buildengineer"
-                    sed -i '7i\\    pipelineTriggers([pollSCM("0 1 * * *")]),' Jenkinsfile
+                    sed -i '7i\\    pipelineTriggers([pollSCM("H/10 1-3,0 * * *")]),' Jenkinsfile
                     echo MATTER_BUILD_NUMBER=${env.BUILD_NUMBER} > jenkins/matterBuildNumber.groovy
                     git add jenkins/matterBuildNumber.groovy Jenkinsfile
                     git commit -m 'Create SQA branch, insert pollSCM trigger and save Matter build number to file.'
@@ -1204,6 +1363,29 @@ def matterBranchAndBuild()
         }
     } else {
         echo "MatterBuildNumber file does not exist."
+    }
+}
+def uploadExtension()
+{
+    dir(env.WORKSPACE + "/matter"){
+
+        // If RC tag added to build paramaters, affix it within matter.slsdk
+        if (params.RC_TAG != ""){
+            sh "python3 slc/script/tag_release_version.py -f matter.slsdk -v '${pipelineMetadata.toolchain_info.matterExtensionVersion}-${_CSA_MATTER_VERSION}' -t ${params.RC_TAG}"
+        }
+
+        // Create staged extension
+        sh "python3 -u slc/script/generate_metadata.py ${savedDirectory}/out/release"
+        sh './slc/copy-extension.sh .'
+        sh "cp -R ${savedDirectory}/out/release matter_extension/demos"
+        sh "find matter_extension/demos -type f -name '*.map' -delete"
+        sh "zip -r matter_extension.zip matter_extension"
+
+        // Upload extension
+        withCredentials([usernamePassword(credentialsId: 'svc_gsdk', usernameVariable: 'JFROG_USERNAME', passwordVariable: 'JFROG_PASSWORD')]){
+
+            shWithBackoffRetry 'jf rt u matter_extension.zip gsdk-generic-development/matter/' + env.BRANCH_NAME + '/' + env.BUILD_NUMBER + '/ --url https://artifactory.silabs.net/artifactory --user $JFROG_USERNAME --password $JFROG_PASSWORD'
+        }
     }
 }
 return this

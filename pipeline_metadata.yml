@@ -8,10 +8,10 @@
     studioBranch: 'master'
     ucCliBranch: 'rel'
     sisdk:
-      sisdkBranch: 'staging/2024.6/2024.6.0-rc2'
+      sisdkBranch: 'staging/2024.6/2024.6.0-df'
       browserUrl: 'https://stash.silabs.com/scm/embsw/sisdk_release.git'
       gitUrl: 'ssh://git@stash.silabs.com/embsw/sisdk_release.git'
-      sisdkTag: 'v2024.6.0-rc2'
+      sisdkTag: 'v2024.6.0-df'
     zap:
       zapBranch: 'master'
       browserUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/zap'

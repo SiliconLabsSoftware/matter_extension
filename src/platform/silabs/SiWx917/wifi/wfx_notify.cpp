@@ -26,27 +26,14 @@
 #include "silabs_utils.h"
 #include "task.h"
 #include "wfx_host_events.h"
-
-#ifdef RS911X_WIFI
 #include "wfx_rsi.h"
-#endif
-
-#if SL_ICD_ENABLED
-#ifdef __cplusplus
-extern "C" {
-#endif
-#include "sl_si91x_m4_ps.h"
-extern "C" uint8_t m4_alarm_initialization_done;
-extern "C" void set_alarm_interrupt_timer(uint16_t interval);
-#ifdef __cplusplus
-}
-#endif
-#endif // SL_ICD_ENABLED
 
 #include <platform/CHIPDeviceLayer.h>
+#include <platform/silabs/SilabsConfig.h>
 
 using namespace ::chip;
 using namespace ::chip::DeviceLayer;
+using SilabsConfig = chip::DeviceLayer::Internal::SilabsConfig;
 
 extern uint32_t retryInterval;
 /*
@@ -180,12 +167,6 @@ void wfx_ip_changed_notify(int got_ip)
  ********************************************************************************************/
 void wfx_retry_interval_handler(bool is_wifi_disconnection_event, uint16_t retryJoin)
 {
-#if SI917_M4_SLEEP_ENABLED
-    if (m4_alarm_initialization_done == false)
-    {
-        initialize_m4_alarm();
-    }
-#endif // SI917_M4_SLEEP_ENABLED
     if (!is_wifi_disconnection_event)
     {
         /* After the reboot or a commissioning time device failed to connect with AP.
@@ -194,22 +175,14 @@ void wfx_retry_interval_handler(bool is_wifi_disconnection_event, uint16_t retry
         if (retryJoin < MAX_JOIN_RETRIES_COUNT)
         {
             SILABS_LOG("wfx_retry_interval_handler : Next attempt after %d Seconds", CONVERT_MS_TO_SEC(WLAN_RETRY_TIMER_MS));
-#if SI917_M4_SLEEP_ENABLED
+#if CHIP_CONFIG_ENABLE_ICD_SERVER
             // TODO: cleanup the retry logic MATTER-1921
-            if (!chip::Server::GetInstance().GetCommissioningWindowManager().IsCommissioningWindowOpen())
-            {
-                set_alarm_interrupt_timer(WLAN_RETRY_TIMER_MS / 1000);
+            if (SilabsConfig::ConfigValueExists(SilabsConfig::kConfigKey_WiFiSSID)) {
+                // If the device is power cycled go to sleep in between retry
                 wfx_rsi_power_save(RSI_SLEEP_MODE_8, STANDBY_POWER_SAVE_WITH_RAM_RETENTION);
-                // TODO: remove this once TICKLESS_IDLE is applied. MATTER-3134
-                sl_wfx_host_si91x_sleep_wakeup();
             }
-            else
-            {
-                vTaskDelay(pdMS_TO_TICKS(WLAN_RETRY_TIMER_MS));
-            }
-#else
+#endif // CHIP_CONFIG_ENABLE_ICD_SERVER
             vTaskDelay(pdMS_TO_TICKS(WLAN_RETRY_TIMER_MS));
-#endif // SI917_M4_SLEEP_ENABLED
         }
         else
         {
@@ -228,14 +201,14 @@ void wfx_retry_interval_handler(bool is_wifi_disconnection_event, uint16_t retry
             retryInterval = WLAN_MAX_RETRY_TIMER_MS;
         }
         SILABS_LOG("wfx_retry_interval_handler : Next attempt after %d Seconds", CONVERT_MS_TO_SEC(retryInterval));
-#if SI917_M4_SLEEP_ENABLED
-        set_alarm_interrupt_timer(retryInterval / 1000);
+#if CHIP_CONFIG_ENABLE_ICD_SERVER
         wfx_rsi_power_save(RSI_SLEEP_MODE_8, STANDBY_POWER_SAVE_WITH_RAM_RETENTION);
-        // TODO: remove this once TICKLESS_IDLE is applied. MATTER-3134
-        sl_wfx_host_si91x_sleep_wakeup();
-#else
+#endif // CHIP_CONFIG_ENABLE_ICD_SERVER
         vTaskDelay(pdMS_TO_TICKS(retryInterval));
-#endif // SI917_M4_SLEEP_ENABLED
         retryInterval += retryInterval;
     }
+    // TODO: remove this code once this is fixed on the TA handling
+#if CHIP_CONFIG_ENABLE_ICD_SERVER
+    wfx_rsi_power_save(RSI_ACTIVE, HIGH_PERFORMANCE);
+#endif // CHIP_CONFIG_ENABLE_ICD_SERVER
 }

@@ -4,7 +4,7 @@ id=com.silabs.sdk.matter
 version=2.3.0
 
 label=Silicon Labs Matter
-description=Matter extension for Gecko SDK Suite
+description=Matter extension for Simplicity SDK Suite
 
 prop.file.templatesFile=matter_templates.xml
 prop.file.zcl.templateJsonFile=src/app/zap-templates/app-templates.json

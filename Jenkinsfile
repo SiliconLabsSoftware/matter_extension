@@ -11,8 +11,19 @@ properties([
         booleanParam(name: 'SEND_CODE_SIZE_REPORT', defaultValue: false, description: 'Set to true if code size report is to be uploaded. SEND_CODE_SIZE_REPORT is always true on and RC or main development branch - DEFAULT: false'),
         // If Set, will build with workspaces instead of .slcp files 
         booleanParam(name: 'BUILD_WITH_WORKSPACES', defaultValue: true, description: 'Set to false if building examples without using workspaces - DEFAULT: true'),
+        // If Set, will modify matter.slsdk to reflect RC tag on matter_extension upload
+        text(name: 'RC_TAG', defaultValue: "", description: 'Set RC tag to reflect in matter.slsdk. Example input: rc3 - DEFAULT: null'),
     ])
 ])
+
+// Used to make sure that SQA branches don't get built when branchIndexing occurs
+if(env.BRANCH_NAME.startsWith('sqa_')){
+    if (currentBuild.getBuildCauses().toString().contains('BranchIndexingCause')) {
+      print "INFO: Build skipped due to trigger being Branch Indexing"
+      currentBuild.result = 'ABORTED'
+      return
+    }
+}
 
 buildOverlayDir = ''
 //TO DO, this is for SQA UTF testing, this value should get from db or somewhere instead of hardcoded
@@ -358,13 +369,14 @@ def pipeline()
                 parallelNodesBuild['Build Chip-tool']                  = containerWrapper('-name "chip-tool" -o -name "chip-ota-provider-app"', buildFarmLargeLabel, chipToolImage, "-u root", 'matter/' + savedDirectory,{ pipelineFunctions.buildChipToolAndOTAProvider() } )
 
                 // Run Unit Tests
-                parallelNodesBuild['Run Unit Tests']                   = containerWrapper('NONE', buildFarmLargeLabel, chipToolImage, "-u root", 'matter/' + savedDirectory,{ pipelineFunctions.RunUnitTests() } )
+                // TODO: Re-enable once unit test issues / cluster generation are resolved - MATTER-3735
+                // parallelNodesBuild['Run Unit Tests']                   = containerWrapper('NONE', buildFarmLargeLabel, chipToolImage, "-u root", 'matter/' + savedDirectory,{ pipelineFunctions.RunUnitTests() } )
 
                 // Copy contents check
                 parallelNodesBuild['Copy']                             = containerWrapper('NONE', buildFarmLargeLabel, gccImage, "", 'matter/', { pipelineFunctions.testCopyContents() })
 
-                // Component Validation
-                parallelNodesBuild['Validate Components'] =            containerWrapper("NONE", buildFarmLargeLabel, null, "", 'matter/', { pipelineFunctions.validateComponents() })
+               // Validate Metadata
+               parallelNodesBuild['Validate Metadata']                 = containerWrapper("NONE", buildFarmLargeLabel, null, "", 'matter/', { pipelineFunctions.validateMetadata() })
                 
                 // Build these examples on main development branch, RC, or if enabled
                 if (env.BRANCH_NAME.startsWith('silabs') || env.BRANCH_NAME.startsWith('RC_') || params.SEND_CODE_SIZE_REPORT == true){
@@ -373,13 +385,16 @@ def pipeline()
                 }
                 // Build OTA binaries on SQA Branch
             } else {
-                parallelNodesBuild['OTA']                              = containerWrapper('-name "*.s37" -o -name "*.gbl" -o -name "*.ota"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildOtaImages() })
+                parallelNodesBuild['Thread OTA']                       = containerWrapper('-name "*.s37" -o -name "*.gbl" -o -name "*.ota"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildThreadOTAImages() })
+                parallelNodesBuild['WiFi OTA']                         = containerWrapper('-name "*.s37" -o -name "*.gbl" -o -name "*.ota" -o -name "*.rps"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildWiFiOTAImages() })
+                parallelNodesBuild['Low-Power']                        = containerWrapper('-name "*.s37" -o -name "*.gbl" -o -name "*.rps"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildLowPowerImages() })
+                parallelNodesBuild['M-OTA-V1']                            = containerWrapper('-name "*.s37"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildMultiOtaImages() })
+                parallelNodesBuild['M-OTA-V1-enc']                            = containerWrapper('-name "*.s37"', buildFarmLargeLabel, gccImage, "", 'matter/' + savedDirectory,{ pipelineFunctions.buildMultiOtaEncImages() })
             }
-
             parallelNodesBuild.failFast = false
             parallel parallelNodesBuild
         } catch (err) {
-            unstable(message: "Some build failures occured")
+            unstable(message: "Some build failures occurred")
         }
     }
 
@@ -409,20 +424,28 @@ def pipeline()
             parallel parallelNodesBuild
         }
     }
-
     stage("Push to Artifactory and UBAI")
     {
         advanceStageMarker()
-        def parallelNodesBuild = [:]
-        if(!env.BRANCH_NAME.startsWith('sqa_')){
-            parallelNodesBuild["Artifactory"] = containerWrapper('NONE', buildFarmLargeLabel, gccImage, "", 'matter/', { pipelineFunctions.pushToArtifactory()  })
-            parallelNodesBuild["UBAI"] = containerWrapper('NONE', buildFarmLargeLabel, ubaiImage, "", 'matter/', { pipelineFunctions.pushToUbai()  })
-            // if SQA branch, will push SQA binaries to UBAI
-        } else {
-            parallelNodesBuild["UBAI"] = containerWrapper('NONE', buildFarmLargeLabel, ubaiImage, "", 'matter/', { pipelineFunctions.pushToUbai(matterBranchName, MATTER_BUILD_NUMBER)  })
+        try{
+            def parallelNodesBuild = [:]
+            // Do not upload build binaries on SQA builds
+            if(!env.BRANCH_NAME.startsWith('sqa_')){
+                parallelNodesBuild["Artifactory"] = containerWrapper('NONE', buildFarmLargeLabel, gccImage, "", 'matter/', { pipelineFunctions.pushToArtifactory()  })
+                parallelNodesBuild["UBAI"] = containerWrapper('NONE', buildFarmLargeLabel, ubaiImage, "", 'matter/', { pipelineFunctions.pushToUbai()  })
+                // Upload matter_extension on RC builds or if RC tag is provided
+                if(env.BRANCH_NAME.startsWith('RC_slc') || (params.RC_TAG != "")){
+                    parallelNodesBuild["Upload Extension"] = containerWrapper('NONE', buildFarmLargeLabel, gccImage, "-u root", 'matter/', { pipelineFunctions.uploadExtension()  })
+                }
+                // if SQA branch, will push SQA binaries to UBAI
+            } else {
+                parallelNodesBuild["UBAI"] = containerWrapper('NONE', buildFarmLargeLabel, ubaiImage, "", 'matter/', { pipelineFunctions.pushToUbai(matterBranchName, MATTER_BUILD_NUMBER)  })
+            }
+            parallelNodesBuild.failFast = false
+            parallel parallelNodesBuild
+        } catch (err) {
+            unstable(message: "Some upload failures occurred")
         }
-        parallelNodesBuild.failFast = false
-        parallel parallelNodesBuild
     }
    
     if(!env.BRANCH_NAME.startsWith('sqa_')){
@@ -431,11 +454,11 @@ def pipeline()
 
             def parallelNodes = [:]
 
-            parallelNodes['Lighting-App BRD4187C']      = { pipelineFunctions.utfThreadTestSuite('gsdkMontrealNode','utf_matter_thread',
-                                                            'matter_thread','lighting-app','thread','BRD4187C','',"/manifest-4187-thread-lighting_slc",
+            parallelNodes['Lighting-App BRD4187C']      = { pipelineFunctions.runUTFTestSuite('gsdkMontrealNode','utf_matter_thread',
+                                                            'matter_thread','lighting-app','thread','BRD4187C',"",'',"/manifest-4187-thread-lighting_slc",
                                                             "--tmconfig tests/.sequence_manager/test_execution_definitions/matter_thread_ci_sequence.yaml","SLC") }
 
-            parallelNodes['lighting 917-SoC BRD4338A']   = { pipelineFunctions.utfWiFiTestSuite('gsdkMontrealNode','utf_matter_wifi_917soc_ci_2','matter_wifi_917soc_ci_2',
+            parallelNodes['lighting 917-SoC BRD4338A']   = { pipelineFunctions.runUTFTestSuite('gsdkMontrealNode','utf_matter_wifi_917soc_ci_2','matter_wifi_917soc_ci_2',
                                                             'lighting-app','wifi','BRD4338A','917_soc','',"/manifest-917soc",
                                                             "--tmconfig tests/.sequence_manager/test_execution_definitions/matter_wifi_ci_sequence.yaml","SLC") }
 
@@ -457,7 +480,6 @@ def pipeline()
             }
         }
     }
-    currentBuild.result = 'SUCCESS'
 }
 
 def postFailure(e)
