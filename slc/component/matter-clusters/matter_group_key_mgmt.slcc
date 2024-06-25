@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_group_key_mgmt
 source:
-  - path: src/app/clusters/group-key-mgmt-server/group-key-mgmt-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/group-key-mgmt-server/group-key-mgmt-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_group_key_mgmt

@@ -7,11 +7,11 @@ define:
 description: libchipcontroller
 id: libchipcontroller
 include:
--   path: src/include
--   path: src/lib
--   path: third_party/nlassert/repo/include
--   path: third_party/nlio/repo/include
--   path: src/controller
+-   path: third_party/matter_sdk/src/include
+-   path: third_party/matter_sdk/src/lib
+-   path: third_party/matter_sdk/third_party/nlassert/repo/include
+-   path: third_party/matter_sdk/third_party/nlio/repo/include
+-   path: third_party/matter_sdk/src/controller
     file_list:
     -   path: CHIPDeviceControllerFactory.h
     -   path: WriteInteraction.h
@@ -46,17 +46,17 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: src/controller/AbstractDnssdDiscoveryController.cpp
--   path: src/controller/AutoCommissioner.cpp
--   path: src/controller/CHIPCommissionableNodeController.cpp
--   path: src/controller/CHIPDeviceController.cpp
--   path: src/controller/CHIPDeviceControllerFactory.cpp
--   path: src/controller/CommissioneeDeviceProxy.cpp
--   path: src/controller/CommissionerDiscoveryController.cpp
--   path: src/controller/CommissioningDelegate.cpp
--   path: src/controller/CommissioningWindowOpener.cpp
--   path: src/controller/CurrentFabricRemover.cpp
--   path: src/controller/ExampleOperationalCredentialsIssuer.cpp
--   path: src/controller/SetUpCodePairer.cpp
+-   path: third_party/matter_sdk/src/controller/AbstractDnssdDiscoveryController.cpp
+-   path: third_party/matter_sdk/src/controller/AutoCommissioner.cpp
+-   path: third_party/matter_sdk/src/controller/CHIPCommissionableNodeController.cpp
+-   path: third_party/matter_sdk/src/controller/CHIPDeviceController.cpp
+-   path: third_party/matter_sdk/src/controller/CHIPDeviceControllerFactory.cpp
+-   path: third_party/matter_sdk/src/controller/CommissioneeDeviceProxy.cpp
+-   path: third_party/matter_sdk/src/controller/CommissionerDiscoveryController.cpp
+-   path: third_party/matter_sdk/src/controller/CommissioningDelegate.cpp
+-   path: third_party/matter_sdk/src/controller/CommissioningWindowOpener.cpp
+-   path: third_party/matter_sdk/src/controller/CurrentFabricRemover.cpp
+-   path: third_party/matter_sdk/src/controller/ExampleOperationalCredentialsIssuer.cpp
+-   path: third_party/matter_sdk/src/controller/SetUpCodePairer.cpp
 ui_hints:
     visibility: never

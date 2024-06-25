@@ -16,12 +16,12 @@ requires:
 provides:
   - name: matter_uart
 source:
-  - path: examples/platform/silabs/efr32/uart.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/efr32/uart.cpp
     condition: [matter_platform_efr32]
-  - path: examples/platform/silabs/SiWx917/uart.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/SiWx917/uart.cpp
     condition: [matter_platform_siwx917]
 include:
-- path: examples/platform/silabs
+- path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: uart.h
 define:

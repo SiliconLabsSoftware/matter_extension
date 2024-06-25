@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_localization_configuration
 source:
-  - path: src/app/clusters/localization-configuration-server/localization-configuration-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server/localization-configuration-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_localization_configuration

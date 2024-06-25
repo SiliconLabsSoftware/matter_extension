@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_channel
 source:
-  - path: src/app/clusters/channel-server/channel-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/channel-server/channel-server.cpp
 include:
-  - path: src/app/clusters/channel-server
+  - path: third_party/matter_sdk/src/app/clusters/channel-server
     file_list:
       - path: channel-delegate.h
       - path: channel-server.h

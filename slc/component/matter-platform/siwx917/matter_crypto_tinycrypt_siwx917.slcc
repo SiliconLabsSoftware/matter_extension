@@ -11,7 +11,7 @@ metadata:
 provides:
   - name: matter_crypto_tinycrypt_siwx917
 source:
-  - path: src/platform/silabs/SiWx917/CHIPCryptoPALTinyCrypt.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/SiWx917/CHIPCryptoPALTinyCrypt.cpp
   - path: third_party/mbedtls/repo/library/aes.c
   - path: third_party/mbedtls/repo/library/asn1parse.c
   - path: third_party/mbedtls/repo/library/asn1write.c
@@ -139,7 +139,7 @@ include:
       - path: mbedtls/md5.h
       - path: mbedtls/ripemd160.h
       - path: mbedtls/rsa.h
-  - path: src/platform/silabs/SiWx917
+  - path: third_party/matter_sdk/src/platform/silabs/SiWx917
     file_list:
       - path: siwx917-chip-tinycrypt-config.h
 define:

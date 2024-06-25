@@ -10,9 +10,9 @@ metadata:
 provides:
   - name: matter_test_event_trigger
 source:
-  - path: examples/platform/silabs/SilabsTestEventTriggerDelegate.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/SilabsTestEventTriggerDelegate.cpp
 include:
-  - path: examples/platform/silabs/
+  - path: third_party/matter_sdk/examples/platform/silabs/
     file_list:
     - path: SilabsTestEventTriggerDelegate.h
 config_file:

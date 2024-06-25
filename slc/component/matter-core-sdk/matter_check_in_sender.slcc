@@ -9,13 +9,13 @@ define:
 description: icd check-in sender
 id: matter_check_in_sender
 include:
--   path: examples/lighting-app/silabs/include
--   path: examples/platform/silabs
--   path: src
--   path: src/include
--   path: src/lib
--   path: third_party/nlassert/repo/include
--   path: third_party/nlio/repo/include
+-   path: third_party/matter_sdk/examples/lighting-app/silabs/include
+-   path: third_party/matter_sdk/examples/platform/silabs
+-   path: third_party/matter_sdk/src
+-   path: third_party/matter_sdk/src/include
+-   path: third_party/matter_sdk/src/lib
+-   path: third_party/matter_sdk/third_party/nlassert/repo/include
+-   path: third_party/matter_sdk/third_party/nlio/repo/include
 label: sender
 package: Matter
 provides:
@@ -25,7 +25,7 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: src/app/icd/server/ICDCheckInSender.cpp
+-   path: third_party/matter_sdk/src/app/icd/server/ICDCheckInSender.cpp
 requires:
   - name : matter_icd_core
 

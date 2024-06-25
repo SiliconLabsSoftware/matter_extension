@@ -15,8 +15,8 @@ define:
   - name: CHIP_CONFIG_PERSIST_SUBSCRIPTIONS
     value: 1
 include:
-  - path: src/app
+  - path: third_party/matter_sdk/src/app
     file_list: 
     - path: SimpleSubscriptionResumptionStorage.h
 source:
-  - path: src/app/SimpleSubscriptionResumptionStorage.cpp
+  - path: third_party/matter_sdk/src/app/SimpleSubscriptionResumptionStorage.cpp

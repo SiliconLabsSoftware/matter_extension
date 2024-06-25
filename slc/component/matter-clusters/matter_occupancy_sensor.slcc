@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_occupancy_sensor
 source:
-  - path: src/app/clusters/occupancy-sensor-server/occupancy-sensor-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server/occupancy-sensor-server.cpp
 include:
-  - path: src/app/clusters/occupancy-sensor-server
+  - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server
     file_list:
       - path: occupancy-hal.h
       - path: occupancy-sensor-server.h

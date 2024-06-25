@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_temperature_control
 source:
-  - path: src/app/clusters/temperature-control-server/temperature-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/temperature-control-server/temperature-control-server.cpp
 include:
-  - path: src/app/clusters/temperature-control-server
+  - path: third_party/matter_sdk/src/app/clusters/temperature-control-server
     file_list:
       - path: supported-temperature-levels-manager.h
 template_contribution:

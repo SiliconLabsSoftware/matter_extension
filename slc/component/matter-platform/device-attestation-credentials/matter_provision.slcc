@@ -24,7 +24,7 @@ include:
   - path: ProvisionProtocol.h
   - path: ProvisionStorage.h
   - path: ProvisionStorageGeneric.h
-- path: examples/platform/silabs
+- path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: SilabsTestEventTriggerDelegate.h
 - path: src

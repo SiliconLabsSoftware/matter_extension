@@ -99,7 +99,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/data_model/dishwasher-thread-app.zap
+  - path: ../../../../examples/dishwasher-app/silabs/data_model/dishwasher-thread-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -107,7 +107,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/include
+  - path: ../../../../examples/dishwasher-app/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -118,15 +118,15 @@ include:
     directory: include
 
 source:
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/src/AppTask.cpp
+  - path: ../../../../examples/dishwasher-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/src/DishwasherManager.cpp
+  - path: ../../../../examples/dishwasher-app/silabs/src/DishwasherManager.cpp
     directory: src
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/src/operational-state-delegate-impl.cpp
+  - path: ../../../../examples/dishwasher-app/silabs/src/operational-state-delegate-impl.cpp
     directory: src
-  - path: ../../../../silabs_examples/dishwasher-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../examples/dishwasher-app/silabs/src/ZclCallbacks.cpp
     directory: src
 
 define:

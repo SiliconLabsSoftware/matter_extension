@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_energy_preference
 source:
-  - path: src/app/clusters/energy-preference-server/energy-preference-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/energy-preference-server/energy-preference-server.cpp
 include:
-  - path: src/app/clusters/energy-preference-server
+  - path: third_party/matter_sdk/src/app/clusters/energy-preference-server
     file_list:
       - path: energy-preference-server.h
 template_contribution:

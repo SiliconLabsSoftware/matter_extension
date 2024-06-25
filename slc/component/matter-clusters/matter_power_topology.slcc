@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_power_topology
 source:
-  - path: src/app/clusters/power-topology-server/power-topology-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/power-topology-server/power-topology-server.cpp
 include:
-  - path: src/app/clusters/power-topology-server
+  - path: third_party/matter_sdk/src/app/clusters/power-topology-server
     file_list:
       - path: power-topology-server.h
 template_contribution:

@@ -13,11 +13,11 @@ metadata:
 provides:
   - name: matter_bindings
 source:
-  - path: src/app/clusters/bindings/BindingManager.cpp
-  - path: src/app/clusters/bindings/PendingNotificationMap.cpp
-  - path: src/app/clusters/bindings/bindings.cpp
+  - path: third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
+  - path: third_party/matter_sdk/src/app/clusters/bindings/PendingNotificationMap.cpp
+  - path: third_party/matter_sdk/src/app/clusters/bindings/bindings.cpp
 include:
-  - path: src/app/clusters/bindings
+  - path: third_party/matter_sdk/src/app/clusters/bindings
     file_list:
       - path: PendingNotificationMap.h
       - path: BindingManager.h

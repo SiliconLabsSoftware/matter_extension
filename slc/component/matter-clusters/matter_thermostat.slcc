@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_thermostat
 source:
-  - path: src/app/clusters/thermostat-server/thermostat-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_thermostat

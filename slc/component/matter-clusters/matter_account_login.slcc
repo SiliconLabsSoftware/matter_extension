@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_account_login
 source:
-  - path: src/app/clusters/account-login-server/account-login-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/account-login-server/account-login-server.cpp
 include:
-  - path: src/app/clusters/account-login-server
+  - path: third_party/matter_sdk/src/app/clusters/account-login-server
     file_list:
       - path: account-login-delegate.h
       - path: account-login-server.h

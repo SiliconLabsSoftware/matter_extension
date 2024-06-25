@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_ota_provider
 source:
-  - path: src/app/clusters/ota-provider/ota-provider.cpp
+  - path: third_party/matter_sdk/src/app/clusters/ota-provider/ota-provider.cpp
 include:
-  - path: src/app/clusters/ota-provider
+  - path: third_party/matter_sdk/src/app/clusters/ota-provider
     file_list:
       - path: OTAProviderUserConsentDelegate.h
       - path: DefaultOTAProviderUserConsent.h

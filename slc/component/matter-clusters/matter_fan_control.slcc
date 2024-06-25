@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_fan_control
 source:
-  - path: src/app/clusters/fan-control-server/fan-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/fan-control-server/fan-control-server.cpp
 include:
-  - path: src/app/clusters/fan-control-server
+  - path: third_party/matter_sdk/src/app/clusters/fan-control-server
     file_list:
       - path: fan-control-delegate.h
       - path: fan-control-server.h

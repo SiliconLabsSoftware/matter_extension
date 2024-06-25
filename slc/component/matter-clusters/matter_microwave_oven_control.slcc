@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_microwave_oven_control
 source:
-  - path: src/app/clusters/microwave-oven-control-server/microwave-oven-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/microwave-oven-control-server.cpp
 include:
-  - path: src/app/clusters/microwave-oven-control-server
+  - path: third_party/matter_sdk/src/app/clusters/microwave-oven-control-server
     file_list:
       - path: microwave-oven-control-server.h
 template_contribution:

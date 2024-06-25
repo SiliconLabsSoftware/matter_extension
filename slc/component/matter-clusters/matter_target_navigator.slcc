@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_target_navigator
 source:
-  - path: src/app/clusters/target-navigator-server/target-navigator-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/target-navigator-server/target-navigator-server.cpp
 include:
-  - path: src/app/clusters/target-navigator-server
+  - path: third_party/matter_sdk/src/app/clusters/target-navigator-server
     file_list:
       - path: target-navigator-delegate.h
       - path: target-navigator-server.h

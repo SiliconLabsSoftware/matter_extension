@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_electrical_power_measurement
 source:
-  - path: src/app/clusters/electrical-power-measurement-server/electrical-power-measurement-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/electrical-power-measurement-server/electrical-power-measurement-server.cpp
 include:
-  - path: src/app/clusters/electrical-power-measurement-server
+  - path: third_party/matter_sdk/src/app/clusters/electrical-power-measurement-server
     file_list:
       - path: electrical-power-measurement-server.h
 template_contribution:

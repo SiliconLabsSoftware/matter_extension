@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_level_control
 source:
-  - path: src/app/clusters/level-control/level-control.cpp
+  - path: third_party/matter_sdk/src/app/clusters/level-control/level-control.cpp
 include:
-  - path: src/app/clusters/level-control
+  - path: third_party/matter_sdk/src/app/clusters/level-control
     file_list:
       - path: level-control.h
 template_contribution:

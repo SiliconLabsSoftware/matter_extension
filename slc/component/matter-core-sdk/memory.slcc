@@ -7,12 +7,12 @@ define:
 description: memory
 id: memory
 include:
--   path: examples/platform/silabs
--   path: src
--   path: src/include
--   path: src/lib
--   path: third_party/nlassert/repo/include
--   path: src/lib/support
+-   path: third_party/matter_sdk/examples/platform/silabs
+-   path: third_party/matter_sdk/src
+-   path: third_party/matter_sdk/src/include
+-   path: third_party/matter_sdk/src/lib
+-   path: third_party/matter_sdk/third_party/nlassert/repo/include
+-   path: third_party/matter_sdk/src/lib/support
     file_list:
     -   path: StringSplitter.h
     -   path: PersistentStorageAudit.h
@@ -91,7 +91,7 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: src/lib/support/CHIPMem.cpp
--   path: src/lib/support/CHIPPlatformMemory.cpp
+-   path: third_party/matter_sdk/src/lib/support/CHIPMem.cpp
+-   path: third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.cpp
 ui_hints:
     visibility: never

@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_content_launch
 source:
-  - path: src/app/clusters/content-launch-server/content-launch-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.cpp
 include:
-  - path: src/app/clusters/content-launch-server
+  - path: third_party/matter_sdk/src/app/clusters/content-launch-server
     file_list:
       - path: content-launch-delegate.h
       - path: content-launch-server.h

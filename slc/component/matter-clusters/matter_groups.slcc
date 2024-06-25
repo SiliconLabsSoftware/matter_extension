@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_groups
 source:
-  - path: src/app/clusters/groups-server/groups-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/groups-server/groups-server.cpp
 include:
-  - path: src/app/clusters/groups-server
+  - path: third_party/matter_sdk/src/app/clusters/groups-server
     file_list:
       - path: groups-server.h
 template_contribution:

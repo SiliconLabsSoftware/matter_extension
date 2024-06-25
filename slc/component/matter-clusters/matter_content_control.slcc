@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_content_control
 source:
-  - path: src/app/clusters/content-control-server/content-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/content-control-server/content-control-server.cpp
 include:
-  - path: src/app/clusters/content-control-server
+  - path: third_party/matter_sdk/src/app/clusters/content-control-server
     file_list:
       - path: content-control-delegate.h
       - path: content-control-server.h

@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_pump_configuration_and_control_client
 source:
-  - path: src/app/clusters/pump-configuration-and-control-client/pump-configuration-and-control-client.cpp
+  - path: third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/pump-configuration-and-control-client.cpp
 template_contribution:
   - name: component_catalog
     value: matter_pump_configuration_and_control_client
