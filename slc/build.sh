@@ -18,7 +18,7 @@
 #       output in: out/brd4187c/lighting-app-thread/
 
 MATTER_ROOT=$( pwd -P )
-GSDK_ROOT=$MATTER_ROOT/third_party/silabs/simplicity_sdk
+GSDK_ROOT=$MATTER_ROOT/third_party/simplicity_sdk
 SILABS_APP_PATH=$1
 SILABS_BOARD=$2
 CONFIG_ARGS=""
@@ -80,12 +80,12 @@ echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter_extension
 if [ ! -L "$EXTENSION_DIR" ]; then
-    ln -s ../../../../ $EXTENSION_DIR
+    ln -s ../../../ $EXTENSION_DIR
 fi
 
 WISECONNECT3_DIR=$GSDK_ROOT/extension/wifi_sdk
 if [ ! -L "WISECONNECT3_DIR" ]; then
-    ln -s ../../../../third_party/silabs/wifi_sdk/ $WISECONNECT3_DIR
+    ln -s ../../../third_party/wifi_sdk/ $WISECONNECT3_DIR
 fi
 
 # Trust SDK and Matter extension

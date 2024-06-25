@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_wifi_network_diagnostics
 source:
-  - path: src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_wifi_network_diagnostics

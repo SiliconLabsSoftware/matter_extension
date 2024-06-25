@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_bridged_device_basic_information
 source:
-  - path: src/app/clusters/bridged-device-basic-information-server/bridged-device-basic-information-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/bridged-device-basic-information-server/bridged-device-basic-information-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_bridged_device_basic_information

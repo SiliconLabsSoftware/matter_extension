@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_access_control
 source:
-  - path: src/app/clusters/access-control-server/access-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/access-control-server/access-control-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_access_control

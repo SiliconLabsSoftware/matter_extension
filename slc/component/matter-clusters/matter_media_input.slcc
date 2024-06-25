@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_media_input
 source:
-  - path: src/app/clusters/media-input-server/media-input-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/media-input-server/media-input-server.cpp
 include:
-  - path: src/app/clusters/media-input-server
+  - path: third_party/matter_sdk/src/app/clusters/media-input-server
     file_list:
       - path: media-input-server.h
       - path: media-input-delegate.h

@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_laundry_dryer_controls
 source:
-  - path: src/app/clusters/laundry-dryer-controls-server/laundry-dryer-controls-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/laundry-dryer-controls-server/laundry-dryer-controls-server.cpp
 include:
-  - path: src/app/clusters/laundry-dryer-controls-server
+  - path: third_party/matter_sdk/src/app/clusters/laundry-dryer-controls-server
     file_list:
       - path: laundry-dryer-controls-delegate.h
       - path: laundry-dryer-controls-server.h

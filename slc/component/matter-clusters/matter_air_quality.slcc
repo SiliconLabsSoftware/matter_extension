@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_air_quality
 source:
-  - path: src/app/clusters/air-quality-server/air-quality-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/air-quality-server/air-quality-server.cpp
 include:
-  - path: src/app/clusters/air-quality-server
+  - path: third_party/matter_sdk/src/app/clusters/air-quality-server
     file_list:
       - path: air-quality-server.h
 template_contribution:

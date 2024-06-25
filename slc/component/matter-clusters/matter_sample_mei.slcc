@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_sample_mei
 source:
-  - path: src/app/clusters/sample-mei-server/sample-mei-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/sample-mei-server/sample-mei-server.cpp
 include:
-  - path: src/app/clusters/sample-mei-server
+  - path: third_party/matter_sdk/src/app/clusters/sample-mei-server
     file_list:
       - path: sample-mei-server.h
 template_contribution:

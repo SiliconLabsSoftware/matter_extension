@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_content_app_observer
 source:
-  - path: src/app/clusters/content-app-observer/content-app-observer.cpp
+  - path: third_party/matter_sdk/src/app/clusters/content-app-observer/content-app-observer.cpp
 include:
-  - path: src/app/clusters/content-app-observer
+  - path: third_party/matter_sdk/src/app/clusters/content-app-observer
     file_list:
       - path: content-app-observer.h
       - path: content-app-observer-delegate.h

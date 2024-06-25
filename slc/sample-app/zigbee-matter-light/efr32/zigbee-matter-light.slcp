@@ -209,8 +209,8 @@ define:
   value: 0
 
 config_file:
-- path: ../../../../silabs_examples/zigbee-matter-light/config/sl_cmp_config.h
-- path: ../../../../silabs_examples/zigbee-matter-light/config/zcl/zcl_config.zap
+- path: ../../../../examples/zigbee-matter-light/config/sl_cmp_config.h
+- path: ../../../../examples/zigbee-matter-light/config/zcl/zcl_config.zap
   file_id: zap_configuration_file_id
   directory: zcl
 - override:
@@ -221,13 +221,13 @@ config_file:
 
 source:
   - path: ../../../../examples/platform/silabs/main.cpp
-  - path: ../../../../silabs_examples/zigbee-matter-light/src/AppTask.cpp
-  - path: ../../../../silabs_examples/zigbee-matter-light/src/MatterDMCallbacks.cpp
-  - path: ../../../../silabs_examples/zigbee-matter-light/src/ZigbeeCallbacks.cpp
-  - path: ../../../../silabs_examples/zigbee-matter-light/src/LightingManager.cpp
+  - path: ../../../../examples/zigbee-matter-light/src/AppTask.cpp
+  - path: ../../../../examples/zigbee-matter-light/src/MatterDMCallbacks.cpp
+  - path: ../../../../examples/zigbee-matter-light/src/ZigbeeCallbacks.cpp
+  - path: ../../../../examples/zigbee-matter-light/src/LightingManager.cpp
 
 include:
-  - path: ../../../../silabs_examples/zigbee-matter-light/include
+  - path: ../../../../examples/zigbee-matter-light/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h

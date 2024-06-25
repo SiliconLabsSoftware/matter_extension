@@ -18,7 +18,7 @@
         "common/attributes/Accessors.js"
     ],
     "resources": {
-        "config-data": "../common/templates/config-data.yaml"
+        "config-data": "../../../third_party/matter_sdk/src/app/common/templates/config-data.yaml"
     },
     "override": "common/override.js",
     "partials": [

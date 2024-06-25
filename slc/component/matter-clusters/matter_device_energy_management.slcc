@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_device_energy_management
 source:
-  - path: src/app/clusters/device-energy-management-server/device-energy-management-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/device-energy-management-server/device-energy-management-server.cpp
 include:
-  - path: src/app/clusters/device-energy-management-server
+  - path: third_party/matter_sdk/src/app/clusters/device-energy-management-server
     file_list:
       - path: device-energy-management-server.h
 template_contribution:

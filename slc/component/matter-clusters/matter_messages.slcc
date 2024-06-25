@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_messages
 source:
-  - path: src/app/clusters/messages-server/messages-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/messages-server/messages-server.cpp
 include:
-  - path: src/app/clusters/messages-server
+  - path: third_party/matter_sdk/src/app/clusters/messages-server
     file_list:
       - path: messages-server.h
       - path: messages-delegate.h

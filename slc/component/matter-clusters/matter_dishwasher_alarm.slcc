@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_dishwasher_alarm
 source:
-  - path: src/app/clusters/dishwasher-alarm-server/dishwasher-alarm-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/dishwasher-alarm-server.cpp
 include:
-  - path: src/app/clusters/dishwasher-alarm-server
+  - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server
     file_list:
       - path: dishwasher-alarm-delegate.h
       - path: dishwasher-alarm-server.h

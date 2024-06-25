@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_wake_on_lan
 source:
-  - path: src/app/clusters/wake-on-lan-server/wake-on-lan-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/wake-on-lan-server/wake-on-lan-server.cpp
 include:
-  - path: src/app/clusters/wake-on-lan-server
+  - path: third_party/matter_sdk/src/app/clusters/wake-on-lan-server
     file_list:
       - path: wake-on-lan-server.h
       - path: wake-on-lan-delegate.h

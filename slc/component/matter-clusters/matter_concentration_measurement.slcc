@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_concentration_measurement
 include:
-  - path: src/app/clusters/concentration-measurement-server
+  - path: third_party/matter_sdk/src/app/clusters/concentration-measurement-server
     file_list:
       - path: concentration-measurement-server.h
       - path: concentration-measurement-cluster-objects.h

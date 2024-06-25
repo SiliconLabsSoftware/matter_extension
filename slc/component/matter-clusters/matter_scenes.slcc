@@ -13,12 +13,12 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
-  - path: src/app/clusters/scenes-server/SceneHandlerImpl.cpp
-  - path: src/app/clusters/scenes-server/ExtensionFieldSetsImpl.cpp
-  - path: src/app/clusters/scenes-server/scenes-server.cpp
-  - path: src/app/clusters/scenes-server/SceneTableImpl.cpp
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneHandlerImpl.cpp
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server/ExtensionFieldSetsImpl.cpp
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server/scenes-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneTableImpl.cpp
 include:
-  - path: src/app/clusters/scenes-server
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server
     file_list:
       - path: SceneHandlerImpl.h
       - path: SceneTableImpl.h

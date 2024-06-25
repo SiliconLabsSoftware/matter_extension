@@ -116,7 +116,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../examples/thermostat/thermostat-common/thermostat.zap
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -124,7 +124,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../examples/thermostat/silabs/include
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -135,15 +135,15 @@ include:
     directory: include
 
 source:
-  - path: ../../../../examples/thermostat/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/thermostat/silabs/src/TemperatureManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
     directory: src
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../examples/thermostat/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/ZclCallbacks.cpp
     directory: src
-  - path: ../../../../examples/thermostat/silabs/src/SensorManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
     directory: src
 
 define:

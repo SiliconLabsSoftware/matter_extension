@@ -13,11 +13,11 @@ metadata:
 provides:
   - name: matter_time_synchronization
 source:
-  - path: src/app/clusters/time-synchronization-server/time-synchronization-server.cpp
-  - path: src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
-  - path: src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
+  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
+  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
 include:
-  - path: src/app/clusters/time-synchronization-server
+  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
     file_list:
       - path: TimeSyncDataProvider.h
       - path: DefaultTimeSyncDelegate.h

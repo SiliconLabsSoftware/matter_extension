@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_basic_information
 source:
-  - path: src/app/clusters/basic-information/basic-information.cpp
+  - path: third_party/matter_sdk/src/app/clusters/basic-information/basic-information.cpp
 include:
-  - path: src/app/clusters/basic-information
+  - path: third_party/matter_sdk/src/app/clusters/basic-information
     file_list:
       - path: basic-information.h
 template_contribution:

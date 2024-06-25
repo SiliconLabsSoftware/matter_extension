@@ -13,7 +13,7 @@ metadata:
 provides:
   - name: matter_fault_injection
 source:
-  - path: src/app/clusters/fault-injection-server/fault-injection-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/fault-injection-server/fault-injection-server.cpp
 template_contribution:
   - name: component_catalog
     value: matter_fault_injection

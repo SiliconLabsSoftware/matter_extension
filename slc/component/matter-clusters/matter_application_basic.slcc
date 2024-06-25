@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_application_basic
 source:
-  - path: src/app/clusters/application-basic-server/application-basic-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/application-basic-server/application-basic-server.cpp
 include:
-  - path: src/app/clusters/application-basic-server
+  - path: third_party/matter_sdk/src/app/clusters/application-basic-server
     file_list:
       - path: application-basic-delegate.h
       - path: application-basic-server.h

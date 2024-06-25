@@ -114,7 +114,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../examples/lock-app/lock-common/lock-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/lock-common/lock-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -122,7 +122,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../examples/lock-app/silabs/include
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -132,13 +132,13 @@ include:
     directory: include
 
 source:
-  - path: ../../../../examples/lock-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/lock-app/silabs/src/LockManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
     directory: src
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../examples/lock-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/ZclCallbacks.cpp
     directory: src
     
 define:

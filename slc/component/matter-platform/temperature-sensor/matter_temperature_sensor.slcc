@@ -11,8 +11,8 @@ metadata:
 provides:
   - name: matter_temperature_sensor
 include:
-  - path: examples/platform/silabs
+  - path: third_party/matter_sdk/examples/platform/silabs
     file_list:
     - path: TemperatureSensor.h
 source:
-  - path: examples/platform/silabs/TemperatureSensor.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/TemperatureSensor.cpp

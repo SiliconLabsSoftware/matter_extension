@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_media_playback
 source:
-  - path: src/app/clusters/media-playback-server/media-playback-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/media-playback-server/media-playback-server.cpp
 include:
-  - path: src/app/clusters/media-playback-server
+  - path: third_party/matter_sdk/src/app/clusters/media-playback-server
     file_list:
       - path: media-playback-server.h
       - path: media-playback-delegate.h

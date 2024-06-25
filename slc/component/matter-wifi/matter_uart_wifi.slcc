@@ -20,9 +20,9 @@ requires:
 provides:
   - name: matter_uart_wifi
 source:
-  - path: examples/platform/silabs/efr32/uart.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/efr32/uart.cpp
 include:
-- path: examples/platform/silabs
+- path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: uart.h
 define:

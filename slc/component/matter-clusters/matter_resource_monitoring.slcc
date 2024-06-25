@@ -13,10 +13,10 @@ metadata:
 provides:
   - name: matter_resource_monitoring
 source:
-  - path: src/app/clusters/resource-monitoring-server/resource-monitoring-server.cpp
-  - path: src/app/clusters/resource-monitoring-server/resource-monitoring-cluster-objects.cpp
+  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-cluster-objects.cpp
 include:
-  - path: src/app/clusters/resource-monitoring-server
+  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server
     file_list:
       - path: resource-monitoring-cluster-objects.h
       - path: resource-monitoring-server.h

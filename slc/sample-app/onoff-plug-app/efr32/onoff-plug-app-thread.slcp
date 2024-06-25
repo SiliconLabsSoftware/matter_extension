@@ -112,7 +112,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../silabs_examples/onoff-plug-app/onoff-plug-common/onoff-plug-app.zap
+  - path: ../../../../examples/onoff-plug-app/onoff-plug-common/onoff-plug-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -120,7 +120,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../silabs_examples/onoff-plug-app/include
+  - path: ../../../../examples/onoff-plug-app/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -130,13 +130,13 @@ include:
     directory: include
     
 source:
-  - path: ../../../../silabs_examples/onoff-plug-app/src/AppTask.cpp
+  - path: ../../../../examples/onoff-plug-app/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../silabs_examples/onoff-plug-app/src/ZclCallbacks.cpp
+  - path: ../../../../examples/onoff-plug-app/src/ZclCallbacks.cpp
     directory: src
-  - path: ../../../../silabs_examples/onoff-plug-app/src/OnOffPlugManager.cpp
+  - path: ../../../../examples/onoff-plug-app/src/OnOffPlugManager.cpp
     directory: src
 
 define:

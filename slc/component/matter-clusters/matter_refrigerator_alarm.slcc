@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_refrigerator_alarm
 source:
-  - path: src/app/clusters/refrigerator-alarm-server/refrigerator-alarm-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/refrigerator-alarm-server/refrigerator-alarm-server.cpp
 include:
-  - path: src/app/clusters/refrigerator-alarm-server
+  - path: third_party/matter_sdk/src/app/clusters/refrigerator-alarm-server
     file_list:
       - path: refrigerator-alarm-server.h
 template_contribution:

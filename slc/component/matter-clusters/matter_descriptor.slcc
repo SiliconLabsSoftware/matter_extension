@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_descriptor
 source:
-  - path: src/app/clusters/descriptor/descriptor.cpp
+  - path: third_party/matter_sdk/src/app/clusters/descriptor/descriptor.cpp
 include:
-  - path: src/app/clusters/descriptor
+  - path: third_party/matter_sdk/src/app/clusters/descriptor
     file_list:
       - path: descriptor.h
 template_contribution:

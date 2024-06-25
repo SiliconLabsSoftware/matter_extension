@@ -13,9 +13,9 @@ metadata:
 provides:
   - name: matter_general_commissioning
 source:
-  - path: src/app/clusters/general-commissioning-server/general-commissioning-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-server.cpp
 include:
-  - path: src/app/clusters/general-commissioning-server
+  - path: third_party/matter_sdk/src/app/clusters/general-commissioning-server
     file_list:
       - path: general-commissioning-server.h
 template_contribution:
