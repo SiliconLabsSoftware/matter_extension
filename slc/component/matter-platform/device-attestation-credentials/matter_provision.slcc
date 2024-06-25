@@ -15,7 +15,7 @@ config_file:
     file_id: matter_provision_config
     
 include:
-- path: examples/platform/silabs/provision
+- path: third_party/matter_sdk/examples/platform/silabs/provision
   file_list:
   - path: AttestationKey.h
   - path: ProvisionChannel.h
@@ -27,7 +27,7 @@ include:
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: SilabsTestEventTriggerDelegate.h
-- path: src
+- path: third_party/matter_sdk/src
   file_list:
   - path: platform/silabs/multi-ota/OtaTlvEncryptionKey.h
 
@@ -36,23 +36,23 @@ requires:
   - name: iostream_rtt
 
 source:
-  - path: examples/platform/silabs/provision/ProvisionEncoder.cpp
-  - path: examples/platform/silabs/provision/ProvisionManager.cpp
-  - path: examples/platform/silabs/provision/ProvisionProtocolV1.cpp
-  - path: examples/platform/silabs/provision/ProvisionProtocolV2.cpp
-  - path: examples/platform/silabs/provision/ProvisionStorage.cpp
-  - path: examples/platform/silabs/provision/ProvisionStorageCustom.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionEncoder.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionManager.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionProtocolV1.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionProtocolV2.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorage.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
   
-  - path: examples/platform/silabs/provision/AttestationKeyPSA.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/AttestationKeyPSA.cpp
     condition: [matter_platform_efr32]
-  - path: examples/platform/silabs/provision/ProvisionChannelEFR32BLE.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelEFR32BLE.cpp
     condition: [matter_ble]
-  - path: examples/platform/silabs/provision/ProvisionStorageDefault.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageDefault.cpp
     condition: [matter_platform_efr32]
 
-  - path: examples/platform/silabs/provision/AttestationKeyMbed.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/AttestationKeyMbed.cpp
     condition: [matter_platform_siwx917]
-  - path: examples/platform/silabs/provision/ProvisionChannelSi917BLE.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelSi917BLE.cpp
     condition: [matter_wifi_ble]
-  - path: examples/platform/silabs/provision/ProvisionStorageFlash.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageFlash.cpp
     condition: [matter_platform_siwx917]
