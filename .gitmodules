@@ -19,3 +19,15 @@
 [submodule "third_party/QR-Code-generator"]
 	path = third_party/QR-Code-generator
 	url = https://github.com/nayuki/QR-Code-generator.git
+[submodule "third_party/wiseconnect-wifi-bt-sdk"]
+	path = third_party/wiseconnect-wifi-bt-sdk
+	url = https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git
+[submodule "third_party/sdk_support"]
+	path = third_party/matter_support
+	url = https://github.com/SiliconLabs/sdk_support
+[submodule "nlio"]
+	path = third_party/nlio
+	url = https://github.com/nestlabs/nlio.git
+[submodule "nlassert"]
+	path = third_party/nlassert
+	url = https://github.com/nestlabs/nlassert.git
