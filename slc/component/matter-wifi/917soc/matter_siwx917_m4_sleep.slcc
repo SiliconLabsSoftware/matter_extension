@@ -12,11 +12,11 @@ provides:
 requires:
   - name: matter_icd_management
 include:
-  - path: third_party/silabs/matter_support/matter/si91x/siwx917/BRD4338A/support/inc
+  - path: third_party/matter_support/matter/si91x/siwx917/BRD4338A/support/inc
     file_list:
       - path: sl_si91x_m4_ps.h
 source:
-  - path: third_party/silabs/matter_support/matter/si91x/siwx917/BRD4338A/support/src/sl_si91x_m4_ps.c
+  - path: third_party/matter_support/matter/si91x/siwx917/BRD4338A/support/src/sl_si91x_m4_ps.c
 define:
   - name: SI917_M4_SLEEP_ENABLED
     value: 1

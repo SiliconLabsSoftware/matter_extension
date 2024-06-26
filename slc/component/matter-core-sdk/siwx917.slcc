@@ -16,8 +16,8 @@ include:
 -   path: third_party/matter_sdk/src/lib
 -   path: third_party/matter_sdk/src/platform/silabs/SiWx917
 -   path: third_party/matter_sdk/src/platform/silabs/SiWx917/wifi
--   path: third_party/matter_sdk/third_party/nlassert/repo/include
--   path: third_party/matter_sdk/third_party/nlio/repo/include
+-   path: third_party/nlassert/include
+-   path: third_party/nlio/include
 -   path: third_party/matter_sdk/src/include/platform
     file_list:
     -   path: RuntimeOptionsProvider.h

@@ -11,8 +11,8 @@ include:
 -   path: third_party/matter_sdk/src
 -   path: third_party/matter_sdk/src/include
 -   path: third_party/matter_sdk/src/lib
--   path: third_party/matter_sdk/third_party/nlassert/repo/include
--   path: third_party/matter_sdk/third_party/nlio/repo/include
+-   path: third_party/nlassert/include
+-   path: third_party/nlio/include
 -   path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns/records
     file_list:
     -   path: Srv.h
