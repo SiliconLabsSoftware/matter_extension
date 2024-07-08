@@ -14,8 +14,8 @@ include:
 - path: src
 - path: third_party/matter_sdk/src/include
 - path: third_party/matter_sdk/src/lib
-- path: third_party/nlassert/repo/include
-- path: third_party/nlio/repo/include
+- path: third_party/nlassert/include
+- path: third_party/nlio/include
 label: silabs_factory_data_provider
 package: Matter
 provides:

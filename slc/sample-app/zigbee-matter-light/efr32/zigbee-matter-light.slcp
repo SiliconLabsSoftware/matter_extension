@@ -216,11 +216,11 @@ config_file:
 - override:
     component: gatt_configuration
     file_id: gatt_configuration_file_id
-  path: ../../../../examples/platform/silabs/gatt_configuration.btconf
+  path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
   directory: btconf
 
 source:
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
   - path: ../../../../examples/zigbee-matter-light/src/AppTask.cpp
   - path: ../../../../examples/zigbee-matter-light/src/MatterDMCallbacks.cpp
   - path: ../../../../examples/zigbee-matter-light/src/ZigbeeCallbacks.cpp
