@@ -1,3 +1,4 @@
+# TODO Remove this component once proper SDK components are implemented
 id: "matter_segger_rtt"
 label: "Matter Segger RTT"
 package: "Matter"
@@ -7,7 +8,7 @@ quality: production
 metadata:
   sbom:
     license: Segger
-root_path: slc/component/matter-platform/segger
+root_path: slc/component/sdk-content/simplicity-sdk
 config_file:
   - path: "util/third_party/segger/systemview/Config/SEGGER_RTT_Conf.h"
 source:

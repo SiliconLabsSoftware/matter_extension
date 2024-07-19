@@ -151,7 +151,7 @@ include:
 source:
   - path: ../../../../examples/dishwasher-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../examples/dishwasher-app/silabs/src/DishwasherManager.cpp
     directory: src
