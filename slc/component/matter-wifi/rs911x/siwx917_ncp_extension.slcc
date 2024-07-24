@@ -25,6 +25,7 @@ source:
 include:
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/hal
   file_list:
+  - path: sl_board_configuration.h
   - path: sl_board_configuration_SiWx917.h
   - path: sl_si91x_ncp_utility.h
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x

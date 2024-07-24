@@ -28,12 +28,18 @@ component:
     from: matter
   - id: matter_gatt
     from: matter
+  - id: matter_provision_default
+    from: matter
 
   - id: matter_efr32_ncp
     from: matter
   - id: matter_wifi
     from: matter
   - id: wf200_ncp_extension
+    from: matter
+  - id: matter_icd_core
+    from: matter
+  - id: matter_icd_management
     from: matter
     
   - id: matter_lock
@@ -113,7 +119,7 @@ requires:
      - device_series_2
      
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/lock-common/lock-app-wifi.zap
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/lock-common/lock-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf

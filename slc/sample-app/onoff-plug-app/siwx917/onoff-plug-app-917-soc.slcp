@@ -26,6 +26,8 @@ component:
     from: matter
   - id: app_common
     from: matter
+  - id: matter_provision_flash
+    from: matter
 
   - id: matter_onoff_plug
     from: matter   

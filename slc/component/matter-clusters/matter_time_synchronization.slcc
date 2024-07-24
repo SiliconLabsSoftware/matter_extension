@@ -28,4 +28,4 @@ template_contribution:
     value: matter_time_synchronization
 define:
   - name: TIME_SYNC_ENABLE_TSC_FEATURE
-    value: 0
+    value: 1

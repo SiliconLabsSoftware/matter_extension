@@ -4,6 +4,9 @@ define:
     value: '1'
 -   name: RADIO_CONFIG_DMP_SUPPORT
     value: '1'
+-   name: CHIP_DNSSD_DEFAULT_MINIMAL
+    value: 1
+
 description: dnssd_wifi
 id: dnssd_wifi
 include:
@@ -37,11 +40,13 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
+-   path: third_party/matter_sdk/src/lib/dnssd/Advertiser.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/ActiveResolveAttempts.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/Advertiser_ImplMinimalMdns.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/IPAddressSorter.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/IncrementalResolve.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/MinimalMdnsServer.cpp
+-   path: third_party/matter_sdk/src/lib/dnssd/Resolver.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/ResolverProxy.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/Resolver_ImplMinimalMdns.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/TxtFields.cpp

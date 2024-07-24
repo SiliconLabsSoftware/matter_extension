@@ -272,7 +272,7 @@ if __name__ == '__main__':
                         if '=' in define: # looks for defines and splits the string to a define, value pair 
                             define, value = define.split('=')
 
-                        if define.startswith(('DISPLAY_ENABLED', 'QR_CODE_ENABLED'))
+                        if define.startswith(('DISPLAY_ENABLED', 'QR_CODE_ENABLED')):
                             # Skip defines related to LCD
                             continue
                         

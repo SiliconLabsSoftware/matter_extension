@@ -32,6 +32,9 @@ component:
     from: matter   
   - id: app_common
     from: matter
+  - id: matter_provision_flash
+    from: matter
+
   - id: matter_access_control
     from: matter
   - id: matter_administrator_commissioning

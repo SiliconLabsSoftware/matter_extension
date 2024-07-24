@@ -96,6 +96,8 @@ component:
 - {from: matter, id: matter_shell}
 - {from: matter, id: matter_power_source}
 - {from: matter, id: app_common}
+- {from: matter, id: matter_provision_default}
+
 #Matter components wrapper from simplicity_sdk
 - {from: matter, id: matter_default_lcd_config}
 - {from: matter, id: matter_buttons}

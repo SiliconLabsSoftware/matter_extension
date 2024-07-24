@@ -39,6 +39,8 @@ component:
     from: matter   
   - id: app_common
     from: matter
+  - id: matter_provision_default
+    from: matter
 
   - id: matter_access_control
     from: matter
@@ -93,6 +95,8 @@ component:
   - id: matter_bindings
     from: matter
   - id: matter_user_label
+    from: matter
+  - id: matter_scenes
     from: matter
 
 

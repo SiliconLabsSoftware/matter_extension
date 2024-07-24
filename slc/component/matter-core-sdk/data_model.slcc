@@ -15,6 +15,7 @@ include:
 -   path: third_party/nlio/include
 -   path: third_party/matter_sdk/src/app
     file_list:
+    -   path: data-model/EncodableToTLV.h
     -   path: data-model/FabricScoped.h
     -   path: data-model/Nullable.h
     -   path: data-model/ListLargeSystemExtensions.h
@@ -23,7 +24,6 @@ include:
     -   path: data-model/BasicTypes.h
     -   path: data-model/FabricScopedPreEncodedValue.h
     -   path: data-model/WrappedStructEncoder.h
-    -   path: data-model/TagBoundEncoder.h
     -   path: data-model/DecodableList.h
     -   path: data-model/Encode.h
     -   path: data-model/Decode.h

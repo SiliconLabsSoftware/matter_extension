@@ -35,6 +35,8 @@ component:
     from: matter
   - id: matter_gatt
     from: matter
+  - id: matter_provision_default
+    from: matter
 
   - id: matter_lighting
     from: matter
@@ -77,6 +79,8 @@ component:
   - id: matter_ota_requestor
     from: matter
   - id: matter_power_source
+    from: matter
+  - id: matter_scenes
     from: matter
   - id: matter_software_diagnostics
     from: matter

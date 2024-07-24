@@ -31,6 +31,8 @@ component:
     from: matter     
   - id: app_common
     from: matter
+  - id: matter_provision_flash
+    from: matter
 
   - id: matter_access_control
     from: matter
@@ -140,7 +142,7 @@ component:
     id: ulp_timers_instance
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/light-switch-app-wifi.zap
+  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/light-switch-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf

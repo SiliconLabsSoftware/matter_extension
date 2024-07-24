@@ -30,6 +30,8 @@ component:
     from: matter
   - id: app_common
     from: matter
+  - id: matter_provision_flash
+    from: matter
 
   - id: matter_access_control
     from: matter
@@ -138,7 +140,7 @@ configuration:
   - {name: SL_ULPUART_DMA_CONFIG_ENABLE, value: '0'}
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/window-app/common/window-app-wifi.zap
+  - path: ../../../../third_party/matter_sdk/examples/window-app/common/window-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf

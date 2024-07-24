@@ -18,6 +18,10 @@ include:
 -   path: third_party/matter_sdk/src/app
     file_list:
     -   path: AttributeAccessToken.h
+    -   path: AttributeValueEncoder.h
+    -   path: AttributeValueDecoder.h
+    -   path: AttributeEncodeState.h
+    -   path: AttributeReportBuilder.h
     -   path: InteractionModelDelegatePointers.h
     -   path: InteractionModelTimeout.h
     -   path: SubscriptionsInfoProvider.h
@@ -38,6 +42,8 @@ include:
     -   path: ConcreteClusterPath.h
     -   path: PendingResponseTrackerImpl.h
     -   path: SubscriptionResumptionSessionEstablisher.h
+    -   path: CommandHandlerExchangeInterface.h
+    -   path: CommandHandlerImpl.h
     -   path: CommandHandler.h
     -   path: DefaultAttributePersistenceProvider.h
     -   path: SimpleSubscriptionResumptionStorage.h
@@ -80,6 +86,9 @@ include:
     -   path: OperationalSessionSetupPool.h
     -   path: ReadHandler.h
     -   path: OTAUserConsentCommon.h
+    -   path: AttributeAccessInterfaceRegistry.h
+    -   path: AttributeReportBuilder.cpp
+    -   path: AttributeValueEncoder.cpp
 label: libchipdatamodel
 package: Matter
 provides:
@@ -89,12 +98,15 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: third_party/matter_sdk/src/app/AttributeAccessInterface.cpp
+-   path: third_party/matter_sdk/src/app/AttributeAccessInterfaceRegistry.cpp
+-   path: third_party/matter_sdk/src/app/AttributeReportBuilder.cpp
+-   path: third_party/matter_sdk/src/app/AttributeValueEncoder.cpp
 -   path: third_party/matter_sdk/src/app/AttributePathExpandIterator.cpp
 -   path: third_party/matter_sdk/src/app/BufferedReadCallback.cpp
 -   path: third_party/matter_sdk/src/app/ChunkedWriteCallback.cpp
 -   path: third_party/matter_sdk/src/app/ClusterStateCache.cpp
 -   path: third_party/matter_sdk/src/app/CommandHandler.cpp
+-   path: third_party/matter_sdk/src/app/CommandHandlerImpl.cpp
 -   path: third_party/matter_sdk/src/app/CommandResponseSender.cpp
 -   path: third_party/matter_sdk/src/app/DefaultAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/DeferredAttributePersistenceProvider.cpp

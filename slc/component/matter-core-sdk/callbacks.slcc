@@ -24,7 +24,6 @@ include:
     -   path: util/att-storage.h
     -   path: util/im-client-callbacks.h
     -   path: util/attribute-storage.h
-    -   path: util/af.h
     -   path: util/ember-strings.h
     -   path: util/types_stub.h
     -   path: util/util.h

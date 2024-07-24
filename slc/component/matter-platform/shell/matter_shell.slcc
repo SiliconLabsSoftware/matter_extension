@@ -19,11 +19,11 @@ source:
 - path: third_party/matter_sdk/examples/shell/shell_common/cmd_otcli.cpp
   condition: [matter_thread]
 - path: third_party/matter_sdk/examples/shell/shell_common/globals.cpp
+- path: third_party/matter_sdk/src/lib/shell/CommandSet.cpp
 - path: third_party/matter_sdk/src/lib/shell/Engine.cpp
 - path: third_party/matter_sdk/src/lib/shell/streamer.cpp
 - path: third_party/matter_sdk/src/lib/shell/streamer_silabs.cpp
 - path: third_party/matter_sdk/src/lib/shell/MainLoopSilabs.cpp
-- path: third_party/matter_sdk/src/lib/shell/commands/Base64.cpp
 - path: third_party/matter_sdk/src/lib/shell/commands/Help.cpp
 - path: third_party/matter_sdk/src/lib/shell/commands/Meta.cpp
 - path: third_party/matter_sdk/src/lib/shell/commands/Config.cpp
@@ -53,11 +53,16 @@ include:
 - path: third_party/matter_sdk/src/lib/shell
   file_list:
   - path: Engine.h
+  - path: Command.h
   - path: Commands.h
+  - path: CommandSet.h
   - path: streamer.h
+  - path: SubShellCommand.h
 - path: third_party/matter_sdk/src/lib/shell/commands
   file_list:
   - path: Help.h
+  - path: WiFi.h
+    condition: matter_wifi
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: matter_shell.h

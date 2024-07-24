@@ -37,6 +37,8 @@ component:
     from: matter
   - id: matter_gatt
     from: matter
+  - id: matter_provision_default
+    from: matter
 
 #  - id: matter_lighting
 #    from: matter

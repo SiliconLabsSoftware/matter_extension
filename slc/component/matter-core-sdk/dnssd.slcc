@@ -4,6 +4,9 @@ define:
     value: '1'
 -   name: RADIO_CONFIG_DMP_SUPPORT
     value: '1'
+-   name: CHIP_DNSSD_DEFAULT_PLATFORM
+    value: 1
+
 description: dnssd
 id: dnssd
 include:
@@ -37,9 +40,11 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
+-   path: third_party/matter_sdk/src/lib/dnssd/Advertiser.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/Discovery_ImplPlatform.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/IPAddressSorter.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/ResolverProxy.cpp
+-   path: third_party/matter_sdk/src/lib/dnssd/Resolver.cpp
 -   path: third_party/matter_sdk/src/lib/dnssd/TxtFields.cpp
 ui_hints:
     visibility: never

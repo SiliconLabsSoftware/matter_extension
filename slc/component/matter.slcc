@@ -41,6 +41,9 @@ provides:
 define:
   - name: MATTER_INTEGRATION
     value: 1
+  - name: SL_MATTER_GN_BUILD 
+    value: 0
+
 include:
 - path: third_party/matter_sdk
 requires:
@@ -108,3 +111,4 @@ requires:
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override
+  - id: matter_provision_default

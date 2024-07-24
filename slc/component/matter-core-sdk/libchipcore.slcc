@@ -26,6 +26,7 @@ include:
     -   path: CHIPEncoding.h
     -   path: TLVWriter.h
     -   path: Global.h
+    -   path: GroupedCallbackList.h
     -   path: TLVTags.h
     -   path: Unchecked.h
     -   path: PasscodeId.h

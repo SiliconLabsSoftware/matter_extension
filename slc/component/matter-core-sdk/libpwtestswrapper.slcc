@@ -9,7 +9,6 @@ include:
     file_list:
     -   path: StringSplitter.h
     -   path: PersistentStorageAudit.h
-    -   path: UnitTestRegistration.h
     -   path: CHIPPlatformMemory.h
     -   path: SafeString.h
     -   path: ScopedBuffer.h
@@ -69,10 +68,8 @@ include:
     -   path: BytesCircularBuffer.h
     -   path: utf8.h
     -   path: BitFlags.h
-    -   path: UnitTestContext.h
     -   path: FibonacciUtils.h
     -   path: ThreadOperationalDataset.h
-    -   path: UnitTestExtendedAssertions.h
     -   path: Variant.h
     -   path: PoolWrapper.h
 label: libpwtestswrapper

@@ -141,10 +141,10 @@ include:
       - path: mbedtls/rsa.h
   - path: third_party/matter_sdk/src/platform/silabs/SiWx917
     file_list:
-      - path: siwx917-chip-tinycrypt-config.h
+      - path: siwx917-chip-mbedtls-config.h
 define:
   - name: OPTIMIZE_TINYCRYPT_ASM
   - name: TINYCRYPT_PRIMITIVES
   - name: SL_MBEDTLS_USE_TINYCRYPT
   - name: MBEDTLS_CONFIG_FILE
-    value: \"siwx917-chip-tinycrypt-config.h\"
+    value: \"siwx917-chip-mbedtls-config.h\"

@@ -25,6 +25,10 @@ include:
 -   path: third_party/matter_sdk/src/app
     file_list:
     -   path: util/attribute-table.h
+    -   path: util/attribute-table-detail.h
+    -   path: util/attribute-storage-detail.h
+    -   path: util/ember-io-storage.h
+    -   path: util/ember-global-attribute-access-interface.h
     -   path: util/endpoint-config-api.h
     -   path: util/DataModelHandler.h
     -   path: util/config.h
@@ -33,7 +37,6 @@ include:
     -   path: util/att-storage.h
     -   path: util/im-client-callbacks.h
     -   path: util/attribute-storage.h
-    -   path: util/af.h
     -   path: util/ember-strings.h
     -   path: util/types_stub.h
     -   path: util/util.h
@@ -46,6 +49,7 @@ include:
     -   path: util/attribute-storage-null-handling.h
     -   path: util/odd-sized-integers.h
     -   path: util/generic-callbacks.h
+    -   path: util/IMClusterCommandHandler.h
 label: app_common
 package: Matter
 provides:

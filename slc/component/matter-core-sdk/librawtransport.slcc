@@ -15,7 +15,6 @@ include:
 -   path: third_party/nlio/include
 -   path: third_party/matter_sdk/src/transport/raw
     file_list:
-    -   path: TCP.h
     -   path: BLE.h
     -   path: PeerAddress.h
     -   path: Tuple.h
@@ -33,7 +32,6 @@ metadata:
 source:
 -   path: third_party/matter_sdk/src/transport/raw/BLE.cpp
 -   path: third_party/matter_sdk/src/transport/raw/MessageHeader.cpp
--   path: third_party/matter_sdk/src/transport/raw/TCP.cpp
 -   path: third_party/matter_sdk/src/transport/raw/UDP.cpp
 ui_hints:
     visibility: never
