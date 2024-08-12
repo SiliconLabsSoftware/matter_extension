@@ -7,6 +7,7 @@ quality: production
 metadata:
   sbom:
     license: Zlib
+
 provides:
   - name: matter_provision
   - name: matter_provision_default
@@ -14,7 +15,16 @@ provides:
 config_file:
   - path: slc/config/sl_matter_provision_config.h
     file_id: matter_provision_config
-    
+
+requires:
+  - name: iostream
+  - name: iostream_rtt
+  - name: matter_crypto_psa_siwx917 # Provisioning Default only support PSA crypto flavor
+    condition: [device_family_siwg917]
+
+conflicts:
+  - name: matter_provision_flash
+
 include:
 - path: third_party/matter_sdk/src/platform/silabs/provision
   file_list:
@@ -28,10 +38,6 @@ include:
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: SilabsTestEventTriggerDelegate.h
-
-requires:
-  - name: iostream
-  - name: iostream_rtt
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageDefault.cpp
@@ -47,6 +53,6 @@ library:
   - path: third_party/matter_support/matter/provision/lib/libProvision_mgm24.a
     condition:
       - device_family_mgm24
-  - path: third_party/matter_support/matter/provision/lib/libProvision_si917.a
+  - path: third_party/matter_support/matter/provision/lib/libProvisionPSA_si917.a
     condition:
       - device_family_siwg917

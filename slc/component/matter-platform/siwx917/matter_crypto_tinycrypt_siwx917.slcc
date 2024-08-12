@@ -8,8 +8,16 @@ quality: production
 metadata:
   sbom:
     license: Zlib
+
 provides:
   - name: matter_crypto_tinycrypt_siwx917
+
+requires:
+  - name: mbedtls_config
+
+conflicts:
+  - name: matter_crypto_psa_siwx917
+
 source:
   - path: third_party/matter_sdk/src/platform/silabs/SiWx917/CHIPCryptoPALTinyCrypt.cpp
   - path: third_party/mbedtls/library/aes.c
@@ -87,6 +95,7 @@ include:
       - path: mbedtls/pk_internal.h
       - path: mbedtls/oid.h
       - path: mbedtls/check_config.h
+      - path: mbedtls/build_info.h
   - path: third_party/mbedtls/library
     file_list:
       - path: common.h
@@ -143,8 +152,83 @@ include:
     file_list:
       - path: siwx917-chip-mbedtls-config.h
 define:
-  - name: OPTIMIZE_TINYCRYPT_ASM
-  - name: TINYCRYPT_PRIMITIVES
   - name: SL_MBEDTLS_USE_TINYCRYPT
-  - name: MBEDTLS_CONFIG_FILE
-    value: \"siwx917-chip-mbedtls-config.h\"
+    value: 1
+  # Using user config as a workaround to avoid reworking siwx917-chip-mbedtls-config.h.
+  # siwx917-chip-mbedtls-config.h contains defines necessary for CSA that cannot be moved easily for now.
+  # Using mbedtls_config forces the MBEDTLS_CONFIG_FILE defines to the generated header.
+  - name: MBEDTLS_USER_CONFIG_FILE
+    value: <siwx917-chip-mbedtls-config.h>
+
+# Temporary work around since we cannot use the si sdk mbedtls components
+template_contribution:
+  - name: mbedtls_config
+    value: MBEDTLS_MPI_MAX_SIZE 32
+  - name: mbedtls_config
+    value: MBEDTLS_NO_PLATFORM_ENTROPY
+  - name: mbedtls_config
+    value: MBEDTLS_AES_C
+  - name: mbedtls_config
+    value: MBEDTLS_ASN1_PARSE_C
+  - name: mbedtls_config
+    value: MBEDTLS_ASN1_WRITE_C
+  - name: mbedtls_config
+    value: MBEDTLS_BASE64_C
+  - name: mbedtls_config
+    value: MBEDTLS_CIPHER_C
+  - name: mbedtls_config
+    value: MBEDTLS_CMAC_C
+  - name: mbedtls_config
+    value: MBEDTLS_ECDSA_C
+  - name: mbedtls_config
+    value: MBEDTLS_ECP_C
+  - name: mbedtls_config
+    value: MBEDTLS_ECP_DP_SECP256R1_ENABLED
+  - name: mbedtls_config
+    value: MBEDTLS_MD_C
+  - name: mbedtls_config
+    value: MBEDTLS_BIGNUM_C
+  - name: mbedtls_config
+    value: MBEDTLS_OID_C
+  - name: mbedtls_config
+    value: MBEDTLS_PEM_PARSE_C
+  - name: mbedtls_config
+    value: MBEDTLS_PEM_WRITE_C
+  - name: mbedtls_config
+    value: MBEDTLS_PK_C
+  - name: mbedtls_config
+    value: MBEDTLS_PK_PARSE_C
+  - name: mbedtls_config
+    value: MBEDTLS_PK_WRITE_C
+  - name: mbedtls_config
+    value: MBEDTLS_PLATFORM_C
+  - name: mbedtls_config
+    value: MBEDTLS_PLATFORM_MEMORY
+  - name: mbedtls_config
+    value: MBEDTLS_ENTROPY_C
+  - name: mbedtls_config
+    value: MBEDTLS_ENTROPY_FORCE_SHA256
+  - name: mbedtls_config
+    value: MBEDTLS_ENTROPY_MAX_SOURCES 2
+  - name: mbedtls_config
+    value: MBEDTLS_CTR_DRBG_C
+  - name: mbedtls_config
+    value:  MBEDTLS_SHA256_C
+  - name: mbedtls_config
+    value:  MBEDTLS_SHA224_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_USE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CREATE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CRT_PARSE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CRT_WRITE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CRL_PARSE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CSR_PARSE_C
+  - name: mbedtls_config
+    value:  MBEDTLS_X509_CSR_WRITE_C
+
+

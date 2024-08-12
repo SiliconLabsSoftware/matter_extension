@@ -11,6 +11,15 @@ provides:
   - name: matter_provision
   - name: matter_provision_flash
 
+requires:
+  - name: iostream
+  - name: iostream_rtt
+  - name: matter_crypto_tinycrypt_siwx917 # Provisioning Flash only support Tinycript crypto flavor
+    condition: [device_family_siwg917]
+
+conflicts:
+  - name: matter_provision_default
+
 config_file:
   - path: slc/config/sl_matter_provision_config.h
     file_id: matter_provision_config
@@ -29,10 +38,6 @@ include:
   file_list:
   - path: SilabsTestEventTriggerDelegate.h
 
-requires:
-  - name: iostream
-  - name: iostream_rtt
-
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageFlash.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
@@ -47,6 +52,6 @@ library:
   - path: third_party/matter_support/matter/provision/lib/libProvisionFlash_mgm24.a
     condition:
       - device_family_mgm24
-  - path: third_party/matter_support/matter/provision/lib/libProvisionPSA_si917.a
+  - path: third_party/matter_support/matter/provision/lib/libProvision_si917.a
     condition:
       - device_family_siwg917

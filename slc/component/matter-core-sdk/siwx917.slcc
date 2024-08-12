@@ -182,7 +182,6 @@ source:
 -   path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
 -   path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
 -   path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
--   path: third_party/matter_sdk/src/platform/silabs/SiWx917/CHIPCryptoPALTinyCrypt.cpp
 -   path: third_party/matter_sdk/src/platform/silabs/SiWx917/OTAImageProcessorImpl.cpp
 -   path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
 -   path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
