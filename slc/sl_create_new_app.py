@@ -54,8 +54,8 @@ class createApp:
             self.silabs_chip_root = os.getenv("silabs_chip_root")
             self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
             self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
-            self.gsdk_root = Path(os.getcwd()).parent.parent
-            self.wiseconnect_root = os.path.join(self.gsdk_root,"extension","wiseconnect")
+            self.sisdk_root = os.getenv("SISDK_ROOT")
+            self.wiseconnect_root = os.getenv("WISECONNECT_ROOT")
             self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
         except:
             print("Could not load the .env file. Run sl_setup_env.py generate .env file")
@@ -106,15 +106,13 @@ Do you want to trust above SDKs/Extensions (yes / no) ? : "
             print(f"{sdk_or_ext} : '{location}' not trusted")
             sys.exit(1)
 
-    def slc_trust(self , wifi917):
+    def slc_trust(self):
         #Get user permission to trust simplicity_sdk and extensions with use arm gcc
         #use arm-gcc toolchain with slc
         subprocess.run([self.slc_path, "configuration","-gcc", self.arm_toolchain_path])
 
-        trust_locations = [["SDK",self.gsdk_root],["Extension", self.silabs_chip_root]]
-        if wifi917:
-            trust_locations.append(["Extension",self.wiseconnect_root])
-
+        trust_locations = [["SDK",self.sisdk_root],["Extension", self.silabs_chip_root],
+                                                    ["Extension",self.wiseconnect_root]]
         self.trust_location(trust_locations)
 
 
@@ -124,7 +122,7 @@ Do you want to trust above SDKs/Extensions (yes / no) ? : "
         config_args=";wiseconnect3_sdk"  if self.silabs_board in self.SoC_boards else ""
         #run slc generate to create copy of sample app at the 'new_app_name' location
         try:
-            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name, "-p", self.reference_slcp_file, "--with", self.silabs_board+config_args, "--new-project", "--force"]
+            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name, "-p", self.reference_slcp_file, "--with", self.silabs_board+config_args, "--new-project", "--force", "--generator-timeout=180", "-o", "makefile"]
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError:
             print("Error running 'slc generate'")

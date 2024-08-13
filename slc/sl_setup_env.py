@@ -91,6 +91,8 @@ else:
 slc_cli_path = os.path.join(silabs_chip_root, "slc","tools","slc_cli")
 zap_path = os.path.join(silabs_chip_root, "slc","tools","zap")
 arm_toolchain_path = os.path.join(arm_gcc_dir,"bin")
+sisdk_root = os.path.join(silabs_chip_root,"third_party","simplicity_sdk")
+wifi_sdk_path = os.path.join(silabs_chip_root,"third_party","wifi_sdk")
 
 
 # Download and extract arm toolchain
@@ -229,7 +231,33 @@ try:
     print(f"For Visual Studio Code and CMAKE based builds please add '{ninja_path}' as NINJA_EXE_PATH environment variable\n ")
 except:
     print("\n\n============Could not install ninja!!============\n\n")
-       
+
+# Checkout submodules
+try:
+    subprocess.run(["git", "submodule", "update", "--init"])
+except:
+    print("Cannot checkout submodules")
+    sys.exit(1)
+
+def create_symlink(target, link_name):
+    # Create a symbolic link if it does not already exist
+    if not os.path.islink(link_name):
+        os.symlink(target, link_name)
+
+# Define the extension directory path
+extension_dir = os.path.join(sisdk_root, "extension")
+
+# Create the extension directory if it does not exist
+if not os.path.exists(extension_dir):
+    os.makedirs(extension_dir)
+
+# Define the paths for matter_extension and wiseconnect
+matter_root = os.path.join(extension_dir, "matter_extension")
+wiseconnect_root = os.path.join(extension_dir, "wiseconnect")
+
+# Create symbolic links for matter_extension and wiseconnect
+create_symlink(silabs_chip_root, matter_root)
+create_symlink(wifi_sdk_path, wiseconnect_root)
 
 #Save PATHs in .env file for future use. 
 if platform == "darwin":
@@ -240,8 +268,10 @@ if platform == "darwin":
         outfile.write("JAVA17_HOME={}\n".format(os.path.join(java_path, "Contents", "Home")))
         outfile.write("ZAP_INSTALL_PATH={}\n".format(zap_path))
         outfile.write("TOOLS_PATH={}:{}:{}:{}:\n".format(arm_toolchain_path,slc_cli_path,os.path.join(java_path, "Contents", "Home", "bin"),commander_app_path))
-        outfile.write("silabs_chip_root={}\n".format(silabs_chip_root))
-        outfile.write("NINJA_EXE_PATH={}".format(ninja_path))
+        outfile.write("silabs_chip_root={}\n".format(matter_root))
+        outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
+        outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
+        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
 elif platform == "win32":
     with open(os.path.expanduser(os.path.join(tools_folder_path,".env")), "w") as outfile:
         outfile.write('STUDIO_ADAPTER_PACK_PATH={}\n'.format(zap_path))
@@ -251,8 +281,10 @@ elif platform == "win32":
         outfile.write('ZAP_INSTALL_PATH={}\n'.format(zap_path.replace("\\","/")))
         outfile.write('TOOLS_PATH={};{};{};{};\n'.format(slc_cli_path,zap_path,arm_toolchain_path,java_path+"\\bin"))
         outfile.write('SLC={}\n'.format(slc_cli_path))
-        outfile.write("silabs_chip_root={}\n".format(silabs_chip_root))
-        outfile.write("NINJA_EXE_PATH={}".format(ninja_path))
+        outfile.write("silabs_chip_root={}\n".format(matter_root))
+        outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
+        outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
+        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
 elif platform == "linux":
     with open(os.path.expanduser("slc/tools/.env"), "w") as outfile:
         outfile.write("STUDIO_ADAPTER_PACK_PATH={}\n".format(zap_path))
@@ -261,8 +293,10 @@ elif platform == "linux":
         outfile.write("JAVA17_HOME={}\n".format(java_path))
         outfile.write("ZAP_INSTALL_PATH={}\n".format(zap_path))
         outfile.write("TOOLS_PATH={}:{}:{}:{}\n".format(arm_toolchain_path,slc_cli_path,os.path.join(java_path, "bin"),commander_app_path))
-        outfile.write("silabs_chip_root={}\n".format(silabs_chip_root))
-        outfile.write("NINJA_EXE_PATH={}".format(ninja_path))
+        outfile.write("silabs_chip_root={}\n".format(matter_root))
+        outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
+        outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
+        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
 
 #Trust extensions
 App = createApp()
@@ -272,12 +306,4 @@ with open(os.path.expanduser(os.path.join(tools_folder_path,"environment_variabl
     outfile.write("POST_BUILD_EXE = {}\n".format(App.POST_BUILD_EXE))
     outfile.write("NINJA_EXE_PATH = {}\n".format(App.NINJA_EXE_PATH))
 
-trust_wifi="no"
-trust_msg = "Do you want to use SiWx91x for development?(yes / no) "
-trust_wifi917=input(trust_msg)
-trust_wifi917 = trust_wifi917.lower().strip()
-if trust_wifi917 not in ["yes","no"]:
-    print("\nINVALID response!! Please select from 'yes' / 'no'\n")
-    trust_wifi917 = input(trust_msg).strip().lower()
-wifi917 = True if trust_wifi917=="yes" else False
-App.slc_trust(wifi917)
+App.slc_trust()
