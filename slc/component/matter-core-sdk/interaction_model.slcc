@@ -87,6 +87,8 @@ include:
     -   path: SynchronizedReportSchedulerImpl.h
     -   path: reporting.h
     -   path: ReportScheduler.h
+    -   path: Read.h
+    -   path: Read-Ember.h
 label: interaction_model
 package: Matter
 provides:
@@ -112,6 +114,7 @@ source:
 -   path: third_party/matter_sdk/src/app/TimedRequest.cpp
 -   path: third_party/matter_sdk/src/app/WriteClient.cpp
 -   path: third_party/matter_sdk/src/app/reporting/Engine.cpp
+-   path: third_party/matter_sdk/src/app/reporting/Read-Ember.cpp
 -   path: third_party/matter_sdk/src/app/reporting/ReportSchedulerImpl.cpp
 -   path: third_party/matter_sdk/src/app/reporting/SynchronizedReportSchedulerImpl.cpp
 ui_hints:

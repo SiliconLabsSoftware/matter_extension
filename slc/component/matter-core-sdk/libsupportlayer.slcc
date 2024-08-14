@@ -54,6 +54,8 @@ include:
     -   path: BufferWriter.h
     -   path: CommonPersistentData.h
     -   path: CodeUtils.h
+    -   path: ObjectDump.h
+    -   path: Compiler.h
     -   path: JniReferences.h
     -   path: DefaultStorageKeyAllocator.h
     -   path: FunctionTraits.h

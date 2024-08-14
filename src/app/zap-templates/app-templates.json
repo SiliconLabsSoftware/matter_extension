@@ -35,6 +35,10 @@
             "path": "../../../third_party/matter_sdk/src/app/zap-templates/partials/cluster-objects-field-init.zapt"
         },
         {
+            "name": "cluster_enums_ensure_known_value",
+            "path": "../../../third_party/matter_sdk/src/app/zap-templates/partials/cluster-enums-ensure-known-value.zapt"
+        },
+        {
             "name": "cluster_enums_enum",
             "path": "../../../third_party/matter_sdk/src/app/zap-templates/partials/cluster-enums-enum.zapt"
         },

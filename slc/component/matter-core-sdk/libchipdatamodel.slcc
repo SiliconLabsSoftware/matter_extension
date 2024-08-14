@@ -22,6 +22,8 @@ include:
     -   path: AttributeValueDecoder.h
     -   path: AttributeEncodeState.h
     -   path: AttributeReportBuilder.h
+    -   path: AttributePathExpandIterator.h
+    -   path: AttributePathExpandIterator-Ember.h
     -   path: InteractionModelDelegatePointers.h
     -   path: InteractionModelTimeout.h
     -   path: SubscriptionsInfoProvider.h
@@ -72,6 +74,7 @@ include:
     -   path: EventPathParams.h
     -   path: CommandResponseHelper.h
     -   path: CommandHandlerInterface.h
+    -   path: CommandHandlerInterfaceRegistry.h
     -   path: DataVersionFilter.h
     -   path: AttributeAccessInterfaceCache.h
     -   path: RequiredPrivilege.h
@@ -100,13 +103,14 @@ metadata:
 source:
 -   path: third_party/matter_sdk/src/app/AttributeAccessInterfaceRegistry.cpp
 -   path: third_party/matter_sdk/src/app/AttributeReportBuilder.cpp
+-   path: third_party/matter_sdk/src/app/AttributePathExpandIterator-Ember.cpp
 -   path: third_party/matter_sdk/src/app/AttributeValueEncoder.cpp
--   path: third_party/matter_sdk/src/app/AttributePathExpandIterator.cpp
 -   path: third_party/matter_sdk/src/app/BufferedReadCallback.cpp
 -   path: third_party/matter_sdk/src/app/ChunkedWriteCallback.cpp
 -   path: third_party/matter_sdk/src/app/ClusterStateCache.cpp
 -   path: third_party/matter_sdk/src/app/CommandHandler.cpp
 -   path: third_party/matter_sdk/src/app/CommandHandlerImpl.cpp
+-   path: third_party/matter_sdk/src/app/CommandHandlerInterfaceRegistry.cpp
 -   path: third_party/matter_sdk/src/app/CommandResponseSender.cpp
 -   path: third_party/matter_sdk/src/app/DefaultAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/DeferredAttributePersistenceProvider.cpp

@@ -16,10 +16,7 @@ requires:
 provides:
   - name: matter_uart
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/efr32/uart.cpp
-    condition: [matter_platform_efr32]
-  - path: third_party/matter_sdk/examples/platform/silabs/SiWx917/uart.cpp
-    condition: [matter_platform_siwx917]
+  - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp
 include:
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:

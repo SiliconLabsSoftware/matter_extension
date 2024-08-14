@@ -16,8 +16,6 @@ component:
   - id: matter_wstk_leds
     from: matter
 
-  - id: uartdrv_usart
-    instance: [vcom]
   - id: i2cspm
     instance: [sensor]
 
@@ -162,6 +160,10 @@ define:
   - name: USE_TEMP_SENSOR
     value: "1"
 configuration:
+  - name: SL_OPENTHREAD_ENABLE_APP_TASK
+    value: 0
+  - name: SL_OPENTHREAD_ENABLE_CLI_TASK
+    value: 0
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
   - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
