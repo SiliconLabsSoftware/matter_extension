@@ -69,7 +69,6 @@ source:
 -   path: third_party/matter_sdk/examples/platform/silabs/MatterConfig.cpp
 -   path: third_party/matter_sdk/examples/platform/silabs/OTAConfig.cpp
 -   path: third_party/matter_sdk/examples/platform/silabs/SoftwareFaultReports.cpp
--   path: third_party/matter_sdk/examples/platform/silabs/efr32/uart.cpp
 -   path: third_party/matter_sdk/examples/platform/silabs/heap_4_silabs.c
 -   path: third_party/matter_sdk/examples/platform/silabs/silabs_utils.cpp
 -   path: third_party/matter_sdk/examples/platform/silabs/syscalls_stubs.cpp

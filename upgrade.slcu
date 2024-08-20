@@ -137,3 +137,18 @@ upgrade:
       - name: SL_IDLE_MODE_INTERVAL
         replacement: SL_ACTIVE_MODE_THRESHOLD
       - script: slc/config/scripts/upgrade_validation.lua
+
+  - sdk:
+      id: matter
+      version: "2.4.0"
+      
+    component:
+      - trigger: matter_uart_wifi_wf200
+        description: Removing unused component
+        remove: 
+          - matter_uart_wifi_wf200
+
+      - trigger: matter_uart_wifi
+        description: Removing unused component
+        remove: 
+          - matter_uart_wifi

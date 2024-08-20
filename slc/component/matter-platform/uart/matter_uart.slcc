@@ -7,20 +7,25 @@ quality: production
 metadata:
   sbom:
     license: Zlib
+
 requires:
    - name: uartdrv_eusart
      condition:
      - matter_platform_efr32
    - name: sl_ulp_uart
      condition: [matter_platform_siwx917]
+
 provides:
   - name: matter_uart
+
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp
+  
 include:
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: uart.h
+  
 define:
   - name: CONFIG_ENABLE_EUART
     condition:
@@ -34,3 +39,6 @@ define:
     condition:
     - device_family_mgm24
     - matter_platform_efr32
+  - name: SLI_SI91X_MCU_INTR_BASED_RX_ON_UART
+    value: 1
+    condition: [matter_platform_siwx917]
