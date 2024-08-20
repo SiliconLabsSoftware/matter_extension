@@ -4,20 +4,15 @@ CODEOWNERS.source_branch_exclusion_pattern cherry-pick/**
 @@@MatterWatt @jumartin @jepenven @ricasall @makardou @selissia @rerasool @mirupp @sashaha @curahman @lobelive
 @@@MatterWifi @sekumar @naagarwa
 @@@Documentation @rerasool @curahman @berush
-@@@Unify @sushanka @naagarwa @mamehta @sabollim
-@@@CICD @gbash @yushu @shmakdis @jepenven
+@@@CICD @yushu @shmakdis @jepenven @curahman
 
 # Pipeline rule
 Jenkinsfile @@MatterWatt @@MatterWifi @@CICD
-silabs_ci_scripts/ @@MatterWatt @@MatterWifi @@CICD 
+jenkins/ @@MatterWatt @@MatterWifi @@CICD 
 
 # Documentation is everyone business
 **/*.md @@Documentation @@MatterWatt @@MatterWifi
 docs/silabs/ @@Documentation @@MatterWatt @@MatterWifi
-
-silabs_examples/unify-matter-bridge/ @@Unify
-silabs_examples/unify-matter-pc/ @@Unify
-silabs_examples/unify-matter-common/ @@Unify
 
 CODEOWNERS               @@MatterWatt
 
