@@ -173,6 +173,7 @@ file defines the well-known (default) parameters used by the automatic provision
 | -sf, --commissioning_flow | optional             | dec/hex            | Commissioning Flow 0=Standard, 1=User Action, 2=Custom.                         |
 | -sr, --rendezvous_flags   | optional             | dec/hex            | Rendez-vous flag: 1=SoftAP, 2=BLE 4=OnNetwork (Can be combined).                |
 | -fi, --firmware_info      | optional             | string             | Firmware Information            |
+| -ca, --creds_address      | optional             | string             | Credentials base address            |
 | -cd, --certification      | required             | string             | Path to the Certification Declaration (CD) file.                |
 | -cc, --cd_cert            | optional             | string             | Certification Declaration Signing Cert            |
 | -ck, --cd_key             | optional             | string             | Certification Declaration Signing Key            |
