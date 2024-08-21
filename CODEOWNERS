@@ -16,10 +16,10 @@ docs/silabs/ @@Documentation @@MatterWatt @@MatterWifi
 
 CODEOWNERS               @@MatterWatt
 
-
+# Ensure CODEOWNERS is triggered for every PR
+* @@MatterWatt
 
 # If a group is involved, at least one reviewer of the group must approve
-(Check(@@Unify >= 1))
 (Check(@@MatterWifi >= 1) | Check(@@MatterWatt >= 1))
 (Check(@@CICD >= 1) | Check(@@MatterWatt >= 2))
 
