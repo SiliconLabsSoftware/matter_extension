@@ -251,7 +251,6 @@ rm -fr $EXT_DIR/src/test_driver/
 rm -fr $EXT_DIR/slc/copy-app.sh
 rm -fr $EXT_DIR/slc/copy-extension.sh
 rm -fr $EXT_DIR/slc/build.sh
-rm -fr $EXT_DIR/slc/README.md
 rm -fr $EXT_DIR/slc/script/
 rm -fr $EXT_DIR/slc/EXTENSION_README.md
 

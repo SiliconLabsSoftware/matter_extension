@@ -1,8 +1,8 @@
-# Matter EFR32 Sensor Example
+# CHIP SiWx917 SoC Sensor Example
 
-The EFR32 Sensor example provides a baseline demonstration of a Sensor control
+The SiWx917 SoC Sensor example provides a baseline demonstration of a Sensor control
 device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled
-by a Chip controller over an OpenThread network.
+by a Chip controller over Wifi network.
 
 This sample app showcases supporting 3 distinct device types on 3 separate endpoints.
 One can toggle between 3 different modes by pressing BTN0. 
@@ -11,10 +11,9 @@ One can toggle between 3 different modes by pressing BTN0.
 2. Contact Sensor       : Matter Contact Sensor  
 3. Occupancy Sensor     : Matter Occupancy Sensor
 
-The EFR32 device can be commissioned over Bluetooth Low Energy (BLE) where the device
+The SiWx917 SoC device can be commissioned over Bluetooth Low Energy where the device
 and the Chip controller will exchange security information with the Rendez-vous
-procedure. If using Thread, Thread Network credentials are then provided to the
-EFR32 device which will then join the Thread network.
+procedure.
 
 If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the
 commissioning information needed for the BLE connection and starting the
@@ -108,7 +107,12 @@ More information on using the chip-tool directly can be found here: [CHIPTool](h
 Here is an example with the chip-tool:
 
 ```shell
-chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
-
-chip-tool onoff on 1 1
+./chip-tool pairing ble-wifi 1122 $SSID $PSK 20202021 3840
 ```
+
+Occupancy Sensing commands:
+
+```shell
+./chip-tool occupancysensing read occupancy  1122 1
+```
+Operate on DUT to change the occupancy status by pressing BTN1 and read the occupancy using the above command again.

@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom
 import pathlib
 import sys
+import yaml
 
 
 ###########################################################################################
@@ -21,6 +22,11 @@ out_folder_dir = sys.argv[1]
 examples_dir = os.path.join(root_dir, "Examples")
 root_sub_dirs = os.listdir(root_dir)
 internal_boards = ['brd4319f']
+with open(os.path.join(root_dir,"pipeline_metadata.yml"), 'r') as stream:
+    pipeline_metadata = yaml.safe_load(stream)
+
+matterExtensionVersion = pipeline_metadata['toolchain_info']['matterExtensionVersion']
+asset_prefix = "asset://extension.matter_"+matterExtensionVersion+"/"
 
 if not os.path.exists(out_folder_dir):
     print("ERROR: Binaries output folder can't be found!")
@@ -129,7 +135,7 @@ for brd, val in demos_map['demos'].items():
                 boardCompatibilityProp.set('value', brd.lower())
 
                 imageFileProp.set('key', 'demos.imageFile')
-                imageFileProp.set('value', os.path.join(
+                imageFileProp.set('value', asset_prefix + os.path.join(
                     "demos", brd, technology, demo_ + ".s37"))
 
                 readmeFileProp.set('key', 'core.readmeFiles')
@@ -207,7 +213,7 @@ for brd, val in demos_map['demos'].items():
                         if demo_name=="thermostat":
                             demo_name = "SiWx917-thermostat-example"
                         demoFilename = demo_name.replace(' ','-') + ".rps"
-                    imageFileProp.set('value', os.path.join("demos", brd, technology, demoFilename))
+                    imageFileProp.set('value', asset_prefix + os.path.join("demos", brd, technology, demoFilename))
 
                     readmeFileProp.set('key', 'core.readmeFiles')
                     readmeFileProp.set(

@@ -13,6 +13,11 @@ provides:
 requires:
 - name: rs911x_ncp_common
 - name: wiseconnect_sapi
+define: 
+- name: RSI_BLE_MAX_NBR_PERIPHERALS
+  value: 1
+- name: RSI_BLE_MAX_NBR_CENTRALS
+  value: 1
 source:
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/rsi_if.c
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/hal/efx_spi.c

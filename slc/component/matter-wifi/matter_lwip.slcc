@@ -42,18 +42,6 @@ include:
 source:
 - path: third_party/matter_sdk/src/lwip/freertos/sys_arch.c
 
-# TODO: Remove these source files once IPV6 component is provided by SiSDK and PR is merged (also remove source files within sdk-content)
-# Not included in lwip_core.slcc
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/dhcp6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/ethip6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/icmp6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/inet6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/ip6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/ip6_addr.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/ip6_frag.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/mld6.c
-- path: slc/component/sdk-content/simplicity-sdk/lwip/src/core/ipv6/nd6.c
-
 define:
 - name: LWIP_NETIF_API
   value: 1
