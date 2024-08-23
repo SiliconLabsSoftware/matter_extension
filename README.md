@@ -2,6 +2,10 @@
 
 # Silicon Labs Matter
 
+TEST
+DELETE ME
+
+
 Welcome to the Silicon Labs Matter Github repo. Matter is an application layer
 that provides a standardized interface between protocols and devices. With
 Matter, it is transparent to the underlying device whether the interaction is
