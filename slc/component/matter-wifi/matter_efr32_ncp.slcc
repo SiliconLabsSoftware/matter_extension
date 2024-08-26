@@ -69,4 +69,4 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/efr32/wifi/dhcp_client.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/wifi/ethernetif.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/wifi/lwip_netif.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/efr32/wifi/wfx_notify.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/wifi/wfx_notify.cpp

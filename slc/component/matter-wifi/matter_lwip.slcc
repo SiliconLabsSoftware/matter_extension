@@ -45,8 +45,6 @@ source:
 define:
 - name: LWIP_NETIF_API
   value: 1
-- name: LWIP_IPV4
-  value: 1
 - name: LWIP_IPV6
   value: 1
 - name: LWIP_ARP

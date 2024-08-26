@@ -14,6 +14,8 @@ provides:
   - name: matter_thermostat
 source:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-atomic.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-presets.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/
