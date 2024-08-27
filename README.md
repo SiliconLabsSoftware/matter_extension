@@ -1,103 +1,68 @@
-[![Silicon Labs](./docs/silabs/images/silabs-logo.jpg)](https://www.silabs.com)
+[![Silicon Labs](./docs/images/silabs-logo.jpg)](https://www.silabs.com)
 
 # Silicon Labs Matter
 
-Welcome to the Silicon Labs Matter Github repo. Matter is an application layer
+Welcome to the Silicon Labs Matter Extension repo. Matter is an application layer
 that provides a standardized interface between protocols and devices. With
 Matter, it is transparent to the underlying device whether the interaction is
 from a Thread application or a Wi-Fi application. For more information on Matter
 in general see the main
-[Matter Overview](https://www.silabs.com/wireless/matter) page. This repo is the
-starting point for all Silicon Labs-related Matter development. Silicon Labs
+[Matter Overview](https://www.silabs.com/wireless/matter) page. Silicon Labs
 supports Matter on both 802.15.4 (Thread) and 802.11 (Wi-Fi) transport
 protocols.
 
-_To see release notes containing list of features and knowns issues go to
-[SiliconLabs/matter/releases](https://github.com/SiliconLabs/matter/releases)
+Silicon Labs supports Matter on several different hardware platforms including the EFR32, RS9116, WF200 and the new SiWx917 which is a Wi-Fi System-on-Chip (SoC).
+
+**This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.3.1/matter-start/)**
+
+_To see official release notes containing list of features and knowns issues go to
+[SiliconLabs/matter_extension/releases](https://github.com/SiliconLabs/matter_extension/releases)
 and find the corresponding notes for the release you are using._
-
-As seen below, Silicon Labs supports Matter on several different hardware platforms including the EFR32, RS9116, WF200 and the new SiWx917 which is a Wi-Fi System-on-Chip (SoC).
-
-Device: EFR32+RS9116
-![Silicon Labs](./docs/silabs/images/silicon_labs_matter.png)
-
-Device: SiWx917 SoC
-![Silicon Labs - SiWx917 soc](./docs/silabs/images/silicon_labs_matter_SiWx917.png)
-
-This repo contains documentation, demos, examples and all the code needed for Matter Accessory Device development on both Thread and Wi-Fi. The Thread development use cases differs from Wi-Fi because the Thread protocol requires the use of an Open Thread Border Router (OTBR).  
-
--   To get started with the Thread demo and development see
-    [Matter Thread](https://siliconlabs.github.io/matter/2.3.0-1.3-alpha.2/thread/DEMO_OVERVIEW.html)
--   To get started with the Wi-Fi demo and development see
-    [Matter Wi-Fi](https://siliconlabs.github.io/matter/2.3.0-1.3-alpha.2/wifi/DEMO_OVERVIEW.html)
-
-The full documentation set starts here:
-[Silicon Labs Matter GitHub Documentation](https://siliconlabs.github.io/matter/2.3.0-1.3-alpha.2)
 
 ---
 
-[![Builds](https://github.com/project-chip/connectedhomeip/workflows/Builds/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/build.yaml)
+# Getting Started
 
-**Builds**
+We provide a set of scripts to set up an environment and build Matter apps in a command line. Silicon Labs Matter leverages an internal tool called Silicon Labs Configurator Command-line Interface (SLC-CLI). SLC-CLI comes pre-integrated in Simplicity Studio, and can be manually installed from here:  [SLC-CLI download](https://www.silabs.com/developers/simplicity-studio/configurator-command-line-interface). This repo can also be used in the Silicon Labs proprietary IDE [Simplicity Studio](https://www.silabs.com/developers/simplicity-studio).
 
-[![Android](https://github.com/project-chip/connectedhomeip/workflows/Android/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/android.yaml)
-[![Ameba](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Ameba/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-ameba.yaml)
-[![ASR](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20ASR/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-asr.yaml)
-[![BouffaloLab](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20BouffaloLab/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-bouffalolab.yaml)
-[![Darwin](https://github.com/project-chip/connectedhomeip/workflows/Darwin/badge.svg)](https://github.com/project-chip/connectedhomeip/blob/master/.github/workflows/darwin.yaml)
-[![TI CC26X2X7](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20TI%20CC26X2X7/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-cc13x2x7_26x2x7.yaml)
-[![TI CC32XX](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20TI%20CC32XX/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-cc32xx.yaml)
-[![EFR32](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20EFR32/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-efr32.yaml)
-[![ESP32](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20ESP32/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-esp32.yaml)
-[![Infineon](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-infineon.yaml/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-infineon.yaml)
-[![i.MX Linux](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20i.MX%20Linux/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-linux-imx.yaml)
-[![K32W with SE051](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20K32W%20with%20SE051/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-k32w.yaml)
-[![Linux ARM](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Linux%20ARM/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-linux-arm.yaml)
-[![Linux Standalone](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Linux%20Standalone/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-linux-standalone.yaml)
-[![Linux Standalone](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Linux%20Standalone/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-linux-standalone.yaml)
-[![Mbed OS](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Mbed%20OS/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-mbed.yaml)
-[![MW320](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20MW320/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-mw320.yaml)
-[![nRF Connect SDK](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20nRF%20Connect%20SDK/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-nrfconnect.yaml)
-[![Open IoT SDK](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Open%20IoT%20SDK/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-openiotsdk.yaml)
-[![QPG](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20QPG/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-qpg.yaml)
-[![STM32](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20stm32/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-stm32.yaml)
-[![Telink](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Telink/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-telink.yaml)
-[![Tizen](https://github.com/project-chip/connectedhomeip/workflows/Build%20example%20-%20Tizen/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/examples-tizen.yaml)
+## Getting Started with Command Line Development
 
-**Tests**
+### Setting up the Environment
 
-[![Unit / Integration Tests](https://github.com/project-chip/connectedhomeip/workflows/Unit%20/%20Integration%20Tests/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/unit_integration_test.yaml)
-[![Cirque](https://github.com/project-chip/connectedhomeip/workflows/Cirque/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/cirque.yaml)
-[![QEMU](https://github.com/project-chip/connectedhomeip/workflows/QEMU/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/qemu.yaml)
+The `sl_setup_env`.py script creates an .env file to be used to set the environment variables needed for the installed tools, ARM toolchain, SLC-CLI, Java ZAP, Simplicity Commander, Ninja, and Java.
 
-**Tools**
+```
+python3 slc/sl_setup_env.py
+```
 
-[![ZAP Templates](https://github.com/project-chip/connectedhomeip/workflows/ZAP/badge.svg)](https://github.com/project-chip/connectedhomeip/actions/workflows/zap_templates.yaml)
+### Creating an Application Project
 
-# Directory Structure
+Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app-thread.slcp example
 
-The Matter repository is structured as follows:
+```
+python3 slc/sl_create_new_app.py MyNewApp slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
+```
 
-| File/Folder        | Content                                                                                                                                               |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| build              | Build system support content and built output directories                                                                                             |
-| build_overrides    | Build system parameter customization for different platforms                                                                                          |
-| config             | Project configurations                                                                                                                                |
-| credentials        | Development and test credentials                                                                                                                      |
-| docs               | Documentation, including guides. Visit the [Matter SDK documentation page](https://project-chip.github.io/connectedhomeip-doc/index.html) to read it. |
-| examples           | Example firmware applications that demonstrate use of Matter                                                                                          |
-| integrations       | 3rd party integrations                                                                                                                                |
-| scripts            | Scripts needed to work with the Matter repository                                                                                                     |
-| src                | Implementation of Matter                                                                                                                              |
-| third_party        | 3rd party code used by Matter                                                                                                                         |
-| zzz_generated      | ZAP generated template code - Revolving around cluster information                                                                                    |
-| BUILD.gn           | Build file for the GN build system                                                                                                                    |
-| CODE_OF_CONDUCT.md | Code of conduct for Matter and contribution to it                                                                                                     |
-| CONTRIBUTING.md    | Guidelines for contributing to Matter                                                                                                                 |
-| LICENSE            | Matter license file                                                                                                                                   |
-| REVIEWERS.md       | PR reviewers                                                                                                                                          |
-| gn_build.sh        | Build script for specific projects such as Android, EFR32, etc.                                                                                       |
-| README.md          | This file                                                                                                                                             |
+### Building an Application Project
+
+After a project is created the `sl_build.py` script can be used to re-generate the MyNewApp project and build it:
+
+```
+python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
+```
+
+## Getting Started with Simplicity Studio Development 
+
+Matter Extension official releases are available to install through Simplicity Studio out of the box. For bleeding edge Matter codebase, this repo can be manually loaded as a custom Extension to the Simplicity SDK in Simplicity Studio.
+
+To stage the Extension for loading it in Studio invoke the following script passing to it the path to some temporary directory (the directory can be safely removed once the Extension is loaded in Studio).
+
+```
+python3 slc/stage_extension.py <any/location/on/disk>
+```
+
+To load a custom Matter Extension in Studio, navigate to Preferences -> Simplicity Studio -> SDKs -> Add Extension. Navigate to the directory where the extension was staged, and click Open -> Ok -> Apply and Close.  
+Note: In general, this repo supports the latest Simplicity SDK version. To confirm if you have the appropriate version, check the [matter.slce](./matter.slce) file.
 
 # License
 
