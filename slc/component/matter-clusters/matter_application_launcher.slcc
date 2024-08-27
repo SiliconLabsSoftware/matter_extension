@@ -2,7 +2,7 @@
 category: Clusters|Media
 description: >
   Implementation of the Application Launcher Server Cluster.
-  The user has to enable the Application Launcher Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+  The user has to enable the Application Launcher Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_application_launcher
 package: Matter
 label: Application Launcher Server Cluster

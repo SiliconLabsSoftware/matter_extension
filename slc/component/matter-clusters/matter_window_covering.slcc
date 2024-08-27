@@ -2,7 +2,7 @@
 category: Clusters|Closures
 description: >
   Implementation of the Window Covering Server Cluster.
-  The user has to enable the Window Covering Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+  The user has to enable the Window Covering Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_window_covering
 package: Matter
 label: Window Covering Server Cluster

@@ -2,7 +2,7 @@
 category: Clusters|General
 description: >
   Implementation of the Messages Server Cluster.
-  The user has to enable the Messages Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+  The user has to enable the Messages Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_messages
 package: Matter
 label: Messages Server Cluster

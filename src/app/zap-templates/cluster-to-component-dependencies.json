@@ -42,9 +42,21 @@
     ]
   },
   {
+    "clusterCode": "water heater management-server",
+    "value": [
+      "%extension-matter%matter_water_heater_management"
+    ]
+  },
+  {
     "clusterCode": "content launcher-server",
     "value": [
       "%extension-matter%matter_content_launch"
+    ]
+  },
+  {
+    "clusterCode": "service area-server",
+    "value": [
+      "%extension-matter%matter_service_area"
     ]
   },
   {
@@ -150,6 +162,12 @@
     ]
   },
   {
+    "clusterCode": "thread network directory-server",
+    "value": [
+      "%extension-matter%matter_thread_network_directory"
+    ]
+  },
+  {
     "clusterCode": "mode base-server",
     "value": [
       "%extension-matter%matter_mode_base"
@@ -204,6 +222,12 @@
     ]
   },
   {
+    "clusterCode": "ecosystem information-server",
+    "value": [
+      "%extension-matter%matter_ecosystem_information"
+    ]
+  },
+  {
     "clusterCode": "thermostat-client",
     "value": [
       "%extension-matter%matter_thermostat_client"
@@ -213,6 +237,12 @@
     "clusterCode": "thread network diagnostics-server",
     "value": [
       "%extension-matter%matter_thread_network_diagnostics"
+    ]
+  },
+  {
+    "clusterCode": "wi-fi network management-server",
+    "value": [
+      "%extension-matter%matter_wifi_network_management"
     ]
   },
   {
@@ -243,6 +273,12 @@
     "clusterCode": "smoke co alarm-server",
     "value": [
       "%extension-matter%matter_smoke_co_alarm"
+    ]
+  },
+  {
+    "clusterCode": "commissioner control-server",
+    "value": [
+      "%extension-matter%matter_commissioner_control"
     ]
   },
   {
@@ -348,7 +384,7 @@
     ]
   },
   {
-    "clusterCode": "wifi network diagnostics-server",
+    "clusterCode": "wi-fi network diagnostics-server",
     "value": [
       "%extension-matter%matter_wifi_network_diagnostics"
     ]
@@ -393,6 +429,12 @@
     "clusterCode": "window covering-server",
     "value": [
       "%extension-matter%matter_window_covering"
+    ]
+  },
+  {
+    "clusterCode": "thread border router management-server",
+    "value": [
+      "%extension-matter%matter_thread_border_router_management"
     ]
   },
   {

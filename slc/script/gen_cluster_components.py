@@ -2,18 +2,18 @@
 
 #This script is creates cluster components from the src/app/clusters directory
 #USAGE : python3 slc/script/gen_cluster_components.py
-#"Warning!! Check for manual changes in matter_icd_management.slcc, matter_ota_requestor.slcc, matter_air_quality.slcc
-# TODO: Update script to include src/app/icd files
+
 
 import os
 import pathlib
 import shutil
 import json
+import yaml
 
 root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
 os.chdir(root)
-cluster_dir_path = "src/app/clusters"
-cluster_xml_path = ["src/app/zap-templates/zcl/data-model/chip" , "src/app/zap-templates/zcl/data-model/draft"] 
+cluster_dir_path = "third_party/matter_sdk/src/app/clusters"
+cluster_xml_path = ["third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip" , "third_party/matter_sdk/src/app/zap-templates/zcl/data-model/draft"] 
 
 # Create a dictionary of all the clusters from Cluster_Dir_Path with the headers, source files,
 # and if it is a server cluster or not
@@ -145,13 +145,11 @@ for clustercomponentname in cluster_data.keys():
         print("xml not found for", clustercomponentname)
 # Create slcc from the cluster_data dictionary
 component_dir = os.path.join(root, "slc", "component", "matter-clusters")
-shutil.rmtree(component_dir, ignore_errors=True)
-os.makedirs(component_dir)
+
 
 for clustercomponentname in sorted(cluster_data.keys()):
     filedata = [""]
     clustername = cluster_data[clustercomponentname]["clustername"]
-    
     try:
         # Special cases for filename differences
         if "client" in clustername:
@@ -172,11 +170,53 @@ for clustercomponentname in sorted(cluster_data.keys()):
     
     label = "{}{} Cluster".format(name, cluster_data[clustercomponentname]['clientOrServer'])
     description = "description: >\n  Implementation of the {}.".format(label)
-    description += f"\n  The user has to enable the {label} in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality."
+    description += f"\n  The user has to enable the {label} in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality."
     filedata.append(description)
     
     if cluster_data[clustercomponentname]['clientOrServer'] == " Client":
         clustername = clustername + "_client"
+
+    #get data from current SLCC file
+    component_location = os.path.join(component_dir, "matter_{}.slcc".format(clustername))
+    includes = []
+    source_data = []
+    defines = []
+    try:
+        with open(component_location, 'r') as file:
+            content = yaml.safe_load(file)
+        # Extract the required sections
+        current_source_data = content.get('source', [])
+        current_include_data = content.get('include', [])
+        current_define_data = content.get('define', [])
+
+        #merge with extracted source and include data and remove duplicates
+        for path in current_source_data:
+            source_data.append(path["path"])
+        if len(current_include_data)>1:
+            include = {}
+            for i in range(len(current_include_data)):
+                if current_include_data[i]["path"] not in cluster_data[clustercomponentname]["include"]:
+                    headers = []
+                    for header in current_include_data[i]["file_list"]:
+                        headers.append(header["path"])
+                    include = {"path": current_include_data[i]["path"], "file_list": headers}
+                    includes.append(include)
+        
+        #merge with extracted define data and remove duplicates
+        for define in current_define_data:
+            df = {}
+            df["name"] = define["name"]
+            df["value"] = define["value"]
+            defines.append(df)
+        os.remove(component_location)
+    except Exception as e:
+        print("EXCEPTION for component ", e , component_location)
+
+    source_data = list(set(source_data + cluster_data[clustercomponentname]["sources"]))
+    if len(cluster_data[clustercomponentname]["headers"]) > 0:
+        include = {"path": cluster_data[clustercomponentname]["include"], "file_list": cluster_data[clustercomponentname]["headers"]}
+        includes.append(include)
+    current_define_data = []
     
     id_str = "matter_" + clustername
     id = "id: {}".format(id_str)
@@ -198,34 +238,35 @@ for clustercomponentname in sorted(cluster_data.keys()):
     provides = "  - name: {}".format(id_str)
     filedata.append(provides)
 
-    if len(cluster_data[clustercomponentname]["sources"]) > 0:
+    if len(source_data) > 0:
         filedata.append("source:")
-        for src in cluster_data[clustercomponentname]["sources"]:
+        for src in source_data:
             path = "  - path: {}".format(src)
             filedata.append(path)
 
-    if len(cluster_data[clustercomponentname]["headers"]) > 0:
+    if len(includes) > 0:
         filedata.append("include:")
-        path = "  - path: {}".format(cluster_data[clustercomponentname]["include"])
-        filedata.append(path)
-        filedata.append("    file_list:")
-        for header in cluster_data[clustercomponentname]["headers"]:
-            path = "      - path: {}".format(header)
+        for include in includes:
+            path = "  - path: {}".format(include["path"])
             filedata.append(path)
+            filedata.append("    file_list:")
+            for header in include["file_list"]:
+                path = "      - path: {}".format(header)
+                filedata.append(path)
 
     filedata.append("template_contribution:")
     filedata.append("  - name: component_catalog")
     value = "    value: {}".format(id_str)
     filedata.append(value)
 
-    # special cases for component with specific defines
-    if clustername == "time_synchronization":
+    if defines != []:
         filedata.append("define:")
-        filedata.append("  - name: TIME_SYNC_ENABLE_TSC_FEATURE")
-        filedata.append("    value: 0")
+        for define in defines:
+            name = "  - name: {}".format(define["name"])
+            filedata.append(name)
+            filedata.append("    value: {}".format(define["value"]))
 
-    clustername = "matter_" + clustername
-    with open(component_dir + "/{}.slcc".format(clustername), 'w') as f:
+    with open(component_location, 'w') as f:
         f.write("\n".join(filedata))
         # print("created = ","slc/component/matter-clusters/{}.slcc".format(clustername))
 
@@ -279,6 +320,3 @@ json_object = json.dumps(lst, indent=2)
 # Write the JSON object to the specified file
 with open(jsonfilepath, "w") as outfile:
     outfile.write(json_object)
-
-print("Warning!! Check for manual changes in matter_icd_management.slcc, matter_ota_requestor.slcc, matter_air_quality.slcc")
-print("Check by running git diff on the above files and any other files that may have been manually changed")

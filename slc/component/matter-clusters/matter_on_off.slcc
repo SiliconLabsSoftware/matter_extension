@@ -2,7 +2,7 @@
 category: Clusters|General
 description: >
   Implementation of the On/off Switch Configuration Server Cluster.
-  The user has to enable the On/off Switch Configuration Server Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+  The user has to enable the On/off Switch Configuration Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_on_off
 package: Matter
 label: On/off Switch Configuration Server Cluster

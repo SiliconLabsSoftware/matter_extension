@@ -2,7 +2,7 @@
 category: Clusters|General
 description: >
   Implementation of the Level Control Cluster.
-  The user has to enable the Level Control Cluster in the Zigbee Cluster Configurator (ZAP) in order to enable this functionality.
+  The user has to enable the Level Control Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_level_control
 package: Matter
 label: Level Control Cluster
@@ -15,12 +15,12 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/level-control/level-control.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/level-control
-    file_list:
-      - path: level-control.h
   - path: third_party/matter_sdk/src/app/cluster-building-blocks
     file_list:
       - path: QuieterReporting.h
+  - path: third_party/matter_sdk/src/app/clusters/level-control
+    file_list:
+      - path: level-control.h
 template_contribution:
   - name: component_catalog
     value: matter_level_control
