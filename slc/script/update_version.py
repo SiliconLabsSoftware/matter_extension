@@ -96,7 +96,7 @@ if __name__ == '__main__':
     # version=0.0.4
     # prop.subLabel=Silicon Labs Matter\\ 1.0.4-1.0
     if FULL_VERSION:
-        replace_text(str(ROOT)+"/matter.slsdk","prop.subLabel=Silicon Labs Matter"+r"\\\\ "+FULL_VERSION_REGEX,"prop.subLabel=Silicon Labs Matter"+r"\\\\"+" " +EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
+        replace_text(str(ROOT)+"/matter.slsdk",FULL_VERSION_REGEX,EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
     replace_text(str(ROOT)+"/matter.slsdk","version="+VERSION_REGEX_FORMAT,"version="+EXTENSION_NEW_VERSION)
 
     # Update pipeline_metadata.yml

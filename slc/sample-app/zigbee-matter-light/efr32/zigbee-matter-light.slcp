@@ -254,4 +254,4 @@ ui_hints:
 
 sdk_extension:
   - id: matter
-    version: "2.3.1"
+    version: "2.4.0"
