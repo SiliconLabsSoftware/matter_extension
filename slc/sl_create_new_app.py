@@ -123,11 +123,7 @@ Do you want to trust above SDKs/Extensions (yes / no) ? : "
         config_args=";wiseconnect3_sdk"  if self.silabs_board in self.SoC_boards else ""
         #run slc generate to create copy of sample app at the 'new_app_name' location
         try:
-<<<<<<< HEAD
             cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name, "-p", self.reference_slcp_file, "--with", self.silabs_board+config_args, "--new-project", "--force", "--generator-timeout=180", "-o", "makefile"]
-=======
-            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,project_flag, self.reference_project_file, "--with", self.silabs_board+config_args, "--new-project", "--force"]
->>>>>>> 8ed03767d3 (Pull request #2032: Feature/workspaces slc cli MATTER-3417)
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError:
             print("Error running 'slc generate'")
