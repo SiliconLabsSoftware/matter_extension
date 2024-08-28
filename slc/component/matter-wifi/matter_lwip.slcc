@@ -47,11 +47,3 @@ define:
   value: 1
 - name: LWIP_IPV6
   value: 1
-- name: LWIP_ARP
-  value: 1
-- name: LWIP_ICMP
-  value: 1
-- name: LWIP_IGMP
-  value: 1
-- name: LWIP_DHCP
-  value: 1
