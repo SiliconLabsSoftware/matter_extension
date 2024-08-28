@@ -21,11 +21,32 @@ and find the corresponding notes for the release you are using._
 
 ---
 
-# Getting Started
+## Setting up the Matter Extension repository
 
-We provide a set of scripts to set up an environment and build Matter apps in a command line. Silicon Labs Matter leverages an internal tool called Silicon Labs Configurator Command-line Interface (SLC-CLI). SLC-CLI comes pre-integrated in Simplicity Studio, and can be manually installed from here:  [SLC-CLI download](https://www.silabs.com/developers/simplicity-studio/configurator-command-line-interface). This repo can also be used in the Silicon Labs proprietary IDE [Simplicity Studio](https://www.silabs.com/developers/simplicity-studio).
+1. Fork the Silicon Labs Matter Extension GitHub repo by clicking "Fork" in the web UI https://github.com/SiliconLabsSoftware/matter_extension .
+
+1. Clone your fork of the  Silicon Labs Matter Extension GitHub:
+
+   ```
+   git clone https://github.com/<user-name>/matter_extension.git 
+   ```
+
+1. Configure the upstream alias:
+
+   ```
+   git remote add upstream git@github.com:/SiliconLabsSoftware/matter_extension.git
+   ```
+
+Your local repo is now ready for development. Follow the rest of this document for instructions on how to create and build a project. 
+
+Additional setup required for contributing to this repo (not enabled yet): [Contributing](./docs/CONTRIBUTING.md)
+
+Steps for directly cherry-picking CSA Matter repo commits into your environment: [Cherry-picking CSA Commits](docs/CHERRY_PICKING_CSA_COMMITS.md)
 
 ## Getting Started with Command Line Development
+
+We provide a set of scripts to set up an environment and build Matter apps in a command line. Silicon Labs Matter leverages an internal tool called Silicon Labs Configurator Command-line Interface (SLC-CLI). SLC-CLI comes pre-integrated in the Simplicity Studio, and is automatically installed by the scripts discussed below; it can be manually installed from here:  [SLC-CLI download](https://www.silabs.com/developers/simplicity-studio/configurator-command-line-interface). This repo can also be used in the Silicon Labs proprietary IDE [Simplicity Studio](https://www.silabs.com/developers/simplicity-studio).
+
 
 ### Setting up the Environment
 
