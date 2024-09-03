@@ -110,8 +110,8 @@ requires:
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/data_model/lighting-thread-app.zap
-    file_id: zap_configuration_file_id
-    directory: zap-generated
+    file_id: zap_config
+    directory: common
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config

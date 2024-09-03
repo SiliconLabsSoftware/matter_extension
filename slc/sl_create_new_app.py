@@ -69,42 +69,27 @@ class createApp:
                 print("SLC undefined. Set SLC from the sl_env_vars.bat")
 
     def trust_location(self, trust_locations):
-        #Ask user permission to trust SDK/Extension at given location
-        #verify the location
-        sdk_ext = ""
         for locations in trust_locations:
             sdk_or_ext = locations[0]
             location = locations[1]
+
+            #verify the location of sdk and extensions
             if not os.path.isdir(location):
                 print(f"\nThe {sdk_or_ext} does not exist at location:{location}")
                 sys.exit(1)
-            locations_str = sdk_or_ext + ":" + str(location)
-            sdk_ext += locations_str + "\n"
 
-        trust = "no"
-        trust_msg = f"\nSLC is trying to trust the following SDKs/Extensions.\n\n{sdk_ext}\n\
-SDKs/Extensions can provide executables and scripts that SLC may automatically execute.\n\
-They can also provide malicious embedded code or libraries\n\
-SLC cannot verify the contents of the SDKs/Extensions.\n\
-Do you want to trust above SDKs/Extensions (yes / no) ? : "
-        
-        
-        trust = input(trust_msg ).strip().lower()
-        if trust not in ["yes","no"]:
-            print("\nINVALID response!! Please select from 'yes' / 'no'\n")
-            trust = input(trust_msg ).strip().lower()
-        if trust == "yes":
-            for locations in trust_locations:
-                sdk_or_ext = locations[0]
-                location = locations[1] 
+            #trust the sdk and extensions
+            print(f"\nTrusting {sdk_or_ext} at location: {location}")
+            try:
                 if sdk_or_ext=="SDK":
                     subprocess.run([self.slc_path, "configuration", "--sdk", location])
                     subprocess.run([self.slc_path, "signature", "trust", "--sdk", location])
                 else:#sdk_ext="Extension":
                     subprocess.run([self.slc_path, "signature", "trust", "--extension-path", location])
-        else:
-            print(f"{sdk_or_ext} : '{location}' not trusted")
-            sys.exit(1)
+            except Exception as e:
+                print("Error while trusting the location",location)
+                print(e)
+                sys.exit(1)
 
     def slc_trust(self):
         #Get user permission to trust simplicity_sdk and extensions with use arm gcc

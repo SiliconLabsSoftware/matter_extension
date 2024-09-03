@@ -15,7 +15,7 @@ Silicon Labs supports Matter on several different hardware platforms including t
 
 **This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.3.1/matter-start/)**
 
-_To see official release notes containing list of features and knowns issues go to
+_To see official release notes containing list of features and known issues go to
 [SiliconLabs/matter_extension/releases](https://github.com/SiliconLabs/matter_extension/releases)
 and find the corresponding notes for the release you are using._
 
@@ -50,7 +50,16 @@ We provide a set of scripts to set up an environment and build Matter apps in a 
 
 ### Setting up the Environment
 
-The `sl_setup_env`.py script creates an .env file to be used to set the environment variables needed for the installed tools, ARM toolchain, SLC-CLI, Java ZAP, Simplicity Commander, Ninja, and Java.
+Install the following python packages:
+
+```
+pip3 install dload
+pip3 install python-dotenv  
+```
+
+The `sl_setup_env.py` script creates an `.env` file which contains all the relevant virtual environment paths to be use by `sl_create_new_app.py` and `sl_build.py` scripts. The file is not meant to be used directly and is mentioned here only for reference.
+
+It will also create `environment_variables_vscode.txt`. This file can be referenced to add environment variables for VS Code based builds.
 
 ```
 python3 slc/sl_setup_env.py
@@ -72,6 +81,49 @@ After a project is created the `sl_build.py` script can be used to re-generate t
 python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
 ```
 
+## Modifying an Application Project
+
+The resulting user project can be modified like any other SLC project. Software components can be added or removed by modifying the project's .slcp file, configuration can be applied by modifying the files in the `config` directory, the application logic can be managed through the files in the `src` directory. Various SLC-CLI commands can be used to examine, validate, or re-generate the project after a modification, see [Software Project Generation and Configuration with SLC-CLI](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-tools-slc-cli/) for more information.
+
+### Adding/Removing Components in an Application Project
+
+Users can add/remove components from a project's .slcp file to enable/disable particular features. To add a component users need to add following lines in the .slcp under the **component:** section:
+
+`- {from: matter, id: <component_id>}`
+
+### Adding/Removing Matter Clusters in an Application Project
+
+To add a new Matter cluster, the cluster must be enabled in the ZAP tool and the respective cluster component must be added to the .slcp file. For modifying Matter endpoints and clusters invoke the ZAP tool passing to it the application's ZAP file:
+
+```C
+python3 slc/sl_run_zaptool.py MyNewApp/config/common/lighting-thread-app.zap
+```
+
+Once the cluster is enabled in the ZAP tool and the file is saved the corresponding component must be added to the project's .slcp file. The component IDs for the cluster components can be found in `src/app/zap-templates/cluster-to-component-dependencies.json`. A cluster component mapping is written in following pattern:
+```
+  {
+    "clusterCode": "Cluster Code",
+    "value": [
+      "%extension-matter%<component_id>"
+    ]
+  }
+```
+For example to enable the "level control-server cluster" the user should enable the cluster in the .zap file in the ZAP tool and then add the `matter_level_control` component to the project's .slcp file:
+
+`- {from: matter, id: matter_level_control}`
+
+The relevant entry from `src/app/zap-templates/cluster-to-component-dependencies.json`:
+
+```
+  {
+    "clusterCode": "level control-server",
+    "value": [
+      "%extension-matter%matter_level_control"
+    ]
+  }
+```
+More details on how to develop using SLC CLI can be found at [Creating Matter Applications using SLC CLI](https://docs.silabs.com/matter/latest/matter-overview-guides/matter-slc-cli)
+
 ## Getting Started with Simplicity Studio Development 
 
 Matter Extension official releases are available to install through Simplicity Studio out of the box. For bleeding edge Matter codebase, this repo can be manually loaded as a custom Extension to the Simplicity SDK in Simplicity Studio.
@@ -82,7 +134,7 @@ To stage the Extension for loading it in Studio invoke the following script pass
 python3 slc/stage_extension.py <any/location/on/disk>
 ```
 
-To load a custom Matter Extension in Studio, navigate to Preferences -> Simplicity Studio -> SDKs -> Add Extension. Navigate to the directory where the extension was staged, and click Open -> Ok -> Apply and Close.  
+To load a custom Matter Extension in Studio, navigate to Preferences -> Simplicity Studio -> SDKs -> Add Extension. Navigate to the directory where the extension was staged, and click Open -> OK -> Apply and Close.  
 Note: In general, this repo supports the latest Simplicity SDK version. To confirm if you have the appropriate version, check the [matter.slce](./matter.slce) file.
 
 # License
