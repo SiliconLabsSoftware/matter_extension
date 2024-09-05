@@ -42,7 +42,7 @@ The Silicon Labs Matter Extension GitHub repo is kept generally up-to-date with 
 The cherry-picked CSA commit might have source file additions/deletions that affect the composition of Silicon Labs Matter SLC components. Follow this process:
 
 - Examine the changes carried in the commit.
-- If no source or header file were added/deleted and no GN build flags were modified then no further action is needed.
+- If neither source nor header files were added/deleted and no GN build flags were modified then no further action is needed.
 - If the changes described above are present but only affect platform code other than Silicon Labs' then no further action is needed.
 - Otherwise seek input from Silicon Labs on how to incorporate the commit changes into the SLC component definitions. 
 
