@@ -7,11 +7,7 @@ The Silicon Labs Matter Extension GitHub repo is kept generally up-to-date with 
 
 1. Fork the Silicon Labs Matter SDK GitHub repo by clicking "Fork" in the web UI https://github.com/SiliconLabsSoftware/matter_sdk
 
-1. Clone your fork of the Silicon Labs Matter SDK GitHub repo:
-
-    ```
-    git clone https://github.com/<user-name>/matter_sdk.git 
-    ```
+1. Clone your fork of the Silicon Labs Matter SDK GitHub repo  `https://github.com/<user-name>/matter_sdk.git` 
 
 1. Add the CSA repo and the Silicon Labs Matter SDK  repo as the upstream remotes:
 

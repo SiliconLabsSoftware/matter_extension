@@ -25,11 +25,7 @@ and find the corresponding notes for the release you are using._
 
 1. Fork the Silicon Labs Matter Extension GitHub repo by clicking "Fork" in the web UI https://github.com/SiliconLabsSoftware/matter_extension .
 
-1. Clone your fork of the  Silicon Labs Matter Extension GitHub:
-
-   ```
-   git clone https://github.com/<user-name>/matter_extension.git 
-   ```
+1. Clone your fork of the  Silicon Labs Matter Extension GitHub `https://github.com/<user-name>/matter_extension`
 
 1. Configure the upstream alias:
 
