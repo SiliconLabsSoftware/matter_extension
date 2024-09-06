@@ -18,8 +18,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server
     file_list:
-      - path: GenericFaultTestEventTriggerHandler.h
       - path: general-diagnostics-server.h
+      - path: GenericFaultTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
     value: matter_general_diagnostics

@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/low-power-server
     file_list:
-      - path: low-power-server.h
       - path: low-power-delegate.h
+      - path: low-power-server.h
 template_contribution:
   - name: component_catalog
     value: matter_low_power

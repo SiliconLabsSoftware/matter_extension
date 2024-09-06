@@ -240,7 +240,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
 
     if len(source_data) > 0:
         filedata.append("source:")
-        for src in source_data:
+        for src in sorted(source_data,key=str.casefold):
             path = "  - path: {}".format(src)
             filedata.append(path)
 
@@ -250,7 +250,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
             path = "  - path: {}".format(include["path"])
             filedata.append(path)
             filedata.append("    file_list:")
-            for header in include["file_list"]:
+            for header in sorted(include["file_list"],key=str.casefold):
                 path = "      - path: {}".format(header)
                 filedata.append(path)
 
@@ -270,7 +270,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
         f.write("\n".join(filedata))
         # print("created = ","slc/component/matter-clusters/{}.slcc".format(clustername))
 
-
+print("Cluster components created successfully.")
 
 # Create the cluster-to-component-dependencies.json
 jsonfilepath = os.path.join(root, "src/app/zap-templates/cluster-to-component-dependencies.json")
@@ -320,3 +320,23 @@ json_object = json.dumps(lst, indent=2)
 # Write the JSON object to the specified file
 with open(jsonfilepath, "w") as outfile:
     outfile.write(json_object)
+
+print("Cluster-to-component-dependencies.json created successfully.")
+
+# Load the JSON file
+matter_sdk_zcl_file_path = "third_party/matter_sdk/src/app/zap-templates/zcl/zcl.json"
+matter_extension_zcl_file_path = "src/app/zap-templates/zcl/zcl.json"
+with open(matter_sdk_zcl_file_path, 'r') as file:
+    data = json.load(file)
+
+# Update paths in the list
+data['xmlRoot'] = [f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
+
+# Update manufacturersXml path
+data['manufacturersXml'] = "../../../../third_party/matter_sdk/" + data['manufacturersXml'].split('/')[-1]
+
+# Write the updated JSON back to the file
+with open(matter_extension_zcl_file_path, 'w') as file:
+    json.dump(data, file, indent=4)
+
+print("Updated zcl.json file successfully.")

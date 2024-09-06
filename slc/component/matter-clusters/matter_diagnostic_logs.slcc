@@ -13,14 +13,14 @@ metadata:
 provides:
   - name: matter_diagnostic_logs
 source:
-  - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/diagnostic-logs-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/BDXDiagnosticLogsProvider.cpp
+  - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/diagnostic-logs-server.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server
     file_list:
-      - path: DiagnosticLogsProviderDelegate.h
       - path: BDXDiagnosticLogsProvider.h
       - path: diagnostic-logs-server.h
+      - path: DiagnosticLogsProviderDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_diagnostic_logs

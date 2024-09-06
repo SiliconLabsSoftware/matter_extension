@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/wake-on-lan-server
     file_list:
-      - path: wake-on-lan-server.h
       - path: wake-on-lan-delegate.h
+      - path: wake-on-lan-server.h
 template_contribution:
   - name: component_catalog
     value: matter_wake_on_lan

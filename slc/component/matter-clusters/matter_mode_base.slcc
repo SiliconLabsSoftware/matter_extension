@@ -13,8 +13,8 @@ metadata:
 provides:
   - name: matter_mode_base
 source:
-  - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-cluster-objects.cpp
+  - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/mode-base-server
     file_list:

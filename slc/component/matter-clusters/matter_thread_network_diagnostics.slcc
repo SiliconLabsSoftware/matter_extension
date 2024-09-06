@@ -13,8 +13,8 @@ metadata:
 provides:
   - name: matter_thread_network_diagnostics
 source:
-  - path: third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-provider.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server/thread-network-diagnostics-server.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server
     file_list:

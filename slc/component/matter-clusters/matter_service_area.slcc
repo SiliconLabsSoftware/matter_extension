@@ -18,8 +18,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/service-area-server
     file_list:
-      - path: service-area-delegate.h
       - path: service-area-cluster-objects.h
+      - path: service-area-delegate.h
       - path: service-area-server.h
 template_contribution:
   - name: component_catalog

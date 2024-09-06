@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/content-app-observer
     file_list:
-      - path: content-app-observer.h
       - path: content-app-observer-delegate.h
+      - path: content-app-observer.h
 template_contribution:
   - name: component_catalog
     value: matter_content_app_observer

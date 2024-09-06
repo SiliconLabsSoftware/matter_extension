@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server
     file_list:
-      - path: laundry-washer-controls-server.h
       - path: laundry-washer-controls-delegate.h
+      - path: laundry-washer-controls-server.h
 template_contribution:
   - name: component_catalog
     value: matter_laundry_washer_controls

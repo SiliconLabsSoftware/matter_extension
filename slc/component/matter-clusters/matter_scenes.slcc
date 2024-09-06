@@ -14,18 +14,18 @@ provides:
   - name: matter_scenes
 source:
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/ExtensionFieldSetsImpl.cpp
-  - path: third_party/matter_sdk/src/app/clusters/scenes-server/scenes-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneHandlerImpl.cpp
+  - path: third_party/matter_sdk/src/app/clusters/scenes-server/scenes-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneTableImpl.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/scenes-server
     file_list:
-      - path: SceneHandlerImpl.h
-      - path: SceneTableImpl.h
-      - path: scenes-server.h
       - path: ExtensionFieldSets.h
       - path: ExtensionFieldSetsImpl.h
+      - path: SceneHandlerImpl.h
+      - path: scenes-server.h
       - path: SceneTable.h
+      - path: SceneTableImpl.h
 template_contribution:
   - name: component_catalog
     value: matter_scenes

@@ -17,10 +17,10 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/ota-provider
     file_list:
-      - path: OTAProviderUserConsentDelegate.h
       - path: DefaultOTAProviderUserConsent.h
       - path: ota-provider-delegate.h
       - path: ota-provider.h
+      - path: OTAProviderUserConsentDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_ota_provider

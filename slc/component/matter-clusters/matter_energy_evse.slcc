@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/energy-evse-server
     file_list:
-      - path: EnergyEvseTestEventTriggerHandler.h
       - path: energy-evse-server.h
+      - path: EnergyEvseTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
     value: matter_energy_evse

@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server
     file_list:
-      - path: SmokeCOTestEventTriggerHandler.h
       - path: smoke-co-alarm-server.h
+      - path: SmokeCOTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
     value: matter_smoke_co_alarm

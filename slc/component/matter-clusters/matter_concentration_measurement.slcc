@@ -15,8 +15,8 @@ provides:
 include:
   - path: third_party/matter_sdk/src/app/clusters/concentration-measurement-server
     file_list:
-      - path: concentration-measurement-server.h
       - path: concentration-measurement-cluster-objects.h
+      - path: concentration-measurement-server.h
 template_contribution:
   - name: component_catalog
     value: matter_concentration_measurement

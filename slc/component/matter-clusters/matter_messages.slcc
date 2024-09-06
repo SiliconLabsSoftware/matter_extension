@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/messages-server
     file_list:
-      - path: messages-server.h
       - path: messages-delegate.h
+      - path: messages-server.h
 template_contribution:
   - name: component_catalog
     value: matter_messages

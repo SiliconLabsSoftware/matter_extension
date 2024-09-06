@@ -17,8 +17,8 @@ source:
 include:
   - path: third_party/matter_sdk/src/app/clusters/media-playback-server
     file_list:
-      - path: media-playback-server.h
       - path: media-playback-delegate.h
+      - path: media-playback-server.h
 template_contribution:
   - name: component_catalog
     value: matter_media_playback
