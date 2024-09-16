@@ -30,3 +30,7 @@
 [submodule "nlassert"]
 	path = third_party/nlassert
 	url = https://github.com/nestlabs/nlassert.git
+[submodule "third_party/matter_private"]
+	path = third_party/matter_private
+	url = ssh://git@stash.silabs.com/wmn_tools/matter_private.git
+	update = none

@@ -22,7 +22,7 @@ out_folder_dir = sys.argv[1]
 examples_dir = os.path.join(root_dir, "Examples")
 root_sub_dirs = os.listdir(root_dir)
 internal_boards = ['brd4319f']
-with open(os.path.join(root_dir,"pipeline_metadata.yml"), 'r') as stream:
+with open(os.path.join(root_dir,"third_party","matter_private","jenkins","pipeline_metadata.yml"), 'r') as stream:
     pipeline_metadata = yaml.safe_load(stream)
 
 matterExtensionVersion = pipeline_metadata['toolchain_info']['matterExtensionVersion']

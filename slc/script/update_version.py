@@ -103,7 +103,7 @@ if __name__ == '__main__':
     #
     # REGEX FORMAT:
     # matterExtensionVersion: '0.0.3'
-    replace_text(str(ROOT)+"/pipeline_metadata.yml","matterExtensionVersion: '"+VERSION_REGEX_FORMAT+"'","matterExtensionVersion: '"+EXTENSION_NEW_VERSION+"'")
+    replace_text(str(ROOT)+"third_party/matter_private/jenkins/pipeline_metadata.yml","matterExtensionVersion: '"+VERSION_REGEX_FORMAT+"'","matterExtensionVersion: '"+EXTENSION_NEW_VERSION+"'")
 
     # Update .md files in slc/ directory
     #
