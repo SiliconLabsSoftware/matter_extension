@@ -16,7 +16,11 @@ import stat
 import subprocess
 from zipfile import ZipFile
 import shutil
+import json
+from datetime import datetime
 from sl_create_new_app import createApp
+import re 
+
 # Use SILABS_MATTER_ROOT or use relative path
 if "SILABS_MATTER_ROOT" not in os.environ:
     print("Using default path for Matter root")
@@ -29,8 +33,16 @@ os.makedirs(os.path.join(silabs_chip_root, "slc/tools"), exist_ok=True)
 
 tools_folder_path = os.path.join(silabs_chip_root, "slc","tools")
 
-#Minimum zap level required to work with the projects. 
-MINIMUM_ZAP_LEVEL= 103
+print("\nSyncing and checking out submodules")
+# Checkout submodules
+try:
+    subprocess.run(["git", "submodule", "sync"])
+    subprocess.run(["git", "submodule", "update", "--init"])
+except Exception as e:
+    print(e)
+    print("Cannot checkout submodules")
+    sys.exit(1)
+print("Submodules checked out successfully\n")
 
 #setting variables to different tools url and paths
 platform = sys.platform
@@ -81,8 +93,23 @@ else:
     print("ERROR: Platform ", platform, " is not supported")
     sys.exit()
 
+#get latest zap from csa submodule
+def get_latest_zap():
+    zap_version = ""
+    zap_path = os.path.join(silabs_chip_root, "third_party", "matter_sdk", "scripts", "setup", "zap.json")
+    zap_json = json.load(open(zap_path))
+    for package in zap_json.get("packages", []):
+        for tag in package.get("tags", []):
+            if tag.startswith("version:2@"):
+                zap_version = tag.removeprefix("version:2@")
+                suffix_index = zap_version.rfind(".")
+                if suffix_index != -1:
+                    zap_version = zap_version[:suffix_index]
+                return zap_version
+
+MINIMUM_ZAP_REQUIRED = get_latest_zap()
 #urls for all the tools
-zap_url = f"https://github.com/project-chip/zap/releases/download/v2024.08.15-nightly/zap-{_platform}-x64.zip"
+zap_url = f"https://github.com/project-chip/zap/releases/download/{MINIMUM_ZAP_REQUIRED}/zap-{_platform}-x64.zip"
 ninja_url = f"https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-{_platform}.zip"
 commander_url = f"https://www.silabs.com/documents/public/software/SimplicityCommander-{__platform.capitalize()}.zip"
 slc_cli_url = f"https://www.silabs.com/documents/login/software/slc_cli_{__platform}.zip"
@@ -178,24 +205,23 @@ def download_zap(install_without_checking = False):
     else:
         print("zap already installed")
 
-download_zap()   
-#checking zap version using zap-cli. Expecting following output
-###################
-#Version: 2024.1.5
-#Feature level: 99
-#Hash: 9c4b5244168a512112d98c5807285a7dbc8b5f3d
-#Date: 2024-01-05T19:47:30.000Z
-#Mode: binary
-#Executable: zap-cli 
-####################
+download_zap()
 
 zap = os.path.join(zap_path,"zap-cli")
 command = f"{zap} --version"
 output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, universal_newlines=True)
-result = output.split("\n")
-zap_level = int(result[1].split(":")[1])
-if zap_level < MINIMUM_ZAP_LEVEL:
-    print(f"Installed zap version is {zap_level} which is less that Minimum Required level of {MINIMUM_ZAP_LEVEL}")
+# Extract version using regex
+installed_zap_version = re.search(r"Version:\s*([\d.]+)", output).group(1)
+#get version from MINIMUM_ZAP_REQUIRED
+MINIMUM_ZAP_REQUIRED = MINIMUM_ZAP_REQUIRED.replace("v","").replace("-nightly","")
+#Convert to datetime object for comparison
+date_format="%Y.%m.%d"
+installed_zap_version = datetime.strptime(installed_zap_version, date_format)
+MINIMUM_ZAP_REQUIRED = datetime.strptime(MINIMUM_ZAP_REQUIRED, date_format)
+
+#Check if installed zap version is less than minimum required version
+if installed_zap_version < MINIMUM_ZAP_REQUIRED:
+    print(f"Installed zap version is {installed_zap_version} which is less that Minimum Required level of {MINIMUM_ZAP_REQUIRED}")
     # Try to delete old zap.
     try:
         print(f"Deleting old version of zap located at {zap_path}")
@@ -244,17 +270,6 @@ except:
     print("\n\n============Could not install ninja!!============\n\n")
 
 print("All tools installed successfully")
-
-print("\nSyncing and checking out submodules")
-# Checkout submodules
-try:
-    subprocess.run(["git", "submodule", "sync"])
-    subprocess.run(["git", "submodule", "update", "--init"])
-except Exception as e:
-    print(e)
-    print("Cannot checkout submodules")
-    sys.exit(1)
-print("Submodules checked out successfully\n")
 
 def create_symlink(target, link_name):
     # Create a symbolic link if it does not already exist
