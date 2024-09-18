@@ -12,6 +12,7 @@ metadata:
 include:
   - path: slc/inc
     file_list:
+    - path: access/AccessBuildConfig.h
     - path: core/CHIPBuildConfig.h
     - path: asn1/ASN1OID.h
     - path: ble/BleBuildConfig.h

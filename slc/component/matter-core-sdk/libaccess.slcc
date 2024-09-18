@@ -20,6 +20,8 @@ include:
     -   path: AuthMode.h
     -   path: Privilege.h
     -   path: RequestPath.h
+    -   path: AccessConfig.h
+    -   path: AccessRestrictionProvider.h
 -   path: third_party/matter_sdk/src/access/examples
     file_list:
     -   path: ExampleAccessControlDelegate.h
@@ -34,6 +36,7 @@ metadata:
     license: "Apache 2.0"
 source:
 -   path: third_party/matter_sdk/src/access/AccessControl.cpp
+-   path: third_party/matter_sdk/src/access/AccessRestrictionProvider.cpp
 -   path: third_party/matter_sdk/src/access/examples/ExampleAccessControlDelegate.cpp
 -   path: third_party/matter_sdk/src/access/examples/PermissiveAccessControlDelegate.cpp
 ui_hints:

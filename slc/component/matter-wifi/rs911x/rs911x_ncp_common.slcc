@@ -15,7 +15,7 @@ requires:
 - name: freertos
 - name: psa_its
 source:
-- path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/wfx_rsi_host.cpp
+- path: third_party/matter_sdk/examples/platform/silabs/wifi/wfx_rsi_host.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.c
 include:

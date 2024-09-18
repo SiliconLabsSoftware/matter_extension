@@ -19,7 +19,7 @@ define:
 - name: RSI_BLE_MAX_NBR_CENTRALS
   value: 1
 source:
-- path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/rsi_if.c
+- path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/rsi_if.cpp
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/hal/efx_spi.c
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/hal/rsi_hal_mcu_interrupt.c
 - path: third_party/matter_sdk/examples/platform/silabs/efr32/rs911x/hal/rsi_hal_mcu_ioports.c
