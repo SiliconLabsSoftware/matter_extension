@@ -1,0 +1,23 @@
+name: publish
+on: [push]
+jobs:
+  publish-efr32-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the Simplicity SDK Docker image
+        run: |
+          docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/simplicity-sdk:latest
+          docker run ghcr.io/siliconlabssoftware/simplicity-sdk:latest
+          docker push ghcr.io/siliconlabssoftware/simplicity-sdk:latest
