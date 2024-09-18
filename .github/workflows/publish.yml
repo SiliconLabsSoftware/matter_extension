@@ -1,0 +1,31 @@
+name: Publish Docker
+on:
+  push:
+    paths:
+      - 'Docker/Dockerfile'
+      - '.github/workflows/publish.yml'
+      - 'Docker/requirements.txt'
+jobs:
+  publish-matter-extension-dependencies-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the matter_extension_dependencies Docker image
+        run: |
+          SiSDK="SiSDK-2024.06.2"
+          WiFiSDK="WiFiSDK-3.3.1"
+          VERSION="${SiSDK}_${WiFiSDK}"
+          docker build -f Docker/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
+          docker run ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
+          docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
