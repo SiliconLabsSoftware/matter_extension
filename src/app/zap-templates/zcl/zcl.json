@@ -142,7 +142,7 @@
         "types/occupancy-sensing.xml",
         "types/thermostat-user-interface-configuration.xml"
     ],
-    "manufacturersXml": "../../../../third_party/matter_sdk/manufacturers.xml",
+    "manufacturersXml": "../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/manufacturers.xml",
     "options": {
         "text": {
             "defaultResponsePolicy": [

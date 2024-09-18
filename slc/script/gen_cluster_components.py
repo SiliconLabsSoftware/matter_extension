@@ -277,7 +277,7 @@ jsonfilepath = os.path.join(root, "src/app/zap-templates/cluster-to-component-de
 lst = []
 
 # Iterate over each cluster component name in the cluster_data dictionary
-for clustercomponentname in cluster_data.keys():
+for clustercomponentname in sorted(cluster_data.keys()):
     # Initialize an empty dictionary to store the dependencies for the current cluster component
     dependanciesDic = {}
     
@@ -333,7 +333,7 @@ with open(matter_sdk_zcl_file_path, 'r') as file:
 data['xmlRoot'] = [f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
 
 # Update manufacturersXml path
-data['manufacturersXml'] = "../../../../third_party/matter_sdk/" + data['manufacturersXml'].split('/')[-1]
+data['manufacturersXml'] = "../../../../third_party/matter_sdk/" + data['manufacturersXml'].split('./')[-1]
 
 # Write the updated JSON back to the file
 with open(matter_extension_zcl_file_path, 'w') as file:

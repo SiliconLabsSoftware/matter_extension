@@ -1,200 +1,8 @@
 [
   {
-    "clusterCode": "window covering-server",
+    "clusterCode": "access control-server",
     "value": [
-      "%extension-matter%matter_window_covering"
-    ]
-  },
-  {
-    "clusterCode": "color control-server",
-    "value": [
-      "%extension-matter%matter_color_control"
-    ]
-  },
-  {
-    "clusterCode": "level control-server",
-    "value": [
-      "%extension-matter%matter_level_control"
-    ]
-  },
-  {
-    "clusterCode": "software diagnostics-server",
-    "value": [
-      "%extension-matter%matter_software_diagnostics"
-    ]
-  },
-  {
-    "clusterCode": "pump configuration and control-client",
-    "value": [
-      "%extension-matter%matter_pump_configuration_and_control_client"
-    ]
-  },
-  {
-    "clusterCode": "thermostat-server",
-    "value": [
-      "%extension-matter%matter_thermostat"
-    ]
-  },
-  {
-    "clusterCode": "general diagnostics-server",
-    "value": [
-      "%extension-matter%matter_general_diagnostics"
-    ]
-  },
-  {
-    "clusterCode": "keypad input-server",
-    "value": [
-      "%extension-matter%matter_keypad_input"
-    ]
-  },
-  {
-    "clusterCode": "door lock-server",
-    "value": [
-      "%extension-matter%matter_door_lock"
-    ]
-  },
-  {
-    "clusterCode": "binding-server",
-    "value": [
-      "%extension-matter%matter_bindings"
-    ]
-  },
-  {
-    "clusterCode": "activated carbon filter monitoring-server",
-    "value": [
-      "%extension-matter%matter_resource_monitoring"
-    ]
-  },
-  {
-    "clusterCode": "media input-server",
-    "value": [
-      "%extension-matter%matter_media_input"
-    ]
-  },
-  {
-    "clusterCode": "energy preference-server",
-    "value": [
-      "%extension-matter%matter_energy_preference"
-    ]
-  },
-  {
-    "clusterCode": "thread network diagnostics-server",
-    "value": [
-      "%extension-matter%matter_thread_network_diagnostics"
-    ]
-  },
-  {
-    "clusterCode": "power topology-server",
-    "value": [
-      "%extension-matter%matter_power_topology"
-    ]
-  },
-  {
-    "clusterCode": "service area-server",
-    "value": [
-      "%extension-matter%matter_service_area"
-    ]
-  },
-  {
-    "clusterCode": "user label-server",
-    "value": [
-      "%extension-matter%matter_user_label"
-    ]
-  },
-  {
-    "clusterCode": "laundry dryer controls-server",
-    "value": [
-      "%extension-matter%matter_laundry_dryer_controls"
-    ]
-  },
-  {
-    "clusterCode": "radon concentration measurement-server",
-    "value": [
-      "%extension-matter%matter_concentration_measurement"
-    ]
-  },
-  {
-    "clusterCode": "thermostat-client",
-    "value": [
-      "%extension-matter%matter_thermostat_client"
-    ]
-  },
-  {
-    "clusterCode": "identify-server",
-    "value": [
-      "%extension-matter%matter_identify"
-    ]
-  },
-  {
-    "clusterCode": "wake on lan-server",
-    "value": [
-      "%extension-matter%matter_wake_on_lan"
-    ]
-  },
-  {
-    "clusterCode": "media playback-server",
-    "value": [
-      "%extension-matter%matter_media_playback"
-    ]
-  },
-  {
-    "clusterCode": "electrical energy measurement-server",
-    "value": [
-      "%extension-matter%matter_electrical_energy_measurement"
-    ]
-  },
-  {
-    "clusterCode": "descriptor-server",
-    "value": [
-      "%extension-matter%matter_descriptor"
-    ]
-  },
-  {
-    "clusterCode": "power source-server",
-    "value": [
-      "%extension-matter%matter_power_source"
-    ]
-  },
-  {
-    "clusterCode": "wi-fi network management-server",
-    "value": [
-      "%extension-matter%matter_wifi_network_management"
-    ]
-  },
-  {
-    "clusterCode": "diagnostic logs-server",
-    "value": [
-      "%extension-matter%matter_diagnostic_logs"
-    ]
-  },
-  {
-    "clusterCode": "mode select-server",
-    "value": [
-      "%extension-matter%matter_mode_select"
-    ]
-  },
-  {
-    "clusterCode": "commissioner control-server",
-    "value": [
-      "%extension-matter%matter_commissioner_control"
-    ]
-  },
-  {
-    "clusterCode": "temperature control-server",
-    "value": [
-      "%extension-matter%matter_temperature_control"
-    ]
-  },
-  {
-    "clusterCode": "messages-server",
-    "value": [
-      "%extension-matter%matter_messages"
-    ]
-  },
-  {
-    "clusterCode": "dishwasher alarm-server",
-    "value": [
-      "%extension-matter%matter_dishwasher_alarm"
+      "%extension-matter%matter_access_control"
     ]
   },
   {
@@ -204,39 +12,33 @@
     ]
   },
   {
-    "clusterCode": "smoke co alarm-server",
+    "clusterCode": "administrator commissioning-server",
     "value": [
-      "%extension-matter%matter_smoke_co_alarm"
+      "%extension-matter%matter_administrator_commissioning"
     ]
   },
   {
-    "clusterCode": "refrigerator alarm-server",
+    "clusterCode": "air quality-server",
     "value": [
-      "%extension-matter%matter_refrigerator_alarm"
+      "%extension-matter%matter_air_quality"
     ]
   },
   {
-    "clusterCode": "thread network directory-server",
+    "clusterCode": "application basic-server",
     "value": [
-      "%extension-matter%matter_thread_network_directory"
+      "%extension-matter%matter_application_basic"
     ]
   },
   {
-    "clusterCode": "content app observer-server",
+    "clusterCode": "application launcher-server",
     "value": [
-      "%extension-matter%matter_content_app_observer"
+      "%extension-matter%matter_application_launcher"
     ]
   },
   {
-    "clusterCode": "mode base-server",
+    "clusterCode": "audio output-server",
     "value": [
-      "%extension-matter%matter_mode_base"
-    ]
-  },
-  {
-    "clusterCode": "on/off switch configuration-server",
-    "value": [
-      "%extension-matter%matter_on_off"
+      "%extension-matter%matter_audio_output"
     ]
   },
   {
@@ -252,183 +54,9 @@
     ]
   },
   {
-    "clusterCode": "content control-server",
+    "clusterCode": "binding-server",
     "value": [
-      "%extension-matter%matter_content_control"
-    ]
-  },
-  {
-    "clusterCode": "ethernet network diagnostics-server",
-    "value": [
-      "%extension-matter%matter_ethernet_network_diagnostics"
-    ]
-  },
-  {
-    "clusterCode": "administrator commissioning-server",
-    "value": [
-      "%extension-matter%matter_administrator_commissioning"
-    ]
-  },
-  {
-    "clusterCode": "groups-server",
-    "value": [
-      "%extension-matter%matter_groups"
-    ]
-  },
-  {
-    "clusterCode": "ecosystem information-server",
-    "value": [
-      "%extension-matter%matter_ecosystem_information"
-    ]
-  },
-  {
-    "clusterCode": "microwave oven control-server",
-    "value": [
-      "%extension-matter%matter_microwave_oven_control"
-    ]
-  },
-  {
-    "clusterCode": "fan control-server",
-    "value": [
-      "%extension-matter%matter_fan_control"
-    ]
-  },
-  {
-    "clusterCode": "application launcher-server",
-    "value": [
-      "%extension-matter%matter_application_launcher"
-    ]
-  },
-  {
-    "clusterCode": "ota software update requestor-server",
-    "value": [
-      "%extension-matter%matter_ota_requestor"
-    ]
-  },
-  {
-    "clusterCode": "fault injection-server",
-    "value": [
-      "%extension-matter%matter_fault_injection"
-    ]
-  },
-  {
-    "clusterCode": "energy evse-server",
-    "value": [
-      "%extension-matter%matter_energy_evse"
-    ]
-  },
-  {
-    "clusterCode": "thermostat user interface configuration-server",
-    "value": [
-      "%extension-matter%matter_thermostat_user_interface_configuration"
-    ]
-  },
-  {
-    "clusterCode": "low power-server",
-    "value": [
-      "%extension-matter%matter_low_power"
-    ]
-  },
-  {
-    "clusterCode": "electrical power measurement-server",
-    "value": [
-      "%extension-matter%matter_electrical_power_measurement"
-    ]
-  },
-  {
-    "clusterCode": "occupancy sensing-server",
-    "value": [
-      "%extension-matter%matter_occupancy_sensor"
-    ]
-  },
-  {
-    "clusterCode": "water heater management-server",
-    "value": [
-      "%extension-matter%matter_water_heater_management"
-    ]
-  },
-  {
-    "clusterCode": "operational credentials-server",
-    "value": [
-      "%extension-matter%matter_operational_credentials"
-    ]
-  },
-  {
-    "clusterCode": "sample mei-server",
-    "value": [
-      "%extension-matter%matter_sample_mei"
-    ]
-  },
-  {
-    "clusterCode": "icd management-server",
-    "value": [
-      "%extension-matter%matter_icd_management"
-    ]
-  },
-  {
-    "clusterCode": "air quality-server",
-    "value": [
-      "%extension-matter%matter_air_quality"
-    ]
-  },
-  {
-    "clusterCode": "channel-server",
-    "value": [
-      "%extension-matter%matter_channel"
-    ]
-  },
-  {
-    "clusterCode": "content launcher-server",
-    "value": [
-      "%extension-matter%matter_content_launch"
-    ]
-  },
-  {
-    "clusterCode": "access control-server",
-    "value": [
-      "%extension-matter%matter_access_control"
-    ]
-  },
-  {
-    "clusterCode": "valve configuration and control-server",
-    "value": [
-      "%extension-matter%matter_valve_configuration_and_control"
-    ]
-  },
-  {
-    "clusterCode": "bridged device basic information-server",
-    "value": [
-      "%extension-matter%matter_bridged_device_basic_information"
-    ]
-  },
-  {
-    "clusterCode": "pump configuration and control-server",
-    "value": [
-      "%extension-matter%matter_pump_configuration_and_control"
-    ]
-  },
-  {
-    "clusterCode": "group key management-server",
-    "value": [
-      "%extension-matter%matter_group_key_mgmt"
-    ]
-  },
-  {
-    "clusterCode": "thread border router management-server",
-    "value": [
-      "%extension-matter%matter_thread_border_router_management"
-    ]
-  },
-  {
-    "clusterCode": "localization configuration-server",
-    "value": [
-      "%extension-matter%matter_localization_configuration"
-    ]
-  },
-  {
-    "clusterCode": "application basic-server",
-    "value": [
-      "%extension-matter%matter_application_basic"
+      "%extension-matter%matter_bindings"
     ]
   },
   {
@@ -438,9 +66,57 @@
     ]
   },
   {
-    "clusterCode": "target navigator-server",
+    "clusterCode": "bridged device basic information-server",
     "value": [
-      "%extension-matter%matter_target_navigator"
+      "%extension-matter%matter_bridged_device_basic_information"
+    ]
+  },
+  {
+    "clusterCode": "channel-server",
+    "value": [
+      "%extension-matter%matter_channel"
+    ]
+  },
+  {
+    "clusterCode": "color control-server",
+    "value": [
+      "%extension-matter%matter_color_control"
+    ]
+  },
+  {
+    "clusterCode": "commissioner control-server",
+    "value": [
+      "%extension-matter%matter_commissioner_control"
+    ]
+  },
+  {
+    "clusterCode": "radon concentration measurement-server",
+    "value": [
+      "%extension-matter%matter_concentration_measurement"
+    ]
+  },
+  {
+    "clusterCode": "content app observer-server",
+    "value": [
+      "%extension-matter%matter_content_app_observer"
+    ]
+  },
+  {
+    "clusterCode": "content control-server",
+    "value": [
+      "%extension-matter%matter_content_control"
+    ]
+  },
+  {
+    "clusterCode": "content launcher-server",
+    "value": [
+      "%extension-matter%matter_content_launch"
+    ]
+  },
+  {
+    "clusterCode": "descriptor-server",
+    "value": [
+      "%extension-matter%matter_descriptor"
     ]
   },
   {
@@ -450,39 +126,69 @@
     ]
   },
   {
-    "clusterCode": "general commissioning-server",
+    "clusterCode": "diagnostic logs-server",
     "value": [
-      "%extension-matter%matter_general_commissioning"
+      "%extension-matter%matter_diagnostic_logs"
     ]
   },
   {
-    "clusterCode": "time format localization-server",
+    "clusterCode": "dishwasher alarm-server",
     "value": [
-      "%extension-matter%matter_time_format_localization"
+      "%extension-matter%matter_dishwasher_alarm"
     ]
   },
   {
-    "clusterCode": "unit testing-server",
+    "clusterCode": "door lock-server",
     "value": [
-      "%extension-matter%matter_test_cluster"
+      "%extension-matter%matter_door_lock"
     ]
   },
   {
-    "clusterCode": "network commissioning-server",
+    "clusterCode": "ecosystem information-server",
     "value": [
-      "%extension-matter%matter_network_commissioning"
+      "%extension-matter%matter_ecosystem_information"
     ]
   },
   {
-    "clusterCode": "wi-fi network diagnostics-server",
+    "clusterCode": "electrical energy measurement-server",
     "value": [
-      "%extension-matter%matter_wifi_network_diagnostics"
+      "%extension-matter%matter_electrical_energy_measurement"
     ]
   },
   {
-    "clusterCode": "operational state-server",
+    "clusterCode": "electrical power measurement-server",
     "value": [
-      "%extension-matter%matter_operational_state"
+      "%extension-matter%matter_electrical_power_measurement"
+    ]
+  },
+  {
+    "clusterCode": "energy evse-server",
+    "value": [
+      "%extension-matter%matter_energy_evse"
+    ]
+  },
+  {
+    "clusterCode": "energy preference-server",
+    "value": [
+      "%extension-matter%matter_energy_preference"
+    ]
+  },
+  {
+    "clusterCode": "ethernet network diagnostics-server",
+    "value": [
+      "%extension-matter%matter_ethernet_network_diagnostics"
+    ]
+  },
+  {
+    "clusterCode": "fan control-server",
+    "value": [
+      "%extension-matter%matter_fan_control"
+    ]
+  },
+  {
+    "clusterCode": "fault injection-server",
+    "value": [
+      "%extension-matter%matter_fault_injection"
     ]
   },
   {
@@ -492,21 +198,51 @@
     ]
   },
   {
-    "clusterCode": "scenes management-server",
+    "clusterCode": "general commissioning-server",
     "value": [
-      "%extension-matter%matter_scenes"
+      "%extension-matter%matter_general_commissioning"
     ]
   },
   {
-    "clusterCode": "ota software update provider-server",
+    "clusterCode": "general diagnostics-server",
     "value": [
-      "%extension-matter%matter_ota_provider"
+      "%extension-matter%matter_general_diagnostics"
     ]
   },
   {
-    "clusterCode": "time synchronization-server",
+    "clusterCode": "group key management-server",
     "value": [
-      "%extension-matter%matter_time_synchronization"
+      "%extension-matter%matter_group_key_mgmt"
+    ]
+  },
+  {
+    "clusterCode": "groups-server",
+    "value": [
+      "%extension-matter%matter_groups"
+    ]
+  },
+  {
+    "clusterCode": "icd management-server",
+    "value": [
+      "%extension-matter%matter_icd_management"
+    ]
+  },
+  {
+    "clusterCode": "identify-server",
+    "value": [
+      "%extension-matter%matter_identify"
+    ]
+  },
+  {
+    "clusterCode": "keypad input-server",
+    "value": [
+      "%extension-matter%matter_keypad_input"
+    ]
+  },
+  {
+    "clusterCode": "laundry dryer controls-server",
+    "value": [
+      "%extension-matter%matter_laundry_dryer_controls"
     ]
   },
   {
@@ -516,9 +252,171 @@
     ]
   },
   {
-    "clusterCode": "audio output-server",
+    "clusterCode": "level control-server",
     "value": [
-      "%extension-matter%matter_audio_output"
+      "%extension-matter%matter_level_control"
+    ]
+  },
+  {
+    "clusterCode": "localization configuration-server",
+    "value": [
+      "%extension-matter%matter_localization_configuration"
+    ]
+  },
+  {
+    "clusterCode": "low power-server",
+    "value": [
+      "%extension-matter%matter_low_power"
+    ]
+  },
+  {
+    "clusterCode": "media input-server",
+    "value": [
+      "%extension-matter%matter_media_input"
+    ]
+  },
+  {
+    "clusterCode": "media playback-server",
+    "value": [
+      "%extension-matter%matter_media_playback"
+    ]
+  },
+  {
+    "clusterCode": "messages-server",
+    "value": [
+      "%extension-matter%matter_messages"
+    ]
+  },
+  {
+    "clusterCode": "microwave oven control-server",
+    "value": [
+      "%extension-matter%matter_microwave_oven_control"
+    ]
+  },
+  {
+    "clusterCode": "mode base-server",
+    "value": [
+      "%extension-matter%matter_mode_base"
+    ]
+  },
+  {
+    "clusterCode": "mode select-server",
+    "value": [
+      "%extension-matter%matter_mode_select"
+    ]
+  },
+  {
+    "clusterCode": "network commissioning-server",
+    "value": [
+      "%extension-matter%matter_network_commissioning"
+    ]
+  },
+  {
+    "clusterCode": "occupancy sensing-server",
+    "value": [
+      "%extension-matter%matter_occupancy_sensor"
+    ]
+  },
+  {
+    "clusterCode": "on/off switch configuration-server",
+    "value": [
+      "%extension-matter%matter_on_off"
+    ]
+  },
+  {
+    "clusterCode": "operational credentials-server",
+    "value": [
+      "%extension-matter%matter_operational_credentials"
+    ]
+  },
+  {
+    "clusterCode": "operational state-server",
+    "value": [
+      "%extension-matter%matter_operational_state"
+    ]
+  },
+  {
+    "clusterCode": "ota software update provider-server",
+    "value": [
+      "%extension-matter%matter_ota_provider"
+    ]
+  },
+  {
+    "clusterCode": "ota software update requestor-server",
+    "value": [
+      "%extension-matter%matter_ota_requestor"
+    ]
+  },
+  {
+    "clusterCode": "power source configuration-server",
+    "value": [
+      "%extension-matter%matter_power_source_configuration"
+    ]
+  },
+  {
+    "clusterCode": "power source-server",
+    "value": [
+      "%extension-matter%matter_power_source"
+    ]
+  },
+  {
+    "clusterCode": "power topology-server",
+    "value": [
+      "%extension-matter%matter_power_topology"
+    ]
+  },
+  {
+    "clusterCode": "pump configuration and control-client",
+    "value": [
+      "%extension-matter%matter_pump_configuration_and_control_client"
+    ]
+  },
+  {
+    "clusterCode": "pump configuration and control-server",
+    "value": [
+      "%extension-matter%matter_pump_configuration_and_control"
+    ]
+  },
+  {
+    "clusterCode": "refrigerator alarm-server",
+    "value": [
+      "%extension-matter%matter_refrigerator_alarm"
+    ]
+  },
+  {
+    "clusterCode": "activated carbon filter monitoring-server",
+    "value": [
+      "%extension-matter%matter_resource_monitoring"
+    ]
+  },
+  {
+    "clusterCode": "sample mei-server",
+    "value": [
+      "%extension-matter%matter_sample_mei"
+    ]
+  },
+  {
+    "clusterCode": "scenes management-server",
+    "value": [
+      "%extension-matter%matter_scenes"
+    ]
+  },
+  {
+    "clusterCode": "service area-server",
+    "value": [
+      "%extension-matter%matter_service_area"
+    ]
+  },
+  {
+    "clusterCode": "smoke co alarm-server",
+    "value": [
+      "%extension-matter%matter_smoke_co_alarm"
+    ]
+  },
+  {
+    "clusterCode": "software diagnostics-server",
+    "value": [
+      "%extension-matter%matter_software_diagnostics"
     ]
   },
   {
@@ -528,9 +426,111 @@
     ]
   },
   {
-    "clusterCode": "power source configuration-server",
+    "clusterCode": "target navigator-server",
     "value": [
-      "%extension-matter%matter_power_source_configuration"
+      "%extension-matter%matter_target_navigator"
+    ]
+  },
+  {
+    "clusterCode": "temperature control-server",
+    "value": [
+      "%extension-matter%matter_temperature_control"
+    ]
+  },
+  {
+    "clusterCode": "unit testing-server",
+    "value": [
+      "%extension-matter%matter_test_cluster"
+    ]
+  },
+  {
+    "clusterCode": "thermostat-client",
+    "value": [
+      "%extension-matter%matter_thermostat_client"
+    ]
+  },
+  {
+    "clusterCode": "thermostat-server",
+    "value": [
+      "%extension-matter%matter_thermostat"
+    ]
+  },
+  {
+    "clusterCode": "thermostat user interface configuration-server",
+    "value": [
+      "%extension-matter%matter_thermostat_user_interface_configuration"
+    ]
+  },
+  {
+    "clusterCode": "thread border router management-server",
+    "value": [
+      "%extension-matter%matter_thread_border_router_management"
+    ]
+  },
+  {
+    "clusterCode": "thread network diagnostics-server",
+    "value": [
+      "%extension-matter%matter_thread_network_diagnostics"
+    ]
+  },
+  {
+    "clusterCode": "thread network directory-server",
+    "value": [
+      "%extension-matter%matter_thread_network_directory"
+    ]
+  },
+  {
+    "clusterCode": "time format localization-server",
+    "value": [
+      "%extension-matter%matter_time_format_localization"
+    ]
+  },
+  {
+    "clusterCode": "time synchronization-server",
+    "value": [
+      "%extension-matter%matter_time_synchronization"
+    ]
+  },
+  {
+    "clusterCode": "user label-server",
+    "value": [
+      "%extension-matter%matter_user_label"
+    ]
+  },
+  {
+    "clusterCode": "valve configuration and control-server",
+    "value": [
+      "%extension-matter%matter_valve_configuration_and_control"
+    ]
+  },
+  {
+    "clusterCode": "wake on lan-server",
+    "value": [
+      "%extension-matter%matter_wake_on_lan"
+    ]
+  },
+  {
+    "clusterCode": "water heater management-server",
+    "value": [
+      "%extension-matter%matter_water_heater_management"
+    ]
+  },
+  {
+    "clusterCode": "wi-fi network diagnostics-server",
+    "value": [
+      "%extension-matter%matter_wifi_network_diagnostics"
+    ]
+  },
+  {
+    "clusterCode": "wi-fi network management-server",
+    "value": [
+      "%extension-matter%matter_wifi_network_management"
+    ]
+  },
+  {
+    "clusterCode": "window covering-server",
+    "value": [
+      "%extension-matter%matter_window_covering"
     ]
   }
 ]
