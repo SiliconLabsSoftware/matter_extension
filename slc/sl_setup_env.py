@@ -21,6 +21,10 @@ from datetime import datetime
 from sl_create_new_app import createApp
 import re 
 
+if sys.version_info < (3, 6):
+    print("This script requires Python 3.6 or higher!")
+    sys.exit(1)
+
 # Use SILABS_MATTER_ROOT or use relative path
 if "SILABS_MATTER_ROOT" not in os.environ:
     print("Using default path for Matter root")
