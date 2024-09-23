@@ -35,6 +35,13 @@ include:
     condition: [matter_thermostat_app]
   - path: ThermostatUI.h
     condition: [matter_thermostat_app]
+- path: examples/fan-control-app/silabs/include
+  file_list:
+  - path: FanControlUI.h
+    condition: [matter_fan_control_app]
+  - path: FanControlIcons.h
+    condition: [matter_fan_control_app]
+
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/display/demo-ui.c
   - path: third_party/matter_sdk/examples/platform/silabs/display/lcd.cpp
@@ -44,6 +51,9 @@ source:
   - path: third_party/matter_sdk/examples/thermostat/silabs/src/ThermostatUI.cpp
     condition:
       - matter_thermostat_app
+  - path: examples/fan-control-app/silabs/src/FanControlUI.cpp
+    condition:
+      - matter_fan_control_app
 define:
   - name: DISPLAY_ENABLED
   - name: SPI_MULTI_SLAVE

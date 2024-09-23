@@ -629,6 +629,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors> 
+   <descriptors name="MatterFanControlOverWiFi" label="Matter - SoC Fan-Control over  Wi-Fi"
+               description="This project builds a Matter Fan-Control app for Wi-Fi SiWx917 that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.fan-control-app.siwx917.fan-control-app-917-soc.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/fan-control-app/siwx917/fan-control-app-917-soc.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/fan-control-app/siwx917/README_WiFi.md"/>
+    <properties key="boardCompatibility" value="brd4338a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*si917.* .*si917.* "/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors> 
    <descriptors name="MatterDishwasherOverThreadSolution" label="Matter - SoC Dishwasher over Thread with external Bootloader"
                description="This project builds a Matter Dishwasher and Matter External Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
@@ -968,6 +985,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.sample-app.sensor-app.siwx917.sensor-app-917-soc.slcp"/>
   </descriptors>
+  <descriptors name="MatterFanControlOverWiFiSolution" label="Matter - Fan Control over Wi-Fi"
+               description="This project builds a Matter Fan Control App that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.workspaces.fan-control-app.siwx917.fan-control-app-917-soc.slcw"/>
+    <properties key="projectFilePaths" value="slc/workspaces/fan-control-app/siwx917/fan-control-app-917-soc.slcw"/>
+    <properties key="readmeFiles" value="slc/sample-app/fan-control-app/siwx917/README_WiFi.md"/>
+    <properties key="boardCompatibility" value="brd4338a  com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*siwg917m111mgtba.* .*siwg917m111mgtba.* .*siwg917m111mgtba.* "/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.sample-app.fan-control-app.siwx917.fan-control-app-917-soc.slcp"/>
+  </descriptors>
   <descriptors name="ZigbeeMatterLight" label="Matter and Zigbee - SoC Light"
                description="This project builds a Matter Lighting app combined with a Zigbee Light that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
@@ -1003,4 +1037,5 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter Technology|Zigbee"/>
     <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.sample-app.zigbee-matter-light.efr32.zigbee-matter-light.slcp"/>
   </descriptors>  
+  
   </model:MDescriptors>
