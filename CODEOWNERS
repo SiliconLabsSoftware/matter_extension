@@ -1,10 +1,11 @@
 # Avoid codeowners only for cherry-pick pull requests
 CODEOWNERS.source_branch_exclusion_pattern cherry-pick/**
 
-@@@MatterWatt @jumartin @jepenven @ricasall @makardou @selissia @rerasool @mirupp @sashaha @curahman @lobelive
-@@@MatterWifi @sekumar @naagarwa
-@@@Documentation @rerasool @curahman @berush
-@@@CICD @yushu @shmakdis @jepenven @curahman
+@@@MatterWatt @jumartin @jepenven @ricasall @makardou @selissia @rerasool @mirupp @sashaha @lobelive
+@@@MatterWifi @sekumar @naagarwa @chbansal @rosahay
+@@@Documentation @rerasool @berush
+@@@CICD @yushu @shmakdis @jepenven 
+@@@Matter @@MatterWatt @@MatterWifi @@Documentation @@CICD
 
 # Pipeline rule
 Jenkinsfile @@MatterWatt @@MatterWifi @@CICD
@@ -17,10 +18,9 @@ docs/silabs/ @@Documentation @@MatterWatt @@MatterWifi
 CODEOWNERS               @@MatterWatt
 
 # Ensure CODEOWNERS is triggered for every PR
-* @@MatterWatt
+* @@MatterWatt @@MatterWifi
 
-# If a group is involved, at least one reviewer of the group must approve
-(Check(@@MatterWifi >= 1) | Check(@@MatterWatt >= 1))
-(Check(@@CICD >= 1) | Check(@@MatterWatt >= 2))
+# Require at least one reviewer from MatterWatt and two from Matter
+(Check(@@MatterWatt >= 1) & Check(@@Matter >= 2))
 
 OverallCheck(2)
