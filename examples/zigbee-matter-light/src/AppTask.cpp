@@ -43,8 +43,8 @@
 
 #include <platform/CHIPDeviceLayer.h>
 
-#include "sl_cmp_config.h"
 #include "ZigbeeCallbacks.h"
+#include "sl_cmp_config.h"
 
 #if (defined(SL_CATALOG_SIMPLE_LED_LED1_PRESENT) || defined(SIWX_917))
 #define LIGHT_LED 1
@@ -75,7 +75,7 @@ CHIP_ERROR AppTask::Init()
     chip::DeviceLayer::Silabs::GetPlatform().SetButtonsCb(AppTask::ButtonEventHandler);
 
 #ifdef DISPLAY_ENABLED
-    GetLCD().Init((uint8_t *) "Lighting-App");
+    GetLCD().Init((uint8_t *) "CMP-Lighting-App");
 #endif
 
     err = BaseApplication::Init();
@@ -112,24 +112,24 @@ CHIP_ERROR AppTask::Init()
 #endif // QR_CODE_ENABLED
 #endif
 #ifdef SL_CATALOG_ZIGBEE_ZCL_FRAMEWORK_CORE_PRESENT
-  PlatformMgr().LockChipStack();
-  uint16_t nbOfMatterFabric = chip::Server::GetInstance().GetFabricTable().FabricCount();
-  PlatformMgr().UnlockChipStack();
-  if (nbOfMatterFabric != 0)
-  {
-    #ifdef SL_MATTER_ZIGBEE_CMP
-    // TODO OT GET CHANNEL
-    uint8_t channel = otLinkGetChannel(DeviceLayer::ThreadStackMgrImpl().OTInstance());
-    SILABS_LOG("Setting Zigbee channel to %d", channel);
-    Zigbee::RequestStart(channel);
-    #else
-    Zigbee::RequestLeave();
-    #endif // SL_MATTER_ZIGBEE_CMP
-  } 
-  else 
-  {
-    Zigbee::RequestStart();
-  }
+    PlatformMgr().LockChipStack();
+    uint16_t nbOfMatterFabric = chip::Server::GetInstance().GetFabricTable().FabricCount();
+    PlatformMgr().UnlockChipStack();
+    if (nbOfMatterFabric != 0)
+    {
+#ifdef SL_MATTER_ZIGBEE_CMP
+        // TODO OT GET CHANNEL
+        uint8_t channel = otLinkGetChannel(DeviceLayer::ThreadStackMgrImpl().OTInstance());
+        SILABS_LOG("Setting Zigbee channel to %d", channel);
+        Zigbee::RequestStart(channel);
+#else
+        Zigbee::RequestLeave();
+#endif // SL_MATTER_ZIGBEE_CMP
+    }
+    else
+    {
+        Zigbee::RequestStart();
+    }
 
 #endif // SL_CATALOG_ZIGBEE_ZCL_FRAMEWORK_CORE_PRESENT
 

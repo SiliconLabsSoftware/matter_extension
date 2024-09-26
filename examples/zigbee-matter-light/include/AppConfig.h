@@ -19,12 +19,15 @@
 #pragma once
 
 #include "silabs_utils.h"
-
+#include "sl_cmp_config.h"
 // ---- Lighting Example App Config ----
 
 #define APP_TASK_NAME "Lit"
-
-#define BLE_DEV_NAME "SiLabs-Light"
+#ifdef SL_MATTER_ZIGBEE_CMP
+#define BLE_DEV_NAME "SL CMP Light Conc"
+#else
+#define BLE_DEV_NAME "SL CMP Light Seq"
+#endif
 
 // Time it takes in ms for the simulated actuator to move from one
 // state to another.
