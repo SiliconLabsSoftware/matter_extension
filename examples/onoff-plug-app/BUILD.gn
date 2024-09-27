@@ -15,6 +15,7 @@
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
 import("//build_overrides/efr32_sdk.gni")
+import("//build_overrides/matter_extension.gni")
 import("//build_overrides/pigweed.gni")
 
 import("${build_root}/config/defaults.gni")
@@ -31,7 +32,7 @@ if (chip_enable_pw_rpc) {
 
 assert(current_os == "freertos")
 
-silabs_project_dir = "${chip_root}/silabs_examples/onoff-plug-app"
+silabs_project_dir = "${matter_extension_root}/examples/onoff-plug-app"
 examples_common_plat_dir = "${chip_root}/examples/platform/silabs"
 
 if (wifi_soc) {
@@ -120,16 +121,16 @@ silabs_executable("onoff_plug_app") {
   }
 
   sources = [
+    "${examples_common_plat_dir}/main.cpp",
     "src/AppTask.cpp",
     "src/OnOffPlugManager.cpp",
     "src/ZclCallbacks.cpp",
-    "${examples_common_plat_dir}/main.cpp",
   ]
 
   deps = [
     ":sdk",
     app_data_model,
-    ]
+  ]
 
   if (wifi_soc) {
     deps += [ "${examples_plat_dir}:siwx917-common" ]

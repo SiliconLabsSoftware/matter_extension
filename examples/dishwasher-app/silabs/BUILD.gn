@@ -15,6 +15,7 @@
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
 import("//build_overrides/efr32_sdk.gni")
+import("//build_overrides/matter_extension.gni")
 
 import("${build_root}/config/defaults.gni")
 import("${efr32_sdk_build_root}/silabs_executable.gni")
@@ -24,7 +25,7 @@ import("${chip_root}/third_party/silabs/silabs_board.gni")
 
 assert(current_os == "freertos")
 
-silabs_project_dir = "${chip_root}/silabs_examples/dishwasher-app/silabs"
+silabs_project_dir = "${matter_extension_root}/examples/dishwasher-app/silabs"
 examples_common_plat_dir = "${chip_root}/examples/platform/silabs"
 
 if (wifi_soc) {
@@ -115,8 +116,8 @@ silabs_executable("dishwasher_app") {
     "${examples_common_plat_dir}/main.cpp",
     "src/AppTask.cpp",
     "src/DishwasherManager.cpp",
-    "src/operational-state-delegate-impl.cpp",
     "src/ZclCallbacks.cpp",
+    "src/operational-state-delegate-impl.cpp",
   ]
 
   deps = [

@@ -15,6 +15,7 @@
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
 import("//build_overrides/efr32_sdk.gni")
+import("//build_overrides/matter_extension.gni")
 import("//build_overrides/pigweed.gni")
 
 import("${build_root}/config/defaults.gni")
@@ -31,7 +32,7 @@ if (chip_enable_pw_rpc) {
 
 assert(current_os == "freertos")
 
-silabs_project_dir = "${chip_root}/silabs_examples/silabs-sensors"
+silabs_project_dir = "${matter_extension_root}/examples/silabs-sensors"
 examples_common_plat_dir = "${chip_root}/examples/platform/silabs"
 
 if (wifi_soc) {
@@ -42,8 +43,8 @@ if (wifi_soc) {
   examples_plat_dir = "${chip_root}/examples/platform/silabs/efr32"
 }
 
-import("${silabs_project_dir}/data_model/args.gni")
 import("${examples_common_plat_dir}/args.gni")
+import("${silabs_project_dir}/data_model/args.gni")
 
 declare_args() {
   # Dump memory usage at link time.
@@ -113,16 +114,11 @@ if (wifi_soc) {
 
 silabs_executable("sensors_app") {
   sensorType = "sensor"
-  if (is_occupancy_sensor)
-  {
+  if (is_occupancy_sensor) {
     sensorType = "occupancy-sensor"
-  }
-  else if (is_temperature_sensor) 
-  {
+  } else if (is_temperature_sensor) {
     sensorType = "temperature-sensor"
-  }
-  else if (is_contact_sensor)
-  {
+  } else if (is_contact_sensor) {
     sensorType = "contact-sensor"
   }
 
@@ -135,10 +131,10 @@ silabs_executable("sensors_app") {
   }
 
   sources = [
-    "src/AppTask.cpp",
-    "src/ZclCallbacks.cpp",
     "${examples_common_plat_dir}/main.cpp",
+    "src/AppTask.cpp",
     "src/SensorsCallbacks.cpp",
+    "src/ZclCallbacks.cpp",
   ]
 
   if (!disable_lcd) {

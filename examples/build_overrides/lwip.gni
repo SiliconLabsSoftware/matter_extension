@@ -12,16 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build_overrides/chip.gni")
-import("//build_overrides/matter_extension.gni")
-import("${chip_root}/config/standalone/args.gni")
-import("${chip_root}/src/platform/silabs/efr32/args.gni")
+import("//build_overrides/build.gni")
 
-silabs_sdk_target = get_label_info(":sdk", "label_no_toolchain")
+declare_args() {
+  # Root directory for lwIP.
+  lwip_root = "//third_party/matter_extension/third_party/matter_sdk/third_party/lwip"
+}
 
-app_data_model = "${matter_extension_root}/examples/silabs-sensors/data_model:sensor_data_model"
-chip_enable_ota_requestor = true
-chip_enable_openthread = true
-
-openthread_external_platform =
-    "${chip_root}/third_party/openthread/platforms/efr32:libopenthread-efr32"
+lwip_remove_configs = [ "${build_root}/config/compiler:warnings_default" ]
+lwip_add_configs = [ "${build_root}/config/compiler:warnings_third_party" ]

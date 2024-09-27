@@ -12,17 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build_overrides/build.gni")
-
-# The location of the build configuration file.
-buildconfig = "${build_root}/config/BUILDCONFIG.gn"
-
-# CHIP uses angle bracket includes.
-check_system_includes = true
-
-default_args = {
-  target_cpu = "arm"
-  target_os = "freertos"
-  chip_openthread_ftd = true
-  import("//args.gni")
+# TODO : Update to local Si SDK repo
+declare_args() {
+  # Root directory for erf32 SDK.
+  efr32_sdk_build_root =
+      "//third_party/matter_extension/third_party/matter_sdk/third_party/silabs"
 }

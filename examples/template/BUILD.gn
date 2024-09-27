@@ -15,6 +15,7 @@
 import("//build_overrides/build.gni")
 import("//build_overrides/chip.gni")
 import("//build_overrides/efr32_sdk.gni")
+import("//build_overrides/matter_extension.gni")
 import("//build_overrides/pigweed.gni")
 
 import("${build_root}/config/defaults.gni")
@@ -31,7 +32,7 @@ if (chip_enable_pw_rpc) {
 
 assert(current_os == "freertos")
 
-silabs_project_dir = "${chip_root}/silabs_examples/template"
+silabs_project_dir = "${matter_extension_root}/examples/template"
 examples_common_plat_dir = "${chip_root}/examples/platform/silabs"
 
 if (wifi_soc) {
@@ -43,7 +44,6 @@ if (wifi_soc) {
 }
 
 import("${examples_common_plat_dir}/args.gni")
-
 
 declare_args() {
   # Dump memory usage at link time.
@@ -122,9 +122,9 @@ silabs_executable("template_app") {
   }
 
   sources = [
+    "${examples_common_plat_dir}/main.cpp",
     "src/AppTask.cpp",
     "src/ZclCallbacks.cpp",
-    "${examples_common_plat_dir}/main.cpp",
   ]
 
   deps = [
@@ -137,7 +137,6 @@ silabs_executable("template_app") {
   } else {
     deps += [ "${examples_plat_dir}:efr32-common" ]
   }
-
 
   ldscript = "${examples_common_plat_dir}/ldscripts/${silabs_family}.ld"
 

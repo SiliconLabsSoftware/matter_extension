@@ -1,4 +1,4 @@
-# Copyright (c) 2020 Project CHIP Authors
+# Copyright (c) 2024 Project CHIP Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,18 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import("//build_overrides/chip.gni")
-import("${chip_root}/src/app/chip_data_model.gni")
-import("${chip_root}/src/platform/device.gni")
-import("args.gni")
+import("//build_overrides/build.gni")
 
-chip_data_model("sensor_data_model") {
-  if (chip_enable_wifi) {
-    network = "wifi"
-  } else {
-    network = "thread"
-  }
-
-  zap_file = "sensor-${network}-app.zap"
-  is_server = true
+declare_args() {
+  # Root directory for the matter extension.
+  matter_extension_root = "//third_party/matter_extension"
 }
