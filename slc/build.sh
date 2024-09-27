@@ -16,6 +16,19 @@
 #   Example --configuration option usage:
 #   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
 #       output in: out/brd4187c/lighting-app-thread/
+#
+#   --skip_gen option : Allows to skip the slc gen step and only run the make commande to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
+#                       This option only works if the project as previously been generated
+#   Example 
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --skip_gen
+#       output in: out/brd4187c/lighting-app-thread/
+#
+#   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
+#   Example 
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#       output in: out/brd4187c/lighting-app-thread/
+#
+
 
 MATTER_ROOT=$( pwd -P )
 GSDK_ROOT=$MATTER_ROOT/third_party/simplicity_sdk
@@ -46,6 +59,31 @@ fi
 # remove SILABS_APP_PATH and SILABS_BOARD from list of input args
 shift 
 shift 
+skip_gen=false
+while [ $# -gt 0 ]; do
+    case "$1" in
+    --clean)
+        rm -rf $OUTPUT_DIR
+        shift
+        ;;
+    --skip_gen)
+        skip_gen=true
+        shift
+        ;;
+    --sisdk)
+        GSDK_ROOT="$2"
+        shift
+        shift
+        ;;
+    *)
+        CONFIG_ARGS+="$1 "
+        shift
+        ;;
+    esac
+done
+echo $CONFIG_ARGS
+# Generate project
+
 
 if ! [ -x "$(command -v slc)" ]; then
     echo "ERROR: please install slc_cli for your host."
@@ -80,12 +118,12 @@ echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter_extension
 if [ ! -L "$EXTENSION_DIR" ]; then
-    ln -s ../../../ $EXTENSION_DIR
+    ln -s $MATTER_ROOT $EXTENSION_DIR
 fi
 
 WISECONNECT3_DIR=$GSDK_ROOT/extension/wifi_sdk
 if [ ! -L "WISECONNECT3_DIR" ]; then
-    ln -s ../../../third_party/wifi_sdk/ $WISECONNECT3_DIR
+    ln -s $MATTER_ROOT/third_party/wifi_sdk/ $WISECONNECT3_DIR
 fi
 
 # Trust SDK and Matter extension
@@ -100,27 +138,12 @@ if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
     export STUDIO_ADAPTER_PACK_PATH=$ZAP_INSTALL_PATH
 fi
 
-
-while [ $# -gt 0 ]; do
-    case "$1" in
-    --clean)
-        rm -rf $OUTPUT_DIR
-        shift
-        ;;
-    *)
-        CONFIG_ARGS+="$1 "
-        shift
-        ;;
-    esac
-done
-echo $CONFIG_ARGS
-# Generate project
-
-
-slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=180 -o makefile
-if [ $? -ne 0 ]; then
-    echo "FAILED TO Generate : $SILABS_APP_PATH"
-    exit 1
-fi    
+if [ "$skip_gen" = false ]; then
+    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=180 -o makefile
+    if [ $? -ne 0 ]; then
+        echo "FAILED TO Generate : $SILABS_APP_PATH"
+        exit 1
+    fi
+fi  
 
 make all -C $OUTPUT_DIR -f $MAKE_FILE -j13
