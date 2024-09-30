@@ -16,7 +16,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the Simplicity SDK Docker image
+      - name: Build the matter_extension Docker image
         run: |
           docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension:latest
           docker run ghcr.io/siliconlabssoftware/matter_extension:latest

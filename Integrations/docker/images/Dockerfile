@@ -66,10 +66,10 @@ RUN set -x \
 ENV GSDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
-ENV WIFI_SDK_ROOT=/opt/silabs/wifi_sdk/
+ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 
-COPY --from=build /tmp/simplicity_sdk /opt/silabs/simplicity_sdk
-COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ /opt/silabs/wiseconnect-wifi-bt-sdk/
-COPY --from=build /tmp/wifi_sdk /opt/silabs/wifi_sdk
+COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
+COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
+COPY --from=build /tmp/wifi_sdk ${WIFI_SDK_ROOT}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
