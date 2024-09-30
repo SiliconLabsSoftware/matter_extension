@@ -18,6 +18,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the Simplicity SDK Docker image
         run: |
-          docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/simplicity-sdk:latest
-          docker run ghcr.io/siliconlabssoftware/simplicity-sdk:latest
-          docker push ghcr.io/siliconlabssoftware/simplicity-sdk:latest
+          docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension:latest
+          docker run ghcr.io/siliconlabssoftware/matter_extension:latest
+          docker push ghcr.io/siliconlabssoftware/matter_extension:latest
