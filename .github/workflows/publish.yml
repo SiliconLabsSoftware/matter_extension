@@ -18,6 +18,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the matter_extension Docker image
         run: |
-          docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension:latest
-          docker run ghcr.io/siliconlabssoftware/matter_extension:latest
-          docker push ghcr.io/siliconlabssoftware/matter_extension:latest
+          docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:24q2rc2_3.3.1
+          docker run ghcr.io/siliconlabssoftware/matter_extension_dependencies:24q2rc2_3.3.1
+          docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:24q2rc2_3.3.1
