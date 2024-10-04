@@ -77,6 +77,20 @@ After a project is created the `sl_build.py` script can be used to re-generate t
 python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
 ```
 
+## Flash an Application to Device
+
+The generated application binaries can be found at `MyNewApp/artifact/lighting-app-thread.s37`. 
+
+Simplicity Commander is used to flash binaries to the device. It is dowloaded by the `sl_setup.py` script and can be found at `slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander`.
+
+```
+slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander flash MyNewApp/artifact/lighting-app-thread.s37
+```
+
+**Note:** If using SiWx917 SoC, `.rps` file will need be flashed, instead of the `.s37` file.
+
+More info on Simplicity Commander can be found [here](https://www.silabs.com/documents/public/user-guides/ug162-simplicity-commander-reference-guide.pdf).
+
 ## Modifying an Application Project
 
 The resulting user project can be modified like any other SLC project. Software components can be added or removed by modifying the project's .slcp file, configuration can be applied by modifying the files in the `config` directory, the application logic can be managed through the files in the `src` directory. Various SLC-CLI commands can be used to examine, validate, or re-generate the project after a modification, see [Software Project Generation and Configuration with SLC-CLI](https://docs.silabs.com/simplicity-studio-5-users-guide/latest/ss-5-users-guide-tools-slc-cli/) for more information.
