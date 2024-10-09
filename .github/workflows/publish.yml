@@ -1,6 +1,5 @@
 name: Publish Docker
 on:
-    workflow_call:
     push:
         paths:
             - "Docker/**"
@@ -8,6 +7,7 @@ on:
         paths:
             - "Docker/**"
     workflow_dispatch:
+    workflow_call:
 jobs:
   publish-matter-extension-dependencies-image:
     runs-on: ubuntu-latest
