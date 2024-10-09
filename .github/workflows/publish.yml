@@ -1,11 +1,6 @@
 name: Publish Docker
 on:
     workflow_call:
-        inputs:
-          push_images:
-            required: false
-            type: boolean
-            default: false
     push:
         paths:
             - "Docker/**"
@@ -13,11 +8,6 @@ on:
         paths:
             - "Docker/**"
     workflow_dispatch:
-        inputs:
-            push_images:
-              required: false
-              type: boolean
-              default: false
 jobs:
   publish-matter-extension-dependencies-image:
     runs-on: ubuntu-latest
