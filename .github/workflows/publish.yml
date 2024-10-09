@@ -1,10 +1,23 @@
 name: Publish Docker
 on:
-  push:
-    paths:
-      - 'Docker/Dockerfile'
-      - '.github/workflows/publish.yml'
-      - 'Docker/requirements.txt'
+    workflow_call:
+        inputs:
+          push_images:
+            required: false
+            type: boolean
+            default: false
+    push:
+        paths:
+            - "Docker/**"
+    pull_request:
+        paths:
+            - "Docker/**"
+    workflow_dispatch:
+        inputs:
+            push_images:
+              required: false
+              type: boolean
+              default: false
 jobs:
   publish-matter-extension-dependencies-image:
     runs-on: ubuntu-latest
@@ -27,5 +40,4 @@ jobs:
           WiFiSDK="WiFiSDK-3.3.1"
           VERSION="${SiSDK}_${WiFiSDK}"
           docker build -f Docker/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
-          docker run ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
           docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:${VERSION}
