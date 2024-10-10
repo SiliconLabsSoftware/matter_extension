@@ -57,7 +57,8 @@ jobs:
 
       - name: SLC Generate
         run: |
-         slc  --java-location=${"JAVA17_HOME}  generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -p $MATTER_EXTN_ROOT/$(SLC_PATH)/${SLC_PATH}/sample-app/${{ inputs.app }}/${{ inputs.family }}/${{ inputs.app }}-${{ inputs.suffix }}.slcp ${ADD_APP_COMPONENT_STRING} ${REMOVE_APP_COMPONENT_STRING} --generator-timeout=180
+         source $(pwd)/slc/tools/.env
+         slc generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -p $MATTER_EXTN_ROOT/$(SLC_PATH)/${SLC_PATH}/sample-app/${{ inputs.app }}/${{ inputs.family }}/${{ inputs.app }}-${{ inputs.suffix }}.slcp ${ADD_APP_COMPONENT_STRING} ${REMOVE_APP_COMPONENT_STRING} --generator-timeout=180
 
       - name: Build
         run: |
