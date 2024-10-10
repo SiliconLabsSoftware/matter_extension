@@ -56,9 +56,10 @@ jobs:
         run: echo "REMOVE_APP_COMPONENT_STRING=--without ${{ inputs.removeAppComponent }}" >> $GITHUB_ENV
 
       - name: SLC Generate
+        shell: bash
         run: |
          source $(pwd)/slc/tools/.env
-         slc generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -p $MATTER_EXTN_ROOT/$(SLC_PATH)/${SLC_PATH}/sample-app/${{ inputs.app }}/${{ inputs.family }}/${{ inputs.app }}-${{ inputs.suffix }}.slcp ${ADD_APP_COMPONENT_STRING} ${REMOVE_APP_COMPONENT_STRING} --generator-timeout=180
+         slc generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -p $MATTER_EXTN_ROOT/slc/sample-app/${{ inputs.app }}/${{ inputs.family }}/${{ inputs.app }}-${{ inputs.suffix }}.slcp ${ADD_APP_COMPONENT_STRING} ${REMOVE_APP_COMPONENT_STRING} --generator-timeout=180
 
       - name: Build
         run: |
