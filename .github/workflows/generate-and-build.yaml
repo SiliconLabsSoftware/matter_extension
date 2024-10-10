@@ -42,6 +42,10 @@ jobs:
          source $(pwd)/venv/bin/activate
          pip install dload python-dotenv 
 
+      - name: Setup script
+        run: |
+          python3 $(pwd)/slc/sl_setup_env.py
+
       - name: Default additional component string
         run: echo "ADD_APP_COMPONENT_STRING=--with ${{ inputs.board }}${{ inputs.board_extension }}" >> $GITHUB_ENV
 
