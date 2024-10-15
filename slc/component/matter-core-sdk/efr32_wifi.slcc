@@ -113,7 +113,6 @@ include:
     -   path: PigweedLogger.h
     -   path: FreeRTOSConfig.h
     -   path: Rpc.h
-    -   path: TemperatureSensor.h
     -   path: silabs_creds.h
     -   path: SilabsTestEventTriggerDelegate.h
     -   path: MemMonitoring.h

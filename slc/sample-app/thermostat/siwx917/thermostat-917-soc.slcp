@@ -85,7 +85,7 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
-  #- id: matter_temperature_sensor
+  #- id: matter_si70xx_sensor
   #  from: matter
   - id: toolchain_gcc_common
     from: matter

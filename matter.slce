@@ -25,7 +25,7 @@ component_path:
   - path: slc/component/matter-platform/segger
   - path: slc/component/matter-platform/shell
   - path: slc/component/matter-platform/siwx917
-  - path: slc/component/matter-platform/temperature-sensor
+  - path: slc/component/matter-platform/sensors
   - path: slc/component/matter-platform/uart
   - path: slc/component/matter-platform/utils
   - path: slc/component/matter-platform/wstk-leds

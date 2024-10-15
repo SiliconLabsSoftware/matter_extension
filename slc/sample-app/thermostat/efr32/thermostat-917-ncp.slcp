@@ -112,7 +112,7 @@ component:
     from: wiseconnect3_sdk
 
 
-  - id: matter_temperature_sensor
+  - id: matter_si70xx_sensor
     from: matter
   - id: sensor_rht
 

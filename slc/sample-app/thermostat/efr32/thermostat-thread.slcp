@@ -96,7 +96,7 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
-  - id: matter_temperature_sensor
+  - id: matter_si70xx_sensor
     from: matter
   - id: sensor_rht
   - id: matter_default_lcd_config
@@ -159,7 +159,7 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
-  - name: USE_TEMP_SENSOR
+  - name: SL_MATTER_USE_SI70XX_SENSOR
     value: "1"
 configuration:
   - name: SL_OPENTHREAD_ENABLE_APP_TASK
