@@ -18,8 +18,10 @@ from zipfile import ZipFile
 import shutil
 import json
 from datetime import datetime
-from sl_create_new_app import createApp
 import re 
+from pathlib import Path
+from sl_create_new_app import createApp
+from script.get_zap_version import get_zap_version
 
 if sys.version_info < (3, 6):
     print("This script requires Python 3.6 or higher!")
@@ -28,14 +30,13 @@ if sys.version_info < (3, 6):
 # Use SILABS_MATTER_ROOT or use relative path
 if "SILABS_MATTER_ROOT" not in os.environ:
     print("Using default path for Matter root")
-    silabs_chip_root = os.path.normpath(os.path.dirname(os.path.abspath(__file__)) + os.sep + os.pardir)
+    silabs_chip_root = Path(__file__).resolve().parents[1]
 else:
     print("Using ENV path for Matter root")
     silabs_chip_root = os.environ["SILABS_MATTER_ROOT"]
 
-os.makedirs(os.path.join(silabs_chip_root, "slc/tools"), exist_ok=True)
-
 tools_folder_path = os.path.join(silabs_chip_root, "slc","tools")
+os.makedirs(tools_folder_path, exist_ok=True)
 
 print("\nSyncing and checking out submodules")
 # Checkout submodules
@@ -97,21 +98,7 @@ else:
     print("ERROR: Platform ", platform, " is not supported")
     sys.exit()
 
-#get latest zap from csa submodule
-def get_latest_zap():
-    zap_version = ""
-    zap_path = os.path.join(silabs_chip_root, "third_party", "matter_sdk", "scripts", "setup", "zap.json")
-    zap_json = json.load(open(zap_path))
-    for package in zap_json.get("packages", []):
-        for tag in package.get("tags", []):
-            if tag.startswith("version:2@"):
-                zap_version = tag.removeprefix("version:2@")
-                suffix_index = zap_version.rfind(".")
-                if suffix_index != -1:
-                    zap_version = zap_version[:suffix_index]
-                return zap_version
-
-MINIMUM_ZAP_REQUIRED = get_latest_zap()
+MINIMUM_ZAP_REQUIRED = get_zap_version()
 #urls for all the tools
 zap_url = f"https://github.com/project-chip/zap/releases/download/{MINIMUM_ZAP_REQUIRED}/zap-{_platform}-x64.zip"
 ninja_url = f"https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-{_platform}.zip"
@@ -142,7 +129,7 @@ if not os.path.isfile(os.path.join(arm_toolchain_path, "arm-none-eabi-gcc")) and
         tar = tarfile.open(os.path.join(tools_folder_path,"gcc.tar.xz"), "r:xz")  
         tar.extractall(path=tools_folder_path)
         tar.close()
-        os.remove("slc/tools/gcc.tar.xz")
+        os.remove(tools_folder_path+"/gcc.tar.xz")
 else:
     print("arm-none-eabi-gcc already installed")
 
