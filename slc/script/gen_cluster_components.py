@@ -13,7 +13,7 @@ import yaml
 root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
 os.chdir(root)
 cluster_dir_path = "third_party/matter_sdk/src/app/clusters"
-cluster_xml_path = ["third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip" , "third_party/matter_sdk/src/app/zap-templates/zcl/data-model/draft"] 
+cluster_xml_path = ["third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"] 
 
 # Create a dictionary of all the clusters from Cluster_Dir_Path with the headers, source files,
 # and if it is a server cluster or not

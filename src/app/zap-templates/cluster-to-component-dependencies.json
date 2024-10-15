@@ -42,12 +42,6 @@
     ]
   },
   {
-    "clusterCode": "barrier control-server",
-    "value": [
-      "%extension-matter%matter_barrier_control"
-    ]
-  },
-  {
     "clusterCode": "basic information-server",
     "value": [
       "%extension-matter%matter_basic_information"
@@ -318,7 +312,7 @@
     ]
   },
   {
-    "clusterCode": "on/off switch configuration-server",
+    "clusterCode": "on/off-server",
     "value": [
       "%extension-matter%matter_on_off"
     ]

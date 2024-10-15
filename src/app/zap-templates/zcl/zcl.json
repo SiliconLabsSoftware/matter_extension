@@ -6,7 +6,6 @@
     "xmlRoot": [
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/.",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/",
-        "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/draft/",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/silabs/"
     ],
     "_comment": "Ensure access-control-definitions.xml is first in xmlFile array",
@@ -21,13 +20,13 @@
         "application-launcher-cluster.xml",
         "audio-output-cluster.xml",
         "ballast-configuration-cluster.xml",
-        "barrier-control-cluster.xml",
         "basic-information-cluster.xml",
         "binding-cluster.xml",
         "boolean-state-cluster.xml",
         "boolean-state-configuration-cluster.xml",
         "actions-cluster.xml",
         "bridged-device-basic-information.xml",
+        "chime-cluster.xml",
         "chip-ota.xml",
         "channel-cluster.xml",
         "clusters-extensions.xml",
@@ -48,7 +47,6 @@
         "drlc-cluster.xml",
         "ecosystem-information-cluster.xml",
         "electrical-energy-measurement-cluster.xml",
-        "electrical-measurement-cluster.xml",
         "electrical-power-measurement-cluster.xml",
         "energy-evse-cluster.xml",
         "energy-evse-mode-cluster.xml",
@@ -69,7 +67,6 @@
         "icd-management-cluster.xml",
         "identify-cluster.xml",
         "illuminance-measurement-cluster.xml",
-        "input-output-value-clusters.xml",
         "keypad-input-cluster.xml",
         "laundry-washer-mode-cluster.xml",
         "laundry-dryer-controls-cluster.xml",
@@ -86,7 +83,6 @@
         "network-commissioning-cluster.xml",
         "occupancy-sensing-cluster.xml",
         "onoff-cluster.xml",
-        "onoff-switch-configuration-cluster.xml",
         "operational-credentials-cluster.xml",
         "operational-state-cluster.xml",
         "operational-state-oven-cluster.xml",
@@ -744,6 +740,7 @@
             "FeatureMap"
         ]
     },
+    "mandatoryDeviceTypes": "0x0016",
     "defaultReportingPolicy": "mandatory",
     "ZCLDataTypes": [
         "ARRAY",

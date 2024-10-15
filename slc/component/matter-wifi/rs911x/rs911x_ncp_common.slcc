@@ -17,7 +17,7 @@ requires:
 source:
 - path: third_party/matter_sdk/examples/platform/silabs/wifi/wfx_rsi_host.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.c
+- path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
 include:
 - path: third_party/matter_sdk/src/platform/silabs/rs911x
   file_list:

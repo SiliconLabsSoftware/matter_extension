@@ -195,8 +195,8 @@ if __name__ == '__main__':
                         if 'gatt_db.c' in src and wifi == True:
                             continue
 
-                        # Skip any references to wfx_sl_ble_init.c, added manually in 9116 WiFi component
-                        if 'wfx_sl_ble_init.c' in src:
+                        # Skip any references to wfx_sl_ble_init.cpp, added manually in 9116 WiFi component
+                        if 'wfx_sl_ble_init.cpp' in src:
                             # Adding for SiWx917 SoC
                             if 'siwx917' not in name:
                                 continue

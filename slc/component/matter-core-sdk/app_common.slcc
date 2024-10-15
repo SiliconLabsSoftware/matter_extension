@@ -21,6 +21,7 @@ include:
     -   path: Engine.h
     -   path: SynchronizedReportSchedulerImpl.h
     -   path: reporting.h
+    -   path: Read-Checked.h
     -   path: ReportScheduler.h
 -   path: third_party/matter_sdk/src/app
     file_list:
@@ -50,6 +51,9 @@ include:
     -   path: util/odd-sized-integers.h
     -   path: util/generic-callbacks.h
     -   path: util/IMClusterCommandHandler.h
+-   path: third_party/matter_sdk/src/app/ember_coupling
+    file_list:
+    -   path: EventPathValidity.mixin.h
 label: app_common
 package: Matter
 provides:

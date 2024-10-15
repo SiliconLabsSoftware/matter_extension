@@ -61,9 +61,9 @@ include:
   - path: third_party/matter_sdk/src/platform/silabs/wifi
     file_list:
       - path: dhcp_client.h
+      - path: wfx_host_events.h
   - path: third_party/matter_sdk/src/platform/silabs/efr32/wifi
     file_list:
-      - path: wfx_host_events.h
       - path: wfx_msgs.h
       - path: wifi_config.h
       - path: ethernetif.h
