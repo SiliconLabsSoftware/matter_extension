@@ -40,10 +40,15 @@ export POST_BUILD_EXE=$(which commander)
 
 # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
 if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-    SILABS_APP=$(basename "$SILABS_APP_PATH" -bootloader.slcw)
+    if [[ "$SILABS_APP_PATH" == *917-soc* ]]; then
+        SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
+        MAKE_FILE=$SILABS_APP.solution.Makefile
+    else
+        SILABS_APP=$(basename "$SILABS_APP_PATH" -bootloader.slcw)
+        MAKE_FILE=$SILABS_APP-bootloader.solution.Makefile
+    fi
     PROJECT_FLAG="-w"
     OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP-solution"
-    MAKE_FILE=$SILABS_APP-bootloader.solution.Makefile
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
     SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)
