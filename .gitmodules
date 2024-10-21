@@ -35,3 +35,7 @@
 	path = third_party/matter_private
 	url = ssh://git@stash.silabs.com/wmn_tools/matter_private.git
 	update = none
+[submodule "third_party/third_party_hw_drivers_extension"]
+	path = third_party/third_party_hw_drivers_extension
+	url = https://github.com/SiliconLabs/third_party_hw_drivers_extension.git
+	update = none

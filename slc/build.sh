@@ -131,12 +131,15 @@ if [ ! -L "WISECONNECT3_DIR" ]; then
     ln -s $MATTER_ROOT/third_party/wifi_sdk/ $WISECONNECT3_DIR
 fi
 
+ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
+
 # Trust SDK and Matter extension
 echo "Ensure SDK and Matter extension are trusted by SLC."
 slc configuration --sdk $GSDK_ROOT
 slc signature trust --development-trust
 slc signature trust  --extension-path "$GSDK_ROOT/extension/matter_extension/"
 slc signature trust --sdk $GSDK_ROOT --extension-path "$WISECONNECT3_DIR"
+slc signature trust --extension-path "$ThirdPartyHwDrivers_DIR"
 
 # Make ZAP available to SLC-CLI
 if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
