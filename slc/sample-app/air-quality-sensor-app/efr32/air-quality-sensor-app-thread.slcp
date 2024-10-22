@@ -44,6 +44,8 @@ component:
     from: matter
   - id: matter_air_quality
     from: matter
+  - id: matter_concentration_measurement
+    from: matter
   - id: matter_ethernet_network_diagnostics
     from: matter
   - id: matter_wifi_network_diagnostics
