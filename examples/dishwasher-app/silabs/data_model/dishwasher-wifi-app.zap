@@ -1,6 +1,6 @@
 {
   "fileFormat": 2,
-  "featureLevel": 100,
+  "featureLevel": 104,
   "creator": "zap",
   "keyValuePairs": [
     {
@@ -29,6 +29,7 @@
       "pathRelativity": "relativeToZap",
       "path": "../../../../src/app/zap-templates/app-templates.json",
       "type": "gen-templates-json",
+      "category": "matter",
       "version": "chip-v1"
     }
   ],
@@ -40,14 +41,16 @@
         "code": 22,
         "profileId": 259,
         "label": "MA-rootdevice",
-        "name": "MA-rootdevice"
+        "name": "MA-rootdevice",
+        "deviceTypeOrder": 0
       },
       "deviceTypes": [
         {
           "code": 22,
           "profileId": 259,
           "label": "MA-rootdevice",
-          "name": "MA-rootdevice"
+          "name": "MA-rootdevice",
+          "deviceTypeOrder": 0
         }
       ],
       "deviceVersions": [
@@ -745,24 +748,6 @@
               "source": "client",
               "isIncoming": 0,
               "isEnabled": 1
-            }
-          ],
-          "attributes": [
-            {
-              "name": "ClusterRevision",
-              "code": 65533,
-              "mfgCode": null,
-              "side": "client",
-              "type": "int16u",
-              "included": 1,
-              "storageOption": "RAM",
-              "singleton": 0,
-              "bounded": 0,
-              "defaultValue": "1",
-              "reportable": 1,
-              "minInterval": 0,
-              "maxInterval": 65344,
-              "reportableChange": 0
             }
           ]
         },
@@ -1496,7 +1481,7 @@
               "storageOption": "External",
               "singleton": 0,
               "bounded": 0,
-              "defaultValue": "",
+              "defaultValue": null,
               "reportable": 1,
               "minInterval": 1,
               "maxInterval": 65534,
@@ -1532,58 +1517,6 @@
               "reportable": 1,
               "minInterval": 0,
               "maxInterval": 65344,
-              "reportableChange": 0
-            }
-          ]
-        },
-        {
-          "name": "Diagnostic Logs",
-          "code": 50,
-          "mfgCode": null,
-          "define": "DIAGNOSTIC_LOGS_CLUSTER",
-          "side": "server",
-          "enabled": 1,
-          "commands": [
-            {
-              "name": "RetrieveLogsRequest",
-              "code": 0,
-              "mfgCode": null,
-              "source": "client",
-              "isIncoming": 1,
-              "isEnabled": 1
-            }
-          ],
-          "attributes": [
-            {
-              "name": "FeatureMap",
-              "code": 65532,
-              "mfgCode": null,
-              "side": "server",
-              "type": "bitmap32",
-              "included": 1,
-              "storageOption": "RAM",
-              "singleton": 0,
-              "bounded": 0,
-              "defaultValue": "0",
-              "reportable": 1,
-              "minInterval": 1,
-              "maxInterval": 65534,
-              "reportableChange": 0
-            },
-            {
-              "name": "ClusterRevision",
-              "code": 65533,
-              "mfgCode": null,
-              "side": "server",
-              "type": "int16u",
-              "included": 1,
-              "storageOption": "RAM",
-              "singleton": 0,
-              "bounded": 0,
-              "defaultValue": "1",
-              "reportable": 1,
-              "minInterval": 1,
-              "maxInterval": 65534,
               "reportableChange": 0
             }
           ]
@@ -1935,7 +1868,7 @@
           ]
         },
         {
-          "name": "WiFi Network Diagnostics",
+          "name": "Wi-Fi Network Diagnostics",
           "code": 54,
           "mfgCode": null,
           "define": "WIFI_NETWORK_DIAGNOSTICS_CLUSTER",
@@ -2827,14 +2760,16 @@
         "code": 117,
         "profileId": 259,
         "label": "MA-dishwasher",
-        "name": "MA-dishwasher"
+        "name": "MA-dishwasher",
+        "deviceTypeOrder": 0
       },
       "deviceTypes": [
         {
           "code": 117,
           "profileId": 259,
           "label": "MA-dishwasher",
-          "name": "MA-dishwasher"
+          "name": "MA-dishwasher",
+          "deviceTypeOrder": 0
         }
       ],
       "deviceVersions": [
