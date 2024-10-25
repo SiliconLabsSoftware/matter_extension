@@ -100,8 +100,8 @@ component:
     from: matter
   - id: matter_scenes
     from: matter
-
-
+  - id: matter_log_uart
+    from: matter
     
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo

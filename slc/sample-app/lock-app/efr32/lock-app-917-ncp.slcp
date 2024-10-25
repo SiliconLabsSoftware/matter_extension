@@ -104,6 +104,8 @@ component:
     from: matter
   - id: matter_icd_management
     from: matter
+  - id: matter_log_uart
+    from: matter
 
   - id: efx_ncp_custom_host_mcu
     from: matter

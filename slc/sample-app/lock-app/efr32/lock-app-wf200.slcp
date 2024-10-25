@@ -101,6 +101,8 @@ component:
     from: matter
   - id: matter_shell
     from: matter
+  - id: matter_log_uart
+    from: matter
 
 # Disable due to size increase of ICD functionality    
 #  - id: matter_default_lcd_config

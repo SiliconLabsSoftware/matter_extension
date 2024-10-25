@@ -104,6 +104,8 @@ component:
     from: matter
   - id: matter_icd_management
     from: matter
+  - id: matter_log_uart
+    from: matter
 
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART

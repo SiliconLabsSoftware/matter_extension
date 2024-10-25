@@ -101,6 +101,8 @@ component:
 
   - id: matter_shell
     from: matter
+  - id: matter_log_uart
+    from: matter
 
   - id: efx_ncp_custom_host_mcu
     from: matter

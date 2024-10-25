@@ -105,6 +105,8 @@ component:
 
   - id: matter_default_lcd_config
     from: matter
+  - id: matter_log_uart
+    from: matter
 
 # Require LCD and QR Code components only on the boards that support LCD
 requires:

@@ -85,6 +85,10 @@ component:
     from: matter
   - id: matter_default_lcd_config
     from: matter
+  - id: matter_shell
+    from: matter
+  - id: matter_log_uart
+    from: matter
 
   - id: sl_si91x_common_flash_nvm3
     from: wiseconnect3_sdk
