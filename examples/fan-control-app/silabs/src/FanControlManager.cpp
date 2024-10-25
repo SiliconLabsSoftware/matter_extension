@@ -17,7 +17,9 @@
  */
 
 #include "FanControlManager.h"
+#if DISPLAY_ENABLED
 #include "FanControlUI.h"
+#endif
 
 #include "AppConfig.h"
 #include "AppTask.h"
@@ -176,7 +178,9 @@ void FanControlManager::HandleFanControlAttributeChange(AttributeId attributeId,
     }
 
     UpdateFanControlLED();
+#if DISPLAY_ENABLED
     UpdateFanControlLCD();
+#endif
 }
 
 void FanControlManager::PercentSettingWriteCallback(uint8_t aNewPercentSetting)

@@ -16,6 +16,8 @@ requires:
 template_file:
   - path: matter-wifi/917soc/linkerfile_common.ld.jinja
     condition: [brd4338a]
+  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+    condition: [brd2605a]
 # TODO: Cleanup the customized linker file for brd4342a board and use the SDK linker file
   - path: matter-wifi/917soc/linkerfile_psram_SoC.ld.jinja
     condition: [brd4342a]
@@ -39,6 +41,9 @@ toolchain_settings:
   - option: linkerfile
     value: autogen/linkerfile_common.ld
     condition: [brd4338a]
+  - option: linkerfile
+    value: autogen/linkerfile_common.ld
+    condition: [brd2605a]
   - option: linkerfile
     value: autogen/linkerfile_psram_SoC.ld
     condition: [brd4342a]

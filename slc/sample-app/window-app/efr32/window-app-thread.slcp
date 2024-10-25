@@ -18,7 +18,7 @@ component:
   - id: clock_manager
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
   - id: matter
     from: matter

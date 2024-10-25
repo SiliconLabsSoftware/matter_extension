@@ -15,7 +15,7 @@ component:
   - id: device_init
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
 
   - id: matter
