@@ -106,9 +106,10 @@ component:
   # ICD configurations
   - id: matter_icd_core
     from: matter
-  - id: matter_icd_management
+  - id: matter_check_in_message
     from: matter
-
+  - id: matter_icd_checkin_sender
+    from: matter
 
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -190,9 +191,13 @@ configuration:
     value: 16
 
 # Default ICD configurations
+  - { name: CHIP_CONFIG_ENABLE_ICD_LIT, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_CIP, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_UAT, value: 1 }
+
   - {name: SL_IDLE_MODE_DURATION_S, value: '3600'}
   - {name: SL_ACTIVE_MODE_DURATION_MS, value: '0'}
-  - {name: SL_ACTIVE_MODE_THRESHOLD, value: '0'}
+  - {name: SL_ACTIVE_MODE_THRESHOLD, value: '5000'}
 
   - {name: SL_OT_IDLE_INTERVAL, value: '15000'}
   - {name: SL_OT_ACTIVE_INTERVAL, value: '500'}
