@@ -2,10 +2,10 @@
 This script copies a trimmed-down version of the repository to a specified target location, making it compatible for use with Simplicity Studio.
 
 Usage:
-    python3 slc/copy_extension.py <target_location>
+    python3 slc/stage_extension.py <target_location>
 
 Example:
-    python3 slc/copy_extension.py /path/to/target
+    python3 slc/stage_extension.py /path/to/target
 
 Arguments:
     target_location: The destination directory where the extension will be copied.

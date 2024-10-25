@@ -8,8 +8,6 @@ define:
     value: '1'
 -   name: RADIO_CONFIG_DMP_SUPPORT
     value: '1'
--   name: WIFI_ENABLE_SECURITY_WPA3_TRANSITION
-    value: '1'
 description: siwx917_common
 id: siwx917_common
 include:
