@@ -106,6 +106,8 @@ component:
   # ICD configurations
   - id: matter_icd_core
     from: matter
+  - id: matter_test_event_trigger
+    from: matter
   - id: matter_check_in_message
     from: matter
   - id: matter_icd_checkin_sender
