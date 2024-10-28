@@ -119,7 +119,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/light-switch-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/icd-lit-light-switch-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -194,13 +194,14 @@ configuration:
   - { name: CHIP_CONFIG_ENABLE_ICD_LIT, value: 1 }
   - { name: CHIP_CONFIG_ENABLE_ICD_CIP, value: 1 }
   - { name: CHIP_CONFIG_ENABLE_ICD_UAT, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_DSLS, value: 1 }
 
-  - {name: SL_IDLE_MODE_DURATION_S, value: '3600'}
+  - {name: SL_IDLE_MODE_DURATION_S, value: '600'}
   - {name: SL_ACTIVE_MODE_DURATION_MS, value: '0'}
   - {name: SL_ACTIVE_MODE_THRESHOLD, value: '5000'}
 
-  - {name: SL_OT_IDLE_INTERVAL, value: '15000'}
-  - {name: SL_OT_ACTIVE_INTERVAL, value: '500'}
+  - {name: SL_OT_IDLE_INTERVAL, value: '900'}
+  - {name: SL_OT_ACTIVE_INTERVAL, value: '1000'}
     
   - {name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED, value: '1'}
   - {name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION, value: '0'}

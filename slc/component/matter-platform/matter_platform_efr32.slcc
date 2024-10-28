@@ -25,7 +25,6 @@ include:
   - path: LEDWidget.h
   - path: MatterConfig.h
   - path: OTAConfig.h
-  - path: matter_shell.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
   - path: SoftwareFaultReports.h
