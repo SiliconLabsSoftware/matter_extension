@@ -1,7 +1,7 @@
-project_name: thermostat-thread
-label: Matter Thermostat
+project_name: multi-sensor-app-thread
+label: Matter multi-sensor
 description: >
-  Matter Thermostat
+  Matter Multi Sensor App
 quality: production
 package: Matter
 
@@ -17,14 +17,14 @@ component:
     from: matter
   - id: matter_leds
     from: matter
-    
+
   - id: matter
     from: matter
   - id: matter_platform_efr32
     from: matter
   - id: matter_ble
     from: matter
-  - id: ot_stack_ftd
+  - id: ot_stack_mtd
   - id: ot_rtos_wrappers_real
   - id: matter_thread
     from: matter
@@ -39,9 +39,7 @@ component:
     from: matter
   - id: matter_provision_default
     from: matter
-
-  - id: matter_thermostat_app
-    from: matter   
+ 
   - id: app_common
     from: matter
   - id: matter_access_control
@@ -49,8 +47,6 @@ component:
   - id: matter_administrator_commissioning
     from: matter
   - id: matter_basic_information
-    from: matter
-  - id: matter_bindings
     from: matter
   - id: matter_descriptor
     from: matter
@@ -74,15 +70,13 @@ component:
     from: matter
   - id: matter_network_commissioning
     from: matter
+  - id: matter_occupancy_sensor
+    from: matter
   - id: matter_operational_credentials
     from: matter
   - id: matter_ota_requestor
     from: matter
   - id: matter_software_diagnostics
-    from: matter
-  - id: matter_thermostat
-    from: matter
-  - id: matter_thermostat_user_interface_configuration
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
@@ -92,61 +86,72 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
-  - id: matter_si70xx_sensor
-    from: matter
-  - id: sensor_rht
   - id: matter_default_lcd_config
     from: matter
-  - id: matter_log_uart
-    from: matter
-
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
     from: matter
   - id: matter_segger_rtt
     from: matter
-
   - id: matter_si70xx_sensor
     from: matter
     condition: [hardware_board_has_si70xx]
+  - id: matter_log_uart
+    from: matter
+
+  # ICD configurations
+  - id: matter_icd_core
+    from: matter
+  - id: matter_check_in_message
+    from: matter
+  - id: matter_icd_checkin_sender
+    from: matter
 
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
 # Select UART/EUART drivers based on device series
   - name: matter_drivers_series_2
     condition:
-     - device_series_2  
+     - device_series_2
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
+  - path: ../../../../examples/multi-sensor-app/config/sl_matter_sensor_config.h
+    file_id: matter_sensor_config
+  - path: ../../../../examples/multi-sensor-app/data_model/multi-sensor-thread-app.zap
     directory: common
     file_id: zap_config
+    condition:
+      - matter_thread
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+
 include:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
+  - path: ../../../../examples/multi-sensor-app/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: AppTask.h
       - path: SensorManager.h
-      - path: TemperatureManager.h
+      - path: SensorsUI.h
+        condition:
+        - matter_lcd
       - path: CHIPProjectConfig.h
     directory: include
 
-
 source:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
+  - path: ../../../../examples/multi-sensor-app/src/AppTask.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
+  - path: ../../../../examples/multi-sensor-app/src/SensorManager.cpp
     directory: src
+  - path: ../../../../examples/multi-sensor-app/src/SensorsUI.cpp
+    directory: src
+    condition:
+    - matter_lcd
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/ZclCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
+  - path: ../../../../examples/multi-sensor-app/src/DataModelCallbacks.cpp
     directory: src
 
 define:
@@ -154,12 +159,13 @@ define:
     value: "1"
   - name: _WANT_REENT_SMALL
     value: "1"
-  - name: IS_DEMO_THERMOSTAT
-    value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+
+
+    
 configuration:
   - name: SL_OPENTHREAD_ENABLE_APP_TASK
     value: 0
@@ -184,10 +190,26 @@ configuration:
   - {name: SL_STACK_SIZE, value: '4608'} 
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
-    
+
+# Default ICD configurations
+  - {name: SL_IDLE_MODE_DURATION_S, value: '600'}
+  - {name: SL_ACTIVE_MODE_DURATION_MS, value: '0'}
+  - {name: SL_ACTIVE_MODE_THRESHOLD, value: '5000'}
+
+  - {name: SL_OT_IDLE_INTERVAL, value: '90000'}
+  - {name: SL_OT_ACTIVE_INTERVAL, value: '1000'}
+
+  - { name: CHIP_CONFIG_ENABLE_ICD_LIT, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_CIP, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_UAT, value: 1 }
+
+  - {name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED, value: '1'}
+  - {name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION, value: '0'}  
+  
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17
+    
 # For the linker file set the flash size as the actual size minus the following:
 # Space reserved for the bootloader (0x6000 bytes at the beginning)
 # A single page at the end reserved for the provisioning data

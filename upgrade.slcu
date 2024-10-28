@@ -201,3 +201,8 @@ upgrade:
         description: Removing unused component
         remove: 
           - matter_uart_wifi
+      
+      - trigger: matter_sensor
+        description: Removing empty and unused component
+        remove:
+          - matter_sensor

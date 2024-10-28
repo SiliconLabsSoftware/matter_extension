@@ -10,9 +10,18 @@ metadata:
 
 provides:
   - name: matter_si70xx_sensor
+  
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
     file_list:
     - path: Si70xxSensor.h
+
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/Si70xxSensor.cpp
+
+define:
+  - name: SL_MATTER_USE_SI70XX_SENSOR
+    value: 1
+
+requires:
+  - name: si70xx_driver

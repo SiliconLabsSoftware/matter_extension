@@ -50,15 +50,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4116A</description>
 	</demo>
-	<demo name="brd4116a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4116a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4116A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4116A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4116A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4116A</description>
 	</demo>
 	<demo name="brd4116a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -140,15 +140,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4317A</description>
 	</demo>
-	<demo name="brd4317a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4317a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4317a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4317A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4317A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4317A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4317A</description>
 	</demo>
 	<demo name="brd4317a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -230,15 +230,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4187C</description>
 	</demo>
-	<demo name="brd4187c.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4187c.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4187C/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4187C/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4187C</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4187C</description>
 	</demo>
 	<demo name="brd4187c.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -460,15 +460,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4121A</description>
 	</demo>
-	<demo name="brd4121a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4121a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4121A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4121A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4121A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4121A</description>
 	</demo>
 	<demo name="brd4121a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -530,15 +530,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Light Switch Application over Thread for BRD4319A</description>
 	</demo>
-	<demo name="brd4319a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4319a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4319a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4319A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4319A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4319A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4319A</description>
 	</demo>
 	<demo name="brd4319a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -610,15 +610,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD2608A</description>
 	</demo>
-	<demo name="brd2608a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd2608a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2608A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2608A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD2608A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD2608A</description>
 	</demo>
 	<demo name="brd2608a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -700,15 +700,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4118A</description>
 	</demo>
-	<demo name="brd4118a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4118a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4118A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4118A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4118A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4118A</description>
 	</demo>
 	<demo name="brd4118a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -770,15 +770,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Light Switch Application over Thread for BRD2703A</description>
 	</demo>
-	<demo name="brd2703a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd2703a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2703A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2703A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD2703A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD2703A</description>
 	</demo>
 	<demo name="brd2703a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -850,15 +850,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4318A</description>
 	</demo>
-	<demo name="brd4318a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4318a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4318a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4318A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4318A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4318A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4318A</description>
 	</demo>
 	<demo name="brd4318a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -920,15 +920,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Light Switch Application over Thread for BRD4337A</description>
 	</demo>
-	<demo name="brd4337a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4337a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4337a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4337A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4337A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4337A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4337A</description>
 	</demo>
 	<demo name="brd4337a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -1010,15 +1010,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4186C</description>
 	</demo>
-	<demo name="brd4186c.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4186c.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4186C/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4186C/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4186C</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4186C</description>
 	</demo>
 	<demo name="brd4186c.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -1160,15 +1160,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4316A</description>
 	</demo>
-	<demo name="brd4316a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4316a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4316a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4316A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4316A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4316A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4316A</description>
 	</demo>
 	<demo name="brd4316a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -1240,15 +1240,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Thermostat Application over Thread for BRD4117A</description>
 	</demo>
-	<demo name="brd4117a.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd4117a.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4117A/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD4117A/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD4117A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4117A</description>
 	</demo>
 	<demo name="brd4117a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
@@ -1320,15 +1320,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Light Switch Application over Thread for BRD2601B</description>
 	</demo>
-	<demo name="brd2601b.demo.sensor_app_thread" label="Matter - SoC Sensor over Thread">
-		<property key="demos.blurb" value="Matter - SoC Sensor app"/>
+	<demo name="brd2601b.demo.sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2601B/OpenThread/sensor-app-thread.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/sensor-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.3.1/demos/BRD2601B/OpenThread/multi-sensor-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Sensor Application over Thread for BRD2601B</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD2601B</description>
 	</demo>
 	<demo name="brd2601b.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
