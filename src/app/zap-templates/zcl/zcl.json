@@ -129,6 +129,7 @@
         "washer-controls-cluster.xml",
         "water-heater-management-cluster.xml",
         "water-heater-mode-cluster.xml",
+        "webrtc-provider-cluster.xml",
         "wifi-network-diagnostics-cluster.xml",
         "wifi-network-management-cluster.xml",
         "window-covering.xml",
@@ -445,8 +446,6 @@
         "Dishwasher Mode": [
             "SupportedModes",
             "CurrentMode",
-            "StartUpMode",
-            "OnMode",
             "FeatureMap"
         ],
         "Microwave Oven Mode": [
@@ -469,15 +468,11 @@
         "Laundry Washer Mode": [
             "SupportedModes",
             "CurrentMode",
-            "StartUpMode",
-            "OnMode",
             "FeatureMap"
         ],
         "Refrigerator And Temperature Controlled Cabinet Mode": [
             "SupportedModes",
             "CurrentMode",
-            "StartUpMode",
-            "OnMode",
             "FeatureMap"
         ],
         "RVC Clean Mode": [
