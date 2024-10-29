@@ -66,6 +66,7 @@ class ID:
     kFlashPageSize      = 0x0103
     kCredsAddress       = 0x0104
     kCsrFile            = 0x0105
+
     # Options
     kVersion            = 0x0111
     kAction             = 0x0112
@@ -83,6 +84,7 @@ class ID:
     kProductionFW       = 0x0136
     kCertToolPath       = 0x0137
     kPylinkLib          = 0x013a
+
     # Instance Info
     kSerialNumber       = 0x0141
     kVendorId           = 0x0142
@@ -95,7 +97,9 @@ class ID:
     kHwVersion          = 0x0151
     kHwVersionStr       = 0x0152
     kManufacturingDate  = 0x0153
-    kUniqueId           = 0x0154
+    # Note: Must be different to the Basic Information cluster's UniqueId
+    kPersistentUniqueId = 0x0154
+
     # Commissionable Data
     kDiscriminator      = 0x0161
     kSpake2pPasscode    = 0x0162
@@ -105,6 +109,7 @@ class ID:
     kSetupPayload       = 0x0166
     kCommissioningFlow  = 0x0167
     kRendezvousFlags    = 0x0168
+
     # Attestation Credentials
     kFirmwareInfo       = 0x0181
     kCertification      = 0x0182
