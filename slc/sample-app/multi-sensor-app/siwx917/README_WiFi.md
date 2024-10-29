@@ -11,7 +11,7 @@ This examples showcases how a Long Idle Time multi sensor ICD device would opera
 3. Matter Humidity Sensor
 
 The SiWx917 SoC device can be commissioned over Bluetooth Low Energy (BLE) where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure.
 
 If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the

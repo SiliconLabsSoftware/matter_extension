@@ -2,10 +2,10 @@
 
 The SiWx917 SoC OnOff Plug example provides a baseline demonstration of an OnOff Plug control
 device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled
-by a Chip controller over a Wi-Fi network.
+by a Matter controller over a Wi-Fi network.
 
 The SiWx917 SoC device can be commissioned over Bluetooth Low Energy (BLE) where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure.
 
 If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the

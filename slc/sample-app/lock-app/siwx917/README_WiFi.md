@@ -2,10 +2,10 @@
 
 The SiWx917 SoC lock example provides a baseline demonstration of a door lock control
 device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled by
-a Chip controller over Wifi network.
+a Matter controller over Wifi network.
     
 The SiWx917 SoC device can be commissioned over Bluetooth Low Energy where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure.
     
 The LCD on the Silabs WSTK shows a QR Code containing the needed commissioning

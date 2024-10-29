@@ -13,7 +13,7 @@ This examples showcases how a Long Idle Time multi sensor ICD device would opera
 The sample is configured by default as a Long Idle Time ICD.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy (BLE) where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure. If using Thread, Thread Network credentials are then provided to the
 EFR32 device which will then join the Thread network.
 

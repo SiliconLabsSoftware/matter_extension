@@ -2,10 +2,10 @@
 
 The EFR32 lighting example provides a baseline demonstration of a Light control
 device, built using Matter and the Silicon Labs Gecko SDK. It can be controlled
-by a Chip controller over an Openthread network.
+by a Matter controller over an Openthread network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure. If using Thread, Thread Network credentials are then provided to the
 EFR32 device which will then join the Thread network.
 

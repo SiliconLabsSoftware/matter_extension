@@ -2,10 +2,10 @@
 
 The EFR32 window-covering example provides a baseline demonstration of a Window
 Covering device, built using Matter and the Silicon Labs Gecko SDK. It can be
-controlled by a Chip controller over an Openthread network.
+controlled by a Matter controller over an Openthread network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
-and the Chip controller will exchange security information with the Rendez-vous
+and the Matter controller will exchange security information with the Rendez-vous
 procedure. In the case of Thread, the Thread Network credentials are provided to
 the EFR32 device which will then join the Thread network.
 
