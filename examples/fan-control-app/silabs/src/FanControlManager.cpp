@@ -171,7 +171,7 @@ void FanControlManager::HandleFanControlAttributeChange(AttributeId attributeId,
     }
 
     case Attributes::FanMode::Id: {
-        FanModeEnum mFanMode = static_cast<FanModeEnum>(*value);
+        mFanMode = *reinterpret_cast<FanModeEnum*>(value);
         FanModeWriteCallback(mFanMode);
         break;
     }
@@ -190,6 +190,7 @@ void FanControlManager::HandleFanControlAttributeChange(AttributeId attributeId,
 void FanControlManager::PercentSettingWriteCallback(uint8_t aNewPercentSetting)
 {
     VerifyOrReturn(aNewPercentSetting != percentCurrent);
+    VerifyOrReturn(mFanMode != FanModeEnum::kAuto);
     ChipLogDetail(NotSpecified, "FanControlManager::PercentSettingWriteCallback: %d", aNewPercentSetting);
     percentCurrent = aNewPercentSetting;
 
@@ -207,6 +208,7 @@ void FanControlManager::PercentSettingWriteCallback(uint8_t aNewPercentSetting)
 void FanControlManager::SpeedSettingWriteCallback(uint8_t aNewSpeedSetting)
 {
     VerifyOrReturn(aNewSpeedSetting != speedCurrent);
+    VerifyOrReturn(mFanMode != FanModeEnum::kAuto);
     ChipLogDetail(NotSpecified, "FanControlManager::SpeedSettingWriteCallback: %d", aNewSpeedSetting);
     speedCurrent  = aNewSpeedSetting;
 
@@ -220,13 +222,7 @@ void FanControlManager::SpeedSettingWriteCallback(uint8_t aNewSpeedSetting)
         ChipLogError(NotSpecified, "FanControlManager::SpeedSettingWriteCallback: failed to set SpeedCurrent attribute");
     }
 
-    // Update the fan mode relative to the new speed.
-    UpdateFanMode();
-}
-
-void FanControlManager::UpdateFanMode()
-{
-    // Change the fan mode as per the current speed.
+    // Update the fan mode as per the current speed.
     if (speedCurrent == 0)
     {
         mFanMode = FanModeEnum::kOff;
@@ -243,7 +239,11 @@ void FanControlManager::UpdateFanMode()
     {
         mFanMode = FanModeEnum::kHigh;
     }
+    UpdateFanMode();
+}
 
+void FanControlManager::UpdateFanMode()
+{
     AttributeUpdateInfo * data = chip::Platform::New<AttributeUpdateInfo>();
     data->endPoint = GetEndPoint();
     data->fanMode = mFanMode;
@@ -295,7 +295,7 @@ void FanControlManager::FanModeWriteCallback(FanModeEnum aNewFanMode)
     }
     case FanModeEnum::kSmart:
     case FanModeEnum::kAuto: {
-        ChipLogProgress(NotSpecified, "FanControlManager::FanModeWriteCallback: Auto");
+        UpdateFanMode();
         break;
     }
     case FanModeEnum::kUnknownEnumValue: {
