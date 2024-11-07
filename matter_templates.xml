@@ -985,7 +985,7 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.sample-app.multi-sensor-app.siwx917.multi-sensor-app-917-soc.slcp"/>
   </descriptors>
-  <descriptors name="MatterFanControlOverWiFiSolution" label="Matter - Fan Control over Wi-Fi"
+  <descriptors name="MatterFanControlOverWiFiSolution" label="Matter - SoC Fan Control over Wi-Fi"
                description="This project builds a Matter Fan Control App that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
