@@ -31,7 +31,7 @@ else:
         print("Example usage:", EXAMPLE_USAGE)
         exit(1)
 
-silabs_board = os.sys.argv[2]
+silabs_board = os.sys.argv[2].lower()
 
 if not shutil.which("slc"):
     print("slc not detected on host")
@@ -46,7 +46,7 @@ if not shutil.which("arm-none-eabi-gcc"):
 slc_path = App.slc_path
 java_path = App.java_path
 # check for soc boards
-SoC_boards = ["brd4338a"]
+SoC_boards = App.SoC_boards
 config_args = ";wiseconnect3_sdk" if silabs_board in SoC_boards else ""
 
 subprocess.run([slc_path, "--java-location", java_path, "generate", "-d", output_dir, project_flag, reference_project_file, "--with", silabs_board + config_args, "--force", "--generator-timeout=180", "-o", "makefile"])
