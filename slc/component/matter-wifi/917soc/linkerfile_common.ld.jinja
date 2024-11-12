@@ -131,6 +131,8 @@ SECTIONS
 		*port.o(.text*)
 		*heap_*.o(.text*)
 		
+		/* ipmu calibration data */
+		*(.common_ipmu_ram*)
 		
 		. = ALIGN(4);
 		/* preinit data */
