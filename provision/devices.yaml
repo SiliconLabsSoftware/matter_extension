@@ -70,6 +70,16 @@ mgm24:
     - version: "2.2"
       file: "efr32mg24_psa3_nvm3k2.s37"
 
+si917y:
+  alias: [ siwg917y ]
+  override: true
+  ram_addr: 0x400
+  flash_addr: 0x8202000
+  stack_size: 0x4FC00
+  firmware:
+    - version: "2.2"
+      file: "si917y_nvm3k2.rps"
+
 si917:
   alias: [ siwg917 ]
   override: true
