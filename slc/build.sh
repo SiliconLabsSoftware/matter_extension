@@ -10,7 +10,7 @@
 #       output in: out/brd4187c/lighting-app-thread/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/workspaces/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
+#   ./slc/build.sh slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
 #       output in: out/brd4187c/lighting-app-thread-solution/
 #
 #   Example --configuration option usage:
