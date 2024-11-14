@@ -121,7 +121,7 @@ requires:
      - device_series_2
      
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/lock-common/lock-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
