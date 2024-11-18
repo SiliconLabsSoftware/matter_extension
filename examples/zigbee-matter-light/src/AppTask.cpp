@@ -23,6 +23,7 @@
 
 #include "LEDWidget.h"
 
+#include <app/DeferredAttributePersistenceProvider.h>
 #include <app/clusters/on-off-server/on-off-server.h>
 #include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
@@ -45,6 +46,7 @@
 
 #include "ZigbeeCallbacks.h"
 #include "sl_cmp_config.h"
+#include "sl_matter_config.h"
 
 #if (defined(SL_CATALOG_SIMPLE_LED_LED1_PRESENT) || defined(SIWX_917))
 #define LIGHT_LED 1
@@ -57,12 +59,32 @@
 
 using namespace chip;
 using namespace chip::app;
+using namespace chip::app::Clusters;
 using namespace ::chip::DeviceLayer;
 using namespace ::chip::DeviceLayer::Silabs;
 
 namespace {
 LEDWidget sLightLED;
-}
+
+// Array of attributes that will have their non-volatile storage deferred/delayed.
+// This is useful for attributes that change frequently over short periods of time, such as during transitions.
+// In this example, we defer the storage of the Level Control's CurrentLevel attribute and the Color Control's
+// CurrentHue and CurrentSaturation attributes for the LIGHT_ENDPOINT.
+DeferredAttribute gDeferredAttributeTable[] = {
+    DeferredAttribute(ConcreteAttributePath(LIGHT_ENDPOINT, LevelControl::Id, LevelControl::Attributes::CurrentLevel::Id)),
+    DeferredAttribute(ConcreteAttributePath(LIGHT_ENDPOINT, ColorControl::Id, ColorControl::Attributes::CurrentHue::Id)),
+    DeferredAttribute(ConcreteAttributePath(LIGHT_ENDPOINT, ColorControl::Id, ColorControl::Attributes::CurrentSaturation::Id))
+};
+
+// The DeferredAttributePersistenceProvider will persist the attribute value in non-volatile memory
+// once it remains constant for SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS milliseconds.
+// For all other attributes not listed in gDeferredAttributeTable, the default GetDefaultAttributePersister is used.
+DeferredAttributePersistenceProvider
+    gDeferredAttributePersister(Server::GetInstance().GetDefaultAttributePersister(),
+                                Span<DeferredAttribute>(gDeferredAttributeTable, ArraySize(gDeferredAttributeTable)),
+                                System::Clock::Milliseconds32(SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS));
+
+} // namespace
 
 using namespace chip::TLV;
 using namespace ::chip::DeviceLayer;
@@ -72,6 +94,7 @@ AppTask AppTask::sAppTask;
 CHIP_ERROR AppTask::Init()
 {
     CHIP_ERROR err = CHIP_NO_ERROR;
+    app::SetAttributePersistenceProvider(&gDeferredAttributePersister);
     chip::DeviceLayer::Silabs::GetPlatform().SetButtonsCb(AppTask::ButtonEventHandler);
 
 #ifdef DISPLAY_ENABLED
@@ -273,7 +296,7 @@ void AppTask::UpdateClusterState(intptr_t context)
     uint8_t newValue = LightMgr().IsLightOn();
 
     // write the new on/off value
-    Protocols::InteractionModel::Status status = OnOffServer::Instance().setOnOffValue(1, newValue, false);
+    Protocols::InteractionModel::Status status = OnOffServer::Instance().setOnOffValue(LIGHT_ENDPOINT, newValue, false);
 
     if (status != Protocols::InteractionModel::Status::Success)
     {
