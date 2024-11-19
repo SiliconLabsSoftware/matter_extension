@@ -37,7 +37,7 @@ component:
     from: matter
   - id: matter_wifi
     from: matter
-  - id: siwx917_ncp_extension
+  - id: siwx917_ncp
     from: matter
     
   - id: matter_window
@@ -108,8 +108,17 @@ component:
   - id: matter_log_uart
     from: matter
 
-  - id: efx_ncp_custom_host_mcu
+
+  # Copy of the component to point to a different sl_net_for_lwip.c file
+  - id: network_manager
     from: matter
+
+  # Copy of the component to remove the default lwipopts.h file
+  - id: wifi_resources
+    from: matter
+
+  - id: sl_si91x_lwip_stack
+    from: wiseconnect3_sdk
   - id: wifi
     from: wiseconnect3_sdk
   - id: basic_network_config_manager
@@ -118,11 +127,7 @@ component:
     from: wiseconnect3_sdk
   - id: sl_si91x_wireless
     from: wiseconnect3_sdk
-  - id: wifi_resources
-    from: wiseconnect3_sdk
   - id: ble
-    from: wiseconnect3_sdk
-  - id: network_manager
     from: wiseconnect3_sdk
 
 # Require LCD and QR Code components only on the boards that support LCD

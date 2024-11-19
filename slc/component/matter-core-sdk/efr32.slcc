@@ -101,7 +101,6 @@ include:
 -   path: third_party/matter_sdk/examples/platform/silabs
     file_list:
     -   path: board_config.h
-    -   path: wfx_rsi.h
     -   path: OTAConfig.h
     -   path: SoftwareFaultReports.h
     -   path: silabs_utils.h

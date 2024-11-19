@@ -33,7 +33,7 @@ component:
     from: matter
   - id: wiseconnect_sapi
     from: matter
-  - id: rs911x_ncp_extension
+  - id: rs911x_ncp
     from: matter
     
   - id: matter_thermostat_app

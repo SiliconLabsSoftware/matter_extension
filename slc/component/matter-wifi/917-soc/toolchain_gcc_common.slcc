@@ -14,18 +14,18 @@ requires:
   - name: toolchain_variant
   - name: toolchain_variant_arm
 template_file:
-  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_common.ld.jinja
     condition: [brd4338a]
-  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_common.ld.jinja
     condition: [brd2605a]
 # TODO: Cleanup the customized linker file for brd4342a board and use the SDK linker file
-  - path: matter-wifi/917soc/linkerfile_psram_SoC.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_psram_SoC.ld.jinja
     condition: [brd4342a]
-  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_common.ld.jinja
     condition: [brd4343a]
-  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_common.ld.jinja
     condition: [brd2708a]
-  - path: matter-wifi/917soc/linkerfile_common.ld.jinja
+  - path: matter-wifi/917-soc/linkerfile_common.ld.jinja
     condition: [brd2911a]
 library:
   - system: gcc

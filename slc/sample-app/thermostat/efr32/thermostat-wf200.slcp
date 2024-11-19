@@ -35,7 +35,7 @@ component:
     from: matter
   - id: matter_wifi
     from: matter
-  - id: wf200_ncp_extension
+  - id: wf200_ncp
     from: matter
     
   - id: matter_thermostat_app
@@ -109,7 +109,7 @@ component:
 
 # Require LCD and QR Code components only on the boards that support LCD
 requires:
-  - name: wf200_ncp_extension
+  - name: wf200_ncp
   - name: spidrv_instance
   - name: uartdrv_eusart
     condition:
