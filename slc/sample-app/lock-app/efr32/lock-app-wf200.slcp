@@ -18,7 +18,7 @@ component:
     
   - id: matter
     from: matter
-  - id: matter_platform_efr32
+  - id: matter_platform_mg
     from: matter
   - id: matter_ble
     from: matter

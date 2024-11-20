@@ -264,6 +264,18 @@ upgrade:
         description: Remove extra NCP component in favor of platform NCP component
         remove:
           - efx_ncp_custom_host_mcu
+      
+      - trigger: matter_thread
+        description: remove the ot_rtos_wrappers_real component
+        remove:
+          - ot_rtos_wrappers_real
+      
+      - trigger: matter_platform_efr32
+        description: Rename matter_platform_efr32 to matter_platform_mg
+        remove: 
+          - matter_platform_efr32
+        add:
+          - matter_platform_mg
 
     configuration:
       - name: SL_OT_IDLE_INTERVAL

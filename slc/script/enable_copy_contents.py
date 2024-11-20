@@ -366,7 +366,7 @@ def update_header_key(inc_dir, val, lib=""):
                     else:
                         update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'matter_platform_siwx917.slcc')))
                 elif val in efr32_headers or (val in ['efr32/' + s for s in efr32_headers]):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'matter_platform_efr32.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,'matter-platform', 'matter_platform_mg.slcc')))
                 elif 'ICDSubscriptionCallback.h' in val:
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-core-sdk', 'efr32_icd_subscription_callback.slcc')))

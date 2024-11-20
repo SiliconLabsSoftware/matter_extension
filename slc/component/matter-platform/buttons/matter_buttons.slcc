@@ -13,6 +13,9 @@ requires:
 # Every board that uses buttons
   - name: simple_button_recommended_instance
     condition:
+    - brd1019a
+  - name: simple_button_recommended_instance
+    condition:
       - brd4116a
   - name: simple_button_recommended_instance
     condition:

@@ -16,7 +16,6 @@ component:
   - id: matter_performance_testing
     from: matter
   - id: ot_stack_ftd
-  - id: ot_rtos_wrappers_real
   - id: matter_buttons
     from: matter
   - id: matter_leds
@@ -24,7 +23,7 @@ component:
 
   - id: matter
     from: matter
-  - id: matter_platform_efr32
+  - id: matter_platform_mg
     from: matter
   - id: matter_ble
     from: matter
@@ -206,6 +205,12 @@ template_contribution:
   - name: memory_flash_size
     value: 0x00318000
     condition: [device_family_efr32mg26]
+  - name: memory_flash_start
+    value: 0x1008000
+    condition: [device_family_simg301]
+  - name: memory_flash_size
+    value: 0x3c7000
+    condition: [device_family_simg301]
 
 config_file:
   - path: performance-test-app-thread.zap

@@ -101,7 +101,6 @@ requires:
   - name: matter_messagedef
   - name: matter_interaction_model
   - name: matter_provision
-  - name: matter_syscalls_stub
   - name: matter_callbacks
   - name: matter_check_in_message
   - name: matter_data_model

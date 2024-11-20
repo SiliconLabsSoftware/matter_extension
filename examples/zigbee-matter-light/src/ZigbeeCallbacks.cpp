@@ -313,8 +313,9 @@ extern "C" void sl_zigbee_af_post_attribute_change_cb(uint8_t endpoint, sl_zigbe
 
 /** @brief On/off Cluster Server Post Init
  *
- * Following resolution of the On/Off state at startup for this endpoint, perform any
- * additional initialization needed; e.g., synchronize hardware state.
+ * Following resolution of the On/Off state at startup for this endpoint,
+ * perform any additional initialization needed; e.g., synchronize hardware
+ * state.
  *
  * @param endpoint Endpoint that is being initialized
  */
@@ -328,7 +329,8 @@ extern "C" void sl_zigbee_af_on_off_cluster_server_post_init_cb(uint8_t endpoint
 
 /** @brief
  *
- * Application framework equivalent of ::sl_zigbee_radio_needs_calibrating_handler
+ * Application framework equivalent of
+ * ::sl_zigbee_radio_needs_calibrating_handler
  */
 extern "C" void sl_zigbee_af_radio_needs_calibrating_cb(void)
 {

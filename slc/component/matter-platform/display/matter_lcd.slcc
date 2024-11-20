@@ -9,7 +9,12 @@ metadata:
     license: Zlib
 requires:
   - name: matter
-  - name: matter_platform_efr32
+  - name: matter_platform_mg
+    condition :
+    - device_series_2
+  - name: matter_platform_mg
+    condition:
+    - device_series_3
   - name: matter_uart
   - name: glib
 provides:

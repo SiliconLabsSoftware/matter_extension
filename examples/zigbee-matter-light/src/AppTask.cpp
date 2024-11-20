@@ -101,6 +101,12 @@ CHIP_ERROR AppTask::Init()
     GetLCD().Init((uint8_t *) "CMP-Lighting-App");
 #endif
 
+#ifdef SL_MATTER_ZIGBEE_CMP
+    ChipLogProgress(AppServer, "Concurrent CMP app");
+#else
+    ChipLogProgress(AppServer, "Sequential CMP app");
+#endif
+
     err = BaseApplication::Init();
     if (err != CHIP_NO_ERROR)
     {
@@ -135,13 +141,13 @@ CHIP_ERROR AppTask::Init()
 #endif // QR_CODE_ENABLED
 #endif
 #ifdef SL_CATALOG_ZIGBEE_ZCL_FRAMEWORK_CORE_PRESENT
+#if defined(SL_MATTER_ZIGBEE_SEQUENTIAL) || (defined(SL_MATTER_ZIGBEE_CMP) && defined(_SILICON_LABS_32B_SERIES_3))
     PlatformMgr().LockChipStack();
     uint16_t nbOfMatterFabric = chip::Server::GetInstance().GetFabricTable().FabricCount();
     PlatformMgr().UnlockChipStack();
     if (nbOfMatterFabric != 0)
     {
 #ifdef SL_MATTER_ZIGBEE_CMP
-        // TODO OT GET CHANNEL
         uint8_t channel = otLinkGetChannel(DeviceLayer::ThreadStackMgrImpl().OTInstance());
         SILABS_LOG("Setting Zigbee channel to %d", channel);
         Zigbee::RequestStart(channel);
@@ -150,10 +156,10 @@ CHIP_ERROR AppTask::Init()
 #endif // SL_MATTER_ZIGBEE_CMP
     }
     else
+#endif // SL_MATTER_ZIGBEE_SEQUENTIAL || (SL_MATTER_ZIGBEE_CMP && _SILICON_LABS_32B_SERIES_3)
     {
         Zigbee::RequestStart();
     }
-
 #endif // SL_CATALOG_ZIGBEE_ZCL_FRAMEWORK_CORE_PRESENT
 
     return err;
