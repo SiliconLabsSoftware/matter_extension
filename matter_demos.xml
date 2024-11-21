@@ -110,6 +110,106 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lock Application over Thread for BRD4116A</description>
 	</demo>
+	<demo name="brd2605a.demo.SiWx917_dishwasher_example_app_siwx917" label="Matter - SoC Dishwasher over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Dishwasher app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-dishwasher-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Dishwasher Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_light_switch_example_app_siwx917" label="Matter - SoC Light Switch over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-light-switch-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Light Switch Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_window_example_app_siwx917" label="Matter - SoC Window Covering over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-window-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/window-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Window Covering Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_lighting_example_app_siwx917" label="Matter - SoC Lighting over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-lighting-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lighting Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_multi_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Multi Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Multi Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-multi-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Multi Sensor Example Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.thermostat_app_siwx917" label="Matter - SoC Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-thermostat-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/thermostat/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Thermostat Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_lock_example_app_siwx917" label="Matter - SoC Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-lock-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lock-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lock Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_air_quality_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Air Quality Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Air Quality Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-air-quality-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Air Quality Sensor Example Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_fan_control_example_app_siwx917" label="Matter - SoC Siwx917 Fan Control Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Fan Control Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-fan-control-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/fan-control-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Fan Control Example Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd2605a.demo.SiWx917_onoff_plug_example_app_siwx917" label="Matter - SoC Onoff Plug over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2605a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD2605A/WiFi/SiWx917-onoff-plug-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Onoff Plug Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
+	</demo>
 	<demo name="brd4317a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -389,6 +489,106 @@
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lock Application for BRD4187C to be used with Wi-Fi RS9116</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_dishwasher_example_app_siwx917" label="Matter - SoC Dishwasher over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Dishwasher app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-dishwasher-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Dishwasher Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_light_switch_example_app_siwx917" label="Matter - SoC Light Switch over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-light-switch-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Light Switch Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_window_example_app_siwx917" label="Matter - SoC Window Covering over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-window-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/window-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Window Covering Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_lighting_example_app_siwx917" label="Matter - SoC Lighting over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-lighting-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lighting Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_multi_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Multi Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Multi Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-multi-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Multi Sensor Example Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.thermostat_app_siwx917" label="Matter - SoC Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-thermostat-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/thermostat/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Thermostat Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_lock_example_app_siwx917" label="Matter - SoC Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-lock-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lock-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lock Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_air_quality_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Air Quality Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Air Quality Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-air-quality-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Air Quality Sensor Example Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_fan_control_example_app_siwx917" label="Matter - SoC Siwx917 Fan Control Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Fan Control Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-fan-control-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/fan-control-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Fan Control Example Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4338a.demo.SiWx917_onoff_plug_example_app_siwx917" label="Matter - SoC Onoff Plug over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4338a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4338A/WiFi/SiWx917-onoff-plug-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Onoff Plug Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
 	</demo>
 	<demo name="brd4121a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -749,6 +949,106 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lock Application over Thread for BRD4118A</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_dishwasher_example_app_siwx917" label="Matter - SoC Dishwasher over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Dishwasher app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-dishwasher-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Dishwasher Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_light_switch_example_app_siwx917" label="Matter - SoC Light Switch over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-light-switch-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Light Switch Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_window_example_app_siwx917" label="Matter - SoC Window Covering over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-window-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/window-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Window Covering Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_lighting_example_app_siwx917" label="Matter - SoC Lighting over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-lighting-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lighting Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_multi_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Multi Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Multi Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-multi-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Multi Sensor Example Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.thermostat_app_siwx917" label="Matter - SoC Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-thermostat-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/thermostat/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Thermostat Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_lock_example_app_siwx917" label="Matter - SoC Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-lock-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lock-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lock Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_air_quality_sensor_example_app_siwx917" label="Matter - SoC Siwx917 Air Quality Sensor Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Air Quality Sensor Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-air-quality-sensor-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Air Quality Sensor Example Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_fan_control_example_app_siwx917" label="Matter - SoC Siwx917 Fan Control Example over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Siwx917 Fan Control Example app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-fan-control-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/fan-control-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Siwx917 Fan Control Example Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
+	</demo>
+	<demo name="brd4342a.demo.SiWx917_onoff_plug_example_app_siwx917" label="Matter - SoC Onoff Plug over Wi-Fi">
+		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4342a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.4.0/demos/BRD4342A/WiFi/SiWx917-onoff-plug-example.rps"/>
+		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/siwx917/README_WiFi.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Onoff Plug Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
 	</demo>
 	<demo name="brd2703a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
