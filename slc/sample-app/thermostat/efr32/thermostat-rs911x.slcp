@@ -13,7 +13,7 @@ component:
   - id: device_init
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
     
   - id: matter
@@ -96,14 +96,11 @@ component:
     from: matter
   - id: matter_segger_rtt
     from: matter
-
-  - id: matter_temperature_sensor
-    from: matter
   - id: matter_shell
     from: matter
-  - id: sensor_rht
-
   - id: matter_default_lcd_config
+    from: matter
+  - id: matter_log_uart
     from: matter
 
 # Require LCD and QR Code components only on the boards that support LCD

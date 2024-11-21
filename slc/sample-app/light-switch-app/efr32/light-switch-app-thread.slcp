@@ -15,7 +15,7 @@ component:
   - id: clock_manager
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
 
   - id: matter
@@ -94,6 +94,8 @@ component:
     from: matter
   - id: matter_default_lcd_config
     from: matter
+  - id: matter_log_uart
+    from: matter
     
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -104,9 +106,12 @@ component:
   # ICD configurations
   - id: matter_icd_core
     from: matter
-  - id: matter_icd_management
+  - id: matter_test_event_trigger
     from: matter
-
+  - id: matter_check_in_message
+    from: matter
+  - id: matter_icd_checkin_sender
+    from: matter
 
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -116,7 +121,7 @@ requires:
      - device_series_2
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/light-switch-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/light-switch-common/icd-lit-light-switch-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -188,12 +193,17 @@ configuration:
     value: 16
 
 # Default ICD configurations
-  - {name: SL_IDLE_MODE_DURATION_S, value: '3600'}
-  - {name: SL_ACTIVE_MODE_DURATION_MS, value: '0'}
-  - {name: SL_ACTIVE_MODE_THRESHOLD, value: '0'}
+  - { name: CHIP_CONFIG_ENABLE_ICD_LIT, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_CIP, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_UAT, value: 1 }
+  - { name: CHIP_CONFIG_ENABLE_ICD_DSLS, value: 1 }
 
-  - {name: SL_OT_IDLE_INTERVAL, value: '15000'}
-  - {name: SL_OT_ACTIVE_INTERVAL, value: '500'}
+  - {name: SL_IDLE_MODE_DURATION_S, value: '600'}
+  - {name: SL_ACTIVE_MODE_DURATION_MS, value: '0'}
+  - {name: SL_ACTIVE_MODE_THRESHOLD, value: '5000'}
+
+  - {name: SL_OT_IDLE_INTERVAL, value: '900'}
+  - {name: SL_OT_ACTIVE_INTERVAL, value: '1000'}
     
   - {name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED, value: '1'}
   - {name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION, value: '0'}

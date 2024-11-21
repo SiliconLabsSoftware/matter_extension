@@ -15,13 +15,9 @@ component:
   - id: clock_manager
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
-
-  - id: i2cspm
-    instance: [sensor]
-
-
+    
   - id: matter
     from: matter
   - id: matter_platform_efr32
@@ -96,18 +92,19 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
-  - id: matter_temperature_sensor
-    from: matter
-  - id: sensor_rht
   - id: matter_default_lcd_config
     from: matter
+  - id: matter_log_uart
+    from: matter
+  - id: matter_si70xx_sensor
+    from: matter
+    condition: [hardware_board_has_si70xx]
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
     from: matter
   - id: matter_segger_rtt
     from: matter
-
 
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -159,8 +156,6 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
-  - name: USE_TEMP_SENSOR
-    value: "1"
 configuration:
   - name: SL_OPENTHREAD_ENABLE_APP_TASK
     value: 0

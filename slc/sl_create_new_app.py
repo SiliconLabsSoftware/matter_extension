@@ -10,7 +10,7 @@ class createApp:
     """Class used to create new app from given arguments and slc"""
     def __init__(self):
         self.EXAMPLE_USAGE = "python slc/sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard>"
-        self.SoC_boards = ["brd4338a"]
+        self.SoC_boards = ["brd4338a", "brd4342a", "brd2605a"]
         self.get_environment()
 
     def print_usage_and_exit(self):
@@ -24,7 +24,7 @@ class createApp:
 
         self.new_app_name = sys.argv[1]
         self.reference_project_file = sys.argv[2]
-        self.silabs_board = sys.argv[3]
+        self.silabs_board = sys.argv[3].lower()
 
         #check if app is siwx917 wifi app
         self.wifi917 = True if "917" in self.reference_project_file else False
@@ -44,6 +44,11 @@ class createApp:
             if not os.path.isdir(self.wiseconnect_root):
                 print(f"\nThe Wifi Extension required to build the {self.reference_project_file} does not exist at location:{self.wiseconnect_root}")
                 sys.exit(1)
+        #Checkout third_party_hw_drivers_extension submodule for air-quality-sensor-app-sparkfun-thread app and trust the extension
+        if "sparkfun" in self.reference_project_file:
+            third_party_hw_drivers_extension_path = os.path.join(os.getcwd(),"third_party","third_party_hw_drivers_extension")
+            subprocess.run(["git", "submodule", "update", "--init", "--checkout",third_party_hw_drivers_extension_path ])
+            subprocess.run([self.slc_path, "signature", "trust", "--extension-path", third_party_hw_drivers_extension_path])
 
     def get_environment(self):
         try:

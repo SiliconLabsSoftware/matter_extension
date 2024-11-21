@@ -13,7 +13,7 @@ component:
   - id: device_init
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
     
   - id: matter
@@ -37,7 +37,7 @@ component:
     from: matter
   - id: wf200_ncp_extension
     from: matter
-  - id: matter_icd_core
+  - id: matter_test_event_trigger
     from: matter
   - id: matter_icd_management
     from: matter
@@ -100,6 +100,8 @@ component:
   - id: matter_segger_rtt
     from: matter
   - id: matter_shell
+    from: matter
+  - id: matter_log_uart
     from: matter
 
 # Disable due to size increase of ICD functionality    

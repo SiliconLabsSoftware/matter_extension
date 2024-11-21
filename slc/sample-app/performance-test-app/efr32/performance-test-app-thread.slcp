@@ -19,7 +19,7 @@ component:
   - id: ot_rtos_wrappers_real
   - id: matter_buttons
     from: matter
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
 
   - id: matter
@@ -40,6 +40,8 @@ component:
   - id: matter_gatt
     from: matter
   - id: matter_provision_default
+    from: matter
+  - id: matter_log_uart
     from: matter
 
 #  - id: matter_lighting

@@ -102,6 +102,7 @@ component:
 - {from: matter, id: matter_power_source}
 - {from: matter, id: app_common}
 - {from: matter, id: matter_provision_default}
+- {from: matter, id: matter_log_uart}
 
 #Matter components wrapper from simplicity_sdk
 - {from: matter, id: matter_default_lcd_config}
@@ -110,7 +111,7 @@ component:
 - {from: matter, id: matter_ble}
 - {from: matter, id: matter_thread_network_diagnostics}
 - {from: matter, id: matter_thread}
-- {from: matter, id: matter_wstk_leds}
+- {from: matter, id: matter_leds}
 - {from: matter, id: matter_platform_efr32}
 
 toolchain_settings:

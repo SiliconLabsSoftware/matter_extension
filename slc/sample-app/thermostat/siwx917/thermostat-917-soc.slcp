@@ -9,10 +9,10 @@ sdk_extension:
   - id: matter
     version: "2.4.0"
   - id: wiseconnect3_sdk
-    version: "3.3.1"
+    version: "3.3.4"
 
 component:
-  - id: matter_wstk_leds
+  - id: matter_leds
     from: matter
   - id: matter
     from: matter
@@ -85,13 +85,13 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
-  #- id: matter_temperature_sensor
+  #- id: matter_si70xx_sensor
   #  from: matter
   - id: toolchain_gcc_common
     from: matter
-  - id: matter_lcd_917SOC
+  - id: matter_default_lcd_config
     from: matter
-  - id: matter_qr_code
+  - id: matter_log_uart
     from: matter
     
   # Override configuration for JTAG use
@@ -134,7 +134,12 @@ component:
     instance: [btn0,btn1]
     from: wiseconnect3_sdk
   - id: sl_si91x_led_917
-    instance: [led0,led1]
+    instance: [led0]
+    condition: [si917_dev_board]
+    from: wiseconnect3_sdk
+  - id: sl_si91x_led_917
+    instance: [led0, led1]
+    condition: [si917_prod_board]
     from: wiseconnect3_sdk
   - instance: [timer0]
     from: wiseconnect3_sdk

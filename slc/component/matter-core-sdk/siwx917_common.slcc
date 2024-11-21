@@ -8,8 +8,6 @@ define:
     value: '1'
 -   name: RADIO_CONFIG_DMP_SUPPORT
     value: '1'
--   name: WIFI_ENABLE_SECURITY_WPA3_TRANSITION
-    value: '1'
 description: siwx917_common
 id: siwx917_common
 include:
@@ -33,15 +31,12 @@ include:
     -   path: OTAConfig.h
     -   path: SoftwareFaultReports.h
     -   path: silabs_utils.h
-    -   path: matter_shell.h
-    -   path: uart.h
     -   path: MatterConfig.h
     -   path: LEDWidget.h
     -   path: sl_systemview_config.h
     -   path: PigweedLogger.h
     -   path: FreeRTOSConfig.h
     -   path: Rpc.h
-    -   path: TemperatureSensor.h
     -   path: silabs_creds.h
     -   path: SilabsTestEventTriggerDelegate.h
     -   path: MemMonitoring.h

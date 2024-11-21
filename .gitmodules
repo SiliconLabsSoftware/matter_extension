@@ -1,14 +1,15 @@
 [submodule "third_party/matter_sdk"]
     path = third_party/matter_sdk
     url = https://github.com/SiliconLabsSoftware/matter_sdk.git
+	branch = release_2.4-1.4
 [submodule "third_party/simplicity_sdk"]
 	path = third_party/simplicity_sdk
 	url = https://github.com/SiliconLabs/simplicity_sdk.git
-	branch = v2024.6.0
+	branch = v2024.6.2
 [submodule "third_party/wifi_sdk"]
 	path = third_party/wifi_sdk
 	url = https://github.com/SiliconLabs/wiseconnect.git
-	branch = v3.3.1
+	branch = v3.3.4
 [submodule "third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk"]
 	path = third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk
 	url = https://github.com/aws/ota-for-aws-iot-embedded-sdk.git
@@ -33,4 +34,8 @@
 [submodule "third_party/matter_private"]
 	path = third_party/matter_private
 	url = ssh://git@stash.silabs.com/wmn_tools/matter_private.git
+	update = none
+[submodule "third_party/third_party_hw_drivers_extension"]
+	path = third_party/third_party_hw_drivers_extension
+	url = https://github.com/SiliconLabs/third_party_hw_drivers_extension.git
 	update = none

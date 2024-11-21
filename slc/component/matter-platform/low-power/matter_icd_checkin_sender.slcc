@@ -28,7 +28,7 @@ source:
 
 requires:
  - name: matter_icd_core
- - name: check_in_message
+ - name: matter_check_in_message
 
 documentation:
   docset: matter
