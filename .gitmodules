@@ -8,7 +8,7 @@
 	branch = v2024.12.0-fc
 [submodule "third_party/wifi_sdk"]
 	path = third_party/wifi_sdk
-	url = https://stash.silabs.com/scm/redpine/wifi_sdk.git
+	url = https://github.com/SiliconLabs/wiseconnect.git
 	branch = v3.4.0
 [submodule "third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk"]
 	path = third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk
