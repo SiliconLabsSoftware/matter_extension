@@ -15,6 +15,9 @@ requires:
 
 provides:
   - name: matter_uart
+  # workaround: ot_platform_abstraction_core.slcc pulls their uartdrv_uart.c implementation if uartdrv_instance is present unless matter_thread_cli
+  - name: matter_thread_cli
+    condition: [matter_thread]
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp
