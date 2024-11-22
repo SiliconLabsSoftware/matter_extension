@@ -117,15 +117,6 @@ jobs:
           export POST_BUILD_EXE=${{ env.POST_BUILD_EXE }}
           make all -C ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -f ${WORKSPACE_PATH}.solution.Makefile -j8
 
-      - name: ls
-        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}
-
-      - name: ls
-        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/${{ inputs.app }}-${{ inputs.suffix }}
-
-      - name: ls
-        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/build/debug
-
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ inputs.app }}-${{ inputs.suffix }} ${{ inputs.board }}
