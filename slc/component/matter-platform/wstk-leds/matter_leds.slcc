@@ -19,6 +19,9 @@ requires:
       - device_family_efr32mg26
   - name: simple_led_recommended_instance
     condition:
+      - device_family_mgm26
+  - name: simple_led_recommended_instance
+    condition:
       - device_family_simg301
   - name: simple_led_recommended_instance
     condition:
@@ -45,6 +48,10 @@ define:
   - name: ENABLE_WSTK_LEDS
     value: "1"
     condition:
+      - brd2709a
+  - name: ENABLE_WSTK_LEDS
+    value: "1"
+    condition:
       - brd4338a
   - name: ENABLE_WSTK_LEDS
     value: "1"
@@ -54,6 +61,14 @@ define:
     value: "1"
     condition:
       - brd4343a
+  - name: ENABLE_WSTK_LEDS
+    value: "1"
+    condition:
+      - brd4350a
+  - name: ENABLE_WSTK_LEDS
+    value: "1"
+    condition:
+      - brd4351a
   - name: ENABLE_WSTK_LEDS
     value: "1"
     condition:

@@ -206,6 +206,12 @@ template_contribution:
     value: 0x00318000
     condition: [device_family_efr32mg26]
   - name: memory_flash_start
+    value: 0x08006000
+    condition: [device_family_mgm26]
+  - name: memory_flash_size
+    value: 0x00318000
+    condition: [device_family_mgm26]
+  - name: memory_flash_start
     value: 0x1008000
     condition: [device_family_simg301]
   - name: memory_flash_size

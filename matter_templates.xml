@@ -7,8 +7,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.lock-app.efr32.lock-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lock-app/efr32/lock-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -24,8 +24,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.multi-sensor-app.efr32.multi-sensor-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/multi-sensor-app/efr32/multi-sensor-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -41,7 +41,7 @@
     <properties key="solutionReferenceId" value="slc.sample-app.lighting-app.efr32.lighting-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd1019a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd1019a brd4319a:0.0.0.A00 com.silabs.board.none "/>
     <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*simg301.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -58,8 +58,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.thermostat.efr32.thermostat-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/thermostat/efr32/thermostat-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/thermostat/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -75,8 +75,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.light-switch-app.efr32.light-switch-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/light-switch-app/efr32/light-switch-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -92,8 +92,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.window-app.efr32.window-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/window-app/efr32/window-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -109,8 +109,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.onoff-plug-app.efr32.onoff-plug-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/onoff-plug-app/efr32/onoff-plug-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -126,8 +126,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.dishwasher-app.efr32.dishwasher-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/dishwasher-app/efr32/dishwasher-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -670,8 +670,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.dishwasher-app.series-2.dishwasher-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/dishwasher-app/series-2/dishwasher-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -687,8 +687,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.light-switch-app.series-2.light-switch-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/light-switch-app/series-2/light-switch-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -704,8 +704,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.lighting-app.series-2.lighting-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/lighting-app/series-2/lighting-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -721,8 +721,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.lock-app.series-2.lock-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/lock-app/series-2/lock-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -738,8 +738,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.onoff-plug-app.series-2.onoff-plug-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/onoff-plug-app/series-2/onoff-plug-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -755,8 +755,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.multi-sensor-app.series-2.multi-sensor-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/multi-sensor-app/series-2/multi-sensor-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -789,8 +789,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.window-app.series-2.window-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/window-app/series-2/window-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -823,8 +823,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/readme.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd4319a:0.0.0.A00 brd2704a brd2703a"/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4337a brd4319a:0.0.0.A00 brd2704a brd2703a brd4350a brd4351a brd2709a"/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -1026,8 +1026,8 @@
     <properties key="solutionReferenceId" value="slc.sample-app.air-quality-sensor-app.efr32.air-quality-sensor-app-thread.slcp"/>
     <properties key="projectFilePaths" value="slc/sample-app/air-quality-sensor-app/efr32/air-quality-sensor-app-thread.slcp"/>
     <properties key="readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>
@@ -1111,8 +1111,8 @@
     <properties key="solutionReferenceId" value="slc.solutions.air-quality-sensor-app.series-2.air-quality-sensor-app-thread-internal-bootloader.slcw"/>
     <properties key="projectFilePaths" value="slc/solutions/air-quality-sensor-app/series-2/air-quality-sensor-app-thread-internal-bootloader.slcw"/>
     <properties key="readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
-    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>

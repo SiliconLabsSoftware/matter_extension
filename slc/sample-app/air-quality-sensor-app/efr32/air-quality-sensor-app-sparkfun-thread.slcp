@@ -212,6 +212,12 @@ template_contribution:
   - name: memory_flash_size
     value: 0x00318000
     condition: [device_family_efr32mg26]
+  - name: memory_flash_start
+    value: 0x08006000
+    condition: [device_family_mgm26]
+  - name: memory_flash_size
+    value: 0x00318000
+    condition: [device_family_mgm26]
 
 readme:
   - path: ./README.md
