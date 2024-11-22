@@ -1,0 +1,130 @@
+name: Full Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  efr32:
+    strategy:
+      matrix:
+        # Every app builds for every board and suffix
+        app: [dishwasher-app, light-switch-app, lighting-app, lock-app, onoff-plug-app, sensor-app, window-app]
+        board: [brd4116a, brd4117a, brd4118a, brd4121a, brd4186c, brd4187c, brd2703a, brd2704a, brd2601b, brd2608a, brd4316a, brd4317a, brd4319a, brd4337a]
+        suffix: [thread]
+        # Build only specific combinations of app, board and suffix
+        include:
+          # Thread boards that have thermostats
+          - board: brd4187c
+            app: thermostat
+            suffix: thread
+          - board: brd4316a
+            app: thermostat
+            suffix: thread
+          # Wi-Fi NCP combos
+          - board: brd4187c
+            app: thermostat
+            suffix: 917-ncp
+          - board: brd4187c
+            app: thermostat
+            suffix: rs911x
+          - board: brd4187c
+            app: thermostat
+            suffix: wf200
+          - board: brd4187c
+            app: lock-app
+            suffix: 917-ncp
+          - board: brd4187c
+            app: lock-app
+            suffix: rs911x
+          - board: brd4187c
+            app: lock-app
+            suffix: wf200  
+          - board: brd4187c
+            app: window-app
+            suffix: 917-ncp          
+
+    name: ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.board }} 
+
+    uses: ./.github/workflows/generate-and-build.yaml
+    with:
+      app: ${{ matrix.app }}
+      board: ${{ matrix.board }}
+      suffix: ${{ matrix.suffix }}
+      family: series-2
+
+  siwx917:
+    strategy:
+      matrix:
+        # Every app builds for every board and suffix
+        app: [dishwasher-app, light-switch-app, lighting-app, lock-app, onoff-plug-app, sensor-app, window-app]
+        board: [brd4338a, brd4342a]
+        suffix: [917-soc]
+
+    name: ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.board }} 
+
+    uses: ./.github/workflows/generate-and-build.yaml
+    with:
+      app: ${{ matrix.app }}
+      board: ${{ matrix.board }}
+      board_extension: ;wiseconnect3_sdk
+      suffix: ${{ matrix.suffix }}
+      family: siwx917
+
+  cmp:
+    strategy:
+      matrix:
+        # Every app builds for every board and suffix
+        app: [zigbee-matter]
+        board: [brd4187c, brd4116a, brd4117a, brd4118a]
+        suffix: [light]
+        addAppComponent: [matter_zigbee_concurrent;matter, matter_zigbee_sequential;matter]
+
+    name: ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.addAppComponent}} ${{ matrix.board }} 
+
+    uses: ./.github/workflows/generate-and-build.yaml
+    with:
+      app: ${{ matrix.app }}
+      board: ${{ matrix.board }}
+      suffix: ${{ matrix.suffix }}
+      addAppComponent: ${{ matrix.addAppComponent }}
+      family: series-2
+
+  copy-sources:
+    strategy:
+      matrix:
+        include:
+          - app: sensor-app
+            board: brd4187c
+            suffix: thread
+            family: series-2
+          - app: thermostat
+            board: brd4187c
+            suffix: rs911x
+            family: series-2
+          - app: lock-app
+            board: brd4187c
+            suffix: wf200
+            family: series-2
+          - app: window-app
+            board: brd4187c
+            suffix: 917-ncp
+            family: series-2
+          - app: lighting-app
+            board: brd4338a
+            board_extension: ;wiseconnect3_sdk
+            suffix: 917-soc
+            family: siwx917            
+
+    name: copy-sources ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.addAppComponent}} ${{ matrix.board }} 
+
+    uses: ./.github/workflows/generate-and-build.yaml
+    with:
+      app: ${{ matrix.app }}
+      board: ${{ matrix.board }}
+      board_extension: ${{ matrix.board_extension }}
+      suffix: ${{ matrix.suffix }}
+      family: ${{ matrix.family }}
+      optionalSlcParams: copy-sources
+
+    
+      

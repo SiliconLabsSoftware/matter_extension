@@ -1,0 +1,133 @@
+name: Build and Generate
+
+on:
+  workflow_call:
+    inputs:
+      app:
+        required: true
+        type: string
+      board:
+        required: true
+        type: string
+      board_extension:
+        required: false
+        type: string
+      suffix:
+        required: true
+        type: string
+      family:
+        required: true
+        type: string
+      addAppComponent:
+        required: false
+        type: string
+      removeAppComponent:
+        required: false
+        type: string
+      optionalSlcParams:
+        required: false
+        type: string
+      addBlComponent:
+        required: false
+        type: string
+      removeBlComponent:
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    container:
+      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: 'true'
+# TODO don't need to check out all submodules
+
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
+      - name: Copy matter_extension to simplicity_sdk and set Matter Extension Environment Variable
+        run: |
+          mkdir -p ${SISDK_ROOT}/extension
+          cd ..
+          cp -r matter_extension ${SISDK_ROOT}/extension
+          echo "MATTER_EXTN_ROOT=${SISDK_ROOT}extension/matter_extension" >> $GITHUB_ENV
+          echo "STUDIO_ADAPTER_PACK_PATH=/opt/silabs/zap-linux-x64" >> $GITHUB_ENV
+
+      - name: SLC Trust
+        run: |
+          slc configuration --sdk ${SISDK_ROOT}
+          slc signature trust --development-trust
+          slc signature trust --extension-path "${MATTER_EXTN_ROOT}"
+          slc signature trust --extension-path "${WIFI_SDK_ROOT}"
+          slc signature trust --sdk ${SISDK_ROOT}
+
+      - name: Default additional app and bootloader component string
+        run: |
+          echo "ADD_APP_COMPONENT_STRING=--with ${{ inputs.board }}${{ inputs.board_extension }}" >> $GITHUB_ENV
+          echo "ADD_BL_COMPONENT_STRING=--with ${{ inputs.board }}${{ inputs.board_extension }}" >> $GITHUB_ENV
+
+      - name: Create string out of additional app components
+        if: ${{ inputs.addAppComponent != '' }}
+        run: echo "ADD_APP_COMPONENT_STRING=${ADD_APP_COMPONENT_STRING},${{ inputs.addAppComponent }}" >> $GITHUB_ENV
+
+      - name: Create string out of removed app components
+        if: ${{ inputs.removeAppComponent != '' }}
+        run: echo "REMOVE_APP_COMPONENT_STRING=--without ${{ inputs.removeAppComponent }}" >> $GITHUB_ENV
+
+      - name: Create string out of additional bootloader components
+        if: ${{ inputs.addBlComponent != '' }}
+        run: echo "ADD_Bl_COMPONENT_STRING=${ADD_BL_COMPONENT_STRING},${{ inputs.addBlComponent }}" >> $GITHUB_ENV
+
+      - name: Create string out of removed bootloader components
+        if: ${{ inputs.removeBlComponent != '' }}
+        run: echo "REMOVE_BL_COMPONENT_STRING=--without ${{ inputs.removeBlComponent }}" >> $GITHUB_ENV
+
+      - name: Default workspace path
+        run: |
+          echo "WORKSPACE_PATH=${{ inputs.app }}-${{ inputs.suffix }}-bootloader" >> $GITHUB_ENV
+
+# Use internal bootloaders for brd4337a, brd2704a, brd2703a, brd4319, brd4116a
+      - name: Create string out of workspace path
+        if: ${{ inputs.board == 'brd4337a' || inputs.board == 'brd2704a' || inputs.board == 'brd2703a' || inputs.board == 'brd4319' || inputs.board == 'brd4116a' }}
+        run: echo "WORKSPACE_PATH=${{ inputs.app }}-${{ inputs.suffix }}-internal-bootloader" >> $GITHUB_ENV
+
+# No bootloader for brd4338a, brd4342a
+      - name: Create string out of workspace path
+        if: ${{ inputs.board == 'brd4338a' || inputs.board == 'brd4342a' }}
+        run: echo "WORKSPACE_PATH=${{ inputs.app }}-${{ inputs.suffix }}" >> $GITHUB_ENV
+
+      - name: SLC Generate Application
+        run: |
+          slc generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -w $MATTER_EXTN_ROOT/slc/workspaces/${{ inputs.app }}/${{ inputs.family }}/${WORKSPACE_PATH}.slcw -pids application ${ADD_APP_COMPONENT_STRING} ${REMOVE_APP_COMPONENT_STRING} --generator-timeout=180
+      
+      - name: SLC Generate Bootloader
+# 917 Solutions don't have a bootloader      
+        if: ${{ inputs.board != 'brd4338a' && inputs.board != 'brd4342a' }}
+        run: slc generate --daemon -d ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -w $MATTER_EXTN_ROOT/slc/workspaces/${{ inputs.app }}/${{ inputs.family }}/${WORKSPACE_PATH}.slcw -pids bootloader ${ADD_BL_COMPONENT_STRING} ${REMOVE_BL_COMPONENT_STRING} --generator-timeout=180
+
+      - name: Build
+        run: |
+          export ARM_GCC_DIR=${{ env.ARM_GCC_DIR }}
+          export POST_BUILD_EXE=${{ env.POST_BUILD_EXE }}
+          make all -C ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }} -f ${WORKSPACE_PATH}.solution.Makefile -j8
+
+      - name: ls
+        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}
+
+      - name: ls
+        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/${{ inputs.app }}-${{ inputs.suffix }}
+
+      - name: ls
+        run: ls ${MATTER_EXTN_ROOT}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/build/debug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs.app }}-${{ inputs.suffix }} ${{ inputs.board }}
+          path: ${{ env.MATTER_EXTN_ROOT }}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/build/debug/${{ inputs.app }}-${{ inputs.suffix }}.s37
+          
