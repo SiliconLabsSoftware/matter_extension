@@ -90,7 +90,6 @@ component:
   - id: matter_log_uart
     from: matter
 
-
   # Copy of the component to point to a different sl_net_for_lwip.c file
   - id: network_manager
     from: matter

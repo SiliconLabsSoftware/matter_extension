@@ -95,7 +95,7 @@ component:
     from: matter
   - id: matter_segger_rtt
     from: matter
-
+    
 requires:
 # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
 # Select UART/EUART drivers based on device series
