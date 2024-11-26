@@ -144,6 +144,7 @@ include:
   - path: CHIPDevicePlatformConfig.h
   - path: SilabsConfig.h
   - path: BLEManagerImpl.h
+  - path: Logging.h
   - path: CHIPPlatformConfig.h
   - path: ConnectivityManagerImpl.h
   - path: BlePlatformConfig.h
