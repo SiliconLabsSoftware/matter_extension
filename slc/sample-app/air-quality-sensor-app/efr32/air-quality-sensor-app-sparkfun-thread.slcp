@@ -7,7 +7,7 @@ package: Matter
 
 sdk_extension:
   - id: matter
-    version: "2.4.0"
+    version: "2.5.0"
   - id: third_party_hw_drivers
     version: "3.0.1"
 

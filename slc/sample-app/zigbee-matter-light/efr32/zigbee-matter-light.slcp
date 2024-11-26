@@ -300,4 +300,4 @@ ui_hints:
 
 sdk_extension:
   - id: matter
-    version: "2.4.0"
+    version: "2.5.0"

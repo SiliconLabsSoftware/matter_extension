@@ -7,7 +7,7 @@ package: Matter
 
 sdk_extension:
   - id: matter
-    version: "2.4.0"
+    version: "2.5.0"
   - id: wiseconnect3_sdk
     version: "3.4.0"
 
@@ -220,10 +220,10 @@ template_contribution:
     value: 1
 
 readme:
-  - path: ./README.md
+  - path: ./README_WiFi.md
 ui_hints:
   highlight:
-    - path: README.md
+    - path: README_WiFi.md
       focus: false
 
 tag:
