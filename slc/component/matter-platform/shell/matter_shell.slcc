@@ -43,6 +43,11 @@ include:
     - path: EventHandlerLibShell.h
       condition:
         - matter_lock
+- path: third_party/matter_sdk/examples/refrigerator-app/silabs/include
+  file_list:
+    - path: EventHandlerLibShell.h
+      condition:
+        - matter_refrigerator
 - path: third_party/matter_sdk/examples/platform/silabs/shell
   file_list:
     - path: ICDShellCommands.h
@@ -82,6 +87,8 @@ source:
   condition: [matter_platform_siwx917]
 - path: third_party/matter_sdk/examples/lock-app/silabs/src/EventHandlerLibShell.cpp
   condition: [matter_lock]
+- path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/EventHandlerLibShell.cpp
+  condition: [matter_refrigerator]
 - path: third_party/matter_sdk/examples/platform/silabs/shell/ICDShellCommands.cpp
   condition: [matter_icd]
 
