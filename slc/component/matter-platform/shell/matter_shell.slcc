@@ -48,11 +48,15 @@ include:
     - path: EventHandlerLibShell.h
       condition:
         - matter_refrigerator
-- path: third_party/matter_sdk/examples/platform/silabs/shell
+- path: third_party/matter_sdk/examples/platform/silabs/shell/icd
   file_list:
     - path: ICDShellCommands.h
       condition: [matter_icd]
-
+- path: third_party/matter_sdk/examples/platform/silabs/shell/tracing
+  file_list:
+    - path: TracingShellCommands.h
+      condition: [matter_tracing]
+      
 source:
 - path: third_party/matter_sdk/examples/platform/silabs/MatterShell.cpp
 - path: third_party/matter_sdk/examples/shell/shell_common/cmd_misc.cpp
@@ -89,8 +93,10 @@ source:
   condition: [matter_lock]
 - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/EventHandlerLibShell.cpp
   condition: [matter_refrigerator]
-- path: third_party/matter_sdk/examples/platform/silabs/shell/ICDShellCommands.cpp
+- path: third_party/matter_sdk/examples/platform/silabs/shell/icd/ICDShellCommands.cpp
   condition: [matter_icd]
+- path: third_party/matter_sdk/examples/platform/silabs/shell/tracing/TracingShellCommands.cpp
+  condition: [matter_tracing]
 
 define:
 - name: ENABLE_CHIP_SHELL
