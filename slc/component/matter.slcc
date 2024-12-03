@@ -53,7 +53,6 @@ include:
   file_list:
   -   path: ICDCheckInBackOffStrategy.h
   -   path: ICDMonitoringTable.h
-
 requires:
   - name: cpp_support
 
@@ -101,7 +100,6 @@ requires:
   - name: matter_syscall_stubs
   - name: matter_nlassert
   - name: matter_nlio
-  - name: matter_tracing
   - name: matter_includes
   - name: matter_messagedef
   - name: matter_interaction_model
@@ -116,6 +114,7 @@ requires:
   - name: matter_types
   - name: matter_naming
   - name: matter_text_only_logging
+  - name: matter_tracing_headers
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override
