@@ -22,3 +22,7 @@ include:
     -   path: metric_event.h
     -   path: registry.h
     -   path: macros.h
+-   path: third_party/matter_sdk/src/platform/silabs/tracing
+    file_list:
+    -   path: SilabsTracingMacros.h
+    -   path: SilabsTracingTypes.h
