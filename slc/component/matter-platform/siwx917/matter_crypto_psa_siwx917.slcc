@@ -68,8 +68,6 @@ source:
   - path: third_party/matter_sdk/src/crypto/PersistentStorageOperationalKeystore.cpp
   - path: third_party/matter_sdk/src/crypto/RandUtils.h
   - path: third_party/matter_sdk/src/crypto/RandUtils.cpp
-  - path: third_party/matter_sdk/src/crypto/RawKeySessionKeystore.h
-  - path: third_party/matter_sdk/src/crypto/RawKeySessionKeystore.cpp
   - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.h
   - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.cpp
   - path: third_party/matter_sdk/src/crypto/PSASessionKeystore.h

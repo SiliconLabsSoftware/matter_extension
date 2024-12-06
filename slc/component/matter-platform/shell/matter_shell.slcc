@@ -14,7 +14,7 @@ provides:
 
 requires:
 - name: matter_uart
-- name: matter_ot_cli
+- name: matter_thread_cli
   condition: [matter_thread]
 
 include:
