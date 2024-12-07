@@ -36,6 +36,7 @@
 #include <assert.h>
 
 #include <platform/silabs/platformAbstraction/SilabsPlatform.h>
+#include <platform/silabs/tracing/SilabsTracingMacros.h>
 
 #include <setup_payload/QRCodeSetupPayloadGenerator.h>
 #include <setup_payload/SetupPayload.h>
@@ -96,6 +97,9 @@ CHIP_ERROR AppTask::Init()
     CHIP_ERROR err = CHIP_NO_ERROR;
     app::SetAttributePersistenceProvider(&gDeferredAttributePersister);
     chip::DeviceLayer::Silabs::GetPlatform().SetButtonsCb(AppTask::ButtonEventHandler);
+    char rebootLightOnKey[] = "Reboot->LightOn";
+    CharSpan rebootLighOnSpan(rebootLightOnKey);
+    SILABS_TRACE_REGISTER(rebootLighOnSpan);
 
 #ifdef DISPLAY_ENABLED
     GetLCD().Init((uint8_t *) "CMP-Lighting-App");
@@ -125,6 +129,7 @@ CHIP_ERROR AppTask::Init()
 
     sLightLED.Init(LIGHT_LED);
     sLightLED.Set(LightMgr().IsLightOn());
+    SILABS_TRACE_INSTANT(rebootLighOnSpan);
 
 // Update the LCD with the Stored value. Show QR Code if not provisioned
 #ifdef DISPLAY_ENABLED
