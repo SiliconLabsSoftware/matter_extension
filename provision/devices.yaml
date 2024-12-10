@@ -107,4 +107,4 @@ simg3:
   stack_size: 0x8000
   firmware:
     - version: "2.2"
-      file: "sixg3_psa123_nvm3k2.s37"
+      file: "sixg3_psa3_nvm3k2.s37"
