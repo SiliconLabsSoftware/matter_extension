@@ -18,7 +18,6 @@ component:
 - instance: [vcom]
   id: uartdrv_eusart
 #Zigbee Components
-- id: zigbee_basic
 - id: zigbee_ble_dmp_cli
 - id: zigbee_address_table
 - id: zigbee_application_bootloader
@@ -120,8 +119,9 @@ requires:
     condition: [device_series_2]
   - name: matter_drivers_series_2
     condition: [device_series_3]
-  - name: rail_util_ieee802154_fast_channel_switching
-    condition: [device_series_2]
+#disabling fast_channel_switching as this cause SMU fault during OTA when call bootloader_ apis
+#- name: rail_util_ieee802154_fast_channel_switching
+#    condition: [device_series_2]
   - name: rail_util_dma
     condition: [device_series_2]
 
