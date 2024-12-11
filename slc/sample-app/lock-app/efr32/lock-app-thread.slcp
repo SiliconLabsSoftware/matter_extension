@@ -238,3 +238,6 @@ ui_hints:
       focus: false
 post_build:
   profile: application
+  
+other_file:
+  - path: ../../../image/qr_code_img.png

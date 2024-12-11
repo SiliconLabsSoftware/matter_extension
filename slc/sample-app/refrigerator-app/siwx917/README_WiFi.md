@@ -25,7 +25,7 @@ documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions
 
 The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
 
-![QR Code](../../../image/qr_code_img.png)
+![QR Code](qr_code_img.png)
 
 A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
 
