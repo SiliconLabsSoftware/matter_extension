@@ -108,3 +108,5 @@ simg3:
   firmware:
     - version: "2.2"
       file: "sixg3_psa3_nvm3k2.s37"
+    - version: "2.3"
+      file: "sixg3_psa3_nvm3k2.s37"
