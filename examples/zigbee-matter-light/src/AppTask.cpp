@@ -146,7 +146,8 @@ CHIP_ERROR AppTask::Init()
 #endif // QR_CODE_ENABLED
 #endif
 #ifdef SL_CATALOG_ZIGBEE_ZCL_FRAMEWORK_CORE_PRESENT
-#if defined(SL_MATTER_ZIGBEE_SEQUENTIAL) || (defined(SL_MATTER_ZIGBEE_CMP) && defined(_SILICON_LABS_32B_SERIES_3))
+#if defined(SL_MATTER_ZIGBEE_SEQUENTIAL) ||                                                                                        \
+    (defined(SL_MATTER_ZIGBEE_CMP) && !defined(SL_CATALOG_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_PRESENT))
     PlatformMgr().LockChipStack();
     uint16_t nbOfMatterFabric = chip::Server::GetInstance().GetFabricTable().FabricCount();
     PlatformMgr().UnlockChipStack();
@@ -161,7 +162,7 @@ CHIP_ERROR AppTask::Init()
 #endif // SL_MATTER_ZIGBEE_CMP
     }
     else
-#endif // SL_MATTER_ZIGBEE_SEQUENTIAL || (SL_MATTER_ZIGBEE_CMP && _SILICON_LABS_32B_SERIES_3)
+#endif // SL_MATTER_ZIGBEE_SEQUENTIAL || (SL_MATTER_ZIGBEE_CMP && !SL_CATALOG_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_PRESENT)
     {
         Zigbee::RequestStart();
     }
