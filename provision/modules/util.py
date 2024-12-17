@@ -53,6 +53,9 @@ class Paths:
             full = "{}/{}".format(base, path)
         return os.path.abspath(os.path.normpath(full))
 
+    @staticmethod
+    def quote(path):
+        return '"{}"'.format(os.path.normpath(path))
 
 class File:
 
