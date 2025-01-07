@@ -115,7 +115,7 @@ jobs:
             suffix: 917-soc
             family: siwx917            
 
-    name: copy-sources ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.addAppComponent}} ${{ matrix.board }} 
+    name: copy-sources ${{ matrix.app }}-${{ matrix.suffix }} ${{ matrix.board }} 
 
     uses: ./.github/workflows/generate-and-build.yaml
     with:

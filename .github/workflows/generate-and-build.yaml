@@ -119,6 +119,6 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{inputs.optionalSlcParams}} ${{ inputs.app }}-${{ inputs.suffix }} ${{ inputs.board }}
+          name: ${{ inputs.addAppComponent }} ${{ inputs.optionalSlcParams }} ${{ inputs.app }}-${{ inputs.suffix }} ${{ inputs.board }}
           path: ${{ env.MATTER_EXTN_ROOT }}/${{ inputs.board }}/${{ inputs.app }}-${{ inputs.suffix }}/${{ inputs.app }}-${{ inputs.suffix }}/build/debug/${{ inputs.app }}-${{ inputs.suffix }}.s37
           
