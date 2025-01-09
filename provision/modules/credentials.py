@@ -207,7 +207,6 @@ class Credentials:
 
     def collectPKCS12(self, pkcs12, pai_cert, dac_cert, dac_key):
         pkcs12_path = pkcs12.str()
-        pkcs12_quoted = _util.Paths.quote(pkcs12_path)
         pkcs12_temp = self.paths.temp(Credentials.PKCS_GENERATED)
         self.copy(pkcs12_path, pkcs12_temp)
 
@@ -218,11 +217,11 @@ class Credentials:
 
         # Extract key from PKCS#12
         password_arg = "pass:{}".format(key_pass)
-        ps = subprocess.Popen(('openssl', 'pkcs12', '-nodes', '-nocerts', '-in', pkcs12_quoted, '-passin', password_arg), stdout=subprocess.PIPE)
+        ps = subprocess.Popen(('openssl', 'pkcs12', '-nodes', '-nocerts', '-in', pkcs12_path, '-passin', password_arg), stdout=subprocess.PIPE)
         subprocess.check_output(('openssl', 'ec', '-outform', 'der', '-out', dack_temp), stdin=ps.stdout)
 
         # Extract certificates from PKCS#12
-        out = _util.execute([ 'openssl', 'pkcs12', '-nodes', '-nokeys', '-in', pkcs12_quoted, '-passin', password_arg ], True, True)
+        out = _util.execute([ 'openssl', 'pkcs12', '-nodes', '-nokeys', '-in', pkcs12_path, '-passin', password_arg ], True, True)
 
         # Parse certificates
         certs = self.parsePKCSCerts(out.decode("utf-8"))
