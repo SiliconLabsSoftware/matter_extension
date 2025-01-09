@@ -83,6 +83,8 @@ si917y:
   firmware:
     - version: "2.2"
       file: "si917y_nvm3k2.rps"
+    - version: "2.3"
+      file: "si917y_nvm3k2.rps"
 
 si917:
   alias: [ siwg917 ]
@@ -98,6 +100,8 @@ si917:
     - version: "2.1"
       file: "si917_nvm3k2.rps"
     - version: "2.2"
+      file: "si917_nvm3k2.rps"
+    - version: "2.3"
       file: "si917_nvm3k2.rps"
 
 simg3:
