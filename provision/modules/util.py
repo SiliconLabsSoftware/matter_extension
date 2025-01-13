@@ -55,7 +55,8 @@ class Paths:
 
     @staticmethod
     def quote(path):
-        return '"{}"'.format(os.path.normpath(path))
+        s = path.strip().strip('"')
+        return '"{}"'.format(os.path.normpath(s))
 
 class File:
 
