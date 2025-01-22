@@ -162,6 +162,8 @@ configuration:
   value: '1'
 - name: SL_CLI_PROMPT_STRING
   value: '"TriProtocol>"'
+- name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+  value: 600
 - name: SL_BT_CONFIG_USER_ADVERTISERS
   value: 3
 - name: SL_BT_CONFIG_MAX_CONNECTIONS

@@ -19,6 +19,7 @@ component:
   - id: btl_common_storage
   - id: btl_debug
   - id: btl_gbl_compression_lzma
+  - id: clock_manager
 
 configuration:
   - name: SLOT0_ENABLE
