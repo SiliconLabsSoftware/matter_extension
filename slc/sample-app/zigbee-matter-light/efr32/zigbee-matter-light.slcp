@@ -216,6 +216,8 @@ configuration:
   value: 1
 - name: CIRCULAR_QUEUE_LEN_MAX
   value: 16
+- name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
+  value: 1
 
 define:
 - name: OS_CFG_COMPAT_INIT
