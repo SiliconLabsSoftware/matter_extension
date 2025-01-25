@@ -121,13 +121,10 @@ requires:
     condition: [device_series_3]
 
 # RAIL components that enable Concurrent Listening 
-# These are disabled by default until the OTA Bootloader issue 1385197 is fixed
-# !!! WARNING: Enabling these components requires that the device is running a
-# bootloader built with BOOTLOADER_MSC_DMA_WRITE set to false !!!
-# - name: rail_util_ieee802154_fast_channel_switching
-#   condition: [device_series_2]
-# - name: rail_util_dma
-#   condition: [device_series_2]
+  - name: rail_util_ieee802154_fast_channel_switching
+    condition: [device_series_2]
+  - name: rail_util_dma
+    condition: [device_series_2]
 
 toolchain_settings:
   - option: cxx_standard
