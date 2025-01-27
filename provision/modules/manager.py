@@ -105,7 +105,7 @@ class ProvisionManager:
 
         # TODO: Figure out a way to get the accessible flash instead of the physical flash for series 3
         if "simg3" in info.part:
-            flash_size = 0x3d0000
+            flash_size = 0x391000
 
         # Collect device information
         device_num = args.get(ID.kDevice)
