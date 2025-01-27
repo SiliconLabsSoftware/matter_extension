@@ -1,6 +1,5 @@
 name: tag-latest
 on:
-  push:
   workflow_dispatch:
 jobs:
   tag-latest-efr32-image:
