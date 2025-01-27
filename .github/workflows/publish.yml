@@ -1,5 +1,9 @@
 name: publish
-on: [push]
+on:
+  push:
+    paths:
+      - '.github/workflows/publish.yml'
+      - 'Integrations/docker/images/Dockerfile'
 jobs:
   publish-efr32-image:
     runs-on: ubuntu-latest
@@ -18,6 +22,10 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the matter_extension_dependencies Docker image
         run: |
+          #docker pull ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
+          #docker tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0 ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+          #docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
           docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
           docker run ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
           docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
+          

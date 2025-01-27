@@ -1,0 +1,26 @@
+name: tag-latest
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  tag-latest-efr32-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build the matter_extension_dependencies Docker image
+        run: |
+          docker pull ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
+          docker tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0 ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+          docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+          
