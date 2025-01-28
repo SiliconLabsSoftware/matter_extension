@@ -211,7 +211,7 @@ template_contribution:
     value: 0x1008000
     condition: [device_family_simg301]
   - name: memory_flash_size
-    # Total flash size is 0x391000. 0x8000 is reserved for flash_s, leaving 0x389000.
+    # Total flash size is 0x391000. 0x8000 is reserved for the bootloader, leaving 0x389000.
     # We subtract the last page for Matter certificates from the total flash.
     value: 0x388000
     condition: [device_family_simg301]
