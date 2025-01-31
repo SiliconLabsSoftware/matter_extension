@@ -255,6 +255,7 @@ post_build:
   profile: application
 
 template_contribution:
+  # Temporarily keeping. This Zigbee TokenManager usage affects our placement and GFW.
   - name: memory_flash_start
     value: 0x1008000
     condition: [device_family_simg301]

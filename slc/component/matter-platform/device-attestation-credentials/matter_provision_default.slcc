@@ -62,3 +62,7 @@ library:
   - path: third_party/matter_support/matter/provision/lib/libProvision_efr32mg24.a
     condition:  
      - device_family_simg301
+
+template_contribution:
+  - name: matter_certificate_store
+    value: 1
