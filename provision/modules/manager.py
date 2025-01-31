@@ -10,17 +10,9 @@ import modules.jlink as _jlink
 import modules.channel as _chan
 import modules.bluetooth as _bt
 import modules.credentials as _creds
-from modules.parameters import Types, Formats, ID
+from modules.parameters import ID, Actions
 from abc import ABC, abstractmethod
 from enum import Enum
-
-
-class Actions:
-    kHelp = 'help'
-    kAuto = 'auto'
-    kRead = 'read'
-    kWrite = 'write'
-    kBinary = 'binary'
 
 
 class ProvisionManager:

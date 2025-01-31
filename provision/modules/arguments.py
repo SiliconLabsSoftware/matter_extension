@@ -7,13 +7,14 @@ import modules.versions as _ver
 import modules.formatter as _format
 import modules.util as _util
 from abc import ABC, abstractmethod
-from modules.parameters import ID, Types, Formats, Parameter, ParameterList
+from modules.parameters import ID, Types, Formats, Parameter, ParameterList, Actions
 
 
 class Argument(Parameter):
 
-    def __init__(self, paths, y) -> None:
+    def __init__(self, parent, paths, y) -> None:
         super().__init__(y)
+        self.parent = parent
         self.paths = paths
         self.value = None
         self.is_user_input = False
@@ -157,7 +158,12 @@ class Argument(Parameter):
 
     def _validatePath(self, x):
         s = self.paths.current(x)
-        if not os.path.exists(s):
+        if self.parent.readMode():
+            # Read mode, create output path if needed
+            dir = os.path.dirname(s)
+            if not os.path.isdir(dir): os.makedirs(dir)
+        elif not os.path.exists(s):
+            # Write mode, the input path must exist
             raise ValueError("Invalid \"{}\" path: {}".format(self.name, s))
         return s
 
@@ -183,7 +189,7 @@ class ArgumentList(ParameterList):
         self.formatter = None
 
     def create(self, y):
-        return Argument(self.paths, y)
+        return Argument(self, self.paths, y)
 
     def set(self, k, v, default_value = None):
         self.get(k).set(v, default_value)
@@ -281,6 +287,11 @@ class ArgumentList(ParameterList):
     ## Write the compiled inputs into a file
     def export(self, path = None):
         self.formatter.exportAll(path or self.str(ID.kOutputPath) or ArgumentList.DEFAULT_OUTPUT_PATH)
+
+    ## Return true if action=='read', false otherwise
+    def readMode(self) -> bool:
+        action = (ID.kAction in self.ids) and self.ids[ID.kAction]
+        return (Actions.kRead == action.str())
 
     def print(self):
         for n, g in self.groups.items():
