@@ -97,7 +97,19 @@ class ProvisionManager:
 
         # TODO: Figure out a way to get the accessible flash instead of the physical flash for series 3
         if "simg3" in info.part:
-            flash_size = 0x391000
+            # Command device info return the whole flash size but only a portion of it is available for any application
+            # Based on that Total flash size, we can determine what is the current flash size available for apps.
+            # The provision storage only reserve 1 flash page for matter credentials for all platforms
+            # S3 token manager reserve 2 pages for it. 
+            # so we preventively remove 1 page to the real flash size 
+            if (info.flash_size == 0x00400000):
+                flash_size = 0x390000 # base is 0x391000
+            elif (info.flash_size == 0x00300000):
+                flash_size = 0x2a2000 # base is 0x2a3000
+            elif (info.flash_size == 0x00200000):
+                flash_size = 0x1b3000 # base is 0x1b4000
+            else:
+                print("Unrecognized Series 3 flash size")
 
         # Collect device information
         device_num = args.get(ID.kDevice)
