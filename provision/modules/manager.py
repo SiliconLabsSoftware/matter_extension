@@ -19,7 +19,7 @@ class ProvisionManager:
     DEFAULT_TEMP = './temp'
 
     def __init__(self, ver) -> None:
-        prot_mod = importlib.import_module("modules.{}.protocol".format(ver.module))
+        prot_mod = importlib.import_module("{}.{}.protocol".format(_util.Paths.MODULES_DIR, ver.module))
         self.protocol = prot_mod.Protocol()
 
     def execute(self, paths, args):

@@ -238,7 +238,7 @@ class ArgumentList(ParameterList):
         formatter = _format.Formatter(self, is_user_input)
         file_ver = versions.find(formatter.parseVersion(inputs_path))
         # Version-specific formatter
-        args_mod = importlib.import_module("modules.{}.arguments".format(file_ver.module))
+        args_mod = importlib.import_module("{}.{}.arguments".format(_util.Paths.MODULES_DIR, file_ver.module))
         formatter = args_mod.Formatter(self)
         formatter.parseAll(inputs_path)
         return file_ver
@@ -249,7 +249,7 @@ class ArgumentList(ParameterList):
         cmd_ver = ver and versions.find(ver) or file_ver or versions.find()
         # print("VERSION: {} (file), {} (command-line)".format(file_ver and file_ver.tag or '?', cmd_ver and cmd_ver.tag or '?'))
         # Load version-specific parameters
-        args_mod = importlib.import_module("modules.{}.arguments".format(cmd_ver.module))
+        args_mod = importlib.import_module("{}.{}.arguments".format(_util.Paths.MODULES_DIR, cmd_ver.module))
         params = args_mod.ParameterList(self.paths, params_path)
         # Update arguments with versioned parameters
         for k, p in params.ids.items():
