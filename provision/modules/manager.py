@@ -56,15 +56,16 @@ class ProvisionManager:
 
         # Connection string
         conn = ConnectionArguments(args)
+        comm = _tools.Commander(args, conn)
 
         # Channel
         if Actions.kBinary == action:
             chan = None
         else:
-            chan = self.createChannel(paths, args, conn)
+            chan = self.createChannel(paths, args, conn, comm)
             # Generator Firmware
             if _chan.Channel.BLE != chan.type:
-                self.writeGeneratorFirmware(args, conn)
+                self.writeGeneratorFirmware(args, comm)
 
         # Exchange data
         self.protocol.execute(paths, args, chan)
@@ -79,19 +80,21 @@ class ProvisionManager:
 
         # Production Firmware
         if chan and (_chan.Channel.BLE != chan.type):
-            self.writeProductionFirmware(args, conn)
+            self.writeProductionFirmware(args, comm)
 
-    def createChannel(self, paths, args, conn):
+        # Reset
+        comm.reset()
+
+    def createChannel(self, paths, args, conn, comm):
         if _chan.Channel.BLE == conn.channel_type:
             # Bluetooth channel
             return _bt.BluetoothChannel(paths, args, conn.address)
         else:
             # JLink RTT: Device info required
-            self.collectDeviceInfo(paths, args, conn)
+            self.collectDeviceInfo(paths, args, conn, comm)
             return _jlink.JLinkChannel(paths, args, conn)
 
-    def collectDeviceInfo(self, paths, args, conn):
-        comm = _tools.Commander(args, conn)
+    def collectDeviceInfo(self, paths, args, conn, comm):
         info = comm.info()
         flash_size = info.flash_size
 
@@ -182,8 +185,7 @@ class ProvisionManager:
             passcode = int.from_bytes(os.urandom(4), byteorder='big')
         arg.set(passcode)
 
-    def writeGeneratorFirmware(self, args, conn):
-        comm = _tools.Commander(args, conn)
+    def writeGeneratorFirmware(self, args, comm):
         gen_fw = args.str(ID.kGeneratorFW)
         if gen_fw is None:
             raise ValueError("Missing Generator Firmware")
@@ -191,11 +193,10 @@ class ProvisionManager:
             raise ValueError("Missing Generator firmware \"{}\"".format(gen_fw))
         comm.flash(gen_fw)
 
-    def writeProductionFirmware(self, args, conn):
+    def writeProductionFirmware(self, args, comm):
         prod_fw = args.str(ID.kProductionFW)
         if prod_fw is not None:
             print("Writing Production Firmware...")
-            comm = _tools.Commander(args, conn)
             comm.flash(prod_fw)
 
 

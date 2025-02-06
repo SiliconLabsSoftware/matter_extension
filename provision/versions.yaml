@@ -102,3 +102,11 @@
   module: "v2_0"
   summary: |-
     - kConfigKey_HardwareVersion = 0x87218
+
+- version: "2.5"
+  date: "2025-01-29"
+  supports:
+    - RC_2.5.0-1.5
+  module: "v2_0"
+  summary: |-
+    - Generator firmware now runs from RAM in EFR32
