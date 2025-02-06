@@ -158,7 +158,7 @@ class ProvisionManager:
         # salt (base 64)
         salt = args.get(ID.kSpake2pSalt)
         if salt.value is None:
-            salt.set(base64.b64encode(random.randbytes(32)).decode('utf-8'))
+            salt.set(base64.b64encode(os.urandom(32)).decode('utf-8'))
             generate_verifier = True
         # iterations
         iterations = args.get(ID.kSpake2pIterations)
@@ -179,7 +179,7 @@ class ProvisionManager:
     def generatePasscode(self, arg):
         passcode = 0
         while (passcode in arg.invalid) or (passcode > arg.max):
-            passcode = int.from_bytes(random.randbytes(4), byteorder='big')
+            passcode = int.from_bytes(os.urandom(4), byteorder='big')
         arg.set(passcode)
 
     def writeGeneratorFirmware(self, args, conn):
