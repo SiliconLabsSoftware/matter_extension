@@ -128,8 +128,7 @@ si917:
     - version: "2.5"
       file: "si917_nvm3k3.rps"
 
-simg3:
-  alias: [sixg3]
+simg301m114:
   ram_addr: 0x20000000
   flash_addr: 0x1000000
   stack_size: 0x8000
@@ -142,3 +141,14 @@ simg3:
       file: "sixg3_psa3_nvm3k3.s37"
     - version: "2.5"
       file: "sixg3_psa3_nvm3k3.s37"
+
+# This is a distinct image for the rainier 3mb part. 
+simg301m113:
+  ram_addr: 0x20000000
+  flash_addr: 0x1000000
+  stack_size: 0x8000
+  firmware:
+    - version: "2.4"
+      file: "sixg3w_psa3_nvm3k3.s37"
+    - version: "2.5"
+      file: "sixg3w_psa3_nvm3k3.s37"
