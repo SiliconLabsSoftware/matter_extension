@@ -10,7 +10,7 @@
 #       output in: out/brd4187c/lighting-app-thread/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/workspaces/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
+#   ./slc/build.sh slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
 #       output in: out/brd4187c/lighting-app-thread-solution/
 #
 #   Example --configuration option usage:
@@ -36,7 +36,9 @@ SILABS_APP_PATH=$1
 SILABS_BOARD=$2
 CONFIG_ARGS=""
 BRD_ONLY=$(echo $SILABS_BOARD | cut -f1 -d";")
-export POST_BUILD_EXE=$(which commander)
+if [ -z "$POST_BUILD_EXE" ]; then
+  export POST_BUILD_EXE=$(which commander)
+fi
 
 # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
 if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
@@ -123,12 +125,12 @@ echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
 EXTENSION_DIR=$GSDK_ROOT/extension/matter_extension
 if [ ! -L "$EXTENSION_DIR" ]; then
-    ln -s $MATTER_ROOT $EXTENSION_DIR
+    ln -s $MATTER_ROOT "$EXTENSION_DIR"
 fi
 
 WISECONNECT3_DIR=$GSDK_ROOT/extension/wifi_sdk
-if [ ! -L "WISECONNECT3_DIR" ]; then
-    ln -s $MATTER_ROOT/third_party/wifi_sdk/ $WISECONNECT3_DIR
+if [ ! -L "$WISECONNECT3_DIR" ]; then
+    ln -s $MATTER_ROOT/third_party/wifi_sdk/ "$WISECONNECT3_DIR"
 fi
 
 ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
@@ -137,7 +139,7 @@ ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
 echo "Ensure SDK and Matter extension are trusted by SLC."
 slc configuration --sdk $GSDK_ROOT
 slc signature trust --development-trust
-slc signature trust  --extension-path "$GSDK_ROOT/extension/matter_extension/"
+slc signature trust  --extension-path "$EXTENSION_DIR"
 slc signature trust --sdk $GSDK_ROOT --extension-path "$WISECONNECT3_DIR"
 slc signature trust --extension-path "$ThirdPartyHwDrivers_DIR"
 

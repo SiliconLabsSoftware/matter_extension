@@ -134,6 +134,12 @@ options:
     short: 'jl'
     type: 'path'
 
+  - id: 0x013b
+    desc: 'Buffer size'
+    name: 'buffer_size'
+    short: 'bz'
+    type: 'int16u'
+
 instance_info:
   - id: 0x0141
     desc: 'Serial Number'
@@ -336,7 +342,6 @@ attestation_credentials:
     short: 'ic'
     type: 'path'
     max: 500
-    check: false
 
   - id: 0x0194
     desc: 'Product Attestation Intermediate Key'
@@ -351,7 +356,6 @@ attestation_credentials:
     short: 'dc'
     type: 'path'
     max: 500
-    check: false
 
   - id: 0x0196
     desc: 'Device Attestation Key'

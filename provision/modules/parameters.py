@@ -4,6 +4,14 @@ import modules.util as _util
 import os
 import yaml
 
+
+class Actions:
+    kHelp = 'help'
+    kAuto = 'auto'
+    kRead = 'read'
+    kWrite = 'write'
+    kBinary = 'binary'
+
 def parseInt(i):
     return int(i, 0)
 
@@ -84,7 +92,7 @@ class ID:
     kProductionFW       = 0x0136
     kCertToolPath       = 0x0137
     kPylinkLib          = 0x013a
-
+    kBufferSize         = 0x013b
     # Instance Info
     kSerialNumber       = 0x0141
     kVendorId           = 0x0142

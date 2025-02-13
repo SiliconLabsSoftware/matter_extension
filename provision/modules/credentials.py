@@ -25,7 +25,6 @@ class Credentials:
         self.generate = args.bool(ID.kGenerateCreds)
         self.csr_mode = args.bool(ID.kCsrMode)
 
-
     def collect(self):
         # Certification Declaration
         cdc = self.args.get(ID.kCdCert)
@@ -48,7 +47,6 @@ class Credentials:
         else:
             # Collect PKCS#12 bundle
             self.collectPKCS12(pkcs12, pai_cert, dac_cert, dac_key)
-
 
     def generateLegacyHeader(self):
         cd = self.args.get(ID.kCertification)
@@ -85,7 +83,6 @@ class Credentials:
         # Write header
         _util.File(self.paths.temp(Credentials.DEFAULT_HEADER_FILE)).write(header)
 
-
     def collectCD(self, cdc, cdk, cd):
         cd_temp = self.paths.temp('cd.bin')
         if cd.value is not None:
@@ -105,21 +102,15 @@ class Credentials:
             # Missing CD
             _util.fail("Missing: Certification Declaration")
 
-
     def collectCertificates(self, paa_cert, paa_key, pai_cert, pai_key, dac_cert, dac_key):
-        cd_gen = dac_gen = pai_gen = False
-        if not self.generate:
-            pass
-        elif self.csr_mode:
-                dac_gen = False
-                pai_gen = (pai_cert.value is None) or (pai_key.value is None)
-        else:
-            dac_gen = (dac_cert.value is None) or (dac_key.value is None)
-            pai_gen = (pai_cert.value is None) or ((dac_gen or self.csr_mode) and (pai_key.value is None))
+        dac_gen = pai_gen = False
+        if self.generate:
+            dac_gen = (not self.csr_mode) and ((dac_cert.value is None) or (dac_key.value is None))
+            pai_gen = (pai_cert.value is None) or (dac_gen and (pai_key.value is None))
             dac_gen = dac_gen or pai_gen
 
         # Collect certificates
-        self.collectPAA(paa_cert, paa_key)
+        self.collectPAA(paa_cert, paa_key, pai_gen)
         paic_pem, paik_pem, _, _  = self.collectPAI(paa_cert, paa_key, pai_cert, pai_key, pai_gen)
         dacc_pem, dack_pem, _, _ = self.collectDAC(pai_cert, pai_key, dac_cert, dac_key, dac_gen)
 
@@ -127,30 +118,32 @@ class Credentials:
         if pai_gen and dac_gen:
             key_pass = self.args.str(ID.kKeyPass) or ''
             pass_arg = "pass:\"{}\"".format(key_pass)
-            out_arg = self.paths.temp(Credentials.PKCS_GENERATED)
-            _util.execute([ 'openssl', 'pkcs12', '-export', '' '-inkey', dack_pem, '-in', dacc_pem, '-certfile', paic_pem, '-out', out_arg, '-password', pass_arg ])
+            dack_pemq = _util.Paths.quote(dack_pem)
+            dacc_pemq = _util.Paths.quote(dacc_pem)
+            paic_pemq = _util.Paths.quote(paic_pem)
+            out_arg =  _util.Paths.quote(self.paths.temp(Credentials.PKCS_GENERATED))
+            _util.execute([ 'openssl', 'pkcs12', '-export', '' '-inkey', dack_pemq, '-in', dacc_pemq, '-certfile', paic_pemq, '-out', out_arg, '-password', pass_arg ])
 
-
-    def collectPAA(self, paa_cert, paa_key):
-        # The PAA is never generated, either use the provided certificate or default
-        if (paa_cert.value is None) or (paa_key.value is None):
-            # Either PAA or PAA key missing, use defaults
-            if paa_cert.value is not None:
-                _util.warn("PAA certificate ignored: {}".format(paa_cert.value))
-            if paa_key.value is not None:
-                _util.warn("PAA key ignored: {}".format(paa_key.value))
-            paa_cert.set(self.paths.temp('paa_cert.pem'), None, False)
-            paa_key.set(self.paths.temp('paa_key.pem'), None, False)
-            self.cert_tool.generatePAA(paa_cert.value, paa_key.value)
-        else:
-            # Use provided PAA and PAA key
-            if paa_cert.value is None:
-                _util.fail("Missing: PAA certificate")
-            if paa_key.value is None:
-                _util.fail("Missing: PAA key")
-        # Copy into DER format (if needed)
-        self.x509Copy(paa_cert.value, 'paa_cert')
-        self.x509Copy(paa_key.value, 'paa_key', True)
+    def collectPAA(self, paa_cert, paa_key, required):
+        if required:
+            if (paa_cert.value is None) or (paa_key.value is None):
+                # Either PAA or PAA key missing, use defaults
+                if paa_cert.value is not None:
+                    _util.warn("PAA certificate ignored: {}".format(paa_cert.value))
+                if paa_key.value is not None:
+                    _util.warn("PAA key ignored: {}".format(paa_key.value))
+                paa_cert.set(self.paths.temp('paa_cert.pem'), None, False)
+                paa_key.set(self.paths.temp('paa_key.pem'), None, False)
+                self.cert_tool.generatePAA(paa_cert.value, paa_key.value)
+            else:
+                # Use provided PAA and PAA key
+                if paa_cert.value is None:
+                    _util.fail("Missing: PAA certificate")
+                if paa_key.value is None:
+                    _util.fail("Missing: PAA key")
+            # Copy into DER format (if needed)
+            self.x509Copy(paa_cert.value, 'paa_cert')
+            self.x509Copy(paa_key.value, 'paa_key', True)
 
     def collectPAI(self, paa_cert, paa_key, pai_cert, pai_key, generate):
         if generate:
@@ -184,7 +177,6 @@ class Credentials:
             pai_key.set(paik_der)
         return paic_pem, paik_pem, paic_der, paik_der
 
-
     def collectDAC(self, pai_cert, pai_key, dac_cert, dac_key, generate):
         if generate:
             if dac_cert.value is not None:
@@ -213,26 +205,27 @@ class Credentials:
         dac_key.set(dack_der)
         return dacc_pem, dack_pem, dacc_der, dack_der
 
-
     def collectPKCS12(self, pkcs12, pai_cert, dac_cert, dac_key):
         pkcs12_path = pkcs12.str()
+        pkcs12_quoted = _util.Paths.quote(pkcs12_path)
         pkcs12_temp = self.paths.temp(Credentials.PKCS_GENERATED)
+        self.copy(pkcs12_path, pkcs12_temp)
+
         dacc_temp = self.paths.temp('dac_cert.pem')
         dack_temp = self.paths.temp('dac_key.der')
         paic_temp = self.paths.temp('pai_cert.pem')
         key_pass = self.args.get(ID.kKeyPass).value or ''
-        self.copy(pkcs12_path, pkcs12_temp)
 
         # Extract key from PKCS#12
         password_arg = "pass:{}".format(key_pass)
-        ps = subprocess.Popen(('openssl', 'pkcs12', '-nodes', '-nocerts', '-in', pkcs12_path, '-passin', password_arg), stdout=subprocess.PIPE)
+        commamd = "openssl pkcs12 -nodes -nocerts -in {} -passin {}".format(pkcs12_quoted, password_arg)
+        ps = subprocess.Popen(commamd, shell=True, stdout=subprocess.PIPE)
         subprocess.check_output(('openssl', 'ec', '-outform', 'der', '-out', dack_temp), stdin=ps.stdout)
 
         # Extract certificates from PKCS#12
-        out = _util.execute([ 'openssl', 'pkcs12', '-nodes', '-nokeys', '-in', pkcs12_path, '-passin', password_arg ], True, True)
+        out = _util.execute([ 'openssl', 'pkcs12', '-nodes', '-nokeys', '-in', pkcs12_quoted, '-passin', password_arg ], True, True)
 
         # Parse certificates
-        # print("\n~~~~~~~~\n{}\n~~~~~~~~\n".format(s))
         certs = self.parsePKCSCerts(out.decode("utf-8"))
         _util.File(dacc_temp).write(certs[0])
         _util.File(paic_temp).write(certs[1])
@@ -244,11 +237,9 @@ class Credentials:
         dac_cert.set(dacc_der)
         dac_key.set(dack_temp)
 
-
     def copy(self, src, dest):
         if (not os.path.exists(dest)) or (not os.path.samefile(src, dest)):
             shutil.copy(src, dest)
-
 
     def x509Copy(self, in_path, out_name, is_key = False):
         if in_path is None:
@@ -258,7 +249,6 @@ class Credentials:
         out_path = self.paths.temp("{}{}".format(out_name, in_ext))
         self.copy(in_path, out_path)
         return self.x509Translate(out_path, is_key)
-
 
     def x509Translate(self, in_path, is_key = False):
         (in_base, in_ext) = os.path.splitext(in_path)
@@ -273,12 +263,13 @@ class Credentials:
             der_path = out_path = "{}.{}".format(in_base, out_ext)
         else:
             _util.fail("Invalid certificate extension: \"{}\"".format(in_ext))
+        inq = _util.Paths.quote(in_path)
+        outq = _util.Paths.quote(out_path)
         if is_key:
-            _util.execute(['openssl', 'ec', '-inform', in_ext, '-in', in_path, '-outform', out_ext, '-out', out_path])
+            _util.execute(['openssl', 'ec', '-inform', in_ext, '-in', inq, '-outform', out_ext, '-out', outq])
         else:
-            _util.execute(['openssl', 'x509', '-inform', in_ext, '-outform', out_ext, '-in', in_path, '-out', out_path])
+            _util.execute(['openssl', 'x509', '-inform', in_ext, '-outform', out_ext, '-in', inq, '-out', outq])
         return pem_path, der_path
-
 
     def parsePKCSCerts(self, certs):
         BEGIN = '-----BEGIN CERTIFICATE-----'
