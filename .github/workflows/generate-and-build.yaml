@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     
     container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDK-2024.06.2_WiFiSDK-3.3.1
   
     steps:
       - name: Checkout
