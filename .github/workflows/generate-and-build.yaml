@@ -36,7 +36,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDK-2024.06.2_WiFiSDK-3.3.1
