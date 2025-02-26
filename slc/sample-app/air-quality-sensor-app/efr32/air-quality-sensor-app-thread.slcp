@@ -37,6 +37,8 @@ component:
   - id: matter_gatt
     from: matter
   - id: matter_provision_default
+    from: matter  
+  - id: matter_log_uart
     from: matter
 
   - id: matter_air_quality_app
