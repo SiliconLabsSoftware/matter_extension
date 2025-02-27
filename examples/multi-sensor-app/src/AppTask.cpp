@@ -21,13 +21,13 @@
 #include "AppEvent.h"
 #include "LEDWidget.h"
 #include "SensorManager.h"
-#include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
 #include <app/util/attribute-storage.h>
 #include <assert.h>
 #include <lib/support/CodeUtils.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <platform/silabs/platformAbstraction/SilabsPlatform.h>
+#include <setup_payload/OnboardingCodesUtil.h>
 #include <setup_payload/QRCodeSetupPayloadGenerator.h>
 #include <setup_payload/SetupPayload.h>
 
@@ -115,7 +115,7 @@ CHIP_ERROR AppTask::StartAppTask()
 void AppTask::AppTaskMain(void * pvParameter)
 {
     AppEvent event;
-    QueueHandle_t sAppEventQueue = *(static_cast<QueueHandle_t *>(pvParameter));
+    osMessageQueueId_t sAppEventQueue = *(static_cast<osMessageQueueId_t *>(pvParameter));
 
     CHIP_ERROR err = sAppTask.Init();
     if (err != CHIP_NO_ERROR)
@@ -132,11 +132,11 @@ void AppTask::AppTaskMain(void * pvParameter)
 
     while (true)
     {
-        BaseType_t eventReceived = xQueueReceive(sAppEventQueue, &event, portMAX_DELAY);
+        osStatus_t eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, osWaitForever);
         while (eventReceived == pdTRUE)
         {
             sAppTask.DispatchEvent(&event);
-            eventReceived = xQueueReceive(sAppEventQueue, &event, 0);
+            eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, 0);
         }
     }
 }

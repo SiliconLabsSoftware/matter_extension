@@ -47,7 +47,6 @@ FanControlManager FanControlManager::sFan(FanControlMgr().GetEndPoint());
 
 namespace {
 LEDWidget sFanLED;
-FanControlAttributeAccessInterface sFanControlAttributeAccess(FanControlMgr().GetEndPoint());
 }
 
 CHIP_ERROR FanControlManager::Init()
@@ -378,5 +377,5 @@ void FanControlManager::UpdateFanControlLCD()
 
 void emberAfFanControlClusterInitCallback(EndpointId endpoint)
 {
-    AttributeAccessInterfaceRegistry::Instance().Register(&sFanControlAttributeAccess);
+    // TODO: Check if anything needs to be added here MATTER-4768
 }

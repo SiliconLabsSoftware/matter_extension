@@ -72,6 +72,7 @@ include:
     -   path: ThreadOperationalDataset.h
     -   path: Variant.h
     -   path: PoolWrapper.h
+    -   path: SpanSearchValue.h
 label: libpwtestswrapper
 package: Matter
 provides:

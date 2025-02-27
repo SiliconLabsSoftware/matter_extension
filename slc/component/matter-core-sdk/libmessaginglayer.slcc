@@ -28,6 +28,7 @@ include:
     -   path: ExchangeMgr.h
     -   path: ExchangeHolder.h
     -   path: EphemeralExchangeDispatch.h
+    -   path: ReliableMessageAnalyticsDelegate.h
 label: libmessaginglayer
 package: Matter
 provides:

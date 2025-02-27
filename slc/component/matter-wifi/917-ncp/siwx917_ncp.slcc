@@ -24,13 +24,11 @@ requires:
 - name: spidrv_instance
 
 include:
-- path: third_party/matter_sdk/src/platform/silabs/wifi/rs911x/platform
+- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp
   file_list:
   - path: sl_board_configuration.h
-  - path: sl_board_configuration_SiWx917.h
   - path: sl_si91x_ncp_utility.h
-  - path: rsi_hal.h
-- path: third_party/matter_sdk/src/platform/silabs/wifi/wf200/platform
+- path: third_party/matter_sdk/src/platform/silabs/wifi/ncp
   file_list:
   - path: spi_multiplex.h
 - path: third_party/matter_sdk/src/platform/silabs/rs911x
@@ -41,18 +39,18 @@ include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi
   file_list:
   - path: wfx_msgs.h
-  - path: WifiInterfaceAbstraction.h
-- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-abstraction
+  - path: WifiInterface.h
+- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface
   file_list:
-  - path: WiseconnectInterfaceAbstraction.h
+  - path: WiseconnectWifiInterface.h
 
 source:
 
-- path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterfaceAbstraction.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/rs911x/platform/efx32_ncp_host.c
-- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-abstraction/WiseconnectInterfaceAbstraction.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterface.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/rs911x/platform/sl_si91x_ncp_utility.c
+- path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterface.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp/efx32_ncp_host.c
+- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface/WiseconnectWifiInterface.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp/sl_si91x_ncp_utility.c
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
 

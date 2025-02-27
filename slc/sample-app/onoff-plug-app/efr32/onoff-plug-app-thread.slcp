@@ -77,8 +77,6 @@ component:
     from: matter
   - id: matter_network_commissioning
     from: matter
-  - id: matter_diagnostic_logs
-    from: matter
   - id: matter_switch
     from: matter
   - id: matter_groups

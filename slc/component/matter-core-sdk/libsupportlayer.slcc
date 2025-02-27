@@ -88,6 +88,7 @@ include:
     -   path: ThreadOperationalDataset.h
     -   path: Variant.h
     -   path: PoolWrapper.h
+    -   path: SpanSearchValue.h
 -   path: third_party/matter_sdk/src/lib/support/verhoeff
     file_list:
     -   path: Verhoeff.h

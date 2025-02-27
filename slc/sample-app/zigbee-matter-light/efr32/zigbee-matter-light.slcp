@@ -73,7 +73,6 @@ component:
 - {from: matter, id: matter_group_key_mgmt}
 - {from: matter, id: matter_descriptor}
 - {from: matter, id: matter_localization_configuration}
-- {from: matter, id: matter_diagnostic_logs}
 - {from: matter, id: matter_crypto}
 - {from: matter, id: matter_basic_information}
 - {from: matter, id: matter_lighting}

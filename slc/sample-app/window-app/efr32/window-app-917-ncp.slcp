@@ -30,8 +30,6 @@ component:
     from: matter
   - id: matter_crypto
     from: matter
-  - id: matter_gatt_additional_advertising
-    from: matter
 
   - id: matter_efr32_ncp
     from: matter

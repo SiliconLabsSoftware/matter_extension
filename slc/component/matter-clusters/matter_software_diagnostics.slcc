@@ -18,6 +18,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server
     file_list:
       - path: software-diagnostics-server.h
+      - path: SoftwareDiagnosticsTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
     value: matter_software_diagnostics

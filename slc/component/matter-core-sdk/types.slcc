@@ -21,7 +21,6 @@ include:
     -   path: util/config.h
     -   path: util/binding-table.h
     -   path: util/af-types.h
-    -   path: util/att-storage.h
     -   path: util/im-client-callbacks.h
     -   path: util/attribute-storage.h
     -   path: util/ember-strings.h
@@ -32,7 +31,6 @@ include:
     -   path: util/privilege-storage.h
     -   path: util/MatterCallbacks.h
     -   path: util/basic-types.h
-    -   path: util/ember-compatibility-functions.h
     -   path: util/attribute-storage-null-handling.h
     -   path: util/odd-sized-integers.h
     -   path: util/generic-callbacks.h
@@ -48,6 +46,5 @@ source:
 -   path: third_party/matter_sdk/src/app/util/attribute-metadata.cpp
 -   path: third_party/matter_sdk/src/app/util/ember-strings.cpp
 -   path: third_party/matter_sdk/src/app/util/ember-io-storage.cpp
--   path: third_party/matter_sdk/src/app/util/ember-global-attribute-access-interface.cpp
 ui_hints:
     visibility: never

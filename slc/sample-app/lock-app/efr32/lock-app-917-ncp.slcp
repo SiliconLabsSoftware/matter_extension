@@ -34,8 +34,6 @@ component:
     from: matter
   - id: siwx917_ncp
     from: matter
-  - id: matter_gatt_additional_advertising
-    from: matter
   - id: matter_lock
     from: matter   
   - id: app_common

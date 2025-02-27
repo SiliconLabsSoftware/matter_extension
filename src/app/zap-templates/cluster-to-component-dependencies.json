@@ -72,6 +72,12 @@
     ]
   },
   {
+    "clusterCode": "chime-server",
+    "value": [
+      "%extension-matter%matter_chime"
+    ]
+  },
+  {
     "clusterCode": "color control-server",
     "value": [
       "%extension-matter%matter_color_control"

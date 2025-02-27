@@ -31,13 +31,13 @@
 #endif // QR_CODE_ENABLED
 #endif // DISPLAY_ENABLED
 
-#include <app/clusters/fan-control-server/fan-control-server.h>
+#include <app-common/zap-generated/attribute-type.h>
+#include <app-common/zap-generated/ids/Attributes.h>
 #include <app/clusters/fan-control-server/fan-control-delegate.h>
-#include <app/server/OnboardingCodesUtil.h>
+#include <app/clusters/fan-control-server/fan-control-server.h>
 #include <app/server/Server.h>
 #include <app/util/attribute-storage.h>
-#include <app-common/zap-generated/ids/Attributes.h>
-#include <app-common/zap-generated/attribute-type.h>
+#include <setup_payload/OnboardingCodesUtil.h>
 
 #include <assert.h>
 
@@ -59,13 +59,11 @@ using namespace ::chip::DeviceLayer;
 using namespace chip::app::Clusters::FanControl;
 using namespace chip::app::Clusters;
 
-
 /**********************************************************
  * AppTask Definitions
  *********************************************************/
 
 AppTask AppTask::sAppTask;
-
 
 CHIP_ERROR AppTask::Init()
 {
@@ -129,11 +127,11 @@ void AppTask::AppTaskMain(void * pvParameter)
 
     while (true)
     {
-        osStatus_t eventReceived = osMessageQueueGet(sAppEventQueue, &event, NULL, osWaitForever);
+        osStatus_t eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, osWaitForever);
         while (eventReceived == osOK)
         {
             sAppTask.DispatchEvent(&event);
-            eventReceived = osMessageQueueGet(sAppEventQueue, &event, NULL, 0);
+            eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, 0);
         }
     }
 }

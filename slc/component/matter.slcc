@@ -110,6 +110,7 @@ requires:
   - name: matter_provision
   - name: matter_callbacks
   - name: matter_check_in_message
+  - name: matter_codegen_data_model_sources
   - name: matter_data_model
   - name: matter_data_model_provider
   - name: matter_error

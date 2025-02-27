@@ -135,17 +135,11 @@ void GetTemperatureHumidityWork(intptr_t contextPtr)
     }
 
 #if SL_LCDCTRL_MUX
-    status = sl_wfx_host_pre_lcd_spi_transfer();
-    if (status != SL_STATUS_OK)
-        return status;
+    VerifyOrReturn(sl_wfx_host_pre_lcd_spi_transfer() == SL_STATUS_OK);
 #endif // SL_LCDCTRL_MUX
-
     DMD_updateDisplay();
-
 #if SL_LCDCTRL_MUX
-    status = sl_wfx_host_post_lcd_spi_transfer();
-    if (status != SL_STATUS_OK)
-        return status;
+    VerifyOrReturn(sl_wfx_host_post_lcd_spi_transfer() == SL_STATUS_OK);
 #endif // SL_LCDCTRL_MUX
 
 #if SLI_SI91X_MCU_INTERFACE && CHIP_CONFIG_ENABLE_ICD_SERVER

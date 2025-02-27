@@ -45,7 +45,6 @@ include:
   - path: GeneralFaults.h
   - path: CHIPDeviceEvent.h
   - path: BuildTime.h
-  - path: NFCManager.h
   - path: ThreadStackManager.h
   - path: TestOnlyCommissionableDataProvider.h
   - path: CHIPDeviceError.h
@@ -53,6 +52,8 @@ include:
   file_list:
   - path: GenericPlatformManagerImpl.ipp
   - path: GenericConnectivityManagerImpl_UDP.h
+  - path: GenericPlatformManagerImpl_CMSISOS.h
+  - path: GenericPlatformManagerImpl_CMSISOS.ipp
   - path: GenericPlatformManagerImpl_POSIX.h
   - path: GenericConnectivityManagerImpl_NoThread.h
   - path: GenericConnectivityManagerImpl_WiFi.ipp
@@ -113,7 +114,6 @@ include:
   - path: FreeRTOSConfig.h
   - path: Rpc.h
   - path: silabs_creds.h
-  - path: SilabsTestEventTriggerDelegate.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction
@@ -161,11 +161,11 @@ include:
   - path: siwx917-chip-mbedtls-config.h
 - path: third_party/matter_sdk/src/platform/silabs/wifi
   file_list:
-  - path: WifiInterfaceAbstraction.h
+  - path: WifiInterface.h
   - path: wfx_msgs.h
-- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-abstraction
+- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface/
   file_list:
-  - path: WiseconnectInterfaceAbstraction.h
+  - path: WiseconnectWifiInterface.h
 
 source:
 - path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
@@ -184,9 +184,9 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/WiseMcuSpam.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterface.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-abstraction/WiseconnectInterfaceAbstraction.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterfaceAbstraction.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface/WiseconnectWifiInterface.cpp
+- path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterface.cpp
 
 define:
 - name: CHIP_HAVE_CONFIG_H

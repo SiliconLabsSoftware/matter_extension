@@ -39,7 +39,6 @@ include:
     -   path: GeneralFaults.h
     -   path: CHIPDeviceEvent.h
     -   path: BuildTime.h
-    -   path: NFCManager.h
     -   path: ThreadStackManager.h
     -   path: TestOnlyCommissionableDataProvider.h
     -   path: CHIPDeviceError.h
@@ -47,6 +46,8 @@ include:
     file_list:
     -   path: GenericPlatformManagerImpl.ipp
     -   path: GenericConnectivityManagerImpl_UDP.h
+    -   path: GenericPlatformManagerImpl_CMSISOS.h
+    -   path: GenericPlatformManagerImpl_CMSISOS.ipp
     -   path: GenericPlatformManagerImpl_POSIX.h
     -   path: GenericConnectivityManagerImpl_NoThread.h
     -   path: GenericConnectivityManagerImpl_WiFi.ipp
@@ -111,7 +112,6 @@ include:
     -   path: FreeRTOSConfig.h
     -   path: Rpc.h
     -   path: silabs_creds.h
-    -   path: SilabsTestEventTriggerDelegate.h
     -   path: MemMonitoring.h
     -   path: BaseApplication.h
 -   path: third_party/matter_sdk/src/platform/silabs

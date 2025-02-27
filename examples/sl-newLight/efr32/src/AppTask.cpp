@@ -23,12 +23,12 @@
 #include "LEDWidget.h"
 #ifdef RGB_LED_ENABLED
 #include "led_widget_rgb.h"
-#endif //RGB_LED_ENABLED
+#endif // RGB_LED_ENABLED
 
 #include <app/clusters/on-off-server/on-off-server.h>
-#include <app/server/OnboardingCodesUtil.h>
 #include <app/server/Server.h>
 #include <app/util/attribute-storage.h>
+#include <setup_payload/OnboardingCodesUtil.h>
 
 #include <assert.h>
 
@@ -48,7 +48,6 @@ using namespace chip;
 using namespace ::chip::DeviceLayer;
 
 namespace {
-
 
 #ifdef RGB_LED_ENABLED
 #define LIGHT_LED_RGB &sl_led_rgb_pwm
@@ -123,7 +122,7 @@ CHIP_ERROR AppTask::StartAppTask()
 void AppTask::AppTaskMain(void * pvParameter)
 {
     AppEvent event;
-    QueueHandle_t sAppEventQueue = *(static_cast<QueueHandle_t *>(pvParameter));
+    osMessageQueueId_t sAppEventQueue = *(static_cast<osMessageQueueId_t *>(pvParameter));
 
     CHIP_ERROR err = sAppTask.Init();
     if (err != CHIP_NO_ERROR)
@@ -140,11 +139,11 @@ void AppTask::AppTaskMain(void * pvParameter)
 
     while (true)
     {
-        BaseType_t eventReceived = xQueueReceive(sAppEventQueue, &event, portMAX_DELAY);
+        osStatus_t eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, osWaitForever);
         while (eventReceived == pdTRUE)
         {
             sAppTask.DispatchEvent(&event);
-            eventReceived = xQueueReceive(sAppEventQueue, &event, 0);
+            eventReceived = osMessageQueueGet(sAppEventQueue, &event, nullptr, 0);
         }
     }
 }
@@ -166,12 +165,10 @@ void AppTask::LightActionEventHandler(AppEvent * aEvent)
         if (LightMgr().IsLightOn())
         {
             action = LightingManager::OFF_ACTION;
-
         }
         else
         {
             action = LightingManager::ON_ACTION;
-
         }
         actor = AppEvent::kEventType_Button;
     }
@@ -228,28 +225,28 @@ void AppTask::LightControlEventHandler(AppEvent * aEvent)
 {
     /* 1. Unpack the AppEvent */
     uint8_t light_action = aEvent->LightControlEvent.Action;
-    uint8_t value = aEvent->LightControlEvent.Value;
+    uint8_t value        = aEvent->LightControlEvent.Value;
 
     /* 2. Excute the control command. */
     if (light_action == LightingManager::MOVE_TO_LEVEL)
     {
 #ifdef RGB_LED_ENABLED
         sLightLED.SetLevel(value);
-#endif //RGB_LED_ENABLED
+#endif // RGB_LED_ENABLED
         SILABS_LOG("Level set to: %d.", value);
     }
     else if (light_action == LightingManager::MOVE_TO_HUE)
     {
 #ifdef RGB_LED_ENABLED
         sLightLED.SetHue(value);
-#endif //RGB_LED_ENABLED
+#endif // RGB_LED_ENABLED
         SILABS_LOG("Light LED hue set.");
     }
     else if (light_action == LightingManager::MOVE_TO_SAT)
     {
 #ifdef RGB_LED_ENABLED
         sLightLED.SetSaturation(value);
-#endif //RGB_LED_ENABLED
+#endif // RGB_LED_ENABLED
         SILABS_LOG("Light LED saturation set.");
     }
 }
@@ -272,8 +269,6 @@ void AppTask::ButtonEventHandler(uint8_t button, uint8_t btnAction)
     }
 }
 
-
-
 void AppTask::PostLightActionRequest(int32_t aActor, LightingManager::Action_t aAction)
 {
     AppEvent event;
@@ -285,12 +280,12 @@ void AppTask::PostLightActionRequest(int32_t aActor, LightingManager::Action_t a
 }
 void AppTask::PostLightControlActionRequest(int32_t aActor, LightingManager::Action_t aAction, uint8_t value)
 {
-    AppEvent light_event                    = {};
-    light_event.Type                        = AppEvent::kEventType_Light;
-    light_event.LightControlEvent.Actor     = aActor;
-    light_event.LightControlEvent.Action    = aAction;
-    light_event.LightControlEvent.Value     = value;
-    light_event.Handler                     = LightControlEventHandler;
+    AppEvent light_event                 = {};
+    light_event.Type                     = AppEvent::kEventType_Light;
+    light_event.LightControlEvent.Actor  = aActor;
+    light_event.LightControlEvent.Action = aAction;
+    light_event.LightControlEvent.Value  = value;
+    light_event.Handler                  = LightControlEventHandler;
     PostEvent(&light_event);
 }
 void AppTask::UpdateClusterState(intptr_t context)
