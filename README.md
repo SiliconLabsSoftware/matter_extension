@@ -238,6 +238,11 @@ To stage the Extension for loading it in Studio, invoke the following script pas
 ```
 python3 slc/stage_extension.py <any/location/on/disk>
 ```
+The stage_extension.py script requires that submodules are initialized and checked out. The `sl_setup.py` script already checks out submodules, alternatively, users can manually checkout the submodules using the following commands.
+```
+git submodule sync 
+git submodule update --init
+```
 
 To load a custom Matter Extension in Studio, navigate to Preferences -> Simplicity Studio -> SDKs -> Add Extension. Navigate to the directory where the extension was staged, and click Open -> OK -> Apply and Close.  
 Note: In general, this repo supports the latest Simplicity SDK version. To confirm if you have the appropriate version, check the [matter.slce](./matter.slce) file.
