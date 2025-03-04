@@ -145,9 +145,9 @@ component:
     id: ulp_timers_instance
 
 config_file:
-  - path: ../../../../examples/multi-sensor-app/config/sl_matter_sensor_config.h
+  - path: ../config/sl_matter_sensor_config.h
     file_id: matter_sensor_config
-  - path: ../../../../examples/multi-sensor-app/data_model/multi-sensor-wifi-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/data_model/multi-sensor-wifi-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -155,7 +155,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../examples/multi-sensor-app/include
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -168,17 +168,17 @@ include:
     directory: include
 
 source:
-  - path: ../../../../examples/multi-sensor-app/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../examples/multi-sensor-app/src/SensorManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/src/SensorManager.cpp
     directory: src
-  - path: ../../../../examples/multi-sensor-app/src/SensorsUI.cpp
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/src/SensorsUI.cpp
     directory: src
     condition:
     - matter_lcd_917SOC
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../examples/multi-sensor-app/src/DataModelCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/multi-sensor-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
