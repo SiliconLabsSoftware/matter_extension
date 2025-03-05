@@ -9,7 +9,7 @@ sdk_extension:
   - id: matter
     version: "2.5.1"
   - id: wiseconnect3_sdk
-    version: "3.4.1"
+    version: "3.4.2"
 
 component:
   - id: matter_leds
@@ -80,8 +80,6 @@ component:
   - id: matter_power_source
     from: matter
   - id: matter_ota_support
-    from: matter
-  - id: matter_fw_upgrade_917
     from: matter
   - id: matter_default_lcd_config
     from: matter
