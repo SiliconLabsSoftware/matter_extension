@@ -26,6 +26,9 @@ include:
   file_list:
   - path: WifiInterface.h
   - path: wfx_msgs.h
+- path: third_party/matter_sdk/src/platform/silabs/wifi/rs911x
+  file_list:
+  - path: WifiInterfaceImpl.h
 - path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface
   file_list:
   - path: WiseconnectWifiInterface.h

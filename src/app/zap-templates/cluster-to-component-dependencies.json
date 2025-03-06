@@ -12,6 +12,12 @@
     ]
   },
   {
+    "clusterCode": "actions-server",
+    "value": [
+      "%extension-matter%matter_actions"
+    ]
+  },
+  {
     "clusterCode": "administrator commissioning-server",
     "value": [
       "%extension-matter%matter_administrator_commissioning"
@@ -75,6 +81,12 @@
     "clusterCode": "chime-server",
     "value": [
       "%extension-matter%matter_chime"
+    ]
+  },
+  {
+    "clusterCode": "closure control-server",
+    "value": [
+      "%extension-matter%matter_closure_control"
     ]
   },
   {
