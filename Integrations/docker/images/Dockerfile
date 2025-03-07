@@ -15,7 +15,7 @@ RUN set -x \
 
 
 # Download Simplicity SDK v2024.12.1 (da661283f3)
-RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.1-0/simplicity-sdk.zip-O /tmp/simplicity_sdk.zip \
+RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.1-0/simplicity-sdk.zip /tmp/simplicity_sdk.zip \
     && unzip /tmp/simplicity_sdk.zip -d /tmp/simplicity_sdk \
     && rm -rf /tmp/simplicity_sdk.zip \
     # Deleting files that are not needed to save space
