@@ -1,6 +1,9 @@
 name: tag-latest
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - .github/workflows/tag_latest.yml
 jobs:
   tag-latest-efr32-image:
     runs-on: ubuntu-latest
@@ -17,9 +20,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set version variable
+        run: echo "VERSION=SiSDKv2024.12.1_WiFi_SDKv3.4.1" >> $GITHUB_ENV
       - name: Build the matter_extension_dependencies Docker image
         run: |
-          docker pull ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0
-          docker tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.0_WiFi_SDKv3.4.0 ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+          docker pull ghcr.io/siliconlabssoftware/matter_extension_dependencies:${{ env.VERSION }}
+          docker tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:${{ env.VERSION }} ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
           docker push ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
           
