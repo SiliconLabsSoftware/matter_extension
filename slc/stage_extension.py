@@ -33,7 +33,7 @@ matter_sdk_exclude = ['third_party','zzz_generated']
 wiseconnect_wifi_bt_sdk_includes = ['sapi']
 
 # Specific includes for matter_support
-matter_support_includes = ['provision', 'mbedtls', "si91x"]
+matter_support_includes = ['provision', 'tinycryt', "board-support"]
 
 def should_exclude(root, path):
     """
@@ -53,16 +53,11 @@ def should_exclude(root, path):
             return True
 
     # Check for matter_support specific includes
-    if "matter_support/matter/" in full_path:
+    if "matter_support/" in full_path:
         if not any(include in full_path for include in matter_support_includes):
             #print(f"Excluding matter_support path: {full_path}")
             return True
     
-    # Exclude other matter_support directories
-    if "matter_support/" in full_path and "matter_support/matter" not in full_path:
-        #print(f"Excluding other matter_support path: {full_path}")
-        return True
-
     # Exclude submodules
     if "third_party/" in full_path:
         if any(exclude in full_path for exclude in exlude_submodules):
