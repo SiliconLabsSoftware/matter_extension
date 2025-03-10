@@ -22,9 +22,10 @@
 [submodule "third_party/wiseconnect-wifi-bt-sdk"]
 	path = third_party/wiseconnect-wifi-bt-sdk
 	url = https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git
-[submodule "third_party/sdk_support"]
+[submodule "third_party/matter_support"]
 	path = third_party/matter_support
-	url = https://github.com/SiliconLabs/sdk_support
+	url = https://github.com/SiliconLabsSoftware/matter_support.git
+	branch = release_2.5-1.4
 [submodule "nlio"]
 	path = third_party/nlio
 	url = https://github.com/nestlabs/nlio.git
