@@ -311,3 +311,6 @@ upgrade:
         description: matter_fw_upgrade_917 is removed since firmware component is added by default from WiFi SDK.
         remove:
           - matter_fw_upgrade_917
+
+    configuration:
+      - script: slc/config/scripts/upgrade_config_to_2.5.2.lua
