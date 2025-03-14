@@ -50,7 +50,7 @@ It will also create `environment_variables_vscode.txt`. This file can be referen
 
 For Mac and Linux:
 ```sh
-python3 sl_setup_env.py
+python3 slc/sl_setup_env.py
 ```
 
 For Windows:
