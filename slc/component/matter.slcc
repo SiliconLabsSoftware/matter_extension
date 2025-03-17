@@ -101,6 +101,7 @@ requires:
   - name: matter_libtransportlayer
   - name: configuration_over_swo
   - name: matter_ot_mbedtls_override
+  - name: matter_server_cluster
   - name: matter_syscall_stubs
   - name: matter_nlassert
   - name: matter_nlio

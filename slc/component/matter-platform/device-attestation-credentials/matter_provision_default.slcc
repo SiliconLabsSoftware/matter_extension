@@ -27,16 +27,15 @@ conflicts:
 
 include:
 - path: third_party/matter_support/provision
-- path: third_party/matter_support/provision/headers
   file_list:
-  - path: AttestationKey.h
-  - path: ProvisionChannel.h
-  - path: ProvisionEncoder.h
-  - path: ProvisionManager.h
-  - path: ProvisionProtocol.h
-  - path: ProvisionStorage.h
-  - path: ProvisionStorageGeneric.h
-  - path: ProvisionedDataProvider.h
+  - path: headers/AttestationKey.h
+  - path: headers/ProvisionChannel.h
+  - path: headers/ProvisionEncoder.h
+  - path: headers/ProvisionManager.h
+  - path: headers/ProvisionProtocol.h
+  - path: headers/ProvisionStorage.h
+  - path: headers/ProvisionStorageGeneric.h
+  - path: headers/ProvisionedDataProvider.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageDefault.cpp
