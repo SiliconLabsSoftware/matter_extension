@@ -15,8 +15,6 @@ component:
   id: cli
 - id: iostream_stdio
 - id: segger_rtt
-- instance: [vcom]
-  id: uartdrv_eusart
 #Zigbee Components
 - id: zigbee_ble_dmp_cli
 - id: zigbee_address_table
@@ -259,4 +257,4 @@ ui_hints:
 
 sdk_extension:
   - id: matter
-    version: "2.5.1"
+    version: "2.5.2"
