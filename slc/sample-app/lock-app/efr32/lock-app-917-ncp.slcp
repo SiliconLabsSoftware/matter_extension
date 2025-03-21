@@ -108,10 +108,6 @@ component:
     from: matter
 
 
-  # Copy of the component to point to a different sl_net_for_lwip.c file
-  - id: network_manager
-    from: matter
-
   # Copy of the component to remove the default lwipopts.h file
   - id: wifi_resources
     from: matter
