@@ -4,12 +4,12 @@
 	branch = release_2.6-1.4
 [submodule "third_party/simplicity_sdk"]
 	path = third_party/simplicity_sdk
-	url = https://github.com/SiliconLabs/simplicity_sdk.git
-	branch = sisdk-2024.12
+    url = https://stash.silabs.com/scm/embsw/sisdk_release.git
+	branch = staging/2024.12/2024.12.2-cf
 [submodule "third_party/wifi_sdk"]
 	path = third_party/wifi_sdk
 	url = https://github.com/SiliconLabs/wiseconnect.git
-	branch = v3.4.2-ifc2
+	branch = v3.4.2-cf
 [submodule "third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk"]
 	path = third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk
 	url = https://github.com/aws/ota-for-aws-iot-embedded-sdk.git

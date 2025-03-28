@@ -83,7 +83,7 @@ CHIP_ERROR AppTask::AppInit()
 
 // Show QR Code if not provisioned
 #ifdef QR_CODE_ENABLED
-    if (BaseApplication::GetProvisionStatus())
+    if (!BaseApplication::GetProvisionStatus())
     {
         GetLCD().ShowQRCode(true);
         mCurrentSensorUI = kSensorUIEnum::kQrCode;
