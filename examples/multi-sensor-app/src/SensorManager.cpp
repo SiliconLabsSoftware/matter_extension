@@ -170,13 +170,13 @@ CHIP_ERROR Init()
 #if defined(SL_MATTER_USE_SI70XX_SENSOR) && SL_MATTER_USE_SI70XX_SENSOR
     VerifyOrDieWithMsg(Si70xxSensor::Init() == SL_STATUS_OK, AppServer, "Failed to initialize the sensor!");
 #endif // defined(SL_MATTER_USE_SI70XX_SENSOR) && SL_MATTER_USE_SI70XX_SENSOR
+    isInitialised = true;
 
     VerifyOrDieWithMsg(DeviceLayer::PlatformMgr().ScheduleWork([](intptr_t arg) {
         SensorActionTriggered(&chip::DeviceLayer::SystemLayer(), nullptr);
     }) == CHIP_NO_ERROR,
                        AppServer, "Failed to schedule the first SensorCallback!");
 
-    isInitialised = true;
     return CHIP_NO_ERROR;
 }
 
