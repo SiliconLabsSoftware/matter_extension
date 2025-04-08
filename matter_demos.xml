@@ -1,15 +1,5 @@
 <?xml version="1.0" ?>
 <demos xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.silabs.com/ss/Demo.ecore">
-	<demo name="brd4116a.demo.zigbee_matter_light_sequential_app_thread" label="Matter - SoC Zigbee Matter Light Sequential over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4116A/OpenThread/zigbee-matter-light-sequential.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-sequential-app/efr32/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Sequential Application over Thread for BRD4116A</description>
-	</demo>
 	<demo name="brd4116a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -29,6 +19,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application over Thread for BRD4116A</description>
+	</demo>
+	<demo name="brd4116a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4116a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4116A/OpenThread/zigbee-matter-light-thread-sequential.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4116A</description>
 	</demo>
 	<demo name="brd4116a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
@@ -90,15 +90,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Dishwasher Application over Thread for BRD4116A</description>
 	</demo>
-	<demo name="brd4116a.demo.zigbee_matter_light_concurrent_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
+	<demo name="brd4116a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4116A/OpenThread/zigbee-matter-light-concurrent.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-concurrent-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4116A/OpenThread/zigbee-matter-light-thread-concurrent.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD4116A</description>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4116A</description>
 	</demo>
 	<demo name="brd4116a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
@@ -230,115 +230,115 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application for BRD2605A with SiWx917 Wi-Fi SoC</description>
 	</demo>
-	<demo name="brd4351a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
+	<demo name="brd4351a_a05.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/air-quality-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Air Quality Sensor Application over Thread for BRD4351A</description>
+		<description>This is a Matter Air Quality Sensor Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
+	<demo name="brd4351a_a05.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/window-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Window Covering Application over Thread for BRD4351A</description>
+		<description>This is a Matter Window Covering Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
+	<demo name="brd4351a_a05.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/lighting-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lighting Application over Thread for BRD4351A</description>
+		<description>This is a Matter Lighting Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
+	<demo name="brd4351a_a05.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/light-switch-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Light Switch Application over Thread for BRD4351A</description>
+		<description>This is a Matter Light Switch Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
+	<demo name="brd4351a_a05.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/thermostat-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Thermostat Application over Thread for BRD4351A</description>
+		<description>This is a Matter Thermostat Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
+	<demo name="brd4351a_a05.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
 		<property key="demos.blurb" value="Matter - SoC Performance Test app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/performance-test-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/performance-test-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Performance Test Application over Thread for BRD4351A</description>
+		<description>This is a Matter Performance Test Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+	<demo name="brd4351a_a05.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/multi-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Multi Sensor Application over Thread for BRD4351A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
+	<demo name="brd4351a_a05.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/onoff-plug-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Onoff Plug Application over Thread for BRD4351A</description>
+		<description>This is a Matter Onoff Plug Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
+	<demo name="brd4351a_a05.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
 		<property key="demos.blurb" value="Matter - SoC Dishwasher app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/dishwasher-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Dishwasher Application over Thread for BRD4351A</description>
+		<description>This is a Matter Dishwasher Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
+	<demo name="brd4351a_a05.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/lock-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lock Application over Thread for BRD4351A</description>
+		<description>This is a Matter Lock Application over Thread for BRD4351A_A05</description>
 	</demo>
-	<demo name="brd4351a.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
+	<demo name="brd4351a_a05.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A_A05/OpenThread/refrigerator-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/refrigerator-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Refrigerator Application over Thread for BRD4351A</description>
+		<description>This is a Matter Refrigerator Application over Thread for BRD4351A_A05</description>
 	</demo>
 	<demo name="brd4317a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -440,16 +440,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Refrigerator Application over Thread for BRD4317A</description>
 	</demo>
-	<demo name="brd4187c.demo.zigbee_matter_light_sequential_app_thread" label="Matter - SoC Zigbee Matter Light Sequential over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/OpenThread/zigbee-matter-light-sequential.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-sequential-app/efr32/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Sequential Application over Thread for BRD4187C</description>
-	</demo>
 	<demo name="brd4187c.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -469,6 +459,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application over Thread for BRD4187C</description>
+	</demo>
+	<demo name="brd4187c.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4187c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/OpenThread/zigbee-matter-light-thread-sequential.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4187C</description>
 	</demo>
 	<demo name="brd4187c.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
@@ -540,15 +540,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Dishwasher Application over Thread for BRD4187C</description>
 	</demo>
-	<demo name="brd4187c.demo.zigbee_matter_light_concurrent_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
+	<demo name="brd4187c.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/OpenThread/zigbee-matter-light-concurrent.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-concurrent-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/OpenThread/zigbee-matter-light-thread-concurrent.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD4187C</description>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4187C</description>
 	</demo>
 	<demo name="brd4187c.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
@@ -599,6 +599,36 @@
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application for BRD4187C to be used with Wi-Fi 917-NCP</description>
+	</demo>
+	<demo name="brd4187c.demo.lock_app_917_ncp_brd4357a" label="Matter - NCP Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4187c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/WiFi/lock-app-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lock Application for BRD4187C to be used with Wi-Fi 917-NCP-BRD4357A</description>
+	</demo>
+	<demo name="brd4187c.demo.window_app_917_ncp_brd4357a" label="Matter - NCP Window Covering over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Window Covering app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4187c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/WiFi/window-app-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Window Covering Application for BRD4187C to be used with Wi-Fi 917-NCP-BRD4357A</description>
+	</demo>
+	<demo name="brd4187c.demo.thermostat_app_917_ncp_brd4357a" label="Matter - NCP Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4187c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4187C/WiFi/thermostat-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Thermostat Application for BRD4187C to be used with Wi-Fi 917-NCP-BRD4357A</description>
 	</demo>
 	<demo name="brd4187c.demo.lock_app_wf200" label="Matter - NCP Lock over Wi-Fi">
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
@@ -850,115 +880,115 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Refrigerator Application over Thread for BRD4121A</description>
 	</demo>
-	<demo name="brd4350a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
+	<demo name="brd4350a_a05.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/air-quality-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Air Quality Sensor Application over Thread for BRD4350A</description>
+		<description>This is a Matter Air Quality Sensor Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
+	<demo name="brd4350a_a05.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/window-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Window Covering Application over Thread for BRD4350A</description>
+		<description>This is a Matter Window Covering Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
+	<demo name="brd4350a_a05.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/lighting-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lighting Application over Thread for BRD4350A</description>
+		<description>This is a Matter Lighting Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
+	<demo name="brd4350a_a05.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/light-switch-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Light Switch Application over Thread for BRD4350A</description>
+		<description>This is a Matter Light Switch Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
+	<demo name="brd4350a_a05.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/thermostat-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Thermostat Application over Thread for BRD4350A</description>
+		<description>This is a Matter Thermostat Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
+	<demo name="brd4350a_a05.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
 		<property key="demos.blurb" value="Matter - SoC Performance Test app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/performance-test-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/performance-test-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Performance Test Application over Thread for BRD4350A</description>
+		<description>This is a Matter Performance Test Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
+	<demo name="brd4350a_a05.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/multi-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Multi Sensor Application over Thread for BRD4350A</description>
+		<description>This is a Matter Multi Sensor Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
+	<demo name="brd4350a_a05.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/onoff-plug-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Onoff Plug Application over Thread for BRD4350A</description>
+		<description>This is a Matter Onoff Plug Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
+	<demo name="brd4350a_a05.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
 		<property key="demos.blurb" value="Matter - SoC Dishwasher app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/dishwasher-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Dishwasher Application over Thread for BRD4350A</description>
+		<description>This is a Matter Dishwasher Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
+	<demo name="brd4350a_a05.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/lock-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lock Application over Thread for BRD4350A</description>
+		<description>This is a Matter Lock Application over Thread for BRD4350A_A05</description>
 	</demo>
-	<demo name="brd4350a.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
+	<demo name="brd4350a_a05.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
-		<property key="core.partCompatibility" value=".*mgm260pd.*"/>
-		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a05"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A_A05/OpenThread/refrigerator-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/refrigerator-app/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Refrigerator Application over Thread for BRD4350A</description>
+		<description>This is a Matter Refrigerator Application over Thread for BRD4350A_A05</description>
 	</demo>
 	<demo name="brd4319a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -1052,7 +1082,7 @@
 	</demo>
 	<demo name="brd4350a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/air-quality-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
@@ -1062,7 +1092,7 @@
 	</demo>
 	<demo name="brd4350a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/window-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
@@ -1072,7 +1102,7 @@
 	</demo>
 	<demo name="brd4350a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/lighting-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
@@ -1082,7 +1112,7 @@
 	</demo>
 	<demo name="brd4350a.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/light-switch-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
@@ -1092,7 +1122,7 @@
 	</demo>
 	<demo name="brd4350a.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/thermostat-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README.md"/>
@@ -1102,7 +1132,7 @@
 	</demo>
 	<demo name="brd4350a.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
 		<property key="demos.blurb" value="Matter - SoC Performance Test app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/performance-test-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/performance-test-app/efr32/README.md"/>
@@ -1112,7 +1142,7 @@
 	</demo>
 	<demo name="brd4350a.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/multi-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
@@ -1122,7 +1152,7 @@
 	</demo>
 	<demo name="brd4350a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/onoff-plug-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
@@ -1132,7 +1162,7 @@
 	</demo>
 	<demo name="brd4350a.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
 		<property key="demos.blurb" value="Matter - SoC Dishwasher app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/dishwasher-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
@@ -1142,7 +1172,7 @@
 	</demo>
 	<demo name="brd4350a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/lock-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
@@ -1152,7 +1182,7 @@
 	</demo>
 	<demo name="brd4350a.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4350a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4350A/OpenThread/refrigerator-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/refrigerator-app/efr32/README.md"/>
@@ -1370,16 +1400,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Refrigerator Application over Thread for BRD2608A</description>
 	</demo>
-	<demo name="brd4118a.demo.zigbee_matter_light_sequential_app_thread" label="Matter - SoC Zigbee Matter Light Sequential over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4118A/OpenThread/zigbee-matter-light-sequential.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-sequential-app/efr32/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Sequential Application over Thread for BRD4118A</description>
-	</demo>
 	<demo name="brd4118a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -1399,6 +1419,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application over Thread for BRD4118A</description>
+	</demo>
+	<demo name="brd4118a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4118a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4118A/OpenThread/zigbee-matter-light-thread-sequential.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4118A</description>
 	</demo>
 	<demo name="brd4118a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
@@ -1590,15 +1620,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application for BRD4342A with SiWx917 Wi-Fi SoC</description>
 	</demo>
-	<demo name="brd1019a.demo.zigbee_matter_light_sequential_app_thread" label="Matter - SoC Zigbee Matter Light Sequential over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
+	<demo name="brd1019a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD1019A/OpenThread/zigbee-matter-light-sequential.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-sequential-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD1019A/OpenThread/zigbee-matter-light-thread-sequential.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Sequential Application over Thread for BRD1019A</description>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD1019A</description>
 	</demo>
 	<demo name="brd1019a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
@@ -1610,15 +1640,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lighting Application over Thread for BRD1019A</description>
 	</demo>
-	<demo name="brd1019a.demo.zigbee_matter_light_concurrent_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
+	<demo name="brd1019a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD1019A/OpenThread/zigbee-matter-light-concurrent.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-concurrent-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD1019A/OpenThread/zigbee-matter-light-thread-concurrent.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD1019A</description>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD1019A</description>
 	</demo>
 	<demo name="brd4343a.demo.SiWx917_dishwasher_example_app_siwx917" label="Matter - SoC Dishwasher over Wi-Fi">
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Dishwasher app"/>
@@ -1822,7 +1852,7 @@
 	</demo>
 	<demo name="brd4351a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/air-quality-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/air-quality-sensor-app/efr32/README.md"/>
@@ -1832,7 +1862,7 @@
 	</demo>
 	<demo name="brd4351a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/window-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README.md"/>
@@ -1842,7 +1872,7 @@
 	</demo>
 	<demo name="brd4351a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/lighting-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
@@ -1852,7 +1882,7 @@
 	</demo>
 	<demo name="brd4351a.demo.light_switch_app_thread" label="Matter - SoC Light Switch over Thread">
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/light-switch-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/light-switch-app/efr32/README.md"/>
@@ -1862,7 +1892,7 @@
 	</demo>
 	<demo name="brd4351a.demo.thermostat_app_thread" label="Matter - SoC Thermostat over Thread">
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/thermostat-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README.md"/>
@@ -1872,7 +1902,7 @@
 	</demo>
 	<demo name="brd4351a.demo.performance_test_app_thread" label="Matter - SoC Performance Test over Thread">
 		<property key="demos.blurb" value="Matter - SoC Performance Test app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/performance-test-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/performance-test-app/efr32/README.md"/>
@@ -1882,7 +1912,7 @@
 	</demo>
 	<demo name="brd4351a.demo.multi_sensor_app_thread" label="Matter - SoC Multi Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/multi-sensor-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/multi-sensor-app/efr32/README.md"/>
@@ -1892,7 +1922,7 @@
 	</demo>
 	<demo name="brd4351a.demo.onoff_plug_app_thread" label="Matter - SoC Onoff Plug over Thread">
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/onoff-plug-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/onoff-plug-app/efr32/README.md"/>
@@ -1902,7 +1932,7 @@
 	</demo>
 	<demo name="brd4351a.demo.dishwasher_app_thread" label="Matter - SoC Dishwasher over Thread">
 		<property key="demos.blurb" value="Matter - SoC Dishwasher app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/dishwasher-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/dishwasher-app/efr32/README.md"/>
@@ -1912,7 +1942,7 @@
 	</demo>
 	<demo name="brd4351a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/lock-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README.md"/>
@@ -1922,7 +1952,7 @@
 	</demo>
 	<demo name="brd4351a.demo.refrigerator_app_thread" label="Matter - SoC Refrigerator over Thread">
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
-		<property key="core.partCompatibility" value=".*mgm260pb.*"/>
+		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4351a"/>
 		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4351A/OpenThread/refrigerator-app-thread.s37"/>
 		<property key="core.readmeFiles" value="slc/sample-app/refrigerator-app/efr32/README.md"/>
@@ -2380,6 +2410,36 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application for BRD4186C to be used with Wi-Fi 917-NCP</description>
 	</demo>
+	<demo name="brd4186c.demo.lock_app_917_ncp_brd4357a" label="Matter - NCP Lock over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Lock app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4186C/WiFi/lock-app-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lock-app/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lock Application for BRD4186C to be used with Wi-Fi 917-NCP-BRD4357A</description>
+	</demo>
+	<demo name="brd4186c.demo.window_app_917_ncp_brd4357a" label="Matter - NCP Window Covering over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Window Covering app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4186C/WiFi/window-app-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/window-app/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Window Covering Application for BRD4186C to be used with Wi-Fi 917-NCP-BRD4357A</description>
+	</demo>
+	<demo name="brd4186c.demo.thermostat_app_917_ncp_brd4357a" label="Matter - NCP Thermostat over Wi-Fi">
+		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4186C/WiFi/thermostat-917-ncp-brd4357a.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/thermostat/efr32/README_WiFi.md"/>
+		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Thermostat Application for BRD4186C to be used with Wi-Fi 917-NCP-BRD4357A</description>
+	</demo>
 	<demo name="brd4186c.demo.lock_app_wf200" label="Matter - NCP Lock over Wi-Fi">
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -2710,15 +2770,15 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Dishwasher Application over Thread for BRD4117A</description>
 	</demo>
-	<demo name="brd4117a.demo.zigbee_matter_light_concurrent_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
+	<demo name="brd4117a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4117A/OpenThread/zigbee-matter-light-concurrent.s37"/>
-		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-concurrent-app/efr32/README.md"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4117A/OpenThread/zigbee-matter-light-thread-concurrent.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light/efr32/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD4117A</description>
+		<description>This is a Matter Zigbee Matter Light Application over Thread for BRD4117A</description>
 	</demo>
 	<demo name="brd4117a.demo.lock_app_thread" label="Matter - SoC Lock over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
