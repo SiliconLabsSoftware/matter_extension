@@ -14,13 +14,12 @@ requires:
   - name: matter_siwx917_common
   - name: sl_si91x_trng
   - name: siwx917_soc_custom_hal
-  - name: device_init_nvic
   - name: si91x_debug
   - name: sl_system_init
   - name: nvm3_default
   - name: memory_manager
   - name: memory_manager_pool
-  - name: freertos_heap_3
+  - name: freertos_heap_4
 # TODO : psram components - should be removed with wiseconnect SDK support
   - name: psram_core
     condition: [brd4342a]
