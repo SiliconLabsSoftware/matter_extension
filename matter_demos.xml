@@ -1620,6 +1620,36 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD1019A</description>
 	</demo>
+		<demo name="brd4407a.demo.zigbee_matter_light_sequential_app_thread" label="Matter - SoC Zigbee Matter Light Sequential over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4407a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4407A/OpenThread/zigbee-matter-light-sequential.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-sequential-app/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Zigbee Matter Light Sequential Application over Thread for BRD4407A</description>
+	</demo>
+	<demo name="brd4407a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
+		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4407a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4407A/OpenThread/lighting-app-thread.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/lighting-app/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Lighting Application over Thread for BRD4407A</description>
+	</demo>
+	<demo name="brd4407a.demo.zigbee_matter_light_concurrent_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
+		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4407a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.5.2/demos/BRD4407A/OpenThread/zigbee-matter-light-concurrent.s37"/>
+		<property key="core.readmeFiles" value="slc/sample-app/zigbee-matter-light-concurrent-app/efr32/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Zigbee Matter Light Concurrent Application over Thread for BRD4407A</description>
+	</demo>
 	<demo name="brd4343a.demo.SiWx917_dishwasher_example_app_siwx917" label="Matter - SoC Dishwasher over Wi-Fi">
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Dishwasher app"/>
 		<property key="core.partCompatibility" value=".*"/>

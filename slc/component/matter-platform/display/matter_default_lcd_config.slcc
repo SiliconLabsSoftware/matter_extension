@@ -11,6 +11,9 @@ metadata:
 requires:
   - name: matter_lcd
     condition: 
+      - brd4407a
+  - name: matter_lcd
+    condition: 
       - brd1019a
   - name: matter_lcd
     condition: 
