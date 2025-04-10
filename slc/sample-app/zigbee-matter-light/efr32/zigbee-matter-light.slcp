@@ -137,6 +137,8 @@ tag:
 - hardware:device:ram:192 
 
 configuration:
+- name: SL_TOKEN_MANAGER_STATIC_SECURE_TOKEN_SIZE
+  value: 8192
 - name: SL_BOARD_ENABLE_VCOM
   value: 1
 - condition: [iostream_eusart]
