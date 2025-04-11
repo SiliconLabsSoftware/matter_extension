@@ -104,7 +104,7 @@ Sample-App Example:
 For Mac and Linux:
 
 ```sh
-python3 sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
+python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
 ```
 
 For Windows:
