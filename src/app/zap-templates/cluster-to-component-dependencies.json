@@ -72,6 +72,12 @@
     ]
   },
   {
+    "clusterCode": "camera av stream management-server",
+    "value": [
+      "%extension-matter%matter_camera_av_stream_management"
+    ]
+  },
+  {
     "clusterCode": "channel-server",
     "value": [
       "%extension-matter%matter_channel"
@@ -525,6 +531,18 @@
     "clusterCode": "water heater management-server",
     "value": [
       "%extension-matter%matter_water_heater_management"
+    ]
+  },
+  {
+    "clusterCode": "webrtc transport provider-server",
+    "value": [
+      "%extension-matter%matter_webrtc_transport_provider"
+    ]
+  },
+  {
+    "clusterCode": "webrtc transport requestor-server",
+    "value": [
+      "%extension-matter%matter_webrtc_transport_requestor"
     ]
   },
   {

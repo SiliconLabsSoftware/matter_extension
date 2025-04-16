@@ -25,3 +25,4 @@ provides:
 requires:
   - name: matter_lwip
   - name: matter_minimal_mdns
+  - name: matter_power_save_interface
