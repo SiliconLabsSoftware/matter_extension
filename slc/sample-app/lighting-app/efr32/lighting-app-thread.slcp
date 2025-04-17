@@ -14,6 +14,10 @@ component:
   - id: sl_system
   - id: clock_manager
   - id: ot_stack_ftd
+  - id: common_token_manager_nvm3
+    condition: [device_series_3]
+  - id: common_token_manager
+    condition: [device_series_3]
   - id: matter_buttons
     from: matter
   - id: matter_leds
@@ -151,6 +155,9 @@ define:
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
 configuration:
+  - name: SL_TOKEN_MANAGER_STATIC_SECURE_TOKEN_SIZE
+    value: 8192
+    condition: [device_series_3]
   - name: SL_OPENTHREAD_ENABLE_APP_TASK
     value: 0
   - name: SL_OPENTHREAD_ENABLE_CLI_TASK
