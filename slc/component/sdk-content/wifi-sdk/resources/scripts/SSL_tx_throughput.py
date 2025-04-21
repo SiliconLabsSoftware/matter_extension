@@ -34,7 +34,7 @@ def ssl_tx():
 
 
 server_socket = socket(AF_INET, SOCK_STREAM)
-server_socket.bind(('0.0.0.0', 443))
+server_socket.bind(('192.168.1.100', 443))  # Replace with the specific IP address of the server
 server_socket.listen(10)
 
 # Choose the appropriate protocol based on the Python version
