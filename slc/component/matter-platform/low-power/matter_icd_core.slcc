@@ -22,6 +22,10 @@ requires:
   condition: [matter_platform_siwx917]
 - name: matter_sleep_manager
   condition: [matter_wifi]
+- name: wakeup_source_config
+  condition: [matter_platform_siwx917]
+- name: gpio_npss_component
+  condition: [matter_platform_siwx917]
 
 conflicts:
 - name: ot_stack_ftd
@@ -49,6 +53,15 @@ define:
 # TODO : Enable this macro for PSRAM power save application, need to cleanup
 - name: SLI_SI91X_MCU_ENABLE_PSRAM_FEATURE
   condition: [brd4342a]
+
+configuration:
+# Wakeup configurations
+- name: SL_ENABLE_GPIO_WAKEUP_SOURCE
+  value: "1"
+  condition: [matter_platform_siwx917]
+- name: ENABLE_NPSS_GPIO_2
+  value: "1"
+  condition: [matter_platform_siwx917]
 
 documentation:
   docset: matter
