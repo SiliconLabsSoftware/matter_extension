@@ -77,8 +77,7 @@ public:
 private:
     static AppTask sAppTask;
 
-    static void ActionInitiated(OnOffPlugManager::Action_t aAction, int32_t aActor);
-    static void ActionCompleted(OnOffPlugManager::Action_t aAction);
+    static void ActionCallback(OnOffPlugManager::Action_t aAction, int32_t aActor);
     static void OnOffActionEventHandler(AppEvent * aEvent);
 
     static void UpdateClusterState(intptr_t context);
