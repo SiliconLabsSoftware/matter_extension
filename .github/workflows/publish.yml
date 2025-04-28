@@ -21,7 +21,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Set version variable
-        run: echo "VERSION=SiSDKv2024.12.1_WiFi_SDKv3.4.1" >> $GITHUB_ENV
+        run: echo "VERSION=SiSDKv2024.12.2_WiFi_SDKv3.5.0-FC" >> $GITHUB_ENV
       - name: Build the matter_extension_dependencies Docker image
         run: |
           docker build -f Integrations/docker/images/Dockerfile . --tag ghcr.io/siliconlabssoftware/matter_extension_dependencies:${{ env.VERSION }}
