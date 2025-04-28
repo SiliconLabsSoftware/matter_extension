@@ -208,6 +208,14 @@ configuration:
   - { name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED, value: "1" }
   - { name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION, value: "0" }
 
+  # Wakeup configurations
+  - {
+      name: SL_ENABLE_GPIO_WAKEUP_SOURCE,
+      value: "1",
+      condition: [matter_icd_core],
+    }
+  - { name: ENABLE_NPSS_GPIO_2, value: "1", condition: [matter_icd_core] }
+
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17

@@ -54,15 +54,6 @@ define:
 - name: SLI_SI91X_MCU_ENABLE_PSRAM_FEATURE
   condition: [brd4342a]
 
-configuration:
-# Wakeup configurations
-- name: SL_ENABLE_GPIO_WAKEUP_SOURCE
-  value: "1"
-  condition: [matter_platform_siwx917]
-- name: ENABLE_NPSS_GPIO_2
-  value: "1"
-  condition: [matter_platform_siwx917]
-
 documentation:
   docset: matter
   document: matter-overview-guides/matter-icd
