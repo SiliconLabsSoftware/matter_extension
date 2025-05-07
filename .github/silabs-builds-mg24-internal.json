@@ -1,0 +1,11 @@
+{
+    "standard": {
+
+        "default": [
+            {
+                "boards": ["brd2703a"],
+                "arguments": [""]
+            }
+        ]
+    } 
+}
