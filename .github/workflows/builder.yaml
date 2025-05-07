@@ -1,0 +1,55 @@
+name: Common Builder
+
+on:
+    workflow_call:
+        inputs:
+            json-file-path:
+                required: true
+                type: string
+            path-to-example-app:
+                required: true
+                type: string
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            platform:
+                required: true
+                type: string
+
+jobs:
+    build:
+        name: ${{ inputs.platform }}-build-job
+        runs-on: ubuntu-latest
+        container:
+            image: ghcr.io/project-chip/chip-build-efr32:115
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+              with:
+                submodules: 'true'
+                lfs: true
+
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+
+            - name: Build ${{ inputs.example-app }}
+              uses: SiliconLabsSoftware/matter_build_action@3fa7357e526337fb8f370a20158b8857aeb708ab
+              with:
+                  json-file-path: ${{ inputs.json-file-path }}
+                  path-to-example-app: ${{ inputs.path-to-example-app }}
+                  example-app: ${{ inputs.example-app }}
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: ${{ inputs.build-type }}
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
+                  path: out/*/*/artifact
+                  if-no-files-found: error
+                  overwrite: true
