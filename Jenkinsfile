@@ -28,7 +28,6 @@ def pipeline()
             // export the NFS overlay
             sh 'sudo exportfs -af'
         } 
-        pipelineFunctions.runScript()
     }
 }
 
