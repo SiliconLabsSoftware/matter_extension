@@ -27,7 +27,7 @@ include:
       - path: Server.h
       - path: CommissioningModeProvider.h
 label: libchipappserver
-package: Matter
+package: matter
 provides:
   - name: matter_libchipappserver
 quality: production

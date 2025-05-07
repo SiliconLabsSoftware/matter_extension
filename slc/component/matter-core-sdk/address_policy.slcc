@@ -30,7 +30,7 @@ include:
       - path: Server.h
       - path: RecordData.h
 label: address_policy
-package: Matter
+package: matter
 provides:
   - name: matter_address_policy
 quality: production

@@ -1,6 +1,6 @@
 id: toolchain_gcc_common
 label: Common Flash GCC Toolchain
-package: Matter
+package: matter
 description: Common Flash Toolchain support for GCC
 category: Matter-WiFi|Platform|Toolchain
 quality: production

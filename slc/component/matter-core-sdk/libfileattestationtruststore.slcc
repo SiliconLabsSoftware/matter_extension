@@ -22,7 +22,7 @@ include:
       - path: TestPAAStore.h
       - path: DeviceAttestationVerifier.h
 label: libfileattestationtruststore
-package: Matter
+package: matter
 provides:
   - name: matter_libfileattestationtruststore
 quality: production

@@ -1,7 +1,7 @@
 id: matter_multi_image_custom_processor
 label: OTA Multi Image Requestor Custom Processor for Testing
 description: OTA Multi Image Requestor Custom Processor for Testing
-package: "Matter"
+package: matter
 category: Stack
 quality: production
 metadata:

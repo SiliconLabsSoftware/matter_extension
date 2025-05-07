@@ -20,7 +20,7 @@ include:
       - path: StatusCode.h
       - path: StatusCodeList.h
 label: im_status
-package: Matter
+package: matter
 provides:
   - name: matter_im_status
 quality: production

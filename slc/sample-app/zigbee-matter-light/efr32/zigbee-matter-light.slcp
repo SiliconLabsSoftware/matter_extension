@@ -1,6 +1,6 @@
 project_name: zigbee-matter-light
 label: z3-light_ot-ftd_Matter_soc
-package: Matter
+package: matter
 category: Matter Zigbee Application
 quality: production
 description: This is the project file for a Matter (OT)+Zigbee+BLE app

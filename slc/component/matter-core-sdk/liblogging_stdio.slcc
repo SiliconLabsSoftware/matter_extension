@@ -12,7 +12,7 @@ include:
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
 label: liblogging_stdio
-package: Matter
+package: matter
 provides:
   - name: matter_liblogging_stdio
 quality: production

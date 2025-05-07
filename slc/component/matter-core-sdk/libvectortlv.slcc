@@ -53,7 +53,7 @@ include:
       - path: CHIPPersistentStorageDelegate.h
       - path: TLV.h
 label: libvectortlv
-package: Matter
+package: matter
 provides:
   - name: matter_libvectortlv
 quality: production

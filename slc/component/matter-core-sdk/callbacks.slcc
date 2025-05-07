@@ -36,7 +36,7 @@ include:
       - path: util/odd-sized-integers.h
       - path: util/generic-callbacks.h
 label: callbacks
-package: Matter
+package: matter
 provides:
   - name: matter_callbacks
 quality: production

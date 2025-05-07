@@ -3,7 +3,7 @@ label: Matter Air Quality Sensor
 description: >
   Matter Air Quality Sensor App.
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

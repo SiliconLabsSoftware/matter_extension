@@ -32,7 +32,7 @@ include:
       - path: Resolver.h
       - path: MinimalMdnsServer.h
 label: dnssd_wifi
-package: Matter
+package: matter
 provides:
   - name: matter_dnssd_wifi
 quality: production

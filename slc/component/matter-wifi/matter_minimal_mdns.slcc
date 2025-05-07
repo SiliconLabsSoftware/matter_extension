@@ -1,5 +1,5 @@
 id: matter_minimal_mdns
-package: Matter
+package: matter
 description: >
   matter_minimal_mdns for wifi
 label: Matter Minimal mDNS

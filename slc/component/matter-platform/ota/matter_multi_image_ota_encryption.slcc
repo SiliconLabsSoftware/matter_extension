@@ -1,7 +1,7 @@
 id: matter_multi_image_ota_encryption
 label: OTA Multi Image Requestor Encryption
 description: Encryption for OTA Multi Image Requestor for Matter
-package: "Matter"
+package: matter
 category: Stack
 quality: production
 metadata:

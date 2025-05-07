@@ -1,5 +1,5 @@
 id: matter_lwip_support
-package: Matter
+package: matter
 label: Src Platform LWIP Support Components
 description: >
   LWIP support for Matter

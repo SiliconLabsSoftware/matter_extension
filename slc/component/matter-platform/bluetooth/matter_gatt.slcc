@@ -2,7 +2,7 @@ id: matter_gatt
 label: GATT Configuration
 description: >
   Adds GATT Configuration for Matter.
-package: "Matter"
+package: matter
 category: Stack|Bluetooth
 quality: production
 metadata:

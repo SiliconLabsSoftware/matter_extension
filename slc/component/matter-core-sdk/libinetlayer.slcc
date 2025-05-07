@@ -48,7 +48,7 @@ include:
       - path: TCPEndPointImplSockets.h
       - path: InetArgParser.h
 label: libinetlayer
-package: Matter
+package: matter
 provides:
   - name: matter_libinetlayer
 quality: production

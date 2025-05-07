@@ -1,7 +1,7 @@
 id: matter
 label: Matter Core Components
 description: Bundles all necessary core Matter components
-package: "Matter"
+package: matter
 category: Stack
 quality: production
 metadata:

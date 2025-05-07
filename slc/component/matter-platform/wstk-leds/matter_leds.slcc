@@ -1,6 +1,6 @@
 id: matter_leds
 label: matter LED Support
-package: Matter
+package: matter
 description: Simple LED and RGB LED Support for Matter applications
 category: Platform
 quality: production

@@ -9,7 +9,7 @@ include:
       - path: nlunit-test.h
       - path: nltest.h
 label: libnlunit_test
-package: Matter
+package: matter
 provides:
   - name: matter_libnlunit_test
 quality: production

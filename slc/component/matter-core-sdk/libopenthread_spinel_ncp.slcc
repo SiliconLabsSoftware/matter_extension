@@ -25,7 +25,7 @@ include:
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
 label: libopenthread_spinel_ncp
-package: Matter
+package: matter
 provides:
   - name: matter_libopenthread_spinel_ncp
 quality: production

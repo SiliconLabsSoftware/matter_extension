@@ -1,5 +1,5 @@
 project_name: matter-bootloader-storage-single-4096k
-package: Matter
+package: matter
 quality: internal
 label: Bootloader - SoC Storage (single OTA image of size 1540kB for 4MB flash)
 description: >

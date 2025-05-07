@@ -3,7 +3,7 @@ label: Matter Light
 description: >
   Matter Lighting App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

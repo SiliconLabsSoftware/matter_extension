@@ -3,7 +3,7 @@ label: Matter WiFi multi-sensor
 description: >
   Matter Multi Sensor App For WiFi
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

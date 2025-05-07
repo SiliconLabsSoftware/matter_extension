@@ -28,7 +28,7 @@ include:
       - path: ManualSetupPayloadGenerator.h
       - path: AdditionalDataPayload.h
 label: additional_data_payload
-package: Matter
+package: matter
 provides:
   - name: matter_additional_data_payload
 quality: production

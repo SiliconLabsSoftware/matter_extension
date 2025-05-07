@@ -33,7 +33,7 @@ include:
       - path: SimpleSessionResumptionStorage.h
       - path: RendezvousParameters.h
 label: libsecurechannel
-package: Matter
+package: matter
 provides:
   - name: matter_libsecurechannel
 quality: production

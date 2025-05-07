@@ -29,7 +29,7 @@ include:
       - path: BleApplicationDelegate.h
       - path: BleLayer.h
 label: libblelayer
-package: Matter
+package: matter
 provides:
   - name: matter_libblelayer
 quality: production

@@ -1,7 +1,7 @@
 id: matter_default_lcd_config
 label: Matter Default LCD/Display Configuration
 description: Default configurations for liquid crystal display on matter devboards
-package: "Matter"
+package: matter
 category: Platform|Display
 quality: production
 metadata:

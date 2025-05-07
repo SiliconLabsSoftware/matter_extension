@@ -29,7 +29,7 @@ include:
       - path: ExchangeHolder.h
       - path: EphemeralExchangeDispatch.h
 label: libmessaginglayer
-package: Matter
+package: matter
 provides:
   - name: matter_libmessaginglayer
 quality: production

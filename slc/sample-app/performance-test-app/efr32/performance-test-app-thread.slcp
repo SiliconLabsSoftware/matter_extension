@@ -3,7 +3,7 @@ label: Performance Test Application
 description: >
   Matter Performance Test Application
 quality: internal
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

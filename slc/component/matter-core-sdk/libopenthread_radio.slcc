@@ -27,7 +27,7 @@ include:
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
 label: libopenthread_radio
-package: Matter
+package: matter
 provides:
   - name: matter_libopenthread_radio
 quality: production

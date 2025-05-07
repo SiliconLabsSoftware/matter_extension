@@ -24,7 +24,7 @@ include:
       - path: TestPAAStore.h
       - path: DeviceAttestationVerifier.h
 label: libdefaultattestationverifier
-package: Matter
+package: matter
 provides:
   - name: matter_libdefaultattestationverifier
 quality: production

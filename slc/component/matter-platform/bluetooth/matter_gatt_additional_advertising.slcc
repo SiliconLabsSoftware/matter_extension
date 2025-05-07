@@ -2,7 +2,7 @@ id: matter_gatt_additional_advertising
 label: GATT Additional Advertising
 description: >
   GATT Additional Advertising Configurations for Matter.
-package: "Matter"
+package: matter
 category: Stack|Bluetooth
 quality: production
 metadata:

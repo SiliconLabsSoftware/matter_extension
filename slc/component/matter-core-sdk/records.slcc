@@ -21,7 +21,7 @@ include:
       - path: IP.h
       - path: Txt.h
 label: records
-package: Matter
+package: matter
 provides:
   - name: matter_records
 quality: production

@@ -20,7 +20,7 @@ include:
       - path: ASN1Error.h
       - path: ASN1Macros.h
 label: libasn1
-package: Matter
+package: matter
 provides:
   - name: matter_libasn1
 quality: production

@@ -73,7 +73,7 @@ include:
       - path: Variant.h
       - path: PoolWrapper.h
 label: libpwtestswrapper
-package: Matter
+package: matter
 provides:
   - name: matter_libpwtestswrapper
 quality: production

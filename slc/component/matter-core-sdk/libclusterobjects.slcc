@@ -14,7 +14,7 @@ include:
   - path: third_party/nlassert/include
   - path: third_party/nlio/include
 label: libclusterobjects
-package: Matter
+package: matter
 provides:
   - name: matter_libclusterobjects
 quality: production

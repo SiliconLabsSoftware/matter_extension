@@ -33,7 +33,7 @@ include:
       - path: SimpleSessionResumptionStorage.h
       - path: RendezvousParameters.h
 label: libsecurechanneltypes
-package: Matter
+package: matter
 provides:
   - name: matter_libsecurechanneltypes
 quality: production

@@ -48,7 +48,7 @@ include:
       - path: TCPEndPointImplSockets.h
       - path: InetArgParser.h
 label: libinetlayer_wifi
-package: Matter
+package: matter
 provides:
   - name: matter_libinetlayer_wifi
 quality: production

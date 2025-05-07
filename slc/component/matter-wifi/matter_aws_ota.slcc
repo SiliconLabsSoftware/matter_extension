@@ -54,7 +54,7 @@ include:
     file_list:
       - path: core_json.h
 label: OTA Download through AWS Cloud
-package: Matter
+package: matter
 provides:
   - name: aws_ota_wifi_dic
 requires:

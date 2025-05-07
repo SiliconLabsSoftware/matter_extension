@@ -23,7 +23,7 @@ include:
       - path: ICDStateObserver.h
       - path: ICDNotifier.h
 label: manager
-package: Matter
+package: matter
 provides:
   - name: matter_manager
 quality: production

@@ -29,7 +29,7 @@ include:
       - path: data-model/Decode.h
       - path: data-model/NullObject.h
 label: data_model
-package: Matter
+package: matter
 provides:
   - name: matter_data_model
 quality: production

@@ -23,7 +23,7 @@ include:
       - path: ICDStateObserver.h
       - path: ICDNotifier.h
 label: configuration_data
-package: Matter
+package: matter
 provides:
   - name: matter_configuration_data
 quality: production

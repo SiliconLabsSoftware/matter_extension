@@ -4,7 +4,7 @@ description: >
   potentially to unaligned memory locations, with or without byte reordering and with or without pointer management
 id: matter_nlio
 label: Stack
-package: Matter
+package: matter
 provides:
   - name: matter_nlio
 quality: production

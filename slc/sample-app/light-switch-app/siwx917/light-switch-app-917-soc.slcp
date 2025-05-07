@@ -3,7 +3,7 @@ label: Matter Light Switch
 description: >
   Matter Light Switch App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

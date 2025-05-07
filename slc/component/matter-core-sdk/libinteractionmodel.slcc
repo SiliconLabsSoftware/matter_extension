@@ -19,7 +19,7 @@ include:
       - path: StatusCode.h
       - path: StatusCodeList.h
 label: libinteractionmodel
-package: Matter
+package: matter
 provides:
   - name: matter_libinteractionmodel
 quality: production

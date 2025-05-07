@@ -1,5 +1,5 @@
 id: siwx917_ncp_brd4357a
-package: Matter
+package: matter
 label: SiWx917 NCP Component for BRD4357a
 description: >
   Adds the config changes required for BRD4357a module board.

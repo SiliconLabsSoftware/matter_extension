@@ -3,7 +3,7 @@ label: Matter Thermostat
 description: >
   Matter Thermostat
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

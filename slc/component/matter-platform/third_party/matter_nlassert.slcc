@@ -2,7 +2,7 @@ category: Matter|Stack
 description: Includes defines macros and interfaces for performing both compile and run-time assertion checking and run-time exception handling
 id: matter_nlassert
 label: Stack
-package: Matter
+package: matter
 provides:
   - name: matter_nlassert
 quality: production

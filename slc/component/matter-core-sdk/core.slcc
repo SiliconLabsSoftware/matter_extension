@@ -24,7 +24,7 @@ include:
       - path: HeapQName.h
       - path: QNameString.h
 label: core
-package: Matter
+package: matter
 provides:
   - name: matter_core
 quality: production

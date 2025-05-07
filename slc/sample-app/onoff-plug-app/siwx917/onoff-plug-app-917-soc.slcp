@@ -3,7 +3,7 @@ label: Matter Onoff Plug
 description: >
   Matter Onoff Plug App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

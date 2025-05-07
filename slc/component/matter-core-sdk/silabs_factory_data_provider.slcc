@@ -17,7 +17,7 @@ include:
   - path: third_party/nlassert/include
   - path: third_party/nlio/include
 label: silabs_factory_data_provider
-package: Matter
+package: matter
 provides:
   - name: matter_silabs_factory_data_provider
 quality: production

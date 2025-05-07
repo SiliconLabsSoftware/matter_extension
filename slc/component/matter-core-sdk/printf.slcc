@@ -8,7 +8,7 @@ include:
       - path: SEGGER_RTT_Conf.h
       - path: SEGGER_RTT.h
 label: printf
-package: Matter
+package: matter
 provides:
   - name: matter_printf
 quality: production

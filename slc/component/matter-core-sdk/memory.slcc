@@ -80,7 +80,7 @@ include:
       - path: Variant.h
       - path: PoolWrapper.h
 label: memory
-package: Matter
+package: matter
 provides:
   - name: matter_memory
 quality: production

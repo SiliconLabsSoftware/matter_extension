@@ -1,7 +1,7 @@
 id: siwx917_soc_custom_hal
 label: Matter startup component for SiWx917 SoC
 description: This component adds a customized hal file for SiWx917 SoC
-package: "Matter"
+package: matter
 category: "Matter-WiFi|Platform"
 quality: production
 metadata:

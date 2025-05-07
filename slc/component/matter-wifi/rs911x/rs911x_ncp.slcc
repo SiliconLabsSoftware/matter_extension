@@ -1,5 +1,5 @@
 id: rs911x_ncp
-package: Matter
+package: matter
 label: RS911x NCP
 description: >
   Adds support RS911x NCP device

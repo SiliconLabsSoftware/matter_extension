@@ -1,5 +1,5 @@
 id: matter_wifi
-package: Matter
+package: matter
 description: >
   matter wifi
 label: Matter WiFi

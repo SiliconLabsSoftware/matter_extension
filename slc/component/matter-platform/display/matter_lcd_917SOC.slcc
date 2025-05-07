@@ -1,7 +1,7 @@
 id: matter_lcd_917SOC
 label: Matter Display for 917 SoC boards
 description: Support for liquid crystal display on matter 917 SOC boards
-package: "Matter"
+package: matter
 category: "Matter-WiFi|Platform"
 quality: production
 metadata:

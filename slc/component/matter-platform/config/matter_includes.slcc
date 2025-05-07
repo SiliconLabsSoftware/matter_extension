@@ -2,7 +2,7 @@ category: Matter|Stack
 description: Includes core configuration settings for Matter applications
 id: matter_includes
 label: Stack
-package: Matter
+package: matter
 provides:
   - name: matter_includes
 quality: production

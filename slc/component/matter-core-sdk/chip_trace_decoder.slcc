@@ -47,7 +47,7 @@ include:
     file_list:
       - path: TraceDecoderProtocols.h
 label: chip_trace_decoder
-package: Matter
+package: matter
 provides:
   - name: matter_chip_trace_decoder
 quality: production

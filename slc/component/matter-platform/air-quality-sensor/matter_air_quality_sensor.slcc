@@ -1,7 +1,7 @@
 id: matter_air_quality_sensor
 label: Air Quality Sensor Support
 description: Air Quality Sensor support for Matter applications
-package: "Matter"
+package: matter
 category: Platform|Sensors
 quality: production
 metadata:

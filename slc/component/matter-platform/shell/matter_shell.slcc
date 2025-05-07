@@ -1,5 +1,5 @@
 id: matter_shell
-package: Matter
+package: matter
 label: Matter Shell
 description: >
   Enables the Matter Shell (CHIP Shell) functionality

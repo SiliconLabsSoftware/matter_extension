@@ -3,7 +3,7 @@ label: Matter Dishwasher
 description: >
   Matter Dishwasher App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

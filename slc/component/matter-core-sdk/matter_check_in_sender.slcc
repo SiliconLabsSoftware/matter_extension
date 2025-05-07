@@ -17,7 +17,7 @@ include:
   - path: third_party/nlassert/include
   - path: third_party/nlio/include
 label: sender
-package: Matter
+package: matter
 provides:
   - name: matter_check_in_sender
 quality: production

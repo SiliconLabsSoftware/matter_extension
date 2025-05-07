@@ -17,7 +17,7 @@ include:
   - path: third_party/nlassert/include
   - path: third_party/nlio/include
 label: lock_cluster_service
-package: Matter
+package: matter
 provides:
   - name: matter_lock_cluster_service
 quality: production

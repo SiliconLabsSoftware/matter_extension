@@ -51,7 +51,7 @@ include:
       - path: CHIPPersistentStorageDelegate.h
       - path: TLV.h
 label: error
-package: Matter
+package: matter
 provides:
   - name: matter_error
 quality: production

@@ -37,7 +37,7 @@ include:
       - path: check_crypto_config.h
       - path: psa_crypto_cipher.h
 label: siwx917_tinycrypt
-package: Matter
+package: matter
 provides:
   - name: matter_siwx917_tinycrypt
 quality: production

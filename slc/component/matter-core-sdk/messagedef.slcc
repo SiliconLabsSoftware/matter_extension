@@ -63,7 +63,7 @@ include:
       - path: AttributePathIB.h
       - path: InvokeRequestMessage.h
 label: messagedef
-package: Matter
+package: matter
 provides:
   - name: matter_messagedef
 quality: production

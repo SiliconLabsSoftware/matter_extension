@@ -26,7 +26,7 @@ include:
       - path: DeviceSafeQueue.h
       - path: GLibTypeDeleter.h
 label: libdevicelayer
-package: Matter
+package: matter
 provides:
   - name: matter_libdevicelayer
 quality: production

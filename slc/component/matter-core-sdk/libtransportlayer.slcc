@@ -37,7 +37,7 @@ include:
       - path: SecureSession.h
       - path: SessionManager.h
 label: libtransportlayer
-package: Matter
+package: matter
 provides:
   - name: matter_libtransportlayer
 quality: production

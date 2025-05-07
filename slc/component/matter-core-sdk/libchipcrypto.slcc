@@ -33,7 +33,7 @@ include:
       - path: PersistentStorageOperationalKeystore.h
       - path: PSASessionKeystore.h
 label: libchipcrypto
-package: Matter
+package: matter
 provides:
   - name: matter_libchipcrypto
 quality: production

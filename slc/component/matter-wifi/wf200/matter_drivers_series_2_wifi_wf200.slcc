@@ -2,7 +2,7 @@ id: matter_drivers_series_2_wifi_wf200
 label: Matter UART selection for Series 2 boards (WF200)
 description: >
   Matter UART selection for Series 2 boards
-package: "Matter"
+package: matter
 category: "Matter-WiFi|Platform|Drivers"
 quality: production
 metadata:

@@ -22,7 +22,7 @@ include:
       - path: UDP.h
       - path: Base.h
 label: librawtransport
-package: Matter
+package: matter
 provides:
   - name: matter_librawtransport
 quality: production

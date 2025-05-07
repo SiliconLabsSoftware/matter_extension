@@ -1,7 +1,7 @@
 id: matter_platform_mg
 label: Platform for xMGx series
 description: xMGx platform support for Matter. (currently Series 2 and 3)
-package: Matter
+package: matter
 category: Platform
 quality: production
 metadata:

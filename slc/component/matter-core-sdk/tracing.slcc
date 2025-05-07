@@ -1,5 +1,5 @@
 id: matter_tracing
-package: Matter
+package: matter
 label: tracing
 description: >
   Enables tracing for matter protocol

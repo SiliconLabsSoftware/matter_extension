@@ -81,7 +81,7 @@ include:
       - path: Variant.h
       - path: PoolWrapper.h
 label: libtestutils
-package: Matter
+package: matter
 provides:
   - name: matter_libtestutils
 quality: production

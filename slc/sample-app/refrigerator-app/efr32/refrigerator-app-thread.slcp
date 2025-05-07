@@ -3,7 +3,7 @@ label: Matter Refrigerator
 description: >
   Matter Refrigerator App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

@@ -1,5 +1,5 @@
 project_name: matter-bootloader-storage-external-single
-package: Matter
+package: matter
 quality: production
 label: Bootloader - SoC SPI Flash Storage (single image with slot size of 1024k)
 description: >

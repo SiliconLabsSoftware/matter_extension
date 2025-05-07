@@ -3,7 +3,7 @@ label: Subscription Persistence
 description: >
   Allows an end device to re-establish its subscription and by extension its
   secure session to a subscriber in the event of a power cycle.
-package: "Matter"
+package: matter
 category: Platform|Low-power
 provides:
   - name: matter_subscription_persistence

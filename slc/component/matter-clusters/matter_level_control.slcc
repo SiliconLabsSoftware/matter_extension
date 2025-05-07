@@ -3,7 +3,7 @@ description: >
   Implementation of the Level Control Cluster.
   The user has to enable the Level Control Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_level_control
-package: Matter
+package: matter
 label: Level Control Cluster
 quality: production
 metadata:

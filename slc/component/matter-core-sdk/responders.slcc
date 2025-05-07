@@ -24,7 +24,7 @@ include:
       - path: Responder.h
       - path: Txt.h
 label: responders
-package: Matter
+package: matter
 provides:
   - name: matter_responders
 quality: production

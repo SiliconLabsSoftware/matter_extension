@@ -1,7 +1,7 @@
 id: matter_si70xx_sensor
 label: Si70xx Sensor Support
 description: Temperature and Humidity Sensor support for Matter applications
-package: "Matter"
+package: matter
 category: Platform|Sensors
 quality: production
 metadata:

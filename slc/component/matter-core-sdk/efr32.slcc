@@ -163,7 +163,7 @@ include:
       - path: GenericThreadStackManagerImpl_FreeRTOS.h
       - path: GenericThreadStackManagerImpl_FreeRTOS.hpp
 label: efr32
-package: Matter
+package: matter
 provides:
   - name: matter_efr32
 quality: production

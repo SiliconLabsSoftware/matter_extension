@@ -24,7 +24,7 @@ include:
       - path: TraceHandlers.h
       - path: TraceDecoder.h
 label: trace_handlers
-package: Matter
+package: matter
 provides:
   - name: matter_trace_handlers
 quality: production

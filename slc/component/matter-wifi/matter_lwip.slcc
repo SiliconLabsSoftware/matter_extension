@@ -1,6 +1,6 @@
 # Re-work this component to implement proper matter_sdk source code and/or SiSDK/WiFi SDK components
 id: matter_lwip
-package: Matter
+package: matter
 description: >
   matter lwip for wifi
 label: Matter LwIP

@@ -29,7 +29,7 @@ include:
       - path: Resolver.h
       - path: MinimalMdnsServer.h
 label: naming
-package: Matter
+package: matter
 provides:
   - name: matter_naming
 quality: production

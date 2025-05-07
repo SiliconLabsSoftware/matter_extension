@@ -3,7 +3,7 @@ label: Matter multi-sensor
 description: >
   Matter Multi Sensor App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

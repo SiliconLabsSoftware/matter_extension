@@ -1,5 +1,5 @@
 id: matter_sleep_manager
-package: Matter
+package: matter
 label: Sleep Manager for Matter WiFi
 description: >
   Sleep Manager manages the sleep states of the Wi-Fi radio

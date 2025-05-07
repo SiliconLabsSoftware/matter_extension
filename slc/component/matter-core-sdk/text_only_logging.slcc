@@ -19,7 +19,7 @@ include:
       - path: Constants.h
       - path: TextOnlyLogging.h
 label: text_only_logging
-package: Matter
+package: matter
 provides:
   - name: matter_text_only_logging
 quality: production

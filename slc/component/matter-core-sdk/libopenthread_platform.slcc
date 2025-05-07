@@ -4,7 +4,7 @@ description: libopenthread_platform
 id: libopenthread_platform
 include: []
 label: libopenthread_platform
-package: Matter
+package: matter
 provides:
   - name: matter_libopenthread_platform
 quality: production

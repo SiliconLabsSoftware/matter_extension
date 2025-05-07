@@ -32,7 +32,7 @@ include:
       - path: Resolver.h
       - path: MinimalMdnsServer.h
 label: dnssd
-package: Matter
+package: matter
 provides:
   - name: matter_dnssd
 quality: production

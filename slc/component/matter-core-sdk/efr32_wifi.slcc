@@ -1,5 +1,5 @@
 id: efr32_wifi
-package: Matter
+package: matter
 label: efr32_wifi
 description: efr32_wifi
 category: Matter|Core

@@ -93,7 +93,7 @@ include:
       - path: AttributeReportBuilder.cpp
       - path: AttributeValueEncoder.cpp
 label: libchipdatamodel
-package: Matter
+package: matter
 provides:
   - name: matter_libchipdatamodel
 quality: production

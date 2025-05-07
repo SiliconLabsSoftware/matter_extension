@@ -27,7 +27,7 @@ include:
       - path: ExampleAccessControlDelegate.h
       - path: PermissiveAccessControlDelegate.h
 label: libaccess
-package: Matter
+package: matter
 provides:
   - name: matter_libaccess
 quality: production

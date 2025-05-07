@@ -21,7 +21,7 @@ include:
       - path: TestPAAStore.h
       - path: DeviceAttestationVerifier.h
 label: test_paa_store
-package: Matter
+package: matter
 provides:
   - name: matter_test_paa_store
 quality: production

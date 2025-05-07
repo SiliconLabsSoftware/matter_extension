@@ -38,7 +38,7 @@ include:
       - path: TypedReadCallback.h
       - path: CommissioneeDeviceProxy.h
 label: libchipcontroller
-package: Matter
+package: matter
 provides:
   - name: matter_libchipcontroller
 quality: production

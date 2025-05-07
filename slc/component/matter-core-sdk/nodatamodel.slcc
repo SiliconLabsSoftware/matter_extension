@@ -42,7 +42,7 @@ include:
       - path: TypedReadCallback.h
       - path: CommissioneeDeviceProxy.h
 label: nodatamodel
-package: Matter
+package: matter
 provides:
   - name: matter_nodatamodel
 quality: production

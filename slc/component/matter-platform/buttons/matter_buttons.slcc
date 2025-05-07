@@ -1,6 +1,6 @@
 id: matter_buttons
 label: WSTK Button Support
-package: Matter
+package: matter
 description: WSTK Button Support for Matter applications
 category: Platform
 quality: production

@@ -8,7 +8,7 @@ include:
       - path: DeviceSafeQueue.h
       - path: GLibTypeDeleter.h
 label: syscalls_stub
-package: Matter
+package: matter
 provides:
   - name: matter_syscalls_stub
 quality: production

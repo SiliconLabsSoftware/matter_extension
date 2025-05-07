@@ -3,7 +3,7 @@ label: Matter FanControl
 description: >
   Matter FanControl App
 quality: production
-package: Matter
+package: matter
 
 sdk_extension:
   - id: matter

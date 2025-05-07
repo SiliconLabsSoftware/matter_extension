@@ -54,7 +54,7 @@ include:
       - path: CHIPPersistentStorageDelegate.h
       - path: TLV.h
 label: libchipcore
-package: Matter
+package: matter
 provides:
   - name: matter_libchipcore
 quality: production

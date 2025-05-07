@@ -22,7 +22,7 @@ include:
       - path: AddressResolve_DefaultImpl.h
       - path: AddressResolve.h
 label: address_resolve_tool
-package: Matter
+package: matter
 provides:
   - name: matter_address_resolve_tool
 quality: production

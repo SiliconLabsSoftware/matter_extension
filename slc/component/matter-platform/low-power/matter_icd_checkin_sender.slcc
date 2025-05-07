@@ -3,7 +3,7 @@ label: ICD Check In Protocol
 description: >
   Support for Check-in Protocol. Used to maintain a known relationship in case subscriptions with clients are lost.
   This is a mandatory feature on LIT ICD devices.
-package: "Matter"
+package: matter
 category: Platform|Low-power
 quality: experimental
 metadata:

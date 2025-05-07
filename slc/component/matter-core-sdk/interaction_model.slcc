@@ -90,7 +90,7 @@ include:
       - path: Read.h
       - path: Read-Ember.h
 label: interaction_model
-package: Matter
+package: matter
 provides:
   - name: matter_interaction_model
 quality: production

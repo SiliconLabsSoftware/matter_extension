@@ -1,5 +1,5 @@
 id: matter_thread
-package: Matter
+package: matter
 label: Thread Network Layer
 description: >
   Adds Thread network layer for Matter devices

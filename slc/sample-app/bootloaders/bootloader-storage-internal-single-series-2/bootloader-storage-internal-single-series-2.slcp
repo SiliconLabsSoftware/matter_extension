@@ -1,5 +1,5 @@
 project_name: matter-bootloader-storage-internal-single
-package: Matter
+package: matter
 quality: production
 label: Bootloader - SoC Internal Storage (single image on 512kB device)
 description: >
