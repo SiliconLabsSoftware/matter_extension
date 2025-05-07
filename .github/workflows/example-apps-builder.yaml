@@ -1,0 +1,146 @@
+name: Build Matter Extension apps
+
+on:
+    push:
+# TODO add these lines back       branches:
+#            - main
+#            - "release_*"
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+    workflow_dispatch:
+        inputs:
+            build-type:
+                description: "The build type to use"
+                required: true
+                type: choice
+                options:
+                    - standard
+                    - full
+                    - release
+
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+
+    set-build-type:
+        runs-on: ubuntu-latest
+        outputs:
+            build-type: ${{ steps.set-build-type.outputs.build-type }}
+        steps:
+            - name: Set build-type based on event
+              id: set-build-type
+              run: |
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "push" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                  fi
+
+    build-lighting-app:
+        name: Build Lighting App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lighting-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-air-quality-sensor-app:
+        name: Build Air Quality Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "air-quality-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-light-switch-app:
+        name: Build Light Switch App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "light-switch-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-lock-app:
+        name: Build Lock App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lock-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
+            ncp-rs911x-support: true
+
+    build-thermostat-app:
+        name: Build Thermostat App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "thermostat"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
+            ncp-rs911x-support: true
+
+    build-window-app:
+        name: Build Window App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "window-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+
+    build-fan-control-app:
+        name: Build Fan Control App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "fan-control-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-multi-sensor-app:
+        name: Build Multi Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "multi-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-onoff-plug-app:
+        name: Build OnOff Plug App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "onoff-plug-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    merge-apps:
+        name: Merge App Artifacts
+        runs-on: ubuntu-latest
+        needs:
+            - build-lighting-app
+            - build-air-quality-sensor-app
+            - build-light-switch-app
+            - build-lock-app
+            - build-thermostat-app
+            - build-window-app
+            - build-fan-control-app
+            - build-multi-sensor-app
+            - build-onoff-plug-app
+        if: success()
+
+        steps:
+            - name: Merge artifacts
+              uses: actions/upload-artifact/merge@v4
+              with:
+                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
+                delete-merged: true
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
