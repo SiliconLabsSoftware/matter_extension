@@ -8,7 +8,7 @@ description: >
 sdk_extension:
   - id: matter
     version: "2.6.0"
-    
+
 component:
   - id: bootloader_core
   - id: bootloader_crc
@@ -23,8 +23,7 @@ component:
   - id: bootloader_compression_lzma
   - id: psa_crypto_config
   - id: matter_syscall_stubs
-    from: matter 
-
+    from: matter
 
 configuration:
   - name: BTL_STORAGE_BASE_ADDRESS

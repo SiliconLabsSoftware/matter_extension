@@ -17,10 +17,10 @@ source:
 include:
   - path: third_party/matter_sdk/examples/platform/silabs/
     file_list:
-    - path: SilabsTestEventTriggerDelegate.h
+      - path: SilabsTestEventTriggerDelegate.h
   - path: third_party/matter_sdk/src/app
     file_list:
-    - path: TestEventTriggerDelegate.h
+      - path: TestEventTriggerDelegate.h
 
 config_file:
   - path: slc/config/sl_matter_test_event_trigger_config.h

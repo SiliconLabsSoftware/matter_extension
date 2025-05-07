@@ -18,4 +18,4 @@ recommends:
 requires:
   - name: device_init_dpll
     condition:
-     - device_series_2
+      - device_series_2

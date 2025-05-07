@@ -18,4 +18,3 @@ define:
     value: 1
 conflicts:
   - name: matter_log_rtt
-  

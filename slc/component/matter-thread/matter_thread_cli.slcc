@@ -20,4 +20,4 @@ conflicts:
   - name: matter_wifi
 define:
   - name: CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI
-    value: '1'
+    value: "1"

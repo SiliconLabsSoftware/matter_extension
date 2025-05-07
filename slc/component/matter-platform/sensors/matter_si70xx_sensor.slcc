@@ -10,11 +10,11 @@ metadata:
 
 provides:
   - name: matter_si70xx_sensor
-  
+
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
     file_list:
-    - path: Si70xxSensor.h
+      - path: Si70xxSensor.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/Si70xxSensor.cpp

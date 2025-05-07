@@ -15,7 +15,6 @@ provides:
 conflicts:
   - name: matter_crypto_tinycrypt_siwx917
 
-
 requires:
   # PSA crypto components
   - name: psa_its

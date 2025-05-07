@@ -1,4 +1,3 @@
-
 category: General
 description: >
   This component includes QuieterReporting.h which is needed by Level Control, color-control and operational-state-server clusters.
@@ -16,4 +15,4 @@ include:
     file_list:
       - path: QuieterReporting.h
 ui_hints:
-    visibility: never
+  visibility: never

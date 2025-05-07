@@ -121,7 +121,7 @@ component:
   - id: ble
     from: wiseconnect3_sdk
   - id: sl_si91x_button_917
-    instance: [btn0,btn1]
+    instance: [btn0, btn1]
     from: wiseconnect3_sdk
   - id: sl_si91x_led_917
     instance: [led0]
@@ -140,7 +140,8 @@ component:
     id: ulp_timers_instance
 
 configuration:
-  - {name: SL_ULPUART_DMA_CONFIG_ENABLE, value: '0'}
+  - name: SL_ULPUART_DMA_CONFIG_ENABLE
+    value: "0"
 
 config_file:
   - path: ../../../../examples/fan-control-app/silabs/data_model/fan-control-wifi-app.zap

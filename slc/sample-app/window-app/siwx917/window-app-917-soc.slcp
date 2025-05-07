@@ -152,24 +152,31 @@ component:
     id: ulp_timers_instance
 
 configuration:
-  - { name: SL_ULPUART_DMA_CONFIG_ENABLE, value: "0" }
+  - name: SL_ULPUART_DMA_CONFIG_ENABLE
+    value: "0"
 
   # Default ICD configurations for window-app (SIT)
-  - { name: SL_IDLE_MODE_DURATION_S, value: "600" }
-  - { name: SL_ACTIVE_MODE_DURATION_MS, value: "0" }
-  - { name: SL_ACTIVE_MODE_THRESHOLD, value: "0" }
-  - { name: SL_TRANSPORT_IDLE_INTERVAL, value: "3000" }
+  - name: SL_IDLE_MODE_DURATION_S
+    value: "600"
+  - name: SL_ACTIVE_MODE_DURATION_MS
+    value: "0"
+  - name: SL_ACTIVE_MODE_THRESHOLD
+    value: "0"
+  - name: SL_TRANSPORT_IDLE_INTERVAL
+    value: "3000"
 
-  - { name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED, value: "1" }
-  - { name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION, value: "0" }
+  - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
+    value: "1"
+  - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
+    value: "0"
 
   # Wakeup configurations
-  - {
-      name: SL_ENABLE_GPIO_WAKEUP_SOURCE,
-      value: "1",
-      condition: [matter_icd_core],
-    }
-  - { name: ENABLE_NPSS_GPIO_2, value: "1", condition: [matter_icd_core] }
+  - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
+    value: "1"
+    condition: [matter_icd_core]
+  - name: ENABLE_NPSS_GPIO_2
+    value: "1"
+    condition: [matter_icd_core]
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/window-app/common/window-app.zap
