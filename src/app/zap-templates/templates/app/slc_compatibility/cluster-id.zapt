@@ -1,0 +1,15 @@
+{{> header}}
+
+#pragma once
+
+#include <lib/core/DataModelTypes.h>
+
+namespace chip {
+namespace app {
+namespace Clusters {
+namespace {{asUpperCamelCase name}} {  
+inline constexpr ClusterId Id = {{asHex code}};
+} // {{asUpperCamelCase name}}
+} // Clusters
+} // app
+} // chip

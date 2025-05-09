@@ -30,8 +30,9 @@ component:
   - id: rail_util_pti
   - id: matter_crypto
     from: matter
-  - id: matter_shell
-    from: matter
+  # TODO: enable matter shell once it is fixed
+  #- id: matter_shell
+  #  from: matter
   - id: matter_gatt
     from: matter
   - id: matter_provision_default

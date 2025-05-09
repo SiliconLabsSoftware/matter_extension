@@ -115,6 +115,11 @@ include:
   - path: silabs_creds.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
+  - path: BaseAppEvent.h
+- path: third_party/matter_sdk/src/app/common
+  file_list:
+  - path: CompatEnumNames.h
+  - path: GlobalIds.h
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction
   file_list:
   - path: SilabsPlatformBase.h

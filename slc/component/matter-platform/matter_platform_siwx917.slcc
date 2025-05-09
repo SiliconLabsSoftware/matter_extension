@@ -48,6 +48,7 @@ include:
   - path: OTAConfig.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
+  - path: BaseAppEvent.h
   - path: SoftwareFaultReports.h
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/BaseApplication.cpp

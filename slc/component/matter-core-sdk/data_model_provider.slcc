@@ -8,7 +8,6 @@ include:
     -   path: ActionReturnStatus.h
     -   path: Context.h
     -   path: EventsGenerator.h
-    -   path: MetadataList.h
     -   path: MetadataTypes.h
     -   path: MetadataLookup.h
     -   path: OperationTypes.h
@@ -28,7 +27,6 @@ source:
 -   path: third_party/matter_sdk/src/app/data-model-provider/ActionReturnStatus.cpp
 -   path: third_party/matter_sdk/src/app/data-model-provider/ProviderMetadataTree.cpp
 -   path: third_party/matter_sdk/src/app/data-model-provider/MetadataLookup.cpp
--   path: third_party/matter_sdk/src/app/data-model-provider/MetadataList.cpp
 
 ui_hints:
     visibility: never

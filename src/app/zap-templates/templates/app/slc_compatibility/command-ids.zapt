@@ -1,0 +1,21 @@
+{{> header}}
+
+#pragma once
+
+#include <lib/core/DataModelTypes.h>
+
+namespace chip {
+namespace app {
+namespace Clusters {
+namespace {{asUpperCamelCase name}} {  
+namespace Commands {
+{{#zcl_commands}}
+namespace {{asUpperCamelCase name}} {
+inline constexpr CommandId Id = {{asHex code}};
+}
+{{/zcl_commands}}
+} // Commands
+} // {{asUpperCamelCase name}}
+} // Clusters
+} // app
+} // chip

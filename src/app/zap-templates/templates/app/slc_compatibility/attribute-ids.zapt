@@ -1,0 +1,23 @@
+{{> header}}
+
+#pragma once
+
+#include <app/common/GlobalIds.h>
+#include <lib/core/DataModelTypes.h>
+
+namespace chip {
+namespace app {
+namespace Clusters {
+namespace {{asUpperCamelCase name}} {
+namespace Attributes {
+{{#zcl_attributes_server}}
+namespace {{asUpperCamelCase label}} {
+inline constexpr AttributeId Id = {{asHex code}};
+} // namespace {{asUpperCamelCase label}}
+
+{{/zcl_attributes_server}}
+} // namespace Attributes
+} // namespace {{asUpperCamelCase name}}
+} // namespace Clusters
+} // namespace app
+} // namespace chip

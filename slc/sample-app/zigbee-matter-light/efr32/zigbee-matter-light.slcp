@@ -98,8 +98,8 @@ component:
 - {from: matter, id: matter_provision_default}
 - {from: matter, id: matter_log_uart}
 - {from: matter, id: matter_tracing}
-# TODO: enable on Bleeding edge update
-#- {from: matter, id: matter_zigbee_multiprotocol_common}
+- {from: matter, id: matter_zigbee_multiprotocol_common}
+- {from: matter, id: matter_unit_localization}
     
 
 #Matter components wrapper from simplicity_sdk
