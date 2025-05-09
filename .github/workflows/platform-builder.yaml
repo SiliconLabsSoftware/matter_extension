@@ -29,10 +29,30 @@ on:
                 required: false
                 type: boolean
                 default: false
+            mg24-support:
+                required: false
+                type: boolean
+                default: true
+            mg24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mg26-support:
+                required: false
+                type: boolean
+                default: true
 
 jobs:
     mg24-build-job:
-        if: ${{ inputs.thread-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
@@ -42,7 +62,7 @@ jobs:
             platform: mg24
 
     mg24-internal-build-job:
-        if: ${{ inputs.thread-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
@@ -52,7 +72,7 @@ jobs:
             platform: mg24-internal
 
     mgm24-build-job:
-        if: ${{ inputs.thread-support }}
+        if: ${{ inputs.thread-support && inputs.mgm24-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24.json'
@@ -62,7 +82,7 @@ jobs:
             platform: mgm24
 
     mgm24-internal-build-job:
-        if: ${{ inputs.thread-support }}
+        if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24-internal.json'
@@ -72,7 +92,7 @@ jobs:
             platform: mgm24-internal
 
     mg26-build-job:
-        if: ${{ inputs.thread-support }}
+        if: ${{ inputs.thread-support && inputs.mg26-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
