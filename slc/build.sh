@@ -82,6 +82,11 @@ while [ $# -gt 0 ]; do
         shift
         shift
         ;;
+    --output_suffix)
+        OUTPUT_DIR="${OUTPUT_DIR}-$2"
+        shift
+        shift
+        ;;
     *)
         CONFIG_ARGS+="$1 "
         shift
