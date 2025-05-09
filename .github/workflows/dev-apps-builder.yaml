@@ -1,4 +1,4 @@
-name: Build Matter Extension apps
+name: Build Dev apps
 
 on:
     push:
@@ -126,6 +126,7 @@ jobs:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
+            - set-build-type
             - build-lighting-app
             - build-air-quality-sensor-app
             - build-light-switch-app
