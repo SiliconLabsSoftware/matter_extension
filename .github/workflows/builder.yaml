@@ -27,6 +27,12 @@ jobs:
             image: ghcr.io/SiliconLabsSoftware/matter_extension_dependencies:SiSDKv2024.12.1_WiFi_SDKv3.4.1
 
         steps:
+            - name: Debug file structure
+              shell: bash
+              run: |
+                    echo "Current workspace: $GITHUB_WORKSPACE"
+                    ls -R $GITHUB_WORKSPACE
+                    
             - name: Initialize required submodules
               shell: bash
               run: |
