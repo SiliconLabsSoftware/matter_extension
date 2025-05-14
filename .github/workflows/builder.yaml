@@ -27,17 +27,14 @@ jobs:
             image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.1_WiFi_SDKv3.4.1
 
         steps:
-            - name: Debug file structure
-              shell: bash
-              run: |
-                    echo "Current workspace: $GITHUB_WORKSPACE"
-                    ls -R $GITHUB_WORKSPACE
-
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
                 submodules: 'false' # Do not initialize submodules automatically
-            
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                git config --global --add safe.directory /__w/matter_extension/matter_extension
             - name: Initialize required submodules
               shell: bash
               run: |
