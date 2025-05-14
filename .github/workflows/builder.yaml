@@ -74,7 +74,7 @@ jobs:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
                   example-app: ${{ inputs.example-app }}
-                  build-script: "./slc/sl_build.py"
+                  build-script: "python3 slc/sl_build.py"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
 
