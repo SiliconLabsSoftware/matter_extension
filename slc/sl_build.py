@@ -117,7 +117,7 @@ def main():
         if without_config:
             cmd.append("--without")
             cmd.append(with_config_args)
-        cmd.append("--generator-timeout=180") 
+        cmd.append("--generator-timeout=360") 
         cmd.append("-o")
         cmd.append("makefile")
         if not  ci:
