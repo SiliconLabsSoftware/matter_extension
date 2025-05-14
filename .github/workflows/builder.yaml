@@ -33,6 +33,11 @@ jobs:
                     echo "Current workspace: $GITHUB_WORKSPACE"
                     ls -R $GITHUB_WORKSPACE
 
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                submodules: 'false' # Do not initialize submodules automatically
+            
             - name: Initialize required submodules
               shell: bash
               run: |
