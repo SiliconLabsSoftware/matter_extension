@@ -38,11 +38,14 @@ jobs:
             - name: Initialize required submodules
               shell: bash
               run: |
+                git submodule update --init third_party/aws_ota_sdk
                 git submodule update --init third_party/matter_sdk
                 git submodule update --init third_party/matter_support
                 git submodule update --init third_party/mbedtls
+                git submodule update --init third_party/mqtt
                 git submodule update --init third_party/nlassert
                 git submodule update --init third_party/nlio
+                git submodule update --init third_party/QR-Code-generator
                 # Skip unnecessary submodules like simplicity_sdk, wifi_sdk, and wiseconnect
 
             - name: Install tools
