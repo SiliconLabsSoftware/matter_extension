@@ -11,7 +11,7 @@ from sl_create_new_app import createApp
 # Initialize logger
 logger = logging.getLogger(__name__)
 
-EXAMPLE_USAGE = "python slc/sl_build.py <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [--verbose] [--with <config>] [--without <config>]"
+EXAMPLE_USAGE = "python slc/sl_build.py <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [--verbose] [--with_config <config>] [--without_config <config>]"
 
 def main():
     parser = ArgumentParser(description="Build Silabs projects using slc.")
@@ -23,11 +23,11 @@ def main():
         help="Enable verbose logging (DEBUG level)"
     )
     parser.add_argument(
-        "--w", 
+        "--with_config", 
         help="Additional configuration to include in the build process"
     )
     parser.add_argument(
-        "--without", 
+        "--without_config", 
         help="Configuration to exclude from the build process"
     )
     parser.add_argument(
@@ -49,8 +49,8 @@ def main():
 
     reference_project_file = args.reference_project_file
     silabs_board = args.silabs_board.lower()
-    with_config = args.w
-    without_config = args.without
+    with_config = args.with_config
+    without_config = args.without_config
     ci =  args.ci
     output_suffix = args.output_suffix
     App = createApp( ci)
