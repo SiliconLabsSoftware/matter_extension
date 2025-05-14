@@ -60,7 +60,9 @@ def main():
         project_flag = "-p"
         silabs_app = os.path.basename(reference_project_file)[:-5]
         if  ci:
-            output_dir = f"out/{silabs_board}/{silabs_app}-{output_suffix}"
+            output_dir = f"out/{silabs_board}/{silabs_app}"
+            if output_suffix:
+                output_dir = output_dir + "-"+output_suffix
         else:
             output_dir = os.path.dirname(reference_project_file)
         makefile_path = f"{silabs_app}.Makefile"
