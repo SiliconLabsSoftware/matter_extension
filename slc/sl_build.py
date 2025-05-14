@@ -51,15 +51,15 @@ def main():
     silabs_board = args.silabs_board.lower()
     with_config = args.w
     without_config = args.without
-    ci = args.ci
+    ci =  args.ci
     output_suffix = args.output_suffix
-    App = createApp(args.ci)
+    App = createApp( ci)
 
     # Determine project flag and paths
     if reference_project_file.endswith('.slcp'):
         project_flag = "-p"
         silabs_app = os.path.basename(reference_project_file)[:-5]
-        if args.ci:
+        if  ci:
             output_dir = f"out/{silabs_board}/{silabs_app}-{output_suffix}"
         else:
             output_dir = os.path.dirname(reference_project_file)
@@ -67,7 +67,7 @@ def main():
     elif reference_project_file.endswith('.slcw'):
         project_flag = "-w"
         silabs_app = os.path.basename(reference_project_file)[:-5]
-        if args.ci:
+        if  ci:
             output_dir = f"out/{silabs_board}/{silabs_app}-solution-{output_suffix}"
         else:
             output_dir = os.path.dirname(reference_project_file)
@@ -99,6 +99,10 @@ def main():
     if without_config:
         without_config_args = f",{without_config}"
 
+    # Trust extensions again if using ci
+    if ci:
+        App.slc_trust()
+
     # Run slc generate command
     try:      
         logger.info("Running slc generate command...")
@@ -116,7 +120,7 @@ def main():
         cmd.append("--generator-timeout=180") 
         cmd.append("-o")
         cmd.append("makefile")
-        if not args.ci:
+        if not  ci:
             cmd.append("--java-location")
             cmd.append(java_path)
         logger.info(cmd)
