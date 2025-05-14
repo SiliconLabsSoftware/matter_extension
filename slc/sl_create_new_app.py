@@ -56,11 +56,11 @@ class createApp:
                 env_path = os.path.join(os.getcwd(),"slc","tools",".env")
                 load_dotenv(env_path,override=True)
                 os.environ["PATH"] = os.getenv("TOOLS_PATH") +  os.environ["PATH"]
-                self.silabs_chip_root = os.getenv("silabs_chip_root")
                 self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
             except:
                 print("Could not load the .env file. Run sl_setup_env.py generate .env file")
                 sys.exit(1)
+        self.silabs_chip_root = os.getenv("silabs_chip_root")
         self.java_path = os.getenv("JAVA17_HOME")
         self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
         self.sisdk_root = os.getenv("SISDK_ROOT")
