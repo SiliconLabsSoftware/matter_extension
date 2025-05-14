@@ -27,7 +27,6 @@ jobs:
             image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
 
         steps:
-<<<<<<< HEAD
             - name: Checkout
               uses: actions/checkout@v4
               with:
@@ -51,17 +50,6 @@ jobs:
                 git submodule update --init third_party/QR-Code-generator
                 git submodule update --init third_party/wiseconnect-wifi-bt-sdk
                 # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
-=======
-            - name: Initialize required submodules
-              shell: bash
-              run: |
-                git submodule update --init third_party/matter_sdk
-                git submodule update --init third_party/matter_support
-                git submodule update --init third_party/mbedtls
-                git submodule update --init third_party/nlassert
-                git submodule update --init third_party/nlio
-                # Skip unnecessary submodules like simplicity_sdk, wifi_sdk, and wiseconnect
->>>>>>> fe603643 (cd to silabs_chip_root and using sl_build)
 
             - name: Install tools
               uses: ./.github/actions/install-tools
