@@ -37,11 +37,16 @@ runs:
         release: '12.2.Rel1'
     
     - name: Stage Matter extension at SISDK_ROOT/extension/
+      shell: bash
       run: |
-        Matter_Extension = ${SISDK_ROOT}/extension
-        python3 slc/stage_extension.py Matter_Extension
-        Matter_Extension = ${Matter_Extension}/matter_extension
-        echo "Matter_Extension=${SISDK_ROOT}/extension/matter_extension" >> $GITHUB_ENV
+        if [ -z "${SISDK_ROOT}" ]; then
+          echo "Error: SISDK_ROOT is not set. Please ensure it is defined in the Docker image or environment."
+          exit 1
+        fi
+        Matter_Extension=${SISDK_ROOT}/extension
+        python3 slc/stage_extension.py "$Matter_Extension"
+        Matter_Extension=${Matter_Extension}/matter_extension
+        echo "silabs_chip_root=${Matter_Extension}" >> $GITHUB_ENV
 
     - name: Set Environment Variables
       shell: bash
