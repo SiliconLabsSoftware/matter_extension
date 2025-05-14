@@ -8,10 +8,10 @@ from pathlib import Path
 
 class createApp:
     """Class used to create new app from given arguments and slc"""
-    def __init__(self):
+    def __init__(self,use_Ci=False):
         self.EXAMPLE_USAGE = "python slc/sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard>"
         self.SoC_boards = ["brd4338a", "brd4342a", "brd4343a", "brd2605a", "brd2708a", "brd2911a"]
-        self.get_environment()
+        self.get_environment(use_Ci)
 
     def print_usage_and_exit(self):
         print("Example usage:", self.EXAMPLE_USAGE)
@@ -50,21 +50,22 @@ class createApp:
             subprocess.run(["git", "submodule", "update", "--init", "--checkout",third_party_hw_drivers_extension_path ])
             subprocess.run([self.slc_path, "signature", "trust", "--extension-path", third_party_hw_drivers_extension_path])
 
-    def get_environment(self):
-        try:
-            env_path = os.path.join(os.getcwd(),"slc","tools",".env")
-            load_dotenv(env_path,override=True)
-            os.environ["PATH"] = os.getenv("TOOLS_PATH") +  os.environ["PATH"]
-            self.java_path = os.getenv("JAVA17_HOME")
-            self.silabs_chip_root = os.getenv("silabs_chip_root")
-            self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
-            self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
-            self.sisdk_root = os.getenv("SISDK_ROOT")
-            self.wiseconnect_root = os.getenv("WISECONNECT_ROOT")
-            self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
-        except:
-            print("Could not load the .env file. Run sl_setup_env.py generate .env file")
-            sys.exit(1)
+    def get_environment(self,use_Ci):
+        if not use_Ci:
+            try:
+                env_path = os.path.join(os.getcwd(),"slc","tools",".env")
+                load_dotenv(env_path,override=True)
+                os.environ["PATH"] = os.getenv("TOOLS_PATH") +  os.environ["PATH"]
+                self.silabs_chip_root = os.getenv("silabs_chip_root")
+                self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
+            except:
+                print("Could not load the .env file. Run sl_setup_env.py generate .env file")
+                sys.exit(1)
+        self.java_path = os.getenv("JAVA17_HOME")
+        self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
+        self.sisdk_root = os.getenv("SISDK_ROOT")
+        self.wiseconnect_root = os.getenv("WIFI_SDK_ROOT")
+        self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
         
         self.slc_path = "slc"
         if sys.platform == "win32":

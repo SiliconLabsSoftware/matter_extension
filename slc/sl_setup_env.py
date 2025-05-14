@@ -301,7 +301,7 @@ if platform == "darwin":
         outfile.write("silabs_chip_root={}\n".format(matter_root))
         outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
         outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
-        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
+        outfile.write("WIFI_SDK_ROOT={}\n".format(wiseconnect_root))
 elif platform == "win32":
     with open(os.path.expanduser(os.path.join(tools_folder_path,".env")), "w") as outfile:
         outfile.write('STUDIO_ADAPTER_PACK_PATH={}\n'.format(zap_path))
@@ -314,7 +314,7 @@ elif platform == "win32":
         outfile.write("silabs_chip_root={}\n".format(matter_root))
         outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
         outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
-        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
+        outfile.write("WIFI_SDK_ROOT={}\n".format(wiseconnect_root))
 elif platform == "linux":
     with open(os.path.expanduser("slc/tools/.env"), "w") as outfile:
         outfile.write("STUDIO_ADAPTER_PACK_PATH={}\n".format(zap_path))
@@ -326,7 +326,7 @@ elif platform == "linux":
         outfile.write("silabs_chip_root={}\n".format(matter_root))
         outfile.write("NINJA_EXE_PATH={}\n".format(ninja_path))
         outfile.write("SISDK_ROOT={}\n".format(sisdk_root))
-        outfile.write("WISECONNECT_ROOT={}\n".format(wiseconnect_root))
+        outfile.write("WIFI_SDK_ROOT={}\n".format(wiseconnect_root))
 
 #Trust extensions
 App = createApp()
