@@ -148,7 +148,7 @@ jobs:
 
     wait-for-jenkins-status:
         name: Wait for Jenkins Status
-        needs: merge-apps
+        # needs: merge-apps
         runs-on: ubuntu-latest
         steps:
             - name: Generate GitHub App Token
