@@ -35,6 +35,13 @@ runs:
       id: arm-none-eabi-gcc-action
       with:
         release: '12.2.Rel1'
+    
+    - name: Stage Matter extension at SISDK_ROOT/extension/
+      run: |
+        Matter_Extension = ${SISDK_ROOT}/extension
+        python3 slc/stage_extension.py Matter_Extension
+        Matter_Extension = ${Matter_Extension}/matter_extension
+        echo "Matter_Extension=${SISDK_ROOT}/extension/matter_extension" >> $GITHUB_ENV
 
     - name: Set Environment Variables
       shell: bash
