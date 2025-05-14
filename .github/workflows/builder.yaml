@@ -35,7 +35,12 @@ jobs:
             - name: Mark repository as safe for Git
               shell: bash
               run: |
+<<<<<<< HEAD
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
+=======
+                    echo "Current workspace: $GITHUB_WORKSPACE"
+                    ls -R $GITHUB_WORKSPACE
+>>>>>>> 24e1af7b (use lowercase)
 
             - name: Initialize required submodules
               shell: bash
