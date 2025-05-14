@@ -157,8 +157,6 @@ configuration:
     value: "1"
   - name: SL_CLI_PROMPT_STRING
     value: '"TriProtocol>"'
-  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
-    value: 600
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 3
   - name: SL_BT_CONFIG_MAX_CONNECTIONS
@@ -204,6 +202,23 @@ configuration:
     value: 16
   - name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
     value: 1
+# series 3 requires more stack in zb stacks
+  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+    value: 1500
+    condition:
+      - device_series_3
+  - name: SL_ZIGBEE_STACK_RTOS_TASK_STACK_SIZE
+    value: 5800
+    condition:
+      - device_series_3
+  - name: SL_ZIGBEE_APP_FRAMEWORK_RTOS_TASK_STACK_SIZE
+    value: 6000
+    condition:
+      - device_series_3
+  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+    value: 600
+    condition:
+      - device_series_2
 
 define:
   - name: OS_CFG_COMPAT_INIT
