@@ -42,6 +42,11 @@ jobs:
                     ls -R $GITHUB_WORKSPACE
 >>>>>>> 24e1af7b (use lowercase)
 
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                submodules: 'false' # Do not initialize submodules automatically
+            
             - name: Initialize required submodules
               shell: bash
               run: |
