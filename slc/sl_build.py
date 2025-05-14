@@ -126,6 +126,8 @@ def main():
             cmd.append("--java-location")
             cmd.append(java_path)
         logger.info(cmd)
+        # Print the current working directory
+        logger.info(f"Current working directory: {os.getcwd()}")
         subprocess.run(cmd)
     except subprocess.CalledProcessError as e:
         logger.error("Error during slc generate command: %s", e)
