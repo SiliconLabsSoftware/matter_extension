@@ -69,6 +69,9 @@ jobs:
                 echo "Current directory: $(pwd)"
 
             - name: Build ${{ inputs.example-app }}
+              shell: bash
+              run: |
+                echo "Current directory: $(pwd)"
               uses: SiliconLabsSoftware/matter_build_action@3fa7357e526337fb8f370a20158b8857aeb708ab
               with:
                   json-file-path: ${{ inputs.json-file-path }}
