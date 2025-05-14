@@ -4,7 +4,7 @@
         "default": [
             {
                 "boards": ["brd4186c", "brd4187c"],
-                "arguments": [""]
+                "arguments": ["--ci"]
             }
         ]
     } 
