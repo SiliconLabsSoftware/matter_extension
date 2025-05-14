@@ -35,18 +35,16 @@ jobs:
             - name: Mark repository as safe for Git
               shell: bash
               run: |
-<<<<<<< HEAD
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
-=======
-                    echo "Current workspace: $GITHUB_WORKSPACE"
-                    ls -R $GITHUB_WORKSPACE
->>>>>>> 24e1af7b (use lowercase)
 
             - name: Checkout repository
               uses: actions/checkout@v4
               with:
                 submodules: 'false' # Do not initialize submodules automatically
-            
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                git config --global --add safe.directory /__w/matter_extension/matter_extension
             - name: Initialize required submodules
               shell: bash
               run: |
