@@ -46,7 +46,8 @@ jobs:
                 git submodule update --init third_party/nlassert
                 git submodule update --init third_party/nlio
                 git submodule update --init third_party/QR-Code-generator
-                # Skip unnecessary submodules like simplicity_sdk, wifi_sdk, and wiseconnect
+                git submodule update --init third_party/wiseconnect-wifi-bt-sdk
+                # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
 
             - name: Install tools
               uses: ./.github/actions/install-tools
