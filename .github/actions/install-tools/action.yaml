@@ -49,8 +49,8 @@ runs:
           exit 1
         fi
         silabs_chip_root=${SISDK_ROOT}extension/matter_extension
-        mkdir -p "$Matter_Extension"
-        ln -s "$(pwd)" "$Matter_Extension"
+        mkdir -p "$silabs_chip_root"
+        ln -s "$(pwd)" "$silabs_chip_root"
         echo "silabs_chip_root=${silabs_chip_root}" >> $GITHUB_ENV
 
     - name: Set Environment Variables
