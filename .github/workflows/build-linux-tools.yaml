@@ -16,7 +16,7 @@ jobs:
         shell: bash
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
-          
+
       - name: Initialize required submodules
         shell: bash
         run: |
@@ -36,6 +36,7 @@ jobs:
       
       - name: Run chip-tool build
         run: |
+            cd third_party/matter_sdk
             sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"'
             sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"'
             sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"'
