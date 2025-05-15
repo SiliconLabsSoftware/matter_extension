@@ -1,5 +1,5 @@
 
-ARG VERSION=126
+ARG VERSION=131
 FROM ghcr.io/project-chip/chip-build:${VERSION} as build
 LABEL org.opencontainers.image.source https://github.com/project-chip/connectedhomeip
 
@@ -14,8 +14,8 @@ RUN set -x \
     && : # last line
 
 
-# Download Simplicity SDK v2024.12.2 (1f19b37)
-RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.2/simplicity-sdk.zip -O /tmp/simplicity_sdk.zip \
+# Download Simplicity SDK v2024.12.1 (da661283f3)
+RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.1-0/simplicity-sdk.zip -O /tmp/simplicity_sdk.zip \
     && unzip /tmp/simplicity_sdk.zip -d /tmp/simplicity_sdk \
     && rm -rf /tmp/simplicity_sdk.zip \
     # Deleting files that are not needed to save space
@@ -29,8 +29,8 @@ RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/Silic
     rm -rf .git \
     && : # last line
 
-# Clone WiSeConnect SDK v3.5.0-fc (f6578897)
-RUN git clone --depth=1 --single-branch --branch=v3.5.0-fc https://github.com/SiliconLabs/wiseconnect.git /tmp/wifi_sdk && \
+# Clone WiSeConnect SDK v3.4.1 (f675628e)
+RUN git clone --depth=1 --single-branch --branch=v3.4.1-fc https://github.com/SiliconLabs/wiseconnect.git /tmp/wifi_sdk && \
     cd /tmp/wifi_sdk && \
     rm -rf .git \
     && : # last line
