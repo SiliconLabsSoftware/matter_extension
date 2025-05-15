@@ -48,9 +48,9 @@ runs:
           echo "Error: SISDK_ROOT is not set. Please ensure it is defined in the Docker image or environment."
           exit 1
         fi
-        Matter_Extension=${SISDK_ROOT}extension
-        python3 slc/stage_extension.py "$Matter_Extension"
-        silabs_chip_root=${Matter_Extension}/matter_extension
+        silabs_chip_root=${SISDK_ROOT}extension/matter_extension
+        mkdir -p "$Matter_Extension"
+        ln -s "$(pwd)" "$Matter_Extension"
         echo "silabs_chip_root=${silabs_chip_root}" >> $GITHUB_ENV
 
     - name: Set Environment Variables
