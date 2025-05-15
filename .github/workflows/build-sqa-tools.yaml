@@ -1,0 +1,87 @@
+name: build-sqa-tools
+
+on:
+    workflow_call:
+
+env:
+    PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
+
+jobs:    
+  build-sqa-tools:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/project-chip/chip-build-crosscompile:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+      
+      - name: Install zip utility
+        shell: bash
+        run: |
+          apt-get update
+          apt-get install -y zip
+     
+      #zip Provision folder
+      - name: Zip provisioning tool
+        shell: bash
+        run: |
+          pwd
+          file="provision.zip"
+          ls -al
+          rm -f "${file}"
+          zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
+          mkdir -p artifact
+          mv "${file}" artifact/
+          echo "Provisioning tool zipped successfully: ${file}"
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
+      
+      - name: Checkout matter_sdk submodules
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --platform linux
+          cd ../..
+
+      - name: Run bootstrap action
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v1.2.0
+        with:
+          platform: linux
+
+      # Builds SQA tools
+      - name: Build chip-tool, OTA provider, and all-clusters app
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
+
+      # Copy Artifacts at on location
+      - name: Prepare and Copy Build Artifacts
+        shell: bash
+        run: |
+          mkdir -p artifact/Chiptool/linux-arm64-ipv6only-clang
+          mkdir -p artifact/release/siwx917-rcp-files
+          mkdir -p artifact/OTA/linux-arm64-ipv6only-clang
+          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/Chiptool/linux-arm64-ipv6only-clang/
+          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/OTA/linux-arm64-ipv6only-clang/
+          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/release/siwx917-rcp-files/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqa-tools
+          path: artifact
+          if-no-files-found: error
+          overwrite: true

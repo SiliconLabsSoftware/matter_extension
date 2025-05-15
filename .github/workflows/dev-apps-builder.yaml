@@ -157,6 +157,10 @@ jobs:
             ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
+    build-sqa-tools:
+        name: Builds SQA Tools
+        needs: set-build-type
+        uses: ./.github/workflows/build-sqa-tools.yaml
 
     build-bootloaders:
         name: Build Bootloaders
