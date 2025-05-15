@@ -71,7 +71,6 @@ jobs:
                   build-script: "python3 slc/sl_build.py"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
-              working-directory: ${{ env.silabs_chip_root }}
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
