@@ -121,6 +121,18 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-internal-bootloaders:
+        name: Build Internal Bootloaders
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "matter-internal-bootloaders"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+            mg24-support: false
+            mgm24-support: false
+            mg26-support: false
 
     merge-apps:
         name: Merge App Artifacts
