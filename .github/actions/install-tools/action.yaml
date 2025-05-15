@@ -44,33 +44,9 @@ runs:
     - name: Stage Matter extension at SISDK_ROOT/extension/
       shell: bash
       run: |
-        if [ -z "${SISDK_ROOT}" ]; then
-          echo "Error: SISDK_ROOT is not set. Please ensure it is defined in the Docker image or environment."
-          exit 1
-        fi
-
-        # Debugging: Print SISDK_ROOT and current directory
-        echo "SISDK_ROOT=${SISDK_ROOT}"
-        echo "Current directory: $(pwd)"
-
         silabs_chip_root=${SISDK_ROOT}extension
-        mkdir -p "$silabs_chip_root"
-
-        # Debugging: Check permissions
-        ls -ld "$(pwd)"
-        ls -ld "${SISDK_ROOT}extension"
-
-        ln -s "$(pwd)" "$silabs_chip_root/matter_extension"
-
-        # Debugging: Check if symlink was created
-        if [ -L "$silabs_chip_root" ]; then
-          echo "Symlink $silabs_chip_root created successfully and points to $(readlink -f "$silabs_chip_root")."
-        else
-          echo "Error: Symlink $silabs_chip_root was not created."
-          exit 1
-        fi
-
-        echo "silabs_chip_root=${silabs_chip_root}" >> $GITHUB_ENV
+        python3 slc/stage_extension.py ${silabs_chip_root}
+        echo "silabs_chip_root=${silabs_chip_root}/matter_extension" >> $GITHUB_ENV
 
     - name: Set Environment Variables
       shell: bash
