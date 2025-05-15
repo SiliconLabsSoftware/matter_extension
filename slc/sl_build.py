@@ -39,6 +39,10 @@ def main():
         action="store_true", 
         help="Use for CI builds",
     )
+    parser.add_argument(
+        "--configuration",
+        help="Specify the configuration to use for the build process"
+    )
     args = parser.parse_args()
 
     # Set logging level based on verbose flag
@@ -53,6 +57,7 @@ def main():
     without_config = args.without_config
     ci =  args.ci
     output_suffix = args.output_suffix
+    configuration = args.configuration
     App = createApp( ci)
 
     # Determine project flag and paths
@@ -119,6 +124,9 @@ def main():
         if without_config:
             cmd.append("--without")
             cmd.append(with_config_args)
+        if configuration:
+            cmd.append("--configuration")
+            cmd.append(configuration)
         cmd.append("--generator-timeout=360") 
         cmd.append("-o")
         cmd.append("makefile")
