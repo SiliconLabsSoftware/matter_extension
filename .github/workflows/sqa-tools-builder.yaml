@@ -1,18 +1,7 @@
 name: Build SQA Tools
 
 on:
-  push:
-# TODO add these lines back       branches:
-#            - main
-#            - "release_*"
-  pull_request:
-      branches:
-          - main
-          - "release_*"
-
-concurrency:
-    group: sqa-tools-builder-${{ github.ref }}
-    cancel-in-progress: true
+  workflow_call: 
 
 env:
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
@@ -143,6 +132,6 @@ jobs:
       - name: Merge artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: sqa-tools
+          name: "slc-sqa-tools"
           delete-merged: true
           pattern: sqa-tools-*

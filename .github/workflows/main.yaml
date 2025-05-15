@@ -1,0 +1,67 @@
+name: Build Triggers 
+
+on:
+  push:
+    branches:
+      - main
+      - "release_*"
+  pull_request:
+    branches:
+      - main
+      - "release_*"
+  workflow_dispatch:
+    inputs:
+      build-type:
+        description: "The build type to use"
+        required: true
+        type: choice
+        options:
+          - standard
+          - full
+          - release
+
+concurrency:
+  group: build-triggers-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checkout-repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+  call-dev-apps-builder:
+    name: Call Dev Apps Builder
+    uses: ./.github/workflows/dev-apps-builder.yaml
+    with:
+      build-type: ${{ github.event.inputs.build-type }}
+
+  call-sqa-apps-builder:
+    name: Call SQA Apps Builder
+    uses: ./.github/workflows/sqa-apps-builder.yaml
+
+  call-sqa-tools-builder:
+    name: Call SQA Tools Builder
+    uses: ./.github/workflows/sqa-tools-builder.yaml
+
+  merge-apps:
+    name: Merge App Artifacts
+    runs-on: ubuntu-latest
+    needs:
+      - call-dev-apps-builder
+      - call-sqa-apps-builder
+      - call-sqa-tools-builder
+    if: success()
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: "artifacts"
+          delete-merged: true
+          pattern: |
+            sample-apps-*
+            sqa-tools
+            sample-apps-custom-sqa

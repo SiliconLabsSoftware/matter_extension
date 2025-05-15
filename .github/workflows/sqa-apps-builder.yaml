@@ -1,11 +1,7 @@
 name: Build SQA apps
 
 on:
-    push:
-
-concurrency:
-    group: sqa-build-examples-${{github.ref}}
-    cancel-in-progress: true
+    workflow_call:
 
 jobs:
     build-lock-app:
@@ -34,6 +30,6 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                  name: "sample-apps-custom-sqa"
+                  name: "slc-sample-apps-custom-sqa"
                   delete-merged: true
                   pattern: "*-custom-sqa"
