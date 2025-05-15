@@ -53,6 +53,21 @@ runs:
         ln -s "$(pwd)" "$silabs_chip_root"
         echo "silabs_chip_root=${silabs_chip_root}" >> $GITHUB_ENV
 
+        # Verify paths and symlink
+        if [ -d "$silabs_chip_root" ]; then
+          echo "Directory $silabs_chip_root exists."
+        else
+          echo "Error: Directory $silabs_chip_root was not created."
+          exit 1
+        fi
+
+        if [ -L "$silabs_chip_root" ]; then
+          echo "Symlink $silabs_chip_root exists and points to $(readlink -f "$silabs_chip_root")."
+        else
+          echo "Error: Symlink $silabs_chip_root was not created."
+          exit 1
+        fi
+
     - name: Set Environment Variables
       shell: bash
       run: |
