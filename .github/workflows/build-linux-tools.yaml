@@ -5,6 +5,12 @@ on:
 
 jobs:
   bootstrap_job:
-    uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
-    with:
-      platform: linux  # Replace 'your-platform-name' with the desired platform name
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run bootstrap action
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
+        with:
+          platform: linux
