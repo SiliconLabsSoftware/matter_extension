@@ -122,8 +122,8 @@ jobs:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
     
-    build-internal-bootloaders:
-        name: Build Internal Bootloaders
+    build-series-2-internal-bootloaders:
+        name: Build Series 2 Internal Bootloaders
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -134,6 +134,17 @@ jobs:
             mgm24-support: false
             mg26-support: false
 
+    build-series-2-bootloaders:
+        name: Build Series 2 Bootloaders
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "matter-bootloaders"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+            mg24-internal-support: false
+            mgm24-internal-support: false
+    
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
