@@ -13,13 +13,11 @@ jobs:
           submodules: 'true'
       
       - name: Checkout matter_sdk submodules
+        shell: bash
         run: |
           cd third_party/matter_sdk
           ./scripts/checkout_submodules.py --shallow --recursive --platform silabs_docker
           cd ../..
-        uses: ./.github/actions/checkout-submodules-and-bootstrap
-        with:
-          platform: silabs_docker
 
       - name: Run bootstrap action
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
