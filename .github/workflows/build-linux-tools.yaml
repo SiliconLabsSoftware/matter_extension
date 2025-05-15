@@ -26,16 +26,23 @@ jobs:
         shell: bash
         run: |
           cd third_party/matter_sdk
-          ./scripts/checkout_submodules.py --shallow --recursive --platform linux
+          ./scripts/checkout_submodules.py --platform linux
           cd ../..
 
       - name: Run bootstrap action
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
         with:
           platform: linux
-      
+          
+      - name: Set PW_ENVIRONMENT_ROOT environment variable
+        env:
+          PW_ENVIRONMENT_ROOT: ${{ github.workspace }}
+        run: |
+          echo "PW_ENVIRONMENT_ROOT is set to $PW_ENVIRONMENT_ROOT"
+
       - name: Run chip-tool build
         run: |
+
             cd third_party/matter_sdk
             sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"'
             sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"'
