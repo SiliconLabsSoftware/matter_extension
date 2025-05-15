@@ -1,0 +1,12 @@
+name: build-linux-tools
+
+on:
+    workflow_call:
+
+jobs:
+  bootstrap_job:
+      # Use the Bootstrap action from the SiliconLabsSoftware/matter_build_action repository
+      - name: Run Bootstrap
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
+        with:
+          platform: linux  # Replace 'your-platform-name' with the desired platform name
