@@ -77,16 +77,16 @@ jobs:
 #            ncp-wf200-support: true
 #            ncp-rs911x-support: true
 
-#    build-thermostat-app:
-#        name: Build Thermostat App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "thermostat"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            ncp-917-support: true
-#            ncp-wf200-support: true
-#            ncp-rs911x-support: true
+    build-thermostat-app:
+        name: Build Thermostat App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "thermostat"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
+            ncp-rs911x-support: true
 
 #    build-window-app:
 #        name: Build Window App
@@ -97,14 +97,14 @@ jobs:
 #            build-type: ${{ needs.set-build-type.outputs.build-type }}
 #            ncp-917-support: true
 
-#    build-fan-control-app:
-#        name: Build Fan Control App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "fan-control-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            thread-support: false
+    build-fan-control-app:
+        name: Build Fan Control App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "fan-control-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
 
 #    build-multi-sensor-app:
 #        name: Build Multi Sensor App
@@ -122,33 +122,33 @@ jobs:
 #            example-app: "onoff-plug-app"
 #            build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-#    merge-apps:
-#        name: Merge App Artifacts
-#        runs-on: ubuntu-latest
-#        needs:
-#            - set-build-type
-##            - build-lighting-app
-##            - build-air-quality-sensor-app
-##            - build-light-switch-app
-##            - build-lock-app
-#            - build-thermostat-app
-##            - build-window-app
-#            - build-fan-control-app
-##            - build-multi-sensor-app
-##            - build-onoff-plug-app
-#        if: success()
-#
-#        steps:
-#            - name: Merge artifacts
-#              uses: actions/upload-artifact/merge@v4
-#              with:
-#                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
-#                delete-merged: true
-#                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+    merge-apps:
+        name: Merge App Artifacts
+        runs-on: ubuntu-latest
+        needs:
+            - set-build-type
+#            - build-lighting-app
+#            - build-air-quality-sensor-app
+#            - build-light-switch-app
+#            - build-lock-app
+            - build-thermostat-app
+#            - build-window-app
+            - build-fan-control-app
+#            - build-multi-sensor-app
+#            - build-onoff-plug-app
+        if: success()
+
+        steps:
+            - name: Merge artifacts
+              uses: actions/upload-artifact/merge@v4
+              with:
+                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
+                delete-merged: true
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
     wait-for-jenkins-status:
         name: Wait for Jenkins Status
-        # needs: merge-apps
+        needs: merge-apps
         runs-on: ubuntu-latest
         steps:
             - name: Generate GitHub App Token
