@@ -33,7 +33,7 @@ jobs:
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
         with:
           platform: linux
-          
+
       - name: Set PW_ENVIRONMENT_ROOT environment variable
         env:
           PW_ENVIRONMENT_ROOT: ${{ github.workspace }}
@@ -41,15 +41,18 @@ jobs:
           echo "PW_ENVIRONMENT_ROOT is set to $PW_ENVIRONMENT_ROOT"
 
       - name: Run chip-tool build
+        shell: bash
         run: |
-
-            cd third_party/matter_sdk
-            sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"'
-            sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"'
-            sh './scripts/run_in_build_env.sh  "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"'
-            sh "mkdir -p artifact/Chiptool/linux-arm64-ipv6only-clang; cp out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/Chiptool/linux-arm64-ipv6only-clang/"
-            sh "mkdir -p artifact/OTA/linux-arm64-ipv6only-clang; cp out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/OTA/linux-arm64-ipv6only-clang/"
-            sh "cp out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/release/siwx917-rcp-files/"
+          cd third_party/matter_sdk
+          pwd
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
+          mkdir -p artifact/Chiptool/linux-arm64-ipv6only-clang
+          cp out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/Chiptool/linux-arm64-ipv6only-clang/
+          mkdir -p artifact/OTA/linux-arm64-ipv6only-clang
+          cp out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/OTA/linux-arm64-ipv6only-clang/
+          cp out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/release/siwx917-rcp-files/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
