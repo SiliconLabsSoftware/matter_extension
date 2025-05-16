@@ -1,4 +1,4 @@
-label: matter-bootloader
+label: matter-bootloader-thread-bootloader
 quality: production
 description: Matter solution containing a bootloader internal project series-3
 project:

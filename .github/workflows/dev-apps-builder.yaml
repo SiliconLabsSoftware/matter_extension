@@ -127,7 +127,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "matter-internal-bootloaders"
+            example-app: "matter-bootloader"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
             mg24-support: false
@@ -139,7 +139,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "matter-bootloaders"
+            example-app: "matter-bootloader"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
             mg24-internal-support: false

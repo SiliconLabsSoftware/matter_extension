@@ -1,4 +1,4 @@
-label: matter-internal-bootloader
+label:matter-bootloader-thread-internal-bootloader.slcw
 quality: production
 description: Matter solution containing a bootloader internal project series-2
 project:
