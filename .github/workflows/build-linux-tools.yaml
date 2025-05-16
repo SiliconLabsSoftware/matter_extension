@@ -7,7 +7,7 @@ jobs:
   bootstrap_job:
     runs-on: ubuntu-latest
     container:
-            image: ghcr.io/project-chip/chip-build-efr32:115
+            image: ghcr.io/project-chip/chip-build-efr32:SiSDKv2024.12.1_WiFi_SDKv3.4.1
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,28 +25,15 @@ jobs:
           git submodule update --init third_party/matter_sdk
       
       - name: Checkout matter_sdk submodules
+        env:
+          PW_ENVIRONMENT_ROOT: ${{ github.workspace }}
+        run: |
         shell: bash
         run: |
           cd third_party/matter_sdk
           ./scripts/checkout_submodules.py --platform linux
-          cd ../..
-
-      - name: Run bootstrap action
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@main
-        with:
-          platform: linux
-
-      - name: Set PW_ENVIRONMENT_ROOT environment variable
-        env:
-          PW_ENVIRONMENT_ROOT: ${{ github.workspace }}
-        run: |
-          echo "PW_ENVIRONMENT_ROOT is set to $PW_ENVIRONMENT_ROOT"
-
-      - name: Run chip-tool build
-        shell: bash
-        run: |
-          cd third_party/matter_sdk
-          pwd
+           echo "PW_ENVIRONMENT_ROOT is set to $PW_ENVIRONMENT_ROOT"
+          . scripts/bootstrap.sh
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
