@@ -121,6 +121,11 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-linux-tools:
+        name: Builds Linux Tools
+        needs: set-build-type
+        uses: ./.github/workflows/build-linux-tools.yaml
 
     merge-apps:
         name: Merge App Artifacts
