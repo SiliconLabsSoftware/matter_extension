@@ -1,7 +1,9 @@
-label:matter-bootloader-thread-internal-bootloader.slcw
+label: matter-bootloader-thread-internal-bootloader.slcw
 quality: production
 description: Matter solution containing a bootloader internal project series-2
 project:
   - path: ../../../sample-app/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
     id: bootloader
     output: matter-bootloader
+post_build:
+  path: ../../../postbuild/matter_thread_bootloader.slpb
