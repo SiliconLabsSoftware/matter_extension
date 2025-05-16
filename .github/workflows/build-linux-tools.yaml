@@ -27,7 +27,6 @@ jobs:
       - name: Checkout matter_sdk submodules
         env:
           PW_ENVIRONMENT_ROOT: ${{ github.workspace }}
-        run: |
         shell: bash
         run: |
           cd third_party/matter_sdk
