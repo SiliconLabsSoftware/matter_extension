@@ -11,7 +11,7 @@ sdk_extension:
 
 component:
   - id: device_init
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: ot_stack_ftd
   - id: matter_buttons

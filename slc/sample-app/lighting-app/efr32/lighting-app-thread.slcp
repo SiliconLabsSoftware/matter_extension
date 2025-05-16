@@ -11,10 +11,10 @@ sdk_extension:
 
 component:
   - id: device_init
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: ot_stack_ftd
-  - id: common_token_manager_nvm3
+  - id: common_token_manager_dynamic
     condition: [device_series_3]
   - id: common_token_manager
     condition: [device_series_3]

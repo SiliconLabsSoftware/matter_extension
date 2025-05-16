@@ -15,6 +15,7 @@ requires:
   - name: bluetooth_stack
   - name: bluetooth_feature_system
   - name: bluetooth_feature_connection
+  - name: bluetooth_feature_connection_role_peripheral
   - name: matter_gatt
 
 provides:

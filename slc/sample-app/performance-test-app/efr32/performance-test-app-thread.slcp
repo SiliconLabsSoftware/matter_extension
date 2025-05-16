@@ -11,7 +11,7 @@ sdk_extension:
 
 component:
   - id: device_init
-  - id: sl_system
+  - id: sl_main
   - id: clock_manager
   - id: matter_performance_testing
     from: matter

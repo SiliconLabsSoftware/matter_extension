@@ -16,6 +16,7 @@ provides:
 
 component:
   - id: device_init
+  - id: sl_main
   - id: matter_buttons
     from: matter
   - id: matter_leds

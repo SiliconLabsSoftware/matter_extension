@@ -44,7 +44,6 @@ requires:
     condition: [matter_wifi]
   - name: power_manager
     condition: [matter_wifi]
-  - name: sl_system
   - name: freertos
   - name: sleeptimer
   - name: dmadrv

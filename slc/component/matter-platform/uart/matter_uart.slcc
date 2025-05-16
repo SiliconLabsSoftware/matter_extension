@@ -15,7 +15,7 @@ requires:
 
 provides:
   - name: matter_uart
-  - name: ot_uart_implemention
+  - name: ot_uart_implementation
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp

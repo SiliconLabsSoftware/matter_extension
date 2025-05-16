@@ -9,6 +9,7 @@ component:
   - id: device_init
   - id: clock_manager
   - id: rail_mux
+  - id: sl_main
   # Needed to use Network Analyser
   #- id: rail_util_pti
   - instance: [example]
@@ -248,10 +249,15 @@ config_file:
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+    directory: src
   - path: ../../../../examples/zigbee-matter-light/src/AppTask.cpp
+    directory: src
   - path: ../../../../examples/zigbee-matter-light/src/MatterDMCallbacks.cpp
+    directory: src
   - path: ../../../../examples/zigbee-matter-light/src/ZigbeeCallbacks.cpp
+    directory: src
   - path: ../../../../examples/zigbee-matter-light/src/LightingManager.cpp
+    directory: src
 
 include:
   - path: ../../../../examples/zigbee-matter-light/include
@@ -262,6 +268,7 @@ include:
       - path: CHIPProjectConfig.h
       - path: LightingManager.h
       - path: ZigbeeCallbacks.h
+    directory: include
 post_build:
   profile: application
 
