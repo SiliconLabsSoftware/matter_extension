@@ -1,7 +1,7 @@
-id: matter_gatt
-label: GATT Configuration
+id: matter_gatt_static
+label: GATT Configuration with MATTERoBLE
 description: >
-  Adds GATT Configuration for Matter.
+  Adds GATT Configuration required for Matter to commission over ble.
 package: matter
 category: Stack|Bluetooth
 quality: production
@@ -12,9 +12,12 @@ config_file:
   - directory: btconf
     path: third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
 provides:
-  - name: gatt_configuration
-  - name: "bluetooth_gatt_database"
-  - name: matter_gatt
+-   name: gatt_configuration
+-   name: bluetooth_gatt_database
+-   name: matter_gatt
+-   name: matter_gatt_static
+conflicts:
+-   name: matter_gatt_dynamic
 requires:
   - name: "bluetooth_gattdb_definition"
 template_contribution:
