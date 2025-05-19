@@ -1,0 +1,9 @@
+parameters: []
+
+constants:
+  - name: workspace_name
+    value: my_workspace
+steps:
+- task: copy
+  input: "{{bootloader_binary}}"
+  output: artifact/{{workspace_name}}.s37
