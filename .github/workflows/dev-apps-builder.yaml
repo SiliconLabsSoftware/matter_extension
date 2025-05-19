@@ -122,6 +122,15 @@ jobs:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build-bootloaders:
+        name: Build Bootloaders
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "matter-bootloader"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+    
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
