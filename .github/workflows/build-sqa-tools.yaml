@@ -77,21 +77,21 @@ jobs:
         with:
           platform: linux
 
-      # Builds SQA tools
+      # Builds chip-tool
       - name: Build chip-tool
         shell: bash
         run: |
           cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
       
-      # Builds SQA tools
+      # Builds OTA provider
       - name: Build OTA provider
         shell: bash
         run: |
           cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
 
-      # Builds SQA tools
+      # Builds all-clusters app
       - name: Build all-clusters app
         shell: bash
         run: |
