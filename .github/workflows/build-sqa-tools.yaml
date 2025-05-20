@@ -110,6 +110,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sqa-tools
-          path: artifact
+          path: sqa-tools
           if-no-files-found: error
           overwrite: true
