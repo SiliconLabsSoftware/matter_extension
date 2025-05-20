@@ -121,6 +121,17 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-refrigerator-app:
+    name: Build Refrigerator App
+    needs: set-build-type
+    uses: ./.github/workflows/platform-builder.yaml
+    with:
+        example-app: "refrigerator-app"
+        build-type: ${{ needs.set-build-type.outputs.build-type }}
+        ncp-917-support: true
+        ncp-wf200-support: true
+        ncp-rs911x-support: true
 
     build-bootloaders:
         name: Build Bootloaders
@@ -146,6 +157,7 @@ jobs:
             - build-fan-control-app
             - build-multi-sensor-app
             - build-onoff-plug-app
+            - build-refrigerator-app
         if: success()
 
         steps:
