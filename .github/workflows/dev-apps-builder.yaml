@@ -121,11 +121,6 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-    
-    build-sqa-tools:
-        name: Builds SQA Tools
-        needs: set-build-type
-        uses: ./.github/workflows/build-sqa-tools.yaml
 
     build-bootloaders:
         name: Build Bootloaders
