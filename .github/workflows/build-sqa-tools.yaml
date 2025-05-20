@@ -86,17 +86,15 @@ jobs:
       - name: Prepare and Copy Build Artifacts
         shell: bash
         run: |
-          mkdir -p artifact/Chiptool/linux-arm64-ipv6only-clang
-          mkdir -p artifact/release/siwx917-rcp-files
-          mkdir -p artifact/OTA/linux-arm64-ipv6only-clang
-          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/
-          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/
-          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/
+          mkdir -p sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sqa-tools
-          path: artifact
+          path: sqa-tools
           if-no-files-found: error
           overwrite: true
