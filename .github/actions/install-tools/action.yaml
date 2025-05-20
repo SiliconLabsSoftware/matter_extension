@@ -11,34 +11,7 @@ runs:
         unzip zap-linux-x64.zip -d /opt/silabs/zap-linux-x64
         rm zap-linux-x64.zip
 
-    - name: Install Simplicity Commander
-      shell: bash
-      run: |
-        wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip
-        unzip SimplicityCommander-Linux.zip -d /opt/silabs/simplicity-commander
-        rm SimplicityCommander-Linux.zip
-        FILE=$(find /opt/silabs/simplicity-commander/ -name "*Commander_linux_x86_64*")
-        if [ -n "$FILE" ]; then
-          echo "$FILE"
-          tar -xjvf "$FILE" -C /opt/silabs/simplicity-commander
-        else
-          echo "File not found"
-        fi
-
-    - name: Install zip
-      shell: bash
-      run: |
-        apt-get update && apt-get install -y zip
-
-    - name: Install Arm GNU Toolchain (arm-none-eabi-gcc)
-      uses: carlosperate/arm-none-eabi-gcc-action@v1
-      id: arm-none-eabi-gcc-action
-      with:
-        release: '12.2.Rel1'
-
     - name: Set Environment Variables
       shell: bash
       run: |
-        echo "ARM_GCC_DIR=${{ steps.arm-none-eabi-gcc-action.outputs.path }}/.." >> $GITHUB_ENV
-        echo "POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander" >> $GITHUB_ENV
         echo "STUDIO_ADAPTER_PACK_PATH=/opt/silabs/zap-linux-x64" >> $GITHUB_ENV
