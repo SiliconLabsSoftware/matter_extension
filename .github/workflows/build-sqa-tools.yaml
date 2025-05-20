@@ -34,7 +34,15 @@ jobs:
           zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
           mkdir -p artifact
           mv "${file}" artifact/
-          echo "Provisioning tool zipped successfully: ${file}"
+          echo "Provisioning tool zipped successfully: artifact/${file}"
+      
+      - name: Zip OTA scripts
+        shell: bash
+        run: |
+           ota_file="ota-scripts.zip"
+           zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+           mv "{ota_file}" artifact/
+           echo "OTA scripts zipped successfully: artifact/${file}"
       
       - name: Mark repository as safe for Git
         shell: bash
@@ -74,9 +82,9 @@ jobs:
           mkdir -p artifact/Chiptool/linux-arm64-ipv6only-clang
           mkdir -p artifact/release/siwx917-rcp-files
           mkdir -p artifact/OTA/linux-arm64-ipv6only-clang
-          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/Chiptool/linux-arm64-ipv6only-clang/
-          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/OTA/linux-arm64-ipv6only-clang/
-          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/release/siwx917-rcp-files/
+          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool artifact/
+          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app artifact/
+          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app artifact/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
