@@ -42,10 +42,33 @@ RUN wget https://www.silabs.com/documents/login/software/slc_cli_linux.zip && \
     rm ./slc_cli_linux.zip \
     && : # last line
 
+# TODO: figure out a way to make this a fixed version. Currently a moving target.
+RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip
+    unzip SimplicityCommander-Linux.zip -d /opt/silabs/simplicity-commander
+    rm SimplicityCommander-Linux.zip
+    FILE=$(find /opt/silabs/simplicity-commander/ -name "*Commander_linux_x86_64*")
+    if [ -n "$FILE" ]; then
+    echo "$FILE"
+    tar -xjvf "$FILE" -C /opt/silabs/simplicity-commander
+    else
+    echo "File not found"
+    fi
+
 # Final SDK container for compiling using Silabs SDK
 FROM ghcr.io/project-chip/chip-build:${VERSION}
 
 ADD requirements.txt /tmp/requirements.txt
+
+# Install Zip
+RUN set -x \
+    && apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
+    git \
+    git-lfs \
+    zip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/ \
+    && : # last line
 
 # GNU ARM Embedded toolchain, cross compiler for various platform builds
 RUN set -x \
@@ -68,7 +91,8 @@ ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
-ENV SYSROOT_AARCH64=/opt/ubuntu-24.04-aarch64-sysroot
+ENV ARM_GCC_DIR=/usr/bin/arm-none-eabi-gcc
+ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
