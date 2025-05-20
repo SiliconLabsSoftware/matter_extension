@@ -129,9 +129,21 @@ jobs:
     with:
         example-app: "refrigerator-app"
         build-type: ${{ needs.set-build-type.outputs.build-type }}
-        ncp-917-support: true
-        ncp-wf200-support: true
-        ncp-rs911x-support: true
+        ncp-917-support: false
+        ncp-wf200-support: false
+        ncp-rs911x-support: false
+    
+    build-performance-test-app:
+    name: Build Performance Test App
+    needs: set-build-type
+    uses: ./.github/workflows/platform-builder.yaml
+    with:
+        example-app: "performance-test-app"
+        build-type: ${{ needs.set-build-type.outputs.build-type }}
+        ncp-917-support: false
+        ncp-wf200-support: false
+        ncp-rs911x-support: false
+        wifi-soc-support: false
 
     build-bootloaders:
         name: Build Bootloaders
