@@ -11,7 +11,7 @@ on:
           - "release_*"
 
 concurrency:
-    group: sqa-build-tools-${{ github.ref }}
+    group: sqa-tools-builder-${{ github.ref }}
     cancel-in-progress: true
 
 env:
