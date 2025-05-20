@@ -1,4 +1,4 @@
-name: build-sqa-tools
+name: Build SQA Tools
 
 on:
     workflow_call:
@@ -40,7 +40,7 @@ jobs:
         shell: bash
         run: |
            ota_file="ota-scripts.zip"
-           zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+           zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
            mv "{ota_file}" artifact/
            echo "OTA scripts zipped successfully: artifact/${file}"
       
@@ -67,12 +67,24 @@ jobs:
           platform: linux
 
       # Builds SQA tools
-      - name: Build chip-tool, OTA provider, and all-clusters app
+      - name: Build chip-tool
         shell: bash
         run: |
           cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
+      
+      # Builds SQA tools
+      - name: Build OTA provider
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
+
+      # Builds SQA tools
+      - name: Build all-clusters app
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
 
       # Copy Artifacts at on location
