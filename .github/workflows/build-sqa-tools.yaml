@@ -59,7 +59,7 @@ jobs:
            ota_file="ota-scripts.zip"
            zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
            mv "${ota_file}" sqa-tools/
-           echo "OTA scripts zipped successfully: sqa-tools/${file}"
+           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
       
       - name: Checkout matter_sdk submodules
         shell: bash
