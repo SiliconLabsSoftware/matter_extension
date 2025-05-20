@@ -10,6 +10,10 @@ on:
           - main
           - "release_*"
 
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
 env:
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
