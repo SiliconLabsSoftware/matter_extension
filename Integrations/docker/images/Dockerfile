@@ -99,3 +99,4 @@ COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
 COPY --from=build /tmp/wifi_sdk ${WIFI_SDK_ROOT}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
+COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
