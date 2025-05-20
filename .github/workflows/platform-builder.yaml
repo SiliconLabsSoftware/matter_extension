@@ -13,6 +13,10 @@ on:
                 required: false
                 type: boolean
                 default: true
+            thread-keyword:
+                required: false
+                type: string
+                default: "-thread"
             wifi-soc-support:
                 required: false
                 type: boolean
@@ -56,7 +60,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{thread-keyword}}-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
