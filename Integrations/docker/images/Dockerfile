@@ -43,16 +43,17 @@ RUN wget https://www.silabs.com/documents/login/software/slc_cli_linux.zip && \
     && : # last line
 
 # TODO: figure out a way to make this a fixed version. Currently a moving target.
-RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip
-    unzip SimplicityCommander-Linux.zip -d /opt/silabs/simplicity-commander
-    rm SimplicityCommander-Linux.zip
-    FILE=$(find /opt/silabs/simplicity-commander/ -name "*Commander_linux_x86_64*")
-    if [ -n "$FILE" ]; then
-    echo "$FILE"
-    tar -xjvf "$FILE" -C /opt/silabs/simplicity-commander
-    else
-    echo "File not found"
-    fi
+RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip && \
+    unzip ./SimplicityCommander-Linux.zip -d /opt/silabs/simplicity-commander && \
+    rm ./SimplicityCommander-Linux.zip && \
+    FILE=$(find /opt/silabs/simplicity-commander/ -name "*Commander_linux_x86_64*") && \
+    if [ -n "$FILE" ]; then \
+        echo "$FILE" && \
+        tar -xjvf "$FILE" -C /opt/silabs/simplicity-commander; \
+    else \
+        echo "File not found"; \
+    fi && \
+    : # last line
 
 # Final SDK container for compiling using Silabs SDK
 FROM ghcr.io/project-chip/chip-build:${VERSION}
