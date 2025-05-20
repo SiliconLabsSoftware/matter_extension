@@ -1,10 +1,17 @@
 name: Build SQA Tools
 
 on:
-    workflow_call:
+  push:
+# TODO add these lines back       branches:
+#            - main
+#            - "release_*"
+  pull_request:
+      branches:
+          - main
+          - "release_*"
 
 env:
-    PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
+  PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
 jobs:    
   build-sqa-tools:
