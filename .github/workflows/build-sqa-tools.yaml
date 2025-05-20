@@ -35,6 +35,11 @@ jobs:
           mkdir -p artifact
           mv "${file}" artifact/
           echo "Provisioning tool zipped successfully: artifact/${file}"
+
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
       
       - name: Zip OTA scripts
         shell: bash
@@ -43,16 +48,6 @@ jobs:
            zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
            mv "{ota_file}" artifact/
            echo "OTA scripts zipped successfully: artifact/${file}"
-      
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init third_party/matter_sdk
       
       - name: Checkout matter_sdk submodules
         shell: bash
