@@ -44,12 +44,12 @@ RUN wget https://www.silabs.com/documents/login/software/slc_cli_linux.zip && \
 
 # TODO: figure out a way to make this a fixed version. Currently a moving target.
 RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip && \
-    unzip ./SimplicityCommander-Linux.zip -d /opt/silabs/simplicity-commander && \
+    unzip ./SimplicityCommander-Linux.zip -d /tmp && \
     rm ./SimplicityCommander-Linux.zip && \
-    FILE=$(find /opt/silabs/simplicity-commander/ -name "*Commander_linux_x86_64*") && \
+    FILE=$(find /tmp -name "*Commander_linux_x86_64*") && \
     if [ -n "$FILE" ]; then \
         echo "$FILE" && \
-        tar -xjvf "$FILE" -C /opt/silabs/simplicity-commander; \
+        tar -xjvf "$FILE" -C /tmp; \
     else \
         echo "File not found"; \
     fi && \
