@@ -77,7 +77,7 @@ RUN set -x \
 RUN set -x \
     && wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF -O /tmp/arm-gnu-toolchain.tar.xz \
     && ls /tmp \
-    && echo "download completed"
+    && echo "download completed" \
     && mkdir -p /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi \
     && tar -xf /tmp/arm-gnu-toolchain.tar.xz -C /opt \
     && rm /tmp/arm-gnu-toolchain.tar.xz \
