@@ -75,6 +75,7 @@ RUN set -x \
 RUN wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=732D909FA8F68C0E1D0D17D08E057619" -O /arm_gcc.tar.xz && \
     tar -xJf /arm_gcc.tar.xz -C /tmp && \
     ls /tmp && \
+    mv /tmp/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi /opt/silabs/arm-gcc
     rm /arm_gcc.tar.xz \
     && : # last line
 
@@ -84,11 +85,10 @@ ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
-ENV ARM_GCC_DIR=/opt/silabs/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi
+ENV ARM_GCC_DIR=/opt/silabs/arm-gcc
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
 COPY --from=build /tmp/wifi_sdk ${WIFI_SDK_ROOT}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
-COPY --from=build /tmp/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi /opt/silabs/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi
