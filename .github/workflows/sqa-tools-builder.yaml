@@ -69,7 +69,6 @@ jobs:
         run: |
           cd third_party/matter_sdk
           ./scripts/checkout_submodules.py --platform linux
-          cd ../..
 
       - name: Run bootstrap action
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@v1.2.0
