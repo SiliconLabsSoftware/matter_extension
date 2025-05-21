@@ -24,11 +24,6 @@ RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.1
     && find /tmp/simplicity_sdk/protocol/openthread -name "*efr32mg21*" -delete \
     && : # last line
 
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
-    && ls /tmp \
-    && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz \
-    && : # last line
-
 # Clone WiSeConnect Wi-Fi and Bluetooth Software 2.11.4 (bf6b600)
 RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git /tmp/wiseconnect-wifi-bt-sdk && \
     cd /tmp/wiseconnect-wifi-bt-sdk && \
@@ -61,6 +56,13 @@ RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Li
     fi && \
     : # last line
 
+# Download ARM GCC toolchain v10.3-2021.07 (aarch64-none-eabi)
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
+    && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz \
+    && rm -rf /tmp/arm-gnu-toolchain.tar.xz \
+    && ls /tmp \
+    && : # last line
+
 # Final SDK container for compiling using Silabs SDK
 FROM ghcr.io/project-chip/chip-build:${VERSION}
 
@@ -81,3 +83,4 @@ COPY --from=build /tmp/wifi_sdk ${WISECONNECT3_DIR}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
 COPY --from=build /tmp/arm-gnu-toolchain-* ${ARM_GCC_DIR}
+RUN ls ${ARM_GCC_DIR}
