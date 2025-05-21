@@ -1,5 +1,5 @@
 
-ARG VERSION=81
+ARG VERSION=latest
 FROM ghcr.io/project-chip/chip-build:${VERSION} AS build
 LABEL org.opencontainers.image.source https://github.com/project-chip/connectedhomeip
 
@@ -70,13 +70,14 @@ ADD requirements.txt /tmp/requirements.txt
 ENV GSDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
-ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
+ENV WISECONNECT3_DIR=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
-ENV ARM_GCC_DIR=/opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi
+ENV ARM_GCC_DIR=/opt/arm-gcc
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
-COPY --from=build /tmp/wifi_sdk ${WIFI_SDK_ROOT}
+COPY --from=build /tmp/wifi_sdk ${WISECONNECT3_DIR}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
+COPY --from=build /tmp/arm-gnu-toolchain-* ${ARM_GCC_DIR}
