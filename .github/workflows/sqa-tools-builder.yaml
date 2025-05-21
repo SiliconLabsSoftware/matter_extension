@@ -119,6 +119,7 @@ jobs:
       - name: Copy Build Artifacts to output directory
         shell: bash
         run: |
+          mkdir -p sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
