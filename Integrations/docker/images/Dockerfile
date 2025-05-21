@@ -76,6 +76,7 @@ RUN wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel
     tar -xJf /arm_gcc.tar.xz -C /tmp && \
     ls /tmp && \
     ARM_GNU_DIR=$(find /tmp -maxdepth 1 -type d -name "arm-gnu-*") && \
+    echo $ARM_GNU_DIR && \
     mv "$ARM_GNU_DIR" /tmp/arm_gcc && \
     ls /tmp && \
     rm /arm_gcc.tar.xz \
