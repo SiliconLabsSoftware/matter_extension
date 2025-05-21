@@ -31,7 +31,6 @@ jobs:
       shell: bash
       run: |
         file="provision.zip"
-        rm -f "${file}"
         zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
         mkdir -p sqa-tools/
         mv "${file}" sqa-tools/
