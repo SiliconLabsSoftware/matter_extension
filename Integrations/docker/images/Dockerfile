@@ -72,26 +72,39 @@ RUN set -x \
     && : # last line
 
 # GNU ARM Embedded toolchain, cross compiler for various platform builds
+# Install Arm GNU Toolchain 12.1.Rel1 (arm-none-eabi-gcc)
 RUN set -x \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
-    gcc-arm-none-eabi \
-    binutils-arm-none-eabi \
-    openjdk-17-jdk-headless \
-    ccache \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/ \
-    # Install Python Packages
-    && pip3 install --break-system-packages -r /tmp/requirements.txt \
-    && rm /tmp/requirements.txt \
+    && wget -q https://developer.arm.com/-/media/Files/downloads/gnu/12.1.rel1/binrel/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
+    && mkdir -p /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi \
+    && tar -xf /tmp/arm-gnu-toolchain.tar.xz -C /opt \
+    && rm /tmp/arm-gnu-toolchain.tar.xz \
+    && ln -s /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc /usr/local/bin/arm-none-eabi-gcc \
+    && ln -s /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-g++ /usr/local/bin/arm-none-eabi-g++ \
+    && ln -s /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objcopy /usr/local/bin/arm-none-eabi-objcopy \
+    && ln -s /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objdump /usr/local/bin/arm-none-eabi-objdump \
+    && ln -s /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-size /usr/local/bin/arm-none-eabi-size \
     && : # last line
-    
+
+RUN set -x \
+&& apt-get update \
+&& DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
+openjdk-17-jdk-headless \
+ccache \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/ \
+# Install Python Packages
+&& pip3 install --break-system-packages -r /tmp/requirements.txt \
+&& rm /tmp/requirements.txt \
+&& : # last line
+
 # Keep GSDK_ROOT name until rename transition to SISDK is completed
+ENV GSDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
+ENV ARM_GCC_DIR=/opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
