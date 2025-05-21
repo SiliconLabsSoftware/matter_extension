@@ -74,7 +74,8 @@ RUN set -x \
 # GNU ARM Embedded toolchain, cross compiler for various platform builds
 RUN wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=732D909FA8F68C0E1D0D17D08E057619" -O /arm_gcc.tar.xz && \
     tar -xJf /arm_gcc.tar.xz -C /tmp && \
-    ARM_GNU_DIR=$(find /tmp -maxdepth 1 -type d -name "arm-gnu-toolchain-*") && \
+    ls /tmp && \
+    ARM_GNU_DIR=$(find /tmp -maxdepth 1 -type d -name "arm-gnu-*") && \
     mv "$ARM_GNU_DIR" /tmp/arm_gcc && \
     ls /tmp && \
     rm /arm_gcc.tar.xz \
