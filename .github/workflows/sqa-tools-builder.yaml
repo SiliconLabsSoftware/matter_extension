@@ -146,6 +146,4 @@ jobs:
         with:
           name: sqa-tools
           delete-merged: true
-          path: sqa-tools
-          if-no-files-found: error
-          overwrite: true
+          pattern: sqa-tools/*
