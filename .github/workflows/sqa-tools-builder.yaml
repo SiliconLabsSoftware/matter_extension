@@ -140,12 +140,12 @@ jobs:
           - package-provisioning-and-ota-scripts
       if: success()
 
-    steps:
-      - name: Merge artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: sqa-tools
-          delete-merged: true
-          path: sqa-tools
-          if-no-files-found: error
-          overwrite: true
+      steps:
+        - name: Merge artifacts
+          uses: actions/upload-artifact/merge@v4
+          with:
+            name: sqa-tools
+            delete-merged: true
+            path: sqa-tools
+            if-no-files-found: error
+            overwrite: true
