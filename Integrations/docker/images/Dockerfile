@@ -80,3 +80,9 @@ COPY --from=build /tmp/wifi_sdk ${WISECONNECT3_DIR}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
 COPY --from=build /tmp/arm-gnu-toolchain-* ${ARM_GCC_DIR}
+
+RUN ls /opt/silabs
+RUN ls /opt/silabs/slc_cli
+RUN ls ${ARM_GCC_DIR}
+RUN [ -x ${POST_BUILD_EXE} ] && echo "${POST_BUILD_EXE} exists and is executable" || (echo "${POST_BUILD_EXE} missing or not executable" && exit 1)
+RUN echo ${PATH}
