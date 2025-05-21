@@ -146,4 +146,4 @@ jobs:
         with:
           name: sqa-tools
           delete-merged: true
-          pattern: sqa-tools/*
+          pattern: sqa-*
