@@ -4,7 +4,7 @@
         "default": [
             {
                 "boards": ["brd4316a", "brd4317a", "brd4318a"],
-                "arguments": [""]
+                "arguments": ["--ci"]
             }
         ]
     } 

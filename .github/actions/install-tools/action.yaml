@@ -36,6 +36,18 @@ runs:
       with:
         release: '12.2.Rel1'
 
+    - name: install required python lib
+      shell: bash
+      run: |
+        pip3 install python-dotenv
+    
+    - name: Stage Matter extension at SISDK_ROOT/extension/
+      shell: bash
+      run: |
+        silabs_chip_root=${SISDK_ROOT}extension
+        python3 slc/stage_extension.py ${silabs_chip_root}
+        echo "silabs_chip_root=${silabs_chip_root}/matter_extension" >> $GITHUB_ENV
+
     - name: Set Environment Variables
       shell: bash
       run: |
