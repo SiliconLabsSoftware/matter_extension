@@ -79,17 +79,16 @@ RUN wget "https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel
     && : # last line
 
 # Keep GSDK_ROOT name until rename transition to SISDK is completed
-ENV GSDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
-ENV ARM_GCC_DIR=/opt/silabs/arm_gcc
+ENV ARM_GCC_DIR=/opt/silabs/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
 COPY --from=build /tmp/wiseconnect-wifi-bt-sdk/ ${WISECONNECT_SDK_ROOT}
 COPY --from=build /tmp/wifi_sdk ${WIFI_SDK_ROOT}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
-COPY --from=build /tmp/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi /opt/silabs/arm_gcc
+COPY --from=build /tmp/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi /opt/silabs/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi
