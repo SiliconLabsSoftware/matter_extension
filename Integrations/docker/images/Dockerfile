@@ -60,13 +60,14 @@ FROM ghcr.io/project-chip/chip-build:${VERSION}
 
 ADD requirements.txt /tmp/requirements.txt
 
-# Install Zip
+# Install Zip and tar
 RUN set -x \
     && apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
     git \
     git-lfs \
     zip \
+    tar \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/ \
     && : # last line
