@@ -9,6 +9,8 @@ RUN set -x \
     && DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
     git \
     git-lfs \
+    zip \
+    tar \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/ \
     && : # last line
@@ -22,11 +24,14 @@ RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.1
     && find /tmp/simplicity_sdk/protocol/openthread -name "*efr32mg21*" -delete \
     && : # last line
 
-# GNU ARM Embedded toolchain, cross compiler for various platform builds
-RUN wget -O /tmp/arm-gcc.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF \
-    && tar -xf /tmp/arm-gcc.tar.xz -C /opt \
+RUN wget /tmp/arm-gcc.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF -O arm-gnu-toolchain.tar.xz
+    && ls /tmp
+
+RUN tar -xf /tmp/arm-gcc.tar.xz -C /opt \
     && rm ./arm-gcc.tar.xz \
     && : # last line
+
+
 
 # Clone WiSeConnect Wi-Fi and Bluetooth Software 2.11.4 (bf6b600)
 RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git /tmp/wiseconnect-wifi-bt-sdk && \
@@ -64,18 +69,6 @@ RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Li
 FROM ghcr.io/project-chip/chip-build:${VERSION}
 
 ADD requirements.txt /tmp/requirements.txt
-
-# Install Zip and tar
-RUN set -x \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -fy --no-install-recommends \
-    git \
-    git-lfs \
-    zip \
-    tar \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/ \
-    && : # last line
 
 # Keep GSDK_ROOT name until rename transition to SISDK is completed
 ENV GSDK_ROOT=/opt/silabs/simplicity_sdk/
