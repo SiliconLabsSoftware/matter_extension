@@ -25,7 +25,7 @@ RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.1
     && : # last line
 
 RUN wget /tmp/arm-gcc.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF \
-    -O /tmp/arm-gnu-toolchain.tar.xz /
+    -O /tmp/arm-gnu-toolchain.tar.xz \
     && ls /tmp \
     && : # last line
 
