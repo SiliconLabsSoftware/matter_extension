@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/project-chip/chip-build-crosscompile:latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,9 +39,7 @@ jobs:
       - name: Zip provisioning tool
         shell: bash
         run: |
-          pwd
           file="provision.zip"
-          ls -al
           rm -f "${file}"
           zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
           mkdir -p sqa-tools/
@@ -99,7 +98,7 @@ jobs:
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
 
       # Copy Artifacts at on location
-      - name: Prepare and Copy Build Artifacts
+      - name: Copy Build Artifacts to output directory
         shell: bash
         run: |
           cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
