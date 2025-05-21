@@ -75,12 +75,12 @@ RUN set -x \
 # GNU ARM Embedded toolchain, cross compiler for various platform builds
 # Install Arm GNU Toolchain 12.1.Rel1 (arm-none-eabi-gcc)
 RUN set -x \
-    && wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF -O /tmp/arm-gnu-toolchain.tar.xz \
-    && ls /tmp \
+    && wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=2C60D7D4E432953DB65C4AA2E7129304F9CD05BF /tmp/arm-gcc \
+    && ls /tmp/arm-gcc \
     && echo "download completed" \
     && mkdir -p /opt/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi \
-    && tar -xf /tmp/arm-gnu-toolchain.tar.xz -C /opt \
-    && rm /tmp/arm-gnu-toolchain.tar.xz \
+    && tar -xf /tmp/arm-gcc/arm-gnu-toolchain-12.1.rel1-x86_64-arm-none-eabi.tar.xz -C /opt \
+    && rm /tmp/arm-gcc/arm-gnu-toolchain.tar.xz \
     && : # last line
 
 # Keep GSDK_ROOT name until rename transition to SISDK is completed
