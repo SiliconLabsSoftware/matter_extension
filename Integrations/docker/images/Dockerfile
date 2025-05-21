@@ -60,7 +60,7 @@ RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Li
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
     && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz \
     && rm -rf /tmp/arm-gnu-toolchain.tar.xz \
-    && echo "================ls /tmp====================="
+    && echo "================ls /tmp=====================" \
     && ls /tmp \
     && : # last line
 
