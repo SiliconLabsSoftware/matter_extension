@@ -24,9 +24,9 @@ RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.1
     && find /tmp/simplicity_sdk/protocol/openthread -name "*efr32mg21*" -delete \
     && : # last line
 
-RUN wget /tmp/arm-gcc.tar.xz https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz \
-    -O /tmp/arm-gnu-toolchain.tar.xz \
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
     && ls /tmp \
+    && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz 
     && : # last line
 
 # Clone WiSeConnect Wi-Fi and Bluetooth Software 2.11.4 (bf6b600)
