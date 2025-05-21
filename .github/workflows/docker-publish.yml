@@ -24,7 +24,7 @@ jobs:
         run: |
           SISDK_Tag=2024.12.1
           WiFI_SDK_Tag=3.4.1
-          Extra_info="_test_gcc_commander_zip"
+          Extra_info=""
           VERSION="SiSDKv${SISDK_Tag}_WiFi_SDKv${WiFI_SDK_Tag}${Extra_info}"
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Build the matter_extension_dependencies Docker image
