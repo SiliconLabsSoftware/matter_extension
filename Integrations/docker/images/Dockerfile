@@ -32,8 +32,6 @@ RUN tar -xf /tmp/arm-gcc.tar.xz -C /opt \
     && rm ./arm-gcc.tar.xz \
     && : # last line
 
-
-
 # Clone WiSeConnect Wi-Fi and Bluetooth Software 2.11.4 (bf6b600)
 RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git /tmp/wiseconnect-wifi-bt-sdk && \
     cd /tmp/wiseconnect-wifi-bt-sdk && \
