@@ -1,5 +1,5 @@
 
-ARG VERSION=lates
+ARG VERSION=latest
 FROM ghcr.io/project-chip/chip-build:${VERSION} AS build
 LABEL org.opencontainers.image.source https://github.com/project-chip/connectedhomeip
 
