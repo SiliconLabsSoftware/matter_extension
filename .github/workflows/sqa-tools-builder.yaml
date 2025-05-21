@@ -17,7 +17,52 @@ concurrency:
 env:
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
-jobs:    
+jobs:
+  package-provisioning-and-ota-scripts:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: false
+    
+    #zip Provision folder
+    - name: Zip provisioning tool
+      shell: bash
+      run: |
+        file="provision.zip"
+        rm -f "${file}"
+        zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
+        mkdir -p sqa-tools/
+        mv "${file}" sqa-tools/
+        echo "Provisioning tool zipped successfully: sqa-tools/${file}"
+
+    - name: Mark repository as safe for Git
+      shell: bash
+      run: |
+        git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+    - name: Initialize required submodules
+      shell: bash
+      run: |
+        git submodule update --init third_party/matter_sdk
+    
+    - name: Zip OTA scripts
+      shell: bash
+      run: |
+          ota_file="ota-scripts.zip"
+          zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+          mv "${ota_file}" sqa-tools/
+          echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
+          
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: sqa-tools
+        path: sqa-tools
+        if-no-files-found: error
+        overwrite: true
+
   build-sqa-tools:
     runs-on: ubuntu-latest
     container:
@@ -29,41 +74,16 @@ jobs:
         with:
           submodules: false
       
-      - name: Install zip utility
-        shell: bash
-        run: |
-          apt-get update
-          apt-get install -y zip
-     
-      #zip Provision folder
-      - name: Zip provisioning tool
-        shell: bash
-        run: |
-          file="provision.zip"
-          rm -f "${file}"
-          zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
-          mkdir -p sqa-tools/
-          mv "${file}" sqa-tools/
-          echo "Provisioning tool zipped successfully: sqa-tools/${file}"
-
       - name: Mark repository as safe for Git
         shell: bash
         run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
+        git config --global --add safe.directory /__w/matter_extension/matter_extension
 
       - name: Initialize required submodules
         shell: bash
         run: |
           git submodule update --init third_party/matter_sdk
-      
-      - name: Zip OTA scripts
-        shell: bash
-        run: |
-           ota_file="ota-scripts.zip"
-           zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
-           mv "${ota_file}" sqa-tools/
-           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
-      
+
       - name: Checkout matter_sdk submodules
         shell: bash
         run: |
@@ -108,6 +128,24 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sqa-tools
+          path: sqa-tools
+          if-no-files-found: error
+          overwrite: true
+
+    merge-artifacts:
+      name: Merge sqa-tools Artifacts
+      runs-on: ubuntu-latest
+      needs:
+          - build-sqa-tools
+          - package-provisioning-and-ota-scripts
+      if: success()
+
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: sqa-tools
+          delete-merged: true
           path: sqa-tools
           if-no-files-found: error
           overwrite: true
