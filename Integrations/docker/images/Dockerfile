@@ -17,40 +17,36 @@ RUN set -x \
 
 # Download Simplicity SDK v2024.12.1 (da661283f3)
 RUN wget https://github.com/SiliconLabs/simplicity_sdk/releases/download/v2024.12.1-0/simplicity-sdk.zip -O /tmp/simplicity_sdk.zip \
-    && unzip /tmp/simplicity_sdk.zip -d /tmp/simplicity_sdk \
+    && unzip /tmp/simplicity_sdk.zip -d /tmp/simplicity_sdk > /dev/null 2>&1 \
     && rm -rf /tmp/simplicity_sdk.zip \
-    # Deleting files that are not needed to save space
     && rm -rf /tmp/simplicity_sdk/protocol/flex /tmp/simplicity_sdk/protocol/z-wave /tmp/simplicity_sdk/protocol/wisun \
     && find /tmp/simplicity_sdk/protocol/openthread -name "*efr32mg21*" -delete \
     && : # last line
 
 # Clone WiSeConnect Wi-Fi and Bluetooth Software 2.11.4 (bf6b600)
-RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git /tmp/wiseconnect-wifi-bt-sdk && \
+RUN git clone --depth=1 --single-branch --branch=2.11.4 https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git /tmp/wiseconnect-wifi-bt-sdk > /dev/null 2>&1 && \
     cd /tmp/wiseconnect-wifi-bt-sdk && \
     rm -rf .git \
     && : # last line
 
 # Clone WiSeConnect SDK v3.4.1 (f675628e)
-RUN git clone --depth=1 --single-branch --branch=v3.4.1 https://github.com/SiliconLabs/wiseconnect.git /tmp/wifi_sdk && \
+RUN git clone --depth=1 --single-branch --branch=v3.4.1 https://github.com/SiliconLabs/wiseconnect.git /tmp/wifi_sdk > /dev/null 2>&1 && \
     cd /tmp/wifi_sdk && \
     rm -rf .git \
     && : # last line
 
 # SLC-cli install
-# TODO: figure out a way to make this a fixed version. Currently a moving target.
 RUN wget https://www.silabs.com/documents/login/software/slc_cli_linux.zip && \
-    unzip ./slc_cli_linux.zip -d /tmp && \
+    unzip ./slc_cli_linux.zip -d /tmp > /dev/null 2>&1 && \
     rm ./slc_cli_linux.zip \
     && : # last line
 
-# TODO: figure out a way to make this a fixed version. Currently a moving target.
 RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip && \
-    unzip ./SimplicityCommander-Linux.zip -d /tmp && \
+    unzip ./SimplicityCommander-Linux.zip -d /tmp > /dev/null 2>&1 && \
     rm ./SimplicityCommander-Linux.zip && \
     FILE=$(find /tmp -name "*Commander_linux_x86_64*") && \
     if [ -n "$FILE" ]; then \
-        echo "$FILE" && \
-        tar -xjvf "$FILE" -C /tmp; \
+        tar -xjvf "$FILE" -C /tmp > /dev/null 2>&1; \
     else \
         echo "File not found"; \
     fi && \
@@ -58,10 +54,8 @@ RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Li
 
 # Download ARM GCC toolchain v10.3-2021.07 (aarch64-none-eabi)
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz -O /tmp/arm-gnu-toolchain.tar.xz \
-    && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz \
+    && tar -xJvf /tmp/arm-gnu-toolchain.tar.xz -C /tmp > /dev/null 2>&1 \
     && rm -rf /tmp/arm-gnu-toolchain.tar.xz \
-    && echo "================ls /tmp=====================" \
-    && ls /tmp \
     && : # last line
 
 # Final SDK container for compiling using Silabs SDK
