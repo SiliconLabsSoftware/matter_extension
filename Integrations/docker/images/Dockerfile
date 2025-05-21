@@ -72,10 +72,10 @@ RUN set -x \
     && : # last line
 
 # GNU ARM Embedded toolchain, cross compiler for various platform builds
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=732D909FA8F68C0E1D0D17D08E057619 -O /arm_gcc.zip && \
-    unzip ./arm_gcc.zip -d /tmp && \
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi.tar.xz?rev=7bd049b7a3034e64885fa1a71c12f91d&hash=732D909FA8F68C0E1D0D17D08E057619 -O /arm_gcc.tar.xz && \
+    tar -xjf file.tar.gz ./arm_gcc.tar.xz -d /tmp && \
     ls /tmp && \
-    rm ./arm_gcc.zip \
+    rm ./arm_gcc.tar.xz \
     && : # last line
 
 # Keep GSDK_ROOT name until rename transition to SISDK is completed
