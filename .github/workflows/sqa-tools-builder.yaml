@@ -132,20 +132,20 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-    merge-artifacts:
-      name: Merge sqa-tools Artifacts
-      runs-on: ubuntu-latest
-      needs:
-          - build-sqa-tools
-          - package-provisioning-and-ota-scripts
-      if: success()
+  merge-artifacts:
+    name: Merge sqa-tools Artifacts
+    runs-on: ubuntu-latest
+    needs:
+        - build-sqa-tools
+        - package-provisioning-and-ota-scripts
+    if: success()
 
-      steps:
-        - name: Merge artifacts
-          uses: actions/upload-artifact/merge@v4
-          with:
-            name: sqa-tools
-            delete-merged: true
-            path: sqa-tools
-            if-no-files-found: error
-            overwrite: true
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: sqa-tools
+          delete-merged: true
+          path: sqa-tools
+          if-no-files-found: error
+          overwrite: true
