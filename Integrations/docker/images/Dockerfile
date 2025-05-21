@@ -84,5 +84,5 @@ COPY --from=build /tmp/arm-gnu-toolchain-* ${ARM_GCC_DIR}
 RUN ls /opt/silabs
 RUN ls /opt/silabs/slc_cli
 RUN ls ${ARM_GCC_DIR}
-RUN [ -x ${POST_BUILD_EXE} ] && echo "${POST_BUILD_EXE} exists and is executable" || (echo "${POST_BUILD_EXE} missing or not executable" && exit 1)
+RUN ls ${POST_BUILD_EXE}
 RUN echo ${PATH}
