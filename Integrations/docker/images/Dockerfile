@@ -58,6 +58,13 @@ RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/
     && rm -rf /tmp/arm-gnu-toolchain.tar.xz \
     && : # last line
 
+# Install java
+RUN wget https://corretto.aws/downloads/resources/17.0.8.8.1/amazon-corretto-17.0.8.8.1-linux-x64.tar.gz -O /tmp/java.tar.gz \
+    && tar -xzf /tmp/java.tar.gz -C /tmp \
+    && rm /tmp/java.tar.gz \
+    && ls /tmp
+    && : # last line
+
 # Final SDK container for compiling using Silabs SDK
 FROM ghcr.io/project-chip/chip-build:${VERSION}
 
@@ -69,8 +76,10 @@ ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WISECONNECT3_DIR=${SISDK_ROOT}/extension/wiseconnect
 ENV ARM_GCC_DIR=/opt/arm-gcc
+ENV JAVA17_HOME=opt/silabs/amazon-corretto-17.0.8.8.1-linux-x64
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
 ENV PATH="${PATH}:${ARM_GCC_DIR}/bin"
+ENV PATH="${PATH}:${JAVA17_HOME}/bin"
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
 
 
@@ -80,9 +89,11 @@ COPY --from=build /tmp/wifi_sdk ${WISECONNECT3_DIR}
 COPY --from=build /tmp/slc_cli /opt/silabs/slc_cli
 COPY --from=build /tmp/SimplicityCommander-Linux /opt/silabs/simplicity-commander
 COPY --from=build /tmp/arm-gnu-toolchain-* ${ARM_GCC_DIR}
+COPY --from=build /tmp/amazon-corretto-17.0.8.8.1-linux-x64 ${JAVA17_HOME}
 
 RUN ls /opt/silabs
 RUN ls /opt/silabs/slc_cli
 RUN ls ${ARM_GCC_DIR}
 RUN ls ${POST_BUILD_EXE}
+RUN ls ${JAVA17_HOME}
 RUN echo ${PATH}
