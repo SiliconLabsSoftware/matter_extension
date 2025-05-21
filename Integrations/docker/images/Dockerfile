@@ -42,11 +42,11 @@ RUN wget https://www.silabs.com/documents/login/software/slc_cli_linux.zip && \
     && : # last line
 
 RUN wget https://www.silabs.com/documents/public/software/SimplicityCommander-Linux.zip && \
-    unzip ./SimplicityCommander-Linux.zip -d /tmp && \
+    unzip ./SimplicityCommander-Linux.zip -d /tmp/simplicity-commander && \
     rm ./SimplicityCommander-Linux.zip && \
-    FILE=$(find /tmp -name "*Commander_linux_x86_64*") && \
+    FILE=$(find /tmp/simplicity-commander -name "*Commander_linux_x86_64*") && \
     if [ -n "$FILE" ]; then \
-        tar -xjvf "$FILE" -C /tmp; \
+        tar -xjvf "$FILE" -C /tmp/simplicity-commander; \
     else \
         echo "File not found"; \
     fi && \
