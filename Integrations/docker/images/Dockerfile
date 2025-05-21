@@ -62,7 +62,7 @@ RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/
 RUN wget https://corretto.aws/downloads/resources/17.0.8.8.1/amazon-corretto-17.0.8.8.1-linux-x64.tar.gz -O /tmp/java.tar.gz \
     && tar -xzf /tmp/java.tar.gz -C /tmp \
     && rm /tmp/java.tar.gz \
-    && ls /tmp
+    && ls /tmp \
     && : # last line
 
 # Final SDK container for compiling using Silabs SDK
