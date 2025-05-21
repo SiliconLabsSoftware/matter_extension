@@ -92,7 +92,6 @@ ENV SISDK_ROOT=/opt/silabs/simplicity_sdk/
 ENV WISECONNECT_SDK_ROOT=/opt/silabs/wiseconnect-wifi-bt-sdk/
 ENV WIFI_SDK_ROOT=${SISDK_ROOT}/extension/wiseconnect
 ENV PATH="${PATH}:/opt/silabs/slc_cli/"
-ENV ARM_GCC_DIR=/usr/bin/arm-none-eabi-gcc
 ENV POST_BUILD_EXE=/opt/silabs/simplicity-commander/commander/commander
 
 COPY --from=build /tmp/simplicity_sdk ${SISDK_ROOT}
