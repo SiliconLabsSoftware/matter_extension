@@ -157,7 +157,6 @@ jobs:
             ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
-            wifi-soc-support: false
 
     build-bootloaders:
         name: Build Bootloaders
