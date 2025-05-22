@@ -57,7 +57,7 @@ jobs:
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: sqa-tools
+        name: sqa-tools-zip
         path: sqa-tools
         if-no-files-found: error
         overwrite: true
@@ -127,7 +127,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: sqa-tools
+          name: sqa-tools-binaries
           path: sqa-tools
           if-no-files-found: error
           overwrite: true
@@ -146,4 +146,4 @@ jobs:
         with:
           name: sqa-tools
           delete-merged: true
-          pattern: sqa-*
+          pattern: sqa-tools-*
