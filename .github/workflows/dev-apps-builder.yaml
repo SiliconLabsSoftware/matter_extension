@@ -151,7 +151,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "zigbee-matter-light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}:zigbee-matter-app-sequential
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-keyword: ""
             ncp-917-support: false
             ncp-wf200-support: false
