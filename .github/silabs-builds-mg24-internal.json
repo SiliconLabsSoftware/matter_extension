@@ -6,6 +6,18 @@
                 "boards": ["brd2703a"],
                 "arguments": [""]
             }
+        ],
+        "zigbee-matter-app-sequential": [
+            {
+                "boards": ["brd2703a"],
+                "arguments": ["'--with matter_zigbee_sequential;matter'"]
+            }
+        ],
+        "zigbee-matter-app-concurrent": [
+            {
+                "boards": ["brd2703a"],
+                "arguments": ["'--with matter_zigbee_concurrent;matter'"]
+            }
         ]
     } 
 }

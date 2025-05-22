@@ -6,6 +6,18 @@
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": [""]
             }
+        ],
+        "zigbee-matter-app-sequential": [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": ["'--with matter_zigbee_sequential;matter'"]
+            }
+        ],
+        "zigbee-matter-app-concurrent": [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": ["'--with matter_zigbee_concurrent;matter'"]
+            }
         ]
     },
     "custom-sqa": {

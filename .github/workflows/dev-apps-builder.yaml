@@ -145,13 +145,26 @@ jobs:
             ncp-rs911x-support: false
             wifi-soc-support: false
 
-    build-zigbee-matter-light-app:
-        name: Build Zigbee Matter Light App
+    build-zigbee-matter-light-sequential-app:
+        name: Build Zigbee Matter Light sequential App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "zigbee-matter-light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ needs.set-build-type.outputs.build-type }}:"zigbee-matter-app-sequential"
+            thread-keyword: ""
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
+
+    build-zigbee-matter-light-concurrent-app:
+        name: Build Zigbee Matter Light concurrent App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}:"zigbee-matter-app-concurrent"
             thread-keyword: ""
             ncp-917-support: false
             ncp-wf200-support: false
