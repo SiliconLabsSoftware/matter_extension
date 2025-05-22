@@ -1,5 +1,12 @@
 {
     "standard": {
+
+        "default": [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": [""]
+            }
+        ],
         "zigbee-matter-light":  [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
@@ -8,12 +15,6 @@
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"]
-            }
-        ],
-        "default": [
-            {
-                "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": [""]
             }
         ]
     },
