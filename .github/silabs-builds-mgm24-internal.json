@@ -7,13 +7,11 @@
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-app-sequential": [
+        "zigbee-matter-app":  [
             {
                 "boards": ["brd4319a_a00", "brd2704a"],
-                "arguments": ["'--with matter_zigbee_sequential;matter'"]
-            }
-        ],
-        "zigbee-matter-app-concurrent": [
+                "arguments": ["'--with matter_zigbee_sequential;matter'"] 
+            },
             {
                 "boards": ["brd4319a_a00", "brd2704a"],
                 "arguments": ["'--with matter_zigbee_concurrent;matter'"]
