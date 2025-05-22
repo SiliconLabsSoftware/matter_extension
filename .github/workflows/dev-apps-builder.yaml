@@ -152,7 +152,7 @@ jobs:
         with:
             example-app: "zigbee-matter-light"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-keyword: false
+            thread-keyword: ""
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
