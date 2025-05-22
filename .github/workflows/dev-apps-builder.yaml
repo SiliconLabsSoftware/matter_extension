@@ -197,7 +197,8 @@ jobs:
             - build-onoff-plug-app
             - build-refrigerator-app
             - build-performance-test-app
-            - build-zigbee-matter-light-app
+            - build-zigbee-matter-light-concurrent-app
+            - build-zigbee-matter-light-sequential-app
         if: success()
 
         steps:
