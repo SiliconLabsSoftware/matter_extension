@@ -50,8 +50,9 @@ jobs:
       shell: bash
       run: |
           ota_file="ota-scripts.zip"
-          zip -r "${ota_file}" "third_party/matter_sdk/scripts/tools/silabs" "third_party/matter_sdk/src/app/ota_image_tool.py" "third_party/matter_sdk/src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
-          mv "${ota_file}" sqa-tools/
+          cd third_party/matter_sdk/
+          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+          mv "${ota_file}" ../../sqa-tools/
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
           
     - name: Upload artifacts
@@ -91,8 +92,6 @@ jobs:
 
       - name: Run bootstrap action
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@v1.2.0
-        with:
-          platform: linux
 
       # Builds chip-tool
       - name: Build chip-tool
