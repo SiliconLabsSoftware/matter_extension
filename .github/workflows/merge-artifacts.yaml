@@ -3,7 +3,7 @@ name: Merge Dev Artifacts
 on:
   workflow_run:
     workflows:
-      - dev-apps-builder
+      - Build Dev apps
     types:
       - completed
 
