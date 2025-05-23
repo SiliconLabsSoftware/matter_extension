@@ -53,6 +53,14 @@ on:
                 required: false
                 type: boolean
                 default: true
+            mgm26-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-internal-support:
+                required: false
+                type: boolean
+                default: true
 
 jobs:
     mg24-build-job:
