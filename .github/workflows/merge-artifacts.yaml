@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate all required workflows
-        uses: ./.github/actions/validate-workflows-success.yaml
+        uses: ./.github/actions/validate-workflows-success
         with:
           sha: ${{ github.sha }}
           workflows: "Build Dev apps, Build SQA apps, Build SQA Tools"
@@ -43,7 +43,7 @@ jobs:
       - name: Download Sample Apps Artifacts 
         uses: actions/download-artifact@v3
         with:
-          name: sample-apps-*
+          name: sample-apps-standard #TODO: get this dynamically
 
       - name: Merge Artifacts
         run: |
