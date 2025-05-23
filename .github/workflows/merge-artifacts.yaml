@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/validate-workflows-success.yaml
         with:
           sha: ${{ github.sha }}
-          workflows: "dev-apps-builder, build-sqa-tools"
+          workflows: "Build Dev apps, Build SQA apps, Build SQA Tools"
 
   merge-artifacts:
     needs: validate
