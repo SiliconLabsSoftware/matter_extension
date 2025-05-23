@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate all required workflows
-        uses: ./.github/workflows/validate-success-workflows.yaml
+        uses: ./.github/actions/validate-workflows-success.yaml
         with:
           sha: ${{ github.sha }}
           workflows: "dev-apps-builder, build-sqa-tools"
