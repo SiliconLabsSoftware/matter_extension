@@ -1,4 +1,4 @@
-name: tag-latest
+name: Tag Latest Docker
 on:
   workflow_dispatch:
   push:
