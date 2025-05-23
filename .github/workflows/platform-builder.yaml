@@ -13,6 +13,10 @@ on:
                 required: false
                 type: boolean
                 default: true
+            thread-keyword:
+                required: false
+                type: string
+                default: "-thread"
             wifi-soc-support:
                 required: false
                 type: boolean
@@ -49,6 +53,18 @@ on:
                 required: false
                 type: boolean
                 default: true
+            mg26-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-internal-support:
+                required: false
+                type: boolean
+                default: true
 
 jobs:
     mg24-build-job:
@@ -56,7 +72,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
@@ -66,7 +82,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-internal-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-internal
@@ -76,7 +92,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24
@@ -86,7 +102,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24-internal.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-internal-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24-internal
@@ -96,10 +112,30 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-thread-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26
+
+    mg26-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg26-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg26-internal
+    
+    mgm26-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm26-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm26-internal
 
     ncp-917-build-job:
         if: ${{ inputs.ncp-917-support }}
