@@ -1,0 +1,42 @@
+name: Validate All Workflows Success
+description: Checks if all required workflows succeeded for the same commit.
+inputs:
+  sha:
+    description: Commit SHA to check
+    required: true
+  workflows:
+    description: Comma-separated list of workflow names to check
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Check all workflows status
+      id: check_status
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const workflows = '${{ inputs.workflows }}'.split(',').map(w => w.trim());
+          const sha = '${{ inputs.sha }}';
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+          let allSuccess = true;
+          for (const name of workflows) {
+            const runs = await github.rest.actions.listWorkflowRunsForRepo({
+              owner,
+              repo,
+              workflow_name: name,
+              per_page: 5,
+              head_sha: sha,
+              status: 'completed'
+            });
+            const success = runs.data.workflow_runs.some(run => run.conclusion === 'success' && run.head_sha === sha);
+            if (!success) {
+              allSuccess = false;
+              break;
+            }
+          }
+          core.setOutput('all-success', allSuccess);
+outputs:
+  all-success:
+    description: "True if all workflows succeeded"
+    value: ${{ steps.check_status.outputs.all-success }}

@@ -1,0 +1,44 @@
+name: Merge Dev Artifacts
+
+on:
+  workflow_run:
+    workflows:
+      - dev-apps-builder
+    types:
+      - completed
+
+concurrency:
+    group: merge-dev-artifacts-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate all required workflows
+        uses: ./.github/workflows/validate-success-workflows.yaml
+        with:
+          sha: ${{ github.sha }}
+          workflows: "dev-apps-builder, build-sqa-tools"
+
+  merge-artifacts:
+    needs: validate
+    runs-on: ubuntu-latest
+    if: needs.validate.outputs.all-success == 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Merge Artifacts
+        run: |
+          mkdir -p artifacts
+          cp -r sqa-tools/* artifacts/
+          cp -r sample-apps-* artifacts/
+          echo "Artifacts merged successfully into artifacts directory."
+      - name: Upload Merged Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifacts
+          path: artifacts

@@ -1,24 +1,7 @@
 name: Build Dev apps
 
 on:
-    push:
-# TODO add these lines back       branches:
-#            - main
-#            - "release_*"
-    pull_request:
-        branches:
-            - main
-            - "release_*"
-    workflow_dispatch:
-        inputs:
-            build-type:
-                description: "The build type to use"
-                required: true
-                type: choice
-                options:
-                    - standard
-                    - full
-                    - release
+    
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
