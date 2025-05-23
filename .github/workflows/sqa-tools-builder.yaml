@@ -66,7 +66,7 @@ jobs:
   build-sqa-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/project-chip/chip-build-crosscompile:latest
+      image: ghcr.io/project-chip/chip-build-crosscompile:81
 
     steps:
       - name: Checkout repository
