@@ -30,11 +30,26 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: false
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: sqa-tools
+      
+      - name: Download SQA Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: sqa-apps
+      
+      - name: Download Sample Apps Artifacts 
+        uses: actions/download-artifact@v3
+        with:
+          name: sample-apps-*
 
       - name: Merge Artifacts
         run: |
           mkdir -p artifacts
-          cp -r sqa-tools/* artifacts/
+          cp -r sqa-tools/ artifacts/
+          cp -r sqa-apps/ artifacts/
           cp -r sample-apps-* artifacts/
           echo "Artifacts merged successfully into artifacts directory."
       - name: Upload Merged Artifacts
