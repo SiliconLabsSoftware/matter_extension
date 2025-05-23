@@ -18,6 +18,9 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             mg26-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+
 
     merge-apps:
         name: Merge App Artifacts
