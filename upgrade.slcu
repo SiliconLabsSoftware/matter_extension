@@ -322,13 +322,9 @@ upgrade:
 
   - sdk:
       id: matter
-      version: "2.6.4"
+      version: "2.6.0"
 
     component:
-      - trigger: matter_gatt
-        description: matter_gatt is removed to allow to chose between different GATT configurations.
-        remove:
-          - matter_gatt
-
-    configuration:
-      - script: slc/config/scripts/upgrade_config_to_2.6.4.lua
+      - script: slc/config/scripts/upgrade_components_to_2.6.0.lua
+        description: >
+          matter_gatt is removed to allow to chose between different GATT configurations.
