@@ -11,10 +11,6 @@
             {
                 "boards": ["brd2703a"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
-            },
-            {
-                "boards": ["brd2703a"],
-                "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"]
             }
         ]
     }

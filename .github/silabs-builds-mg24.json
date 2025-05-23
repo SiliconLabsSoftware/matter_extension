@@ -11,10 +11,6 @@
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
-            },
-            {
-                "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"]
             }
         ]
     },
