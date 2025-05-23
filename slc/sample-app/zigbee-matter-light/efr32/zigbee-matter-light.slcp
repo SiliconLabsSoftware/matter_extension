@@ -137,9 +137,6 @@ tag:
   - hardware:device:ram:192
 
 configuration:
-  - name: SL_BT_CONFIG_USER_ADVERTISERS
-    value: 2
-    condition: [matter_ble_side_channel]
   - name: SL_TOKEN_MANAGER_STATIC_SECURE_TOKEN_SIZE
     value: 8192
   - name: SL_BOARD_ENABLE_VCOM
@@ -162,7 +159,12 @@ configuration:
   - name: SL_CLI_PROMPT_STRING
     value: '"TriProtocol>"'
   - name: SL_BT_CONFIG_USER_ADVERTISERS
+    value: 2
+    condition: [matter_ble_side_channel]
+    unless: [matter_ble_dmp_test]
+  - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 3
+    condition: [matter_ble_dmp_test]
   - name: SL_BT_CONFIG_MAX_CONNECTIONS
     value: 4
   - name: LIB_MEM_CFG_HEAP_SIZE
@@ -202,6 +204,10 @@ configuration:
     value: 1
   - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
     value: 1536
+  - name: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
+    value: 1088
+    condition:
+      - device_series_2
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
   - name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
@@ -247,7 +253,7 @@ config_file:
     directory: common
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
     directory: btconf
-    unless: [matter_ble_dmp_test]
+    unless: [matter_ble_dmp_test, matter_gatt_static]
   - path: ../../../../examples/zigbee-matter-light/config/btconf/gatt_configuration.btconf
     directory: btconf
     condition: [matter_ble_dmp_test]
