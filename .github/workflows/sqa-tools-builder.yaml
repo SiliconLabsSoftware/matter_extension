@@ -18,7 +18,7 @@ env:
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
 jobs:
-  package-provisioning-and-ota-scripts:
+  package-scripts:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -136,7 +136,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
         - build-sqa-tools
-        - package-provisioning-and-ota-scripts
+        - package-scripts
     if: success()
 
     steps:
