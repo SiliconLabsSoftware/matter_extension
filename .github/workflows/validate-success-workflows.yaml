@@ -1,12 +1,15 @@
 name: Validate All Workflows Success
 description: Checks if all required workflows succeeded for the same commit.
-inputs:
-  sha:
-    description: Commit SHA to check
-    required: true
-  workflows:
-    description: Comma-separated list of workflow names to check
-    required: true
+on:
+      workflow_call:
+        inputs:
+            sha:
+              description: Commit SHA to check
+              required: true
+            workflows:
+              description: Comma-separated list of workflow names to check
+              required: true
+  
 runs:
   using: "composite"
   steps:
