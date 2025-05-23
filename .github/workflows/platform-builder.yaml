@@ -123,15 +123,15 @@ jobs:
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
     
-    mg26m-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26m-internal-support }}
+    mgm26-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg26-internal.json'
+            json-file-path: './.github/silabs-builds-mgm26-internal.json'
             path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
-            platform: mg26m-internal
+            platform: mgm26-internal
 
     ncp-917-build-job:
         if: ${{ inputs.ncp-917-support }}
