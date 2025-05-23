@@ -24,14 +24,32 @@ jobs:
         name: ${{ inputs.platform }}-build-job
         runs-on: ubuntu-latest
         container:
-            image: ghcr.io/project-chip/chip-build-efr32:115
+            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.1_WiFi_SDKv3.4.1_test_gcc_commander_zip
 
         steps:
             - name: Checkout
               uses: actions/checkout@v4
               with:
-                submodules: 'true'
-                lfs: true
+                submodules: 'false' # Do not initialize submodules automatically
+            
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                git config --global --add safe.directory /__w/matter_extension/matter_extension
+           
+            - name: Initialize required submodules
+              shell: bash
+              run: |
+                git submodule update --init third_party/aws_ota_sdk
+                git submodule update --init third_party/matter_sdk
+                git submodule update --init third_party/matter_support
+                git submodule update --init third_party/mbedtls
+                git submodule update --init third_party/mqtt
+                git submodule update --init third_party/nlassert
+                git submodule update --init third_party/nlio
+                git submodule update --init third_party/QR-Code-generator
+                git submodule update --init third_party/wiseconnect-wifi-bt-sdk
+                # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
 
             - name: Install tools
               uses: ./.github/actions/install-tools
