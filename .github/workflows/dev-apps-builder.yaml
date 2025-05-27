@@ -121,6 +121,42 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-refrigerator-app:
+        name: Build Refrigerator App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "refrigerator-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+    
+    build-performance-test-app:
+        name: Build Performance Test App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "performance-test-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
+
+    build-zigbee-matter-light-app:
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
 
     build-bootloaders:
         name: Build Bootloaders
@@ -146,6 +182,9 @@ jobs:
             - build-fan-control-app
             - build-multi-sensor-app
             - build-onoff-plug-app
+            - build-refrigerator-app
+            - build-performance-test-app
+            - build-zigbee-matter-light-app
         if: success()
 
         steps:
