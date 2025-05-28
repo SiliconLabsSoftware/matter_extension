@@ -9,5 +9,5 @@ project:
     id: bootloader
     output: matter-bootloader
 post_build:
-  path: ../../../postbuild/matter_thread_bootloader.slpb
+  path: ../../../postbuild/ws_default_application_bootloader.slpb
   
