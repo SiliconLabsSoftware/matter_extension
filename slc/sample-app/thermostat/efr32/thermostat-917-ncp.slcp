@@ -106,10 +106,8 @@ component:
   - id: matter_lwip
     from: matter
 
-  # Copy of the component to remove the default lwipopts.h file
   - id: wifi_resources
-    from: matter
-
+    from: wiseconnect3_sdk
   - id: wifi
     from: wiseconnect3_sdk
   - id: basic_network_config_manager

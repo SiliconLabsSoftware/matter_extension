@@ -96,10 +96,8 @@ component:
   - id: matter_lwip
     from: matter
 
-  # Copy of the component to remove the default lwipopts.h file
   - id: wifi_resources
-    from: matter
-
+    from: wiseconnect3_sdk
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
     from: matter
