@@ -194,3 +194,13 @@ jobs:
                 name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+    
+    merge-artifact:
+        name: Merge Dev Artifacts
+        needs:
+        - set-build-type
+        - merge-apps
+        if: success()
+        uses: ./.github/workflows/merge-artifacts.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
