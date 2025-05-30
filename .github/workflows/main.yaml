@@ -26,14 +26,6 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  checkout-repo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-
   call-dev-apps-builder:
     name: Call Dev Apps Builder
     uses: ./.github/workflows/dev-apps-builder.yaml
