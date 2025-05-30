@@ -168,6 +168,6 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                name: "slc-sample-apps-${{ needs.set-build-type.outputs.build-type }}"
+                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
