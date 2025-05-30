@@ -102,8 +102,6 @@ if ! [ -x "$(command -v slc)" ]; then
     exit
 fi 
 
-echo "arm-gcc-dir: $ARM_GCC_DIR"
-
 if ! [ -d "$ARM_GCC_DIR" ]; then
     echo "ERROR: ARM_GCC_DIR is nil."
     exit
