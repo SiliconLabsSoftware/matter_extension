@@ -1,42 +1,51 @@
 name: Merge Dev Artifacts
 
 on:
-  workflow_run:
-    workflows:
-      - Build Dev apps
-    types:
-      - completed
-
-concurrency:
-    group: merge-dev-artifacts-${{ github.ref }}
-    cancel-in-progress: true
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
 
 jobs:
-  validate:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Validate all required workflows
-        uses: ./.github/actions/validate-workflows-success.yaml
-        with:
-          sha: ${{ github.sha }}
-          workflows: "Build Dev apps, Build SQA apps, Build SQA Tools"
-
   merge-artifacts:
-    needs: validate
     runs-on: ubuntu-latest
-    if: needs.validate.outputs.all-success == 'true'
+    
     steps:
+      - name: echo build-type
+        run: |
+            echo "build-type = ${{ inputs.build-type }}"
+      
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: false
 
+      - name: Download Sample Apps Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: sample-apps-${{ inputs.build-type }}
+          path: sample-apps-${{ inputs.build-type }}
+
+      - name: Download SQA Sample Apps Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: sample-apps-custom-sqa
+          path: sample-apps-custom-sqa
+
+      - name: Download Sample Apps Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: sqa-tools
+          path: sqa-tools
+
       - name: Merge Artifacts
         run: |
+          ls -la
           mkdir -p artifacts
-          cp -r sqa-tools/* artifacts/
-          cp -r sample-apps-* artifacts/
+          cp -r sample-apps-${{ inputs.build-type }} sqa-tools sample-apps-custom-sqa artifacts/
           echo "Artifacts merged successfully into artifacts directory."
+
       - name: Upload Merged Artifacts
         uses: actions/upload-artifact@v4
         with:
