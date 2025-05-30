@@ -55,6 +55,6 @@ jobs:
           name: "artifacts"
           delete-merged: true
           pattern: |
-            sample-apps-*
+            sample-apps-${{ github.event.inputs.build-type }}
             sqa-tools
-            sample-apps-custom-sqa
+            sample-apps  -custom-sqa
