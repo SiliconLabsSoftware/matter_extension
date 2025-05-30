@@ -3,8 +3,9 @@ name: Build Triggers
 on:
   push:
     branches:
-      - main
-      - "release_*"
+# TODO add these lines back       branches:
+#            - main
+#            - "release_*"
   pull_request:
     branches:
       - main
