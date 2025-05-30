@@ -39,7 +39,8 @@ if [ -f "$MATTER_ROOT/slc/tools/.env" ]; then
 fi
 set +a
 
-GSDK_ROOT=$MATTER_ROOT/third_party/simplicity_sdk
+MATTER_ROOT=$( pwd -P )
+: "${GSDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 SILABS_APP_PATH=$1
 SILABS_BOARD=$2
 CONFIG_ARGS=""
@@ -121,8 +122,13 @@ fi
 
 if ! [ -x "$(command -v arm-none-eabi-gcc)" ]; then
     echo "ERROR: $ARM_GCC_DIR/bin missing from PATH"
-    echo "Run export PATH='\$PATH:$ARM_GCC_DIR/bin' to add to PATH"
-    exit
+    echo "Run export PATH=\"\$PATH:$ARM_GCC_DIR/bin\" to add to PATH"
+    export PATH="$PATH:$ARM_GCC_DIR/bin"
+    # Optionally, re-check if arm-none-eabi-gcc is now available
+    if ! [ -x "$(command -v arm-none-eabi-gcc)" ]; then
+        echo "ERROR: arm-none-eabi-gcc still not found in PATH after update."
+        exit 1
+    fi
 fi
 
 if ! [ -x "$(command -v arm-none-eabi-gcc-12.2.1)" ]; then
@@ -140,9 +146,11 @@ if [ ! -L "$EXTENSION_DIR" ]; then
     ln -s $MATTER_ROOT "$EXTENSION_DIR"
 fi
 
-WISECONNECT3_DIR=$GSDK_ROOT/extension/wifi_sdk
-if [ ! -L "$WISECONNECT3_DIR" ]; then
-    ln -s $MATTER_ROOT/third_party/wifi_sdk/ "$WISECONNECT3_DIR"
+if [ -z "$WISECONNECT3_DIR" ]; then
+    WISECONNECT3_DIR="$GSDK_ROOT/extension/wifi_sdk"
+    if [ ! -L "$WISECONNECT3_DIR" ]; then
+        ln -s $MATTER_ROOT/third_party/wifi_sdk/ "$WISECONNECT3_DIR"
+    fi
 fi
 
 ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
@@ -161,7 +169,7 @@ if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
 fi
 
 if [ "$skip_gen" = false ]; then
-    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=360 -o makefile
+    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=500 -o makefile
     if [ $? -ne 0 ]; then
         echo "FAILED TO Generate : $SILABS_APP_PATH"
         exit 1
