@@ -161,7 +161,7 @@ if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
 fi
 
 if [ "$skip_gen" = false ]; then
-    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=360 -o makefile
+    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=500 -o makefile
     if [ $? -ne 0 ]; then
         echo "FAILED TO Generate : $SILABS_APP_PATH"
         exit 1
