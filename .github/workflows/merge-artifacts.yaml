@@ -27,11 +27,23 @@ jobs:
           name: sample-apps-${{ inputs.build-type }}
           path: sample-apps-${{ inputs.build-type }}
 
+      - name: Download SQA Sample Apps Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: sample-apps-custom-sqa
+          path: sample-apps-custom-sqa
+
+      - name: Download Sample Apps Artifacts 
+        uses: actions/download-artifact@v4
+        with:
+          name: sqa-tools
+          path: sqa-tools
+
       - name: Merge Artifacts
         run: |
           ls -la
           mkdir -p artifacts
-          cp -r sample-apps-${{ inputs.build-type }} artifacts/
+          cp -r sample-apps-${{ inputs.build-type }} sqa-tools sample-apps-custom-sqa artifacts/
           echo "Artifacts merged successfully into artifacts directory."
 
       - name: Upload Merged Artifacts
