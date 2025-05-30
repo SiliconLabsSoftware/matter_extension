@@ -156,6 +156,13 @@ jobs:
         runs-on: ubuntu-latest
         needs:
             - set-build-type
+            - build-bootloaders
+            - build-lighting-app
+            - build-air-quality-sensor-app
+            - build-light-switch-app
+            - build-lock-app
+            - build-thermostat-app
+            - build-window-app
             - build-fan-control-app
             - build-multi-sensor-app
             - build-onoff-plug-app
