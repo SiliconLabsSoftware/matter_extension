@@ -9,30 +9,13 @@ on:
                 type: string
 
 jobs:
-
-    set-build-type:
-        runs-on: ubuntu-latest
-        outputs:
-            build-type: ${{ steps.set-build-type.outputs.build-type }}
-        steps:
-            - name: Set build-type based on event
-              id: set-build-type
-              run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  fi
-
     build-lighting-app:
         name: Build Lighting App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lighting-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
@@ -40,7 +23,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "air-quality-sensor-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-light-switch-app:
         name: Build Light Switch App
@@ -48,7 +31,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "light-switch-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-lock-app:
         name: Build Lock App
@@ -56,7 +39,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lock-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
@@ -67,7 +50,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
@@ -78,7 +61,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "window-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
 
     build-fan-control-app:
@@ -87,7 +70,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "fan-control-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             thread-support: false
 
     build-multi-sensor-app:
@@ -96,7 +79,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "multi-sensor-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-onoff-plug-app:
         name: Build OnOff Plug App
@@ -104,7 +87,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff-plug-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
     
     build-refrigerator-app:
         name: Build Refrigerator App
@@ -112,7 +95,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "refrigerator-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
@@ -123,7 +106,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance-test-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
@@ -135,7 +118,7 @@ jobs:
     #     uses: ./.github/workflows/platform-builder.yaml
     #     with:
     #         example-app: "zigbee-matter-light"
-    #         build-type: ${{ needs.set-build-type.outputs.build-type }}
+    #         build-type: ${{ inputs.build-type }}
     #         thread-keyword: ""
     #         ncp-917-support: false
     #         ncp-wf200-support: false
@@ -148,7 +131,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "matter-bootloader"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             wifi-soc-support: false
     
     merge-apps:
@@ -175,6 +158,6 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
+                name: "sample-apps-${{ inputs.build-type }}"
                 delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+                pattern: "*-${{ inputs.build-type }}"

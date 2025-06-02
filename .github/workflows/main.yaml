@@ -26,11 +26,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  set-build-type:
+      runs-on: ubuntu-latest
+      outputs:
+          build-type: ${{ steps.set-build-type.outputs.build-type }}
+      steps:
+          - name: Set build-type based on event
+            id: set-build-type
+            run: |
+                if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                    echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                    echo "build-type=standard" >> $GITHUB_OUTPUT
+                elif [[ "${{ github.event_name }}" == "push" ]]; then
+                    echo "build-type=standard" >> $GITHUB_OUTPUT
+                  fi
+
   call-dev-apps-builder:
     name: Call Dev Apps Builder
     uses: ./.github/workflows/dev-apps-builder.yaml
     with:
-      build-type: ${{ github.event.inputs.build-type }}
+      build-type: ${{ needs.set-build-type.outputs.build-type }}
 
   call-sqa-apps-builder:
     name: Call SQA Apps Builder
@@ -47,6 +63,7 @@ jobs:
       - call-dev-apps-builder
       - call-sqa-apps-builder
       - call-sqa-tools-builder
+      - set-build-type
     if: success()
     steps:
       - name: Merge artifacts
@@ -55,6 +72,6 @@ jobs:
           name: "artifacts"
           delete-merged: true
           pattern: |
-            sample-apps-${{ github.event.inputs.build-type }}
+            sample-apps-${{ needs.set-build-type.outputs.build-type }}
             sqa-tools
-            sample-apps  -custom-sqa
+            sample-apps-custom-sqa
