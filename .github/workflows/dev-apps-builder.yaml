@@ -11,7 +11,6 @@ on:
 jobs:
     build-lighting-app:
         name: Build Lighting App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lighting-app"
@@ -19,7 +18,6 @@ jobs:
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "air-quality-sensor-app"
@@ -27,7 +25,6 @@ jobs:
 
     build-light-switch-app:
         name: Build Light Switch App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "light-switch-app"
@@ -35,7 +32,6 @@ jobs:
 
     build-lock-app:
         name: Build Lock App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lock-app"
@@ -46,7 +42,6 @@ jobs:
 
     build-thermostat-app:
         name: Build Thermostat App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
@@ -57,7 +52,6 @@ jobs:
 
     build-window-app:
         name: Build Window App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "window-app"
@@ -66,7 +60,6 @@ jobs:
 
     build-fan-control-app:
         name: Build Fan Control App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "fan-control-app"
@@ -75,7 +68,6 @@ jobs:
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "multi-sensor-app"
@@ -83,7 +75,6 @@ jobs:
 
     build-onoff-plug-app:
         name: Build OnOff Plug App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff-plug-app"
@@ -91,7 +82,6 @@ jobs:
     
     build-refrigerator-app:
         name: Build Refrigerator App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "refrigerator-app"
@@ -102,7 +92,6 @@ jobs:
     
     build-performance-test-app:
         name: Build Performance Test App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance-test-app"
@@ -127,7 +116,6 @@ jobs:
 
     build-bootloaders:
         name: Build Bootloaders
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "matter-bootloader"
