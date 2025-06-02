@@ -30,6 +30,6 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                  name: "sample-apps-custom-sqa"
+                  name: "slc-sample-apps-custom-sqa"
                   delete-merged: true
                   pattern: "*-custom-sqa"

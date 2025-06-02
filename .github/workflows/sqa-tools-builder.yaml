@@ -132,6 +132,6 @@ jobs:
       - name: Merge artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: "sqa-tools"
+          name: "slc-sqa-tools"
           delete-merged: true
           pattern: sqa-tools-*

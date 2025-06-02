@@ -72,6 +72,4 @@ jobs:
           name: "artifacts"
           delete-merged: true
           pattern: |
-            sample-apps-${{ needs.set-build-type.outputs.build-type }}
-            sqa-tools
-            sample-apps-custom-sqa
+            slc-*
