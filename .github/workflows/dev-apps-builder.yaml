@@ -126,7 +126,6 @@ jobs:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
-            - set-build-type
             - build-bootloaders
             - build-lighting-app
             - build-air-quality-sensor-app
