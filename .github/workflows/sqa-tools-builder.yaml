@@ -1,7 +1,11 @@
 name: Build SQA Tools
 
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
 
 concurrency:
     group: sqa-tools-builder-${{ github.ref }}
@@ -136,6 +140,6 @@ jobs:
       - name: Merge artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: sqa-tools
+          name: sqa-tools-${{ inputs.build-type }}
           delete-merged: true
           pattern: sqa-tools-*
