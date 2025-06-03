@@ -8,7 +8,7 @@ runs:
       shell: bash
       run: |
         ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
-        wget "https://github.com/project-chip/zap/releases/download/v${ZAP_VERSION}/zap-linux-x64.zip"
+        wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
         unzip zap-linux-x64.zip -d /opt/silabs/zap-linux-x64
         rm zap-linux-x64.zip
 
