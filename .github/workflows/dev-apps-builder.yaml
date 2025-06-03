@@ -171,6 +171,8 @@ jobs:
         name: Build SQA Tools
         needs: set-build-type
         uses: ./.github/workflows/sqa-tools-builder.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
     
     merge-apps:
         name: Merge App Artifacts
