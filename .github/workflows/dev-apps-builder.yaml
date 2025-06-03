@@ -167,12 +167,18 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
     
+    build-sqa-tools:
+        name: Build SQA Tools
+        needs: set-build-type
+        uses: ./.github/workflows/sqa-tools-builder.yaml
+    
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
             - set-build-type
             - build-bootloaders
+            - build-sqa-tools
             - build-lighting-app
             - build-air-quality-sensor-app
             - build-light-switch-app

@@ -1,14 +1,7 @@
 name: Build SQA Tools
 
 on:
-  push:
-# TODO add these lines back       branches:
-#            - main
-#            - "release_*"
-  pull_request:
-      branches:
-          - main
-          - "release_*"
+  workflow_dispatch:
 
 concurrency:
     group: sqa-tools-builder-${{ github.ref }}
