@@ -1,3 +1,21 @@
+#!/usr/bin/env python3
+"""
+get_zap_version.py
+
+Description:
+    This script determines the required ZAP version for Simplicity Studio Matter SDK workflows.
+    It reads the ZAP version from a release variable or from the Matter SDK's zap.json file.
+    The script is intended for use in CI/CD pipelines or locally to fetch the correct ZAP version
+    for downloading or validation.
+
+Usage:
+    python3 get_zap_version.py           # Prints a human-readable message with the minimum required ZAP version
+    python3 get_zap_version.py --docker  # Prints only the version string (for automation in Docker or CI)
+
+Arguments:
+    --docker    Print only the version string (no extra text), suitable for scripting/automation.
+"""
+
 import os
 import json
 import argparse
@@ -14,9 +32,11 @@ def get_zap_version():
     # Check if the environment variable SILABS_MATTER_ROOT is set
     if "SILABS_MATTER_ROOT" not in os.environ:
         # If not set, use the default path for Matter root
+        print("Using default path for Matter root")
         silabs_chip_root = Path(__file__).resolve().parents[2]
     else:
         # If set, use the path from the environment variable
+        print("Using ENV path for Matter root")
         silabs_chip_root = os.environ["SILABS_MATTER_ROOT"]
 
     zap_version = ""
