@@ -7,7 +7,7 @@ runs:
     - name: Install ZAP
       shell: bash
       run: |
-        wget https://github.com/project-chip/zap/releases/download/v2025.04.10/zap-linux-x64.zip
+        wget https://github.com/project-chip/zap/releases/download/v2025.05.22/zap-linux-x64.zip
         unzip zap-linux-x64.zip -d /opt/silabs/zap-linux-x64
         rm zap-linux-x64.zip
 
