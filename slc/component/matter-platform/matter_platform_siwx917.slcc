@@ -72,6 +72,10 @@ define:
   - name: RS911X_WIFI
   - name: SL_SI91x_DUAL_INTERRUPTS_ERRATA
   - name: NVM3_LOCK_OVERRIDE
+  - name: SL_WLAN_EVENT_THREAD_PRIORITY
+    value: osPriorityRealtime6
+  - name: SL_WLAN_COMMAND_ENGINE_THREAD_PRIORITY
+    value: osPriorityRealtime5
 toolchain_settings:
   - option: gcc_linker_option
     value: "-Wl,--wrap=MemoryAlloc"
