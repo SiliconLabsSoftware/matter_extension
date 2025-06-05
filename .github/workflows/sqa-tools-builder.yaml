@@ -1,0 +1,145 @@
+name: Build SQA Tools
+
+on:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
+
+concurrency:
+    group: sqa-tools-builder-${{ github.ref }}
+    cancel-in-progress: true
+
+env:
+  PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
+
+jobs:
+  package-scripts:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: false
+    
+    #zip Provision folder
+    - name: Zip provisioning tool
+      shell: bash
+      run: |
+        file="provision.zip"
+        zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
+        mkdir -p sqa-tools/
+        mv "${file}" sqa-tools/
+        echo "Provisioning tool zipped successfully: sqa-tools/${file}"
+
+    - name: Mark repository as safe for Git
+      shell: bash
+      run: |
+        git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+    - name: Initialize required submodules
+      shell: bash
+      run: |
+        git submodule update --init third_party/matter_sdk
+    
+    - name: Zip OTA scripts
+      shell: bash
+      run: |
+          ota_file="ota-scripts.zip"
+          cd third_party/matter_sdk/
+          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+          mv "${ota_file}" ../../sqa-tools/
+          echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
+          
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: sqa-tools-zip
+        path: sqa-tools
+        if-no-files-found: error
+        overwrite: true
+
+  build-sqa-tools:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/project-chip/chip-build-crosscompile:81
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
+
+      - name: Checkout matter_sdk submodules
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --platform linux
+
+      - name: Run bootstrap action
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v1.2.0
+
+      # Builds chip-tool
+      - name: Build chip-tool
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
+      
+      # Builds OTA provider
+      - name: Build OTA provider
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-ota-provider-ipv6only-clang build"
+
+      # Builds all-clusters app
+      - name: Build all-clusters app
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
+
+      # Copy Artifacts at on location
+      - name: Copy Build Artifacts to output directory
+        shell: bash
+        run: |
+          mkdir -p sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
+          cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqa-tools-binaries
+          path: sqa-tools
+          if-no-files-found: error
+          overwrite: true
+
+  merge-artifacts:
+    name: Merge sqa-tools Artifacts
+    runs-on: ubuntu-latest
+    needs:
+        - build-sqa-tools
+        - package-scripts
+    if: success()
+
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: sqa-tools-${{ inputs.build-type }}
+          delete-merged: true
+          pattern: sqa-tools-*
