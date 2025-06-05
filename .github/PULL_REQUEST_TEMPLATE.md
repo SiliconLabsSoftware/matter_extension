@@ -4,10 +4,9 @@
 -->
 
 <!--
-  Jira Issue Number: Reference the Jira ticket this PR addresses (e.g., MATTER-123, NOJIRA).
-  Add the JIRA Issue at the beginning of the title of the PR.
+  Issue Link: Reference the Issue this PR addresses
 -->
-**Jira Issue Number:** 
+**Issue Link:** 
 
 <!--
   Briefly describe the problem or feature addressed by this PR.
