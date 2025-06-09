@@ -130,7 +130,6 @@ jobs:
     
     # copy wifi firmware
   copy-wifi-firmware:
-    name: Copy Multiple WiFi Firmware Files
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
@@ -161,9 +160,9 @@ jobs:
       - name: Upload WiFi firmware artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: wifi-firmware
-          path: sqa-tools/out/WiFi-Firmware
-          if-no-files-found: warn
+          name: sqa-tools-wifi-firmware
+          path: sqa-tools
+          if-no-files-found: error
           overwrite: true
 
   merge-artifacts:
@@ -172,6 +171,7 @@ jobs:
     needs:
         - build-sqa-tools
         - package-scripts
+        - copy-wifi-firmware
     if: success()
 
     steps:
