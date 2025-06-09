@@ -145,16 +145,10 @@ jobs:
       - name: Copy WiFi firmware files
         shell: bash
         run: |
-          echo "Listing connectivity_firmware/standard:"
-          ls -l ${WISECONNECT3_DIR}/connectivity_firmware/standard/
-          echo "Listing firmware:"
-          ls -l ${WISECONNECT_SDK_ROOT}/firmware/
-          cp ${WISECONNECT_SDK_ROOT}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/out/WiFi-Firmware/siwx917/ || true
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS9116W.2.*.rps sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.4/ || true
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS916W.2.*.rps sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.5/ || true
+          cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/out/WiFi-Firmware/siwx917/
+          cp ${WISECONNECT_SDK_ROOT}/firmware/RS9116W.2.*.rps sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.4/
+          cp ${WISECONNECT_SDK_ROOT}/firmware/RS916W.2.*.rps sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.5/
           echo "WiFi firmware files copied successfully."
-          echo "Listing output directories:"
-          ls -lR sqa-tools/out/WiFi-Firmware/
 
       - name: Upload WiFi firmware artifacts
         uses: actions/upload-artifact@v4
