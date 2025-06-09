@@ -1,0 +1,38 @@
+{{> header}}
+
+#pragma once
+
+#include <app/data-model-provider/MetadataTypes.h>
+#include <lib/core/DataModelTypes.h>
+
+#include <cstdint>
+
+#include <cluster/{{asUpperCamelCase name}}/Ids.h>
+
+namespace chip {
+namespace app {
+namespace Clusters {
+namespace {{asUpperCamelCase name}} {
+
+{{#if defaultValue}}
+inline constexpr uint32_t kRevision = {{defaultValue}};
+{{else}}
+inline constexpr uint32_t kRevision = 1;
+{{/if}}
+
+namespace Attributes {
+
+{{#zcl_attributes_server}}
+namespace {{asUpperCamelCase label}} {
+inline constexpr DataModel::AttributeEntry kMetadataEntry = {
+    .attributeId = {{asUpperCamelCase label}}::Id;
+    .flags       = BitFlags<DataModel::AttributeQualityFlags>
+}
+} // namespace {{asUpperCamelCase label}}
+
+{{/zcl_attributes_server}}
+} // namespace Attributes
+} // namespace {{asUpperCamelCase name}}
+} // namespace Clusters
+} // namespace app
+} // namespace chip

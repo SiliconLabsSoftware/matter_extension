@@ -114,6 +114,7 @@ requires:
   - name: matter_codegen_data_model_sources
   - name: matter_data_model
   - name: matter_data_model_provider
+  - name: matter_encode_decode
   - name: matter_error
   - name: matter_libinteractionmodel
   - name: matter_memory
@@ -121,6 +122,8 @@ requires:
   - name: matter_naming
   - name: matter_text_only_logging
   - name: matter_tracing_headers
+  # TODO: Remove once Zap issue is fixed
+  - name: matter_zap_include
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override

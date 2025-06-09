@@ -72,6 +72,12 @@
     ]
   },
   {
+    "clusterCode": "camera av settings user level management-server",
+    "value": [
+      "%extension-matter%matter_camera_av_settings_user_level_management"
+    ]
+  },
+  {
     "clusterCode": "camera av stream management-server",
     "value": [
       "%extension-matter%matter_camera_av_stream_management"
@@ -96,6 +102,12 @@
     ]
   },
   {
+    "clusterCode": "closure dimension-server",
+    "value": [
+      "%extension-matter%matter_closure_dimension"
+    ]
+  },
+  {
     "clusterCode": "color control-server",
     "value": [
       "%extension-matter%matter_color_control"
@@ -105,6 +117,12 @@
     "clusterCode": "commissioner control-server",
     "value": [
       "%extension-matter%matter_commissioner_control"
+    ]
+  },
+  {
+    "clusterCode": "commodity price-server",
+    "value": [
+      "%extension-matter%matter_commodity_price"
     ]
   },
   {
@@ -171,6 +189,12 @@
     "clusterCode": "electrical energy measurement-server",
     "value": [
       "%extension-matter%matter_electrical_energy_measurement"
+    ]
+  },
+  {
+    "clusterCode": "electrical grid conditions-server",
+    "value": [
+      "%extension-matter%matter_electrical_grid_conditions"
     ]
   },
   {
@@ -303,6 +327,12 @@
     "clusterCode": "messages-server",
     "value": [
       "%extension-matter%matter_messages"
+    ]
+  },
+  {
+    "clusterCode": "meter identification-server",
+    "value": [
+      "%extension-matter%matter_meter_identification"
     ]
   },
   {
@@ -507,6 +537,12 @@
     "clusterCode": "time synchronization-server",
     "value": [
       "%extension-matter%matter_time_synchronization"
+    ]
+  },
+  {
+    "clusterCode": "unit localization-server",
+    "value": [
+      "%extension-matter%matter_unit_localization"
     ]
   },
   {

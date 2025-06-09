@@ -13,10 +13,14 @@ metadata:
 provides:
   - name: matter_closure_control
 source:
+  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/closure-control-cluster-logic.cpp
   - path: third_party/matter_sdk/src/app/clusters/closure-control-server/closure-control-server.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-control-server
     file_list:
+      - path: closure-control-cluster-delegate.h
+      - path: closure-control-cluster-logic.h
+      - path: closure-control-cluster-matter-context.h
       - path: closure-control-cluster-objects.h
       - path: closure-control-server.h
 template_contribution:

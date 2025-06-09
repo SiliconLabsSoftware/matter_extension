@@ -1,0 +1,21 @@
+{{> header}}
+
+#pragma once
+
+#include <lib/core/DataModelTypes.h>
+
+namespace chip {
+namespace app {
+namespace Clusters {
+namespace {{asUpperCamelCase name}} {  
+namespace Events {
+{{#zcl_events}}
+namespace {{asUpperCamelCase name}} {
+inline constexpr EventId Id = {{asHex code}};
+}
+{{/zcl_events}}
+} // Commands
+} // {{asUpperCamelCase name}}
+} // Events
+} // app
+} // chip

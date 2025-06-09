@@ -3,8 +3,14 @@
 
         "default": [
             {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a"],
+                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a","brd4121a"],
                 "arguments": [""]
+            }
+        ],
+        "zigbee-matter-light":  [
+            {
+                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a","brd4121a"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"]
             }
         ]
     } 

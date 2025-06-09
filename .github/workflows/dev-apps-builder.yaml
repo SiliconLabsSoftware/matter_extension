@@ -122,6 +122,42 @@ jobs:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build-refrigerator-app:
+        name: Build Refrigerator App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "refrigerator-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+
+    build-performance-test-app:
+        name: Build Performance Test App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "performance-test-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
+
+    build-zigbee-matter-light-app:
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
+
     build-bootloaders:
         name: Build Bootloaders
         needs: set-build-type
@@ -131,11 +167,19 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
     
+    build-sqa-tools:
+        name: Build SQA Tools
+        needs: set-build-type
+        uses: ./.github/workflows/sqa-tools-builder.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
             - set-build-type
+            - build-sqa-tools
             - build-bootloaders
             - build-lighting-app
             - build-air-quality-sensor-app
@@ -146,13 +190,16 @@ jobs:
             - build-fan-control-app
             - build-multi-sensor-app
             - build-onoff-plug-app
+            - build-refrigerator-app
+            - build-performance-test-app
+            - build-zigbee-matter-light-app
         if: success()
 
         steps:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                name: "sample-apps-${{ needs.set-build-type.outputs.build-type }}"
+                name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 

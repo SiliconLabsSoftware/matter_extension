@@ -37,6 +37,7 @@ include:
   - path: silabs_creds.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
+  - path: BaseAppEvent.h
 - path: third_party/matter_sdk/src/platform/silabs/SiWx917
   file_list:
   - path: SiWxPlatformInterface.h

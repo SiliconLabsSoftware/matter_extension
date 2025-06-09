@@ -6,6 +6,12 @@
                 "boards": ["brd2703a"],
                 "arguments": [""]
             }
+        ],
+        "zigbee-matter-light":  [
+            {
+                "boards": ["brd2703a"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"]
+            }
         ]
-    } 
+    }
 }
