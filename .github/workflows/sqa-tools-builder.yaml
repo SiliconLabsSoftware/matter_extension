@@ -135,11 +135,6 @@ jobs:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-
       - name: Create WiFi firmware directories
         shell: bash
         run: |
@@ -149,9 +144,6 @@ jobs:
 
       - name: Copy WiFi firmware files
         shell: bash
-        env:
-          WISECONNECT_SDK_ROOT: ${{ env.WISECONNECT_SDK_ROOT }}
-          WISECONNECT3_DIR: ${{ env.WISECONNECT3_DIR }}
         run: |
           echo "Listing connectivity_firmware/standard:"
           ls -l ${WISECONNECT3_DIR}/connectivity_firmware/standard/
