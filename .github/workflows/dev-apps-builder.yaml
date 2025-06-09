@@ -246,6 +246,7 @@ jobs:
                   private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
             - name: Wait for Test Results
+              if: steps.wait_for_results.outputs.completed == 'false'
               run: |
                   echo "Waiting for check run to complete..."
                   elapsed_time=0
