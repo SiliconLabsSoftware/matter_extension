@@ -138,9 +138,9 @@ jobs:
       - name: Create WiFi firmware directories
         shell: bash
         run: |
-          mkdir -p sqa-tools/out/WiFi-Firmware/siwx917
-          mkdir -p sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.4
-          mkdir -p sqa-tools/out/WiFi-Firmware/rs911x/Evk_1.5
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.4
+          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.5
 
       - name: Copy WiFi firmware files
         shell: bash
@@ -159,7 +159,6 @@ jobs:
           overwrite: true
 
   merge-artifacts:
-    name: Merge sqa-tools Artifacts
     runs-on: ubuntu-latest
     needs:
         - build-sqa-tools
@@ -168,7 +167,7 @@ jobs:
     if: success()
 
     steps:
-      - name: Merge artifacts
+      - name: Merge sqa-tools Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
           name: sqa-tools-${{ inputs.build-type }}
