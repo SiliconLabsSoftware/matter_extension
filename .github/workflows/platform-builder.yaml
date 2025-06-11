@@ -33,7 +33,7 @@ on:
                 required: false
                 type: boolean
                 default: false
-            24-support:
+            mg24-support:
                 required: false
                 type: boolean
                 default: true
@@ -145,7 +145,7 @@ jobs:
             path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-917-ncp-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
-            platform: ncp-917mg
+            platform: ncp-917
 
     ncp-wf200-build-job:
         if: ${{ inputs.ncp-wf200-support }}
