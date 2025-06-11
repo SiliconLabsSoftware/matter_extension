@@ -154,6 +154,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-keyword: ""
             mg24-internal-support: false
+            mg24-support: false
             mgm24-support: false
             mgm24-internal-support: false
             ncp-917-support: false
