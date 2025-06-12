@@ -7,13 +7,13 @@
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-light":
-        {
-            "boards": ["brd4186c", "brd4187c", "brd2601b"],
-            "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
-        }
+        "zigbee-matter-light":  [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ]
     },
-    
     "custom-sqa": {
         "lock-app" :[
             {
