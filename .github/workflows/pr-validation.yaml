@@ -18,7 +18,7 @@ jobs:
 
           python -c 'import sys; pr_summary = open("/tmp/pr-summary.txt", "rt").read(); sys.exit(0 if "**Testing Done:**" in pr_summary else 1)'
 
-      - name: Check for "**Description of Problem/Feature:**" section in PR
+      - name: Check for "**Description of Fix/Solution:**" section in PR
         id: check-description
         continue-on-error: true
         run: |
@@ -26,10 +26,15 @@ jobs:
           ${{ github.event.pull_request.body }}
           EndMarkerForPrSummary
 
-          python -c 'import sys; pr_summary = open("/tmp/pr-summary.txt", "rt").read(); sys.exit(0 if "**Description of Problem/Feature:**" in pr_summary else 1)'
+          python -c 'import sys; pr_summary = open("/tmp/pr-summary.txt", "rt").read(); sys.exit(0 if "**Description of Fix/Solution:**" in pr_summary else 1)'
 
       - name: Fail if "**Testing Done:**" section not in PR
         if: (steps.check-testing.outcome == 'failure') && (github.event.pull_request.user.login != 'dependabot[bot]')
 
         run: |
           python -c 'import sys; print("Testing section missing (test failed)"); sys.exit(1)'
+      
+      - name: Fail if "**Description of Fix/Solution:**" section not in PR
+        if: (steps.check-description.outcome == 'failure') && (github.event.pull_request.user.login != 'dependabot[bot]')
+        run: |
+          python -c 'import sys; print("Description of Problem/Feature section missing (test failed)"); sys.exit(1)'
