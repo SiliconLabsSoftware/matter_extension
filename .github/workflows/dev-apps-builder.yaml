@@ -153,7 +153,6 @@ jobs:
             example-app: "zigbee-matter-light"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-keyword: ""
-            mg24-support: true
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
