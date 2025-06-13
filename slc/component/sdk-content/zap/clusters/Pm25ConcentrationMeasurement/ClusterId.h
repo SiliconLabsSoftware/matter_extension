@@ -24,9 +24,11 @@
 namespace chip {
 namespace app {
 namespace Clusters {
-namespace Pm25ConcentrationMeasurement {  
-inline constexpr ClusterId Id = 0x42A;
-} // Pm25ConcentrationMeasurement
-} // Clusters
-} // app
-} // chip
+namespace Pm25ConcentrationMeasurement {
+
+inline constexpr ClusterId Id = 0x0000042A;
+
+} // namespace Pm25ConcentrationMeasurement
+} // namespace Clusters
+} // namespace app
+} // namespace chip

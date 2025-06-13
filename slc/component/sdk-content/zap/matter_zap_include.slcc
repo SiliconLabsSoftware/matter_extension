@@ -12,9 +12,9 @@ metadata:
     license: Zlib
 include:
   - path: slc/component/sdk-content/zap
-  - path: slc/component/sdk-content/zap/clusters/OperationalCredentials
+  - path: slc/component/sdk-content/zap/app/static-cluster-config
     file_list:
-    - path: Metadata.h
+    - path: SoftwareDiagnostics.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h

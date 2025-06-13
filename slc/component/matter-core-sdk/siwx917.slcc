@@ -82,6 +82,7 @@ include:
   - path: GenericConnectivityManagerImpl_TCP.h
   - path: GenericConnectivityManagerImpl_WiFi.h
   - path: GenericConnectivityManagerImpl_TCP.ipp
+  - path: NFCCommissioningManager.h
 - path: third_party/matter_sdk/src/platform/logging
   file_list:
   - path: LogV.h
@@ -95,7 +96,6 @@ include:
 - path: third_party/matter_sdk/src/app/common
   file_list:
   - path: CompatEnumNames.h
-  - path: GlobalIds.h
 - path: third_party/matter_sdk/src/lwip/silabs
   file_list:
   - path: lwipopts-wf200.h

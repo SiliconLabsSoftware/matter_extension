@@ -276,6 +276,18 @@
     ]
   },
   {
+    "clusterCode": "joint fabric administrator-server",
+    "value": [
+      "%extension-matter%matter_joint_fabric_administrator"
+    ]
+  },
+  {
+    "clusterCode": "joint fabric datastore-server",
+    "value": [
+      "%extension-matter%matter_joint_fabric_datastore"
+    ]
+  },
+  {
     "clusterCode": "keypad input-server",
     "value": [
       "%extension-matter%matter_keypad_input"

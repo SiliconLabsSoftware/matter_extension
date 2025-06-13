@@ -14,10 +14,15 @@ provides:
   - name: matter_network_commissioning
 source:
   - path: third_party/matter_sdk/src/app/clusters/network-commissioning/network-commissioning.cpp
+  - path: third_party/matter_sdk/src/app/clusters/network-commissioning/ThreadScanResponse.cpp
+  - path: third_party/matter_sdk/src/app/clusters/network-commissioning/WifiScanResponse.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/network-commissioning
     file_list:
+      - path: constants.h
       - path: network-commissioning.h
+      - path: ThreadScanResponse.h
+      - path: WifiScanResponse.h
 template_contribution:
   - name: component_catalog
     value: matter_network_commissioning
