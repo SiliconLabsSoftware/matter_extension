@@ -43,8 +43,9 @@ pip3 install dload
 pip3 install python-dotenv  
 ```
 
+> **Note:** Users may need to create a Python virtual environment before installing the required packages and running the scripts.
 
-The `sl_setup_env.py` script creates an `.env` file which contains all the relevant virtual environment paths to be used by `sl_create_new_app.py` and `sl_build.py` scripts. The file is not meant to be used directly and is mentioned here only for reference.
+The `sl_setup_env.py` script creates an `.env` file containing all relevant virtual environment paths used by the `sl_create_new_app.py` and `sl_build.py` scripts. This file is for internal use by the scripts and does not need to be edited directly.
 
 It will also create `environment_variables_vscode.txt`. This file can be referenced to add environment variables for VS Code-based builds.
 
