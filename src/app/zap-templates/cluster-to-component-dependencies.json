@@ -480,6 +480,12 @@
     ]
   },
   {
+    "clusterCode": "soil measurement-server",
+    "value": [
+      "%extension-matter%matter_soil_measurement"
+    ]
+  },
+  {
     "clusterCode": "switch-server",
     "value": [
       "%extension-matter%matter_switch"
@@ -501,6 +507,12 @@
     "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"
+    ]
+  },
+  {
+    "clusterCode": "testing-server",
+    "value": [
+      "%extension-matter%matter_testing"
     ]
   },
   {

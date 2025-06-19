@@ -182,6 +182,7 @@
             "FeatureMap"
         ],
         "Administrator Commissioning": [
+            "ClusterRevision",
             "WindowStatus",
             "AdminFabricIndex",
             "AdminVendorId"
@@ -218,13 +219,17 @@
         "Closure Control": [
             "CountdownTime",
             "OverallState",
-            "OverallTarget"
+            "OverallTarget",
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Closure Dimension": [
             "CurrentState",
             "Target",
             "UnitRange",
-            "LimitRange"
+            "LimitRange",
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Commodity Price": [
             "TariffUnit",
@@ -356,6 +361,21 @@
             "ProtocolVersion",
             "PowerThreshold",
             "FeatureMap"
+        ],
+        "Network Commissioning": [
+            "ClusterRevision",
+            "ConnectMaxTimeSeconds",
+            "FeatureMap",
+            "InterfaceEnabled",
+            "LastConnectErrorValue",
+            "LastNetworkID",
+            "LastNetworkingStatus",
+            "MaxNetworks",
+            "Networks",
+            "ScanMaxTimeSeconds",
+            "SupportedThreadFeatures",
+            "SupportedWiFiBands",
+            "ThreadVersion"
         ],
         "Occupancy Sensing": [
             "HoldTimeLimits",
@@ -809,18 +829,11 @@
             "MaxConcurrentEncoders",
             "MaxEncodedPixelRate",
             "NightVisionUsesInfrared",
-            "RateDistortionTradeOffPoints",
             "MaxContentBufferSize",
             "TwoWayTalkSupport",
-            "SnapshotCapabilities",
             "MaxNetworkBandwidth",
             "CurrentFrameRate",
             "HDRModeEnabled",
-            "SupportedStreamUsages",
-            "AllocatedVideoStreams",
-            "AllocatedAudioStreams",
-            "AllocatedSnapshotStreams",
-            "RankedVideoStreamPrioritiesList",
             "SoftRecordingPrivacyModeEnabled",
             "SoftLivestreamPrivacyModeEnabled",
             "HardPrivacyModeOn",
