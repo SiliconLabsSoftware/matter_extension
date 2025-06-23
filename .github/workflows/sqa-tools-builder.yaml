@@ -127,17 +127,47 @@ jobs:
           path: sqa-tools
           if-no-files-found: error
           overwrite: true
+    
+    # copy wifi firmware
+  copy-wifi-firmware:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+
+    steps:
+      - name: Create WiFi firmware directories
+        shell: bash
+        run: |
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.4
+          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.5
+
+      - name: Copy WiFi firmware files
+        shell: bash
+        run: |
+          cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
+          cp ${WISECONNECT_SDK_ROOT}/firmware/RS9116W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.4/
+          cp ${WISECONNECT_SDK_ROOT}/firmware/RS916W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.5/
+          echo "WiFi firmware files copied successfully."
+
+      - name: Upload WiFi firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqa-tools-wifi-firmware
+          path: sqa-tools
+          if-no-files-found: error
+          overwrite: true
 
   merge-artifacts:
-    name: Merge sqa-tools Artifacts
     runs-on: ubuntu-latest
     needs:
         - build-sqa-tools
         - package-scripts
+        - copy-wifi-firmware
     if: success()
 
     steps:
-      - name: Merge artifacts
+      - name: Merge sqa-tools Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
           name: sqa-tools-${{ inputs.build-type }}
