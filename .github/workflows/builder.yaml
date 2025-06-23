@@ -24,7 +24,7 @@ jobs:
         name: ${{ inputs.platform }}-build-job
         runs-on: ubuntu-latest
         container:
-            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2024.12.2_WiFi_SDKv3.4.2
+            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
 
         steps:
             - name: Checkout
