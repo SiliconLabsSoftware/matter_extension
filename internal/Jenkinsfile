@@ -1,10 +1,10 @@
 pipeline {
     agent any
     stages {
-    // Trigger11
         stage('Trigger downstream') {
             steps {
-                build job: 'Matter GitHub Jenkins/feature%2Fgithub_integration', parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: false
+                def encodedBranchName = env.BRANCH_NAME.replace("/", "%2F")
+                build job: 'Matter GitHub Jenkins/${encodedBranchName}', parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: false
             }
         }
     }
