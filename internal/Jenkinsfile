@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-    //trigger
+    //trigger build
         stage('Trigger downstream') {
             steps {
                 script {
