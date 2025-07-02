@@ -218,14 +218,14 @@
         ],
         "Closure Control": [
             "CountdownTime",
-            "OverallState",
-            "OverallTarget",
+            "OverallCurrentState",
+            "OverallTargetState",
             "FeatureMap",
             "ClusterRevision"
         ],
         "Closure Dimension": [
             "CurrentState",
-            "Target",
+            "TargetState",
             "UnitRange",
             "LimitRange",
             "FeatureMap",
@@ -870,6 +870,10 @@
         ],
         "Zone Management": [
             "TwoDCartesianMax"
+        ],
+        "TLS Client Management": [
+            "ClusterRevision",
+            "MaxProvisioned"
         ]
     },
     "mandatoryDeviceTypes": "0x0016",

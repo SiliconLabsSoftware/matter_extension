@@ -57,7 +57,7 @@ include:
   - path: GenericConnectivityManagerImpl_NoThread.h
   - path: GenericConnectivityManagerImpl_WiFi.ipp
   - path: GenericPlatformManagerImpl_POSIX.ipp
-  - path: GenericPlatformManagerImpl_Zephyr.ipp
+  - path: GenericPlatformManagerImpl_ZephyrSelect.ipp
   - path: GenericConfigurationManagerImpl.h
   - path: GenericPlatformManagerImpl.h
   - path: GenericConnectivityManagerImpl_Thread.h

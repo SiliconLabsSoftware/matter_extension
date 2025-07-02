@@ -564,6 +564,18 @@
     ]
   },
   {
+    "clusterCode": "tls_certificate_management-server",
+    "value": [
+      "%extension-matter%matter_tls_certificate_management"
+    ]
+  },
+  {
+    "clusterCode": "tls management server-client",
+    "value": [
+      "%extension-matter%matter_tls_management_server_client"
+    ]
+  },
+  {
     "clusterCode": "unit localization-server",
     "value": [
       "%extension-matter%matter_unit_localization"
