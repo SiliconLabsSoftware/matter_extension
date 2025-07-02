@@ -347,6 +347,7 @@ jobs:
         name: Trigger SQA Workflow
         needs: wait-for-jenkins-status
         runs-on: ubuntu-latest
+        if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
         steps:
             - name: Trigger Workflow
               run: |
