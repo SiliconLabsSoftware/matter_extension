@@ -1,10 +1,10 @@
 pipeline {
     agent any
     stages {
-    //trigger build 2
         stage('Trigger downstream') {
             steps {
                 script {
+                    // TODO: Need to change branch to trigger main branch once testing is done
                     def encodedBranchName = env.BRANCH_NAME.replace("/", "%2F")
                     build job: "Matter GitHub Jenkins/${encodedBranchName}", parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: false
                 }
