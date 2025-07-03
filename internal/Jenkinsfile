@@ -4,6 +4,7 @@ pipeline {
         stage('Trigger downstream') {
             steps {
                 script {
+                    // Trigger New PR workflow comment
                     // TODO: Need to change branch to trigger main branch once testing is done
                     build job: "Matter GitHub Jenkins/feature%2Fgithub_jenkins_integration", parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: false
                 }
