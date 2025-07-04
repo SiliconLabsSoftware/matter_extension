@@ -222,13 +222,18 @@ jobs:
             - name: Create Check Run for Test Results
               id: create_check_run
               run: |
+                  if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                      HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+                    else
+                      HEAD_SHA="${{ github.sha }}"
+                    fi
                   curl -X POST \
                       -H "Authorization: Bearer ${{ steps.generate_app_token.outputs.token }}" \
                       -H "Accept: application/vnd.github.v3+json" \
                       https://api.github.com/repos/${{ github.repository }}/check-runs \
                       -d '{
                           "name": "Wait for Test Results",
-                          "head_sha": "'${{ github.sha }}'",
+                          "head_sha": "${HEAD_SHA}",
                           "status": "in_progress"
                       }'
 
