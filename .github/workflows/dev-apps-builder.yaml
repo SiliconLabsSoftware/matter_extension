@@ -233,7 +233,7 @@ jobs:
                       https://api.github.com/repos/${{ github.repository }}/check-runs \
                       -d '{
                           "name": "Wait for Test Results",
-                          "head_sha": "${HEAD_SHA}",
+                          "head_sha": "'${HEAD_SHA}'",
                           "status": "in_progress"
                       }'
 
