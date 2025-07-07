@@ -213,6 +213,7 @@ jobs:
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            secrets: inherit
 
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
