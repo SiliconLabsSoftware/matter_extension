@@ -1,0 +1,151 @@
+name: Wait for Test Results
+
+on:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
+
+jobs:
+  wait-for-jenkins-status:
+      name: Wait for Jenkins Status
+      needs: merge-apps
+      runs-on: ubuntu-latest
+      steps:
+          - name: Generate GitHub App Token
+            id: generate_app_token
+            uses: actions/create-github-app-token@v1
+            with:
+                app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+                private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+          - name: Create Check Run for Test Results
+            id: create_check_run
+            run: |
+                if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                    HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+                  else
+                    HEAD_SHA="${{ github.sha }}"
+                  fi
+                curl -X POST \
+                    -H "Authorization: Bearer ${{ steps.generate_app_token.outputs.token }}" \
+                    -H "Accept: application/vnd.github.v3+json" \
+                    https://api.github.com/repos/${{ github.repository }}/check-runs \
+                    -d '{
+                        "name": "Wait for Test Results",
+                        "head_sha": "'${HEAD_SHA}'",
+                        "status": "in_progress"
+                    }'
+
+          - name: List Check Runs
+            id: list_check_runs
+            run: |
+                curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                     -H "Accept: application/vnd.github.v3+json" \
+                      https://api.github.com/repos/${{ github.repository }}/commits/${{ github.sha }}/check-runs > check_runs.json
+                cat check_runs.json
+
+          - name: Extract Check Run ID
+            id: extract_check_run_id
+            run: |
+                CHECK_RUN_ID=$(jq -r --arg JOB_NAME "Wait for Jenkins Status" '.check_runs[] | select(.name == "Wait for Test Results") | .id' check_runs.json)
+                echo "CHECK_RUN_ID=$CHECK_RUN_ID" >> $GITHUB_ENV
+
+          - name: Wait for Test Results
+            id: wait_for_results
+            run: |
+                echo "Waiting for check run to complete..."
+                elapsed_time=0
+                timeout=3300
+                while true; do
+                    response=$(curl -s -H "Authorization: Bearer ${{ steps.generate_app_token.outputs.token }}" \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        https://api.github.com/repos/${{ github.repository }}/check-runs/${CHECK_RUN_ID})
+  
+                    status=$(echo "$response" | jq -r '.status // empty')
+                    conclusion=$(echo "$response" | jq -r '.conclusion // empty')
+  
+                    if [[ "$status" == "completed" ]]; then
+                        title=$(echo "$response" | jq -r '.output.title // empty')
+                        summary=$(echo "$response" | jq -r '.output.summary // empty')
+                        text=$(echo "$response" | jq -r '.output.text // empty')
+  
+                        echo "Check run completed successfully:"
+                        echo "Title: $title"
+                        echo "Summary: $summary"
+                        echo "Text: $text"
+                        if [[ "$conclusion" == "failure" ]]; then
+                            echo "Sanity tests failed. Exiting workflow."
+                            exit 1
+                        fi
+                        echo "completed=true" >> $GITHUB_OUTPUT
+                        break
+                    fi
+  
+                    if [[ "$elapsed_time" -ge "$timeout" ]]; then
+                        echo "completed=false" >> $GITHUB_OUTPUT
+                        echo "Token timeout reached."
+                        break 
+                    fi
+  
+                    echo "Waiting for check run to complete..."
+                    sleep 60
+                    elapsed_time=$((elapsed_time + 60))
+                done
+
+          - name: Generate new token since token times out after 1 hour
+            if: steps.wait_for_results.outputs.completed == 'false'
+            id: refresh_token
+            uses: actions/create-github-app-token@v1
+            with:
+                app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+                private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+          - name: Wait for Test Results
+            if: steps.wait_for_results.outputs.completed == 'false'
+            run: |
+                echo "Waiting for check run to complete..."
+                elapsed_time=0
+                timeout=3300
+                while true; do
+                    response=$(curl -s -H "Authorization: Bearer ${{ steps.refresh_token.outputs.token }}" \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        https://api.github.com/repos/${{ github.repository }}/check-runs/${CHECK_RUN_ID})
+  
+                    status=$(echo "$response" | jq -r '.status // empty')
+                    conclusion=$(echo "$response" | jq -r '.conclusion // empty')
+  
+                    if [[ "$status" == "completed" ]]; then
+                        title=$(echo "$response" | jq -r '.output.title // empty')
+                        summary=$(echo "$response" | jq -r '.output.summary // empty')
+                        text=$(echo "$response" | jq -r '.output.text // empty')
+  
+                        echo "Check run completed successfully:"
+                        echo "Title: $title"
+                        echo "Summary: $summary"
+                        echo "Text: $text"
+                        if [[ "$conclusion" == "failure" ]]; then
+                            echo "Sanity tests failed. Exiting workflow."
+                            exit 1
+                        fi
+                        break
+                    fi
+  
+                    if [[ "$elapsed_time" -ge "$timeout" ]]; then
+                        curl -X PATCH \
+                            -H "Authorization: Bearer ${{ steps.refresh_token.outputs.token }}" \
+                            -H "Accept: application/vnd.github.v3+json" \
+                            https://api.github.com/repos/${{ github.repository }}/check-runs/${CHECK_RUN_ID} \
+                            -d '{
+                                "status": "completed",
+                                "conclusion": "timed_out"
+                            }'
+                        echo "Timeout reached."
+                        exit 1 
+                    fi
+  
+                    echo "Waiting for check run to complete..."
+                    sleep 60
+                    elapsed_time=$((elapsed_time + 60))
+                done
