@@ -56,7 +56,13 @@ jobs:
           - name: Extract Check Run ID
             id: extract_check_run_id
             run: |
-                CHECK_RUN_ID=$(jq -r --arg JOB_NAME "Wait for Jenkins Status" '.check_runs[] | select(.name == "Wait for Test Results") | .id' check_runs.json)
+                CHECK_RUN_ID=$(jq -r '.check_runs[] | select(.name == "Wait for Test Results" and .status == "in_progress") | .id' check_runs.json | tail -n 1)
+                if [[ -z "$CHECK_RUN_ID" || "$CHECK_RUN_ID" == "null" ]]; then
+                    echo "Error: No in-progress check run found for 'Wait for Test Results'."
+                    cat check_runs.json
+                    exit 1
+                fi
+                echo "Extracted CHECK_RUN_ID: $CHECK_RUN_ID"
                 echo "CHECK_RUN_ID=$CHECK_RUN_ID" >> $GITHUB_ENV
 
           - name: Wait for Test Results
