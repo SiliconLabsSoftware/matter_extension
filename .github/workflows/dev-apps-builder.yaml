@@ -9,7 +9,7 @@ on:
         branches:
             - main
             - "release_*"
-            - "feature/*"  # TODO: remove this line when testing is done
+            - "feature/*"   # TODO: remove this line when testing is done
     workflow_dispatch:
         inputs:
             build-type:
