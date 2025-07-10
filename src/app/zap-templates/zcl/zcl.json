@@ -874,6 +874,9 @@
         "TLS Client Management": [
             "ClusterRevision",
             "MaxProvisioned"
+        ],
+        "Thermostat": [
+            "CurrentThermostatSuggestion"
         ]
     },
     "mandatoryDeviceTypes": "0x0016",
