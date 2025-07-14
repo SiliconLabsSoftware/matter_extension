@@ -7,9 +7,15 @@ pipeline {
                     // Trigger New PR workflow comment again
                     // TODO: Need to change branch to trigger main branch once testing is done
                     // build job: "Matter GitHub Jenkins/feature%2Fgithub_jenkins_integration", parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: false
-                    checkout([$class: 'GitSCM',
-                              branches: [[name: '*/feature/github_jenkins_integration']]
-                    ])
+                    checkout scm: [$class                    : 'GitSCM',
+                            branches                         : scm.branches,
+                            browser                          : [$class: 'Stash', repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter_github_jenkins/'],
+                            userRemoteConfigs                : scm.userRemoteConfigs]
+
+                    sh """
+                        git checkout feature/github_jenkins_integration
+                    """
+
                     def matter_github_jenkins_jenkinsFile = load 'Jenkinsfile'
                     matter_github_jenkins_jenkinsFile.run()
                 }
