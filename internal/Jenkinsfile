@@ -13,6 +13,8 @@ pipeline {
                             userRemoteConfigs                : scm.userRemoteConfigs]
 
                     sh """
+                        git status
+                        ls -l
                         git checkout feature/github_jenkins_integration
                     """
 
