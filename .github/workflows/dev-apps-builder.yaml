@@ -1,7 +1,7 @@
 name: Build Dev apps
 
 on:
-    push:
+#   push:
 # TODO add these lines back       branches:
 #            - main
 #            - "release_*"

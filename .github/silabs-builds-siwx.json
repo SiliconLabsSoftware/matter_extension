@@ -9,12 +9,110 @@
         ]
     },
     "custom-sqa": {
-        "lock-app" :[
+        "lighting-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-ota-v2",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+            },
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix low-power",
+                "arguments": ["--output_suffix 917-soc-multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-lto",
+                              "'--with wiseconnect_toolchain_gcc_lto;wiseconnect3_sdk'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-ext-ble",
+                              "'--with matter_gatt_additional_advertising;matter'"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-ota-v2",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-low-power",
                               "'--with matter_platform_low_power;matter'",
                               "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-low-power-ota",
+                              "'--with matter_platform_low_power;matter'",
+                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-low-power-sync-reports-false",
+                              "'--with matter_platform_low_power;matter'",
+                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-lto",
+                              "'--with wiseconnect_toolchain_gcc_lto;wiseconnect3_sdk'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-icd-idle-60s",
+                              "--configuration SL_IDLE_MODE_DURATION_S:60"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-icd-sync-reports-false",
+                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-ext-ble",
+                              "'--with matter_gatt_additional_advertising;matter'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-sleep-timer",
+                              "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL",
+                              "'--with sl_si91x_sleep_timer_clock_selection;wiseconnect3_sdk'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-lf-fsm",
+                              "--configuration LF_FSM_CLOCK_SELECTION:RC_KHZ_CLK_SEL",
+                              "'--with sl_si91x_lf_fsm_clock_selection;wiseconnect3_sdk'"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix 917-soc-sleep-timer-lf-fsm",
+                              "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL,LF_FSM_CLOCK_SELECTION:RC_KHZ_CLK_SEL",
+                              "'--with sl_si91x_sleep_timer_clock_selection;wiseconnect3_sdk, sl_si91x_lf_fsm_clock_selection;wiseconnect3_sdk'"]
             }
         ]
     } 
