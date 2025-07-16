@@ -14,6 +14,14 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
 
     build-lock-app:
         name: Build Lock App
@@ -21,6 +29,11 @@ jobs:
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
@@ -31,6 +44,17 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -38,6 +62,17 @@ jobs:
         with:
             example-app: "multi-sensor-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
 
     build-window-app:
         name: Build Window App
@@ -45,7 +80,15 @@ jobs:
         with:
             example-app: "window-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
             ncp-917-support: true
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
 
     build-dishwasher-app:
         name: Build Dishwasher App
@@ -53,6 +96,16 @@ jobs:
         with:
             example-app: "dishwasher-app"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            wifi-soc-support: false
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -60,6 +113,13 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
@@ -74,6 +134,9 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false

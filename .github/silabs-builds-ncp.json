@@ -13,7 +13,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix 917-ncp-ota-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'"]
             },
             {
                 "boards": ["brd4187c"],

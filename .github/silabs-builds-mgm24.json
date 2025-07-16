@@ -13,30 +13,30 @@
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'"]
             }
         ],
         "lock-app": [
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'"]
             },
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-v3",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\""]
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'3'"]
             },
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-lz4-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'",
                               "'--with bootloader_gbl_compression_lz4'"]
             },
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-lz4-v3",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'3'",
                               "'--with bootloader_gbl_compression_lz4'"]
             }
         ]
