@@ -32,7 +32,7 @@ jobs:
         if: (steps.check-testing.outcome == 'failure') && (github.event.pull_request.user.login != 'dependabot[bot]')
 
         run: |
-          python -c 'import sys; print("Testing section missing (test failed)"); sys.exit(1)'
+          python -c 'import sys; print("Missing **Testing Done:** section in PR description"); sys.exit(1)'
       
       - name: Fail if "**Description of Fix/Solution:**" section not in PR
         if: (steps.check-description.outcome == 'failure') && (github.event.pull_request.user.login != 'dependabot[bot]')
