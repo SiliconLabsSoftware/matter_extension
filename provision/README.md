@@ -202,6 +202,7 @@ well-known (default) parameters used by the automatic provisioning action.
 | -ct, --cert_tool          | optional             | string             | Path to the chip-cert tool. Defaults to `../out/tools/chip-cert`                                                       |
 | -jl, --pylink_lib         | optional             | string             | Path to the PyLink library.                                                                                            |
 | -bz, --buffer_size        | optional             | string             | Size of the buffer used to hold transmitted arguments.                                                                 |
+| -rs, --reset              | optional             | string             | Reset after flashing the GFW.<sup>7<sup>                                                                               |
 | -sn, --serial_number      | optional             | string             | Serial Number.                                                                                                         |
 | -vi, --vendor_id          | optional             | dec/hex            | Vendor ID. e.g: 65521 or 0xFFF1 (Max 2 bytes).                                                                         |
 | -vn, --vendor_name        | optional             | string             | Vendor name (Max 32 char).                                                                                             |
@@ -246,6 +247,7 @@ bt:XXXXXXXXXXXXXXXX for bluetooth <sup>2</sup> If not provided (or zero), the
 corresponding private-key must also be provided <sup>4</sup> Required if the DAC
 is not provided <sup>5</sup> If not provided, the `unique_id` is randomly
 generated <sup>6</sup> Salt and verifier must be provided as base64 string
+<sup>7</sup> Required when the GFW is signed for Secure Boot.
 
 WARNING: With the release of version 2.0, many shortcuts have been modified.
 Single-characters are now reserved for tool options. Most long versions have
