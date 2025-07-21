@@ -39,8 +39,7 @@ We provide a set of scripts to set up an environment and build Matter apps in a 
 Install the following Python packages:
 
 ```
-pip3 install dload
-pip3 install python-dotenv  
+pip3 install -r requirements.txt
 ```
 
 > **Note:** Users may need to create a Python virtual environment before installing the required packages and running the scripts.
