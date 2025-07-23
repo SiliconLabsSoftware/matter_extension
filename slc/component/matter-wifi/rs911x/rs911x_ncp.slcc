@@ -1,6 +1,5 @@
-
 id: rs911x_ncp
-package: Matter
+package: matter
 label: RS911x NCP
 description: >
   Adds support RS911x NCP device
@@ -11,15 +10,15 @@ metadata:
     license: Zlib
 
 provides:
-- name: rs911x_ncp
-- name: efx_ncp_custom_host_mcu
+  - name: rs911x_ncp
+  - name: efx_ncp_custom_host_mcu
 
 requires:
-- name: wiseconnect_sapi
-- name: spidrv_core
-- name: freertos
-- name: psa_its
-- name: matter_lwip_support
+  - name: wiseconnect_sapi
+  - name: spidrv_core
+  - name: freertos
+  - name: psa_its
+  - name: matter_lwip_support
 
 include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi
@@ -60,11 +59,11 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
 
 define:
-- name: RSI_BLE_MAX_NBR_PERIPHERALS
-  value: 1
-- name: RSI_BLE_MAX_NBR_CENTRALS
-  value: 1
-- name: RSI_BLE_ENABLE
-  value: 1
-- name: SLI_SI91X_ENABLE_BLE
-  value: 1
+  - name: RSI_BLE_MAX_NBR_PERIPHERALS
+    value: 1
+  - name: RSI_BLE_MAX_NBR_CENTRALS
+    value: 1
+  - name: RSI_BLE_ENABLE
+    value: 1
+  - name: SLI_SI91X_ENABLE_BLE
+    value: 1

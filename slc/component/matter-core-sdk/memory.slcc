@@ -1,18 +1,18 @@
 category: Matter|Core
 define:
--   name: CHIP_HAVE_CONFIG_H
-    value: '1'
--   name: RADIO_CONFIG_DMP_SUPPORT
-    value: '1'
+  - name: CHIP_HAVE_CONFIG_H
+    value: "1"
+  - name: RADIO_CONFIG_DMP_SUPPORT
+    value: "1"
 description: memory
 id: memory
 include:
--   path: third_party/matter_sdk/examples/platform/silabs
--   path: third_party/matter_sdk/src
--   path: third_party/matter_sdk/src/include
--   path: third_party/matter_sdk/src/lib
--   path: third_party/nlassert/include
--   path: third_party/matter_sdk/src/lib/support
+  - path: third_party/matter_sdk/examples/platform/silabs
+  - path: third_party/matter_sdk/src
+  - path: third_party/matter_sdk/src/include
+  - path: third_party/matter_sdk/src/lib
+  - path: third_party/nlassert/include
+  - path: third_party/matter_sdk/src/lib/support
     file_list:
     -   path: AutoRelease.h
     -   path: StringSplitter.h
@@ -81,15 +81,15 @@ include:
     -   path: Variant.h
     -   path: PoolWrapper.h
 label: memory
-package: Matter
+package: matter
 provides:
--   name: matter_memory
+  - name: matter_memory
 quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: third_party/matter_sdk/src/lib/support/CHIPMem.cpp
--   path: third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.cpp
+  - path: third_party/matter_sdk/src/lib/support/CHIPMem.cpp
+  - path: third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.cpp
 ui_hints:
-    visibility: never
+  visibility: never
