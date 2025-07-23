@@ -4,11 +4,11 @@ define:
     value: "1"
   - name: RADIO_CONFIG_DMP_SUPPORT
     value: "1"
-  - name: CHIP_DNSSD_DEFAULT_MINIMAL
+  - name: CHIP_DNSSD_DEFAULT_PLATFORM
     value: 1
 
-description: dnssd_minimal
-id: dnssd_minimal
+description: dnssd
+id: dnssd
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
   - path: third_party/matter_sdk/src
@@ -31,24 +31,20 @@ include:
       - path: IncrementalResolve.h
       - path: Resolver.h
       - path: MinimalMdnsServer.h
-label: dnssd_minimal
+label: dnssd
 package: matter
 provides:
-  - name: matter_dnssd_minimal
+  - name: matter_dnssd
 quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
 source:
   - path: third_party/matter_sdk/src/lib/dnssd/Advertiser.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/ActiveResolveAttempts.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/Advertiser_ImplMinimalMdns.cpp
+  - path: third_party/matter_sdk/src/lib/dnssd/Discovery_ImplPlatform.cpp
   - path: third_party/matter_sdk/src/lib/dnssd/IPAddressSorter.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/IncrementalResolve.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/MinimalMdnsServer.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/Resolver.cpp
   - path: third_party/matter_sdk/src/lib/dnssd/ResolverProxy.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/Resolver_ImplMinimalMdns.cpp
+  - path: third_party/matter_sdk/src/lib/dnssd/Resolver.cpp
   - path: third_party/matter_sdk/src/lib/dnssd/TxtFields.cpp
 ui_hints:
   visibility: never

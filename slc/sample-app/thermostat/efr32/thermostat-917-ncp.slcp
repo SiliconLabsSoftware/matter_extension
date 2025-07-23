@@ -99,11 +99,10 @@ component:
     from: matter
   - id: matter_segger_rtt
     from: matter
+
   - id: matter_shell
     from: matter
   - id: matter_log_uart
-    from: matter
-  - id: matter_lwip
     from: matter
 
   - id: wifi_resources

@@ -108,8 +108,6 @@ component:
     from: matter
   - id: matter_log_uart
     from: matter
-  - id: matter_lwip
-    from: matter
 
   - id: wifi_resources
     from: wiseconnect3_sdk
