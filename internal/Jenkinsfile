@@ -1,12 +1,25 @@
 pipeline {
     agent any
     stages {
-        stage('Trigger downstream') {
+        stage('Checkout matter_github_jenkins and run') {
             steps {
                 script {
-                    // Trigger New PR workflow comment again
-                    // TODO: Need to change branch to trigger main branch once testing is done
-                    build job: "Matter GitHub Jenkins/feature%2Fgithub_jenkins_integration", parameters:[string(name: 'branchName', value: env.BRANCH_NAME), string(name:'buildNumber', value: env.BUILD_NUMBER)], wait: true
+                    checkout scm: [$class                    : 'GitSCM',
+                            branches                         : scm.branches,
+                            browser                          : [$class: 'Stash', repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter_extension/'],
+                            doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
+                            extensions                       : [[$class: 'ScmName', name: 'matter_extension']],
+                            userRemoteConfigs                : scm.userRemoteConfigs]   
+        
+                    sh """
+                        git submodule update --init  --checkout third_party/matter_github_jenkins
+                        cd third_party/matter_github_jenkins
+                        git checkout feature/github_jenkins_integration
+                    """
+
+                    def matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
+
+                    matter_github_jenkins_pipeline.run_pipeline()
                 }
             }
         }
