@@ -21,6 +21,7 @@ include:
     -   path: TextOnlyLogging.h
 -   path: third_party/matter_sdk/src/lib/support
     file_list:
+    -   path: AutoRelease.h
     -   path: StringSplitter.h
     -   path: PersistentStorageAudit.h
     -   path: CHIPPlatformMemory.h
