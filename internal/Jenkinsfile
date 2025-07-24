@@ -1,29 +1,35 @@
+#!groovy
 @Library('gsdk-shared-lib@master')
-pipeline {
-    agent { label 'Build-Farm-Large' }
-    stages {
-        stage('Checkout matter_github_jenkins and run') {
-            steps {
-                script {
-                    checkout scm: [$class                    : 'GitSCM',
+
+def pipeline()
+{
+    stage('Checkout matter_github_jenkins and run')
+    {
+        node('Build-Farm-Large')
+        {    
+            checkout scm: [$class                    : 'GitSCM',
                             branches                         : scm.branches,
                             browser                          : [$class: 'Stash', repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter_extension/'],
                             doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
                             extensions                       : [[$class: 'ScmName', name: 'matter_extension']],
                             userRemoteConfigs                : scm.userRemoteConfigs]   
         
-                    sh """
-                        git status
-                        git submodule update --init  --checkout third_party/matter_github_jenkins
-                        cd third_party/matter_github_jenkins
-                        git checkout feature/github_jenkins_integration
-                    """
+            sh """
+                git status
+                git submodule update --init  --checkout third_party/matter_github_jenkins
+                cd third_party/matter_github_jenkins
+                git checkout feature/github_jenkins_integration
+            """
 
-                    def matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
-
-                    matter_github_jenkins_pipeline.run_pipeline()
-                }
-            }
-        }
+            // Load pipeline from the submodule
+            def matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
+        } 
+        matter_github_jenkins_pipeline.run_pipeline()
     }
+}
+
+try {
+    pipeline()
+} catch (Exception e) {
+    error "Pipeline failed: ${e.message}"
 }
