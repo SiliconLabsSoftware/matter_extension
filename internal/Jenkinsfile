@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'Build-Farm-Large' }
     stages {
         stage('Checkout matter_github_jenkins and run') {
             steps {
@@ -12,14 +12,13 @@ pipeline {
                             userRemoteConfigs                : scm.userRemoteConfigs]   
         
                     sh """
+                        git status
                         git submodule update --init  --checkout third_party/matter_github_jenkins
                         cd third_party/matter_github_jenkins
                         git checkout feature/github_jenkins_integration
-                        git pull
-                        git status
                     """
 
-                    matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
+                    def matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
 
                     matter_github_jenkins_pipeline.run_pipeline()
                 }
