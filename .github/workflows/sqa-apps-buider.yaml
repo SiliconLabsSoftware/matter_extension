@@ -1,7 +1,8 @@
 name: Build SQA apps
 
 on:
-    push:
+    # push:
+    workflow_dispatch:
 
 concurrency:
     group: sqa-build-examples-${{github.ref}}
