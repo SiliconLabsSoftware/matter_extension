@@ -15,11 +15,7 @@ def pipeline()
                             userRemoteConfigs                : scm.userRemoteConfigs]   
         
             sh """
-                git status
                 git submodule update --init  --checkout third_party/matter_github_jenkins
-                cd third_party/matter_github_jenkins
-                git checkout feature/github_jenkins_integration
-                git pull
             """
 
             // Load pipeline from the submodule
