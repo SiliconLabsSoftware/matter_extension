@@ -12,10 +12,6 @@ pipeline {
                             userRemoteConfigs                : scm.userRemoteConfigs]   
         
                     sh """
-                        git status
-                        ls
-                        cd third_party
-                        ls
                         git submodule update --init  --checkout third_party/matter_github_jenkins
                         cd third_party/matter_github_jenkins
                         git checkout feature/github_jenkins_integration
