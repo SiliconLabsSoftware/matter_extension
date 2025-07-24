@@ -1,3 +1,4 @@
+@Library('gsdk-shared-lib@master')
 pipeline {
     agent { label 'Build-Farm-Large' }
     stages {
