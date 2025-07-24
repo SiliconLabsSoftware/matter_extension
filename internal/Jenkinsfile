@@ -23,8 +23,8 @@ def pipeline()
 
             // Load pipeline from the submodule
             def matter_github_jenkins_pipeline = load 'third_party/matter_github_jenkins/Jenkinsfile'
+            matter_github_jenkins_pipeline.run_pipeline()
         } 
-        matter_github_jenkins_pipeline.run_pipeline()
     }
 }
 
