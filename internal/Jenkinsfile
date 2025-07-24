@@ -7,7 +7,7 @@ def pipeline()
     {
         node('Build-Farm-Large')
         {    
-            checkout scm: [$class                    : 'GitSCM',
+            checkout scm: [$class                            : 'GitSCM',
                             branches                         : scm.branches,
                             browser                          : [$class: 'Stash', repoUrl: 'https://stash.silabs.com/projects/WMN_TOOLS/repos/matter_extension/'],
                             doGenerateSubmoduleConfigurations: scm.doGenerateSubmoduleConfigurations,
