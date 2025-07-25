@@ -1,0 +1,7 @@
+label: closure-app-917-soc
+quality: production
+description: Matter solution containing for Closure App over WiFi
+project:
+  - path: ../../../sample-app/closure-app/siwx917/closure-app-917-soc.slcp
+    id: application
+    output: closure-app-917-soc

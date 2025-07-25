@@ -715,6 +715,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
+    <descriptors name="MatterClosureControlOverWiFi" label="Matter - SoC Closure-Control over  Wi-Fi"
+               description="This project builds a Matter  Closure-Control app for Wi-Fi SiWx917 that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.closure-app.siwx917.closure-app-917-soc.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/closure-app/siwx917/closure-app-917-soc.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/siwx917/README_WiFi.md"/>
+    <properties key="boardCompatibility" value="brd4338a brd4342a brd4343a brd2605a brd2708a brd2911a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=" .*si917.* .*siwg917.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors>
   <descriptors name="MatterDishwasherOverThreadSolution" label="Matter - SoC Dishwasher over Thread with external Bootloader"
                description="This project builds a Matter Dishwasher and Matter External Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
@@ -1070,6 +1087,23 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.sample-app.fan-control-app.siwx917.fan-control-app-917-soc.slcp"/>
+  </descriptors>
+<descriptors name="MatterClosureControlOverWiFiSolution" label="Matter - SoC Closure Control over Wi-Fi"
+               description="This project builds a Matter Closure Control App that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.solutions.closure-app.siwx917.closure-app-917-soc.slcw"/>
+    <properties key="projectFilePaths" value="slc/solutions/closure-app/siwx917/closure-app-917-soc.slcw"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/siwx917/README_WiFi.md"/>
+    <properties key="boardCompatibility" value="brd4338a brd4342a brd4343a brd2605a brd2708a brd2911a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=" .*si917.* .*siwg917.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.sample-app.closure-app.siwx917.closure-app-917-soc.slcp"/>
   </descriptors>
   <descriptors name="ZigbeeMatterLight" label="Matter and Zigbee - SoC Light"
                description="This project builds a Matter Lighting app combined with a Zigbee Light that can be developed inside Simplicity Studio">
