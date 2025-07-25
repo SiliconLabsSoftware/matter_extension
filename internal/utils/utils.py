@@ -17,6 +17,11 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
+# Import internal modules
+from github.github_workflow import get_latest_sha, get_workflow_info, wait_for_artifacts
+from artifacts.ubai_client import search_file_in_ubai
+from artifacts.artifact_processor import download_and_upload_artifacts
+
 
 def parse_arguments():
     """
@@ -69,7 +74,6 @@ def _get_sqa_workflow_info(args):
     try:
         commit_sha = args.commit_sha
         build_number = args.run_number
-        from github.github_workflow import get_workflow_info
         _, workflow_id = get_workflow_info(args.branch_name, commit_sha, sqa=True)
         
         return {
@@ -98,7 +102,6 @@ def _get_dev_workflow_info(args):
         RuntimeError: If GitHub API request fails or workflow info cannot be determined
     """
     try:
-        from github.github_workflow import get_latest_sha, get_workflow_info
         commit_sha, pr_build_number = get_latest_sha(args.branch_name)
         
         if pr_build_number is None:
@@ -132,7 +135,6 @@ def artifacts_already_uploaded(workflow_info, sqa):
     Returns:
         bool: True if artifacts are already uploaded, False otherwise
     """
-    from artifacts.ubai_client import search_file_in_ubai
     return search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa) is not None
 
 
@@ -145,9 +147,6 @@ def process_artifacts(workflow_info, sqa):
         sqa (bool): Whether this is an SQA build
     """
     print("Merged artifacts file not present in UBAI. Proceeding to download and upload artifacts.")
-    from github.github_workflow import wait_for_artifacts
-    from artifacts.artifact_processor import download_and_upload_artifacts
-    
     wait_for_artifacts(workflow_info['commit_sha'], sqa)
     download_and_upload_artifacts(
         workflow_info['workflow_id'],
