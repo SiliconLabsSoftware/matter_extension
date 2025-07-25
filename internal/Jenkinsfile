@@ -13,7 +13,7 @@ pipeline
         stage('Initialize') {
             steps {
                 script {
-                    pipelineFunctions = load 'jenkinsFunctions.groovy'
+                    pipelineFunctions = load 'internal/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
                 }
             }
@@ -21,7 +21,7 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
-                    retry(2) {
+                    retry(3) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
                                 def result = pipelineFunctions.upload_artifacts()
