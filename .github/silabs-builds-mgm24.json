@@ -40,5 +40,5 @@
                               "'--with bootloader_gbl_compression_lz4'"]
             }
         ]
-    } 
+    }
 }

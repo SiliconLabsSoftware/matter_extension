@@ -7,12 +7,13 @@
 namespace chip {
 namespace app {
 namespace Clusters {
-namespace {{asUpperCamelCase name}} {  
+namespace {{asUpperCamelCase name}} {
 namespace Events {
 {{#zcl_events}}
-namespace {{asUpperCamelCase name}} {
-inline constexpr EventId Id = {{asHex code}};
-}
+namespace {{chip_name_for_id_usage name}} {
+inline constexpr EventId Id = {{asHex code 8}};
+} // namespace {{chip_name_for_id_usage name}}
+
 {{/zcl_events}}
 } // Commands
 } // {{asUpperCamelCase name}}

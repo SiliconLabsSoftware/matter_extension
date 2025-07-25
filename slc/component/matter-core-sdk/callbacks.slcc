@@ -18,6 +18,7 @@ include:
     -   path: util/attribute-table.h
     -   path: util/endpoint-config-api.h
     -   path: util/DataModelHandler.h
+    -   path: util/cluster-config.h
     -   path: util/config.h
     -   path: util/binding-table.h
     -   path: util/af-types.h

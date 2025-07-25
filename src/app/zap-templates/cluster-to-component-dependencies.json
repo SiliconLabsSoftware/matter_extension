@@ -276,6 +276,18 @@
     ]
   },
   {
+    "clusterCode": "joint fabric administrator-server",
+    "value": [
+      "%extension-matter%matter_joint_fabric_administrator"
+    ]
+  },
+  {
+    "clusterCode": "joint fabric datastore-server",
+    "value": [
+      "%extension-matter%matter_joint_fabric_datastore"
+    ]
+  },
+  {
     "clusterCode": "keypad input-server",
     "value": [
       "%extension-matter%matter_keypad_input"
@@ -468,6 +480,12 @@
     ]
   },
   {
+    "clusterCode": "soil measurement-server",
+    "value": [
+      "%extension-matter%matter_soil_measurement"
+    ]
+  },
+  {
     "clusterCode": "switch-server",
     "value": [
       "%extension-matter%matter_switch"
@@ -489,6 +507,12 @@
     "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"
+    ]
+  },
+  {
+    "clusterCode": "testing-server",
+    "value": [
+      "%extension-matter%matter_testing"
     ]
   },
   {
@@ -537,6 +561,18 @@
     "clusterCode": "time synchronization-server",
     "value": [
       "%extension-matter%matter_time_synchronization"
+    ]
+  },
+  {
+    "clusterCode": "tls_certificate_management-server",
+    "value": [
+      "%extension-matter%matter_tls_certificate_management"
+    ]
+  },
+  {
+    "clusterCode": "tls management server-client",
+    "value": [
+      "%extension-matter%matter_tls_management_server_client"
     ]
   },
   {

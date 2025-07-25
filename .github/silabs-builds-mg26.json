@@ -163,5 +163,5 @@
                               "'--with zigbee_high_datarate_phy,matter_zigbee_concurrent;matter'"]
             }
         ]
-    } 
+    }
 }

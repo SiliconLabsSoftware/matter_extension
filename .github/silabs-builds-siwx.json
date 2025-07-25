@@ -38,7 +38,7 @@
                               "'--with matter_gatt_additional_advertising;matter'"]
             }
         ],
-        "lock-app": [
+        "lock-app" :[
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
                 "arguments": ["--output_suffix 917-soc-ota-v2",
