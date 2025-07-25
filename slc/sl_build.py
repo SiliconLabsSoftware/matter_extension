@@ -49,6 +49,6 @@ java_path = App.java_path
 SoC_boards = App.SoC_boards
 config_args = ";wiseconnect3_sdk" if silabs_board in SoC_boards else ""
 
-subprocess.run([slc_path, "--java-location", java_path, "generate", "-d", output_dir, project_flag, reference_project_file, "--with", silabs_board + config_args, "--force", "--generator-timeout=180", "-o", "makefile"])
+subprocess.run([slc_path, "--java-location", java_path, "generate", "-d", output_dir, project_flag, reference_project_file, "--with", silabs_board + config_args, "--daemon", "--force", "--generator-timeout=180", "-o", "makefile"])
 
 subprocess.run(["make", "all", "-C", output_dir, "-f", makefile_path, "-j13"])
