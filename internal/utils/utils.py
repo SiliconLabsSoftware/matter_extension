@@ -17,7 +17,6 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-# Import internal modules
 from internal.github.github_workflow import get_latest_sha, get_workflow_info, wait_for_artifacts
 from internal.artifacts.ubai_client import search_file_in_ubai
 from internal.artifacts.artifact_processor import download_and_upload_artifacts
@@ -135,8 +134,8 @@ def artifacts_already_uploaded(workflow_info, sqa):
     Returns:
         bool: True if artifacts are already uploaded, False otherwise
     """
-    return search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa) is not None
-
+    ubai_artifact = search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa)
+    return True if len(ubai_artifact) > 0 else False
 
 def process_artifacts(workflow_info, sqa):
     """
