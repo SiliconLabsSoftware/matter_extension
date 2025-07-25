@@ -1,7 +1,7 @@
 [![Silicon Labs](./docs/images/silabs-logo.jpg)](https://www.silabs.com)
 
 
-!!! TEST-1 !!!!!!!!
+!!! TEST-2 !!!!!!!!
 !!! DO NOT MERGE"
 
 # Silicon Labs Matter
