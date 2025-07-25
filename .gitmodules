@@ -32,9 +32,6 @@
 [submodule "nlassert"]
 	path = third_party/nlassert
 	url = https://github.com/nestlabs/nlassert.git
-[submodule "third_party/matter_github_jenkins"]
-	path = third_party/matter_github_jenkins
-	url = ssh://git@stash.silabs.com/wmn_tools/matter_github_jenkins.git
 [submodule "third_party/third_party_hw_drivers_extension"]
 	path = third_party/third_party_hw_drivers_extension
 	url = https://github.com/SiliconLabs/third_party_hw_drivers_extension.git
