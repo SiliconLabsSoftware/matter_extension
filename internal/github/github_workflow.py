@@ -13,6 +13,14 @@ Date: 2025-06-19
 
 import requests
 import time
+import os
+import sys
+
+# Add the workspace root to Python path to enable importing internal modules
+workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
+
 import internal.config as config
 
 

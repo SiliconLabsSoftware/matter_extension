@@ -30,6 +30,13 @@ import argparse
 import sys
 import time
 import requests
+import os
+
+# Add the workspace root to Python path to enable importing internal modules
+workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
+
 import internal.config as config
 
 def main():

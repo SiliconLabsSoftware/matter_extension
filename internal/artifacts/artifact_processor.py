@@ -12,7 +12,14 @@ Date: 2025-06-19
 """
 
 import os
+import sys
 import zipfile
+
+# Add the workspace root to Python path to enable importing internal modules
+workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
+
 import internal.config as config
 from internal.github.github_workflow import _make_github_api_request
 from internal.artifacts.ubai_client import upload_to_ubai
