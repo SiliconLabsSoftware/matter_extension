@@ -157,6 +157,7 @@ ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
 
 # Trust SDK and Matter extension
 echo "Ensure SDK and Matter extension are trusted by SLC."
+slc --daemon
 slc configuration --sdk $GSDK_ROOT
 slc signature trust --development-trust
 slc signature trust --extension-path "$EXTENSION_DIR"
