@@ -12,7 +12,7 @@ Date: 2025-06-19
 
 import requests
 import os
-import config
+import internal.config as config
 from urllib.parse import quote
 
 

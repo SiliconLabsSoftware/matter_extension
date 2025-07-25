@@ -13,9 +13,9 @@ Date: 2025-06-19
 
 import os
 import zipfile
-import config
-from github.github_workflow import _make_github_api_request
-from artifacts.ubai_client import upload_to_ubai
+import internal.config as config
+from internal.github.github_workflow import _make_github_api_request
+from internal.artifacts.ubai_client import upload_to_ubai
 
 
 def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=False):

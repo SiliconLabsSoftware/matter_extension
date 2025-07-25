@@ -30,7 +30,7 @@ import argparse
 import sys
 import time
 import requests
-import config
+import internal.config as config
 
 def main():
     parser = argparse.ArgumentParser()

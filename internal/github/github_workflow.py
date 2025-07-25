@@ -13,7 +13,7 @@ Date: 2025-06-19
 
 import requests
 import time
-import config
+import internal.config as config
 
 
 def get_latest_sha(branch_name):

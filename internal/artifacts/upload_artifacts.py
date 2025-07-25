@@ -30,7 +30,7 @@ Author: Stefan Livadariu
 Date: 2025-06-19
 """
 
-from utils.utils import parse_arguments, determine_workflow_info, artifacts_already_uploaded, process_artifacts
+from internal.utils.utils import parse_arguments, determine_workflow_info, artifacts_already_uploaded, process_artifacts
 
 
 # TODO: Will need to handle the -standard and -release binaries differently depending where they come from.
