@@ -175,6 +175,10 @@ jobs:
           mkdir -p "$OUTPUT_DIR" 
           mkdir -p ${SISDK_ROOT}/extension/
           cp -r . ${SISDK_ROOT}/extension/matter_extension/
+
+          #Debug
+          echo "${SISDK_ROOT}/extension/matter_extension/slc/component exist? $(test -d ${SISDK_ROOT}/extension/matter_extension/slc/component && echo 'YES' || echo 'NO')"
+
           python3 -u './slc/script/validate_components.py' ${SISDK_ROOT}/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
