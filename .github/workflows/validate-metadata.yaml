@@ -60,6 +60,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-workspace
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false 
+
       - name: Validate Matter Extension Package Field
         shell: bash
         working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
@@ -94,6 +99,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-workspace
     steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: false 
+
     - name: Validate Matter Extension File Path Lengths 
       shell: bash
       working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
@@ -129,6 +139,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: setup-workspace
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false 
+          
       - name: Validate Matter Templates 
         shell: bash
         working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
@@ -189,6 +204,8 @@ jobs:
     name: Merge Validation Results
     runs-on: ubuntu-latest
     needs:
+      - validate-package-field
+      - validate-file-path-lengths
       - validate-matter-templates
       - validate-components
     if: always()
