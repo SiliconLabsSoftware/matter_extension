@@ -173,6 +173,13 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
           mkdir -p "$OUTPUT_DIR" 
+
+          # Debug to show current directory and target path
+          echo "Current directory: $(pwd)"
+          echo "Looking for sisdk/extension/matter_extension/slc/component"
+          echo "Full path: $(pwd)/sisdk/extension/matter_extension/slc/component"
+          echo "Does it exist? $(test -d sisdk/extension/matter_extension/slc/component && echo 'YES' || echo 'NO')"
+
           python3 -u './slc/script/validate_components.py' sisdk/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
