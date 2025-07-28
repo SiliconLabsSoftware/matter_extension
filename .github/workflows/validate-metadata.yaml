@@ -172,7 +172,7 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
           mkdir -p "$OUTPUT_DIR" 
-          python3 -u './slc/script/validate_components.py' sisdk/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+          python3 -u './slc/script/validate_components.py' ${SISDK_ROOT}/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4
