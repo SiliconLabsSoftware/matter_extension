@@ -23,6 +23,7 @@ if workspace_root not in sys.path:
 import internal.config as config
 from internal.github.github_workflow import _make_github_api_request
 from internal.artifacts.ubai_client import upload_to_ubai
+from internal.artifacts.artifactory_client import upload_to_artifactory
 
 
 def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=False):
@@ -241,7 +242,6 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_numb
             branch_name=branch_name,
             run_number=run_number
         )
-        from artifacts.artifactory_client import upload_to_artifactory
         upload_to_artifactory(artifact_file, artifact_name, branch_name, str(run_number))
     except Exception as e:
         raise RuntimeError(f"Failed to upload merged artifacts: {e}")
