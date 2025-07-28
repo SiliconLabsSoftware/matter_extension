@@ -139,9 +139,6 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output"    
           mkdir -p "$OUTPUT_DIR"
-          echo "DEBUG: Current directory is $(pwd)"
-          echo "DEBUG: Looking for template script at: $(pwd)/slc/script/validate_matter_templates.py"
-          ls -la ./slc/script/validate_matter_templates.py || echo "Template script not found"
           python3 -u './slc/script/validate_matter_templates.py' | tee "$OUTPUT_DIR/validate_matter_templates_result.log"
 
       - name: Upload template validation results
@@ -206,9 +203,6 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output"    # CHANGE THIS
           mkdir -p "$OUTPUT_DIR" 
-          echo "DEBUG: Current directory is $(pwd)"
-          echo "DEBUG: Looking for components in: $(pwd)/slc/component"
-          ls -la slc/component || echo "Component directory not found"
           python3 -u './slc/script/validate_components.py' sisdk/extension/ext/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
