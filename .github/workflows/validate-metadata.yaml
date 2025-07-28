@@ -24,6 +24,11 @@ jobs:
         with:
           submodules: false 
 
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+
       - name: Initialize Required Submodules 
         shell: bash
         run: |
