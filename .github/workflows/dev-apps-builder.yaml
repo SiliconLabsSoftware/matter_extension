@@ -197,7 +197,7 @@ jobs:
             - build-refrigerator-app
             - build-performance-test-app
             - build-zigbee-matter-light-app
-        # if: success()
+        if: always()
 
         steps:
             - name: Merge artifacts
