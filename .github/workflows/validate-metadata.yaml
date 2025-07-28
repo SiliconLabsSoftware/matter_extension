@@ -13,57 +13,17 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-  setup-workspace:
-    name: Setup Workspace
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          submodules: false 
-
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-
-      - name: Initialize Required Submodules 
-        shell: bash
-        run: |
-          git submodule update --init third_party/aws_ota_sdk
-          git submodule update --init third_party/matter_sdk
-          git submodule update --init third_party/matter_support
-          git submodule update --init third_party/mbedtls
-          git submodule update --init third_party/mqtt
-          git submodule update --init third_party/nlassert
-          git submodule update --init third_party/nlio
-          git submodule update --init third_party/QR-Code-generator
-          git submodule update --init third_party/wiseconnect-wifi-bt-sdk
-          # Skip wifi_sdk and simplicity_sdk
-
-      - name: Stage Extension
-        working-directory: ${{ github.workspace }}
-        run: |
-          python3 slc/stage_extension.py sisdk/extension/ext
-
-      - name: Upload staged workspace
-        uses: actions/upload-artifact@v4
-        with:
-          name: staged-workspace
-          path: |
-            sisdk/
-
   validate-package-field:
     name: Validate Matter Extension Package Field
     runs-on: ubuntu-latest
-    needs: setup-workspace
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           submodules: false 
+
+      - name: Stage Extension
+        run: python3 slc/stage_extension.py sisdk/extension/ext
 
       - name: Validate Matter Extension Package Field
         shell: bash
@@ -97,12 +57,14 @@ jobs:
   validate-file-path-lengths:
     name: Validate Matter Extension File Path Lengths
     runs-on: ubuntu-latest
-    needs: setup-workspace
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
       with:
         submodules: false 
+      
+    - name: Stage Extension
+      run: python3 slc/stage_extension.py sisdk/extension/ext
 
     - name: Validate Matter Extension File Path Lengths 
       shell: bash
@@ -137,13 +99,15 @@ jobs:
   validate-matter-templates:
     name: Validate Matter Templates
     runs-on: ubuntu-latest
-    needs: setup-workspace
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           submodules: false 
-          
+
+      - name: Stage Extension
+        run: python3 slc/stage_extension.py sisdk/extension/ext
+
       - name: Validate Matter Templates 
         shell: bash
         working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
@@ -164,14 +128,32 @@ jobs:
   validate-components:
     name: Validate Components
     runs-on: ubuntu-latest
-    needs: setup-workspace
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false 
+
       - name: Mark Repository as Safe for Git
         shell: bash
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/aws_ota_sdk
+          git submodule update --init third_party/matter_sdk
+          git submodule update --init third_party/matter_support
+          git submodule update --init third_party/mbedtls
+          git submodule update --init third_party/mqtt
+          git submodule update --init third_party/nlassert
+          git submodule update --init third_party/nlio
+          git submodule update --init third_party/QR-Code-generator
+          git submodule update --init third_party/wiseconnect-wifi-bt-sdk
+          # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
       
       - name: Trust SDK 
         shell: bash
@@ -188,9 +170,9 @@ jobs:
         continue-on-error: true 
         run: |
           set -e
-          OUTPUT_DIR="$(pwd)/validate_metadata_output"    # CHANGE THIS
+          OUTPUT_DIR="$(pwd)/validate_metadata_output" 
           mkdir -p "$OUTPUT_DIR" 
-          python3 -u './slc/script/validate_components.py' sisdk/extension/ext/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+          python3 -u './slc/script/validate_components.py' sisdk/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4
