@@ -162,7 +162,7 @@ jobs:
         run: |
           set -e 
           echo "Trusting SDK at sisdk"
-          slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
+          slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}out/dmp_uc.data
           slc signature trust --sdk ${SISDK_ROOT}
 
       - name: Validate Components
@@ -173,13 +173,13 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
           mkdir -p "$OUTPUT_DIR" 
-          mkdir -p ${SISDK_ROOT}/extension/
-          cp -r . ${SISDK_ROOT}/extension/matter_extension/
+          mkdir -p ${SISDK_ROOT}extension/
+          cp -r . ${SISDK_ROOT}extension/matter_extension/
 
           #Debug
-          echo "${SISDK_ROOT}/extension/matter_extension/slc/component exist? $(test -d ${SISDK_ROOT}/extension/matter_extension/slc/component && echo 'YES' || echo 'NO')"
+          echo "${SISDK_ROOT}extension/matter_extension/slc/component exist? $(test -d ${SISDK_ROOT}extension/matter_extension/slc/component && echo 'YES' || echo 'NO')"
 
-          python3 -u './slc/script/validate_components.py' ${SISDK_ROOT}/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+          python3 -u './slc/script/validate_components.py' ${SISDK_ROOT}extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4
