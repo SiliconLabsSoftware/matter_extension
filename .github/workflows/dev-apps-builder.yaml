@@ -215,7 +215,6 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
         secrets:
             private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
-        if: always()
 
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
@@ -231,4 +230,8 @@ jobs:
                       https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
                       -d '{
                           "ref": "${{ github.ref }}"
+<<<<<<< HEAD
                       }'
+=======
+                      }'
+>>>>>>> dd2ac3f0 (SQA enable)
