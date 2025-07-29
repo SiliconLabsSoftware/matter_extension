@@ -141,6 +141,9 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
 
+      - name: Stage Extension
+        run: python3 slc/stage_extension.py sisdk/extension/ext
+
       - name: Initialize required submodules
         shell: bash
         run: |
@@ -153,17 +156,15 @@ jobs:
           git submodule update --init third_party/nlio
           git submodule update --init third_party/QR-Code-generator
           git submodule update --init third_party/wiseconnect-wifi-bt-sdk
-          git submodule update --init third_party/simplicity_sdk
-          # Skip unnecessary submodules like wifi_sdk
       
       - name: Trust SDK 
         shell: bash
         working-directory: ${{ github.workspace }}
         run: |
           set -e 
-          echo "Trusting SDK at third_party/simplicity_sdk"
-          slc configuration --sdk third_party/simplicity_sdk -data third_party/simplicity_sdk/out/dmp_uc.data
-          slc signature trust --sdk third_party/simplicity_sdk
+          echo "Trusting SDK at ${SISDK_ROOT}"
+          slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
+          slc signature trust --sdk ${SISDK_ROOT}
 
       - name: Validate Components
         shell: bash 
@@ -172,12 +173,8 @@ jobs:
         run: |
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
-          mkdir -p "$OUTPUT_DIR" 
-
-          #Debug
-          echo "third_party/simplicity_sdk/extension/matter_extension/slc/component exist? $(test -d third_party/simplicity_sdk/extension/matter_extension/slc/component && echo 'YES' || echo 'NO')"
-
-          python3 -u './slc/script/validate_components.py' third_party/simplicity_sdk/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+          mkdir -p "$OUTPUT_DIR"
+          python3 -u './slc/script/validate_components.py' sisdk/extension/ext/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4
