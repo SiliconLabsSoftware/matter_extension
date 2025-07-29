@@ -106,12 +106,12 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
     
-    build-closure-control-app:
-        name: Build Closure Control App
+    build-closure-app:
+        name: Build Closure App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "closure-control-app"
+            example-app: "closure-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
