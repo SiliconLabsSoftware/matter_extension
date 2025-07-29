@@ -132,7 +132,7 @@ jobs:
   copy-wifi-firmware:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
+      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
 
     steps:
       - name: Create WiFi firmware directories
