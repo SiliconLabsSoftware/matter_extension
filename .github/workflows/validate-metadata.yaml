@@ -22,12 +22,9 @@ jobs:
         with:
           submodules: false 
 
-      - name: Stage Extension
-        run: python3 slc/stage_extension.py sisdk/extension/ext
-
       - name: Validate Matter Extension Package Field
         shell: bash
-        working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
+        working-directory: ${{ github.workspace }}
         run: |
           set -e 
           OUTPUT_DIR="$(pwd)/validate_metadata_output"
@@ -51,7 +48,7 @@ jobs:
         if: always()
         with:
           name: package-validation
-          path: sisdk/extension/ext/matter_extension/validate_metadata_output/
+          path: validate_metadata_output/
           if-no-files-found: ignore
 
   validate-file-path-lengths:
@@ -62,6 +59,19 @@ jobs:
       uses: actions/checkout@v4
       with:
         submodules: false 
+
+    - name: Initialize required submodules
+      shell: bash
+      run: |
+        git submodule update --init third_party/aws_ota_sdk
+        git submodule update --init third_party/matter_sdk
+        git submodule update --init third_party/matter_support
+        git submodule update --init third_party/mbedtls
+        git submodule update --init third_party/mqtt
+        git submodule update --init third_party/nlassert
+        git submodule update --init third_party/nlio
+        git submodule update --init third_party/QR-Code-generator
+        git submodule update --init third_party/wiseconnect-wifi-bt-sdk
       
     - name: Stage Extension
       run: python3 slc/stage_extension.py sisdk/extension/ext
@@ -105,12 +115,9 @@ jobs:
         with:
           submodules: false 
 
-      - name: Stage Extension
-        run: python3 slc/stage_extension.py sisdk/extension/ext
-
       - name: Validate Matter Templates 
         shell: bash
-        working-directory: ${{ github.workspace }}/sisdk/extension/ext/matter_extension
+        working-directory: ${{ github.workspace }}
         run: | 
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output"    
@@ -122,7 +129,7 @@ jobs:
         if: always()
         with:
           name: template-validation
-          path: sisdk/extension/ext/matter_extension/validate_metadata_output/
+          path: validate_metadata_output/
           if-no-files-found: ignore
    
   validate-components:
