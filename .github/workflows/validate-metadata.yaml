@@ -78,7 +78,6 @@ jobs:
 
     - name: Validate Matter Extension File Path Lengths 
       shell: bash
-      working-directory: ${{ github.workspace }}/sisdk/extension/matter_extension
       run: |
         set -e 
         OUTPUT_DIR="$(pwd)/validate_metadata_output"      
@@ -103,7 +102,7 @@ jobs:
       if: always()
       with:
         name: filepath-validation
-        path: sisdk/extension/ext/matter_extension/validate_metadata_output/
+        path: sisdk/extension/matter_extension/validate_metadata_output/
         if-no-files-found: ignore
 
   validate-matter-templates:
