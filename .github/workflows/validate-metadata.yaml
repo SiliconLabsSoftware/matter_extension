@@ -78,6 +78,7 @@ jobs:
 
     - name: Validate Matter Extension File Path Lengths 
       shell: bash
+      working-directory: ${{ github.workspace }}/sisdk/extension/matter_extension
       run: |
         set -e 
         OUTPUT_DIR="$(pwd)/validate_metadata_output"      
