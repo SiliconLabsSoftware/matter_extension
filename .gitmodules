@@ -4,8 +4,8 @@
 	branch = main
 [submodule "third_party/simplicity_sdk"]
 	path = third_party/simplicity_sdk
-	url = https://stash.silabs.com/scm/embsw/sisdk_release.git
-	branch = v2025.6.0-df
+	url = https://github.com/SiliconLabs/simplicity_sdk.git
+	branch = v2025.6.0
 [submodule "third_party/wifi_sdk"]
 	path = third_party/wifi_sdk
 	url = https://github.com/SiliconLabs/wiseconnect.git
