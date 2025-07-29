@@ -73,6 +73,8 @@ def _get_pr_latest_sha(pr_identifier):
     prs_data = response.json()
     commit_sha = _find_pr_commit_sha(prs_data, pr_number)
     print(f"Found commit SHA for PR #{pr_number}: {commit_sha}")
+    print(f"Commit SHA - {commit_sha}")
+    print(f"PR Number: {pr_number}")
     return commit_sha, pr_number
 
 
@@ -99,10 +101,7 @@ def _get_branch_latest_sha(branch_name):
     
     commit_sha = branch_data[0]['sha']
     print(f"Found commit SHA for branch {branch_name}: {commit_sha}")
-<<<<<<< HEAD
     print(f"Commit SHA - {commit_sha}")
-=======
->>>>>>> dd2ac3f0 (SQA enable)
     return commit_sha, None
 
 
