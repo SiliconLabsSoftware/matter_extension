@@ -3,7 +3,7 @@ category: Matter|Core
 description: >
   This component includes PowerSaveInterface.h which is needed by wifi-sleep-manager and the wifi-platform.
 id: matter_power_save_interface
-package: Matter
+package: matter
 label: Includes header file PowerSaveInterface.h
 quality: production
 metadata:

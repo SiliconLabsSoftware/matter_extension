@@ -77,7 +77,7 @@ include:
     -   path: OperationalSessionSetupPool.h
     -   path: ReadHandler.h
     -   path: OTAUserConsentCommon.h
--   path: third_party/matter_sdk/src/app/reporting
+  - path: third_party/matter_sdk/src/app/reporting
     file_list:
     -   path: ReportSchedulerImpl.h
     -   path: Engine.h

@@ -107,6 +107,8 @@ component:
 
   - id: wifi_resources
     from: wiseconnect3_sdk
+  - id: sl_si91x_lwip_stack
+    from: wiseconnect3_sdk
   - id: wifi
     from: wiseconnect3_sdk
   - id: basic_network_config_manager

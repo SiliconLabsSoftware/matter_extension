@@ -23,10 +23,10 @@ include:
     -   path: AccessConfig.h
     -   path: AccessRestrictionProvider.h
     -   path: ProviderDeviceTypeResolver.h
--   path: third_party/matter_sdk/src/access/examples
+  - path: third_party/matter_sdk/src/access/examples
     file_list:
-      - path: ExampleAccessControlDelegate.h
-      - path: PermissiveAccessControlDelegate.h
+    -   path: ExampleAccessControlDelegate.h
+    -   path: PermissiveAccessControlDelegate.h
 label: libaccess
 package: matter
 provides:

@@ -17,7 +17,7 @@ component:
   - id: iostream_stdio
   - id: segger_rtt
   #Zigbee Components
- - id: zigbee_ble_dmp_cli
+  - id: zigbee_ble_dmp_cli
   - id: zigbee_address_table
   - id: zigbee_application_bootloader
   - id: zigbee_security_link_keys
@@ -74,7 +74,6 @@ component:
   - { from: matter, id: matter_group_key_mgmt }
   - { from: matter, id: matter_descriptor }
   - { from: matter, id: matter_localization_configuration }
-  - { from: matter, id: matter_diagnostic_logs }
   - { from: matter, id: matter_crypto }
   - { from: matter, id: matter_basic_information }
   - { from: matter, id: matter_lighting }
@@ -249,25 +248,23 @@ define:
 
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/config/sl_cmp_config.h
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/config/zcl/zcl_config.zap
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/sl_cmp_config.h
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/zcl/zcl_config.zap
     file_id: zap_config
     directory: common
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
     directory: btconf
     unless: [matter_ble_dmp_test, matter_gatt_static]
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/config/btconf/gatt_configuration.btconf
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/btconf/gatt_configuration.btconf
     directory: btconf
     condition: [matter_ble_dmp_test]
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/MatterDMCallbacks.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/src/MatterDMCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/src/LightingManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/LightingManager.cpp
     directory: src
 
 include:

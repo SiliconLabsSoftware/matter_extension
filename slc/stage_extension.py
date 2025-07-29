@@ -27,7 +27,7 @@ exclude_root_directories = [ "matter_extension/out", "matter_extension/slc/tools
 exlude_submodules = ['simplicity_sdk', 'wifi_sdk', "matter_private", "third_party_hw_drivers_extension"]
 
 #specific exlude from matter_sdk
-matter_sdk_exclude = ['matter_sdk/third_party','matter_sdk/zzz_generated','matter_sdk/examples/virtual-device-app','matter_sdk/src/controller/java/generated']
+matter_sdk_exclude = ['matter_sdk/third_party','matter_sdk/zzz_generated','matter_sdk/examples/virtual-device-app','matter_sdk/src/controller/java/generated','matter_sdk/examples/chef/devices','matter_sdk/scripts/py_matter_idl/matter/idl/tests/outputs/large_all_clusters_app']
 
 # Specific includes for wiseconnect_wifi_bt_sdk
 wiseconnect_wifi_bt_sdk_includes = ['sapi']

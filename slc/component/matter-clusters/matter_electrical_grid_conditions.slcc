@@ -1,10 +1,9 @@
-
 category: Clusters|Energy Management
 description: >
   Implementation of the Electrical Grid Conditions Server Cluster.
   The user has to enable the Electrical Grid Conditions Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_electrical_grid_conditions
-package: Matter
+package: matter
 label: Electrical Grid Conditions Server Cluster
 quality: production
 metadata:

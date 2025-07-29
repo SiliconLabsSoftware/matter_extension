@@ -82,3 +82,6 @@ toolchain_settings:
     value: "-Wl,--wrap=MemoryAlloc"
     # Wrap these in case internal newlib call them (e.g. strdup will)
     # directly call _malloc_r)
+  # TODO: remove this once it is fixed in CSA
+  - option: gcc_compiler_option
+    value: -Wno-unused-variable

@@ -175,6 +175,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/ZclCallbacks.cpp

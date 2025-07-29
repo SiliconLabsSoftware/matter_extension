@@ -15,10 +15,10 @@ include:
   - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/lib/support/logging
     file_list:
-      - path: BinaryLogging.h
-      - path: CHIPLogging.h
-      - path: Constants.h
-      - path: TextOnlyLogging.h
+    -   path: BinaryLogging.h
+    -   path: CHIPLogging.h
+    -   path: Constants.h
+    -   path: TextOnlyLogging.h
   - path: third_party/matter_sdk/src/lib/support
     file_list:
     -   path: AutoRelease.h
@@ -91,9 +91,9 @@ include:
     -   path: PoolWrapper.h
     -   path: SpanSearchValue.h
     -   path: ReadOnlyBuffer.h
--   path: third_party/matter_sdk/src/lib/support/verhoeff
+  - path: third_party/matter_sdk/src/lib/support/verhoeff
     file_list:
-      - path: Verhoeff.h
+    -   path: Verhoeff.h
 label: libsupportlayer
 package: matter
 provides:
