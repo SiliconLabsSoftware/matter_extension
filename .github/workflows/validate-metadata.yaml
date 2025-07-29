@@ -84,7 +84,7 @@ jobs:
         OUTPUT_DIR="$(pwd)/validate_metadata_output"      
         mkdir -p "$OUTPUT_DIR"
         pwd
-        output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory sisdk/extension/matter_extension --verbose 2>&1) 
+        output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
         echo "$output"
         no_warning="INFO:__main__:No file paths exceeding 240 characters were detected. Nothing will be written to the file."
         if [[ "$output" != *"$no_warning"* ]]; then
