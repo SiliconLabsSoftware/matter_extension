@@ -42,7 +42,7 @@ jobs:
           echo "" >> missing_package_matter.txt
           echo "Total files with missing package field: 3" >> missing_package_matter.txt
 
-          {# output=$(python3 -u './slc/script/verify_package_matter.py' --directory . --verbose 2>&1) #}
+          # output=$(python3 -u './slc/script/verify_package_matter.py' --directory . --verbose 2>&1) 
 
           output="ERROR - Some files are missing the required 'package: matter' field"
           echo "$output"
@@ -97,7 +97,7 @@ jobs:
         echo "" >> long_file_paths.txt
         echo "Total files with long paths: 3" >> long_file_paths.txt
 
-        {# output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) #}
+        # output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
        
         output="WARNING: Files with paths exceeding 240 characters detected"
         echo "$output"
