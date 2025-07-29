@@ -30,6 +30,7 @@ pipeline
                                 bypass_send_results_gh = result.bypass_send_results
                                 pr_number = result.pr_number
                                 echo "commit_sha: ${commit_sha}, run_number: ${run_number}"
+                                buildDescription("GitHub Workflow Run Number: ${run_number}")
                             }
                         }
                     }
