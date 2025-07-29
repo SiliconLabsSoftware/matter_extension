@@ -105,6 +105,15 @@ jobs:
             example-app: "fan-control-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
+    
+    build-closure-control-app:
+        name: Build Closure Control App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "closure-control-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -196,6 +205,7 @@ jobs:
             - build-refrigerator-app
             - build-performance-test-app
             - build-zigbee-matter-light-app
+            - build-closure-control-app
         if: success()
 
         steps:
