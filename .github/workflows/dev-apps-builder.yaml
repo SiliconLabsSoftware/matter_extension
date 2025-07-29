@@ -230,8 +230,4 @@ jobs:
                       https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
                       -d '{
                           "ref": "${{ github.ref }}"
-<<<<<<< HEAD
                       }'
-=======
-                      }'
->>>>>>> dd2ac3f0 (SQA enable)
