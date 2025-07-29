@@ -74,6 +74,7 @@ jobs:
         git submodule update --init third_party/wiseconnect-wifi-bt-sdk
       
     - name: Stage Extension
+      working-directory: ${{ github.workspace }}
       run: python3 slc/stage_extension.py sisdk/extension
 
     - name: Validate Matter Extension File Path Lengths 
