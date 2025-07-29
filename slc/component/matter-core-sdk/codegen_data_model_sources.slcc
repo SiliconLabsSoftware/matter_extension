@@ -6,11 +6,10 @@ include:
     file_list:
     -   path: CodegenDataModelProvider.h
     -   path: EmberAttributeDataBuffer.h
-    -   path: EmberMetadata.h
     -   path: Instance.h
     -   path: ServerClusterInterfaceRegistry.h
 label: codegen_data_model_sources
-package: Matter
+package: matter
 provides:
 -   name: matter_codegen_data_model_sources
 quality: production
@@ -22,7 +21,6 @@ source:
 -   path: third_party/matter_sdk/src/data-model-providers/codegen/CodegenDataModelProvider_Read.cpp
 -   path: third_party/matter_sdk/src/data-model-providers/codegen/CodegenDataModelProvider_Write.cpp
 -   path: third_party/matter_sdk/src/data-model-providers/codegen/EmberAttributeDataBuffer.cpp
--   path: third_party/matter_sdk/src/data-model-providers/codegen/EmberMetadata.cpp
 -   path: third_party/matter_sdk/src/data-model-providers/codegen/Instance.cpp
 -   path: third_party/matter_sdk/src/data-model-providers/codegen/ServerClusterInterfaceRegistry.cpp
 ui_hints:

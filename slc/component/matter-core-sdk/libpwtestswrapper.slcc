@@ -1,11 +1,11 @@
 category: Matter|Core
 define:
--   name: PW_SPAN_ENABLE_ASSERTS
-    value: 'false'
+  - name: PW_SPAN_ENABLE_ASSERTS
+    value: "false"
 description: libpwtestswrapper
 id: libpwtestswrapper
 include:
--   path: third_party/matter_sdk/src/lib/support
+  - path: third_party/matter_sdk/src/lib/support
     file_list:
     -   path: StringSplitter.h
     -   path: PersistentStorageAudit.h
@@ -74,14 +74,14 @@ include:
     -   path: PoolWrapper.h
     -   path: SpanSearchValue.h
 label: libpwtestswrapper
-package: Matter
+package: matter
 provides:
--   name: matter_libpwtestswrapper
+  - name: matter_libpwtestswrapper
 quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
 source:
--   path: third_party/matter_sdk/src/lib/support/UnitTest.cpp
+  - path: third_party/matter_sdk/src/lib/support/UnitTest.cpp
 ui_hints:
-    visibility: never
+  visibility: never

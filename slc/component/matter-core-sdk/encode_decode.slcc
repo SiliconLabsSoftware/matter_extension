@@ -12,7 +12,7 @@ include:
     -   path: StructDecodeIterator.h
     -   path: WrappedStructEncoder.h
 label: encode_decode
-package: Matter
+package: matter
 provides:
 -   name: matter_encode_decode
 quality: production

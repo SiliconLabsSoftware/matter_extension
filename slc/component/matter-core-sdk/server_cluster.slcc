@@ -8,7 +8,7 @@ include:
     -   path: ServerClusterContext.h
     -   path: ServerClusterInterface.h
 label: server_cluster
-package: Matter
+package: matter
 provides:
 -   name: matter_server_cluster
 quality: production

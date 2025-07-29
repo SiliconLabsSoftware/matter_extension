@@ -1,5 +1,5 @@
 id: wf200_ncp
-package: Matter
+package: matter
 label: WF200 NCP Extension
 description: >
   Adds support for the HAL and WiFi Driver layer for WF200 NCP devices

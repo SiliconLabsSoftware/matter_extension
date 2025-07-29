@@ -1,10 +1,9 @@
-
 category: Clusters|General
 description: >
   Implementation of the chime Server Cluster.
   The user has to enable the chime Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_chime
-package: Matter
+package: matter
 label: chime Server Cluster
 quality: production
 metadata:

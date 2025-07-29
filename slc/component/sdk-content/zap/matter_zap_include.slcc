@@ -3,7 +3,7 @@ category: Matter|Stack
 description: Includes PM25 Zap configuration for Matter applications
 id: matter_zap_include
 label: Stack
-package: Matter
+package: matter
 provides:
   - name: matter_zap_include
 quality: production
