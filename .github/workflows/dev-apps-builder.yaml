@@ -205,7 +205,7 @@ jobs:
             - build-refrigerator-app
             - build-performance-test-app
             - build-zigbee-matter-light-app
-            - build-closure-control-app
+            - build-closure-app
         if: success()
 
         steps:
