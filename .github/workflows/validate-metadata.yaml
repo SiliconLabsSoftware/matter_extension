@@ -16,7 +16,6 @@ jobs:
   validate-package-field:
     name: Validate Matter Extension Package Field
     runs-on: ubuntu-latest
-    continue-on-error: true 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -33,18 +32,7 @@ jobs:
           set -e 
           OUTPUT_DIR="$(pwd)/validate_metadata_output"
           mkdir -p "$OUTPUT_DIR" 
-
-          # temporarily simulate error 
-          echo "Files missing 'package: matter' field:" > missing_package_matter.txt
-          echo "  - slc/component/test_component.slcc" >> missing_package_matter.txt
-          echo "  - slc/component/another_component.slcc" >> missing_package_matter.txt
-          echo "  - templates/test_template.slcp" >> missing_package_matter.txt
-          echo "" >> missing_package_matter.txt
-          echo "Total files with missing package field: 3" >> missing_package_matter.txt
-
-          # output=$(python3 -u './slc/script/verify_package_matter.py' --directory . --verbose 2>&1) 
-
-          output="ERROR - Some files are missing the required 'package: matter' field"
+          output=$(python3 -u './slc/script/verify_package_matter.py' --directory . --verbose 2>&1) 
           echo "$output"
           no_warning="INFO - All .slcc, .slcp, and .slce files contain the required strings."
           if [[ "$output" != *"$no_warning"* ]]; then
@@ -69,7 +57,6 @@ jobs:
   validate-file-path-lengths:
     name: Validate Matter Extension File Path Lengths
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v4
@@ -86,20 +73,8 @@ jobs:
         set -e 
         OUTPUT_DIR="$(pwd)/validate_metadata_output"      
         mkdir -p "$OUTPUT_DIR"
-        pwd 
-
-        # temporarily simulate error
-        echo "Files with paths exceeding 240 characters:" > long_file_paths.txt
-        echo "" >> long_file_paths.txt
-        echo "Length: 245 - slc/component/very_long_component_name_that_exceeds_the_maximum_allowed_file_path_length_limit_for_windows_systems_and_should_be_shortened_to_comply_with_the_requirements_test.slcc" >> long_file_paths.txt
-        echo "Length: 251 - templates/extremely_long_template_name_that_definitely_exceeds_the_240_character_limit_and_would_cause_issues_on_windows_file_systems_so_it_needs_to_be_renamed_to_something_much_shorter_and_more_reasonable.slcp" >> long_file_paths.txt
-        echo "Length: 243 - docs/api/reference/very_detailed_documentation_file_with_an_unnecessarily_long_filename_that_should_be_shortened_for_better_compatibility_across_different_operating_systems_and_file_systems.md" >> long_file_paths.txt
-        echo "" >> long_file_paths.txt
-        echo "Total files with long paths: 3" >> long_file_paths.txt
-
-        # output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
-       
-        output="WARNING: Files with paths exceeding 240 characters detected"
+        pwd
+        output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
         echo "$output"
         no_warning="INFO:__main__:No file paths exceeding 240 characters were detected. Nothing will be written to the file."
         if [[ "$output" != *"$no_warning"* ]]; then
@@ -222,6 +197,6 @@ jobs:
       - name: Merge validation artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: "validate-metadata-artifacts"
+          name: "validate-metadata-${{ inputs.build-type }}"
           delete-merged: true
           pattern: "*-validation"
