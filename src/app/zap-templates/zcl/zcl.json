@@ -245,6 +245,12 @@
             "CurrentDayEntry",
             "NextDayEntry"
         ],
+        "Commodity Metering": [
+            "MeteredQuantity",
+            "MeteredQuantityTimestamp",
+            "MeasurementType",
+            "MaximumMeteredQuantities"
+        ],
         "Descriptor": [
             "ClusterRevision",
             "FeatureMap"
@@ -876,7 +882,9 @@
             "MaxProvisioned"
         ],
         "Thermostat": [
-            "CurrentThermostatSuggestion"
+            "MaxThermostatSuggestions",
+            "CurrentThermostatSuggestion",
+            "ThermostatSuggestionNotFollowingReason"
         ]
     },
     "mandatoryDeviceTypes": "0x0016",

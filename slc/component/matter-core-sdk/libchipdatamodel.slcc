@@ -1,21 +1,21 @@
 category: Matter|Core
 define:
--   name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
+  - name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
--   name: CHIP_HAVE_CONFIG_H
-    value: '1'
--   name: RADIO_CONFIG_DMP_SUPPORT
-    value: '1'
+  - name: CHIP_HAVE_CONFIG_H
+    value: "1"
+  - name: RADIO_CONFIG_DMP_SUPPORT
+    value: "1"
 description: libchipdatamodel
 id: libchipdatamodel
 include:
--   path: third_party/matter_sdk/examples/platform/silabs
--   path: third_party/matter_sdk/src
--   path: third_party/matter_sdk/src/include
--   path: third_party/matter_sdk/src/lib
--   path: third_party/nlassert/include
--   path: third_party/nlio/include
--   path: third_party/matter_sdk/src/app
+  - path: third_party/matter_sdk/examples/platform/silabs
+  - path: third_party/matter_sdk/src
+  - path: third_party/matter_sdk/src/include
+  - path: third_party/matter_sdk/src/lib
+  - path: third_party/nlassert/include
+  - path: third_party/nlio/include
+  - path: third_party/matter_sdk/src/app
     file_list:
     -   path: AttributeAccessToken.h
     -   path: AttributeValueEncoder.h
@@ -91,7 +91,7 @@ include:
     -   path: AttributeAccessInterfaceRegistry.h
     -   path: AttributeReportBuilder.cpp
     -   path: AttributeValueEncoder.cpp
--   path: third_party/matter_sdk/src/app/persistence
+  - path: third_party/matter_sdk/src/app/persistence
     file_list:
     -   path: AttributePersistenceProviderInstance.h
     -   path: DefaultAttributePersistenceProvider.h
@@ -99,9 +99,9 @@ include:
     -   path: AttributePersistenceProvider.h
     -   path: PascalString.h
 label: libchipdatamodel
-package: Matter
+package: matter
 provides:
--   name: matter_libchipdatamodel
+  - name: matter_libchipdatamodel
 quality: production
 metadata:
   sbom:
@@ -130,4 +130,4 @@ source:
 -   path: third_party/matter_sdk/src/app/TimerDelegates.cpp
 -   path: third_party/matter_sdk/src/app/WriteHandler.cpp
 ui_hints:
-    visibility: never
+  visibility: never

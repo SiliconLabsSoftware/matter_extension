@@ -1,5 +1,5 @@
 id: efr32_wifi
-package: Matter
+package: matter
 label: efr32_wifi
 description: efr32_wifi
 category: Matter|Core
@@ -9,7 +9,7 @@ metadata:
     license: "Apache 2.0"
 
 provides:
-- name: matter_efr32_wifi
+  - name: matter_efr32_wifi
 
 include:
 - path: third_party/matter_sdk/examples/platform/silabs
@@ -134,6 +134,8 @@ include:
   - path: Efr32OpaqueKeypair.h
   - path: efr32-psa-crypto-config.h
   - path: efr32-chip-mbedtls-config.h
+  - path: BLEChannel.h
+
 - path: third_party/matter_sdk/src/platform/silabs
   file_list:
   - path: OTAImageProcessorImpl.h
@@ -162,29 +164,29 @@ include:
   - path: GenericThreadStackManagerImpl_FreeRTOS.hpp
 
 source:
-- path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
-- path: third_party/matter_sdk/src/platform/SingletonConfigurationManager.cpp
-- path: third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
-- path: third_party/matter_sdk/src/platform/silabs/ConfigurationManagerImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/ConnectivityManagerImpl_WIFI.cpp
-- path: third_party/matter_sdk/src/platform/silabs/DiagnosticDataProviderImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/KeyValueStoreManagerImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
-- path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
-- path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
-- path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
-- path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
-- path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOpaqueKeypair.cpp
-- path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOperationalKeystore.cpp
-- path: third_party/matter_sdk/src/platform/silabs/efr32/OTAImageProcessorImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp
+  - path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
+  - path: third_party/matter_sdk/src/platform/SingletonConfigurationManager.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/ConfigurationManagerImpl.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/ConnectivityManagerImpl_WIFI.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/DiagnosticDataProviderImpl.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/KeyValueStoreManagerImpl.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOpaqueKeypair.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOperationalKeystore.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/OTAImageProcessorImpl.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp
 
 define:
-- name: CHIP_HAVE_CONFIG_H
-  value: '1'
-- name: RADIO_CONFIG_DMP_SUPPORT
-  value: '1'
+  - name: CHIP_HAVE_CONFIG_H
+    value: "1"
+  - name: RADIO_CONFIG_DMP_SUPPORT
+    value: "1"
 
 ui_hints:
   visibility: never

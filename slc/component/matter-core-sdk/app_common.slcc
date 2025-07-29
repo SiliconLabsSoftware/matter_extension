@@ -1,28 +1,28 @@
 category: Matter|Core
 define:
--   name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
+  - name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>
--   name: CHIP_HAVE_CONFIG_H
-    value: '1'
--   name: RADIO_CONFIG_DMP_SUPPORT
-    value: '1'
+  - name: CHIP_HAVE_CONFIG_H
+    value: "1"
+  - name: RADIO_CONFIG_DMP_SUPPORT
+    value: "1"
 description: app_common
 id: app_common
 include:
--   path: third_party/matter_sdk/examples/platform/silabs
--   path: third_party/matter_sdk/src
--   path: third_party/matter_sdk/src/include
--   path: third_party/matter_sdk/src/lib
--   path: third_party/nlassert/include
--   path: third_party/nlio/include
--   path: third_party/matter_sdk/src/app/reporting
+  - path: third_party/matter_sdk/examples/platform/silabs
+  - path: third_party/matter_sdk/src
+  - path: third_party/matter_sdk/src/include
+  - path: third_party/matter_sdk/src/lib
+  - path: third_party/nlassert/include
+  - path: third_party/nlio/include
+  - path: third_party/matter_sdk/src/app/reporting
     file_list:
     -   path: ReportSchedulerImpl.h
     -   path: Engine.h
     -   path: SynchronizedReportSchedulerImpl.h
     -   path: reporting.h
     -   path: ReportScheduler.h
--   path: third_party/matter_sdk/src/app
+  - path: third_party/matter_sdk/src/app
     file_list:
     -   path: util/attribute-table.h
     -   path: util/attribute-table-detail.h
@@ -51,9 +51,9 @@ include:
     -   path: util/IMClusterCommandHandler.h
     -   path: util/MarkAttributeDirty.h
 label: app_common
-package: Matter
+package: matter
 provides:
--   name: matter_app_common
+  - name: matter_app_common
 quality: production
 metadata:
   sbom:
@@ -68,4 +68,4 @@ source:
 -   path: third_party/matter_sdk/src/app/util/privilege-storage.cpp
 -   path: third_party/matter_sdk/src/app/util/util.cpp
 ui_hints:
-    visibility: never
+  visibility: never

@@ -1,10 +1,9 @@
-
 category: Clusters|Measurement
 description: >
   Implementation of the Air Quality Server Cluster.
   The user has to enable the Air Quality Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_air_quality
-package: Matter
+package: matter
 label: Air Quality Server Cluster
 quality: production
 metadata:

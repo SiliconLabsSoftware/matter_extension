@@ -120,9 +120,21 @@
     ]
   },
   {
+    "clusterCode": "commodity metering-server",
+    "value": [
+      "%extension-matter%matter_commodity_metering"
+    ]
+  },
+  {
     "clusterCode": "commodity price-server",
     "value": [
       "%extension-matter%matter_commodity_price"
+    ]
+  },
+  {
+    "clusterCode": "commodity tariff-server",
+    "value": [
+      "%extension-matter%matter_commodity_tariff"
     ]
   },
   {

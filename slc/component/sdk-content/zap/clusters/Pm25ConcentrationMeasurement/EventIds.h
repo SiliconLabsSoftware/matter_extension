@@ -24,7 +24,7 @@
 namespace chip {
 namespace app {
 namespace Clusters {
-namespace Pm25ConcentrationMeasurement {  
+namespace Pm25ConcentrationMeasurement {
 namespace Events {
 } // Commands
 } // Pm25ConcentrationMeasurement

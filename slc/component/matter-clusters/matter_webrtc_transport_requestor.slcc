@@ -1,10 +1,9 @@
-
 category: Clusters|General
 description: >
   Implementation of the Webrtc Transport Requestor Server Cluster.
   The user has to enable the Webrtc Transport Requestor Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_webrtc_transport_requestor
-package: Matter
+package: matter
 label: Webrtc Transport Requestor Server Cluster
 quality: production
 metadata:
