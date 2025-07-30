@@ -207,7 +207,7 @@ jobs:
             - build-performance-test-app
             - build-zigbee-matter-light-app
             - build-closure-app
-        if: always()
+        if: success()
 
         steps:
             - name: Merge artifacts
@@ -225,7 +225,6 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
         secrets:
             private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
-        if: always()
 
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
