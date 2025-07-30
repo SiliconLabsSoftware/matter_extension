@@ -55,7 +55,7 @@ def _get_pr_latest_sha(pr_identifier):
         pr_identifier (str): PR identifier in format 'PR-123'
         
     Returns:
-        tuple: (commit_sha (str), pr_number (str), base_branch (str))
+        tuple: (commit_sha (str), pr_number (str), head_branch (str))
         
     Raises:
         ValueError: If PR identifier format is invalid
@@ -71,12 +71,12 @@ def _get_pr_latest_sha(pr_identifier):
     print(f"Fetching PR #{pr_number} information from GitHub API")
     response = _make_github_api_request(config.pr_sha_url)
     prs_data = response.json()
-    commit_sha, base_ref = _find_pr_commit_sha(prs_data, pr_number)
+    commit_sha, head_ref = _find_pr_commit_sha(prs_data, pr_number)
     print(f"Found commit SHA for PR #{pr_number}: {commit_sha}")
-    print(f"Base branch: {base_ref}")
+    print(f"Head branch: {head_ref}")
     print(f"Commit SHA - {commit_sha}")
     print(f"PR Number: {pr_number}")
-    return commit_sha, pr_number, base_ref
+    return commit_sha, pr_number, head_ref
 
 
 def _get_branch_latest_sha(branch_name):
@@ -106,7 +106,7 @@ def _get_branch_latest_sha(branch_name):
     return commit_sha, None, None
 
 
-def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, base_branch=None):
+def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, head_branch=None):
     """
     Get the workflow run number and ID for a given branch and commit SHA.
     
@@ -115,7 +115,7 @@ def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, base_branch=
         commit_sha (str): The commit SHA of the workflow.
         sqa (bool): Whether to get SQA workflow info (default: False).
         pr (bool): Whether this is a PR workflow (default: False).
-        base_branch (str): The base branch for PR workflows (default: None).
+        head_branch (str): The head branch for PR workflows (default: None).
         
     Returns:
         tuple: (run_number (int), workflow_id (int))
@@ -125,9 +125,8 @@ def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, base_branch=
         ValueError: If the workflow data is invalid or wrong job type is triggered
     """
     if pr:
-        # Add base branch to the URL if provided
-        if base_branch:
-            pr_url = f"{config.actions_runs_url_pr}&branch={base_branch}"
+        if head_branch:
+            pr_url = f"{config.actions_runs_url_pr}&branch={head_branch}"
         else:
             pr_url = config.actions_runs_url_pr
         print(f"Fetching workflow runs from actions/runs event Pull Request URL: {pr_url}")
@@ -206,21 +205,21 @@ def _make_github_api_request(url):
 
 def _find_pr_commit_sha(prs_data, pr_number):
     """
-    Find the commit SHA and base branch for a specific PR number.
+    Find the commit SHA and head branch for a specific PR number.
     
     Args:
         prs_data (list): List of PR data from GitHub API
         pr_number (str): PR number to search for
         
     Returns:
-        tuple: (commit_sha (str), base_ref (str))
+        tuple: (commit_sha (str), head_ref (str))
         
     Raises:
         RuntimeError: If PR is not found
     """
     for pr in prs_data:
         if str(pr['number']) == pr_number:
-            return pr['head']['sha'], pr['base']['ref']
+            return pr['head']['sha'], pr['head']['ref']
     
     raise RuntimeError(f"No matching PR found for number: {pr_number}")
 
