@@ -101,14 +101,14 @@ def _get_dev_workflow_info(args):
         RuntimeError: If GitHub API request fails or workflow info cannot be determined
     """
     try:
-        commit_sha, pr_build_number = get_latest_sha(args.branch_name)
+        commit_sha, pr_build_number, base_branch = get_latest_sha(args.branch_name)
         
         if pr_build_number is None:
             run_number, workflow_id = get_workflow_info(args.branch_name, commit_sha)
             build_number = run_number
             branch_name = args.branch_name
         else:
-            run_number, workflow_id = get_workflow_info(pr_build_number, commit_sha, pr=True)
+            run_number, workflow_id = get_workflow_info(pr_build_number, commit_sha, pr=True, base_branch=base_branch)
             build_number = run_number
             branch_name = args.branch_name
         
