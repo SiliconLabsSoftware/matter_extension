@@ -148,9 +148,6 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
 
-      - name: Stage Extension
-        run: python3 slc/stage_extension.py sisdk/extension
-
       - name: Initialize required submodules
         shell: bash
         run: |
@@ -181,7 +178,7 @@ jobs:
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
           mkdir -p "$OUTPUT_DIR"
-          python3 -u './slc/script/validate_components.py' sisdk/extension/matter_extension/slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+          python3 -u './slc/script/validate_components.py' slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
 
       - name: Upload validation artifacts
         uses: actions/upload-artifact@v4
