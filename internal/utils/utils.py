@@ -3,9 +3,6 @@ Utility functions module.
 
 This module contains common utility functions and validation helpers used across
 the artifact upload system.
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import argparse

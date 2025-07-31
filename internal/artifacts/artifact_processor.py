@@ -6,9 +6,6 @@ This module handles all artifact processing operations including:
 - Extracting artifact files
 - Processing individual binary artifacts
 - Managing artifact uploads to UBAI
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import os

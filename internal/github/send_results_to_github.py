@@ -21,9 +21,6 @@ Environment Variables:
 Dependencies:
     - requests
     - config.py (must define required URLs, repo info, and headers)
-
-Author: Stefan Livadariu
-Date: 2025-06-23
 """
 
 import argparse

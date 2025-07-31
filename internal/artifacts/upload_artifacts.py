@@ -25,9 +25,6 @@ Dependencies:
     - requests
     - config.py (must define required URLs and headers)
     - ubai_upload_cli, ubai_search_cli (must be available in PATH, need to use GSDK docker image )
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import os

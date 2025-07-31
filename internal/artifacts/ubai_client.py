@@ -5,9 +5,6 @@ This module handles all UBAI operations including:
 - Uploading files to UBAI with metadata
 - Searching for existing artifacts in UBAI
 - Managing UBAI CLI interactions
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import subprocess

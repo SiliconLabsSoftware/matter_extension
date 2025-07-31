@@ -6,9 +6,6 @@ This module handles all GitHub API interactions including:
 - Getting commit SHAs for branches and PRs
 - Waiting for artifacts to be ready
 - Managing workflow runs and check runs.
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import requests

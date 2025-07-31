@@ -5,9 +5,6 @@ This module handles all Artifactory operations including:
 - Uploading artifacts to Artifactory
 - Managing Artifactory URLs and authentication
 - Handling release vs development branch uploads
-
-Author: Stefan Livadariu
-Date: 2025-06-19
 """
 
 import requests
