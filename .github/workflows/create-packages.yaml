@@ -1,0 +1,134 @@
+
+name: Create Matter Packages
+
+on: [workflow_dispatch, push]
+
+jobs:
+  matter_packages:
+    runs-on: ubuntu-latest
+    container:
+      image: 'artifactory-local.silabs.net/gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest'
+      options: --user root
+      env:
+        CONAN_HOME: ~/.silabs/slt/installs/conan
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Conan remotes
+        id: add-conan-remotes
+        working-directory: packages
+        run: |
+          conan config install -t file remotes.json
+          conan remote list
+
+      - name: Install GCC, CMAKE
+        id: setup-conan
+        run: |
+          conan config show "*"
+          slt update  --self
+          slt install gcc-arm-none-eabi --engine conan
+          slt install cmake --engine conan 
+          slt install iar-embedded-workbench  --engine conan ||true
+          slt install gcc-riscv32 --engine conan || true
+    
+      - name: Add tools to PATH
+        run: |
+          # Get tool paths
+          gcc=$(slt locate gcc-arm-none-eabi | grep Path | cut -f 4 -d ' ')
+          gcc_bin=$gcc/bin
+          cmake=$(slt locate cmake | grep Path | cut -f 4 -d ' ')/bin
+          iar=$(slt locate iar-embedded-workbench | grep Path | cut -f 4 -d ' ')/arm/bin || echo ""
+          riscv=$(slt locate gcc-riscv32 | grep Path | cut -f 4 -d ' ')/bin || echo ""
+          
+          # Set ARM_GCC_DIR environment variable
+          echo "ARM_GCC_DIR=$gcc" >> $GITHUB_ENV
+          
+          # Combine all paths (filter out empty ones)
+          NEW_PATH="$gcc_bin:$cmake"
+          [ -n "$iar" ] && NEW_PATH="$NEW_PATH:$iar"
+          [ -n "$riscv" ] && NEW_PATH="$NEW_PATH:$riscv"
+          
+          # Update PATH
+          echo "PATH=$NEW_PATH:$PATH" >> $GITHUB_ENV
+
+      - name: define concurrent threads for conan download and upload
+        id: check-conan
+        run: |
+            conan --version
+            conan config home
+            mkdir -p conan-settings
+            echo "core.download:parallel=6\ncore.upload:parallel=4 " > conan-settings/global.conf
+            conan config install ./conan-settings --type dir
+            conan config show "*"
+            rm -rf conan-settings
+
+      - name: Get dependent conan packages
+        working-directory: packages/
+        run: |
+          echo "PATH: $PATH"
+          conan config show "*"
+          which arm-none-eabi-gcc && arm-none-eabi-gcc --version || echo "GCC not found"
+          which cmake && cmake --version || echo "CMake not found"
+          conan install . --build missing --lockfile-out=conan-matter.lock
+          cat ../../dependencies.mk
+
+      - name: create-package
+        id: create-package
+        run: |
+          conan export-pkg conanfile.py
+      
+# If the jenkins job takes longer than 15 minutes, use this action to trigger jenkins job without waiting for it completes. 
+#  to pass parameters to Jenkins job, add  --data "param1=value1&param2=value2". 
+      # - name: Trigger Jenkins Job
+      #   run: |
+      #     curl -X POST "${{ secrets.JENKINS_URL }}/job/test-githubapp-sharedlib/build" \
+      #       --user "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}"
+
+# Trigger Jenkins Job, show jenkins output and wait for it to complete. 
+# The `-http -s` flags configure the connection method - `-http` forces HTTP protocol usage instead of the default SSH, while `-s` specifies the Jenkins server URL from the secrets.
+# The `build -s -v` command triggers a Jenkins job with specific options. The `-s` flag makes the command synchronous (waits for job completion), 
+# while `-v` enables verbose output so you can see detailed logs of the Jenkins job execution within your GitHub Actions workflow.
+      - name: Download Jenkins CLI
+        run: curl -O ${{ secrets.JENKINS_URL }}/jnlpJars/jenkins-cli.jar
+
+      - name: Trigger Jenkins Job
+        run: |
+          java -jar jenkins-cli.jar \
+          -auth "${{ secrets.JENKINS_USER }}:${{ secrets.JENKINS_TOKEN }}" \
+          -http -s "${{ secrets.JENKINS_URL }}" \
+          build -s -v test-githubapp-sharedlib 
+
+ # can be seprated from create package
+      # - name: Publish my package
+      #   id: publish-package
+      #   uses: SiliconLabsInternal/conan-create-publish-action@main
+      #   with:
+      #     conanfile-path: 'packages/rail_library/conanfile.py'
+      #     remote-name: rail-conan-dev
+      #     remote-url: https://artifactory.silabs.net/artifactory/api/conan/rail-conan-dev
+      #     remote-username:  ${{ secrets.JF_USERNAME }}
+      #     remote-token:  ${{ secrets.JF_TOKEN }}
+      #     create: false
+      #     publish: true
+      
+  notify:  
+    needs: matter_packages
+    runs-on: ubuntu-latest
+    if: always()  # ensures this runs regardless of previous job success/failure
+    steps:
+    - name: Send message to SlackAdd commentMore actions
+      uses: slackapi/slack-github-action@v1.24.0
+      with:
+          channel-id: 'C0985B0MB1D'  #matter-package-ci
+          slack-message: |
+            * GitHub Workflow Notification *
+            . Repo: ${{ github.repository }}
+            . Branch: ${{ github.ref_name }}
+            . Workflow: ${{ github.workflow }}
+            . Commit: <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>
+            . Status: ${{ needs.matter_packages.result }}
+            . Triggered by: ${{ github.actor }}
+      env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}    
