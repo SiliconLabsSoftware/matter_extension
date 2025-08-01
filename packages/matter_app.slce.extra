@@ -1,0 +1,77 @@
+id: matter_app
+examples:
+sample_apps:
+  - openthread-border-router-doc
+  - onoff-plug-app-917-soc
+  - onoff-plug-app-thread
+  - light-switch-app-917-soc
+  - light-switch-app-thread
+  - air-quality-sensor-app-917-soc
+  - air-quality-sensor-app-thread
+  - matter-bootloader-storage-internal-single
+  - matter-bootloader-storage-single-4096k
+  - matter-bootloader-storage-external-single
+  - thermostat-917-soc
+  - thermostat-wf200
+  - thermostat-thread
+  - thermostat-rs911x
+  - thermostat-917-ncp
+  - fan-control-app-917-soc
+  - lock-app-917-soc
+  - lock-app-917-ncp
+  - lock-app-wf200
+  - lock-app-thread
+  - lock-app-rs911x
+  - multi-sensor-app-917-soc
+  - multi-sensor-app-thread
+  - zigbee-matter-light
+  - performance-test-app-thread
+  - window-app-917-soc
+  - window-app-thread
+  - window-app-917-ncp
+  - refrigerator-app-917-soc
+  - refrigerator-app-thread
+  - dishwasher-app-917-soc
+  - dishwasher-app-thread
+  - lighting-app-917-soc
+  - lighting-app-thread
+description: matter Sample Apps
+dependencies:
+components: []
+extra_files:
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/openthread-border-router-doc/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/onoff-plug-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/onoff-plug-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/light-switch-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/light-switch-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/air-quality-sensor-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/air-quality-sensor-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/bootloaders/bootloader-storage-single-4096k-series-3/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/bootloaders/bootloader-storage-external-single-series-2/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/thermostat/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/thermostat/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/thermostat/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/thermostat/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/thermostat/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/fan-control-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lock-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lock-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lock-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lock-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lock-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/multi-sensor-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/multi-sensor-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/zigbee-matter-light/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/performance-test-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/window-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/window-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/window-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/refrigerator-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/refrigerator-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/dishwasher-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/dishwasher-app/efr32/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lighting-app/siwx917/pkg.slt
+  - /Users/sashaha/Documents/Git/Matter_git/New_Repo/package_manager/matter_extension/slc/sample-app/lighting-app/efr32/pkg.slt
+git_extra_files:
+git_path_mapping:
