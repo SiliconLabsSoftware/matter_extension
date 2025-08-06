@@ -1,5 +1,5 @@
 id: matter
-version: 2.6.1
+version: 2.6.2
 description: "Matter extension for Simplicity SDK Suite"
 label: "Silicon Labs Matter"
 sdk:
@@ -47,4 +47,4 @@ component_path:
   - path: slc/component/matter-wifi/917-ncp
 documentation:
   - docset: matter
-    version: 2.6.1
+    version: 2.6.2
