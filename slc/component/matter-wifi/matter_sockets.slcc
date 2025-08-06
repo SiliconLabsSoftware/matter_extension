@@ -23,7 +23,7 @@ include:
       - path: net/if.h
       - path: netinet/in.h
       - path: sys/ioctl.h
-      - path: sys/sockets.h
+      - path: sys/socket.h
 source:
   - path: third_party/matter_sdk/src/platform/silabs/wifi/DnssdImpl.cpp
 define:
