@@ -10,7 +10,7 @@ sdk_extension:
     version: "2.8.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "3.5.2"
+    version: "4.0.0"
 
 component:
   - id: device_init
