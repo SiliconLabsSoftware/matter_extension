@@ -1,12 +1,4 @@
 {
-    "standard": {
-        "default": [
-            {
-                "boards": [],
-                "arguments": [""]
-            }
-        ]
-    },
     "full": {
         "default": [
             {
