@@ -2,9 +2,6 @@ name: Build Dev apps
 
 on:
     push:
-# TODO add these lines back       branches:
-#            - main
-#            - "release_*"
     pull_request:
         branches:
             - main
@@ -33,13 +30,17 @@ jobs:
         steps:
             - name: Set build-type based on event
               id: set-build-type
-              run: |
+              run: |                  
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                      fi
                   fi
 
     validate-metadata:
