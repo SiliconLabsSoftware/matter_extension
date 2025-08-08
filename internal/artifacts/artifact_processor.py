@@ -9,6 +9,7 @@ This module handles all artifact processing operations including:
 """
 
 import os
+import shutil
 import sys
 import zipfile
 
@@ -165,8 +166,22 @@ def _download_artifact(download_url, artifact_name):
         RuntimeError: If download fails
     """
     print(f"Downloading artifact {artifact_name} from URL: {download_url}")
-    response = _make_github_api_request(download_url)
+    
+    # Clean up existing files/folders before downloading
     artifact_file = os.path.join('.', artifact_name)
+    extracted_folder = os.path.join('.', artifact_name.replace('.zip', ''))
+    
+    # Delete existing artifact file if it exists
+    if os.path.exists(artifact_file):
+        print(f"Removing existing artifact file: {artifact_file}")
+        os.remove(artifact_file)
+    
+    # Delete existing extracted folder if it exists
+    if os.path.exists(extracted_folder):
+        print(f"Removing existing extracted folder: {extracted_folder}")
+        shutil.rmtree(extracted_folder)
+    
+    response = _make_github_api_request(download_url)
     with open(artifact_file, 'wb') as f:
         f.write(response.content)
     print(f"Successfully downloaded {artifact_name}")
@@ -489,7 +504,8 @@ def _generate_new_file_name(file_name, app_info, board_id):
         if "." not in sample_app:
             return f"{sample_app}{cmp_type}.{file_ext}"
         else:
-            return f"{sample_app}{cmp_type}"
+            sample_app_base = sample_app.rsplit(".", 1)[0]
+            return f"{sample_app_base}{cmp_type}.{file_ext}"
 
 
 def _extract_sample_app_name(file_name):
