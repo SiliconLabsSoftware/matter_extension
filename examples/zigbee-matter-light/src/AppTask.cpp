@@ -23,10 +23,11 @@
 
 #include "LEDWidget.h"
 
-#include <app/DeferredAttributePersistenceProvider.h>
 #include <app/clusters/on-off-server/on-off-server.h>
-#include <app/server/OnboardingCodesUtil.h>
+#include <app/util/persistence/DefaultAttributePersistenceProvider.h>
+#include <app/util/persistence/DeferredAttributePersistenceProvider.h>
 #include <app/server/Server.h>
+#include <setup_payload/OnboardingCodesUtil.h>
 
 #include <assert.h>
 
@@ -76,9 +77,10 @@ DeferredAttribute gDeferredAttributeTable[] = {
 // The DeferredAttributePersistenceProvider will persist the attribute value in non-volatile memory
 // once it remains constant for SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS milliseconds.
 // For all other attributes not listed in gDeferredAttributeTable, the default GetDefaultAttributePersister is used.
+DefaultAttributePersistenceProvider gSimpleAttributePersistence;
 DeferredAttributePersistenceProvider
-    gDeferredAttributePersister(Server::GetInstance().GetDefaultAttributePersister(),
-                                Span<DeferredAttribute>(gDeferredAttributeTable, ArraySize(gDeferredAttributeTable)),
+    gDeferredAttributePersister(gSimpleAttributePersistence,
+                                Span<DeferredAttribute>(gDeferredAttributeTable, MATTER_ARRAY_SIZE(gDeferredAttributeTable)),
                                 System::Clock::Milliseconds32(SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS));
 
 } // namespace

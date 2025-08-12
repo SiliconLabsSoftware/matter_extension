@@ -95,6 +95,8 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
+  - id: matter_unit_localization
+    from: matter
   - id: matter_default_lcd_config
     from: matter
   # Override configuration for JTAG use

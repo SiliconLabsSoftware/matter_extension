@@ -34,7 +34,6 @@ include:
       - path: FreeRTOSConfig.h
       - path: Rpc.h
       - path: silabs_creds.h
-      - path: SilabsTestEventTriggerDelegate.h
       - path: MemMonitoring.h
       - path: BaseApplication.h
   - path: third_party/matter_sdk/src/platform/silabs/SiWx917

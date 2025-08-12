@@ -35,9 +35,6 @@ component:
     from: matter
   - id: matter_descriptor
     from: matter
-  - id: matter_diagnostic_logs
-
-    from: matter
   - id: matter_ethernet_network_diagnostics
     from: matter
   - id: matter_fixed_label

@@ -35,8 +35,6 @@ component:
     from: matter
   - id: matter_descriptor
     from: matter
-  - id: matter_diagnostic_logs
-    from: matter
   - id: matter_fixed_label
     from: matter
   - id: matter_general_commissioning
