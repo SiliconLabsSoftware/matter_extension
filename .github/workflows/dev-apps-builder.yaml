@@ -74,6 +74,14 @@ jobs:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build-dishwasher-app:
+        name: Build Dishwasher App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "dishwasher-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     build-lock-app:
         name: Build Lock App
         needs: set-build-type
