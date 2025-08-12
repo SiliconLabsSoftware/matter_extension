@@ -1,0 +1,12 @@
+label: closure-app-thread-bootloader
+quality: production
+description: Matter workspace containing both a Matter bootloader and Closure App over Thread Example
+project:
+  - path: ../../../sample-app/closure-app/efr32/closure-app-thread.slcp
+    id: application
+    output: closure-app-thread
+  - path: ../../../sample-app/bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

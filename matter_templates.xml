@@ -136,6 +136,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
+  <descriptors name="MatterClosureControlOverThread" label="Matter - Closure Control over Thread"
+           description="This project builds a Matter Closure Control app that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.sample-app.closure-app.efr32.closure-app-thread.slcp"/>
+    <properties key="projectFilePaths" value="slc/sample-app/closure-app/efr32/closure-app-thread.slcp"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/efr32/README.md"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd1019a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*simg301.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors>
   <descriptors name="MatterLockOverWiFi" label="Matter - NCP Lock over Wi-Fi"
                description="This project builds a Matter Lock for Wi-Fi RS9116 that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
@@ -1257,6 +1274,57 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.sample-app.lighting-app.efr32.lighting-app-thread.slcp"/>
+  </descriptors>
+  <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with internal Bootloader"
+           description="This project builds a Matter Closure Control and Matter Internal Bootloader that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.solutions.closure-app.series-2.closure-app-thread-internal-bootloader.slcw"/>
+    <properties key="projectFilePaths" value="slc/solutions/closure-app/series-2/closure-app-thread-internal-bootloader.slcw"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/efr32/README.md"/>
+    <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.sample-app.closure-app.efr32.closure-app-thread.slcp"/>
+  </descriptors>
+  <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with external Bootloader"
+           description="This project builds a Matter Closure Control and Matter External Bootloader that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.solutions.closure-app.series-2.closure-app-thread-bootloader.slcw"/>
+    <properties key="projectFilePaths" value="slc/solutions/closure-app/series-2/closure-app-thread-bootloader.slcw"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/efr32/README.md"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd2601b brd2608a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.sample-app.closure-app.efr32.closure-app-thread.slcp"/>
+  </descriptors>
+  <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with internal Bootloader"
+           description="This project builds a Matter Closure Control and Matter Bootloader that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.solutions.closure-app.series-3.closure-app-thread-bootloader.slcw"/>
+    <properties key="projectFilePaths" value="slc/solutions/closure-app/series-3/closure-app-thread-bootloader.slcw"/>
+    <properties key="readmeFiles" value="slc/sample-app/closure-app/efr32/README.md"/>
+    <properties key="boardCompatibility" value="brd1019a com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*simg301.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="ALPHA"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.sample-app.closure-app.efr32.closure-app-thread.slcp"/>
   </descriptors>
   <descriptors name="Matter-Bootloader" label="Matter - Default internal 4096k Flash Storage"
                description="This project builds a Matter Bootloader for series 3 that can be developed inside Simplicity Studio">
