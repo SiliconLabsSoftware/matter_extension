@@ -186,7 +186,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-3/${{ inputs.example-app }}-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-3/${{ inputs.example-app }}-thread-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: sixg301
