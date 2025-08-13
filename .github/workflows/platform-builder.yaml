@@ -65,6 +65,10 @@ on:
                 required: false
                 type: boolean
                 default: true
+            sixg301-support:
+                required: false
+                type: boolean
+                default: false
 
 jobs:
     mg24-build-job:
@@ -78,7 +82,7 @@ jobs:
             platform: mg24
 
     mg24-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-internal-support && (inputs.build-type == 'full') }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
@@ -108,7 +112,7 @@ jobs:
             platform: mgm24-internal
 
     mg26-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-support }}
+        if: ${{ inputs.thread-support && inputs.mg26-support && (inputs.build-type == 'full') }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
@@ -118,17 +122,17 @@ jobs:
             platform: mg26
 
     mg26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mg26-internal-support && (inputs.build-type == 'full') }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26-internal.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
 
     mgm26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mgm26-internal-support && (inputs.build-type == 'full') }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm26-internal.json'
@@ -176,3 +180,13 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
+
+    sixg301-build-job:
+        if: ${{ inputs.sixg301-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-sixg301.json'
+            path-to-example-app: ${{ inputs.example-app == 'zigbee-matter-light' && format('slc/solutions/{0}/series-3/{0}-bootloader.slcw', inputs.example-app) || format('slc/solutions/{0}/series-3/{0}-thread-bootloader.slcw', inputs.example-app) }}
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: sixg301
