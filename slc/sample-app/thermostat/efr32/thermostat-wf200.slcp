@@ -143,10 +143,15 @@ include:
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/ZclCallbacks.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
+    directory: src
 
 define:
   - name: CHIP_CRYPTO_PLATFORM
