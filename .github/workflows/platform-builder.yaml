@@ -126,7 +126,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26-internal.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
