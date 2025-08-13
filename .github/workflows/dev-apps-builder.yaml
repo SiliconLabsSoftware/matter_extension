@@ -1,5 +1,6 @@
 name: Build Dev apps
-
+# Adding comment to trigger CI flow.
+# Will remove after test 
 on:
     push:
         branches:
