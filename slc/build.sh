@@ -157,6 +157,7 @@ ThirdPartyHwDrivers_DIR=third_party/third_party_hw_drivers_extension
 
 # Trust SDK and Matter extension
 echo "Ensure SDK and Matter extension are trusted by SLC."
+slc --daemon
 slc configuration --sdk $GSDK_ROOT
 slc signature trust --development-trust
 slc signature trust --extension-path "$EXTENSION_DIR"
@@ -169,7 +170,7 @@ if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
 fi
 
 if [ "$skip_gen" = false ]; then
-    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=500 -o makefile
+    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=1500 -o makefile
     if [ $? -ne 0 ]; then
         echo "FAILED TO Generate : $SILABS_APP_PATH"
         exit 1
