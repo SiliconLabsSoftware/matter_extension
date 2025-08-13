@@ -176,3 +176,13 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
+
+    sixg301-build-job:
+        if: ${{ inputs.sixg301-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-sixg301.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-3/${{ inputs.example-app }}-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: sixg301
