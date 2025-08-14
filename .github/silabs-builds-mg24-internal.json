@@ -1,6 +1,13 @@
 {
     "standard": {
-
+        "default": [
+            {
+                "boards": [],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
         "default": [
             {
                 "boards": ["brd2703a"],
