@@ -103,7 +103,7 @@ MINIMUM_ZAP_REQUIRED = get_zap_version()
 zap_url = f"https://github.com/project-chip/zap/releases/download/{MINIMUM_ZAP_REQUIRED}/zap-{_platform}-x64.zip"
 ninja_url = f"https://github.com/ninja-build/ninja/releases/download/v1.11.1/ninja-{_platform}.zip"
 commander_url = f"https://www.silabs.com/documents/public/software/SimplicityCommander-{__platform.capitalize()}.zip"
-slc_cli_url = f"https://www.silabs.com/documents/login/software/slc_cli_{__platform}.zip"
+slc_cli_url = f"https://www.silabs.com/documents/public/software/slc_cli_{__platform}.zip"
 
 #paths for all the tools
 slc_cli_path = os.path.join(silabs_chip_root, "slc","tools","slc_cli")
