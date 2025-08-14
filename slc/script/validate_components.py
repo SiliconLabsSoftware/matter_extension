@@ -91,7 +91,7 @@ def printCleansed(output):
         #Do not print logs for components without any issues.
         if "No issues detected" in lines[-1]:
             break
-        cleanedOutput = '\n'.join(lines[2:])
+        cleanedOutput = '\n'.join(lines)
         print(cleanedOutput + "\n")
 
 if __name__ == "__main__":
