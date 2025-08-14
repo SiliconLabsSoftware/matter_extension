@@ -293,3 +293,4 @@ ui_hints:
 sdk_extension:
   - id: matter
     version: "2.6.2"
+    vendor: silabs

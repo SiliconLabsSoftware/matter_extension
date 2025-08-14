@@ -2,6 +2,7 @@ id: matter
 version: 2.6.2
 description: "Matter extension for Simplicity SDK Suite"
 label: "Silicon Labs Matter"
+vendor: silabs
 sdk:
   id: simplicity_sdk
   version: 2025.6.1

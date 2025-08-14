@@ -19,8 +19,9 @@ provides:
 - name: efx_ncp_custom_host_mcu
 
 recommends:
-- id: uartdrv_eusart
-  instance: [vcom]
+  - id: uartdrv_eusart
+    vendor: silabs
+    instance: [vcom]
 
 requires:
 - name: wiseconnect3_common
