@@ -1,15 +1,7 @@
 name: Build Dev apps
 on:
     push:
-        branches:
-            - main
-            - "release_*"
-            - "feature/*" #TODO: Remove 
     pull_request:
-        branches:
-            - main
-            - "release_*"
-            - "feature/*" # TODO: Remove this after validation
 
     workflow_dispatch:
         inputs:
