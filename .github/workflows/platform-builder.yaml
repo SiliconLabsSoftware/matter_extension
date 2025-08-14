@@ -186,7 +186,6 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'
-            path-to-example-app: ${{ inputs.example-app == 'zigbee-matter-light' && format('slc/solutions/{0}/series-3/{0}-bootloader.slcw', inputs.example-app) || format('slc/solutions/{0}/series-3/{0}-thread-bootloader.slcw', inputs.example-app) }}
-            example-app: ${{ inputs.example-app }}
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-3/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
             build-type: ${{ inputs.build-type }}
             platform: sixg301
