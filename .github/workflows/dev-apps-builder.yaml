@@ -177,15 +177,6 @@ jobs:
             ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
-
-    build-bootloaders:
-        name: Build Bootloaders
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "matter-bootloader"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
     
     build-sqa-tools:
         name: Build SQA Tools
@@ -201,7 +192,6 @@ jobs:
             - set-build-type
             - validate-metadata 
             - build-sqa-tools
-            - build-bootloaders
             - build-lighting-app
             - build-air-quality-sensor-app
             - build-light-switch-app
