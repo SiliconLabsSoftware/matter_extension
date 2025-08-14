@@ -120,17 +120,6 @@ if ! [ -d "$ARM_GCC_DIR/bin" ]; then
     exit
 fi
 
-if ! [ -x "$(command -v arm-none-eabi-gcc)" ]; then
-    echo "ERROR: $ARM_GCC_DIR/bin missing from PATH"
-    echo "Run export PATH=\"\$PATH:$ARM_GCC_DIR/bin\" to add to PATH"
-    export PATH="$PATH:$ARM_GCC_DIR/bin"
-    # Optionally, re-check if arm-none-eabi-gcc is now available
-    if ! [ -x "$(command -v arm-none-eabi-gcc)" ]; then
-        echo "ERROR: arm-none-eabi-gcc still not found in PATH after update."
-        exit 1
-    fi
-fi
-
 if ! [ -x "$(command -v arm-none-eabi-gcc-12.2.1)" ]; then
     echo "WARNING: might be an incompatible toolchain."
     echo "Please install gcc-arm-none-eabi-12.2.Rel1 for your host."
