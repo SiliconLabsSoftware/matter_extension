@@ -2,10 +2,10 @@ name: Build Dev apps
 on:
     push:
         branches:
-            - '*'
+            - '**'
     pull_request:
         branches:
-            - '*'
+            - '**'
             
     workflow_dispatch:
         inputs:
