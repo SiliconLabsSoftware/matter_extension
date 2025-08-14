@@ -1,9 +1,0 @@
-label: matter-bootloader-thread-bootloader
-quality: production
-description: Matter solution containing a bootloader internal project series-3
-project:
-  - path: ../../../sample-app/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
-    id: bootloader
-    output: matter-bootloader
-post_build:
-  path: ../../../postbuild/matter_thread_bootloader.slpb
