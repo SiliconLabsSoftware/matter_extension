@@ -186,16 +186,6 @@ jobs:
             ncp-rs911x-support: false
             wifi-soc-support: false
             sixg301-support: true
-
-    build-bootloaders:
-        name: Build Bootloaders
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "matter-bootloader"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
-            sixg301-support: true
     
     build-sqa-tools:
         name: Build SQA Tools
