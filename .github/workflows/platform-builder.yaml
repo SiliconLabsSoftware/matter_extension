@@ -65,7 +65,10 @@ on:
                 required: false
                 type: boolean
                 default: true
-
+            sixg301-support:
+                required: false
+                type: boolean
+                default: false
 jobs:
     mg24-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support }}
@@ -176,3 +179,13 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
+    
+    sixg301-build-job:
+        if: ${{ inputs.sixg301-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-sixg301.json'
+            path-to-example-app: ${{ inputs.example-app == 'zigbee-matter-light' && format('slc/solutions/{0}/series-3/{0}-bootloader.slcw', inputs.example-app) || format('slc/solutions/{0}/series-3/{0}-thread-bootloader.slcw', inputs.example-app) }}
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: sixg301
