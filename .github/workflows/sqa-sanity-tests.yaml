@@ -10,10 +10,6 @@ on:
       private-key:
         required: true
 
-permissions:
-    contents: read
-    checks: write
-
 jobs:
   wait-for-jenkins-status:
     name: Wait for Jenkins Status
