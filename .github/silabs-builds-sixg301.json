@@ -5,6 +5,12 @@
                 "boards": ["brd1019a", "brd4407a"],
                 "arguments": [""]
             }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd1019a", "brd4407a"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
         ]
     },
     "full": {
