@@ -10,13 +10,13 @@
     "full": {
         "default": [
             {
-                "boards": ["brd2709a"],
+                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
                 "arguments": [""]
             }
         ],
         "zigbee-matter-light":  [
             {
-                "boards": ["brd2709a"],
+                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
             }
         ]
