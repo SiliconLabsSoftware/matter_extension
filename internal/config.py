@@ -7,13 +7,7 @@ sha_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits?sha='
 commits_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/commits'
 actions_runs_url = f'https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs'
 actions_runs_url_pr = f'https://api.github.com/repos/{repo_owner}/{repo_name}/actions/runs?event=pull_request'
-
-# Require new update token
-_token = os.getenv("GITHUB_UPDATE_TOKEN")
-if not _token:
-    raise RuntimeError("Missing GITHUB_UPDATE_TOKEN in environment")
-
-github_auth = "Bearer " + _token
+github_auth = "Bearer " + os.environ["GITHUB_ACCESS_TOKEN"]
 github_headers = {
     'Accept': 'application/vnd.github+json',
     'Authorization': github_auth,
