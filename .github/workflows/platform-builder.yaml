@@ -126,7 +126,7 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
-
+    
     mgm26-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
         uses: ./.github/workflows/builder.yaml
