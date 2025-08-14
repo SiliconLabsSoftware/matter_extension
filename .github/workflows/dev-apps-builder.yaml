@@ -217,7 +217,6 @@ jobs:
 
     wait-for-test-results:
         name: Wait for Test Results
-        needs: merge-apps
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
