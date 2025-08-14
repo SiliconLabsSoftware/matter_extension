@@ -123,7 +123,6 @@ jobs:
             example-app: "closure-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
-            sixg301-support: true
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -151,7 +150,6 @@ jobs:
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
-            sixg301-support: true
 
     build-performance-test-app:
         name: Build Performance Test App
