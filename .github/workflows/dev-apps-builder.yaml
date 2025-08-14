@@ -2,9 +2,9 @@ name: Build Dev apps
 
 on:
     push:
-# TODO add these lines back       branches:
-#            - main
-#            - "release_*"
+        branches:
+            - main
+            - "release_*"
     pull_request:
         branches:
             - main
