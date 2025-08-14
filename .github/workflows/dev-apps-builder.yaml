@@ -1,12 +1,10 @@
 name: Build Dev apps
-# Adding comment to trigger CI flow.
-# Will remove after test 
 on:
     push:
         branches:
             - main
             - "release_*"
-            - "feature/*"
+            - "feature/*" #TODO: Remove 
     pull_request:
         branches:
             - main
@@ -189,6 +187,16 @@ jobs:
             wifi-soc-support: false
             sixg301-support: true
 
+    build-bootloaders:
+        name: Build Bootloaders
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "matter-bootloader"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+            sixg301-support: true
+    
     build-sqa-tools:
         name: Build SQA Tools
         needs: set-build-type
