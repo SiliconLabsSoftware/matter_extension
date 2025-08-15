@@ -1,6 +1,13 @@
 {
     "standard": {
-
+        "default": [
+            {
+                "boards": [],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
         "default": [
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
