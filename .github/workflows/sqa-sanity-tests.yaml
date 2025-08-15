@@ -14,57 +14,27 @@ jobs:
   wait-for-jenkins-status:
     name: Wait for Jenkins Status
     runs-on: ubuntu-latest
-    timeout-minutes: 600
     steps:
-      - name: Generate GitHub App Token
-        id: generate_app_token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
-          private-key: ${{ secrets.private-key }}
+      - name: Determine HEAD SHA
+        id: determine_sha
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            HEAD_SHA="${{ github.sha }}"
+          fi
+          echo "HEAD_SHA=$HEAD_SHA" >> $GITHUB_ENV
+          echo "Using HEAD_SHA: $HEAD_SHA"
 
       - name: Create Check Run for Test Results
         id: create_check_run
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          else
-            HEAD_SHA="${{ github.sha }}"
-          fi
-          curl -X POST \
-            -H "Authorization: Bearer ${{ steps.generate_app_token.outputs.token }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/check-runs \
-            -d '{
-              "name": "Wait for Test Results",
-              "head_sha": "'${HEAD_SHA}'",
-              "status": "in_progress"
-            }'
-
-      - name: List Check Runs
-        id: list_check_runs
-        run: |
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            HEAD_SHA="${{ github.event.pull_request.head.sha }}"
-          else
-            HEAD_SHA="${{ github.sha }}"
-          fi
-          curl -H "Authorization: Bearer ${{ steps.generate_app_token.outputs.token }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/commits/${HEAD_SHA}/check-runs > check_runs.json
-          cat check_runs.json
-
-      - name: Extract Check Run ID
-        id: extract_check_run_id
-        run: |
-          CHECK_RUN_ID=$(jq -r '.check_runs[] | select(.name == "Wait for Test Results" and .status == "in_progress") | .id' check_runs.json | tail -n 1)
-          if [[ -z "$CHECK_RUN_ID" || "$CHECK_RUN_ID" == "null" ]]; then
-            echo "Error: No in-progress check run found for 'Wait for Test Results'."
-            cat check_runs.json
-            exit 1
-          fi
-          echo "Extracted CHECK_RUN_ID: $CHECK_RUN_ID"
-          echo "CHECK_RUN_ID=$CHECK_RUN_ID" >> $GITHUB_ENV
+        uses: ./.github/actions/create-check-run
+        with:
+          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.private-key }}
+          repository: ${{ github.repository }}
+          check-name: "Wait for Test Results"
+          head-sha: ${{ env.HEAD_SHA }}
 
       - name: Wait for Test Results (with token refresh)
         uses: ./.github/actions/wait-for-check-run
@@ -72,7 +42,7 @@ jobs:
           app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.private-key }}
           repository: ${{ github.repository }}
-          check-run-id: ${{ env.CHECK_RUN_ID }}
+          check-run-id: ${{ steps.create_check_run.outputs.check-run-id }}
           poll-interval: 60
           window-seconds: 3600
           max-windows: 10

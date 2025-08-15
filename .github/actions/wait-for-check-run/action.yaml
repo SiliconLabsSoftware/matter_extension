@@ -48,23 +48,47 @@ runs:
           echo "Generating GitHub App token (window $((windows+1))/$MAX_WINDOWS)"
           token=$(npx actions-create-github-app-token --app-id "$APP_ID" --private-key "$PRIVATE_KEY")
           elapsed_time=0
+          window_start_time=$(date +%s)
+          
           while [[ "$elapsed_time" -lt "$WINDOW_SECONDS" ]]; do
+            echo "Checking status of check run $CHECK_RUN_ID (elapsed: ${elapsed_time}s)"
             response=$(curl -s -H "Authorization: Bearer $token" \
               -H "Accept: application/vnd.github.v3+json" \
               "https://api.github.com/repos/$REPO/check-runs/$CHECK_RUN_ID")
+            
+            # Check if the API call was successful
+            if [[ -z "$response" ]]; then
+              echo "Warning: Empty response from GitHub API"
+              sleep "$POLL_INTERVAL"
+              elapsed_time=$((elapsed_time + POLL_INTERVAL))
+              continue
+            fi
+            
             status=$(echo "$response" | jq -r '.status // empty')
             conclusion=$(echo "$response" | jq -r '.conclusion // empty')
+            
+            if [[ -z "$status" || "$status" == "null" ]]; then
+              echo "Warning: Unable to get status from response: $response"
+              sleep "$POLL_INTERVAL"
+              elapsed_time=$((elapsed_time + POLL_INTERVAL))
+              continue
+            fi
+            
+            echo "Check run status: $status"
             if [[ "$status" == "completed" ]]; then
-              echo "Check run completed: $conclusion"
+              echo "Check run completed with conclusion: $conclusion"
               echo "conclusion=$conclusion" >> $GITHUB_OUTPUT
               completed=true
               break
             fi
+            
             sleep "$POLL_INTERVAL"
-            elapsed_time=$((elapsed_time + POLL_INTERVAL))
+            current_time=$(date +%s)
+            elapsed_time=$((current_time - window_start_time))
           done
           windows=$((windows+1))
         done
+        
         if [[ "$completed" == "false" ]]; then
           echo "Check run did not complete in time. Marking as timed_out."
           echo "conclusion=timed_out" >> $GITHUB_OUTPUT

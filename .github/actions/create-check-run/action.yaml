@@ -1,0 +1,62 @@
+name: create-check-run
+description: "Creates a GitHub check run and returns the check run ID"
+
+inputs:
+  app-id:
+    required: true
+    description: 'GitHub App ID'
+  private-key:
+    required: true
+    description: 'GitHub App private key'
+  repository:
+    required: true
+    description: 'GitHub repository (owner/repo)'
+  check-name:
+    required: true
+    description: 'Name of the check run'
+  head-sha:
+    required: true
+    description: 'SHA of the commit'
+
+outputs:
+  check-run-id:
+    description: 'ID of the created check run'
+    value: ${{ steps.create_and_extract.outputs.check-run-id }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Create Check Run and Extract ID
+      id: create_and_extract
+      shell: bash
+      env:
+        APP_ID: ${{ inputs.app-id }}
+        PRIVATE_KEY: ${{ inputs.private-key }}
+        REPO: ${{ inputs.repository }}
+        CHECK_NAME: ${{ inputs.check-name }}
+        HEAD_SHA: ${{ inputs.head-sha }}
+      run: |
+        set -e
+        echo "Generating GitHub App token for check run creation"
+        token=$(npx actions-create-github-app-token --app-id "$APP_ID" --private-key "$PRIVATE_KEY")
+        
+        echo "Creating check run: $CHECK_NAME"
+        response=$(curl -s -X POST \
+          -H "Authorization: Bearer $token" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/$REPO/check-runs \
+          -d '{
+            "name": "'"$CHECK_NAME"'",
+            "head_sha": "'"$HEAD_SHA"'",
+            "status": "in_progress"
+          }')
+        
+        check_run_id=$(echo "$response" | jq -r '.id // empty')
+        if [[ -z "$check_run_id" || "$check_run_id" == "null" ]]; then
+          echo "Error: Failed to create check run"
+          echo "Response: $response"
+          exit 1
+        fi
+        
+        echo "Created check run with ID: $check_run_id"
+        echo "check-run-id=$check_run_id" >> $GITHUB_OUTPUT
