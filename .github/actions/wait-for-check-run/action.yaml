@@ -1,0 +1,71 @@
+name: wait-for-check-run
+description: "Waits for a GitHub check run to complete, refreshing token as needed."
+
+inputs:
+  app-id:
+    required: true
+    description: 'GitHub App ID'
+  private-key:
+    required: true
+    description: 'GitHub App private key'
+  repository:
+    required: true
+    description: 'GitHub repository (owner/repo)'
+  check-run-id:
+    required: true
+    description: 'ID of the check run to wait for'
+  poll-interval:
+    required: false
+    default: '60'
+    description: 'Polling interval in seconds'
+  window-seconds:
+    required: false
+    default: '3600'
+    description: 'Token refresh window in seconds'
+  max-windows:
+    required: false
+    default: '10'
+    description: 'Maximum number of token windows'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Wait for Check Run with Token Refresh
+      shell: bash
+      env:
+        APP_ID: ${{ inputs.app-id }}
+        PRIVATE_KEY: ${{ inputs.private-key }}
+        REPO: ${{ inputs.repository }}
+        CHECK_RUN_ID: ${{ inputs.check-run-id }}
+        POLL_INTERVAL: ${{ inputs.poll-interval }}
+        WINDOW_SECONDS: ${{ inputs.window-seconds }}
+        MAX_WINDOWS: ${{ inputs.max-windows }}
+      run: |
+        set -e
+        windows=0
+        completed=false
+        while [[ "$windows" -lt "$MAX_WINDOWS" && "$completed" == "false" ]]; do
+          echo "Generating GitHub App token (window $((windows+1))/$MAX_WINDOWS)"
+          token=$(npx actions-create-github-app-token --app-id "$APP_ID" --private-key "$PRIVATE_KEY")
+          elapsed_time=0
+          while [[ "$elapsed_time" -lt "$WINDOW_SECONDS" ]]; do
+            response=$(curl -s -H "Authorization: Bearer $token" \
+              -H "Accept: application/vnd.github.v3+json" \
+              "https://api.github.com/repos/$REPO/check-runs/$CHECK_RUN_ID")
+            status=$(echo "$response" | jq -r '.status // empty')
+            conclusion=$(echo "$response" | jq -r '.conclusion // empty')
+            if [[ "$status" == "completed" ]]; then
+              echo "Check run completed: $conclusion"
+              echo "conclusion=$conclusion" >> $GITHUB_OUTPUT
+              completed=true
+              break
+            fi
+            sleep "$POLL_INTERVAL"
+            elapsed_time=$((elapsed_time + POLL_INTERVAL))
+          done
+          windows=$((windows+1))
+        done
+        if [[ "$completed" == "false" ]]; then
+          echo "Check run did not complete in time. Marking as timed_out."
+          echo "conclusion=timed_out" >> $GITHUB_OUTPUT
+        fi
