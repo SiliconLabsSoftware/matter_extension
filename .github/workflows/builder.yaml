@@ -37,6 +37,14 @@ jobs:
               run: |
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
 
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                submodules: 'false' # Do not initialize submodules automatically
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                git config --global --add safe.directory /__w/matter_extension/matter_extension
             - name: Initialize required submodules
               shell: bash
               run: |
@@ -60,7 +68,7 @@ jobs:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
                   example-app: ${{ inputs.example-app }}
-                  build-script: "./slc/build.sh"
+                  build-script: "python3 slc/sl_build.py"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
 
