@@ -42,6 +42,7 @@ def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=Fals
     print(f"Starting artifact download and upload process for workflow {workflow_id}")
     try:
         artifact_info = _download_and_extract_artifacts(workflow_id)
+        delete_artifacts(workflow_id)
         print("Uploading individual artifacts to UBAI.")
         _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, run_number)
         print("Uploading merged artifacts to UBAI and Artifactory.")
@@ -123,6 +124,18 @@ def _download_and_extract_artifacts(workflow_id):
         'artifact_name': artifact_info['name'],
         'extracted_folder': extracted_folder
     }
+
+def delete_artifacts(workflow_id):
+    """
+    Deletes the specified artifacts from the build server.
+    """
+    # Implement the logic to delete artifacts based on the workflow_id
+    artifact_info = _get_artifact_info(workflow_id)
+    artifact_url = artifact_info['download_url']
+    # Delete the artifact file
+    delete_url = "-X DELETE " + artifact_url
+    _make_github_api_request(delete_url)
+    print(f"Deleted artifact: {artifact_info['name']}")
 
 
 def _get_artifact_info(workflow_id):
