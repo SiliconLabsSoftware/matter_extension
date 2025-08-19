@@ -55,7 +55,8 @@ jobs:
               uses: ./.github/actions/install-tools
 
             - name: Build ${{ inputs.example-app }}
-              uses: SiliconLabsSoftware/matter_build_action@3fa7357e526337fb8f370a20158b8857aeb708ab
+              id: build-step
+              uses: SiliconLabsSoftware/matter_build_action@feature/return_skip
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
@@ -65,6 +66,7 @@ jobs:
                   build-type: ${{ inputs.build-type }}
 
             - name: Upload artifacts
+              if: steps.build-step.outputs.should-skip != 'true'
               uses: actions/upload-artifact@v4
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
