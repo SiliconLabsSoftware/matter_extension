@@ -129,13 +129,22 @@ def delete_artifacts(workflow_id):
     """
     Deletes the specified artifacts from the build server.
     """
+    import requests
     # Implement the logic to delete artifacts based on the workflow_id
     artifact_info = _get_artifact_info(workflow_id)
-    artifact_url = artifact_info['download_url']
-    # Delete the artifact file
-    delete_url = "-X DELETE " + artifact_url
-    _make_github_api_request(delete_url)
-    print(f"Deleted artifact: {artifact_info['name']}")
+    # The delete URL should be the artifact URL without /zip suffix
+    artifact_url = artifact_info['download_url'].replace('/zip', '')
+    print(f"Making DELETE request to: {artifact_url}")
+    
+    # Make DELETE request to delete the artifact
+    response = requests.delete(url=artifact_url, headers=config.github_headers)
+    
+    if response.status_code not in [204, 200]:
+        error_msg = f"Failed to delete artifact. Status: {response.status_code}, Response: {response.text}"
+        print(error_msg)
+        raise RuntimeError(error_msg)
+    
+    print(f"Successfully deleted artifact: {artifact_info['name']}")
 
 
 def _get_artifact_info(workflow_id):
