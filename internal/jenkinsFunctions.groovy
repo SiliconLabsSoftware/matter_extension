@@ -318,8 +318,7 @@ def actionWithRetry(Closure action)
 }
 
 def approvePullRequestOnSuccess(sqa_tests_result) {
-    if(env.CHANGE_ID && env.JOB_NAME.contains("Matter extension GitHub/"))
-    {
+    if(env.CHANGE_ID) {
         withCredentials([
             usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
         ])
