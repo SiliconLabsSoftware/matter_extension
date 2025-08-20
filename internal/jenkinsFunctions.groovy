@@ -332,18 +332,13 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
                 reviewBody = 'Jenkins CI tests passed - auto-approving PR'
             }
             
-            def reviewData = """
-            {
-                "event": "${reviewEvent}",
-                "body": "${reviewBody}"
-            }
-            """
+            def reviewData = "{\"event\":\"${reviewEvent}\",\"body\":\"${reviewBody}\"}"
             
             echo "Updating PR ${env.CHANGE_ID} with review event: ${reviewEvent}"
             
             def response = sh(script: """
                 curl -s -w "HTTPSTATUS:%{http_code}" -X POST \\
-                     -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \\
+                     -H "Authorization: token \${GITHUB_ACCESS_TOKEN}" \\
                      -H "Accept: application/vnd.github+json" \\
                      -H "Content-Type: application/json" \\
                      -d '${reviewData}' \\
