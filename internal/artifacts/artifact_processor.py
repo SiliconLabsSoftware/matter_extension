@@ -9,6 +9,7 @@ This module handles all artifact processing operations including:
 """
 
 import os
+import requests
 import shutil
 import sys
 import zipfile
@@ -42,6 +43,7 @@ def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=Fals
     print(f"Starting artifact download and upload process for workflow {workflow_id}")
     try:
         artifact_info = _download_and_extract_artifacts(workflow_id)
+        delete_artifacts(workflow_id)
         print("Uploading individual artifacts to UBAI.")
         _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, run_number)
         print("Uploading merged artifacts to UBAI and Artifactory.")
@@ -124,6 +126,26 @@ def _download_and_extract_artifacts(workflow_id):
         'extracted_folder': extracted_folder
     }
 
+def delete_artifacts(workflow_id):
+    """
+    Deletes the specified artifacts from the build server.
+    """
+    # Implement the logic to delete artifacts based on the workflow_id
+    artifact_info = _get_artifact_info(workflow_id)
+    # Use the artifact URL for deletion (not the download URL)
+    artifact_url = artifact_info['url']
+    print(f"Making DELETE request to: {artifact_url}")
+    
+    # Make DELETE request to delete the artifact
+    response = requests.delete(url=artifact_url, headers=config.github_headers)
+    
+    if response.status_code not in [204, 200]:
+        error_msg = f"Failed to delete artifact. Status: {response.status_code}, Response: {response.text}"
+        print(error_msg)
+        raise RuntimeError(error_msg)
+    
+    print(f"Successfully deleted artifact: {artifact_info['name']}")
+
 
 def _get_artifact_info(workflow_id):
     """
@@ -133,7 +155,7 @@ def _get_artifact_info(workflow_id):
         workflow_id (int): Workflow run ID
         
     Returns:
-        dict: Artifact information containing download_url and name
+        dict: Artifact information containing download_url, name, id, and url
         
     Raises:
         RuntimeError: If API request fails or no artifacts found
@@ -147,7 +169,9 @@ def _get_artifact_info(workflow_id):
     artifact = artifacts_data['artifacts'][0]
     return {
         'download_url': artifact['archive_download_url'],
-        'name': artifact['name'] + '.zip'
+        'name': artifact['name'] + '.zip',
+        'id': artifact['id'],
+        'url': artifact['url']
     }
 
 
