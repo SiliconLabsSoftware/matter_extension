@@ -320,13 +320,13 @@ def actionWithRetry(Closure action)
 def approvePullRequestOnSuccess(sqa_tests_result) {
     if(env.CHANGE_ID) {
         withCredentials([
-            usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+            usernamePassword(credentialsId: 'silabsbot-github-token', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
         ])
         {
             def reviewEvent = 'REQUEST_CHANGES'
             def reviewBody = 'Jenkins CI tests failed - requesting changes'
             
-            if(sqa_tests_result == 'REQUEST_CHANGES')
+            if(sqa_tests_result == 'PASS')
             {
                 reviewEvent = 'APPROVE'
                 reviewBody = 'Jenkins CI tests passed - auto-approving PR'
