@@ -195,6 +195,7 @@ jobs:
       - validate-package-field
       - validate-file-path-lengths
       - validate-matter-templates
+      - validate-components
     if: always()
     steps:
       - name: Merge validation artifacts
