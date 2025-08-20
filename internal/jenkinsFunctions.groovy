@@ -316,4 +316,40 @@ def actionWithRetry(Closure action)
 	    }
 	}
 }
+
+def approvePullRequestOnSuccess(sqa_tests_result) {
+    if(env.CHANGE_ID && env.JOB_NAME.contains("Matter extension GitHub/"))
+    {
+        withCredentials([
+            usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+        ])
+        {
+            def reviewEvent = 'DISMISS'
+            def reviewBody = 'Jenkins CI tests failed - removing approval'
+            
+            if(sqa_tests_result == 'PASS')
+            {
+                reviewEvent = 'APPROVE'
+                reviewBody = 'Jenkins CI tests passed - auto-approving PR'
+            }
+            
+            def reviewData = """
+            {
+                "event": "${reviewEvent}",
+                "body": "${reviewBody}"
+            }
+            """
+            
+            sh(script: """
+                curl -X POST \\
+                     -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \\
+                     -H "Accept: application/vnd.github.v3+json" \\
+                     -H "Content-Type: application/json" \\
+                     -d '${reviewData}' \\
+                     "https://api.github.com/repos/SiliconLabsSoftware/matter_extension/pulls/${env.CHANGE_ID}/reviews"
+            """, label: 'update GitHub pull request approval status')
+        }
+    }
+}
+
 return this
