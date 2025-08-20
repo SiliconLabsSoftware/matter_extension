@@ -1,0 +1,72 @@
+name: Artifact Cleanup
+
+on:
+  schedule:
+    # Run daily at 2 AM UTC to clean up old artifacts
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      days_to_keep:
+        description: 'Number of days to keep artifacts'
+        required: false
+        default: '7'
+        type: string
+
+permissions:
+  contents: read
+  actions: write  # Required for deleting artifacts
+  metadata: read
+
+jobs:
+  cleanup:
+    name: Delete Old Artifacts
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Delete old artifacts
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const daysToKeep = ${{ github.event.inputs.days_to_keep || 7 }};
+          const cutoffDate = new Date();
+          cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+          
+          console.log(`Deleting artifacts older than ${daysToKeep} days (before ${cutoffDate.toISOString()})`);
+          
+          // Get all artifacts for the repository
+          const artifacts = await github.rest.actions.listArtifactsForRepo({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            per_page: 100
+          });
+          
+          let deletedCount = 0;
+          
+          for (const artifact of artifacts.data.artifacts) {
+            const artifactDate = new Date(artifact.created_at);
+            
+            if (artifactDate < cutoffDate) {
+              console.log(`Deleting artifact: ${artifact.name} (created: ${artifact.created_at})`);
+              
+              try {
+                await github.rest.actions.deleteArtifact({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  artifact_id: artifact.id
+                });
+                deletedCount++;
+              } catch (error) {
+                console.error(`Failed to delete artifact ${artifact.name}: ${error.message}`);
+              }
+            } else {
+              console.log(`Keeping artifact: ${artifact.name} (created: ${artifact.created_at})`);
+            }
+          }
+          
+          console.log(`Cleanup completed. Deleted ${deletedCount} artifacts.`);
+    
+    - name: Summary
+      run: |
+        echo "Artifact cleanup workflow completed successfully"
+        echo "This workflow demonstrates the use of 'actions: write' permission"
+        echo "which is required to delete artifacts via the GitHub API"
