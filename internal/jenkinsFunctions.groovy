@@ -345,14 +345,20 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
                      "https://api.github.com/repos/SiliconLabsSoftware/matter_extension/pulls/${env.CHANGE_ID}/reviews"
             """, returnStdout: true, label: 'update GitHub pull request approval status')
             
-            def httpStatus = response.tokenize('HTTPSTATUS:')[1]
-            def responseBody = response.tokenize('HTTPSTATUS:')[0]
+            echo "Full curl response: ${response}"
             
-            if (httpStatus == '200') {
+            def parts = response.split('HTTPSTATUS:')
+            def responseBody = parts.length > 0 ? parts[0].trim() : ""
+            def httpStatus = parts.length > 1 ? parts[1].trim() : ""
+            
+            echo "HTTP Status: '${httpStatus}'"
+            echo "Response Body: '${responseBody}'"
+            
+            if (httpStatus == '200' || httpStatus == '201') {
                 echo "✅ Successfully ${reviewEvent.toLowerCase()}d PR ${env.CHANGE_ID}"
-                echo "Response: ${responseBody}"
+                echo "GitHub API Response: ${responseBody}"
             } else {
-                error("❌ Failed to update PR approval status. HTTP Status: ${httpStatus}, Response: ${responseBody}")
+                error("❌ Failed to update PR approval status. HTTP Status: '${httpStatus}', Response: '${responseBody}'")
             }
         }
     } else {
