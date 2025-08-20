@@ -16,7 +16,7 @@ pipeline
                     pipelineFunctions = load 'internal/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
                     def sqa_tests_result = "PASS"
-                    approvePullRequestOnSuccess(sqa_tests_result)
+                    pipelineFunctions.approvePullRequestOnSuccess(sqa_tests_result)
                 }
             }
         }
@@ -91,7 +91,7 @@ pipeline
 
                     // echo "commit_sha: ${commit_sha}"
                     def sqa_tests_result = "PASS"
-                    approvePullRequestOnSuccess(sqa_tests_result)
+                    pipelineFunctions.approvePullRequestOnSuccess(sqa_tests_result)
                     if (!bypass_send_results_gh){
                         pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
                     }
