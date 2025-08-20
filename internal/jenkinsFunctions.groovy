@@ -343,7 +343,7 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
             sh(script: """
                 curl -X POST \\
                      -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \\
-                     -H "Accept: application/vnd.github.v3+json" \\
+                     -H "Accept: application/vnd.github+json" \\
                      -H "Content-Type: application/json" \\
                      -d '${reviewData}' \\
                      "https://api.github.com/repos/SiliconLabsSoftware/matter_extension/pulls/${env.CHANGE_ID}/reviews"
