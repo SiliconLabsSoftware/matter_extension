@@ -16,6 +16,7 @@ include:
     file_list:
     - path: SoftwareDiagnostics.h
     - path: AdministratorCommissioning.h
+    - path: GeneralDiagnostics.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h
