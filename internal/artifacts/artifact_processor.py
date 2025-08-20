@@ -9,6 +9,7 @@ This module handles all artifact processing operations including:
 """
 
 import os
+import requests
 import shutil
 import sys
 import zipfile
@@ -129,11 +130,10 @@ def delete_artifacts(workflow_id):
     """
     Deletes the specified artifacts from the build server.
     """
-    import requests
     # Implement the logic to delete artifacts based on the workflow_id
     artifact_info = _get_artifact_info(workflow_id)
-    # The delete URL should be the artifact URL without /zip suffix
-    artifact_url = artifact_info['download_url'].replace('/zip', '')
+    # Use the artifact URL for deletion (not the download URL)
+    artifact_url = artifact_info['url']
     print(f"Making DELETE request to: {artifact_url}")
     
     # Make DELETE request to delete the artifact
@@ -155,7 +155,7 @@ def _get_artifact_info(workflow_id):
         workflow_id (int): Workflow run ID
         
     Returns:
-        dict: Artifact information containing download_url and name
+        dict: Artifact information containing download_url, name, id, and url
         
     Raises:
         RuntimeError: If API request fails or no artifacts found
@@ -169,7 +169,9 @@ def _get_artifact_info(workflow_id):
     artifact = artifacts_data['artifacts'][0]
     return {
         'download_url': artifact['archive_download_url'],
-        'name': artifact['name'] + '.zip'
+        'name': artifact['name'] + '.zip',
+        'id': artifact['id'],
+        'url': artifact['url']
     }
 
 
