@@ -326,7 +326,7 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
             def reviewEvent = 'REQUEST_CHANGES'
             def reviewBody = 'Jenkins CI tests failed - requesting changes'
             
-            if(sqa_tests_result == 'PASS')
+            if(sqa_tests_result == 'REQUEST_CHANGES')
             {
                 reviewEvent = 'APPROVE'
                 reviewBody = 'Jenkins CI tests passed - auto-approving PR'
