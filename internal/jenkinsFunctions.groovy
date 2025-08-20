@@ -324,8 +324,8 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
             usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
         ])
         {
-            def reviewEvent = 'DISMISS'
-            def reviewBody = 'Jenkins CI tests failed - removing approval'
+            def reviewEvent = 'REQUEST_CHANGES'
+            def reviewBody = 'Jenkins CI tests failed - requesting changes'
             
             if(sqa_tests_result == 'PASS')
             {
@@ -340,15 +340,29 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
             }
             """
             
-            sh(script: """
-                curl -X POST \\
+            echo "Updating PR ${env.CHANGE_ID} with review event: ${reviewEvent}"
+            
+            def response = sh(script: """
+                curl -s -w "HTTPSTATUS:%{http_code}" -X POST \\
                      -H "Authorization: token ${GITHUB_ACCESS_TOKEN}" \\
                      -H "Accept: application/vnd.github+json" \\
                      -H "Content-Type: application/json" \\
                      -d '${reviewData}' \\
                      "https://api.github.com/repos/SiliconLabsSoftware/matter_extension/pulls/${env.CHANGE_ID}/reviews"
-            """, label: 'update GitHub pull request approval status')
+            """, returnStdout: true, label: 'update GitHub pull request approval status')
+            
+            def httpStatus = response.tokenize('HTTPSTATUS:')[1]
+            def responseBody = response.tokenize('HTTPSTATUS:')[0]
+            
+            if (httpStatus == '200') {
+                echo "✅ Successfully ${reviewEvent.toLowerCase()}d PR ${env.CHANGE_ID}"
+                echo "Response: ${responseBody}"
+            } else {
+                error("❌ Failed to update PR approval status. HTTP Status: ${httpStatus}, Response: ${responseBody}")
+            }
         }
+    } else {
+        echo "Skipping PR approval: No CHANGE_ID found or not a GitHub Matter extension job"
     }
 }
 
