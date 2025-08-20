@@ -252,6 +252,7 @@ def _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
     for workflow in workflow_runs:
+        print(f"Workflow: name={workflow.get('name')}, head_branch={workflow.get('head_branch')}, head_sha={workflow.get('head_sha')}, run_number={workflow.get('run_number')}")
         if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
             _validate_branch_workflow(workflow)
             return _extract_workflow_info(workflow)
