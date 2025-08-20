@@ -1,5 +1,4 @@
 name: Build Dev apps
-
 on:
     push:
         branches:
@@ -7,9 +6,8 @@ on:
             - "release_*"
     pull_request:
         branches:
-            - main
-            - "release_*"
-            - "feature/*" # TODO: Remove this after validation
+            - '**'
+            
     workflow_dispatch:
         inputs:
             build-type:
@@ -34,13 +32,17 @@ jobs:
         steps:
             - name: Set build-type based on event
               id: set-build-type
-              run: |
+              run: |                  
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                      fi
                   fi
 
     validate-metadata:
@@ -139,7 +141,7 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
+    
     build-refrigerator-app:
         name: Build Refrigerator App
         needs: set-build-type
@@ -150,7 +152,7 @@ jobs:
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
-
+    
     build-performance-test-app:
         name: Build Performance Test App
         needs: set-build-type
@@ -186,7 +188,7 @@ jobs:
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
+    
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
@@ -215,7 +217,7 @@ jobs:
               with:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"     
 
     wait-for-test-results:
         name: Wait for Test Results

@@ -1,6 +1,20 @@
+
 {
     "standard": {
-
+        "default": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": [""]
+            }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ]
+    },
+    "full": {
         "default": [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
