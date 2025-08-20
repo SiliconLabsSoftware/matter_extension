@@ -69,5 +69,5 @@ jobs:
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: out/*/*/artifact
-                  if-no-files-found: warn
+                  if-no-files-found: ignore
                   overwrite: true
