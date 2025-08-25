@@ -1,0 +1,11 @@
+parameters: []
+
+constants:
+  - name: workspace_name
+    value: my_workspace
+
+steps:
+  # Create production image
+- task: copy
+  input: "{{build_dir}}/{{project_name}}.rps"
+  output: ../artifact/{{project_name}}.rps
