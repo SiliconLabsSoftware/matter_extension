@@ -7,5 +7,5 @@ constants:
 steps:
   # Create production image
 - task: copy
-  input: "{{build_dir}}/{{project_name}}.rps"
-  output: ../artifact/{{project_name}}.rps
+  input: "{{application_binary}}"
+  output: artifact/{{project_name}}.rps
