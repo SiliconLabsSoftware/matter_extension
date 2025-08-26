@@ -1,0 +1,94 @@
+name: Generate Matter Metadata
+
+on: [workflow_dispatch, push]
+
+jobs:
+  generate-metadata:
+    runs-on: silabs-internal
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup SLT
+        uses: SiliconLabsInternal/action-setup-slt@main
+
+      - name: Setup Conan
+        run: |
+          conan config install package/conan_config
+          conan remote list
+          conan config home
+          conan config show "*"
+
+      - name: Prepare example package
+        run: |
+          git clean -fxd
+          cp package/matter_metadata/* .
+
+      - name: Generate Studio Metadata
+        uses: SiliconLabsInternal/hwfilter/action/hwstudio@template
+        id: studio-metadata
+        with:
+          pattern: 'slc/sample-app/**/**/*.slcp'
+          config: matter_metadata.yml
+          package_includes: matter_metadata
+          quality_excludes: internal
+          output: matter_templates.xml
+
+      - name: Print Generated File Content
+        run: |
+          echo "=== Generated matter_templates.xml Content ==="
+          if [ -f "matter_templates.xml" ]; then
+            echo "File size: $(wc -c < matter_templates.xml) bytes"
+            echo "Line count: $(wc -l < matter_templates.xml) lines"
+            echo "Descriptor count: $(grep -c '<descriptors' matter_templates.xml || echo '0')"
+            echo ""
+            echo "=== FILE CONTENT START ==="
+            cat matter_templates.xml
+            echo ""
+            echo "=== FILE CONTENT END ==="
+          else
+            echo "matter_templates.xml not found"
+            ls -la
+          fi
+
+      - name: Prepare Upload Directory
+        run: |
+          mkdir -p actions_generated
+          if [ -f "matter_templates.xml" ]; then
+            cp matter_templates.xml actions_generated/
+            echo "Copied generated file to actions_generated/"
+          else
+            echo "Generated file not found for upload"
+            exit 1
+          fi
+
+      - name: Compare Generated vs Original
+        run: |
+          echo "=== COMPARISON: Generated vs Original ==="
+          
+          # Get the original file from git
+          git show HEAD:matter_templates.xml > matter_templates_original.xml
+          
+          if [ -f "matter_templates_original.xml" ] && [ -f "matter_templates.xml" ]; then
+            echo "Original: $(wc -l < matter_templates_original.xml) lines, $(grep -c '<descriptors' matter_templates_original.xml || echo '0') descriptors"
+            echo "Generated: $(wc -l < matter_templates.xml) lines, $(grep -c '<descriptors' matter_templates.xml || echo '0') descriptors"
+            echo ""
+            
+            if cmp -s matter_templates_original.xml matter_templates.xml; then
+              echo "Files are identical"
+            else
+              echo "Files differ:"
+              diff -u matter_templates_original.xml matter_templates.xml | head -50 || true
+            fi
+            
+            # Copy original to upload directory for download
+            cp matter_templates_original.xml actions_generated/
+          else
+            echo "Cannot compare - missing files"
+          fi
+
+      - name: Upload Matter Metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: matter-templates-xml
+          path: actions_generated/
