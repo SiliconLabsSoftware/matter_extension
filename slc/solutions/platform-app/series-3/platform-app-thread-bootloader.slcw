@@ -1,5 +1,6 @@
 label: platform-app-thread-bootloader
 quality: production
+package: matter
 description: Matter workspace container both a Matter bootloader and Platform Thread App on Series 3
 project:
   - path: ../../../sample-app/platform-app/efr32/platform-app-thread.slcp

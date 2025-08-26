@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """
-This script scans a specified directory for `.slcc`, `.slcp`, and `.slce` files and verifies whether they contain 
-specific strings (`package: matter` or `id: matter`). It also triggers the `verify_vendor_silabs` function to 
+This script scans a specified directory for `.slcc`, `.slcp`, `.slce`, and `.slcw` files and verifies whether they
+contain specific strings (`package: matter` or `id: matter`). It also triggers the `verify_vendor_silabs` function to
 check for the presence of `vendor: silabs` in the same files. It excludes the `third_party` directory during the scan.
 
 Usage:
@@ -12,7 +12,7 @@ Example:
     python3 verify_package_matter.py --directory /example/directory --verbose
 
 Arguments:
-    - --directory: The directory to scan for `.slcc`, `.slcp`, and `.slce` files.
+    - --directory: The directory to scan for `.slcc`, `.slcp`, `.slce`, and `.slcw` files.
     - --verbose: Enable detailed output.
 
 Output:
@@ -92,11 +92,11 @@ def verify_package_matter(file_path):
 
 def main():
     """
-    Main function to parse .slcc, .slcp, and .slce files and verify 'package: matter' or 'id: matter'.
+    Main function to parse .slcc, .slcp, .slce, and .slcw files and verify 'package: matter' or 'id: matter'.
     Also triggers `VerifyVendorSilabs` for additional checks.
     """
-    parser = argparse.ArgumentParser(description="Scan .slcc, .slcp, and .slce files for 'package: matter' or 'id: matter'.")
-    parser.add_argument("--directory", type=str, required=True, help="Directory to scan for .slcc, .slcp, and .slce files.")
+    parser = argparse.ArgumentParser(description="Scan .slcc, .slcp, .slce, and .slcw files for 'package: matter' or 'id: matter'.")
+    parser.add_argument("--directory", type=str, required=True, help="Directory to scan for .slcc, .slcp, .slce, and .slcw files.")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging.")
     args = parser.parse_args()
 
@@ -104,14 +104,14 @@ def main():
     configure_logging(args.verbose)
 
     directory = args.directory
-    extensions = ('.slcc', '.slcp', '.slce')
+    extensions = ('.slcc', '.slcp', '.slce', '.slcw')
     files = find_files_with_extension(directory, extensions)
 
     # Instantiate VerifyVendorSilabs
     verifier = VerifyVendorSilabs(verbose=args.verbose)
 
     if not files:
-        logger.info("No .slcc, .slcp, or .slce files found.")
+        logger.info("No .slcc, .slcp, .slce, or .slcw files found.")
         return
 
     missing_files = []
@@ -147,7 +147,7 @@ def main():
         )
 
     if not missing_files and not missing_vendor_files:
-        logger.info("All .slcc, .slcp, and .slce files contain the required strings.")
+        logger.info("All .slcc, .slcp, .slcw, and .slce files contain the required strings.")
 
 if __name__ == "__main__":
     main()
