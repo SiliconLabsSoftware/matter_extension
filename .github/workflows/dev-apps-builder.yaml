@@ -152,7 +152,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance-test-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
 
     build-zigbee-matter-light-app:
