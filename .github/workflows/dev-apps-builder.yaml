@@ -145,7 +145,6 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
     
@@ -156,7 +155,6 @@ jobs:
         with:
             example-app: "performance-test-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
@@ -172,7 +170,6 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
