@@ -145,7 +145,6 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-wf200-support: false
             ncp-rs911x-support: false
     
     build-performance-test-app:
@@ -154,8 +153,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance-test-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-wf200-support: false
+            build-type: ${{ needs.set-build-type.outputs.build-type }
             ncp-rs911x-support: false
             wifi-soc-support: false
 
@@ -170,7 +168,6 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            ncp-wf200-support: false
             ncp-rs911x-support: false
             wifi-soc-support: false
     
