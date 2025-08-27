@@ -1,10 +1,13 @@
 name: Validate Metadata
 
 on:
-  workflow_run:
-    workflows: ["Build Dev apps"]
-    types:
-      - requested
+  push:
+      branches:
+          - main
+          - "release_*"
+  pull_request:
+        branches:
+            - '**'
   workflow_dispatch:
   workflow_call:
     inputs:
