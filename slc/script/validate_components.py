@@ -150,9 +150,11 @@ def validate_upgrade_file(directory: str, slc_cmd: str, stash: bool = False) -> 
         logger.info("Upgrade file validation unsuccessful.\n")
         print_cleansed(results, stash)
 
+
 def parse_args(argv: List[str]) -> argparse.Namespace:
     """!
     @brief Parse command line arguments.
+
     @param argv The list of command-line arguments (excluding program name).
     @return Parsed arguments namespace.
     """
