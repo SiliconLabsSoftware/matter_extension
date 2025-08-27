@@ -1,6 +1,11 @@
 name: Validate Metadata
 
 on:
+  workflow_run:
+    workflows: ["Build Dev apps"]
+    types:
+      - requested
+  workflow_dispatch:
   workflow_call:
     inputs:
       build-type: 
@@ -201,6 +206,6 @@ jobs:
       - name: Merge validation artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: "validate-metadata-${{ inputs.build-type }}"
+          name: "validate-metadata-results"
           delete-merged: true
           pattern: "*-validation"
