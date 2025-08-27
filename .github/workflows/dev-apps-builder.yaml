@@ -1,4 +1,5 @@
 name: Build Dev apps
+
 on:
     push:
         branches:
@@ -140,8 +141,8 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff-plug-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-    
+            build-type: ${{ needs.set-build-type.outputs.build-type }}    
+
     build-refrigerator-app:
         name: Build Refrigerator App
         needs: set-build-type
@@ -152,7 +153,7 @@ jobs:
             ncp-917-support: false
             ncp-wf200-support: false
             ncp-rs911x-support: false
-    
+
     build-performance-test-app:
         name: Build Performance Test App
         needs: set-build-type
@@ -188,7 +189,7 @@ jobs:
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-    
+
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
@@ -218,6 +219,7 @@ jobs:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"     
+
 
     wait-for-test-results:
         name: Wait for Test Results

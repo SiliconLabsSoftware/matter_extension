@@ -1,4 +1,3 @@
-
 {
     "standard": {
         "default": [
@@ -15,6 +14,7 @@
         ]
     },
     "full": {
+
         "default": [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],

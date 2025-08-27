@@ -25,6 +25,7 @@ metadata:
     license: "Apache 2.0"
 source:
 -   path: third_party/matter_sdk/src/app/data-model-provider/ActionReturnStatus.cpp
+-   path: third_party/matter_sdk/src/app/data-model-provider/EventsGenerator.cpp
 -   path: third_party/matter_sdk/src/app/data-model-provider/ProviderMetadataTree.cpp
 -   path: third_party/matter_sdk/src/app/data-model-provider/MetadataLookup.cpp
 
