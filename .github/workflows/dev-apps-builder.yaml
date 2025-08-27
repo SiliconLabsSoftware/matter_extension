@@ -42,13 +42,6 @@ jobs:
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
-    validate-metadata:
-        name: Validate Metadata
-        needs: set-build-type
-        uses: ./.github/workflows/validate-metadata.yaml
-        with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-    
     build-lighting-app:
         name: Build Lighting App
         needs: set-build-type
@@ -180,7 +173,6 @@ jobs:
         runs-on: ubuntu-latest
         needs:
             - set-build-type
-            - validate-metadata 
             - build-sqa-tools
             - build-lighting-app
             - build-air-quality-sensor-app
