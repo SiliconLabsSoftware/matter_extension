@@ -151,7 +151,6 @@ def validate_upgrade_file(directory: str, slc_cmd: str, stash: bool = False) -> 
         print_cleansed(results, stash)
 
 
-
 def parse_args(argv: List[str]) -> argparse.Namespace:
     """!
     @brief Parse command line arguments.
