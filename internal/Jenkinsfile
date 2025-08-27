@@ -138,6 +138,7 @@ pipeline
         {
             when {
                 expression { env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_") }
+
             }
             steps {
                 script {

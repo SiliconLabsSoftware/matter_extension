@@ -450,6 +450,12 @@
     ]
   },
   {
+    "clusterCode": "push_av_stream_transport-server",
+    "value": [
+      "%extension-matter%matter_push_av_stream_transport"
+    ]
+  },
+  {
     "clusterCode": "refrigerator alarm-server",
     "value": [
       "%extension-matter%matter_refrigerator_alarm"
