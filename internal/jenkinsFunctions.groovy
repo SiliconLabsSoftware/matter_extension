@@ -1,7 +1,7 @@
 def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
-    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    usernamePassword(credentialsId: 'github-app', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
         def output = sh(script: "python3 -u internal/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
@@ -47,7 +47,7 @@ def parse_upload_artifacts_output(output) {
 
 def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary) {
     withCredentials([
-    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    usernamePassword(credentialsId: 'github-app', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
         sh """
