@@ -2,6 +2,7 @@ name: CLA-Assistant
 ## This workflow is used for public repositories
 
 on:
+  push:
   workflow_dispatch:
  #issue_comment:
  #  types: [created]
