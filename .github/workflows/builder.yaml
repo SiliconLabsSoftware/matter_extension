@@ -28,14 +28,10 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
-                submodules: 'false' # Do not initialize submodules automatically
-            
-            - name: Mark repository as safe for Git
-              shell: bash
-              run: |
-                git config --global --add safe.directory /__w/matter_extension/matter_extension
+                submodules: 'false'
+                set-safe-directory: true
            
             - name: Initialize required submodules
               shell: bash

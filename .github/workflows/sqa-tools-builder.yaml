@@ -19,10 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: false
-    
+        set-safe-directory: true
+
     #zip Provision folder
     - name: Zip provisioning tool
       shell: bash
@@ -32,11 +33,6 @@ jobs:
         mkdir -p sqa-tools/
         mv "${file}" sqa-tools/
         echo "Provisioning tool zipped successfully: sqa-tools/${file}"
-
-    - name: Mark repository as safe for Git
-      shell: bash
-      run: |
-        git config --global --add safe.directory /__w/matter_extension/matter_extension
 
     - name: Initialize required submodules
       shell: bash
@@ -67,14 +63,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: false
-      
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
+          set-safe-directory: true
 
       - name: Initialize required submodules
         shell: bash
