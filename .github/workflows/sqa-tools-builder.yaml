@@ -138,9 +138,7 @@ jobs:
       - name: Create WiFi firmware directories
         shell: bash
         run: |
-          mkdir -p sqa-tools/WiFi-Firmware/siwx917
-          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.4
-          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.5
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917 sqa-tools/WiFi-Firmware/rs911x/{Evk_1.4,Evk_1.5}
 
       - name: Copy WiFi firmware files
         shell: bash
