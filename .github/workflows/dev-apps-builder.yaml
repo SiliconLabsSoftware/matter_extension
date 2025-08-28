@@ -7,9 +7,8 @@ on:
             - "release_*"
     pull_request:
         branches:
-            - main
-            - "release_*"
-            - "feature/*" # TODO: Remove this after validation
+            - '**'
+            
     workflow_dispatch:
         inputs:
             build-type:
@@ -34,13 +33,17 @@ jobs:
         steps:
             - name: Set build-type based on event
               id: set-build-type
-              run: |
+              run: |                  
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                      fi
                   fi
 
     validate-metadata:
@@ -138,7 +141,7 @@ jobs:
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff-plug-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ needs.set-build-type.outputs.build-type }}    
 
     build-refrigerator-app:
         name: Build Refrigerator App
@@ -215,7 +218,8 @@ jobs:
               with:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"     
+
 
     wait-for-test-results:
         name: Wait for Test Results
