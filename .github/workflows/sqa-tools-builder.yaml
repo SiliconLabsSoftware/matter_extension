@@ -28,10 +28,33 @@ jobs:
     - name: Zip provisioning tool
       shell: bash
       run: |
+        set -euo pipefail
+        # On error, show a small portion of the provision tree for debugging
+        trap 'echo "[ERROR] Provision zip step failed; sample tree:"; find provision -maxdepth 3 -type f 2>/dev/null | head -100' ERR
+        # Validate source directory exists
+        [ -d provision ] || { echo "Missing provision directory" >&2; exit 1; }
         file="provision.zip"
-        zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
-        mkdir -p sqa-tools/
+        echo "Creating ${file} (excluding hardware-specific and cache paths)..."
+        zip -r -9 -X "${file}" provision \
+          -x "provision/support/efr32*" \
+          -x "provision/support/si917*" \
+          -x "provision/modules/__pycache__/*"
+        # Ensure archive is not empty
+        if command -v zipinfo >/dev/null 2>&1; then
+          if ! zipinfo -1 "${file}" | grep -q .; then
+            echo "Archive ${file} is empty after exclusions; failing." >&2
+            exit 1
+          fi
+        else
+          # Fallback using unzip -l if zipinfo unavailable
+            if ! unzip -l "${file}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
+              echo "Archive ${file} appears empty; failing." >&2
+              exit 1
+            fi
+        fi
+        mkdir -p sqa-tools
         mv "${file}" sqa-tools/
+        echo "Archive size: $(du -h "sqa-tools/${file}" | cut -f1)"
         echo "Provisioning tool zipped successfully: sqa-tools/${file}"
 
     - name: Initialize required submodules

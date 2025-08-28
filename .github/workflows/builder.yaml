@@ -62,7 +62,7 @@ jobs:
                   build-type: ${{ inputs.build-type }}
 
             - name: Upload artifacts
-              uses: actions/upload-artifact@v5
+              uses: actions/upload-artifact@v4
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: out/*/*/artifact
