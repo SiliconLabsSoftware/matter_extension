@@ -1,0 +1,34 @@
+{
+    "standard": {
+
+        "default": [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": [""]
+            }
+        ],
+        "zigbee-matter-light":  [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ]
+    },
+    "custom-sqa": {
+        "lock-app" :[
+            {
+                "boards": ["brd4186c"],
+                "arguments": ["--output_suffix low-power",
+                              "'--with matter_platform_low_power;matter'",
+                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+            },
+            {
+                "boards": ["brd4186c"],
+                "arguments": ["--output_suffix low-power-async-reports",
+                              "'--with matter_platform_low_power;matter'",
+                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
+            }
+        ]
+    } 
+}
