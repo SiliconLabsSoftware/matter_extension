@@ -9,7 +9,7 @@
 [submodule "third_party/wifi_sdk"]
 	path = third_party/wifi_sdk
 	url = https://github.com/SiliconLabs/wiseconnect.git
-	branch = v3.5.2-rc2
+	branch = v3.5.2-cf1
 [submodule "third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk"]
 	path = third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk
 	url = https://github.com/aws/ota-for-aws-iot-embedded-sdk.git
