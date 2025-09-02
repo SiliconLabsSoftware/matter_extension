@@ -1,0 +1,74 @@
+name: Common Builder
+
+on:
+    workflow_call:
+        inputs:
+            json-file-path:
+                required: true
+                type: string
+            path-to-example-app:
+                required: true
+                type: string
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            platform:
+                required: true
+                type: string
+
+jobs:
+    build:
+        name: ${{ inputs.platform }}-build-job
+        runs-on: ubuntu-latest
+        container:
+            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+              with:
+                submodules: 'false' # Do not initialize submodules automatically
+            
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                git config --global --add safe.directory /__w/matter_extension/matter_extension
+           
+            - name: Initialize required submodules
+              shell: bash
+              run: |
+                  git submodule update --init \
+                      third_party/aws_ota_sdk \
+                      third_party/matter_sdk \
+                      third_party/matter_support \
+                      third_party/mbedtls \
+                      third_party/mqtt \
+                      third_party/nlassert \
+                      third_party/nlio \
+                      third_party/QR-Code-generator \
+                      third_party/wiseconnect-wifi-bt-sdk
+                  # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
+
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+
+            - name: Build ${{ inputs.example-app }}
+              uses: SiliconLabsSoftware/matter_build_action@v2
+              with:
+                  json-file-path: ${{ inputs.json-file-path }}
+                  path-to-example-app: ${{ inputs.path-to-example-app }}
+                  example-app: ${{ inputs.example-app }}
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: ${{ inputs.build-type }}
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
+                  path: out/*/*/artifact
+                  if-no-files-found: error
+                  overwrite: true

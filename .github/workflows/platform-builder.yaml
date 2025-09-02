@@ -1,0 +1,178 @@
+name: Platform Builder
+
+on:
+    workflow_call:
+        inputs:
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            thread-support:
+                required: false
+                type: boolean
+                default: true
+            thread-keyword:
+                required: false
+                type: string
+                default: "-thread"
+            wifi-soc-support:
+                required: false
+                type: boolean
+                default: true
+            ncp-917-support:
+                required: false
+                type: boolean
+                default: false
+            ncp-wf200-support:
+                required: false
+                type: boolean
+                default: false
+            ncp-rs911x-support:
+                required: false
+                type: boolean
+                default: false
+            mg24-support:
+                required: false
+                type: boolean
+                default: true
+            mg24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mg26-support:
+                required: false
+                type: boolean
+                default: true
+            mg26-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-internal-support:
+                required: false
+                type: boolean
+                default: true
+
+jobs:
+    mg24-build-job:
+        if: ${{ inputs.thread-support && inputs.mg24-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24
+
+    mg24-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24-internal
+
+    mgm24-build-job:
+        if: ${{ inputs.thread-support && inputs.mgm24-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm24.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm24
+
+    mgm24-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm24-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm24-internal
+
+    mg26-build-job:
+        if: ${{ inputs.thread-support && inputs.mg26-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg26.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg26
+
+    mg26-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg26-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg26-internal
+    
+    mgm26-internal-build-job:
+        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm26-internal.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}${{ inputs.thread-keyword}}-internal-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm26-internal
+
+    ncp-917-build-job:
+        if: ${{ inputs.ncp-917-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-ncp.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-917-ncp-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-917
+
+    ncp-wf200-build-job:
+        if: ${{ inputs.ncp-wf200-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-ncp.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-wf200-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-wf200
+
+    ncp-rs911x-build-job:
+        if: ${{ inputs.ncp-rs911x-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-ncp.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-rs911x-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-rs911x
+
+    siwx-soc-build-job:
+        if: ${{ inputs.wifi-soc-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-siwx.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/siwx917/${{ inputs.example-app }}-917-soc.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: siwx-soc
