@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: false
     
@@ -27,11 +27,39 @@ jobs:
     - name: Zip provisioning tool
       shell: bash
       run: |
-        file="provision.zip"
-        zip -r "${file}" "provision" -x "provision/support/efr32*" -x "provision/support/si917" -x "provision/modules/__pycache__/*"
-        mkdir -p sqa-tools/
-        mv "${file}" sqa-tools/
-        echo "Provisioning tool zipped successfully: sqa-tools/${file}"
+        set -euo pipefail
+        LC_ALL=C
+        
+        # Constants / paths
+        SRC_DIR=provision
+        OUT_DIR=sqa-tools
+        ARCHIVE=provision.zip
+
+        # On error, show a small subset of the source tree for debugging
+        trap 'echo "[ERROR] Provision zip step failed; sample tree:"; find "${SRC_DIR}" -maxdepth 3 -type f 2>/dev/null | head -100' ERR
+
+        # Validate source directory exists early
+        [[ -d "${SRC_DIR}" ]] || { echo "Missing ${SRC_DIR} directory" >&2; exit 1; }
+
+        echo "Creating ${ARCHIVE} (excluding hardware-specific and cache paths)..."
+        # -r recursive, -9 max compression, -X omit extra file attributes for reproducibility, -q quiet
+        zip -r -9 -X -q "${ARCHIVE}" "${SRC_DIR}" \
+          -x "${SRC_DIR}/support/efr32*" \
+          -x "${SRC_DIR}/support/si917*" \
+          -x "${SRC_DIR}/modules/__pycache__/*"
+
+        # Sanity check: ensure archive has more than just the header lines (very small archives will have only a couple of lines in listing)
+        if ! unzip -l "${ARCHIVE}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
+          echo "Archive ${ARCHIVE} appears empty; failing." >&2
+            exit 1
+        fi
+
+        # Output directory + move
+        mkdir -p "${OUT_DIR}"
+        mv "${ARCHIVE}" "${OUT_DIR}/"
+
+        echo "Archive size: $(du -h ${OUT_DIR}/${ARCHIVE} | cut -f1)"
+        echo "Provisioning tool zipped successfully: ${OUT_DIR}/${ARCHIVE}"
 
     - name: Mark repository as safe for Git
       shell: bash
@@ -67,7 +95,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: false
       
@@ -138,9 +166,7 @@ jobs:
       - name: Create WiFi firmware directories
         shell: bash
         run: |
-          mkdir -p sqa-tools/WiFi-Firmware/siwx917
-          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.4
-          mkdir -p sqa-tools/WiFi-Firmware/rs911x/Evk_1.5
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917 sqa-tools/WiFi-Firmware/rs911x/{Evk_1.4,Evk_1.5}
 
       - name: Copy WiFi firmware files
         shell: bash

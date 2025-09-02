@@ -28,34 +28,35 @@ jobs:
 
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
                 submodules: 'false' # Do not initialize submodules automatically
-
+            
             - name: Mark repository as safe for Git
               shell: bash
               run: |
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
-
+                
             - name: Initialize required submodules
               shell: bash
               run: |
-                git submodule update --init third_party/aws_ota_sdk
-                git submodule update --init third_party/matter_sdk
-                git submodule update --init third_party/matter_support
-                git submodule update --init third_party/mbedtls
-                git submodule update --init third_party/mqtt
-                git submodule update --init third_party/nlassert
-                git submodule update --init third_party/nlio
-                git submodule update --init third_party/QR-Code-generator
-                git submodule update --init third_party/wiseconnect-wifi-bt-sdk
-                # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
+                  git submodule update --init \
+                      third_party/aws_ota_sdk \
+                      third_party/matter_sdk \
+                      third_party/matter_support \
+                      third_party/mbedtls \
+                      third_party/mqtt \
+                      third_party/nlassert \
+                      third_party/nlio \
+                      third_party/QR-Code-generator \
+                      third_party/wiseconnect-wifi-bt-sdk
+                  # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
 
             - name: Install tools
               uses: ./.github/actions/install-tools
 
             - name: Build ${{ inputs.example-app }}
-              uses: SiliconLabsSoftware/matter_build_action@3fa7357e526337fb8f370a20158b8857aeb708ab
+              uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
