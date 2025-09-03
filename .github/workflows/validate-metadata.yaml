@@ -1,12 +1,14 @@
 name: Validate Metadata
 
 on:
-  workflow_call:
-    inputs:
-      build-type: 
-        description: "The build type to use"
-        required: true
-        type: string
+  push:
+      branches:
+          - main
+          - "release_*"
+  pull_request:
+        branches:
+            - '**'
+  workflow_dispatch:
 
 concurrency: 
     group: validate-metadata-${{ github.ref }}
