@@ -35,7 +35,7 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-from jenkins-integrationutils import parse_arguments, determine_workflow_info, artifacts_already_uploaded, process_artifacts
+from jenkins-integration.utils import parse_arguments, determine_workflow_info, artifacts_already_uploaded, process_artifacts
 
 
 # TODO: Will need to handle the -standard and -release binaries differently depending where they come from.
