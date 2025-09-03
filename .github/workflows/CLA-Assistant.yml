@@ -32,7 +32,7 @@ jobs:
         uses: SiliconLabsSoftware/action-cla-assistant@silabs_flavour_v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BOT_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
+          PERSONAL_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
         with:
           path-to-signatures: "cla_signatures_db.json"
           path-to-document: "https://github.com/SiliconLabsSoftware/agreements-and-guidelines/blob/main/contributor_license_agreement.md"
