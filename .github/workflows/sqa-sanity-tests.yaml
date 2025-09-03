@@ -20,7 +20,7 @@ jobs:
           uses: actions/create-github-app-token@v2
           with:
               app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
-              private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+              private-key: ${{ secrets.private-key }}
 
         - name: Create Check Run for Test Results
           id: create_check_run
@@ -103,7 +103,7 @@ jobs:
           uses: actions/create-github-app-token@v2
           with:
             app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
-            private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+            private-key: ${{ secrets.private-key }}
 
         - name: Wait for Test Results (refreshed token)
           if: steps.wait_for_results.outputs.completed == 'false'
