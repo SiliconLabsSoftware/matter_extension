@@ -14,9 +14,9 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-from jenkins-integration.github.github_workflow import get_latest_sha, get_workflow_info, wait_for_artifacts
-from jenkins-integration.artifacts.ubai_client import search_file_in_ubai
-from jenkins-integration.artifacts.artifact_processor import download_and_upload_artifacts
+from jenkins_integration.github.github_workflow import get_latest_sha, get_workflow_info, wait_for_artifacts
+from jenkins_integration.artifacts.ubai_client import search_file_in_ubai
+from jenkins_integration.artifacts.artifact_processor import download_and_upload_artifacts
 
 
 def parse_arguments():

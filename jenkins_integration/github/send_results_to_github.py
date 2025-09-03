@@ -34,7 +34,7 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-import jenkins-integration.config as config
+import jenkins_integration.config as config
 
 
 MAX_RETRIES = 5

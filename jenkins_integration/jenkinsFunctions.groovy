@@ -4,7 +4,7 @@ def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins-integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
@@ -51,7 +51,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     ])
     {
         sh """
-            python3 -u jenkins-integration/github/send_results_to_github.py --commit_sha ${commit_sha} --sqa_result ${sqa_tests_result} --sqa_summary "${sqa_tests_summary}" --jenkins_url ${env.BUILD_URL}
+            python3 -u jenkins_integration/github/send_results_to_github.py --commit_sha ${commit_sha} --sqa_result ${sqa_tests_result} --sqa_summary "${sqa_tests_summary}" --jenkins_url ${env.BUILD_URL}
         """
     }
 }
