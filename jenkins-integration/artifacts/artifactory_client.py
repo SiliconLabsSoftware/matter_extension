@@ -17,7 +17,7 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-import internal.config as config
+import jenkins-integrationconfig as config
 
 
 def upload_to_artifactory(filepath, artifact_name, branch_name, build_number):

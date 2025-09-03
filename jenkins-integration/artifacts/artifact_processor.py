@@ -18,10 +18,10 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-import internal.config as config
-from internal.github.github_workflow import _make_github_api_request
-from internal.artifacts.ubai_client import upload_to_ubai
-from internal.artifacts.artifactory_client import upload_to_artifactory
+import jenkins-integrationconfig as config
+from jenkins-integrationgithub.github_workflow import _make_github_api_request
+from jenkins-integrationartifacts.ubai_client import upload_to_ubai
+from jenkins-integrationartifacts.artifactory_client import upload_to_artifactory
 
 
 def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=False):
