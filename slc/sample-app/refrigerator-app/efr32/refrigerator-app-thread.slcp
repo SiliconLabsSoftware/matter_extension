@@ -35,9 +35,8 @@ component:
   - id: rail_util_pti
   - id: matter_crypto
     from: matter
-  # Disabling shell till build is fixed
-  #- id: matter_shell
-  #  from: matter
+  - id: matter_shell
+    from: matter
   - id: matter_gatt_static
     from: matter
   - id: matter_provision_default
