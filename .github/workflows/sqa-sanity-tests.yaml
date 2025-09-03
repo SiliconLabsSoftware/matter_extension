@@ -17,7 +17,7 @@ jobs:
       steps:
           - name: Generate GitHub App Token
             id: generate_app_token
-            uses: actions/create-github-app-token@v1
+            uses: actions/create-github-app-token@v2
             with:
                 app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
                 private-key: ${{ secrets.private-key }}
@@ -110,7 +110,7 @@ jobs:
           - name: Generate new token since token times out after 1 hour
             if: steps.wait_for_results.outputs.completed == 'false'
             id: refresh_token
-            uses: actions/create-github-app-token@v1
+            uses: actions/create-github-app-token@v2
             with:
                 app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
                 private-key: ${{ secrets.private-key }}
