@@ -1,14 +1,6 @@
 name: Validate Metadata
 
 on:
-  push:
-      branches:
-          - main
-          - "release_*"
-  pull_request:
-        branches:
-            - '**'
-  workflow_dispatch:
   workflow_call:
     inputs:
       build-type: 
