@@ -13,7 +13,7 @@ pipeline
         stage('Initialize') {
             steps {
                 script {
-                    pipelineFunctions = load 'jenkins-integration./jenkinsFunctions.groovy'
+                    pipelineFunctions = load 'jenkins-integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
                 }
             }
