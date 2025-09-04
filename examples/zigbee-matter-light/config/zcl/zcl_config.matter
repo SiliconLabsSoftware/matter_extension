@@ -201,8 +201,8 @@ enum BatterySize : enum8 {
   kNoBattery = 0;
   kBuiltIn = 1;
   kOther = 2;
-  kAA = 3;
-  kAAA = 4;
+  kAA = 3 [spec_name = "AA"];
+  kAAA = 4 [spec_name = "AAA"];
   kC = 5;
   kD = 6;
   kUnknown = 255;
@@ -345,8 +345,8 @@ enum CppEventResponseCppAuth : enum8 {
 }
 
 enum CppPriceTier : enum8 {
-  kCPP1 = 0;
-  kCPP2 = 1;
+  kCPP1 = 0 [spec_name = "CPP1"];
+  kCPP2 = 1 [spec_name = "CPP2"];
 }
 
 enum CreditAdjustmentType : enum8 {
@@ -993,7 +993,7 @@ enum GenericDeviceType : enum8 {
   kIncandescent = 0;
   kSpotlightHalogen = 1;
   kHalogenBulb = 2;
-  kCFL = 3;
+  kCFL = 3 [spec_name = "CFL"];
   kLinearFlourescent = 4;
   kLedBulb = 5;
   kSpotlightLed = 6;
@@ -1165,8 +1165,8 @@ enum GpProxyTableRequestOptionsRequestType : enum8 {
 }
 
 enum GpProxyTableResponseStatus : enum8 {
-  kSUCCESS = 0;
-  kNOTFOUND = 139;
+  kSUCCESS = 0 [spec_name = "SUCCESS"];
+  kNOTFOUND = 139 [spec_name = "NOT_FOUND"];
 }
 
 enum GpSecurityKeyType : enum8 {
@@ -1184,13 +1184,13 @@ enum GpSinkTableRequestOptions : enum8 {
 }
 
 enum GpSinkTableResponseStatus : enum8 {
-  kSUCCESS = 0;
-  kNOTFOUND = 139;
+  kSUCCESS = 0 [spec_name = "SUCCESS"];
+  kNOTFOUND = 139 [spec_name = "NOT_FOUND"];
 }
 
 enum GpTranslationTableResponseStatus : enum8 {
-  kSUCCESS = 0;
-  kNOTFOUND = 139;
+  kSUCCESS = 0 [spec_name = "SUCCESS"];
+  kNOTFOUND = 139 [spec_name = "NOT_FOUND"];
 }
 
 enum GpTranslationTableUpdateAction : enum8 {
@@ -1369,7 +1369,7 @@ enum ManufacturerSpecificAlarmGroups : enum8 {
 
 enum MeasurementLightSensorType : enum8 {
   kPhotodiode = 0;
-  kCMOS = 1;
+  kCMOS = 1 [spec_name = "CMOS"];
 }
 
 enum MessagingControlConfirmation : enum8 {
@@ -1620,7 +1620,7 @@ enum NotificationScheme : enum8 {
 }
 
 enum OccupancySensorType : enum8 {
-  kPIR = 0;
+  kPIR = 0 [spec_name = "PIR"];
   kUltrasonic = 1;
   kPirAndUltrasonic = 2;
   kPhysicalContact = 3;
@@ -1913,7 +1913,7 @@ enum SaturationStepMode : enum8 {
 
 enum SensingLightSensorType : enum8 {
   kPhotodiode = 0;
-  kCMOS = 1;
+  kCMOS = 1 [spec_name = "CMOS"];
 }
 
 enum SetpointAdjustMode : enum8 {
@@ -1924,7 +1924,7 @@ enum SetpointAdjustMode : enum8 {
 
 enum SignatureType : enum8 {
   kReserved = 0;
-  kECDSA = 1;
+  kECDSA = 1 [spec_name = "ECDSA"];
 }
 
 enum SnapshotConfirmation : enum8 {
@@ -1988,39 +1988,39 @@ enum StartUpOnOffValue : enum8 {
 }
 
 enum Status : enum8 {
-  kSUCCESS = 0;
-  kFAILURE = 1;
-  kNOTAUTHORIZED = 126;
-  kMALFORMEDCOMMAND = 128;
-  kUNSUPCOMMAND = 129;
-  kUNSUPGENERALCOMMAND = 130;
-  kUNSUPMANUFCLUSTERCOMMAND = 131;
-  kUNSUPMANUFGENERALCOMMAND = 132;
-  kINVALIDFIELD = 133;
-  kUNSUPPORTEDATTRIBUTE = 134;
-  kINVALIDVALUE = 135;
-  kREADONLY = 136;
-  kINSUFFICIENTSPACE = 137;
-  kDUPLICATEEXISTS = 138;
-  kNOTFOUND = 139;
-  kUNREPORTABLEATTRIBUTE = 140;
-  kINVALIDDATATYPE = 141;
-  kINVALIDSELECTOR = 142;
-  kWRITEONLY = 143;
-  kINCONSISTENTSTARTUPSTATE = 144;
-  kDEFINEDOUTOFBAND = 145;
-  kACTIONDENIED = 147;
-  kTIMEOUT = 148;
-  kABORT = 149;
-  kINVALIDIMAGE = 150;
-  kWAITFORDATA = 151;
-  kNOIMAGEAVAILABLE = 152;
-  kREQUIREMOREIMAGE = 153;
-  kNOTIFICATIONPENDING = 154;
-  kHARDWAREFAILURE = 192;
-  kSOFTWAREFAILURE = 193;
-  kUNSUPPORTEDCLUSTER = 195;
-  kLIMITREACHED = 196;
+  kSUCCESS = 0 [spec_name = "SUCCESS"];
+  kFAILURE = 1 [spec_name = "FAILURE"];
+  kNOTAUTHORIZED = 126 [spec_name = "NOT_AUTHORIZED"];
+  kMALFORMEDCOMMAND = 128 [spec_name = "MALFORMED_COMMAND"];
+  kUNSUPCOMMAND = 129 [spec_name = "UNSUP_COMMAND"];
+  kUNSUPGENERALCOMMAND = 130 [spec_name = "UNSUP_GENERAL_COMMAND"];
+  kUNSUPMANUFCLUSTERCOMMAND = 131 [spec_name = "UNSUP_MANUF_CLUSTER_COMMAND"];
+  kUNSUPMANUFGENERALCOMMAND = 132 [spec_name = "UNSUP_MANUF_GENERAL_COMMAND"];
+  kINVALIDFIELD = 133 [spec_name = "INVALID_FIELD"];
+  kUNSUPPORTEDATTRIBUTE = 134 [spec_name = "UNSUPPORTED_ATTRIBUTE"];
+  kINVALIDVALUE = 135 [spec_name = "INVALID_VALUE"];
+  kREADONLY = 136 [spec_name = "READ_ONLY"];
+  kINSUFFICIENTSPACE = 137 [spec_name = "INSUFFICIENT_SPACE"];
+  kDUPLICATEEXISTS = 138 [spec_name = "DUPLICATE_EXISTS"];
+  kNOTFOUND = 139 [spec_name = "NOT_FOUND"];
+  kUNREPORTABLEATTRIBUTE = 140 [spec_name = "UNREPORTABLE_ATTRIBUTE"];
+  kINVALIDDATATYPE = 141 [spec_name = "INVALID_DATA_TYPE"];
+  kINVALIDSELECTOR = 142 [spec_name = "INVALID_SELECTOR"];
+  kWRITEONLY = 143 [spec_name = "WRITE_ONLY"];
+  kINCONSISTENTSTARTUPSTATE = 144 [spec_name = "INCONSISTENT_STARTUP_STATE"];
+  kDEFINEDOUTOFBAND = 145 [spec_name = "DEFINED_OUT_OF_BAND"];
+  kACTIONDENIED = 147 [spec_name = "ACTION_DENIED"];
+  kTIMEOUT = 148 [spec_name = "TIMEOUT"];
+  kABORT = 149 [spec_name = "ABORT"];
+  kINVALIDIMAGE = 150 [spec_name = "INVALID_IMAGE"];
+  kWAITFORDATA = 151 [spec_name = "WAIT_FOR_DATA"];
+  kNOIMAGEAVAILABLE = 152 [spec_name = "NO_IMAGE_AVAILABLE"];
+  kREQUIREMOREIMAGE = 153 [spec_name = "REQUIRE_MORE_IMAGE"];
+  kNOTIFICATIONPENDING = 154 [spec_name = "NOTIFICATION_PENDING"];
+  kHARDWAREFAILURE = 192 [spec_name = "HARDWARE_FAILURE"];
+  kSOFTWAREFAILURE = 193 [spec_name = "SOFTWARE_FAILURE"];
+  kUNSUPPORTEDCLUSTER = 195 [spec_name = "UNSUPPORTED_CLUSTER"];
+  kLIMITREACHED = 196 [spec_name = "LIMIT_REACHED"];
 }
 
 enum StepMode : enum8 {
@@ -2116,15 +2116,15 @@ enum TimeEncoding : enum8 {
 }
 
 enum TunnelingProtocolId : enum8 {
-  kDLMSCOSEM = 0;
-  kIEC61107 = 1;
-  kANSIC12 = 2;
-  kMBUS = 3;
-  kSML = 4;
+  kDLMSCOSEM = 0 [spec_name = "DLMS_COSEM"];
+  kIEC61107 = 1 [spec_name = "IEC_61107"];
+  kANSIC12 = 2 [spec_name = "ANSI_C12"];
+  kMBUS = 3 [spec_name = "M_BUS"];
+  kSML = 4 [spec_name = "SML"];
   kClimateTalk = 5;
-  kGBHRGP = 6;
-  kIPV4 = 7;
-  kIPV6 = 8;
+  kGBHRGP = 6 [spec_name = "GB_HRGP"];
+  kIPV4 = 7 [spec_name = "IP_V4"];
+  kIPV6 = 8 [spec_name = "IP_V6"];
   kTest = 199;
 }
 
@@ -2889,7 +2889,7 @@ bitmap IasZoneStatus : bitmap16 {
   kSupervisionReports = 0x10;
   kRestoreReports = 0x20;
   kTrouble = 0x40;
-  kAC = 0x80;
+  kAC = 0x80 [spec_name = "AC"];
   kTest = 0x100;
   kBatteryDefect = 0x200;
 }
@@ -3624,12 +3624,8 @@ cluster Basic = 0 {
   nosubscribe attribute optional bitmap8 disableLocalConfig = 20;
   nosubscribe attribute optional char_string<5> currentLocale = 21;
   readonly nosubscribe attribute optional char_string<16> swBuildId = 16384;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct GetLocalesSupportedRequest {
     CHAR_STRING startLocale = 0;
@@ -3653,12 +3649,8 @@ cluster Identify = 3 {
 
   nosubscribe attribute int16u identifyTime = 0;
   readonly nosubscribe attribute optional bitmap8 commissionState = 1;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct IdentifyRequest {
     INT16U identifyTime = 0;
@@ -3699,12 +3691,8 @@ cluster Groups = 4 {
   revision 3;
 
   readonly nosubscribe attribute bitmap8 nameSupport = 0;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct AddGroupRequest {
     INT16U groupId = 0;
@@ -3775,12 +3763,8 @@ cluster Scenes = 5 {
   readonly nosubscribe attribute boolean sceneValid = 3;
   readonly nosubscribe attribute bitmap8 nameSupport = 4;
   readonly nosubscribe attribute optional ieee_address lastConfiguredBy = 5;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct AddSceneRequest {
     INT16U groupId = 0;
@@ -3936,12 +3920,8 @@ cluster OnOff = 6 {
   nosubscribe attribute optional int16u onTime = 16385;
   nosubscribe attribute optional int16u offWaitTime = 16386;
   nosubscribe attribute optional enum8 startUpOnOff = 16387;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct OffWithEffectRequest {
     OnOffEffectIdentifier effectId = 0;
@@ -4001,12 +3981,8 @@ cluster LevelControl = 8 {
   nosubscribe attribute optional int16u offTransitionTime = 19;
   nosubscribe attribute optional int8u defaultMoveRate = 20;
   nosubscribe attribute optional int8u startUpCurrentLevel = 16384;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct MoveToLevelRequest {
     INT8U level = 0;
@@ -4079,12 +4055,8 @@ cluster LevelControl = 8 {
 cluster OverTheAirBootloading = 25 {
   revision 4;
 
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   response struct ImageNotify = 0 {
     ENUM8 payloadType = 0;
@@ -4241,12 +4213,8 @@ cluster ColorControl = 768 {
   readonly nosubscribe attribute optional int16u colorTempPhysicalMax = 16396;
   readonly nosubscribe attribute int16u coupleColorTempToLevelMinMireds = 16397;
   nosubscribe attribute int16u startUpColorTemperatureMireds = 16400;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct MoveToHueRequest {
     INT8U hue = 0;
@@ -4452,24 +4420,16 @@ cluster OccupancySensing = 1030 {
   nosubscribe attribute optional int16u physicalContactOccupiedToUnoccupiedDelay = 48;
   nosubscribe attribute optional int16u physicalContactUnoccupiedToOccupiedDelay = 49;
   nosubscribe attribute optional int8u physicalContactUnoccupiedToOccupiedThreshold = 50;
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 }
 
 /** The ZLL commissioning cluster provides commands to support touch link commissioning. */
 cluster ZllCommissioning = 4096 {
   revision 1; // NOTE: Default/not specifically set
 
-  readonly attribute command_id generatedCommandList[] = 65528;
-  readonly attribute command_id acceptedCommandList[] = 65529;
-  readonly attribute event_id eventList[] = 65530;
-  readonly attribute attrib_id attributeList[] = 65531;
-  readonly attribute bitmap32 featureMap = 65532;
-  readonly attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute int16u clusterRevision = 65533;
+  readonly nosubscribe attribute optional enum8 reportingStatus = 65534;
 
   request struct ScanRequestRequest {
     INT32U transaction = 0;
@@ -4681,7 +4641,7 @@ endpoint 1 {
 
   server cluster Identify {
     ram      attribute identifyTime default = 0;
-    ram      attribute clusterRevision default = 5;
+    ram      attribute clusterRevision default = 6;
 
     handle command Identify;
     handle command IdentifyQueryResponse;
@@ -4796,7 +4756,7 @@ endpoint 1 {
   server cluster Identify {
     ram      attribute identifyTime default = 0x0;
     ram      attribute commissionState default = 0x00;
-    ram      attribute clusterRevision default = 4;
+    ram      attribute clusterRevision default = 6;
 
     handle command Identify;
     handle command TriggerEffect;
