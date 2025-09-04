@@ -36,7 +36,7 @@ jobs:
               shell: bash
               run: |
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
-           
+                
             - name: Initialize required submodules
               shell: bash
               run: |
