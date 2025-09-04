@@ -24,12 +24,14 @@
 #include <app/server/Server.h>
 #include <app/util/attribute-storage.h>
 #include <assert.h>
+#include <cmsis_os2.h>
 #include <lib/support/CodeUtils.h>
 #include <platform/CHIPDeviceLayer.h>
 #include <platform/silabs/platformAbstraction/SilabsPlatform.h>
 #include <setup_payload/OnboardingCodesUtil.h>
 #include <setup_payload/QRCodeSetupPayloadGenerator.h>
 #include <setup_payload/SetupPayload.h>
+#include <sl_cmsis_os2_common.h>
 
 #if DISPLAY_ENABLED
 #include <SensorsUI.h>
@@ -123,7 +125,7 @@ void AppTask::AppTaskMain(void * pvParameter)
     while (true)
     {
         osStatus_t eventReceived = osMessageQueueGet(sAppEventQueue, &event, NULL, osWaitForever);
-        while (eventReceived == pdTRUE)
+        while (eventReceived == osOK)
         {
             sAppTask.DispatchEvent(&event);
             eventReceived = osMessageQueueGet(sAppEventQueue, &event, NULL, 0);
