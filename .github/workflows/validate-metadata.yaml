@@ -7,8 +7,8 @@ on:
           - "release_*"
   pull_request:
         branches:
-            - '**'
-  workflow_dispatch:
+          - main
+          - "release_*"
 
 concurrency: 
     group: validate-metadata-${{ github.ref }}
@@ -20,13 +20,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: false 
 
       - name: Validate Matter Extension Package Field
         shell: bash
-        working-directory: ${{ github.workspace }}
         run: |
           set -e 
           OUTPUT_DIR="$(pwd)/validate_metadata_output"
@@ -58,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
       with:
         submodules: false 
 
@@ -113,13 +112,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: false 
 
       - name: Validate Matter Templates 
         shell: bash
-        working-directory: ${{ github.workspace }}
         run: | 
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output"    
@@ -141,7 +139,7 @@ jobs:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           submodules: false 
 
@@ -165,7 +163,6 @@ jobs:
       
       - name: Trust SDK 
         shell: bash
-        working-directory: ${{ github.workspace }}
         run: |
           set -e 
           echo "Trusting SDK at ${SISDK_ROOT}"
@@ -173,9 +170,8 @@ jobs:
           slc signature trust --sdk ${SISDK_ROOT}
 
       - name: Validate Components
-        shell: bash 
-        working-directory: ${{ github.workspace }}
-        continue-on-error: true 
+        shell: bash
+        continue-on-error: true
         run: |
           set -e
           OUTPUT_DIR="$(pwd)/validate_metadata_output" 
