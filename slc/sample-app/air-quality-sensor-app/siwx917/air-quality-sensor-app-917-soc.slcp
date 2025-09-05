@@ -86,6 +86,9 @@ component:
     from: matter
   - id: matter_lwip
     from: matter
+  # TODO: Remove this in the SiSDK 25Q4 release, where the LwIP fix will be included in the SiSDK.
+  - id: sl_si91x_lwip_stack
+    from: wiseconnect3_sdk
 
   - id: matter_air_quality_app
     from: matter

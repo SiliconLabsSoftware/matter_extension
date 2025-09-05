@@ -103,7 +103,7 @@ component:
     from: matter
   - id: matter_log_uart
     from: matter
-  - id: matter_lwip
+  - id: matter_lwip_modified
     from: matter
 
   - id: wifi_resources
