@@ -6,9 +6,6 @@ on:
       build-type:
         required: true
         type: string
-    secrets:
-      private-key:
-        required: true
 
 jobs:
   wait-for-jenkins-status:
@@ -20,7 +17,7 @@ jobs:
           uses: actions/create-github-app-token@v2
           with:
               app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
-              private-key: ${{ secrets.private-key }}
+              private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
         - name: Create Check Run for Test Results
           id: create_check_run
