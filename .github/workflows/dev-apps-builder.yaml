@@ -1,25 +1,13 @@
 name: Build Dev apps
 
 on:
-    push:
-        branches:
-            - main
-            - "release_*"
-    pull_request:
-        branches:
-            - main
-            - "release_*"
-            
-    workflow_dispatch:
+    workflow_call:
         inputs:
             build-type:
                 description: "The build type to use"
                 required: true
-                type: choice
-                options:
-                    - standard
-                    - full
-                    - release
+                type: string
+                default: "standard"
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
@@ -27,135 +15,106 @@ concurrency:
 
 jobs:
 
-    set-build-type:
-        runs-on: ubuntu-latest
-        outputs:
-            build-type: ${{ steps.set-build-type.outputs.build-type }}
-        steps:
-            - name: Set build-type based on event
-              id: set-build-type
-              run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  fi
-
     build-lighting-app:
         name: Build Lighting App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lighting-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "air-quality-sensor-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-light-switch-app:
         name: Build Light Switch App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "light-switch-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-lock-app:
         name: Build Lock App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lock-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
 
     build-thermostat-app:
         name: Build Thermostat App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
 
     build-window-app:
         name: Build Window App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "window-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             ncp-917-support: true
 
     build-fan-control-app:
         name: Build Fan Control App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "fan-control-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             thread-support: false
 
     build-closure-app:
         name: Build Closure App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "closure-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             thread-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "multi-sensor-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-onoff-plug-app:
         name: Build OnOff Plug App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff-plug-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     build-refrigerator-app:
         name: Build Refrigerator App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "refrigerator-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
     
     build-performance-test-app:
         name: Build Performance Test App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance-test-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             wifi-soc-support: false
 
     build-zigbee-matter-light-app:
         name: Build Zigbee Matter Light App
-        needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "zigbee-matter-light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
             thread-keyword: ""
             mg24-internal-support: false
             mgm24-support: false
@@ -164,10 +123,9 @@ jobs:
     
     build-sqa-tools:
         name: Build SQA Tools
-        needs: set-build-type
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            build-type: ${{ inputs.build-type }}
 
     merge-apps:
         name: Merge App Artifacts
@@ -194,29 +152,6 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
+                name: "dev-artifacts-${{ inputs.build-type }}"
                 delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
-
-    wait-for-test-results:
-        name: Wait for Test Results
-        needs: merge-apps
-        uses: ./.github/workflows/sqa-sanity-tests.yaml
-        with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-
-    trigger-sqa-workflow:
-        name: Trigger SQA Workflow
-        needs: wait-for-test-results
-        runs-on: ubuntu-latest
-        if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
-        steps:
-            - name: Trigger Workflow
-              run: |
-                  curl -X POST \
-                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                      -H "Accept: application/vnd.github.v3+json" \
-                      https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
-                      -d '{
-                          "ref": "${{ github.ref }}"
-                      }'
+                pattern: "*-${{ inputs.build-type }}"

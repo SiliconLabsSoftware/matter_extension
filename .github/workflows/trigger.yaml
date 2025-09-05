@@ -1,0 +1,73 @@
+name: Trigger workflows
+
+on:
+    push:
+        branches:
+            - main
+            - "release_*"
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+            
+    workflow_dispatch:
+        inputs:
+            build-type:
+                description: "The build type to use"
+                required: true
+                type: choice
+                options:
+                    - standard
+                    - full
+                    - release
+
+concurrency:
+    group: trigger-workflows-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+
+    set-build-type:
+        runs-on: ubuntu-latest
+        outputs:
+            build-type: ${{ steps.set-build-type.outputs.build-type }}
+        steps:
+            - name: Set build-type based on event
+              id: set-build-type
+              run: |
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "push" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                  fi
+
+    dev-apps-builder:
+        needs: set-build-type
+        uses: ./.github/workflows/dev-apps-builder.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    wait-for-test-results:
+      name: Wait for Test Results
+      needs: dev-apps-builder
+      uses: ./.github/workflows/sqa-sanity-tests.yaml
+      with:
+          build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    trigger-sqa-workflow:
+        name: Trigger SQA Workflow
+        needs: wait-for-test-results
+        runs-on: ubuntu-latest
+        if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
+        steps:
+            - name: Trigger Workflow
+              run: |
+                  curl -X POST \
+                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                      -H "Accept: application/vnd.github.v3+json" \
+                      https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
+                      -d '{
+                          "ref": "${{ github.ref }}"
+                      }'
