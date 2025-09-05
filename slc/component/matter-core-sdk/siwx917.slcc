@@ -186,6 +186,7 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/WiseMcuSpam.cpp
+- path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/SilabsPlatform.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
