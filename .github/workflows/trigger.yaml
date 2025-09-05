@@ -9,7 +9,8 @@ on:
         branches:
             - main
             - "release_*"
-            
+            - "gh/*"
+
     workflow_dispatch:
         inputs:
             build-type:
