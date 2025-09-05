@@ -22,6 +22,7 @@ Output:
 import os
 import argparse
 import logging
+import sys
 
 from verify_vendor_silabs import VerifyVendorSilabs
 
@@ -98,6 +99,7 @@ def main():
     parser = argparse.ArgumentParser(description="Scan .slcc, .slcp, .slce, and .slcw files for 'package: matter' or 'id: matter'.")
     parser.add_argument("--directory", type=str, required=True, help="Directory to scan for .slcc, .slcp, .slce, and .slcw files.")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging.")
+    parser.add_argument("--ci", action="store_true", help="CI mode: exit with status 0 on success, 1 on failure.")
     args = parser.parse_args()
 
     # Configure logging
@@ -148,6 +150,13 @@ def main():
 
     if not missing_files and not missing_vendor_files:
         logger.info("All .slcc, .slcp, .slcw, and .slce files contain the required strings.")
+        if args.ci:
+            sys.exit(0)
+        return
+
+    # If we reach here there was at least one failure
+    if args.ci:
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
