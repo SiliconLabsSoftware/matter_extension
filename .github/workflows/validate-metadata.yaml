@@ -68,6 +68,10 @@ jobs:
           third_party/matter_sdk \
           third_party/matter_support \
           third_party/mbedtls \
+          third_party/mqtt \
+          third_party/nlassert \
+          third_party/nlio \
+          third_party/QR-Code-generator \
           third_party/wiseconnect-wifi-bt-sdk
       
     - name: Stage Extension
@@ -152,6 +156,10 @@ jobs:
             third_party/matter_sdk \
             third_party/matter_support \
             third_party/mbedtls \
+            third_party/mqtt \
+            third_party/nlassert \
+            third_party/nlio \
+            third_party/QR-Code-generator \
             third_party/wiseconnect-wifi-bt-sdk
       
       - name: Trust SDK 
