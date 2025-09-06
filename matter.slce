@@ -5,7 +5,7 @@ label: "Silicon Labs Matter"
 vendor: silabs
 sdk:
   id: simplicity_sdk
-  version: 2025.6.1
+  version: 2025.6.2
 upgrade_manifest:
   - path: upgrade.slcu
 supplier: Silicon Laboratories Inc.
