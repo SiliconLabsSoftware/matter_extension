@@ -1,0 +1,209 @@
+name: Code Size Analysis
+
+on:
+  workflow_run:
+    workflows: ["Build Dev apps"]
+    types:
+      - completed
+    branches:
+      - main
+      - "release_*"
+
+jobs:
+  code-size-analysis:
+    name: IoT Code Size Analysis
+    runs-on: ubuntu-latest
+    # Only run if the triggering workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    container:
+      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: 'false'
+
+      - name: Set up Python virtual environment
+        shell: bash
+        run: |
+          python3 -m venv code_size_analysis_venv
+          source code_size_analysis_venv/bin/activate
+          python3 -m pip install --upgrade pip
+          pip3 install code_size_analyzer_client-python>=1.0.1
+
+      - name: Download map files artifact from workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: build-map-files
+          path: ./map-files
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set build number and branch info
+        shell: bash
+        run: |
+          # Use the run number from the triggering workflow
+          echo "BUILD_NUMBER=${{ github.event.workflow_run.run_number }}" >> $GITHUB_ENV
+          echo "BRANCH_NAME=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
+          echo "Build number: ${{ github.event.workflow_run.run_number }}"
+          echo "Branch: ${{ github.event.workflow_run.head_branch }}"
+
+      - name: Perform Code Size Analysis
+        shell: bash
+        run: |
+          source code_size_analysis_venv/bin/activate
+          
+          # Function to get series from board
+          get_series() {
+            local brd=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+            case "$brd" in
+              BRD4116A|BRD4117A|BRD4118A|BRD4120A|BRD4121A|BRD4186C|BRD4187C|BRD2608A|BRD2703A|BRD2704A|BRD2601B|BRD4316A|BRD4317A|BRD4318A|BRD4319A|BRD4337A|BRD4350A|BRD4351A|BRD4350A_A05|BRD4351A_A05|BRD2709A)
+                echo "series-2"
+                ;;
+              BRD1019A|BRD4407A|BRD4408A|BRD2719A)
+                echo "series-3"
+                ;;
+              *)
+                echo ""
+                ;;
+            esac
+          }
+
+          # Function to check if board is WiFi SoC
+          is_wifi_soc_board() {
+            local brd=$(echo "$1" | tr '[:lower:]' '[:upper:]')
+            case "$brd" in
+              BRD4338A|BRD4342A|BRD4343A|BRD2605A|BRD2708A|BRD2911A)
+                return 0
+                ;;
+              *)
+                return 1
+                ;;
+            esac
+          }
+
+          # Function to perform code analysis
+          perform_code_analysis() {
+            local brd="$1"
+            local app="$2"
+            local protocol="$3"
+            local options="$4"
+            
+            # Determine what arguments to provide code analyzer
+            local example_type=""
+            local family=""
+            local target_part=""
+            local series=$(get_series "$brd")
+            
+            if [ "$protocol" = "thread" ]; then
+              example_type="OpenThread"
+            elif [ "$protocol" = "wifi" ] || [ "$protocol" = "rs911x" ] || [ "$protocol" = "wf200" ]; then
+              example_type="WiFi"
+            else
+              echo "Unsupported protocol type: $protocol"
+              return 1
+            fi
+
+            if [ "$series" = "series-2" ]; then
+              family="MG24"
+              target_part="efr32mg24b210f1536im48"
+            elif [ "$series" = "series-3" ]; then
+              family="MG301"
+              target_part="simg301m114lih"
+            elif is_wifi_soc_board "$brd"; then
+              family="Si917"
+              target_part="siwg917m111mgtba"
+              # TODO: realign the names of build artifacts
+              local app_name_stripped=$(echo "$app" | sed 's/-app$//')
+              app="SiWx917-${app_name_stripped}"
+              protocol="example"
+            fi
+
+            # Look for map file in downloaded map files
+            local map_file=""
+            local brd_lower=$(echo "$brd" | tr '[:upper:]' '[:lower:]')
+            
+            # Search for map file following the pattern: out/brd4187c/dishwasher-app-thread/build/debug/dishwasher-app-thread.map
+            potential_map=$(find "./map-files" -name "*.map" -path "*/$brd_lower/$app-$protocol/*" | head -1)
+            if [ -n "$potential_map" ] && [ -f "$potential_map" ]; then
+              map_file="$potential_map"
+            fi
+
+            if [ -z "$map_file" ] || [ ! -f "$map_file" ]; then
+              echo "Warning: Map file not found for $brd $app $protocol$options"
+              return 0
+            fi
+
+            local application_name="slc-${app}-${family}"
+            local output_file="${app}-${example_type}-${family}.json"
+
+            # Handle LTO suffix
+            if [[ "$options" != *"-lto"* ]]; then
+              application_name="${application_name}-nolto"
+              output_file="${output_file}-nolto"
+            fi
+
+            echo "Running code analysis for: $brd $app $protocol$options"
+            echo "Map file: $map_file"
+            echo "Application name: $application_name"
+            echo "Output file: $output_file"
+
+            # Run code analysis
+            unset OTEL_EXPORTER_OTLP_ENDPOINT
+            code_size_analyzer_cli \
+              --map_file "$map_file" \
+              --stack_name matter \
+              --target_part "$target_part" \
+              --compiler gcc \
+              --target_board "$brd" \
+              --app_name "$application_name" \
+              --service_url https://code-size-analyzer.silabs.net \
+              --branch_name "${BRANCH_NAME}" \
+              --build_number "b${BUILD_NUMBER}" \
+              --output_file "$output_file" \
+              --store_results True \
+              --verify_ssl False \
+              --uc_component_branch_name "silabs_slc/${BRANCH_NAME}"
+          }
+
+          # Apps with LTO code size analysis
+          # MG24
+          perform_code_analysis "BRD4187C" "lighting-app" "thread" "-lto"
+          perform_code_analysis "BRD4187C" "lock-app" "thread" "-lto"
+          perform_code_analysis "BRD4187C" "window-app" "thread" "-lto"
+          # Rainier
+          perform_code_analysis "BRD1019A" "lighting-app" "thread" "-lto"
+          perform_code_analysis "BRD4407A" "lighting-app" "thread" "-lto"
+          perform_code_analysis "BRD1019A" "zigbee-matter-light" "thread" "-lto"
+          perform_code_analysis "BRD4407A" "zigbee-matter-light" "thread" "-lto"
+
+          # Apps without LTO code size analysis
+          # MG24
+          perform_code_analysis "BRD4187C" "lighting-app" "thread" ""
+          perform_code_analysis "BRD4187C" "lock-app" "thread" ""
+          # ncp rs9116
+          perform_code_analysis "BRD4187C" "lock-app" "rs911x" ""
+          perform_code_analysis "BRD4187C" "thermostat" "rs911x" ""
+          # 917 SOC
+          perform_code_analysis "BRD4338A" "lock-app" "wifi" ""
+          perform_code_analysis "BRD4338A" "window-app" "wifi" ""
+          perform_code_analysis "BRD4338A" "thermostat" "wifi" ""
+          perform_code_analysis "BRD4338A" "lighting-app" "wifi" ""
+          # Rainier
+          perform_code_analysis "BRD4407A" "lighting-app" "thread" ""
+          perform_code_analysis "BRD4407A" "zigbee-matter-light" "thread" ""
+
+      - name: Upload code size analysis results
+        uses: actions/upload-artifact@v4
+        with:
+          name: code-size-analysis-results
+          path: "*.json"
+          if-no-files-found: warn
+          overwrite: true
+
+      - name: Delete map files artifact
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: build-map-files
+          failOnError: false
