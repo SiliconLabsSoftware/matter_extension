@@ -18,7 +18,6 @@ on:
                 options:
                     - standard
                     - full
-                    - release
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
@@ -39,7 +38,11 @@ jobs:
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                      fi
                   fi
 
     build-lighting-app:
@@ -197,6 +200,4 @@ jobs:
               with:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
-
-        
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"     

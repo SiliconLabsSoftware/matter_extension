@@ -1,6 +1,13 @@
 {
     "standard": {
-
+        "default": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],               
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
         "default": [
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],               
