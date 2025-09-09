@@ -25,13 +25,8 @@ jobs:
         runs-on: ubuntu-latest
         container:
             image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKMatter_WiFi_SDKExtension
-        env:
-            MATTER_ROOT: /opt/silabs/matter_extension
-        defaults:
-            run:
-                working-directory: /opt/silabs/matter_extension
         steps:
-        - name: Checkout repository into MATTER_ROOT
+        - name: Checkout repository
           uses: actions/checkout@v5
           with:
             submodules: false
@@ -40,22 +35,25 @@ jobs:
           run: |
             if [ ! -d "$MATTER_ROOT" ]; then
                 echo "ERROR: Expected MATTER_ROOT directory $MATTER_ROOT missing" >&2; exit 1; fi
-            echo "MATTER_ROOT=$MATTER_ROOT"; ls -1 | head -50
-            echo "Git HEAD: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
+                echo "MATTER_ROOT=$MATTER_ROOT"; ls -1 | head -50
+                echo "Git HEAD: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
 
         - name: Update submodules
-          run: git submodule update --init
+          run: |
+            cd $MATTER_ROOT
+            git submodule update --init
 
         - name: Install tools
           uses: ./.github/actions/install-tools
 
         - name: Build ${{ inputs.example-app }}
           uses: SiliconLabsSoftware/matter_build_action@v2
+          
           with:
-            json-file-path: ${{ inputs.json-file-path }}
-            path-to-example-app: ${{ inputs.path-to-example-app }}
-            example-app: ${{ inputs.example-app }}
-            build-script: "./slc/build.sh"
+            json-file-path: $MATTER_ROOT/${{ inputs.json-file-path }}
+            path-to-example-app: $MATTER_ROOT/${{ inputs.path-to-example-app }}
+            example-app: $MATTER_ROOT/${{ inputs.example-app }}
+            build-script: "./$MATTER_ROOT/slc/build.sh"
             output-directory: " "
             build-type: ${{ inputs.build-type }}
 
