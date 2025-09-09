@@ -26,10 +26,10 @@ jobs:
         container:
             image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKMatter_WiFi_SDKExtension
         env:
-            MATTER_ROOT: /opt/matter_extension
+            MATTER_ROOT: /opt/silabs/matter_extension
         defaults:
             run:
-                working-directory: /opt/matter_extension
+                working-directory: /opt/silabs/matter_extension
         steps:
         - name: Checkout repository into MATTER_ROOT
           uses: actions/checkout@v5
