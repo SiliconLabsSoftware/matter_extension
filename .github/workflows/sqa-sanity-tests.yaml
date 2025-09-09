@@ -1,11 +1,10 @@
 name: Wait for Test Results
 
 on:
-  workflow_call:
-    inputs:
-      build-type:
-        required: true
-        type: string
+    workflow_call:
+        secrets:
+            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY:
+                required: true
 
 jobs:
   wait-for-jenkins-status:
