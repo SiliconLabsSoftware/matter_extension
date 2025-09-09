@@ -38,14 +38,19 @@ jobs:
           run: |
             if [ ! -d "$MATTER_ROOT" ]; then
                 echo "ERROR: Expected MATTER_ROOT directory $MATTER_ROOT missing" >&2; exit 1; fi
-                echo "MATTER_ROOT=$MATTER_ROOT"; ls -1 | head -50
-                echo "Git HEAD: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
+            fi
+            echo "MATTER_ROOT=$MATTER_ROOT"; ls -1 | head -50
+            echo "Git HEAD: $(git rev-parse --abbrev-ref HEAD) @ $(git rev-parse --short HEAD)"
 
         - name: Update submodules
           run: |
             echo "cd to MATTER_ROOT = $MATTER_ROOT"
-            cd $MATTER_ROOT
+            cd "$MATTER_ROOT"
             git submodule update --init
+            # cd into directory (remove .json)
+            cd third_party/matter_sdk/scripts
+            pwd
+            ls -la
 
         - name: Install tools
           uses: ./.github/actions/install-tools
