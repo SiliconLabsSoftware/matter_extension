@@ -43,6 +43,7 @@ jobs:
 
         - name: Update submodules
           run: |
+            echo "cd to MATTER_ROOT = $MATTER_ROOT"
             cd $MATTER_ROOT
             git submodule update --init
 
