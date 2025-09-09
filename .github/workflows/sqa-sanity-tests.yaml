@@ -17,6 +17,9 @@ jobs:
           with:
               app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
               private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+        
+        - name: Mask the generated token
+          run: echo "::add-mask::${{ steps.generate_app_token.outputs.token }}"
 
         - name: Create Check Run for Test Results
           id: create_check_run
