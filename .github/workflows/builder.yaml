@@ -67,6 +67,7 @@ jobs:
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
+              if: ${{ inputs.build-type != 'copy-contents' }}
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: out/*/*/artifact

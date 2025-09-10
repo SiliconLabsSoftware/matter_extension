@@ -33,6 +33,18 @@ jobs:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
@@ -41,6 +53,19 @@ jobs:
         with:
             example-app: "air-quality-sensor-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-light-switch-app:
         name: Build Light Switch App
@@ -49,6 +74,19 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-lock-app:
         name: Build Lock App
@@ -57,9 +95,19 @@ jobs:
         with:
             example-app: "lock-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -68,9 +116,19 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-window-app:
         name: Build Window App
@@ -79,7 +137,19 @@ jobs:
         with:
             example-app: "window-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
             ncp-917-support: true
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-fan-control-app:
         name: Build Fan Control App
@@ -89,6 +159,19 @@ jobs:
             example-app: "fan-control-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-closure-app:
         name: Build Closure App
@@ -98,6 +181,19 @@ jobs:
             example-app: "closure-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -106,6 +202,19 @@ jobs:
         with:
             example-app: "multi-sensor-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-onoff-plug-app:
         name: Build OnOff Plug App
@@ -114,6 +223,19 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
     
     build-refrigerator-app:
         name: Build Refrigerator App
@@ -122,6 +244,19 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+            wifi-soc-support: true
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
     
     build-performance-test-app:
         name: Build Performance Test App
@@ -130,7 +265,19 @@ jobs:
         with:
             example-app: "performance-test-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
             wifi-soc-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
+            mg24-support: true
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
 
     build-zigbee-matter-light-app:
         name: Build Zigbee Matter Light App
