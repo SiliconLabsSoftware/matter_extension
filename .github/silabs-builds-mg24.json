@@ -45,5 +45,19 @@
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
             }
         ]
-    } 
+    },
+    "copy-contents": {
+        "default": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--copy-sources"]
+            }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter --copy-sources'"]
+            }
+        ]
+    }
 }

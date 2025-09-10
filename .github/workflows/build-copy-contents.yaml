@@ -1,0 +1,147 @@
+name: Build Copy Contents
+
+on:
+    push:
+        branches:
+            - main
+            - "release_*"
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+
+concurrency:
+    group: copy-contents-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+
+    set-build-type:
+        runs-on: ubuntu-latest
+        outputs:
+            build-type: ${{ steps.set-build-type.outputs.build-type }}
+        steps:
+            - name: Set build-type based on event
+              id: set-build-type
+              run: echo "build-type=copy-contents" >> $GITHUB_OUTPUT
+            
+    build-lighting-app:
+        name: Build Lighting App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lighting-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
+
+    build-air-quality-sensor-app:
+        name: Build Air Quality Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "air-quality-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-light-switch-app:
+        name: Build Light Switch App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "light-switch-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-lock-app:
+        name: Build Lock App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lock-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
+            ncp-rs911x-support: true
+
+    build-thermostat-app:
+        name: Build Thermostat App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "thermostat"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
+            ncp-rs911x-support: true
+
+    build-window-app:
+        name: Build Window App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "window-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+
+    build-fan-control-app:
+        name: Build Fan Control App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "fan-control-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-closure-app:
+        name: Build Closure App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "closure-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-multi-sensor-app:
+        name: Build Multi Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "multi-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-onoff-plug-app:
+        name: Build OnOff Plug App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "onoff-plug-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-refrigerator-app:
+        name: Build Refrigerator App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "refrigerator-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+    
+    build-performance-test-app:
+        name: Build Performance Test App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "performance-test-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+
+    build-zigbee-matter-light-app:
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: true
