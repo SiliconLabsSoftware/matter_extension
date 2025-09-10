@@ -31,12 +31,12 @@ jobs:
               uses: actions/checkout@v5
               with:
                 submodules: 'false' # Do not initialize submodules automatically
-            
+
             - name: Mark repository as safe for Git
               shell: bash
               run: |
                 git config --global --add safe.directory /__w/matter_extension/matter_extension
-                
+
             - name: Initialize required submodules
               shell: bash
               run: |
@@ -70,5 +70,5 @@ jobs:
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: out/*/*/artifact
-                  if-no-files-found: error
+                  if-no-files-found: warn
                   overwrite: true

@@ -19,7 +19,6 @@ on:
                 options:
                     - standard
                     - full
-                    - release
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
@@ -40,7 +39,11 @@ jobs:
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                      fi
                   fi
 
     validate-metadata:
@@ -139,7 +142,7 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            
+
     build-refrigerator-app:
         name: Build Refrigerator App
         needs: set-build-type
@@ -170,6 +173,7 @@ jobs:
             mgm24-internal-support: false
             sixg301-support: true
             wifi-soc-support: false
+            sixg301-support: true
     
     build-sqa-tools:
         name: Build SQA Tools
@@ -212,10 +216,8 @@ jobs:
         name: Wait for Test Results
         needs: merge-apps
         uses: ./.github/workflows/sqa-sanity-tests.yaml
-        with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
         secrets:
-            private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
