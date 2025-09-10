@@ -292,3 +292,6 @@ jobs:
             mgm24-internal-support: false
             wifi-soc-support: false
             sixg301-support: true
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-internal-support: false
