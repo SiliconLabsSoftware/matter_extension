@@ -154,7 +154,7 @@ jobs:
             wifi-soc-support: false
 
     build-zigbee-matter-light-sequential-app:
-        name: Build Zigbee Matter Light App
+        name: Build Zigbee Matter Light Sequential App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -168,7 +168,7 @@ jobs:
             sixg301-support: true
 
     build-zigbee-matter-light-concurrent-app:
-        name: Build Zigbee Matter Light App
+        name: Build Zigbee Matter Light Concurrent App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
