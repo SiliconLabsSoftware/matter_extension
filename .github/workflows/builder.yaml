@@ -105,7 +105,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: success()
               with:
-                  name: map-files-${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
+                  name: map-files-${{ inputs.example-app }}-${{inputs.platform}}
                   path: |
                     out/**/*.map
                   retention-days: 1

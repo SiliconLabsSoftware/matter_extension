@@ -220,4 +220,4 @@ jobs:
               with:
                 name: "build-map-files"
                 delete-merged: true
-                pattern: "map-files-*-${{ needs.set-build-type.outputs.build-type }}"
+                pattern: "map-files-*"
