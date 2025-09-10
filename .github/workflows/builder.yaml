@@ -73,10 +73,33 @@ jobs:
                   if-no-files-found: warn
                   overwrite: true
 
+            - name: Find and upload map files for code size analysis
+              shell: bash
+              run: |
+                echo "Searching for map files..."
+                find out -name "*.map" -type f 2>/dev/null || echo "No map files found"
+                
+                # List directory structure to understand layout
+                echo "Directory structure:"
+                find out -type d | head -20 2>/dev/null || echo "No out directory found"
+                
+                # Check if any map files exist and upload them
+                if find out -name "*.map" -type f | grep -q .; then
+                  echo "Map files found, creating artifact..."
+                  find out -name "*.map" -type f > /tmp/map_files.txt
+                  cat /tmp/map_files.txt
+                else
+                  echo "No map files found to upload"
+                fi
+
             - name: Upload map files for code size analysis
               uses: actions/upload-artifact@v4
+              if: success()
               with:
                   name: map-files-${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
-                  path: "out/*/*/build/*/*.map"
+                  path: |
+                    out/**/*.map
+                    out/*/*/build/**/*.map
+                    out/*/*/*/build/**/*.map
                   retention-days: 1
                   if-no-files-found: ignore
