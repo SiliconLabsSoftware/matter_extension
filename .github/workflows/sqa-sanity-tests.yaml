@@ -27,7 +27,6 @@ jobs:
           with:
               github-token: ${{ steps.generate_app_token.outputs.token }}
               script: |
-                  const core = require('@actions/core');
                     const headSha = (context.eventName === 'pull_request')
                       ? context.payload.pull_request.head.sha
                       : context.sha;
