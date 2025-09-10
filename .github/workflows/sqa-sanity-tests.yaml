@@ -46,7 +46,6 @@ jobs:
           with:
             github-token: ${{ steps.generate_app_token.outputs.token }}
             script: |
-                const core = require('@actions/core');
                 const checkRunId = Number('${{ steps.create_check_run.outputs.check_run_id }}');
                 const timeoutSeconds = 3300; // ~55 minutes (margin before 1h token expiry)
                 const pollIntervalSeconds = 60;
@@ -112,7 +111,6 @@ jobs:
           with:
             github-token: ${{ steps.refresh_token.outputs.token }}
             script: |
-                const core = require('@actions/core');
                 const checkRunId = Number('${{ steps.create_check_run.outputs.check_run_id }}');
                 const timeoutSeconds = 3300;
                 const pollIntervalSeconds = 60;
