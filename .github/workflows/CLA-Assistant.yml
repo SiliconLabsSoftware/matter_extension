@@ -38,7 +38,6 @@ jobs:
           path-to-document: "https://github.com/SiliconLabsSoftware/agreements-and-guidelines/blob/main/contributor_license_agreement.md"
           branch: 'cla-database'
           allowlist: silabs-*,bot*
-          # the following are the optional inputs - If the optional inputs are not given, then default values will be taken
           remote-organization-name: "SiliconLabsInternal"
           remote-repository-name: "contributor-license-agreements"
           create-file-commit-message: "Created the CLA database file. CLA Assistant Lite bot created this file."

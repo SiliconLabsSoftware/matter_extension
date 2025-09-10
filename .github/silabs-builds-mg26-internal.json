@@ -1,0 +1,25 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": [],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
+
+        "default": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": [""]
+            }
+        ],
+        "zigbee-matter-light":  [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ]
+    } 
+}

@@ -1,0 +1,39 @@
+name: Build SQA apps
+
+on:
+    workflow_dispatch:
+
+concurrency:
+    group: sqa-build-examples-${{github.ref}}
+    cancel-in-progress: true
+
+jobs:
+    build-lock-app:
+        name: Build Lock App
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lock-app"
+            build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-support: false
+            mg26-internal-support: false
+            mgm26-support: false
+            mgm26-internal-support: false
+
+
+    merge-apps:
+        name: Merge App Artifacts
+        runs-on: ubuntu-latest
+        needs:
+            - build-lock-app
+        if: success()
+
+        steps:
+            - name: Merge artifacts
+              uses: actions/upload-artifact/merge@v4
+              with:
+                  name: "sample-apps-custom-sqa"
+                  delete-merged: true
+                  pattern: "*-custom-sqa"

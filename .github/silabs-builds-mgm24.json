@@ -1,0 +1,19 @@
+
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4316a"],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": ["brd4316a", "brd4317a", "brd4318a"],
+                "arguments": [""]
+            }
+        ]
+    } 
+}
