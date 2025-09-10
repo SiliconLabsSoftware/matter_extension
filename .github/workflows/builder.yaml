@@ -73,7 +73,7 @@ jobs:
                   if-no-files-found: warn
                   overwrite: true
 
-            - name: Find and upload map files for code size analysis
+            - name: Find map files for code size analysis
               shell: bash
               run: |
                 echo "=== BUILD OUTPUT ANALYSIS ==="
@@ -107,6 +107,6 @@ jobs:
               with:
                   name: map-files-${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
-                    **/*.map
+                    out/**/*.map
                   retention-days: 1
                   if-no-files-found: ignore
