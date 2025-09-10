@@ -446,18 +446,18 @@ def _determine_app_info(app_name_folder, board_id, build_type):
         }
     elif "thread" in app_name_folder:
         return {
-            'app_name': f"{board_id}-OpenThread-{build_type}",
+            'app_name': f"{board_id}-OpenThread",
             'cmp_type': ""
         }
     elif "zigbee-matter-light" in app_name_folder:
         cmp_type = "-thread-sequential" if "sequential" in app_name_folder else "-thread-concurrent"
         return {
-            'app_name': f"{board_id}-OpenThread-{build_type}",
+            'app_name': f"{board_id}-OpenThread",
             'cmp_type': cmp_type
         }
     else:
         return {
-            'app_name': f"{board_id}-WiFi-{build_type}",
+            'app_name': f"{board_id}-WiFi",
             'cmp_type': ""
         }
 
