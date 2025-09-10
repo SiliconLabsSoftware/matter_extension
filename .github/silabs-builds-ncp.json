@@ -1,6 +1,6 @@
 {
     "standard": {
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4187c"],
                 "arguments": [""]
@@ -8,7 +8,7 @@
         ]
     },
     "full": {
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4186c", "brd4187c"],
                 "arguments": [""]

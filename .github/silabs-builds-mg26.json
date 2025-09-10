@@ -1,7 +1,7 @@
 
 {
     "standard": {
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a"],
                 "arguments": [""]
@@ -10,16 +10,22 @@
     },
     "full": {
 
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a","brd4121a"],
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee-matter-light-sequential":  [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a","brd4121a"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ],
+        "zigbee-matter-light-concurrent": [
+            {
+                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a","brd4121a"],
+                "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"] 
             }
         ]
     } 

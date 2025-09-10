@@ -51,7 +51,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lighting-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             sixg301-support: true
 
@@ -60,7 +60,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "air-quality-sensor-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-light-switch-app:
@@ -68,7 +68,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "light-switch-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-lock-app:
@@ -76,7 +76,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lock-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
@@ -87,7 +87,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "thermostat"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
@@ -98,7 +98,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "window-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
 
@@ -107,7 +107,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "fan-control-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
@@ -116,7 +116,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "closure-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
@@ -125,7 +125,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "multi-sensor-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-onoff-plug-app:
@@ -133,7 +133,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "onoff-plug-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-refrigerator-app:
@@ -141,7 +141,7 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "refrigerator-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
     
     build-performance-test-app:
@@ -149,16 +149,30 @@ jobs:
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "performance-test-app"
+            example-app: "regular"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
 
-    build-zigbee-matter-light-app:
+    build-zigbee-matter-light-sequential-app:
         name: Build Zigbee Matter Light App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "zigbee-matter-light"
+            example-app: "zigbee-matter-light-sequential"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: true
+
+    build-zigbee-matter-light-concurrent-app:
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light-concurrent"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-keyword: ""
             mg24-internal-support: false

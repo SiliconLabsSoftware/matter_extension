@@ -1,6 +1,6 @@
 {
     "standard": {
-        "default": [
+        "regular": [
             {
                 "boards": [],
                 "arguments": [""]
@@ -9,16 +9,22 @@
     },
     "full": {
 
-        "default": [
+        "regular": [
             {
                 "boards": ["brd2709a"],
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee-matter-light-sequential":  [
             {
                 "boards": ["brd2709a"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ],
+        "zigbee-matter-light-concurrent": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"] 
             }
         ]
     } 

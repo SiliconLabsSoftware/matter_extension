@@ -1,22 +1,28 @@
 
 {
     "standard": {
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4187c"],
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-light": [
+        "zigbee-matter-light-sequential": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            }
+        ],
+        "zigbee-matter-light-concurrent": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix concurrent","'--with matter_zigbee_concurrent;matter'"] 
             }
         ]
     },
     "full": {
 
-        "default": [
+        "regular": [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": [""]
