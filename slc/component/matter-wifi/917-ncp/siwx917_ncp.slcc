@@ -24,10 +24,10 @@ recommends:
     instance: [vcom]
 
 requires:
-- name: wiseconnect3_common
-- name: sl_si91x_spi_bus
-- name: device_init_dpll
-- name: spidrv_instance
+  - name: wiseconnect_common
+  - name: sl_si91x_spi_bus
+  - name: device_init_dpll
+  - name: spidrv_instance
 
 include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp

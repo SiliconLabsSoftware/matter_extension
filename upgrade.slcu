@@ -356,3 +356,14 @@ upgrade:
     configuration:
       - script: slc/config/scripts/upgrade_config_to_2.7.0.lua
 
+  - sdk:
+      id: matter
+      version: "2.6.0"
+ 
+    component:
+      - trigger: wiseconnect3_common
+        description: Renamed the wiseconnect3_common to wiseconnect_common
+        remove:
+          - wiseconnect3_common
+        add:
+          - wiseconnect_common
