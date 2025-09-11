@@ -202,6 +202,26 @@ jobs:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+    
+    merge-map-files:
+        name: Merge Map Files for Code Size Analysis
+        runs-on: ubuntu-latest
+        needs:
+            - set-build-type
+            - build-lighting-app 
+            - build-lock-app
+            - build-window-app
+            - build-thermostat-app
+            - build-zigbee-matter-light-app
+        if: success()
+
+        steps:
+            - name: Merge map files artifacts
+              uses: actions/upload-artifact/merge@v4
+              with:
+                name: "build-map-files"
+                delete-merged: true
+                pattern: "map-files-*"
 
     wait-for-test-results:
         name: Wait for Test Results

@@ -72,3 +72,41 @@ jobs:
                   path: out/*/*/artifact
                   if-no-files-found: warn
                   overwrite: true
+
+            - name: Find map files for code size analysis
+              shell: bash
+              run: |
+                echo "=== BUILD OUTPUT ANALYSIS ==="
+                echo "Current directory:"
+                pwd
+                
+                echo "=== Contents of current directory ==="
+                ls -la || echo "No files found"
+                
+                echo "=== Searching for ANY map files recursively ==="
+                find . -name "*.map" -type f 2>/dev/null || echo "No map files found anywhere"
+                
+                echo "=== Searching for build-related directories ==="
+                find . -type d -name "*build*" 2>/dev/null | head -20 || echo "No build directories found"
+                
+                echo "=== Searching for 'out' or similar directories ==="
+                find . -type d \( -name "out*" -o -name "*output*" -o -name "*artifact*" -o -name "*build*" \) 2>/dev/null | head -20 || echo "No output directories found"
+                
+                echo "=== If map files exist, list them ==="
+                if find . -name "*.map" -type f | grep -q .; then
+                  echo "Map files found:"
+                  find . -name "*.map" -type f > /tmp/map_files.txt
+                  cat /tmp/map_files.txt
+                else
+                  echo "No map files found to upload"
+                fi
+                
+            - name: Upload map files for code size analysis
+              uses: actions/upload-artifact@v4
+              if: success()
+              with:
+                  name: map-files-${{ inputs.example-app }}-${{inputs.platform}}
+                  path: |
+                    out/**/*.map
+                  retention-days: 1
+                  if-no-files-found: ignore
