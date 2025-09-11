@@ -134,7 +134,7 @@ pipeline
                 }
             }
         }
-        stage('Trigger SQA Regression Pipelines')
+        stage('Trigger SQA Regression Pipelines') 
         {
             when {
                 expression { env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_") }
