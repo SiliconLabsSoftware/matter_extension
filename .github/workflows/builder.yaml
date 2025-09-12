@@ -1,5 +1,5 @@
 name: Common Builder
-
+  
 on:
     workflow_call:
         inputs:
