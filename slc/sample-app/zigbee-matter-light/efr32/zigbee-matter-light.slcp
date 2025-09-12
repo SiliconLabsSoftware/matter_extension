@@ -260,15 +260,17 @@ config_file:
     condition: [matter_ble_dmp_test]
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/MatterDMCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/LightingManager.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/src/LightingManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/ZclCallbacks.cpp
     directory: src
 
 include:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/include
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
