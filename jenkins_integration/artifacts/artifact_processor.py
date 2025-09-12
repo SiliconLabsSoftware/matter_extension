@@ -138,7 +138,7 @@ def _get_artifact_info(workflow_id):
     Raises:
         RuntimeError: If API request fails or no artifacts found
     """
-    workflow_artifact_url = f"{config.actions_runs_url}/{workflow_id}/artifacts"
+    workflow_artifact_url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
     print(f"Fetching artifacts from URL: {workflow_artifact_url}")
     response = _make_github_api_request(workflow_artifact_url)
     artifacts_data = response.json()
