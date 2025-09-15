@@ -61,8 +61,6 @@ define:
     value: 1
   - name: SL_WFX_CONFIG_SCAN
     value: 1
-  - name: SIWX_917
-    value: 1
   - name: CHIP_9117
     value: 1
   - name: DEBUG_UART

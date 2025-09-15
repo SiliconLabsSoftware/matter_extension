@@ -24,6 +24,12 @@ component:
   - id: matter_shell
     from: matter
 
+  - id: mbedtls_pki_aws
+    condition: [matter_aws]
+    from: matter
+  - id: mbedtls_entropy_default_aws
+    condition: [matter_aws]
+    from: matter
   - id: matter_wifi
     from: matter
 
