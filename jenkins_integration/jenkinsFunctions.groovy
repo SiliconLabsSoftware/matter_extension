@@ -201,14 +201,14 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
                     sh 'pwd && ls -al'
                     dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}", "${commit_sha}")
+                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
                     }
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
                         regression_list.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}", "${commit_sha}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
@@ -219,7 +219,7 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
                         regression_list_main.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}", "${commit_sha}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
