@@ -160,7 +160,7 @@ def wait_for_artifacts(commit_sha, sqa=False):
     print(f"Job to wait for: {config_data['job_name']}")
     print(f"Max wait time: {config_data['max_retries']} minutes")
     
-    for attempt in range(1, config_data['max_retries'] + 2):
+    for attempt in range(1, config_data['max_retries'] + 4):
         try:
             if _check_artifacts_ready(commit_sha, config_data['job_name']):
                 print(f"Artifacts are ready after {attempt} attempts!")
