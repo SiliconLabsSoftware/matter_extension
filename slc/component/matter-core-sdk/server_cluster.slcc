@@ -8,6 +8,9 @@ include:
     -   path: DefaultServerCluster.h
     -   path: ServerClusterContext.h
     -   path: ServerClusterInterface.h
+    -   path: ServerClusterInterfaceRegistry.h
+    -   path: SingleEndpointServerClusterRegistry.h
+    -   path: OptionalAttributeSet.h
 label: server_cluster
 package: matter
 provides:
@@ -20,5 +23,7 @@ source:
 -   path: third_party/matter_sdk/src/app/server-cluster/AttributeListBuilder.cpp
 -   path: third_party/matter_sdk/src/app/server-cluster/DefaultServerCluster.cpp
 -   path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterface.cpp
+-   path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterfaceRegistry.cpp
+-   path: third_party/matter_sdk/src/app/server-cluster/SingleEndpointServerClusterRegistry.cpp
 ui_hints:
     visibility: never
