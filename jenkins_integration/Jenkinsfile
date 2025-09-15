@@ -114,7 +114,7 @@ pipeline
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
-                expression { pr_number == null }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -124,7 +124,7 @@ pipeline
        }
        stage('Upload SQA Artifacts') {
             when {
-                expression { pr_number == null }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -134,10 +134,10 @@ pipeline
                 }
             }
         }
-        stage('Trigger SQA Regression Pipelines')
+        stage('Trigger SQA Regression Pipelines') 
         {
             when {
-                expression { pr_number == null }
+                expression {  env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
