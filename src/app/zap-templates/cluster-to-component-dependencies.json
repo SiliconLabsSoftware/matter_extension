@@ -652,5 +652,11 @@
     "value": [
       "%extension-matter%matter_window_covering"
     ]
+  },
+  {
+    "clusterCode": "zone_management-server",
+    "value": [
+      "%extension-matter%matter_zone_management"
+    ]
   }
 ]

@@ -25,6 +25,10 @@ include:
     -   path: Dnssd.h
     -   path: Server.h
     -   path: CommissioningModeProvider.h
+  # TODO: Remove this once NFC dependency is removed
+  - path: third_party/matter_sdk/src/nfc
+    file_list:
+      - path: NFCReaderTransport.h
 label: libchipappserver
 package: matter
 provides:

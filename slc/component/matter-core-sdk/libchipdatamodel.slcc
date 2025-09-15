@@ -98,6 +98,8 @@ include:
     -   path: DeferredAttributePersistenceProvider.h
     -   path: AttributePersistenceProvider.h
     -   path: PascalString.h
+    -   path: String.h
+    -   path: AttributePersistence.h
 label: libchipdatamodel
 package: matter
 provides:
@@ -120,9 +122,11 @@ source:
 -   path: third_party/matter_sdk/src/app/CommandResponseSender.cpp
 -   path: third_party/matter_sdk/src/app/GlobalAttributes.cpp
 -   path: third_party/matter_sdk/src/app/StorageDelegateWrapper.cpp
+-   path: third_party/matter_sdk/src/app/persistence/AttributePersistence.cpp
 -   path: third_party/matter_sdk/src/app/persistence/AttributePersistenceProviderInstance.cpp
 -   path: third_party/matter_sdk/src/app/persistence/DeferredAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/persistence/DefaultAttributePersistenceProvider.cpp
+-   path: third_party/matter_sdk/src/app/persistence/String.cpp
 -   path: third_party/matter_sdk/src/app/SafeAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/EventManagement.cpp
 -   path: third_party/matter_sdk/src/app/FailSafeContext.cpp
