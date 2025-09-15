@@ -1,5 +1,5 @@
 name: CLA validation
-
+# Comment for testing PR for this feature
 on:
   issue_comment:
     types: [created]
