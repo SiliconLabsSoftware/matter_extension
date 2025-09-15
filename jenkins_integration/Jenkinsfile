@@ -124,7 +124,7 @@ pipeline
        }
        stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -137,7 +137,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines') 
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_") }
+                expression {  env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
