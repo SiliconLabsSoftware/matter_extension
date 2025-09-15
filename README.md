@@ -6,7 +6,7 @@ Welcome to the Silicon Labs Matter Extension repo. Matter is an application laye
 
 Silicon Labs supports Matter on several different hardware platforms including the EFR32, RS9116, WF200, and the new SiWx917, which is a Wi-Fi System-on-Chip (SoC).
 
-**This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.6.2/matter-start/)**
+**This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.7.0/matter-start/)**
 
 _To see official release notes containing a list of features and known issues, go to [SiliconLabs/matter_extension/releases](https://github.com/SiliconLabs/matter_extension/releases) and find the corresponding notes for the release you are using._
 
@@ -67,7 +67,7 @@ git config --system core.longpaths true  
 
 ### Creating an Application Project
 
-Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app-thread.slcp example or from the `lighting-app-thread-bootloader.slcw` [solution](https://docs.silabs.com/matter/2.6.2/matter-overview-guides/matter-solutions) application project file:
+Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app-thread.slcp example or from the `lighting-app-thread-bootloader.slcw` [solution](https://docs.silabs.com/matter/2.7.0/matter-overview-guides/matter-solutions) application project file:
 
 Sample-App Example: 
 For Mac and Linux:
@@ -214,7 +214,7 @@ The relevant entry from `src/app/zap-templates/cluster-to-component-dependencies
     ]
   }
 ```
-More details on how to develop using SLC CLI can be found at [Creating Matter Applications using SLC CLI](https://docs.silabs.com/matter/2.6.2/matter-overview-guides/matter-slc-cli)
+More details on how to develop using SLC CLI can be found at [Creating Matter Applications using SLC CLI](https://docs.silabs.com/matter/2.7.0/matter-overview-guides/matter-slc-cli)
 
 
 ## Project Upgrades
@@ -224,9 +224,9 @@ Users can upgrade a project to a newer Matter extension version by performing th
 Checkout the target tag/branch to which you need to upgrade the project.
 1. Run the slc/sl_setup_env.py script to check out dependencies of that target tag/branch.
 1. Run the slc/sl_project_upgrade.py script to upgrade the project to the target Matter extension version.
-1. For example, to upgrade a project to Matter extension v2.6.2:
+1. For example, to upgrade a project to Matter extension v2.7.0:
    
-`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app-thread.slcp 2.6.2`
+`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app-thread.slcp 2.7.0`
 
 
 ## Getting Started with Simplicity Studio Development 
