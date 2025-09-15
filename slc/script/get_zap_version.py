@@ -27,7 +27,8 @@ from pathlib import Path
 # This string should remain empty on the main branch. Update it only when a release branch is created. 
 # Coordinate with the studio team to determine the appropriate ZAP version for the release.
 # Version string example :  "v2024.08.14-nightly"
-SIMPLICITY_STUDIO_ZAP_VERSION = ""
+# TODO: empty this once CSA is update, needed for TE2
+SIMPLICITY_STUDIO_ZAP_VERSION = "v2025.09.10-nightly"
 
 def get_zap_version():
     if SIMPLICITY_STUDIO_ZAP_VERSION:
