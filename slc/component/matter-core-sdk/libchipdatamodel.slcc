@@ -91,15 +91,15 @@ include:
     -   path: AttributeAccessInterfaceRegistry.h
     -   path: AttributeReportBuilder.cpp
     -   path: AttributeValueEncoder.cpp
-  - path: third_party/matter_sdk/src/app/persistence
+  - path: third_party/matter_sdk/src/app
     file_list:
-    -   path: AttributePersistenceProviderInstance.h
-    -   path: DefaultAttributePersistenceProvider.h
-    -   path: DeferredAttributePersistenceProvider.h
-    -   path: AttributePersistenceProvider.h
-    -   path: PascalString.h
-    -   path: String.h
-    -   path: AttributePersistence.h
+    -   path: persistence/AttributePersistenceProviderInstance.h
+    -   path: persistence/DefaultAttributePersistenceProvider.h
+    -   path: persistence/DeferredAttributePersistenceProvider.h
+    -   path: persistence/AttributePersistenceProvider.h
+    -   path: persistence/PascalString.h
+    -   path: persistence/String.h
+    -   path: persistence/AttributePersistence.h
 label: libchipdatamodel
 package: matter
 provides:
