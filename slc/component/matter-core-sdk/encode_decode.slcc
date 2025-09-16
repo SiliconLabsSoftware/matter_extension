@@ -7,10 +7,10 @@ define:
 description: encode_decode
 id: encode_decode
 include:
--   path: third_party/matter_sdk/src/app/data-model
+-   path: third_party/matter_sdk/src/app/
     file_list:
-    -   path: StructDecodeIterator.h
-    -   path: WrappedStructEncoder.h
+    -   path: data-model/StructDecodeIterator.h
+    -   path: data-model/WrappedStructEncoder.h
 label: encode_decode
 package: matter
 provides:

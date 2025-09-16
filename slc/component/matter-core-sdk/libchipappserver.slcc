@@ -29,6 +29,7 @@ include:
   - path: third_party/matter_sdk/src/nfc
     file_list:
       - path: NFCReaderTransport.h
+      - path: NFCTag.h
 label: libchipappserver
 package: matter
 provides:

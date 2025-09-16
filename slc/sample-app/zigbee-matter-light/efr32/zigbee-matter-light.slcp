@@ -277,6 +277,8 @@ include:
       - path: AppTask.h
       - path: CHIPProjectConfig.h
       - path: LightingManager.h
+      - path: ZigbeeCMPConfig.h
+      - path: ZigbeeSequentialConfig.h
     directory: include
 post_build:
   profile: application
