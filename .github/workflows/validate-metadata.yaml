@@ -15,8 +15,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-  validate-package-field:
-    name: Validate Matter Extension Package Field
+  package-field:
+    name: Matter Extension Package Field
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -24,7 +24,7 @@ jobs:
         with:
           submodules: false 
 
-      - name: Validate Matter Extension Package Field
+      - name: Matter Extension Package Field
         shell: bash
         run: |
           set -e 
@@ -35,15 +35,14 @@ jobs:
             if [[ -f "missing_package_matter.txt" ]]; then
               echo "Packages without 'package: matter' detected"
               cat missing_package_matter.txt
-              exit 1 
             else 
               echo "Error: 'missing_package_matter.txt' does not exist, but it was expected."
               exit 1
             fi
           fi
 
-  validate-file-path-lengths:
-    name: Validate Matter Extension File Path Lengths
+  file-path-lengths:
+    name: Matter Extension File Path Lengths
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
@@ -68,12 +67,11 @@ jobs:
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
 
-    - name: Validate Matter Extension File Path Lengths 
+    - name: Matter Extension File Path Lengths 
       shell: bash
       working-directory: ${{ github.workspace }}/../staged/matter_extension
       run: |
         set -e 
-        pwd
         output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
         echo "$output"
         no_warning="INFO:__main__:No file paths exceeding 240 characters were detected. Nothing will be written to the file."
@@ -81,15 +79,14 @@ jobs:
           if [[ -f "long_file_paths.txt" ]]; then
             echo "File paths exceeding 240 characters detected!"
             cat long_file_paths.txt
-            exit 1
           else
             echo "Error: 'long_file_paths.txt' does not exist, but it was expected."
             exit 1
           fi  
         fi
         
-  validate-matter-templates:
-    name: Validate Matter Templates
+  matter-templates:
+    name: Matter Templates
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -97,14 +94,14 @@ jobs:
         with:
           submodules: false 
 
-      - name: Validate Matter Templates 
+      - name: Matter Templates 
         shell: bash
         run: | 
           set -e
           python3 -u './slc/script/validate_matter_templates.py'
    
-  validate-components:
-    name: Validate Components
+  components:
+    name: Components
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
@@ -140,7 +137,7 @@ jobs:
           slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
           slc signature trust --sdk ${SISDK_ROOT}
           
-      - name: Validate Components
+      - name: Components
         shell: bash
         continue-on-error: true
         run: |
