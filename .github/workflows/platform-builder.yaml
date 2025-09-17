@@ -69,6 +69,11 @@ on:
                 required: false
                 type: boolean
                 default: false
+            ncp-917-brd4357a-support:
+                required: false
+                type: boolean
+                default: false
+
 jobs:
     mg24-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support }}
@@ -169,6 +174,17 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-rs911x
+    
+    ncp-917-brd4357a-build-job:
+        if: ${{ inputs.ncp-917-brd4357a-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-ncp-brd4357a.json'
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-917-ncp-bootloader.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-917-brd4357a
+
 
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}

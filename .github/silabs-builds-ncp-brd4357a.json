@@ -3,7 +3,7 @@
         "default": [
             {
                 "boards": ["brd4187c"],
-                "arguments": [""]
+                "arguments": ["--output_suffix brd4357a", "'--with siwx917_ncp_brd4357a;matter'"]
             }
         ]
     },
@@ -11,8 +11,8 @@
         "default": [
             {
                 "boards": ["brd4186c", "brd4187c"],
-                "arguments": [""]
+                "arguments": ["--output_suffix brd4357a", "'--with siwx917_ncp_brd4357a;matter'"]
             }
         ]
-    } 
+    }
 }
