@@ -118,7 +118,6 @@ jobs:
         with:
             example-app: "closure-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
