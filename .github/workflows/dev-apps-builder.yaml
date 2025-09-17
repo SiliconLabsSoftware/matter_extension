@@ -81,7 +81,6 @@ jobs:
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
-            ncp-917-brd4357a-support: true
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -93,7 +92,6 @@ jobs:
             ncp-917-support: true
             ncp-wf200-support: true
             ncp-rs911x-support: true
-            ncp-917-brd4357a-support: true
 
     build-window-app:
         name: Build Window App
@@ -103,7 +101,6 @@ jobs:
             example-app: "window-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-917-brd4357a-support: true
 
     build-fan-control-app:
         name: Build Fan Control App
