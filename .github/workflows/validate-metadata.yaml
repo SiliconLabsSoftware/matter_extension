@@ -139,7 +139,7 @@ jobs:
           
       - name: Validate Components
         shell: bash
-        continue-on-error: true
+        continue-on-error: true # TO-DO: Set to false once work is completed to resolve validate components errors
         run: |
           set -e
           python3 -u './slc/script/validate_components.py' slc/component slc
