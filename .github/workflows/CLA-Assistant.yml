@@ -28,7 +28,7 @@ jobs:
         run: echo "::add-mask::${{ steps.app-token.outputs.token }}"
 
       - name: "CLA Assistant"
-        if: ${{ contains(github.event.comment.body, 'I have read the CLA Document and I hereby sign the CLA') }} || github.event_name == 'pull_request_target'
+        if: ${{ contains(github.event.comment.body, 'I have read the CLA Document and I hereby sign the CLA') }} || github.event_name == 'pull_request'
         uses: SiliconLabsSoftware/action-cla-assistant@silabs_flavour_v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
