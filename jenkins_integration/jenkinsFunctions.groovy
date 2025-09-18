@@ -238,6 +238,56 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
         }
     }
 }
+
+/**
+ * Publishes static analysis results to SonarQube.
+ */
+def publishSonarAnalysis() {
+
+        // Use the SonarQube environment defined in Jenkins
+        withSonarQubeEnv('Silabs SonarQube') {
+        
+        // Use credentials stored in Jenkins
+        withCredentials([string(credentialsId: 'sonarqube_token', variable: 'SONAR_SECRET')]) {
+
+            // Create necessary directories
+            sh "mkdir -p ${env.WORKSPACE}/sonar"
+            sh "mkdir -p ${env.WORKSPACE}/sonar-cache"
+
+            // Prepare global SonarQube parameters
+            def sonarqubeParams = [
+                "-Dsonar.projectKey=matter_extension",
+                "-Dsonar.projectBaseDir=${env.WORKSPACE}",
+                "-Dsonar.working.directory=${env.WORKSPACE}/sonar",
+                "-Dsonar.token=${SONAR_SECRET}",
+                "-Dsonar.cfamily.cache.enabled=true",
+                "-Dsonar.cfamily.cache.path=${env.WORKSPACE}/sonar-cache",
+                "-Dsonar.userHome=${env.WORKSPACE}/sonar-user-home",
+                "-Duser.home=${env.WORKSPACE}/sonar-user-home",
+                "-Dsonar.qualitygate.wait=true",
+                "-Dsonar.cfamily.threads=32",
+                "-Dsonar.sourceEncoding=UTF-8",
+                "-Dsonar.sources=.",
+                "-Dsonar.inclusions=**/*.c,**/*.h,**/*.cpp,**/*.hpp",
+                "-Dsonar.exclusions=third_party/**"
+            ]
+
+            // Handle pull request analysis if applicable
+            if (env.CHANGE_ID) {
+                sonarqubeParams += [
+                    "-Dsonar.pullrequest.key=${env.CHANGE_ID}",
+                    "-Dsonar.pullrequest.branch=${env.CHANGE_BRANCH}",
+                    "-Dsonar.pullrequest.base=${env.CHANGE_TARGET}"
+                ]
+            } else {
+                sonarqubeParams += ["-Dsonar.branch.name=${env.BRANCH_NAME}"]
+            }
+
+            sh "sonar-scanner ${sonarqubeParams.collect { "\"${it}\"" }.join(' ')}"
+        }
+    }
+}
+
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
