@@ -216,12 +216,12 @@ fi
 if [ "$skip_gen" = false ]; then
     if [[ "$SILABS_APP_PATH" == *.slcw ]]; then        
         # Get bootloader arguments
-        BOOTLOADER_WITH_ARG="--with $SILABS_BOARD"
+        BOOTLOADER_WITH_ARG="--with $BRD_ONLY"
         if [ ! -z "$BL_COMPONENTS" ]; then
-            BOOTLOADER_WITH_ARG="--with $SILABS_BOARD,$BL_COMPONENTS"
+            BOOTLOADER_WITH_ARG="--with $BRD_ONLY,$BL_COMPONENTS"
             echo "Bootloader components: $BL_COMPONENTS"
         else
-            echo "Bootloader: board only $SILABS_BOARD"
+            echo "Bootloader: board only $BRD_ONLY"
         fi
 
         BOOTLOADER_WITHOUT_ARG=""
@@ -230,12 +230,12 @@ if [ "$skip_gen" = false ]; then
         fi
         
         # Get application arguments
-        APPLICATION_WITH_ARG="--with $SILABS_BOARD"
+        APPLICATION_WITH_ARG="--with $BRD_ONLY"
         if [ ! -z "$APP_COMPONENTS" ]; then
-            APPLICATION_WITH_ARG="--with $SILABS_BOARD,$APP_COMPONENTS"
+            APPLICATION_WITH_ARG="--with $BRD_ONLY,$APP_COMPONENTS"
             echo "Application components: $APP_COMPONENTS"
         else
-            echo "Application: board only $SILABS_BOARD"
+            echo "Application: board only $BRD_ONLY"
         fi
 
         APPLICATION_WITHOUT_ARG=""
@@ -260,9 +260,9 @@ if [ "$skip_gen" = false ]; then
         fi
     else
         # Generate .slcp
-        WITH_ARG="--with $SILABS_BOARD"
+        WITH_ARG="--with $BRD_ONLY"
         if [ ! -z "$APP_COMPONENTS" ]; then
-            WITH_ARG="--with $SILABS_BOARD,$APP_COMPONENTS"
+            WITH_ARG="--with $BRD_ONLY,$APP_COMPONENTS"
         fi
         
         WITHOUT_ARG=""
