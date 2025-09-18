@@ -204,7 +204,7 @@ jobs:
 
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
-        needs: wait-for-test-results
+        needs: merge-apps
         runs-on: ubuntu-latest
         if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
         steps:
