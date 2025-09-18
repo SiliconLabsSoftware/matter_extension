@@ -365,5 +365,4 @@ def approvePullRequestOnSuccess(sqa_tests_result) {
         echo "Skipping PR approval: No CHANGE_ID found or not a GitHub Matter extension job"
     }
 }
-
 return this
