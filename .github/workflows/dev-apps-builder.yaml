@@ -1,10 +1,6 @@
 name: Build Dev apps
 
 on:
-    push:
-        branches:
-            - main
-            - "release_*"
     pull_request:
         branches:
             - main
