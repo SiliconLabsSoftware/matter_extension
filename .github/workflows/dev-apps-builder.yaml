@@ -202,16 +202,9 @@ jobs:
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
-    wait-for-test-results:
-        name: Wait for Test Results
-        needs: merge-apps
-        uses: ./.github/workflows/sqa-sanity-tests.yaml
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
-
     trigger-sqa-workflow:
         name: Trigger SQA Workflow
-        needs: wait-for-test-results
+        needs: merge-apps
         runs-on: ubuntu-latest
         if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
         steps:
