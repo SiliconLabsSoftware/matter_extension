@@ -117,9 +117,9 @@ def _is_release_branch(branch_name):
         branch_name (str): Branch name to check
         
     Returns:
-        bool: True if it's a release branch, False otherwise
+        bool: True if the branch name contains 'release_' or is 'main', False otherwise
     """
-    return "release_" in branch_name
+    return "release_" in branch_name or branch_name == "main"
 
 
 def _perform_artifactory_upload(filepath, artifactory_url):
