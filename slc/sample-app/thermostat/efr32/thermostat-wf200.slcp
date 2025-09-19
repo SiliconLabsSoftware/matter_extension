@@ -145,7 +145,7 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/MatterDMCallbacks.cpp
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
 
 define:
