@@ -14,6 +14,10 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
+  - id: common_token_manager_dynamic
+    condition: [device_series_3]
+  - id: common_token_manager
+    condition: [device_series_3]
   - id: matter_buttons
     from: matter
   - id: matter_leds
