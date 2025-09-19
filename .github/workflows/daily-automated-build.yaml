@@ -1,0 +1,130 @@
+name: Daily Automated Build
+
+on:
+  schedule:
+    - cron: '0 9 * * *'  # 5 AM EST
+  workflow_dispatch: # Allow manual testing 
+
+concurrency:
+  group: daily-automated-build-${{github.ref}}
+  cancel-in-progress: false
+
+env:
+  # Set timezone
+  TZ: 'America/New_York'
+
+jobs:
+  check-recent-commits:
+    name: Check for Recent Commits
+    runs-on: ubuntu-latest
+    outputs:
+      has-recent-commits: ${{ steps.check-commits.outputs.has-commits }}
+      commit-count: ${{ steps.check-commits.outputs.commit-count }}
+      latest-commit: ${{ steps.check-commits.outputs.latest-commit }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0  # Fetch full history to check commit dates
+          ref: main       # Check main branch
+
+      - name: Check for commits in last 24 hours
+        id: check-commits
+        run: |
+          # Set timezone for consistent handling
+          export TZ='America/New_York'
+          
+          # Get current time and calculate 24 hours ago
+          current_time=$(date +%s)
+          twenty_four_hours_ago=$((current_time - 86400))
+          
+          echo "Current time (EST/EDT): $(date)"
+          echo "24 hours ago (EST/EDT): $(date -d @$twenty_four_hours_ago)"
+          
+          # Check for commits in the last 24 hours on main branch
+          recent_commits=$(git log --since="24 hours ago" --oneline --pretty=format:"%h %s" main)
+          commit_count=$(git rev-list --count --since="24 hours ago" main)
+          latest_commit=$(git log -1 --pretty=format:"%h - %s (%an, %ar)" main)
+          
+          echo "Commits in last 24 hours: $commit_count"
+          echo "Recent commits:"
+          echo "$recent_commits"
+          echo "Latest commit: $latest_commit"
+          
+          # Set outputs
+          echo "commit-count=$commit_count" >> $GITHUB_OUTPUT
+          echo "latest-commit=$latest_commit" >> $GITHUB_OUTPUT
+          
+          if [ "$commit_count" -gt 0 ]; then
+            echo "has-commits=true" >> $GITHUB_OUTPUT
+            echo "Found $commit_count recent commits - build will proceed"
+          else
+            echo "has-commits=false" >> $GITHUB_OUTPUT
+            echo "No commits found in last 24 hours - build will be skipped"
+          fi
+
+  trigger-full-ci-build:
+    name: Trigger Full CI Build
+    needs: check-recent-commits
+    runs-on: ubuntu-latest
+    if: needs.check-recent-commits.outputs.has-recent-commits == 'true'
+    
+    steps:
+      - name: Trigger Dev Apps Builder
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const result = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'dev-apps-builder.yaml',
+              ref: 'main',
+              inputs: {
+                'build-type': 'full'
+              }
+            });
+            
+            console.log('Triggered full CI build with Jenkins SQA automation');
+            console.log('Built', '${{ needs.check-recent-commits.outputs.commit-count }}', 'recent commits');
+            console.log('Latest commit:', '${{ needs.check-recent-commits.outputs.latest-commit }}');
+            console.log('Jenkins SQA will be automatically triggered after build completion');
+            
+            return result;
+
+  build-skipped-notification:
+    name: Build Skipped Notification  
+    needs: check-recent-commits
+    runs-on: ubuntu-latest
+    if: needs.check-recent-commits.outputs.has-recent-commits == 'false'
+    
+    steps:
+      - name: Skip Notification
+        run: |
+          echo "Daily automated build skipped"
+          echo "No commits found in the main branch within the last 24 hours"
+          echo "Next scheduled check: Tomorrow at 5:00 AM EST"
+
+  daily-build-summary:
+    name: Daily Build Summary
+    runs-on: ubuntu-latest
+    needs: [check-recent-commits, trigger-full-ci-build]
+    if: always() && needs.check-recent-commits.outputs.has-recent-commits == 'true'
+    
+    steps:
+      - name: Build Status Summary
+        run: |
+          echo "Daily automated build summary:"
+          echo "Triggered full CI build for ${{ needs.check-recent-commits.outputs.commit-count }} recent commits"
+          echo "Latest commit: ${{ needs.check-recent-commits.outputs.latest-commit }}"
+          echo ""
+          echo "Full CI build workflow has been triggered!"
+          echo "Jenkins SQA automation will be triggered automatically after build completion"
+          echo "Check the 'Build Dev apps' workflow run for detailed results"
+          echo "Artifacts will be available in the triggered workflow"
+          
+          if [ "${{ needs.trigger-full-ci-build.result }}" == "failure" ]; then
+            echo "Failed to trigger CI build workflow!"
+            exit 1
+          else
+            echo "Successfully triggered full CI build workflow with integrated Jenkins automation!"
+          fi
