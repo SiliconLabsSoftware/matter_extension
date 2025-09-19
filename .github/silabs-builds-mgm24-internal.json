@@ -1,0 +1,19 @@
+
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4337a"],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": ["brd4319a_a00", "brd2704a", "brd4337a"],
+                "arguments": [""]
+            }
+        ]
+    } 
+}
