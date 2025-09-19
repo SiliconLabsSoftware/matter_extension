@@ -147,17 +147,27 @@ while [ $# -gt 0 ]; do
 done
 echo $CONFIG_ARGS
 
-BL_COMPONENTS=""
-APP_COMPONENTS=""
+# Helper functions to build component arguments
+build_with_arg() {
+    local board="$1"
+    local components="$2"
+    
+    if [ ! -z "$components" ]; then
+        echo "--with $board,$components"
+    else
+        echo "--with $board"
+    fi
+}
 
-# Check if we have app/bootloader component specifications
-if [ ! -z "$WITH_BOOTLOADER_COMPONENTS" ]; then
-    BL_COMPONENTS="$WITH_BOOTLOADER_COMPONENTS"
-fi
-
-if [ ! -z "$WITH_APP_COMPONENTS" ]; then
-    APP_COMPONENTS="$WITH_APP_COMPONENTS"
-fi
+build_without_arg() {
+    local components="$1"
+    
+    if [ ! -z "$components" ]; then
+        echo "--without $components"
+    else
+        echo ""
+    fi
+}
 
 # Generate project
 
@@ -217,55 +227,25 @@ if [ "$skip_gen" = false ]; then
     if [[ "$SILABS_APP_PATH" == *.slcw ]]; then 
         # WiFi SOC solution       
         if [[ "$SILABS_APP_PATH" == *917-soc* ]]; then
-            # Get bootloader args
-            BOOTLOADER_WITH_ARG="--with $SILABS_BOARD"
-            if [ ! -z "$BL_COMPONENTS" ]; then
-                BOOTLOADER_WITH_ARG="--with $SILABS_BOARD,$BL_COMPONENTS"
-                echo "Bootloader components: $BL_COMPONENTS"
-            else
-                echo "Bootloader: board $SILABS_BOARD"
-            fi
-
-            BOOTLOADER_WITHOUT_ARG=""
-            if [ ! -z "$WITHOUT_BOOTLOADER_COMPONENTS" ]; then
-                BOOTLOADER_WITHOUT_ARG="--without $WITHOUT_BOOTLOADER_COMPONENTS"
-            fi
+            # Get application args
+            APP_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
+            APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
             
             echo "Generating application..."
-            slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG $CONFIG_ARGS --generator-timeout=1800
+            slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG $CONFIG_ARGS --generator-timeout=1800
             if [ $? -ne 0 ]; then
                 echo "FAILED TO Generate application for: $SILABS_APP_PATH"
                 exit 1
             fi
-        # Thread solution 
+        # Other solutions
         else            
             # Get bootloader arguments
-            BOOTLOADER_WITH_ARG="--with $BRD_ONLY"
-            if [ ! -z "$BL_COMPONENTS" ]; then
-                BOOTLOADER_WITH_ARG="--with $BRD_ONLY,$BL_COMPONENTS"
-                echo "Bootloader components: $BL_COMPONENTS"
-            else
-                echo "Bootloader: board only $BRD_ONLY"
-            fi
-
-            BOOTLOADER_WITHOUT_ARG=""
-            if [ ! -z "$WITHOUT_BOOTLOADER_COMPONENTS" ]; then
-                BOOTLOADER_WITHOUT_ARG="--without $WITHOUT_BOOTLOADER_COMPONENTS"
-            fi
+            BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS" "Bootloader")
+            BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
             
             # Get application arguments
-            APPLICATION_WITH_ARG="--with $BRD_ONLY"
-            if [ ! -z "$APP_COMPONENTS" ]; then
-                APPLICATION_WITH_ARG="--with $BRD_ONLY,$APP_COMPONENTS"
-                echo "Application components: $APP_COMPONENTS"
-            else
-                echo "Application: board only $BRD_ONLY"
-            fi
-
-            APPLICATION_WITHOUT_ARG=""
-            if [ ! -z "$WITHOUT_APP_COMPONENTS" ]; then
-                APPLICATION_WITHOUT_ARG="--without $WITHOUT_APP_COMPONENTS"
-            fi
+            APPLICATION_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS" "Application")
+            APPLICATION_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
            
             # Generate bootloader first
             echo "Generating bootloader..."    
@@ -284,25 +264,9 @@ if [ "$skip_gen" = false ]; then
             fi
         fi
     else
-        # Generate .slcp
-        if [[ "$SILABS_APP_PATH" == *siwx917* ]]; then
-            # WiFi .slcp project (use full board parameter with SDK extension)
-            WITH_ARG="--with $SILABS_BOARD"
-            if [ ! -z "$APP_COMPONENTS" ]; then
-                WITH_ARG="--with $SILABS_BOARD,$APP_COMPONENTS"
-            fi
-        else
-            # Thread .slcp project (use board only)
-            WITH_ARG="--with $BRD_ONLY"
-            if [ ! -z "$APP_COMPONENTS" ]; then
-                WITH_ARG="--with $BRD_ONLY,$APP_COMPONENTS"
-            fi
-        fi
-        
-        WITHOUT_ARG=""
-        if [ ! -z "$WITHOUT_APP_COMPONENTS" ]; then
-            WITHOUT_ARG="--without $WITHOUT_APP_COMPONENTS"
-        fi
+        # Generate .slcp projects
+        WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS" "Application")
+        WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
         
         echo "Generating application with: $WITH_ARG $WITHOUT_ARG"
         slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $WITH_ARG $WITHOUT_ARG $CONFIG_ARGS --generator-timeout=3500 -o makefile
