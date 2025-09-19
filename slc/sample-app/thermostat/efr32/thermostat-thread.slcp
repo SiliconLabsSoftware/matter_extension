@@ -13,6 +13,10 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
+  - id: common_token_manager_dynamic
+    condition: [device_series_3]
+  - id: common_token_manager
+    condition: [device_series_3]
   - id: matter_buttons
     from: matter
   - id: matter_leds
@@ -140,7 +144,7 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/MatterDMCallbacks.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
     directory: src
