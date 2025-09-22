@@ -13,34 +13,35 @@ from pathlib import Path
 class matter_appRecipe(ConanFile):
     # Attributes: https://docs.conan.io/2/reference/conanfile/attributes.html
     # Package reference
-    name = "matter_app"
-    version = "0.0.202509221539" #FIXME: This version number is a boo boo.
     user = "silabs"
+    name = "matter_app"
+    version = "2.6.2-alpha.2"
 
     # Basic Conan metadata
     description = "matter SampleApp package"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
-    homepage = "" # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = "" # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse
-    topics = ("silabs") # You can add more topics
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
+    url = (
+        "https://github.com/SiliconLabsSoftware/matter_extension"
+    )  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse
+    topics = "silabs"  # You can add more topics
 
     # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/1.2.6@silabs"
+    python_requires = "silabs_package_assistant/[>=1]@silabs"
 
     # Custom Silabs metadata
     sl_metadata = {
-        "slack_channel": "",
-        "team": "",
+        "slack_channel": "#matter-development",
+        "team": "MATTER",
         "confluence_doc": "",
-        "jira_project": "", # E.g.,: https://jira.silabs.com/projects/<space>/summary
+        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",  # Ex: https://jira.silabs.com/projects/<space>/summary
         "maintainers": [
-            {"name": "NA", "email": "NA@silabs.com"},
+            {"name": "sashaha", "email": "sashaha@silabs.com"},
         ],
     }
-
     # Other attributes
-    #revision_mode = "scm"
+    revision_mode = "scm"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -108,8 +109,8 @@ class matter_appRecipe(ConanFile):
         
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        slcp_files = list(map(str, Path(os.getcwd()).rglob("*.slcp")))
-        slcw_files = list(map(str, Path(os.getcwd()).rglob("*.slcw")))
+        slcp_files = [str(p) for p in Path(os.getcwd()).rglob("*.slcp") if "third_party" not in p.parts]
+        slcw_files = [str(p) for p in Path(os.getcwd()).rglob("*.slcw") if "third_party" not in p.parts]
 
         for slcp_file in slcp_files + slcw_files:
             # slcp_related_files should return empty list if the desired_quality and desired_packages are not matched
@@ -157,8 +158,8 @@ class matter_appRecipe(ConanFile):
         
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        slcp_files = list(map(str, Path(os.getcwd()).rglob("*.slcp")))
-        slcw_files = list(map(str, Path(os.getcwd()).rglob("*.slcw")))
+        slcp_files = [str(p) for p in Path(os.getcwd()).rglob("*.slcp") if "third_party" not in p.parts]
+        slcw_files = [str(p) for p in Path(os.getcwd()).rglob("*.slcw") if "third_party" not in p.parts]
 
         for slcp_file in slcp_files + slcw_files:
             # slcp_related_files should return empty list if the desired_quality and desired_packages are not matched

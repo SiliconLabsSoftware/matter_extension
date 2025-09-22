@@ -18,26 +18,28 @@ class matterRecipe(ConanFile):
     description = "Matter extension for Simplicity SDK Suite"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
-    homepage = ""  # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = ""  # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
+    url = (
+        "https://github.com/SiliconLabsSoftware/matter_extension"
+    )  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse
     topics = "silabs"  # You can add more topics
 
     # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/1.2.6@silabs"
+    python_requires = "silabs_package_assistant/[>=1]@silabs"
 
     # Custom Silabs metadata
     sl_metadata = {
-        "slack_channel": "",
-        "team": "",
+        "slack_channel": "#matter-development",
+        "team": "MATTER",
         "confluence_doc": "",
-        "jira_project": "",  # E.g.,: https://jira.silabs.com/projects/<space>/summary
+        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",  # Ex: https://jira.silabs.com/projects/<space>/summary
         "maintainers": [
-            {"name": "NA", "email": "NA@silabs.com"},
+            {"name": "sashaha", "email": "sashaha@silabs.com"},
         ],
     }
 
     # Other attributes
-    # revision_mode = "scm"
+    revision_mode = "scm"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -80,7 +82,28 @@ class matterRecipe(ConanFile):
     }
 
     def requirements(self):
-        pass
+        self.requires(
+            "openthread/0.1.5@silabs")
+        self.requires(
+            "bluetooth_le_host/0.0.6@silabs")
+        self.requires(
+            "rail_module/0.0.5@silabs")
+        self.requires(
+            "multiprotocol/0.1.4@silabs")
+        self.requires(
+            "zigbee/0.1.5@silabs")
+        self.requires(
+            "platform_nwp_siwx91x/0.0.3@silabs")
+        self.requires(
+            "bluetooth_le_siwx91x/0.0.3@silabs")
+        self.requires(
+            "lwip/0.0.5@silabs")
+
+    def slt_requirements(self):
+        req = {}
+        req["zap"] = "~"
+        req["slc_cli"] = "~"
+        return req
 
     def layout(self):
         pass
