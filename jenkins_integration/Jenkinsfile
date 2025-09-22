@@ -18,6 +18,17 @@ pipeline
                 }
             }
         }
+        stage('Code Coverage') {
+            steps {
+                script {
+                    pipelineFunctions.actionWithRetry {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.run_code_coverage()
+                        }
+                    }
+                }
+            }
+        }
         stage('Upload Artifacts') {
             steps {
                 script {

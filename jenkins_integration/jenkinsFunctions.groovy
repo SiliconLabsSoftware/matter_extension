@@ -1,3 +1,33 @@
+def run_code_coverage() {
+    echo "Installing system dependencies..."
+    sh '''
+        sudo apt-get update
+        sudo apt-get install -y jq lcov
+        sudo apt-get install -y libglib2.0-dev libdbus-1-dev
+    '''
+
+    echo "Setting up Python 3.10 environment..."
+    sh '''
+        python3.10 -m venv venv
+        source venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install requests litellm
+    '''
+
+    echo "Initializing submodules for build..."
+    sh './scripts/checkout_submodules.py --shallow --platform linux'
+
+    echo "Building and generating coverage..."
+    sh '''
+        source scripts/bootstrap.sh
+        gn gen out/coverage --args='use_coverage=true'
+        ninja -C out/coverage check -k 0
+
+        # collect coverage
+        ./scripts/build_coverage.sh -o=out/coverage --code=all
+    '''
+}
+
 def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
