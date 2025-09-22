@@ -214,7 +214,7 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/WindowManager.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:

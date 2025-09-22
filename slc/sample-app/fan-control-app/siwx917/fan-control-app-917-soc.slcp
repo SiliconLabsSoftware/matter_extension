@@ -174,7 +174,7 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../examples/fan-control-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../examples/fan-control-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:

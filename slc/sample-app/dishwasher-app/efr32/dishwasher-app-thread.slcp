@@ -137,7 +137,7 @@ source:
     directory: src
   - path: ../../../../examples/dishwasher-app/silabs/src/operational-state-delegate-impl.cpp
     directory: src
-  - path: ../../../../examples/dishwasher-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../examples/dishwasher-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
