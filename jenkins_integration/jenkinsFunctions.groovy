@@ -1,9 +1,9 @@
 def run_code_coverage() {
     echo "Installing system dependencies..."
     sh '''
-        sudo apt-get update
-        sudo apt-get install -y jq lcov
-        sudo apt-get install -y libglib2.0-dev libdbus-1-dev
+        apt-get update
+        apt-get install -y jq lcov
+        apt-get install -y libglib2.0-dev libdbus-1-dev
     '''
 
     echo "Setting up Python 3.10 environment..."
