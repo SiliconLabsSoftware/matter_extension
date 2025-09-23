@@ -32,7 +32,6 @@ include:
     -   path: util/DataModelHandler.h
     -   path: util/cluster-config.h
     -   path: util/config.h
-    -   path: util/binding-table.h
     -   path: util/af-types.h
     -   path: util/im-client-callbacks.h
     -   path: util/attribute-storage.h
@@ -63,7 +62,6 @@ source:
 -   path: third_party/matter_sdk/src/app/util/DataModelHandler.cpp
 -   path: third_party/matter_sdk/src/app/util/attribute-storage.cpp
 -   path: third_party/matter_sdk/src/app/util/attribute-table.cpp
--   path: third_party/matter_sdk/src/app/util/binding-table.cpp
 -   path: third_party/matter_sdk/src/app/util/generic-callback-stubs.cpp
 -   path: third_party/matter_sdk/src/app/util/privilege-storage.cpp
 -   path: third_party/matter_sdk/src/app/util/util.cpp

@@ -16,7 +16,9 @@ include:
     file_list:
     - path: AdministratorCommissioning.h
     - path: BasicInformation.h
+    - path: Binding.h
     - path: EthernetNetworkDiagnostics.h
+    - path: FixedLabel.h
     - path: GeneralDiagnostics.h
     - path: GroupKeyManagement.h
     - path: SoftwareDiagnostics.h
