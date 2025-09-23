@@ -17,11 +17,11 @@ Arguments:
 
 Output:
     - Warnings for file paths exceeding 240 characters are printed to the console.
-    - Grouped file paths with lengths greater than 240 are written to "long_file_paths.txt".
+    - Validation results are logged with appropriate exit codes.
 
 Example:
     If the user provides "/example/directory" as input, the script calculates the lengths of file paths after 
-    appending the prefix, groups paths longer than 240 characters, and writes the grouped paths to "long_file_paths.txt".
+    appending the prefix and logs warnings for paths longer than 240 characters to the console.
 """
 
 import os
@@ -97,22 +97,17 @@ def main():
     directory = os.path.abspath(args.directory)
     if not os.path.isdir(directory):
         logger.error(f"Error: {directory} is not a valid directory.")
-        sys.exit(1)
-
-    output_file = "long_file_paths.txt"
+        return 1
 
     grouped_paths = count_file_path_lengths(directory, prefix, args.verbose)
 
     if grouped_paths:
-        # Log grouped counts
-        logger.info("Updated file path length counts grouped in blocks of 10:")
-        for group, paths in sorted(grouped_paths.items()):
-            logger.info(f"{group}-{group+9}: {len(paths)}")
-
-    # Write long file paths to a file
-    write_long_file_paths(grouped_paths, output_file)
-    if grouped_paths:
-        logger.info(f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
+        # Exit with error code when long paths are detected
+        logger.error("Validation failed: File paths exceeding 240 characters were detected.")
+        return 1
+    else:
+        logger.info("Validation successful: No file paths exceeding 240 characters were detected.")
+        return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

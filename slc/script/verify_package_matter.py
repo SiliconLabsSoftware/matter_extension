@@ -16,17 +16,17 @@ Arguments:
 
 Output:
     - Warnings for files missing the required strings are printed to the console.
-    - A list of files missing the required strings is saved to `missing_package_matter.txt`.
+    - A summary of validation results is logged with appropriate exit codes.
 
 Example:
     If the user provides `/example/directory` as input, the script scans for `.slcc`, `.slcp`, and `.slce` files, 
-    checks for the required strings, and logs the results. Files missing the required strings are saved to 
-    `missing_package_matter.txt`.
+    checks for the required strings, and logs the results. Files missing the required strings are listed in the console output.
 """
 
 import os
 import argparse
 import logging
+import sys
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -87,7 +87,7 @@ def main():
     
     if not files:
         logger.info("No .slcc, .slcp, or .slce files found.")
-        return
+        return 0
 
     missing_files = []
 
@@ -99,15 +99,15 @@ def main():
                 logger.warning(f"'package: matter' NOT found in: {file_path}")
             missing_files.append(file_path)
 
-    # Save missing files to a file
+    # Print missing files and return appropriate exit code
     if missing_files:
-        output_file = "missing_package_matter.txt"
-        with open(output_file, 'w') as f:
-            for file_path in missing_files:
-                f.write(file_path + '\n')
-        logger.info(f"List of files without 'package: matter' or 'id: matter' saved to {output_file}")
+        logger.error(f"Validation failed: {len(missing_files)} files without required 'package: matter' or 'id: matter' declarations found:")
+        for file_path in missing_files:
+            logger.error(f"  - {file_path}")
+        return 1
     else:
-        logger.info("All .slcc, .slcp, and .slce files contain the required strings.")
+        logger.info("Validation successful: All .slcc, .slcp, and .slce files contain the required strings.")
+        return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
