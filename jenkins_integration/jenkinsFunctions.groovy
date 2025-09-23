@@ -2,44 +2,56 @@ def run_code_coverage() {
     dir('third_party/matter_sdk') {
         echo "Fixing container environment and installing dependencies..."
         sh '''
-            # Fix APT directories
+            set -euo pipefail
+
+            # Fix APT directories (in case the image is missing partial dirs)
             mkdir -p /var/lib/apt/lists/partial
             mkdir -p /var/cache/apt/archives/partial
             mkdir -p /var/lib/dpkg/info
-            
-            # Clean and update APT
+
+            # Clean and update APT with a couple retries
             apt-get clean
             rm -rf /var/lib/apt/lists/*
-            apt-get update
-            
-            # Install required packages
-            apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev
+            apt-get -o Acquire::Retries=3 update
+
+            # Install required packages (venv needed for python virtualenv)
+            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+                jq lcov libglib2.0-dev libdbus-1-dev \
+                python3-venv python3-pip || true
+
+            # Some images ship python3.10 separately; install its venv if present
+            if command -v python3.10 >/dev/null 2>&1; then
+                apt-get -o Acquire::Retries=3 install -y --no-install-recommends python3.10-venv || true
+            fi
         '''
 
         echo "Setting up Python environment..."
         sh '''
-            # Check Python version available
-            python3 --version || echo "Python3 not found"
-            python3.10 --version || echo "Python3.10 not found, using python3"
-            
-            # Use available Python version
+            set -euo pipefail
+
+            # Prefer python3.10 if available
+            PY=python3
             if command -v python3.10 >/dev/null 2>&1; then
-                python3.10 -m venv venv
-            else
-                python3 -m venv venv
+                PY=python3.10
             fi
-            
-            source venv/bin/activate
+
+            $PY --version || true
+
+            $PY -m venv venv
+            . venv/bin/activate
             python -m pip install --upgrade pip
             pip install requests litellm
         '''
 
         echo "Initializing submodules for build..."
-        sh './scripts/checkout_submodules.py --shallow --platform linux'
+        sh '''
+            set -euo pipefail
+            ./scripts/checkout_submodules.py --shallow --platform linux
+        '''
 
         echo "Building and generating coverage..."
         sh '''
-            source scripts/bootstrap.sh
+            ./scripts/bootstrap.sh
             gn gen out/coverage --args='use_coverage=true'
             ninja -C out/coverage check -k 0
             ./scripts/build_coverage.sh -o=out/coverage --code=all
