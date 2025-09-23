@@ -19,10 +19,37 @@ pipeline
             }
         }
         stage('Code Coverage') {
+            environment { TSAN_OPTIONS = 'halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt' }
+            agent { 
+                docker { 
+                    image 'ghcr.io/project-chip/chip-build:167' 
+                    args '--privileged --sysctl "net.ipv6.conf.all.disable_ipv6=0 net.ipv4.conf.all.forwarding=0 net.ipv6.conf.all.forwarding=0"' 
+                    reuseNode true 
+                } 
+            }
             steps {
                 script {
+                    stage('Code Coverage') {
+    environment { TSAN_OPTIONS = 'halt_on_error=1 suppressions=scripts/tests/chiptest/tsan-linux-suppressions.txt' }
+    agent { 
+        docker { 
+            image 'ghcr.io/project-chip/chip-build:167'
+            args '--privileged --sysctl "net.ipv6.conf.all.disable_ipv6=0 net.ipv4.conf.all.forwarding=0 net.ipv6.conf.all.forwarding=0"' 
+            reuseNode true 
+        } 
+    }
+    steps {
+        script {
+            sh 'pwd'
+            sh 'ls -la'
+            
+            pipelineFunctions.actionWithRetry {
+                pipelineFunctions.run_code_coverage()
+            }
+        }
+    }
+}
                     pipelineFunctions.actionWithRetry {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                         pipelineFunctions.run_code_coverage()
                         }
                     }
