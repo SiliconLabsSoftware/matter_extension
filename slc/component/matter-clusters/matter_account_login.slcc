@@ -3,6 +3,7 @@ description: >
   Implementation of the Account Login Server Cluster.
   The user has to enable the Account Login Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_account_login
+package: matter
 label: Account Login Server Cluster
 quality: production
 metadata:
