@@ -1,31 +1,50 @@
 def run_code_coverage() {
-    echo "Installing system dependencies..."
-    sh '''
-        apt-get update
-        apt-get install -y jq lcov
-        apt-get install -y libglib2.0-dev libdbus-1-dev
-    '''
+    dir('third_party/matter_sdk') {
+        echo "Fixing container environment and installing dependencies..."
+        sh '''
+            # Fix APT directories
+            mkdir -p /var/lib/apt/lists/partial
+            mkdir -p /var/cache/apt/archives/partial
+            mkdir -p /var/lib/dpkg/info
+            
+            # Clean and update APT
+            apt-get clean
+            rm -rf /var/lib/apt/lists/*
+            apt-get update
+            
+            # Install required packages
+            apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev
+        '''
 
-    echo "Setting up Python 3.10 environment..."
-    sh '''
-        python3.10 -m venv venv
-        source venv/bin/activate
-        python -m pip install --upgrade pip
-        pip install requests litellm
-    '''
+        echo "Setting up Python environment..."
+        sh '''
+            # Check Python version available
+            python3 --version || echo "Python3 not found"
+            python3.10 --version || echo "Python3.10 not found, using python3"
+            
+            # Use available Python version
+            if command -v python3.10 >/dev/null 2>&1; then
+                python3.10 -m venv venv
+            else
+                python3 -m venv venv
+            fi
+            
+            source venv/bin/activate
+            python -m pip install --upgrade pip
+            pip install requests litellm
+        '''
 
-    echo "Initializing submodules for build..."
-    sh './scripts/checkout_submodules.py --shallow --platform linux'
+        echo "Initializing submodules for build..."
+        sh './scripts/checkout_submodules.py --shallow --platform linux'
 
-    echo "Building and generating coverage..."
-    sh '''
-        source scripts/bootstrap.sh
-        gn gen out/coverage --args='use_coverage=true'
-        ninja -C out/coverage check -k 0
-
-        # collect coverage
-        ./scripts/build_coverage.sh -o=out/coverage --code=all
-    '''
+        echo "Building and generating coverage..."
+        sh '''
+            source scripts/bootstrap.sh
+            gn gen out/coverage --args='use_coverage=true'
+            ninja -C out/coverage check -k 0
+            ./scripts/build_coverage.sh -o=out/coverage --code=all
+        '''
+    }
 }
 
 def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {

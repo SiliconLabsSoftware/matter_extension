@@ -30,11 +30,9 @@ pipeline
             steps {
                 script {
                     sh 'pwd'
-                    sh 'ls -la'                    
-                    dir('third_party/matter_sdk') { 
-                        pipelineFunctions.actionWithRetry {
-                            pipelineFunctions.run_code_coverage()
-                        }
+                    sh 'ls -la'
+                    pipelineFunctions.actionWithRetry {
+                        pipelineFunctions.run_code_coverage()
                     }
                 }
             }
