@@ -66,6 +66,12 @@
     ]
   },
   {
+    "clusterCode": "boolean state-server",
+    "value": [
+      "%extension-matter%matter_boolean_state"
+    ]
+  },
+  {
     "clusterCode": "bridged device basic information-server",
     "value": [
       "%extension-matter%matter_bridged_device_basic_information"
