@@ -283,7 +283,29 @@ def publishSonarAnalysis() {
                 sonarqubeParams += ["-Dsonar.branch.name=${env.BRANCH_NAME}"]
             }
 
-            sh "sonar-scanner ${sonarqubeParams.collect { "\"${it}\"" }.join(' ')}"
+            // Capture the sonar-scanner output to parse quality gate status
+            def sonarOutput = sh(script: "sonar-scanner ${sonarqubeParams.collect { "\"${it}\"" }.join(' ')}", returnStdout: true).trim()
+            echo "SonarQube Scanner Output:\n${sonarOutput}"
+        
+            // Parse quality gate status from sonar-scanner output
+            def qualityGateStatus = "UNKNOWN"
+            def qualityGateResult = "FAIL"
+        
+            // Look for QUALITY GATE STATUS pattern in the output
+            def qualityGateMatcher = sonarOutput =~ /QUALITY GATE STATUS:\s*(PASSED|FAILED)/
+            if (qualityGateMatcher.find()) {
+                qualityGateStatus = qualityGateMatcher[0][1]
+                qualityGateResult = (qualityGateStatus == "PASSED") ? "PASS" : "FAIL"
+            }
+            
+            echo "Static Analysis Result: ${qualityGateResult}"
+
+            if (env.CHANGE_ID) {
+                echo "commit_sha: ${commit_sha}"
+                if (!bypass_send_results_gh){
+                    pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
+                }
+            }
         }
     }
 }
