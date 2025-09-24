@@ -73,9 +73,6 @@ jobs:
       working-directory: ${{ github.workspace }}/../staged/matter_extension
       run: |
         python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose --ci
-        if [[ $? -ne 0 ]]; then
-          echo "File paths exceeding 240 characters detected!"
-        fi
         
   matter-templates:
     name: Validate Matter Templates
