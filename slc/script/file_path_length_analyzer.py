@@ -124,8 +124,10 @@ def main():
     # CI mode: exit with status 0 on success, 1 on failure
     if args.ci:
         if grouped_paths:
+            print("File paths exceeding 240 characters detected!")
             sys.exit(1)
         else:
+            print("No file paths exceeding 240 characters were detected. Success.")
             sys.exit(0)
 
 if __name__ == "__main__":
