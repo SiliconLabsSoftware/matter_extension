@@ -109,16 +109,17 @@ def main():
 
     grouped_paths = count_file_path_lengths(directory, prefix, args.verbose)
 
-    if grouped_paths:
-        # Log grouped counts
-        logger.info("Updated file path length counts grouped in blocks of 10:")
-        for group, paths in sorted(grouped_paths.items()):
-            logger.info(f"{group}-{group+9}: {len(paths)}")
+    if not args.ci:
+        if grouped_paths:
+            # Log grouped counts
+            logger.info("Updated file path length counts grouped in blocks of 10:")
+            for group, paths in sorted(grouped_paths.items()):
+                logger.info(f"{group}-{group+9}: {len(paths)}")
 
-    # Write long file paths to a file
-    write_long_file_paths(grouped_paths, output_file)
-    if grouped_paths:
-        logger.info(f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
+        # Write long file paths to a file
+        write_long_file_paths(grouped_paths, output_file)
+        if grouped_paths:
+            logger.info(f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
 
     # CI mode: exit with status 0 on success, 1 on failure
     if args.ci:
