@@ -28,6 +28,7 @@ import os
 import sys
 import argparse
 import logging
+import sys
 from io import BufferedWriter
 
 # The prefix represents a base file path commonly found on Windows machines. 
@@ -89,6 +90,11 @@ def main():
         action="store_true",
         help="Enable detailed output."
     )
+    parser.add_argument(
+        "--ci",
+        action="store_true",
+        help="CI mode: exit with status 0 on success, 1 on failure"
+    )
     args = parser.parse_args()
 
     # Configure logging level based on verbosity
@@ -113,6 +119,13 @@ def main():
     write_long_file_paths(grouped_paths, output_file)
     if grouped_paths:
         logger.info(f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
+
+    # CI mode: exit with status 0 on success, 1 on failure
+    if args.ci:
+        if grouped_paths:
+            sys.exit(1)
+        else:
+            sys.exit(0)
 
 if __name__ == "__main__":
     main()

@@ -24,6 +24,7 @@ jobs:
         with:
           submodules: false 
 
+      # TO-DO: Update to use script output when release_2.7 is merged to main 
       - name: Validate Matter Extension Package Field
         shell: bash
         run: |
@@ -67,22 +68,14 @@ jobs:
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
 
-    - name: Validate Matter Extension File Path Lengths 
+    - name: Validate Matter Extension File Path Lengths
       shell: bash
       working-directory: ${{ github.workspace }}/../staged/matter_extension
       run: |
-        set -e 
-        output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
-        echo "$output"
-        no_warning="INFO:__main__:No file paths exceeding 240 characters were detected. Nothing will be written to the file."
-        if [[ "$output" != *"$no_warning"* ]]; then
-          if [[ -f "long_file_paths.txt" ]]; then
-            echo "File paths exceeding 240 characters detected!"
-            cat long_file_paths.txt
-          else
-            echo "Error: 'long_file_paths.txt' does not exist, but it was expected."
-            exit 1
-          fi  
+        set -e
+        python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose --ci
+        if [[ $? -ne 0 ]]; then
+          echo "File paths exceeding 240 characters detected!"
         fi
         
   matter-templates:
