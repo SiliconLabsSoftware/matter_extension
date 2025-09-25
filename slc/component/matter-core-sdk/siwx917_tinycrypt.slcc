@@ -1,4 +1,4 @@
-category: Matter|Core
+category: Matter|Silabs Abstraction|Siw917
 define:
   - name: RADIO_CONFIG_DMP_SUPPORT
     value: "1"

@@ -1,4 +1,4 @@
-category: Matter|Core
+category: Matter|OT|Radio Lib
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"

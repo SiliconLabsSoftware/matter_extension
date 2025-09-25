@@ -1,5 +1,5 @@
 
-category: Matter|Core
+category: Matter|Platform Abstraction |Silicon Labs
 description: >
   This component includes PowerSaveInterface.h which is needed by wifi-sleep-manager and the wifi-platform.
 id: matter_power_save_interface

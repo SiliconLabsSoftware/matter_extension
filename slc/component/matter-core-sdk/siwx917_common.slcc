@@ -2,7 +2,7 @@ id: siwx917_common
 package: matter
 label: siwx917_common
 description: siwx917_common
-category: Matter|Core
+category: Matter|Silabs Abstraction|Siw917
 quality: production
 metadata:
   sbom:
