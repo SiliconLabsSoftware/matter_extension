@@ -1,17 +1,19 @@
 def run_code_coverage() {
+    echo "Installing dependencies..."
     sh '''
-       ls -la
-       python3 --version
-       python3 ./slc/sl_setup_env.py
-    '''
-    dir('third_party/matter_sdk') {
-        echo "Installing dependencies..."
-        sh '''
             apt-get update
             apt-get install -y jq lcov
             apt-get install -y libglib2.0-dev libdbus-1-dev
+            apt-get install -y python3-pip
         '''
-
+    sh '''
+       ls -la
+       python3 --version
+       python3 -m pip install --upgrade pip
+       pip3 install dload python-dotenv
+       python3 ./slc/sl_setup_env.py
+    '''
+    dir('third_party/matter_sdk') {
         echo "Checkout submodules & Bootstrap..."
         sh '''
             pwd
