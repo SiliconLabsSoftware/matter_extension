@@ -1,61 +1,20 @@
 def run_code_coverage() {
     dir('third_party/matter_sdk') {
-        echo "Fixing container environment and installing dependencies..."
+        // echo "Installing dependencies..."
+        // sh '''
+        //     apt-get update
+        //     apt-get install -y jq lcov
+        //     apt-get install -y libglib2.0-dev libdbus-1-dev
+        // '''
+
+        echo "Checkout submodules & Bootstrap..."
         sh '''
-            set -euo pipefail
-
-            # Fix APT directories (in case the image is missing partial dirs)
-            mkdir -p /var/lib/apt/lists/partial
-            mkdir -p /var/cache/apt/archives/partial
-            mkdir -p /var/lib/dpkg/info
-
-            # Clean and update APT with a couple retries
-            apt-get clean
-            rm -rf /var/lib/apt/lists/*
-            apt-get -o Acquire::Retries=3 update
-
-            # Install required packages (venv needed for python virtualenv)
-            DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-                jq lcov libglib2.0-dev libdbus-1-dev \
-                python3-venv python3-pip || true
-
-            # Some images ship python3.10 separately; install its venv if present
-            if command -v python3.10 >/dev/null 2>&1; then
-                apt-get -o Acquire::Retries=3 install -y --no-install-recommends python3.10-venv || true
-            fi
-        '''
-
-        echo "Setting up Python environment..."
-        sh '''
-            set -euo pipefail
-
-            # Prefer python3.10 if available
-            PY=python3
-            if command -v python3.10 >/dev/null 2>&1; then
-                PY=python3.10
-            fi
-
-            $PY --version || true
-
-            $PY -m venv venv
-            . venv/bin/activate
-            python -m pip install --upgrade pip
-            pip install requests litellm
-        '''
-
-        echo "Initializing submodules for build..."
-        sh '''
-            set -euo pipefail
             ./scripts/checkout_submodules.py --shallow --platform linux
+            ./scripts/bootstrap.sh
         '''
 
-        echo "Building and generating coverage..."
-        sh '''
-            ./scripts/bootstrap.sh
-            gn gen out/coverage --args='use_coverage=true'
-            ninja -C out/coverage check -k 0
-            ./scripts/build_coverage.sh -o=out/coverage --code=all
-        '''
+        echo "Run Build Coverage..."
+        sh './scripts/build_coverage.sh --yaml --xml'
     }
 }
 
