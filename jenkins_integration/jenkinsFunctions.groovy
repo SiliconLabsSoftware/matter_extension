@@ -2,7 +2,7 @@ def run_code_coverage() {
     sh '''
        ls -la
        python3 --version
-       python3 sl_setup_env.py
+       python3 ./slc/sl_setup_env.py
     '''
     dir('third_party/matter_sdk') {
         echo "Installing dependencies..."
