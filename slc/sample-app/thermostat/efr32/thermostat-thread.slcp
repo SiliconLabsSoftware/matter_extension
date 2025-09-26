@@ -117,6 +117,9 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_2
+  - name: matter_drivers_series_2
+    condition: 
+      - device_series_3
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
@@ -144,7 +147,7 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/MatterDMCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/DataModelCallbacks.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
     directory: src
