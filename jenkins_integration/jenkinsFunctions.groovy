@@ -1,4 +1,9 @@
 def run_code_coverage() {
+    sh '''
+       ls -la
+       python3 --version
+       python sl_setup_env.py
+    '''
     dir('third_party/matter_sdk') {
         // echo "Installing dependencies..."
         // sh '''
@@ -9,6 +14,8 @@ def run_code_coverage() {
 
         echo "Checkout submodules & Bootstrap..."
         sh '''
+            pwd
+            ls -la
             ./scripts/checkout_submodules.py --shallow --platform linux
             ./scripts/bootstrap.sh
         '''
