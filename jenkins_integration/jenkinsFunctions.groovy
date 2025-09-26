@@ -2,15 +2,15 @@ def run_code_coverage() {
     sh '''
        ls -la
        python3 --version
-       python sl_setup_env.py
+       python3 sl_setup_env.py
     '''
     dir('third_party/matter_sdk') {
-        // echo "Installing dependencies..."
-        // sh '''
-        //     apt-get update
-        //     apt-get install -y jq lcov
-        //     apt-get install -y libglib2.0-dev libdbus-1-dev
-        // '''
+        echo "Installing dependencies..."
+        sh '''
+            apt-get update
+            apt-get install -y jq lcov
+            apt-get install -y libglib2.0-dev libdbus-1-dev
+        '''
 
         echo "Checkout submodules & Bootstrap..."
         sh '''
