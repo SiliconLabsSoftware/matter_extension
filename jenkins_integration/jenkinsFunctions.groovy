@@ -56,6 +56,32 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
+/**
+ * Send SonarQube results to GitHub PR using Python script
+ */
+def send_sonar_results_to_github(commit_sha, result, status, sonar_output, pr_number, branch_name, target_branch) {
+    withCredentials([
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ]) {
+        // Escape sonar output for shell command
+        def escapedOutput = sonar_output.replace('"', '\\"').replace('`', '\\`').replace('$', '\\$')
+        
+        sh """
+            python3 -u jenkins_integration/github/send_sonar_results_to_github.py \\
+                --github_token \${GITHUB_ACCESS_TOKEN} \\
+                --repo_owner "SiliconLabsSoftware" \\
+                --repo_name "matter_extension" \\
+                --pr_number ${pr_number} \\
+                --commit_sha ${commit_sha} \\
+                --result ${result} \\
+                --status ${status} \\
+                --branch_name "${branch_name}" \\
+                --target_branch "${target_branch}" \\
+                --sonar_output "${escapedOutput}"
+        """
+    }
+}
+
 def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, testSuite, branchName, runNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
@@ -253,6 +279,7 @@ def publishSonarAnalysis() {
             // Create necessary directories
             sh "mkdir -p ${env.WORKSPACE}/sonar"
             sh "mkdir -p ${env.WORKSPACE}/sonar-cache"
+            sh "mkdir -p ${env.WORKSPACE}/sonar-user-home"
 
             // Prepare global SonarQube parameters
             def sonarqubeParams = [
@@ -283,11 +310,45 @@ def publishSonarAnalysis() {
                 sonarqubeParams += ["-Dsonar.branch.name=${env.BRANCH_NAME}"]
             }
 
-            // Capture the sonar-scanner output to parse quality gate status
-            def sonarOutput = sh(script: "sonar-scanner ${sonarqubeParams.join(' ')}", returnStdout: true).trim()
-            echo "SonarQube Scanner Output:\n${sonarOutput}"
+            // Capture the sonar-scanner output with error handling
+            def sonarOutput = ""
+            def qualityGateResult = "FAIL"
+            def qualityGateStatus = "FAILED"
+            def commit_sha = env.GIT_COMMIT ?: "unknown"
 
-            return sonarOutput
+            try {
+                sonarOutput = sh(script: "sonar-scanner ${sonarqubeParams.join(' ')}", returnStdout: true).trim()
+                echo "SonarQube Scanner Output:\n${sonarOutput}"
+
+                // Parse quality gate status from output
+                def qualityGateMatcher = sonarOutput =~ /QUALITY GATE STATUS:\s*(PASSED|FAILED)/
+                if (qualityGateMatcher.find()) {
+                    qualityGateStatus = qualityGateMatcher[0][1]
+                    qualityGateResult = (qualityGateStatus == "PASSED") ? "PASS" : "FAIL"
+                } else {
+                    qualityGateResult = "PASS"
+                }
+
+                // Parse SCM revision ID from output (with fallback)
+                def scmRevisionMatcher = sonarOutput =~ /SCM revision ID '([a-fA-F0-9]+)'/
+                if (scmRevisionMatcher.find()) {
+                    commit_sha = scmRevisionMatcher[0][1]
+                    echo "Extracted SCM revision ID: ${commit_sha}"
+                } else {
+                    echo "SCM revision ID not found, using fallback: ${commit_sha}"
+                }
+
+            } catch (Exception e) {
+                echo "SonarQube scanner failed with error: ${e.getMessage()}"
+                sonarOutput = "SonarQube analysis failed: ${e.getMessage()}"
+                qualityGateResult = "FAIL"
+                qualityGateStatus = "FAILED"
+            }
+
+            echo "Static Analysis Quality Gate Status: ${qualityGateStatus}"
+            echo "Static Analysis Result: ${qualityGateResult}"
+
+            return [status: qualityGateStatus, result: qualityGateResult, output: sonarOutput, commit_sha: commit_sha]
         }
     }
 }
