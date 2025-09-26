@@ -80,7 +80,6 @@ component:
   - { from: matter, id: matter_network_commissioning }
   - { from: matter, id: matter_operational_credentials }
   - { from: matter, id: matter_administrator_commissioning }
-  - { from: matter, id: matter_time_format_localization }
   - { from: matter, id: matter_on_off }
   - { from: matter, id: matter_scenes }
   - { from: matter, id: matter }

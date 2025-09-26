@@ -195,6 +195,7 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/wiseconnect-interface/WiseconnectWifiInterface.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterface.cpp
+- path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/SilabsPlatform.cpp
 
 define:
   - name: CHIP_HAVE_CONFIG_H
