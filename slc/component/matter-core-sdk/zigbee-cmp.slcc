@@ -1,0 +1,14 @@
+id: matter_zigbee_cmp
+package: matter
+label: tracing
+description: >
+  Enables tracing for matter protocol
+category: Matter|Core
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+
+provides:
+  - name: matter_zigbee_cmp
+
