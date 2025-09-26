@@ -1,4 +1,4 @@
-category: Matter|Core
+category: Matter|SEGGER RTT
 define: []
 description: syscalls
 id: syscalls

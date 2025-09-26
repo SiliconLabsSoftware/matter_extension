@@ -1,4 +1,4 @@
-category: Matter|Core|ICD
+category: Matter|ICD
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"

@@ -1,4 +1,4 @@
-category: Matter|Core|ICD|LIT
+category: Matter|ICD|LIT
 define:
   - name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>

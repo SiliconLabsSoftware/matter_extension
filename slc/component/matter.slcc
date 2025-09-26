@@ -88,7 +88,6 @@ requires:
   - name: matter_libchipcrypto
   - name: matter_libchipdatamodel
   - name: matter_libchipprotocols
-  - name: matter_libclusterobjects
   - name: matter_libcredentials
   - name: matter_libmatterdeviceinfoproviderexample
   - name: matter_libmessaginglayer

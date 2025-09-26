@@ -1,4 +1,4 @@
-category: Matter|Core|Data Model
+category: Matter|Data Model
 define:
   - name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER
     value: <lib/address_resolve/AddressResolve_DefaultImpl.h>

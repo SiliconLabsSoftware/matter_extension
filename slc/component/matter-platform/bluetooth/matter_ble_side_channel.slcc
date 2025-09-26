@@ -3,7 +3,7 @@ package: matter
 label: matter_ble_side_channel
 description: >
     Enables ble side channel POC in Matter Apps
-category: Matter|Core
+category: Matter|BLE|Side Channel
 quality: production
 metadata:
   sbom:

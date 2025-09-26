@@ -1,4 +1,4 @@
-category: Matter|Core|Data Model
+category: Matter|Data Model
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"

@@ -1,4 +1,4 @@
-category: Matter|Core|DNSSD
+category: Matter|DNSSD
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"
