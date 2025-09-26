@@ -1,4 +1,4 @@
-category: Clusters|General
+category: Matter|Clusters|General
 description: >
   Implementation of the General Commissioning Server Cluster.
   The user has to enable the General Commissioning Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
@@ -13,7 +13,7 @@ provides:
   - name: matter_general_commissioning
 source:
   - path: third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-server.cpp
-  #- path: third_party/matter_sdk/src/app/clusters/general-commissioning-server/TemporaryTestCoupling.cpp
+  - path: third_party/matter_sdk/src/app/clusters/general-commissioning-server/TemporaryTestCoupling.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/general-commissioning-server
     file_list:

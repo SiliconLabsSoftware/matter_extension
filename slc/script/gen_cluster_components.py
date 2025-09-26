@@ -159,7 +159,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
     except:
         category = "General"
     
-    category_str = "category: Clusters|{}".format(category)
+    category_str = "category: Matter|Clusters|{}".format(category)
     filedata.append(category_str)
     try:
         name = cluster_data[clustercomponentname]["name"].replace("_", " ").replace("matter ", "")

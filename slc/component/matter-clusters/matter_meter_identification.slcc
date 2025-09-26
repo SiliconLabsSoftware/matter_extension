@@ -1,4 +1,4 @@
-category: Clusters|Energy Management
+category: Matter|Clusters|Energy Management
 description: >
   Implementation of the Meter Identification Server Cluster.
   The user has to enable the Meter Identification Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

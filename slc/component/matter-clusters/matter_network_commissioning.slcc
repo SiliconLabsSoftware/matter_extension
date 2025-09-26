@@ -1,4 +1,4 @@
-category: Clusters|CHIP
+category: Matter|Clusters|CHIP
 description: >
   Implementation of the Network Commissioning Cluster.
   The user has to enable the Network Commissioning Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

@@ -1,4 +1,4 @@
-category: Clusters|Cameras
+category: Matter|Clusters|Cameras
 description: >
   Implementation of the Camera AV Settings User Level Management Server Cluster.
   The user has to enable the Camera AV Settings User Level Management Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

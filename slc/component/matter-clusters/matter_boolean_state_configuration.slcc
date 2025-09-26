@@ -1,4 +1,4 @@
-category: Clusters|General
+category: Matter|Clusters|General
 description: >
   Implementation of the Boolean State Configuration Server Cluster.
   The user has to enable the Boolean State Configuration Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

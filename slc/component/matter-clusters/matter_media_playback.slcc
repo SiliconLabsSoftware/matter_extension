@@ -1,4 +1,4 @@
-category: Clusters|Media
+category: Matter|Clusters|Media
 description: >
   Implementation of the Media Playback Server Cluster.
   The user has to enable the Media Playback Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

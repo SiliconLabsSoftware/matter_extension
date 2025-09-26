@@ -1,4 +1,4 @@
-category: Clusters|General
+category: Matter|Clusters|General
 description: >
   Implementation of the Fixed Label Server Cluster.
   The user has to enable the Fixed Label Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

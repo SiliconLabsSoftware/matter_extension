@@ -1,4 +1,4 @@
-category: Clusters|HVAC
+category: Matter|Clusters|HVAC
 description: >
   Implementation of the Thermostat User Interface Configuration Server Cluster.
   The user has to enable the Thermostat User Interface Configuration Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

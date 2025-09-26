@@ -1,4 +1,4 @@
-category: Clusters|Appliances
+category: Matter|Clusters|Appliances
 description: >
   Implementation of the Temperature Control Server Cluster.
   The user has to enable the Temperature Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

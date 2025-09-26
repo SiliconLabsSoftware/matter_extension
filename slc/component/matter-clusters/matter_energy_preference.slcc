@@ -1,4 +1,4 @@
-category: Clusters|Energy Management
+category: Matter|Clusters|Energy Management
 description: >
   Implementation of the Energy Preference Server Cluster.
   The user has to enable the Energy Preference Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

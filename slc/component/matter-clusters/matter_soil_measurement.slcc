@@ -1,4 +1,4 @@
-category: Clusters|Measurement
+category: Matter|Clusters|Measurement
 description: >
   Implementation of the Soil Measurement Server Cluster.
   The user has to enable the Soil Measurement Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

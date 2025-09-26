@@ -1,4 +1,4 @@
-category: Clusters|General
+category: Matter|Clusters|General
 description: >
   Implementation of the On/Off Server Cluster.
   The user has to enable the On/Off Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

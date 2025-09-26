@@ -1,4 +1,4 @@
-category: Clusters|General
+category: Matter|Clusters|General
 description: >
   Implementation of the Low Power Server Cluster.
   The user has to enable the Low Power Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

@@ -1,4 +1,4 @@
-category: Clusters|Closures
+category: Matter|Clusters|Closures
 description: >
   Implementation of the Window Covering Server Cluster.
   The user has to enable the Window Covering Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
