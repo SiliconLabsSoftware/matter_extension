@@ -391,4 +391,19 @@ void RegisterPerfTestCommands()
 
     Engine::Root().RegisterCommands(&sPerfTestCommand, 1);
 }
+
+// Dummy function with no static analysis issues
+int DummyFunctionWithNoIssues(int input, bool condition)
+{
+    int result = 0;
+    
+    if (condition && input > 0) {
+        result = input * 2;
+    } else {
+        result = input + 10;
+    }
+    
+    return result;
+}
+
 #endif // ENABLE_CHIP_SHELL
