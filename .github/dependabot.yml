@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "08:00"
+    allow:
+      - dependency-name: "third_party/matter_sdk"
+      - dependency-name: "third_party/matter_support"
+    target-branch: "main"
