@@ -103,16 +103,151 @@ jobs:
             private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
         
         - name: Mask the generated token
+          if: steps.wait_for_results.outputs.completed == 'false'
           run: echo "::add-mask::${{ steps.refresh_token.outputs.token }}"
 
-        - name: Wait for Test Results (refreshed token)
+        - name: Wait for Test Results (hour 2)
           if: steps.wait_for_results.outputs.completed == 'false'
+          id: wait_for_results_2
           uses: actions/github-script@v7
           with:
             github-token: ${{ steps.refresh_token.outputs.token }}
             script: |
                 const checkRunId = Number('${{ steps.create_check_run.outputs.check_run_id }}');
-                const timeoutSeconds = 3300;
+                const timeoutSeconds = 3300; // ~55 minutes (margin before 1h token expiry)
+                const pollIntervalSeconds = 60;
+                let elapsed = 0;
+
+                async function fetchCheckRun() {
+                    const { data } = await github.rest.checks.get({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        check_run_id: checkRunId,
+                    });
+                    return data;
+                }
+
+                while (true) {
+                    let run;
+                    try {
+                        run = await fetchCheckRun();
+                    } catch (e) {
+                        core.warning(`Error fetching check run (will retry): ${e.message}`);
+                        await new Promise(r => setTimeout(r, 5000));
+                        elapsed += 5;
+                        continue;
+                    }
+
+                    if (run.status === 'completed') {
+                        core.info(`Check run completed. conclusion=${run.conclusion}`);
+                        core.info(`Title: ${run.output?.title || ''}`);
+                        core.info(`Summary: ${run.output?.summary || ''}`);
+                        core.info(`Text: ${run.output?.text || ''}`);
+                        if (run.conclusion === 'failure') {
+                            core.setFailed('Sanity tests failed.');
+                        }
+                        core.setOutput('completed', 'true');
+                        break;
+                    }
+
+                    if (elapsed >= timeoutSeconds) {
+                        core.warning('Token timeout reached before completion; will refresh token in next step.');
+                        core.setOutput('completed', 'false');
+                        break;
+                    }
+
+                    core.info('Waiting for check run to complete...');
+                    await new Promise(r => setTimeout(r, pollIntervalSeconds * 1000));
+                    elapsed += pollIntervalSeconds;
+                }
+
+        - name: Generate new token for hour 3
+          if: steps.wait_for_results_2.outputs.completed == 'false'
+          id: refresh_token_2
+          uses: actions/create-github-app-token@v2
+          with:
+            app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+            private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+        
+        - name: Mask the generated token
+          if: steps.wait_for_results_2.outputs.completed == 'false'
+          run: echo "::add-mask::${{ steps.refresh_token_2.outputs.token }}"
+
+        - name: Wait for Test Results (hour 3)
+          if: steps.wait_for_results_2.outputs.completed == 'false'
+          id: wait_for_results_3
+          uses: actions/github-script@v7
+          with:
+            github-token: ${{ steps.refresh_token_2.outputs.token }}
+            script: |
+                const checkRunId = Number('${{ steps.create_check_run.outputs.check_run_id }}');
+                const timeoutSeconds = 3300; // ~55 minutes (margin before 1h token expiry)
+                const pollIntervalSeconds = 60;
+                let elapsed = 0;
+
+                async function fetchCheckRun() {
+                    const { data } = await github.rest.checks.get({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        check_run_id: checkRunId,
+                    });
+                    return data;
+                }
+
+                while (true) {
+                    let run;
+                    try {
+                        run = await fetchCheckRun();
+                    } catch (e) {
+                        core.warning(`Error fetching check run (will retry): ${e.message}`);
+                        await new Promise(r => setTimeout(r, 5000));
+                        elapsed += 5;
+                        continue;
+                    }
+
+                    if (run.status === 'completed') {
+                        core.info(`Check run completed. conclusion=${run.conclusion}`);
+                        core.info(`Title: ${run.output?.title || ''}`);
+                        core.info(`Summary: ${run.output?.summary || ''}`);
+                        core.info(`Text: ${run.output?.text || ''}`);
+                        if (run.conclusion === 'failure') {
+                            core.setFailed('Sanity tests failed.');
+                        }
+                        core.setOutput('completed', 'true');
+                        break;
+                    }
+
+                    if (elapsed >= timeoutSeconds) {
+                        core.warning('Token timeout reached before completion; will refresh token in next step.');
+                        core.setOutput('completed', 'false');
+                        break;
+                    }
+
+                    core.info('Waiting for check run to complete...');
+                    await new Promise(r => setTimeout(r, pollIntervalSeconds * 1000));
+                    elapsed += pollIntervalSeconds;
+                }
+
+        - name: Generate new token for hour 4
+          if: steps.wait_for_results_3.outputs.completed == 'false'
+          id: refresh_token_3
+          uses: actions/create-github-app-token@v2
+          with:
+            app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+            private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+        
+        - name: Mask the generated token
+          if: steps.wait_for_results_3.outputs.completed == 'false'
+          run: echo "::add-mask::${{ steps.refresh_token_3.outputs.token }}"
+
+        - name: Wait for Test Results (hour 4)
+          if: steps.wait_for_results_3.outputs.completed == 'false'
+          uses: actions/github-script@v7
+          with:
+            github-token: ${{ steps.refresh_token_3.outputs.token }}
+            script: |
+                const checkRunId = Number('${{ steps.create_check_run.outputs.check_run_id }}');
+                const timeoutSeconds = 3300; // ~55 minutes (margin before 1h token expiry)
                 const pollIntervalSeconds = 60;
                 let elapsed = 0;
 
