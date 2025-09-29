@@ -393,6 +393,48 @@ void RegisterPerfTestCommands()
 }
 
 
+// Dummy function with intentional SonarQube quality gate issues for testing
+void DummyFunctionWithSonarQubeIssues(char* buffer, int size)
+{
+    // Issue 1: Unused variable (dead store)
+    int unusedVariable = 42;
+    
+    // Issue 2: Potential null pointer dereference without null check
+    strcpy(buffer, "test");
+    
+    // Issue 3: Buffer overflow potential - using size without bounds checking
+    for (int i = 0; i <= size; ++i) {  // Off-by-one error: should be < size
+        buffer[i] = 'X';
+    }
+    
+    // Issue 4: Memory leak - malloc without free
+    char* tempBuffer = (char*)malloc(100);
+    strcpy(tempBuffer, "temporary");
+    // Missing free(tempBuffer);
+    
+    // Issue 5: Use of deprecated/unsafe function
+    char destination[50];
+    strcpy(destination, buffer);  // Should use strncpy or safer alternative
+    
+    // Issue 6: Unreachable code
+    if (size < 0) {
+        return;
+        int deadCode = 123;  // This line is unreachable
+    }
+    
+    // Issue 7: Division by zero potential
+    int result = 100 / (size - size);  // Always divides by zero
+    
+    // Issue 8: Comparison with uninitialized variable
+    int uninitializedVar;
+    if (uninitializedVar > 10) {
+        printf("This might not work as expected\n");
+    }
+    
+    // Issue 9: Format string vulnerability
+    printf(buffer);  // Should be printf("%s", buffer);
+}
+
 // Dummy function with no static analysis issues for testing
 int DummyFunctionWithNoIssues(int input, bool condition)
 {
@@ -406,6 +448,8 @@ int DummyFunctionWithNoIssues(int input, bool condition)
     
     return result;
 }
+
+
 
 // Another dummy function with proper memory management and no issues
 void DummyFunctionWithProperCode(size_t bufferSize)

@@ -22,7 +22,6 @@ pipeline
             steps {
                 script {
                     // Declare variables outside the Docker container block
-                    def staticAnalysisResult = ""
                     def staticAnalysisStatus = ""
                     def staticAnalysisOutput = ""
                     def sonarCommitSha = ""
@@ -31,21 +30,18 @@ pipeline
                         def sonarResult = pipelineFunctions.publishSonarAnalysis()
 
                         // Extract results for GitHub reporting
-                        staticAnalysisResult = sonarResult.result
                         staticAnalysisStatus = sonarResult.status
                         staticAnalysisOutput = sonarResult.output
                         sonarCommitSha = sonarResult.commit_sha
 
-                        echo "Static Analysis Result: ${staticAnalysisResult}"
                         echo "Static Analysis Status: ${staticAnalysisStatus}"
                         echo "Commit SHA from SonarQube: ${sonarCommitSha}"
                     }
                     // Send results to GitHub PR only
                     try {
-                        if (!bypass_send_results_gh && env.CHANGE_ID) {
+                        if (env.CHANGE_ID) {
                             pipelineFunctions.send_sonar_results_to_github(
                                 sonarCommitSha,
-                                staticAnalysisResult,
                                 staticAnalysisStatus,
                                 staticAnalysisOutput,
                                 env.CHANGE_ID,
