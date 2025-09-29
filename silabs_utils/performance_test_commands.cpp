@@ -391,4 +391,42 @@ void RegisterPerfTestCommands()
 
     Engine::Root().RegisterCommands(&sPerfTestCommand, 1);
 }
+
+
+// Dummy function with no static analysis issues for testing
+int DummyFunctionWithNoIssues(int input, bool condition)
+{
+    int result = 0;
+    
+    if (condition && input > 0) {
+        result = input * 2;
+    } else {
+        result = input + 10;
+    }
+    
+    return result;
+}
+
+// Another dummy function with proper memory management and no issues
+void DummyFunctionWithProperCode(size_t bufferSize)
+{
+    if (bufferSize == 0 || bufferSize > 1024) {
+        return;
+    }
+    
+    char* buffer = static_cast<char*>(malloc(bufferSize));
+    if (buffer != nullptr) {
+        memset(buffer, 0, bufferSize);
+        // Simulate some work with the buffer
+        for (size_t i = 0; i < bufferSize - 1; ++i) {
+            buffer[i] = static_cast<char>('A' + (i % 26));
+        }
+        buffer[bufferSize - 1] = '\0';
+        
+        // Clean up properly
+        free(buffer);
+        buffer = nullptr;
+    }
+}
+
 #endif // ENABLE_CHIP_SHELL
