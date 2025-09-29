@@ -59,9 +59,10 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
 /**
  * Send SonarQube results to GitHub PR using Python script
  */
-def send_sonar_results_to_github(commit_sha, result, status, sonar_output, pr_number, branch_name, target_branch) {
+def send_sonar_results_to_github(commit_sha, status, sonar_output, pr_number, branch_name, target_branch) {
     withCredentials([
-        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN'),
+        string(credentialsId: 'sonarqube_token', variable: 'SONAR_SECRET')
     ]) {
         // Escape sonar output for shell command
         def escapedOutput = sonar_output.replace('"', '\\"').replace('`', '\\`').replace('$', '\\$')
@@ -73,11 +74,13 @@ def send_sonar_results_to_github(commit_sha, result, status, sonar_output, pr_nu
                 --repo_name "matter_extension" \\
                 --pr_number ${pr_number} \\
                 --commit_sha ${commit_sha} \\
-                --result ${result} \\
                 --status ${status} \\
                 --branch_name "${branch_name}" \\
                 --target_branch "${target_branch}" \\
-                --sonar_output "${escapedOutput}"
+                --sonar_output "${escapedOutput}" \\
+                --sonar_token \${SONAR_SECRET} \\
+                --sonar_url "https://sonarqube.silabs.net" \\
+                --project_key "matter_extension"
         """
     }
 }
@@ -312,7 +315,6 @@ def publishSonarAnalysis() {
 
             // Capture the sonar-scanner output with error handling
             def sonarOutput = ""
-            def qualityGateResult = "FAIL"
             def qualityGateStatus = "FAILED"
             def commit_sha = env.GIT_COMMIT ?: "unknown"
 
@@ -324,9 +326,8 @@ def publishSonarAnalysis() {
                 def qualityGateMatcher = sonarOutput =~ /QUALITY GATE STATUS:\s*(PASSED|FAILED)/
                 if (qualityGateMatcher.find()) {
                     qualityGateStatus = qualityGateMatcher[0][1]
-                    qualityGateResult = (qualityGateStatus == "PASSED") ? "PASS" : "FAIL"
                 } else {
-                    qualityGateResult = "PASS"
+                    qualityGateStatus = "PASSED"
                 }
 
                 // Parse SCM revision ID from output (with fallback)
@@ -341,14 +342,12 @@ def publishSonarAnalysis() {
             } catch (Exception e) {
                 echo "SonarQube scanner failed with error: ${e.getMessage()}"
                 sonarOutput = "SonarQube analysis failed: ${e.getMessage()}"
-                qualityGateResult = "FAIL"
                 qualityGateStatus = "FAILED"
             }
 
             echo "Static Analysis Quality Gate Status: ${qualityGateStatus}"
-            echo "Static Analysis Result: ${qualityGateResult}"
 
-            return [status: qualityGateStatus, result: qualityGateResult, output: sonarOutput, commit_sha: commit_sha]
+            return [status: qualityGateStatus, output: sonarOutput, commit_sha: commit_sha]
         }
     }
 }
