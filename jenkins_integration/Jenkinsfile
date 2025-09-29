@@ -42,7 +42,7 @@ pipeline
                     }
                     // Send results to GitHub PR only
                     try {
-                        if (!bypass_send_results_gh && env.CHANGE_ID) {
+                        if (env.CHANGE_ID) {
                             pipelineFunctions.send_sonar_results_to_github(
                                 sonarCommitSha,
                                 staticAnalysisResult,
@@ -58,6 +58,25 @@ pipeline
                         }
                     } catch (Exception githubEx) {
                         echo "❌ Failed to post to GitHub PR: ${githubEx.getMessage()}"
+                    }
+                }
+            }
+        }
+        stage('Upload Artifacts') {
+            steps {
+                script {
+                    retry(3) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            pipelineFunctions.actionWithRetry {
+                                def result = pipelineFunctions.upload_artifacts()
+                                commit_sha = result.commit_sha
+                                run_number = result.run_number
+                                bypass_send_results_gh = result.bypass_send_results
+                                pr_number = result.pr_number
+                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}"
+                                buildDescription("GitHub Workflow Run Number: ${run_number}")
+                            }
+                        }
                     }
                 }
             }
