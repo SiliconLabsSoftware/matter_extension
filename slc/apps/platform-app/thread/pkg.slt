@@ -1,2 +1,12 @@
+<<<<<<< HEAD:slc/apps/platform-app/thread/pkg.slt
 [extension.matter]
 version = "2.7.0"
+=======
+# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+matter = { version = "2.8.0-0.dev", installer ="conan"}
+>>>>>>> 144c90496 (This commit combines all the work from implementing package manager):slc/sample-app/platform-app/efr32/pkg.slt

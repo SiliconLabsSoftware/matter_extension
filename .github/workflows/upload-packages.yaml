@@ -1,0 +1,295 @@
+name: upload-packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_packages:
+        description: 'Upload package? ( default: false)'
+        required: false
+        default: false
+        type: boolean
+      use_SQA_remote:
+        description: 'Use SQA remote for upload (default is dev remote)'
+        required: false
+        default: false
+        type: boolean
+
+        
+  workflow_call:
+    inputs:
+        upload_packages:
+          description: 'Use SQA remote for upload (default is dev remote)'
+          required: false
+          default: false
+          type: boolean
+    outputs:
+      package-ref:
+        description: 'Stack package reference (legacy single ref)'
+        value: ${{ jobs.publish-package.outputs.stack-package-ref }}
+      recipe-revision:
+        description: 'Stack recipe revision (legacy single revision)'
+        value: ${{ jobs.publish-package.outputs.stack-recipe-revision }}
+      stack-package-ref:
+        description: 'Stack package reference'
+        value: ${{ jobs.publish-package.outputs.stack-package-ref }}
+      stack-recipe-revision:
+        description: 'Stack recipe revision'
+        value: ${{ jobs.publish-package.outputs.stack-recipe-revision }}
+      stack-full-package-ref:
+        description: 'Full stack package reference'
+        value: ${{ jobs.publish-package.outputs.stack-full-package-ref }}
+      stack-package-name:
+        description: 'Stack package name'
+        value: ${{ jobs.publish-package.outputs.stack-package-name }}
+      stack-package-version:
+        description: 'Stack package version'
+        value: ${{ jobs.publish-package.outputs.stack-package-version }}
+      stack-package-user:
+        description: 'Stack package user'
+        value: ${{ jobs.publish-package.outputs.stack-package-user }}
+      stack-package-channel:
+        description: 'Stack package channel'
+        value: ${{ jobs.publish-package.outputs.stack-package-channel }}
+      stack-package-id:
+        description: 'Stack package id'
+        value: ${{ jobs.publish-package.outputs.stack-package-id }}
+      stack-package-revision:
+        description: 'Stack package revision'
+        value: ${{ jobs.publish-package.outputs.stack-package-revision }}
+      stack-prerelease-qualifier:
+        description: 'Stack prerelease qualifier'
+        value: ${{ jobs.publish-package.outputs.stack-prerelease-qualifier }}
+      stack-prerelease-number:
+        description: 'Stack prerelease number'
+        value: ${{ jobs.publish-package.outputs.stack-prerelease-number }}
+      app-package-ref:
+        description: 'App package reference'
+        value: ${{ jobs.publish-package.outputs.app-package-ref }}
+      app-recipe-revision:
+        description: 'App recipe revision'
+        value: ${{ jobs.publish-package.outputs.app-recipe-revision }}
+      app-full-package-ref:
+        description: 'Full app package reference'
+        value: ${{ jobs.publish-package.outputs.app-full-package-ref }}
+      app-package-name:
+        description: 'App package name'
+        value: ${{ jobs.publish-package.outputs.app-package-name }}
+      app-package-version:
+        description: 'App package version'
+        value: ${{ jobs.publish-package.outputs.app-package-version }}
+      app-package-user:
+        description: 'App package user'
+        value: ${{ jobs.publish-package.outputs.app-package-user }}
+      app-package-channel:
+        description: 'App package channel'
+        value: ${{ jobs.publish-package.outputs.app-package-channel }}
+      app-package-id:
+        description: 'App package id'
+        value: ${{ jobs.publish-package.outputs.app-package-id }}
+      app-package-revision:
+        description: 'App package revision'
+        value: ${{ jobs.publish-package.outputs.app-package-revision }}
+      app-prerelease-qualifier:
+        description: 'App prerelease qualifier'
+        value: ${{ jobs.publish-package.outputs.app-prerelease-qualifier }}
+      app-prerelease-number:
+        description: 'App prerelease number'
+        value: ${{ jobs.publish-package.outputs.app-prerelease-number }}
+
+env:
+  CONAN_HOME: ~/.silabs/slt/installs/conan
+
+jobs:
+  publish-package:
+    outputs:
+      stack-package-ref: ${{ steps.capture-stack-package.outputs.package-ref }}
+      stack-recipe-revision: ${{ steps.capture-stack-package.outputs.recipe-revision }}
+      app-package-ref: ${{ steps.capture-app-package.outputs.package-ref }}
+      app-recipe-revision: ${{ steps.capture-app-package.outputs.recipe-revision }}
+      stack-full-package-ref: ${{ steps.publish-stack-package.outputs.full-package-ref }}
+      stack-package-name: ${{ steps.publish-stack-package.outputs.package-name }}
+      stack-package-version: ${{ steps.publish-stack-package.outputs.package-version }}
+      stack-package-user: ${{ steps.publish-stack-package.outputs.package-user }}
+      stack-package-channel: ${{ steps.publish-stack-package.outputs.package-channel }}
+      stack-package-id: ${{ steps.publish-stack-package.outputs.package-id }}
+      stack-package-revision: ${{ steps.publish-stack-package.outputs.package-revision }}
+      stack-prerelease-qualifier: ${{ steps.publish-stack-package.outputs.prerelease-qualifier }}
+      stack-prerelease-number: ${{ steps.publish-stack-package.outputs.prerelease-number }}
+      app-full-package-ref: ${{ steps.publish-app-package.outputs.full-package-ref }}
+      app-package-name: ${{ steps.publish-app-package.outputs.package-name }}
+      app-package-version: ${{ steps.publish-app-package.outputs.package-version }}
+      app-package-user: ${{ steps.publish-app-package.outputs.package-user }}
+      app-package-channel: ${{ steps.publish-app-package.outputs.package-channel }}
+      app-package-id: ${{ steps.publish-app-package.outputs.package-id }}
+      app-package-revision: ${{ steps.publish-app-package.outputs.package-revision }}
+      app-prerelease-qualifier: ${{ steps.publish-app-package.outputs.prerelease-qualifier }}
+      app-prerelease-number: ${{ steps.publish-app-package.outputs.prerelease-number }}
+    runs-on: [silabs-internal]
+    steps:      
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: true
+      - name: set upload package
+        id: set-publish-flag
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="${GITHUB_REF_NAME}"
+          UPLOAD_INPUT="${{ inputs.upload_packages }}"  # 'true' or 'false' (workflow_dispatch/workflow_call)
+          PUBLISH=false
+          # Conditions: input must be true AND branch matches allowed patterns
+          if [[ "${UPLOAD_INPUT}" == "true" ]]; then
+            if [[ "${BRANCH}" == "main" || "${BRANCH}" == release* || "${BRANCH}" == feature/* ]]; then
+              PUBLISH=true
+            fi
+          fi
+          echo "Resolved branch: ${BRANCH}"
+          echo "upload_packages input: ${UPLOAD_INPUT}"
+          echo "Computed publish flag: ${PUBLISH}"
+          # Export to environment for later steps
+          echo "PUBLISH=${PUBLISH}" >> "$GITHUB_ENV"
+
+      - name: Setup SLT
+        id: setup-action
+        uses: SiliconLabsInternal/action-setup-slt@main
+        with: 
+          use-unstable: true
+
+      - name: Check SLT version
+        run: |
+          echo "SLT version installed: ${{ steps.setup-action.outputs.slt-version }}"
+          echo "SLT executable path : ${{ steps.setup-action.outputs.slt-path }}"
+          echo "conan_engine version installed: ${{ steps.setup-action.outputs.conan-engine-version }}"
+          echo "conan_engine executable path: ${{ steps.setup-action.outputs.conan-engine-path }}"
+          echo "conan version installed: ${{ steps.setup-action.outputs.conan-version }}"
+          echo "conan executable path: ${{ steps.setup-action.outputs.conan-path }}"
+      
+      - name: Setup Conan remotes
+        id: add-conan-remotes
+        run: |
+          make install_download_remotes
+          conan remote list
+      
+      - name: Update SLT
+        run: slt update --self
+
+      - name: Set Conan remote variables
+        id: set-remote
+        run: |
+          echo "SL_PRERELEASE=packages/.prerelease" >> $GITHUB_ENV
+          echo "REMOTE_NAME=matter-conan-dev" >> $GITHUB_ENV
+          echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev" >> $GITHUB_ENV
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension_private/matter_extension_private
+          git submodule update --init
+
+      - name: define concurrent threads for conan download and upload
+        id: check-conan
+        run: |
+            conan --version
+            conan config home
+            mkdir -p conan-settings
+            cat > conan-settings/global.conf << EOF
+            core.download:parallel=6
+            core.upload:parallel=4
+            EOF
+            conan config install ./conan-settings --type dir
+            conan config show "*"
+            rm -rf conan-settings
+      
+      - name: Get dependent conan packages
+        run: |
+          echo "PATH: $PATH"
+          conan config show "*"
+          which arm-none-eabi-gcc && arm-none-eabi-gcc --version || echo "GCC not found"
+          which cmake && cmake --version || echo "CMake not found"  
+      
+      # Remove all matter packages and regenerate with channel set
+      - name: remove-all-local-packages
+        run: |
+          make remove_all_matter_packages
+      
+      - name: get-package-version
+        id: get-package-version
+        uses: SiliconLabsInternal/action-conan-create-publish@main
+        with:
+          conanfile-path: 'packages/matter/conanfile.py'
+          remote-name: ${{ env.REMOTE_NAME }}
+          remote-url: ${{ env.REMOTE_URL }}
+          remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
+          remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
+          create: false
+          publish: false
+          #package-user: ${{ github.actor }}
+          stack-name: "matter"
+
+      - name: package version update
+        run: |
+          echo "Prerelease Number: ${{ steps.get-package-version.outputs.prerelease-number }}"
+          echo "SL_PRERELEASE_NUMBER=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
+          pip install --upgrade PyYAML
+          make generate_pkg_slt
+
+      - name: Publish package
+        id: publish-stack-package
+        uses: SiliconLabsInternal/action-conan-create-publish@main
+        with:
+          conanfile-path: 'packages/matter/conanfile.py'
+          remote-name: ${{ env.REMOTE_NAME }}
+          remote-url: ${{ env.REMOTE_URL }}
+          remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
+          remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
+          create: true
+          publish: ${{ env.PUBLISH }}
+          stack-name: "matter"
+
+      - name: Capture Package Outputs
+        id: capture-stack-package
+        run: |
+          echo "package-ref=${{ steps.publish-stack-package.outputs.package-ref }}" >> $GITHUB_OUTPUT
+          echo "recipe-revision=${{ steps.publish-stack-package.outputs.recipe-revision }}" >> $GITHUB_OUTPUT
+          echo "Package Ref: ${{ steps.publish-stack-package.outputs.package-ref }}"
+          echo "Recipe Revision: ${{ steps.publish-stack-package.outputs.recipe-revision }}"
+          echo "Full Package Ref: ${{ steps.publish-stack-package.outputs.full-package-ref }}"
+          echo "Package Name: ${{ steps.publish-stack-package.outputs.package-name }}"
+          echo "Package Version: ${{ steps.publish-stack-package.outputs.package-version }}"
+          echo "Package User: ${{ steps.publish-stack-package.outputs.package-user }}"
+          echo "Package Channel: ${{ steps.publish-stack-package.outputs.package-channel }}"
+          echo "Package ID: ${{ steps.publish-stack-package.outputs.package-id }}"
+          echo "Package Revision: ${{ steps.publish-stack-package.outputs.package-revision }}"
+          echo "Prerelease Qualifier: ${{ steps.publish-stack-package.outputs.prerelease-qualifier }}"
+          echo "Prerelease Number: ${{ steps.publish-stack-package.outputs.prerelease-number }}"
+
+      - name: Publish package
+        id: publish-app-package
+        uses: SiliconLabsInternal/action-conan-create-publish@main
+        with:
+          conanfile-path: 'packages/matter_app/conanfile.py'
+          remote-name: ${{ env.REMOTE_NAME }}
+          remote-url: ${{ env.REMOTE_URL }}
+          remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
+          remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
+          create: true
+          publish: ${{ env.PUBLISH }}
+          stack-name: "matter_app"
+          
+      - name: Capture Package Outputs
+        id: capture-app-package
+        run: |
+          echo "package-ref=${{ steps.publish-app-package.outputs.package-ref }}" >> $GITHUB_OUTPUT
+          echo "recipe-revision=${{ steps.publish-app-package.outputs.recipe-revision }}" >> $GITHUB_OUTPUT
+          echo "Package Ref: ${{ steps.publish-app-package.outputs.package-ref }}"
+          echo "Recipe Revision: ${{ steps.publish-app-package.outputs.recipe-revision }}"
+          echo "Full Package Ref: ${{ steps.publish-app-package.outputs.full-package-ref }}"
+          echo "Package Name: ${{ steps.publish-app-package.outputs.package-name }}"
+          echo "Package Version: ${{ steps.publish-app-package.outputs.package-version }}"
+          echo "Package User: ${{ steps.publish-app-package.outputs.package-user }}"
+          echo "Package Channel: ${{ steps.publish-app-package.outputs.package-channel }}"
+          echo "Package ID: ${{ steps.publish-app-package.outputs.package-id }}"
+          echo "Package Revision: ${{ steps.publish-app-package.outputs.package-revision }}"
+          echo "Prerelease Qualifier: ${{ steps.publish-app-package.outputs.prerelease-qualifier }}"
+          echo "Prerelease Number: ${{ steps.publish-app-package.outputs.prerelease-number }}"

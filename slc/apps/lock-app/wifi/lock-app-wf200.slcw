@@ -3,7 +3,11 @@ quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Lock over WiFi Example
 project:
+<<<<<<<< HEAD:slc/apps/lock-app/wifi/lock-app-wf200.slcw
   - path: ./lock-app-wf200.slcp
+========
+  - path: ../../../sample-app/lock-app/siwx917/lock-app-wf200.slcp
+>>>>>>>> 144c90496 (This commit combines all the work from implementing package manager):slc/solutions/lock-app/siwx917/lock-app-wf200-bootloader.slcw
     id: application
     output: lock-app-wf200
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp

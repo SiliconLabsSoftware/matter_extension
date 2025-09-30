@@ -3,7 +3,11 @@ quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Thermostat over WiFi Example
 project:
+<<<<<<<< HEAD:slc/apps/thermostat/wifi/thermostat-917-ncp.slcw
   - path: ./thermostat-917-ncp.slcp
+========
+  - path: ../../../sample-app/thermostat/siwx917/thermostat-917-ncp.slcp
+>>>>>>>> 144c90496 (This commit combines all the work from implementing package manager):slc/solutions/thermostat/siwx917/thermostat-917-ncp-bootloader.slcw
     id: application
     output: thermostat-917-ncp
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
