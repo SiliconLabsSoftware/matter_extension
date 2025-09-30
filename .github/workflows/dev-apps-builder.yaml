@@ -3,13 +3,8 @@ name: Build Dev apps
 on:
     push:
         branches:
-            - main
-            - "release_*"
-    pull_request:
-        branches:
-            - main
-            - "release_*"
-            
+          - "feature/*"
+        
     workflow_dispatch:
         inputs:
             build-type:
@@ -19,33 +14,28 @@ on:
                 options:
                     - standard
                     - full
-
+                    - release
 concurrency:
     group: dev-build-examples-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
-
     set-build-type:
-        runs-on: ubuntu-latest
+        runs-on: [silabs-internal, austin]
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
         steps:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
-                          echo "build-type=full" >> $GITHUB_OUTPUT
-                      else
-                          echo "build-type=standard" >> $GITHUB_OUTPUT
-                      fi
-                  fi
-
+                elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                    echo "build-type=standard" >> $GITHUB_OUTPUT
+                elif [[ "${{ github.event_name }}" == "push" ]]; then
+                    echo "build-type=standard" >> $GITHUB_OUTPUT
+                fi
+    
     build-lighting-app:
         name: Build Lighting App
         needs: set-build-type
@@ -53,6 +43,7 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            sixg301-support: true
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
@@ -79,7 +70,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
-            ncp-rs911x-support: true
+            ncp-rs911x-support: false
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -90,7 +81,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
-            ncp-rs911x-support: true
+            ncp-rs911x-support: false
 
     build-window-app:
         name: Build Window App
@@ -117,6 +108,7 @@ jobs:
         with:
             example-app: "closure-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -133,7 +125,7 @@ jobs:
         with:
             example-app: "onoff-plug-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
+    
     build-refrigerator-app:
         name: Build Refrigerator App
         needs: set-build-type
@@ -141,6 +133,9 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
     
     build-performance-test-app:
         name: Build Performance Test App
@@ -149,7 +144,11 @@ jobs:
         with:
             example-app: "performance-test-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
             wifi-soc-support: false
+            mg24-support: false
 
     build-zigbee-matter-light-app:
         name: Build Zigbee Matter Light App
@@ -162,72 +161,143 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
+            ncp-917-support: false
+            ncp-wf200-support: false
+            ncp-rs911x-support: false
             wifi-soc-support: false
-
-    build-platform-app:
-        name: Build Platform App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "platform-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
-
+            sixg301-support: true
+    
     build-sqa-tools:
         name: Build SQA Tools
         needs: set-build-type
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    merge-apps:
-        name: Merge App Artifacts
-        runs-on: ubuntu-latest
+    apps-built:
+        name: Apps Built Aggregate
+        runs-on: [silabs-internal, austin]
         needs:
             - set-build-type
-            - build-sqa-tools
-            - build-lighting-app
-            - build-air-quality-sensor-app
-            - build-light-switch-app
-            - build-lock-app
-            - build-thermostat-app
-            - build-window-app
-            - build-fan-control-app
-            - build-multi-sensor-app
-            - build-onoff-plug-app
-            - build-refrigerator-app
-            - build-performance-test-app
-            - build-zigbee-matter-light-app
-            - build-closure-app
-        if: success()
-
+            #- build-sqa-tools
+            #- build-lighting-app
+            #- build-air-quality-sensor-app
+            #- build-light-switch-app
+            #- build-lock-app
+            #- build-thermostat-app
+            #- build-window-app
+            #- build-fan-control-app
+            #- build-multi-sensor-app
+            #- build-onoff-plug-app
+            #- build-refrigerator-app
+            #- build-performance-test-app
+            #- build-zigbee-matter-light-app
+            #- build-closure-app
+        outputs:
+            build-type: ${{ steps.propagate-build-type.outputs.build-type }}
         steps:
-            - name: Merge artifacts
-              uses: actions/upload-artifact/merge@v4
-              with:
-                name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
-                delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+            - id: propagate-build-type
+              run: echo "build-type=${{ needs.set-build-type.outputs.build-type }}" >> $GITHUB_OUTPUT
+            - name: Aggregation complete
+              run: echo "All app build jobs completed."
 
-    wait-for-test-results:
-        name: Wait for Test Results
-        needs: merge-apps
-        uses: ./.github/workflows/sqa-sanity-tests.yaml
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
-
-    trigger-sqa-workflow:
-        name: Trigger SQA Workflow
-        needs: wait-for-test-results
-        runs-on: ubuntu-latest
-        if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
+  # merge-apps:
+  #     name: Merge App Artifacts
+  #     runs-on: [silabs-internal, austin]
+  #     needs: apps-built
+  #     if: success()
+  #     steps:
+  #         - name: Merge artifacts
+  #           uses: actions/upload-artifact/merge@v4
+  #           with:
+  #             name: "dev-artifacts-${{ needs.apps-built.outputs.build-type }}"
+  #             delete-merged: true
+  #             pattern: "*-${{ needs.apps-built.outputs.build-type }}"
+  #
+  #         - name: Download merged artifacts
+  #           uses: actions/download-artifact@v4
+  #           with:
+  #             name: "dev-artifacts-${{ needs.apps-built.outputs.build-type }}"
+  #             path: ./artifacts
+  #
+  #         - name: Create artifact archive
+  #           run: |
+  #             cd ./artifacts
+  #             tar -czf "../dev-artifacts-${{ needs.apps-built.outputs.build-type }}.tar.gz" .
+  #             cd ..
+  #             ls -la dev-artifacts-*.tar.gz
+  #
+  #         - name: Upload to Artifactory
+  #           run: |
+  #             ARTIFACT_NAME="dev-artifacts-${{ needs.apps-built.outputs.build-type }}.tar.gz"
+  #             ARTIFACTORY_URL="https://artifactory.silabs.net/artifactory/matter-conan-dev"
+  #             UPLOAD_PATH="${ARTIFACTORY_URL}/${{ github.ref_name }}/${{ github.run_id }}/${ARTIFACT_NAME}"
+  #             
+  #             echo "Uploading ${ARTIFACT_NAME} to ${UPLOAD_PATH}"
+  #             
+  #             curl -u "${{ secrets.SARTHAK_JF_USERNAME }}:${{ secrets.SARTHAK_JF_TOKEN }}" \
+  #               -X PUT "${UPLOAD_PATH}" \
+  #               -T "${ARTIFACT_NAME}" \
+  #               -H "Content-Type: application/gzip"
+  #             
+  #             echo "Upload completed successfully"
+  #
+  #         - name: Delete GitHub artifact
+  #           run: |
+  #             echo "Deleting GitHub artifact: dev-artifacts-${{ needs.apps-built.outputs.build-type }}"
+  #             gh api \
+  #               --method DELETE \
+  #               -H "Accept: application/vnd.github+json" \
+  #               -H "X-GitHub-Api-Version: 2022-11-28" \
+  #               "/repos/${{ github.repository }}/actions/artifacts/$(gh api "/repos/${{ github.repository }}/actions/artifacts?name=dev-artifacts-${{ needs.apps-built.outputs.build-type }}" --jq '.artifacts[0].id')" || echo "Artifact not found or already deleted"
+  #           env:
+  #             GH_TOKEN: ${{ github.token }}
+    
+    upload-packages:
+        needs: apps-built
+        uses: ./.github/workflows/upload-packages.yaml
+        secrets: inherit
+        with:
+            use_sqa_remote: false
+            
+    notify:  
+        needs: upload-packages
+        runs-on: silabs-internal
+        if: always() && needs.upload-packages.result != 'skipped'  # ensures this runs regardless of previous job success/failure but not if skipped
         steps:
-            - name: Trigger Workflow
+            - name: Determine status color and emoji
+              id: status_info
               run: |
-                  curl -X POST \
-                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                      -H "Accept: application/vnd.github.v3+json" \
-                      https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
-                      -d '{
-                          "ref": "${{ github.ref }}"
-                      }'
+                if [[ "${{ needs.upload-packages.result }}" == "success" ]]; then
+                  echo "color=good" >> $GITHUB_OUTPUT
+                  echo "emoji=✅" >> $GITHUB_OUTPUT
+                elif [[ "${{ needs.upload-packages.result }}" == "failure" ]]; then
+                  echo "color=danger" >> $GITHUB_OUTPUT
+                  echo "emoji=❌" >> $GITHUB_OUTPUT
+                else
+                  echo "color=warning" >> $GITHUB_OUTPUT
+                  echo "emoji=⚠️" >> $GITHUB_OUTPUT
+                fi
+            
+            - name: Send message to Slack
+              uses: slackapi/slack-github-action@v2.1.1
+              with:
+                webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+                webhook-type: incoming-webhook
+                payload: |
+                  {
+                    "attachments": [
+                      {
+                        "color": "${{ steps.status_info.outputs.color }}",
+                        "blocks": [
+                          {
+                            "type": "section",
+                            "text": {
+                              "type": "mrkdwn",
+                              "text": "${{ steps.status_info.outputs.emoji }} *Dev Apps Build & Publish*\n\n*Branch:* ${{ github.ref_name }}\n*Workflow:* ${{ github.workflow }}\n*Commit:* <${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\n*Status:* ${{ needs.upload-packages.result }}\n*Triggered by:* ${{ github.actor }}\n\n*Stack Package*\nRef: ${{ needs.upload-packages.outputs.stack-package-ref }}\nFull Ref: ${{ needs.upload-packages.outputs.stack-full-package-ref }}\nName: ${{ needs.upload-packages.outputs.stack-package-name }}\nVersion: ${{ needs.upload-packages.outputs.stack-package-version }}\nChannel: ${{ needs.upload-packages.outputs.stack-package-channel }}\nUser: ${{ needs.upload-packages.outputs.stack-package-user }}\nID: ${{ needs.upload-packages.outputs.stack-package-id }}\nRecipe Rev: ${{ needs.upload-packages.outputs.stack-recipe-revision }}\nPkg Rev: ${{ needs.upload-packages.outputs.stack-package-revision }}\nPrerelease: ${{ needs.upload-packages.outputs.stack-prerelease-qualifier }}${{ needs.upload-packages.outputs.stack-prerelease-qualifier && '.' || '' }}${{ needs.upload-packages.outputs.stack-prerelease-number }}\n\n*App Package*\nRef: ${{ needs.upload-packages.outputs.app-package-ref }}\nFull Ref: ${{ needs.upload-packages.outputs.app-full-package-ref }}\nName: ${{ needs.upload-packages.outputs.app-package-name }}\nVersion: ${{ needs.upload-packages.outputs.app-package-version }}\nChannel: ${{ needs.upload-packages.outputs.app-package-channel }}\nUser: ${{ needs.upload-packages.outputs.app-package-user }}\nID: ${{ needs.upload-packages.outputs.app-package-id }}\nRecipe Rev: ${{ needs.upload-packages.outputs.app-recipe-revision }}\nPkg Rev: ${{ needs.upload-packages.outputs.app-package-revision }}\nPrerelease: ${{ needs.upload-packages.outputs.app-prerelease-qualifier }}${{ needs.upload-packages.outputs.app-prerelease-qualifier && '.' || '' }}${{ needs.upload-packages.outputs.app-prerelease-number }}"
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }

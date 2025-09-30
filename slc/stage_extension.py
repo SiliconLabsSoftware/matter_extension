@@ -111,9 +111,6 @@ def copy_directory(source_directory, target_location):
             if file.startswith("."):
                 continue
             source_file = os.path.join(root, file)
-            if not os.path.exists(source_file):
-                print(f"Warning: Source file does not exist: {source_file}")
-                continue
             relative_path = os.path.relpath(root, source_directory)
             target_dir = os.path.join(target_location, relative_path)
             os.makedirs(target_dir, exist_ok=True)

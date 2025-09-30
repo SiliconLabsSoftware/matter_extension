@@ -1,23 +1,21 @@
 name: Validate Metadata
 
 on:
-  push:
-      branches:
-          - main
-          - "release_*"
-  pull_request:
-        branches:
-          - main
-          - "release_*"
+  workflow_call:
+    inputs:
+      build-type: 
+        description: "The build type to use"
+        required: true
+        type: string
 
 concurrency: 
     group: validate-metadata-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
-  package-field:
+  validate-package-field:
     name: Validate Matter Extension Package Field
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -26,12 +24,36 @@ jobs:
 
       - name: Validate Matter Extension Package Field
         shell: bash
+        working-directory: ${{ github.workspace }}
         run: |
-          python3 -u './slc/script/verify_package_matter.py' --directory . --verbose --ci
+          set -e 
+          OUTPUT_DIR="$(pwd)/validate_metadata_output"
+          mkdir -p "$OUTPUT_DIR" 
+          output=$(python3 -u './slc/script/verify_package_matter.py' --directory . --verbose 2>&1) 
+          echo "$output"
+          no_warning="INFO - All .slcc, .slcp, and .slce files contain the required strings."
+          if [[ "$output" != *"$no_warning"* ]]; then
+            if [[ -f "missing_package_matter.txt" ]]; then
+              echo "Packages without 'package: matter' detected"
+              cp missing_package_matter.txt "$OUTPUT_DIR/"
+              exit 1 
+            else 
+              echo "Error: 'missing_package_matter.txt' does not exist, but it was expected."
+              exit 1
+            fi
+          fi
 
-  file-path-lengths:
+      - name: Upload package validation results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: package-validation
+          path: validate_metadata_output/
+          if-no-files-found: ignore
+
+  validate-file-path-lengths:
     name: Validate Matter Extension File Path Lengths
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v5
@@ -41,29 +63,52 @@ jobs:
     - name: Initialize required submodules
       shell: bash
       run: |
-        git submodule update --init \
-          third_party/aws_ota_sdk \
-          third_party/matter_sdk \
-          third_party/matter_support \
-          third_party/mbedtls \
-          third_party/mqtt \
-          third_party/nlassert \
-          third_party/nlio \
-          third_party/QR-Code-generator \
-          third_party/wiseconnect-wifi-bt-sdk
+        git submodule update --init third_party/aws_ota_sdk
+        git submodule update --init third_party/matter_sdk
+        git submodule update --init third_party/matter_support
+        git submodule update --init third_party/mbedtls
+        git submodule update --init third_party/mqtt
+        git submodule update --init third_party/nlassert
+        git submodule update --init third_party/nlio
+        git submodule update --init third_party/QR-Code-generator
+        git submodule update --init third_party/wiseconnect-wifi-bt-sdk
       
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
 
-    - name: Validate Matter Extension File Path Lengths
+    - name: Validate Matter Extension File Path Lengths 
       shell: bash
       working-directory: ${{ github.workspace }}/../staged/matter_extension
       run: |
-        python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose --ci
-        
-  matter-templates:
+        set -e 
+        OUTPUT_DIR="$(pwd)/validate_metadata_output"      
+        mkdir -p "$OUTPUT_DIR"
+        pwd
+        output=$(python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose 2>&1) 
+        echo "$output"
+        no_warning="INFO:__main__:No file paths exceeding 240 characters were detected. Nothing will be written to the file."
+        if [[ "$output" != *"$no_warning"* ]]; then
+          if [[ -f "long_file_paths.txt" ]]; then
+            echo "File paths exceeding 240 characters detected!"
+            cp long_file_paths.txt "$OUTPUT_DIR/"
+            exit 1
+          else
+            echo "Error: 'long_file_paths.txt' does not exist, but it was expected."
+            exit 1
+          fi  
+        fi 
+
+    - name: Upload file path validation results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: filepath-validation
+        path: sisdk/extension/matter_extension/validate_metadata_output/
+        if-no-files-found: ignore
+
+  validate-matter-templates:
     name: Validate Matter Templates
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -72,13 +117,24 @@ jobs:
 
       - name: Validate Matter Templates 
         shell: bash
+        working-directory: ${{ github.workspace }}
         run: | 
           set -e
-          python3 -u './slc/script/validate_matter_templates.py'
+          OUTPUT_DIR="$(pwd)/validate_metadata_output"    
+          mkdir -p "$OUTPUT_DIR"
+          python3 -u './slc/script/validate_matter_templates.py' | tee "$OUTPUT_DIR/validate_matter_templates_result.log"
+
+      - name: Upload template validation results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: template-validation
+          path: validate_metadata_output/
+          if-no-files-found: ignore
    
-  components:
+  validate-components:
     name: Validate Components
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
     steps:
@@ -91,31 +147,60 @@ jobs:
         shell: bash
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
+
       - name: Initialize required submodules
         shell: bash
         run: |
-          git submodule update --init \
-            third_party/aws_ota_sdk \
-            third_party/matter_sdk \
-            third_party/matter_support \
-            third_party/mbedtls \
-            third_party/mqtt \
-            third_party/nlassert \
-            third_party/nlio \
-            third_party/QR-Code-generator \
-            third_party/wiseconnect-wifi-bt-sdk
+          git submodule update --init third_party/aws_ota_sdk
+          git submodule update --init third_party/matter_sdk
+          git submodule update --init third_party/matter_support
+          git submodule update --init third_party/mbedtls
+          git submodule update --init third_party/mqtt
+          git submodule update --init third_party/nlassert
+          git submodule update --init third_party/nlio
+          git submodule update --init third_party/QR-Code-generator
+          git submodule update --init third_party/wiseconnect-wifi-bt-sdk
       
       - name: Trust SDK 
         shell: bash
+        working-directory: ${{ github.workspace }}
         run: |
           set -e 
           echo "Trusting SDK at ${SISDK_ROOT}"
           slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
           slc signature trust --sdk ${SISDK_ROOT}
-          
+
       - name: Validate Components
-        shell: bash
-        continue-on-error: true # TO-DO: Set to false once work is completed to resolve validate components errors
+        shell: bash 
+        working-directory: ${{ github.workspace }}
+        continue-on-error: true 
         run: |
           set -e
-          python3 -u './slc/script/validate_components.py' slc/component slc
+          OUTPUT_DIR="$(pwd)/validate_metadata_output" 
+          mkdir -p "$OUTPUT_DIR"
+          python3 -u './slc/script/validate_components.py' slc/component slc | tee "$OUTPUT_DIR/component_validation_results.log"
+
+      - name: Upload validation artifacts
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: component-validation
+          path: validate_metadata_output/
+          if-no-files-found: ignore
+
+  merge-validation-artifacts:
+    name: Merge Validation Results
+    runs-on: [silabs-internal, austin]
+    needs:
+      - validate-package-field
+      - validate-file-path-lengths
+      - validate-matter-templates
+      - validate-components
+    if: always()
+    steps:
+      - name: Merge validation artifacts
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: "validate-metadata-${{ inputs.build-type }}"
+          delete-merged: true
+          pattern: "*-validation"

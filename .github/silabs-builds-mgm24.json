@@ -1,26 +1,10 @@
-
 {
     "standard": {
+
         "default": [
             {
                 "boards": ["brd4316a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4316a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            }
-        ]
-    },
-    "full": {
-        "default": [
-            {
-                "boards": ["brd4316a", "brd4317a", "brd4318a"],
-                "arguments": [""]
-            },
-            {
-                "boards": ["brd4316a", "brd4317a", "brd4318a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     } 

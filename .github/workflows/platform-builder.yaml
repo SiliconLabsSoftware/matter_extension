@@ -40,15 +40,15 @@ on:
             mg24-internal-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
             mgm24-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
             mgm24-internal-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
             mg26-support:
                 required: false
                 type: boolean
@@ -68,8 +68,7 @@ on:
             sixg301-support:
                 required: false
                 type: boolean
-                default: true
-
+                default: false
 jobs:
     mg24-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support }}
@@ -146,7 +145,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-917-ncp-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/siwx917/${{ inputs.example-app }}-917-ncp-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
@@ -156,7 +155,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-wf200-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/siwx917/${{ inputs.example-app }}-wf200-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-wf200
@@ -166,7 +165,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/solutions/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-rs911x-bootloader.slcw
+            path-to-example-app: slc/solutions/${{ inputs.example-app }}/siwx917/${{ inputs.example-app }}-rs911x-bootloader.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-rs911x
@@ -182,7 +181,7 @@ jobs:
             platform: siwx-soc
 
     sixg301-build-job:
-        if: ${{ inputs.thread-support && inputs.sixg301-support }}
+        if: ${{ inputs.sixg301-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'

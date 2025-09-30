@@ -1,0 +1,15 @@
+# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+matter = { version = "2.7.0-alpha.1", installer ="conan"}
+openthread = { version = "0.1.5", installer ="conan"}
+bluetooth_le_host = { version = "0.0.6", installer ="conan"}
+rail_module = { version = "0.0.5", installer ="conan"}
+multiprotocol = { version = "0.1.4", installer ="conan"}
+zigbee = { version = "0.1.5", installer ="conan"}
+platform_nwp_siwx91x = { version = "0.0.6", installer ="conan"}
+bluetooth_le_siwx91x = { version = "0.0.6", installer ="conan"}
+lwip = { version = "0.0.5", installer ="conan"}

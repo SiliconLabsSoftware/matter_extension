@@ -56,60 +56,78 @@ import os
 import sys
 import argparse
 import logging
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 import yaml
 
 # Module-level logger (configured once in main)
 logger = logging.getLogger(__name__)
 
 
-def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, str]:
-    """Load dependency versions from shared YAML file at repo root.
+def _load_grouped_versions(filename: str = "dependency_versions.yaml") -> Dict[str, Dict[str, str]]:
+    """Load grouped dependency versions (common/thread/wifi) from YAML.
 
-    Falls back to embedded defaults if file is missing (so the script remains
-    usable in isolation), but logs a warning encouraging creation of the file.
+    Accepts either new grouped format or legacy flat mapping. Returns a dict:
+        { "common": {...}, "thread": {...}, "wifi": {...} }
+    Fallback provides minimal defaults if the file is missing or malformed.
     """
-    # Attempt to locate the file relative to this script first, then cwd.
     script_dir = os.path.dirname(os.path.abspath(__file__))
     candidates = [
-        os.path.join(script_dir, filename),  # same directory (slc/script)
-        os.path.join(script_dir, "..", "..", filename),  # legacy repo root location
-        os.path.join(os.getcwd(), filename),  # current working directory fallback
+        os.path.join(script_dir, filename),
+        os.path.join(script_dir, "..", "..", filename),
+        os.path.join(os.getcwd(), filename),
     ]
+    raw: Dict[str, Any] = {}
     for path in candidates:
         if os.path.exists(path):
             try:
                 with open(path, "r", encoding="utf-8") as f:
                     data = yaml.safe_load(f) or {}
+                if isinstance(data, dict):
+                    raw = data
                     logger.debug("Loaded dependency versions from %s", path)
-                    return data
+                    break
             except Exception as e:
                 logger.error("Failed parsing dependency versions file %s: %s", path, e)
                 break
-    # Fallback defaults (should mirror committed YAML); warn about fallback.
-    logger.warning("dependency_versions.yaml not found; using embedded fallback versions")
-    return {
-        "openthread": "0.1.5",
-        "bluetooth_le_host": "0.0.6",
-        "rail_module": "0.0.5",
-        "wifi": "0.0.7",
-        "platform_nwp_siwx91x": "0.0.3",
-        "bluetooth_le_siwx91x": "0.0.3",
-        "lwip": "0.0.5",
-    }
+    grouped: Dict[str, Dict[str, str]]
+    if raw and any(k in raw for k in ("thread", "wifi", "common")):
+        grouped = {
+            "common": raw.get("common", {}) or {},
+            "thread": raw.get("thread", {}) or {},
+            "wifi": raw.get("wifi", {}) or {},
+        }
+    elif raw:  # legacy flat mapping; no explicit groups provided
+        # Instead of maintaining hardcoded dependency name lists, just put all
+        # flat keys into both 'thread' and 'wifi' groups so additions require
+        # no script changes. Keep 'common' empty (or could optionally lift
+        # universally shared entries there later).
+        flat_items = {k: v for k, v in raw.items() if k not in ("common", "thread", "wifi")}
+        grouped = {
+            "common": {},
+            "thread": dict(flat_items),
+            "wifi": dict(flat_items),
+        }
+    else:
+        logger.warning("dependency_versions.yaml not found; using embedded fallback versions")
+        grouped = {
+            "common": {"bluetooth_le_host": "0.0.6"},
+            "thread": {"openthread": "0.1.5", "rail_module": "0.0.5"},
+            "wifi": {"platform_nwp_siwx91x": "0.0.3", "bluetooth_le_siwx91x": "0.0.3", "lwip": "0.0.5"},
+        }
+    return grouped
 
 
-DEP_VERSIONS: Dict[str, str] = load_dep_versions()
+DEP_GROUPS = _load_grouped_versions()
 
 
 def build_content_strings(matter_version: str):
-    """Return content templates filled with the provided Matter version.
+    """Return header plus platform-specific dependency blocks using grouped versions.
 
-    Uses centralized DEP_VERSIONS so individual dependency version bumps
-    only require changing the dictionary above.
+    The returned tuple is (common_header, thread_block, wifi_block, all_header).
+    For now 'common_header' and 'all_header' are identical (Matter only) to preserve
+    previous behavior when --common is supplied.
     """
-    # Common header (matter dependency only)
-    pkg_slt_content_common = f"""# Version defaults to "0" if not defined
+    header = f"""# Version defaults to "0" if not defined
 version = "0"
  
  
@@ -118,45 +136,30 @@ version = "0"
 matter = {{ version = "{matter_version}", installer ="conan"}}
 """
 
-    # Thread / EFR variant dependencies
-    pkg_slt_content_thread = """openthread = { version = "%s", installer ="conan"}
-bluetooth_le_host = { version = "%s", installer ="conan"}
-rail_module = { version = "%s", installer ="conan"}
-""" % (
-        DEP_VERSIONS["openthread"],
-        DEP_VERSIONS["bluetooth_le_host"],
-        DEP_VERSIONS["rail_module"],
-    )
+    def merged_lines(group_name: str) -> str:
+        # Merge common first, then group-specific (group overrides duplicates)
+        common = DEP_GROUPS.get("common", {})
+        specific = DEP_GROUPS.get(group_name, {})
+        merged: Dict[str, str] = dict(common)
+        # Maintain insertion order: add keys from specific (overwriting any duplicates)
+        for k, v in specific.items():
+            merged[k] = v
+        # Simple emission: rely on merged dict insertion order (Python 3.7+ preserves it)
+        #  - common entries first
+        #  - followed by group-specific additions / overrides
+        lines = []
+        for name, ver in merged.items():
+            if name == "matter":
+                continue
+            lines.append(f"{name} = {{ version = \"{ver}\", installer =\"conan\"}}\n")
+        return "".join(lines)
 
-    # Wi-Fi / 91x variant dependencies
-    pkg_slt_content_wifi = """wifi = { version = "%s", installer ="conan"}
-platform_nwp_siwx91x = { version = "%s", installer ="conan"}
-bluetooth_le_siwx91x = { version = "%s", installer ="conan"}
-lwip = { version = "%s", installer ="conan"}
-bluetooth_le_host = { version = "%s", installer ="conan"}
-""" % (
-        DEP_VERSIONS["wifi"],
-        DEP_VERSIONS["platform_nwp_siwx91x"],
-        DEP_VERSIONS["bluetooth_le_siwx91x"],
-        DEP_VERSIONS["lwip"],
-        DEP_VERSIONS["bluetooth_le_host"],
-    )
-
-    # Universal (common) variant (could differ later; currently same as common header)
-    pkg_slt_content_all = f"""# Version defaults to "0" if not defined
-version = "0"
- 
- 
-[dependency]
-# Get a specific version of the package
-matter = {{ version = "{matter_version}", installer ="conan"}}
-"""
-    return (
-        pkg_slt_content_common,
-        pkg_slt_content_thread,
-        pkg_slt_content_wifi,
-        pkg_slt_content_all,
-    )
+    thread_block = merged_lines("thread")
+    wifi_block = merged_lines("wifi")
+    logger.debug("Resolved dependency groups: %s", DEP_GROUPS)
+    logger.debug("Thread block emitted:\n%s", thread_block)
+    logger.debug("WiFi block emitted:\n%s", wifi_block)
+    return header, thread_block, wifi_block, header
 
 
 def resolve_matter_version(cli_version: Optional[str]) -> str:
@@ -194,8 +197,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
     logger.info(f"Using Matter package version: {matter_version}")
 
-    pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(
-        matter_version)
+    pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(matter_version)
 
     for root, dirs, files in os.walk(base_directory):
         # Skip whole subtree if root matches an exclude pattern
@@ -220,18 +222,18 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
             pkg_slt_content = pkg_slt_content_all
         else:
             path_components = os.path.normpath(root).split(os.path.sep)
-            if "siwx917" in path_components:
-                pkg_slt_content = pkg_slt_content_common + pkg_slt_content_wifi
-            elif "efr" in path_components:
+            if "siwx917" not in path_components:
                 pkg_slt_content = pkg_slt_content_common + pkg_slt_content_thread
+                # logger.debug("efr app contents = %s", pkg_slt_content_thread)
             else:
-                pkg_slt_content = pkg_slt_content_common
+                pkg_slt_content = pkg_slt_content_common + pkg_slt_content_wifi
+                # logger.debug("wifi app contents = %s", pkg_slt_content_wifi)
 
         pkg_slt_path = os.path.join(root, "pkg.slt")
         try:
             with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
                 pkg_slt_file.write(pkg_slt_content)
-            logger.info(f"Generated pkg.slt in: {pkg_slt_path}")
+            logger.debug(f"Generated pkg.slt in: {pkg_slt_path}")
         except Exception as e:
             logger.error(f"Failed to generate pkg.slt in {pkg_slt_path}: {e}")
 

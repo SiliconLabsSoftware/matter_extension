@@ -1,26 +1,11 @@
 {
     "standard": {
+
         "default": [
             {
                 "boards": ["brd4187c"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
-    },
-    "full": {
-        "default": [
-            {
-                "boards": ["brd4186c", "brd4187c"],
-                "arguments": [""]
-            },
-            {
-                "boards": ["brd4186c", "brd4187c"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            }
-        ]
-    }
+    } 
 }

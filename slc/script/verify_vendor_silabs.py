@@ -103,7 +103,7 @@ class VerifyVendorSilabs:
         missing_files = []
 
         for file_path in files:
-            if not self.verify_vendor_silabs_file(file_path):
+            if not self.verify_file(file_path):
                 self.logger.warning(f"'vendor: silabs' NOT found in: {file_path}")
                 missing_files.append(file_path)
 

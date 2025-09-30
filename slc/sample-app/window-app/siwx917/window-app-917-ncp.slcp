@@ -1,7 +1,7 @@
-project_name: thermostat-917-ncp
-label: Matter Thermostat
+project_name: window-app-917-ncp
+label: Matter Window App
 description: >
-  Matter Thermostat For WiFi
+  Matter window-app For WiFi
 quality: production
 package: matter
 
@@ -9,8 +9,9 @@ sdk_extension:
   - id: matter
     version: "2.7.0"
     vendor: silabs
-  - id: wiseconnect3_sdk
-    version: "4.0.0"
+
+provides:
+  - name: window_app
 
 component:
   - id: device_init
@@ -19,7 +20,6 @@ component:
     from: matter
   - id: matter_leds
     from: matter
-
   - id: matter
     from: matter
   - id: matter_platform_mg
@@ -38,7 +38,7 @@ component:
   - id: siwx917_ncp
     from: matter
 
-  - id: matter_thermostat_app
+  - id: matter_window
     from: matter
   - id: app_common
     from: matter
@@ -51,11 +51,7 @@ component:
     from: matter
   - id: matter_basic_information
     from: matter
-  - id: matter_bindings
-    from: matter
   - id: matter_descriptor
-    from: matter
-  - id: matter_diagnostic_logs
     from: matter
   - id: matter_ethernet_network_diagnostics
     from: matter
@@ -79,11 +75,9 @@ component:
     from: matter
   - id: matter_ota_requestor
     from: matter
+  - id: matter_power_source
+    from: matter
   - id: matter_software_diagnostics
-    from: matter
-  - id: matter_thermostat
-    from: matter
-  - id: matter_thermostat_user_interface_configuration
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
@@ -95,6 +89,8 @@ component:
     from: matter
   - id: matter_wifi_network_diagnostics
     from: matter
+  - id: matter_window_covering
+    from: matter
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
     from: matter
@@ -103,35 +99,33 @@ component:
 
   - id: matter_shell
     from: matter
+  - id: matter_icd_core
+    from: matter
+  - id: matter_test_event_trigger
+    from: matter
+  - id: matter_icd_management
+    from: matter
   - id: matter_log_uart
     from: matter
   - id: matter_lwip
     from: matter
   # TODO: Remove this in the SiSDK 25Q4 release, where the LwIP fix will be included in the SiSDK.
   - id: sl_si91x_lwip_stack
-    from: wiseconnect3_sdk
 
   - id: wifi_resources
-    from: wiseconnect3_sdk
   - id: sl_si91x_lwip_stack
-    from: wiseconnect3_sdk
   - id: wifi
-    from: wiseconnect3_sdk
   - id: basic_network_config_manager
-    from: wiseconnect3_sdk
   - id: sl_si91x_basic_buffers
-    from: wiseconnect3_sdk
   - id: sl_si91x_wireless
-    from: wiseconnect3_sdk
   - id: ble
-    from: wiseconnect3_sdk
 
 # Require LCD and QR Code components only on the boards that support LCD
 #requires:
 #  - name: matter_default_lcd_config
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
+  - path: ../../../../third_party/matter_sdk/examples/window-app/common/window-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
@@ -139,34 +133,29 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
+  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/include
     file_list:
       - path: AppConfig.h
-      - path: AppEvent.h
-      - path: AppTask.h
-      - path: SensorManager.h
-      - path: TemperatureManager.h
       - path: CHIPProjectConfig.h
+      - path: WindowManager.h
+      - path: AppTask.h
+      - path: AppEvent.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/AppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/DataModelCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/WindowManager.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_THERMOSTAT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"
@@ -191,6 +180,20 @@ configuration:
   - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
     value: "1856"
     condition: [device_series_3]
+  # Default ICD configurations for window-app (SIT)
+  - name: SL_IDLE_MODE_DURATION_S
+    value: "600"
+  - name: SL_ACTIVE_MODE_DURATION_MS
+    value: "0"
+  - name: SL_ACTIVE_MODE_THRESHOLD
+    value: "0"
+  - name: SL_TRANSPORT_IDLE_INTERVAL
+    value: "3000"
+
+  - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
+    value: "1"
+  - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
+    value: "0"
   - name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
     value: 1
 

@@ -18,59 +18,97 @@ on:
             platform:
                 required: true
                 type: string
+env:
+  CONAN_HOME: ~/.silabs/slt/installs/conan
 
 jobs:
     build:
         name: ${{ inputs.platform }}-build-job
-        runs-on: ubuntu-latest
-        container:
-            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2
+        runs-on: [silabs-internal, austin]
 
         steps:
             - name: Checkout
               uses: actions/checkout@v5
               with:
-                  submodules: "false" # Do not initialize submodules automatically
+                submodules: 'true'
+            
+            - name: Setup SLT
+              id: setup-action
+              uses: SiliconLabsInternal/action-setup-slt@main
+              with: 
+                use-unstable: true
+
+            - name: Check SLT version
+              run: |
+                echo "SLT version installed: ${{ steps.setup-action.outputs.slt-version }}"
+                echo "SLT executable path : ${{ steps.setup-action.outputs.slt-path }}"
+                echo "conan_engine version installed: ${{ steps.setup-action.outputs.conan-engine-version }}"
+                echo "conan_engine executable path: ${{ steps.setup-action.outputs.conan-engine-path }}"
+                echo "conan version installed: ${{ steps.setup-action.outputs.conan-version }}"
+                echo "conan executable path: ${{ steps.setup-action.outputs.conan-path }}"
+            
+            - name: Setup Conan remotes
+              id: add-conan-remotes
+              run: |
+                make install_download_remotes
+                conan remote list
+            
+            - name: Update SLT
+              run: slt update --self
 
             - name: Mark repository as safe for Git
               shell: bash
               run: |
-                  git config --global --add safe.directory /__w/matter_extension/matter_extension
+                git config --global --add safe.directory $(pwd)
 
-            - name: Initialize required submodules
-              shell: bash
+            - name: define concurrent threads for conan download and upload
+              id: check-conan
               run: |
-                  git submodule update --init \
-                      third_party/aws_ota_sdk \
-                      third_party/matter_sdk \
-                      third_party/matter_support \
-                      third_party/mbedtls \
-                      third_party/mqtt \
-                      third_party/nlassert \
-                      third_party/nlio \
-                      third_party/QR-Code-generator \
-                      third_party/wiseconnect-wifi-bt-sdk
-                  # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
+                  conan --version
+                  conan config home
+                  mkdir -p conan-settings
+                  cat > conan-settings/global.conf << EOF
+                  core.download:parallel=6
+                  core.upload:parallel=4
+                  EOF
+                  conan config install ./conan-settings --type dir
+                  conan config show "*"
+                  rm -rf conan-settings
+            
+            - name: Install libgl1 for commander
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y libgl1 libglib2.0-0
 
-            - name: Install tools
-              uses: ./.github/actions/install-tools
+            - name: Install GCC, CMAKE, commander
+              id: setup-conan
+              run: |
+                    conan config show "*"
+                    slt update  --self
+                    slt install commander
+                    slt install gcc-arm-none-eabi --engine conan
+                    slt install cmake --engine conan 
+            
+            - name: Create Matter app package
+              run: make create_app_package
+            
+            - name: Create Matter Stack package
+              run: make create_stack_package
 
             - name: Build ${{ inputs.example-app }}
-              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              uses: SiliconLabsSoftware/matter_build_action@3fa7357e526337fb8f370a20158b8857aeb708ab
               with:
-                  json-file-path: ${{ inputs.json-file-path }}
-                  path-to-example-app: ${{ inputs.path-to-example-app }}
-                  example-app: ${{ inputs.example-app }}
-                  build-script: "./slc/build.sh"
-                  output-directory: " "
-                  build-type: ${{ inputs.build-type }}
+                json-file-path: ${{ inputs.json-file-path }}
+                path-to-example-app: ${{ inputs.path-to-example-app }}
+                example-app: ${{ inputs.example-app }}
+                build-script: "python3 slc/build.py --ci --verbose"
+                output-directory: " "
+                build-type: ${{ inputs.build-type }}
 
-            - name: Upload artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
-                  path: |
-                      out/*/*/artifact/**
-                      !out/*/*-copy-sources/artifact/**
-                  if-no-files-found: warn
-                  overwrite: true
+#            - name: Upload artifacts
+#              uses: actions/upload-artifact@v4
+#              with:
+#                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
+#                  path: ${{ env.SAMPLE_APP_PATH }}/out/*/*/artifact
+#                  if-no-files-found: error
+#                  overwrite: true
