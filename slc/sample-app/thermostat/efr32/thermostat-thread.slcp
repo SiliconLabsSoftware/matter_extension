@@ -99,8 +99,7 @@ component:
     condition: [hardware_board_has_si70xx]
   - id: matter_zigbee_multiprotocol_common
     from: matter
-  - id: matter_zigbee_cmp
-    from: matter
+    condition: [matter_zigbee_cmp]
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -132,7 +131,7 @@ config_file:
     file_id: zap_config
     directory: common
     condition: [matter_zigbee_cmp]
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-thread-app.zap
     directory: common
     file_id: zap_config
     unless: [matter_zigbee_cmp]
@@ -217,6 +216,8 @@ configuration:
     value: 16
   - name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
     value: 1
+
+# CMP configs for Zigbee Matter
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
     value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
     condition: [matter_zigbee_cmp]
