@@ -2,7 +2,7 @@ id: matter_zigbee_cmp
 package: matter
 label: tracing
 description: >
-  Enables tracing for matter protocol
+  Enables Zigbee components required in a matter cmp project
 category: Matter|Core
 quality: production
 metadata:
@@ -49,9 +49,3 @@ define:
   - name: OS_CFG_COMPAT_INIT
   - name: SL_CLI_TICK_ENABLE
     value: 0
-
-# config_file:
-#   - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/sl_cmp_config.h
-#   - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/zcl/zcl_config.zap
-#     file_id: zap_config
-#     directory: common
