@@ -38,7 +38,7 @@ include:
     condition: [matter_air_quality_app]
     file_list:
       - path: AirQualitySensorUI.h
-  - path: examples/fan-control-app/silabs/include
+  - path: third_party/matter_sdk/examples/fan-control-app/silabs/include
     condition: [matter_fan_control_app]
     file_list:
       - path: FanControlUI.h
@@ -68,7 +68,7 @@ source:
   - path: third_party/matter_sdk/examples/air-quality-sensor-app/silabs/src/AirQualitySensorUI.cpp
     condition:
       - matter_air_quality_app
-  - path: examples/multi-sensor-app/src/SensorsUI.cpp
+  - path: third_party/matter_sdk/examples/multi-sensor-app/silabs/src/SensorsUI.cpp
     condition:
       - matter_multi_sensor_app
 define:

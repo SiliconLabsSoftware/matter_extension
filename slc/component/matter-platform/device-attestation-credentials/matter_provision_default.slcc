@@ -36,7 +36,7 @@ include:
       - path: headers/ProvisionStorage.h
       - path: headers/ProvisionStorageGeneric.h
       - path: headers/ProvisionedDataProvider.h
-  - path: third_party/matter_sdk/examples/platform/silabs
+  - path: third_party/matter_sdk/examples/platform/silabs/test-event-trigger
     file_list:
       - path: SilabsTestEventTriggerDelegate.h
 
