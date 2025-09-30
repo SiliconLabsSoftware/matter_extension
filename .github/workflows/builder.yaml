@@ -24,18 +24,18 @@ jobs:
         name: ${{ inputs.platform }}-build-job
         runs-on: ubuntu-latest
         container:
-            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
+            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.1_WiFi_SDKv3.5.1
 
         steps:
             - name: Checkout
               uses: actions/checkout@v5
               with:
-                submodules: 'false' # Do not initialize submodules automatically
+                  submodules: "false" # Do not initialize submodules automatically
 
             - name: Mark repository as safe for Git
               shell: bash
               run: |
-                git config --global --add safe.directory /__w/matter_extension/matter_extension
+                  git config --global --add safe.directory /__w/matter_extension/matter_extension
 
             - name: Initialize required submodules
               shell: bash
