@@ -340,9 +340,9 @@ class AutoCommand(Command):
         ID.kPaiCert,
         ID.kCertification,
     ]
+
     # Used for backwards compatibility
     OUTGOING_OPTIONAL = [
-        ID.kSwVersionStr,
         ID.kTestEventTriggerKey
     ]
 

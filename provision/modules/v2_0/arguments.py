@@ -27,7 +27,6 @@ class Formatter(_format.Formatter):
         self.extract(info, 'hw_version_str')
         self.extract(info, 'manufacturing_date')
         self.extract(info, 'unique_id')
-        self.extract(info, 'sw_version_str')
         # Commissionable Data
         data = matter and (
             'commissionable_data' in matter) and matter['commissionable_data'] or None
@@ -73,7 +72,6 @@ class Formatter(_format.Formatter):
         self.insert(info, 'hw_version')
         self.insert(info, 'hw_version_str')
         self.insert(info, 'manufacturing_date')
-        self.insert(info, 'sw_version_str')
         self.insert(info, 'unique_id')
         if len(info) > 0:
             matter['instance_info'] = info

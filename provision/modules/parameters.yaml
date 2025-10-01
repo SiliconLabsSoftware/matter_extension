@@ -233,13 +233,6 @@ instance_info:
       min: 1
       max: 16
 
-    - id: 0x0155
-      desc: "Software Version String"
-      name: "sw_version_str"
-      short: "zs"
-      type: "string"
-      max: 32
-
 commissionable_data:
     - id: 0x0161
       desc: "Setup Discriminator"

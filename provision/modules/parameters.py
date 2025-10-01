@@ -132,7 +132,6 @@ class ID:
     kManufacturingDate = 0x0153
     # Note: Must be different to the Basic Information cluster's UniqueId
     kPersistentUniqueId = 0x0154
-    kSwVersionStr = 0x0155
 
     # Commissionable Data
     kDiscriminator = 0x0161

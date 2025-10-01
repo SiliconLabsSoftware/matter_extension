@@ -214,7 +214,6 @@ well-known (default) parameters used by the automatic provisioning action.
 | -hv, --hw_version         | optional             | dec/hex            | The hardware version value (Max 2 bytes).                                                                              |
 | -hs, --hw_version_str     | optional             | string             | The hardware version string (Max 64 char).                                                                             |
 | -md, --manufacturing_date | optional             | string             | Manufacturing date.                                                                                                    |
-| -zs, --sw_version_str     | optional             | string             | The software version string (Max 32 char).                                                                             |
 | -ui, --unique_id          | optional<sup>5</sup> | hex string         | Rotating Device ID's UniqueID (128-bits hex string). Not to be confused with the Basic Information cluster's UniqueId. |
 | -sd, --discriminator      | optional<sup>2</sup> | dec/hex            | BLE pairing discriminator. e.g: 3840 or 0xF00. (12-bit)                                                                |
 | -sp, --spake2p_passcode   | required             | dec/hex            | Session passcode used to generate the SPAKE2+ verifier.                                                                |

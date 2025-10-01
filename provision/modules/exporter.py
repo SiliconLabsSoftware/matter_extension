@@ -40,7 +40,6 @@ class Exporter(object):
         self.put(ID.kHwVersionStr)
         self.put(ID.kManufacturingDate)
         self.put(ID.kPersistentUniqueId)
-        self.put(ID.kSwVersionStr)
         self.put(ID.kDiscriminator)
         self.put(ID.kSpake2pIterations)
         self.put(ID.kSpake2pSalt)
