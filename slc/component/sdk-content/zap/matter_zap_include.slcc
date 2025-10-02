@@ -23,6 +23,7 @@ include:
     - path: GroupKeyManagement.h
     - path: SoftwareDiagnostics.h
     - path: WiFiNetworkDiagnostics.h
+    - path: TimeFormatLocalization.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h

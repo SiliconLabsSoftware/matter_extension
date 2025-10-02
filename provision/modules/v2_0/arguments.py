@@ -1,5 +1,5 @@
-import modules.parameters as _params
 import modules.formatter as _format
+import modules.parameters as _params
 
 
 class ParameterList(_params.ParameterList):
@@ -13,7 +13,8 @@ class Formatter(_format.Formatter):
         # Matter
         matter = ('matter' in main) and main['matter'] or None
         # Instance Info
-        info = matter and ('instance_info' in matter) and matter['instance_info'] or None
+        info = matter and (
+            'instance_info' in matter) and matter['instance_info'] or None
         self.extract(info, 'serial_number')
         self.extract(info, 'vendor_id')
         self.extract(info, 'vendor_name')
@@ -27,7 +28,8 @@ class Formatter(_format.Formatter):
         self.extract(info, 'manufacturing_date')
         self.extract(info, 'unique_id')
         # Commissionable Data
-        data = matter and ('commissionable_data' in matter) and matter['commissionable_data'] or None
+        data = matter and (
+            'commissionable_data' in matter) and matter['commissionable_data'] or None
         self.extract(data, 'discriminator')
         self.extract(data, 'passcode', 'spake2p_passcode')
         self.extract(data, 'iterations', 'spake2p_iterations')
@@ -36,7 +38,8 @@ class Formatter(_format.Formatter):
         self.extract(data, 'commissioning_flow')
         self.extract(data, 'rendezvous_flags')
         # Attestation Credentials
-        creds = matter and ('attestation_credentials' in matter) and matter['attestation_credentials'] or None
+        creds = matter and (
+            'attestation_credentials' in matter) and matter['attestation_credentials'] or None
         self.extract(creds, 'creds_address')
         self.extract(creds, 'pkcs12')
         self.extract(creds, 'key_id')
@@ -52,7 +55,7 @@ class Formatter(_format.Formatter):
         self.extract(creds, 'certification')
         self.extract(creds, 'common_name')
 
-    def format(self, main = {}):
+    def format(self, main={}):
         main = super().format(main)
         # Matter
         matter = main['matter']
@@ -70,7 +73,8 @@ class Formatter(_format.Formatter):
         self.insert(info, 'hw_version_str')
         self.insert(info, 'manufacturing_date')
         self.insert(info, 'unique_id')
-        if len(info) > 0: matter['instance_info'] = info
+        if len(info) > 0:
+            matter['instance_info'] = info
         # Commissionable Data
         data = {}
         self.insert(data, 'discriminator')
@@ -80,7 +84,8 @@ class Formatter(_format.Formatter):
         self.insert(data, 'spake2p_verifier', 'verifier')
         self.insert(data, 'commissioning_flow')
         self.insert(data, 'rendezvous_flags')
-        if len(data) > 0: matter['commissionable_data'] = data
+        if len(data) > 0:
+            matter['commissionable_data'] = data
         # Attestation Credentials
         creds = {}
         self.insert(creds, 'creds_address')
@@ -97,5 +102,6 @@ class Formatter(_format.Formatter):
         self.insert(creds, 'dac_key')
         self.insert(creds, 'certification')
         self.insert(creds, 'common_name')
-        if len(creds) > 0: matter['attestation_credentials'] = creds
+        if len(creds) > 0:
+            matter['attestation_credentials'] = creds
         return main

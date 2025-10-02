@@ -25,16 +25,19 @@ config_file:
     file_id: matter_provision_config
 
 include:
-- path: third_party/matter_support/provision
-  file_list:
-  - path: headers/AttestationKey.h
-  - path: headers/ProvisionChannel.h
-  - path: headers/ProvisionEncoder.h
-  - path: headers/ProvisionManager.h
-  - path: headers/ProvisionProtocol.h
-  - path: headers/ProvisionStorage.h
-  - path: headers/ProvisionStorageGeneric.h
-  - path: headers/ProvisionedDataProvider.h
+  - path: third_party/matter_support/provision
+    file_list:
+      - path: headers/AttestationKey.h
+      - path: headers/ProvisionChannel.h
+      - path: headers/ProvisionEncoder.h
+      - path: headers/ProvisionManager.h
+      - path: headers/ProvisionProtocol.h
+      - path: headers/ProvisionStorage.h
+      - path: headers/ProvisionStorageGeneric.h
+      - path: headers/ProvisionedDataProvider.h
+  - path: third_party/matter_sdk/examples/platform/silabs/test-event-trigger
+    file_list:
+      - path: SilabsTestEventTriggerDelegate.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageFlash.cpp

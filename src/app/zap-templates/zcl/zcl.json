@@ -48,6 +48,7 @@
         "diagnostic-logs-cluster.xml",
         "dishwasher-alarm-cluster.xml",
         "dishwasher-mode-cluster.xml",
+        "groupcast-cluster.xml",
         "microwave-oven-mode-cluster.xml",
         "meter-identification-cluster.xml",
         "door-lock-cluster.xml",
@@ -284,6 +285,10 @@
         "Device Energy Management Mode": [
             "SupportedModes",
             "CurrentMode",
+            "FeatureMap"
+        ],
+        "Diagnostic Logs": [
+            "ClusterRevision",
             "FeatureMap"
         ],
         "Door Lock": [
@@ -909,6 +914,9 @@
             "MaxThermostatSuggestions",
             "CurrentThermostatSuggestion",
             "ThermostatSuggestionNotFollowingReason"
+        ],
+        "Time Format Localization": [
+            "ClusterRevision"
         ],
         "Zone Management": [
             "MaxUserDefinedZones",
