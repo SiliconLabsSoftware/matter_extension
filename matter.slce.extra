@@ -1533,7 +1533,6 @@ extra_files:
   - provision/test/assets/BRD4187C.zip
   - provision/test/assets/BRD4186C.zip
   # matter_sdk paths
-  - third_party/matter_sdk/src/app/.gitignore
   - third_party/matter_sdk/src/app/AppConfig.h
   - third_party/matter_sdk/src/app/AttributeAccessInterface.h
   - third_party/matter_sdk/src/app/AttributeAccessInterfaceCache.h

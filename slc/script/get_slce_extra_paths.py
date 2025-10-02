@@ -26,6 +26,7 @@ Key behaviours:
     * Relative base selectable: current working directory (default) or each root (first matching root wins) with fallback to CWD.
     * Optional glob `--pattern` applied individually to each candidate path.
     * Safe replacement of previously generated block (no incremental appends leading to duplication).
+    * Hidden entries (names starting with '.') are ignored (both files and directories).
 
 Exit codes (@retval):
     @retval 0 Success.
@@ -54,10 +55,17 @@ def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: str |
     root = root.resolve()
     for dirpath, dirnames, filenames in os.walk(root, followlinks=False):
         current_dir = Path(dirpath)
+        # Prune hidden directories in-place to prevent descending into them
+        dirnames[:] = [d for d in dirnames if not d.startswith('.')]
+
         if include_dirs:
-            if pattern is None or current_dir.match(pattern):
-                results.append(current_dir)
+            if not current_dir.name.startswith('.'):
+                if pattern is None or current_dir.match(pattern):
+                    results.append(current_dir)
         for name in filenames:
+            # Skip hidden files
+            if name.startswith('.'):
+                continue
             p = current_dir / name
             if pattern is None or p.match(pattern):
                 results.append(p)

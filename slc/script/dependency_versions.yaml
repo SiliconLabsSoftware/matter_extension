@@ -1,4 +1,4 @@
-# Centralized dependency versions consumed by both Conan recipes and generation scripts.
+ # Centralized dependency versions consumed by both Conan recipes and generation scripts.
 # To bump a version, edit here. Keep keys in stable, logical order for minimal diff noise.
 # NOTE: Only include packages actually required anywhere (scripts or recipes). Unused keys can be removed later.
 openthread: 0.1.5
