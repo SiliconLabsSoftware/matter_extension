@@ -15,10 +15,10 @@ class matter_appRecipe(ConanFile):
     # Package reference
     user = "silabs"
     name = "matter_app"
-    version = "2.6.2-alpha.2"
+    version = "2.7.0-0.dev"
 
     # Basic Conan metadata
-    description = "matter SampleApp package"
+    description = "matter sample-app package"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
