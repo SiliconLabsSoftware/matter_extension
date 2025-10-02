@@ -11,8 +11,6 @@ sdk_extension:
     vendor: silabs
 
 component:
-  - id: matter_zigbee_multiprotocol_common
-    from: matter
   - id: device_init
   - id: sl_main
   - id: clock_manager
