@@ -36,7 +36,7 @@ Exit codes (@retval):
     @retval 5 Failure reading matter.slce.extra.
     @retval 6 Marker line not found in matter.slce.extra.
     @retval 7 Failure writing updated matter.slce.extra.
-    @retval 8 Missing --output when not using --slce-extra.
+    @    @retval 8 Missing --output when not using --slce-extra.
     @retval 9 Required always-include file missing.
 
 @note If no --roots are supplied a built‑in list of default SDK template directories is used.
