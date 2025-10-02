@@ -142,14 +142,6 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
-    build-dishwasher-app:
-        name: Build Dishwasher App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "dishwasher-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
     
     build-performance-test-app:
         name: Build Performance Test App
@@ -198,7 +190,6 @@ jobs:
             - build-onoff-plug-app
             - build-refrigerator-app
             - build-performance-test-app
-            - build-dishwasher-app
             - build-zigbee-matter-light-app
             - build-closure-app
         if: success()
