@@ -82,22 +82,19 @@ class matterRecipe(ConanFile):
     }
 
     def requirements(self):
-        self.requires(
-            "openthread/0.1.5@silabs")
-        self.requires(
-            "bluetooth_le_host/0.0.6@silabs")
-        self.requires(
-            "rail_module/0.0.5@silabs")
-        self.requires(
-            "multiprotocol/0.1.4@silabs")
-        self.requires(
-            "zigbee/0.1.5@silabs")
-        self.requires(
-            "platform_nwp_siwx91x/0.0.3@silabs")
-        self.requires(
-            "bluetooth_le_siwx91x/0.0.3@silabs")
-        self.requires(
-            "lwip/0.0.5@silabs")
+        """Declare recipe dependencies using centralized version mapping.
+
+        Rationale:
+            Centralizing dependency versions makes alignment with other tooling
+            (e.g. generation scripts) simpler and reduces risk of version skew.
+
+        To update a version, modify the DEP_VERSIONS mapping defined below the
+        class. Optionally, future work could externalize this to a single
+        versions file consumed by both scripts and recipes.
+        """
+
+        for dep_name, dep_version in DEP_VERSIONS.items():  # preserves insertion order (Python 3.7+)
+            self.requires(f"{dep_name}/{dep_version}@{self.user}")
 
     def slt_requirements(self):
         req = {}
@@ -294,3 +291,39 @@ class matterRecipe(ConanFile):
             result["git_path_mapping"] = git_path_mapping
 
         return result
+
+
+def _load_dep_versions(filename: str = "dependency_versions.yaml") -> dict:
+    """Load dependency versions from a shared YAML file.
+
+    The file lives next to this conanfile. If missing or malformed, raise to
+    fail fast—keeping version drift visible.
+    """
+    # New canonical location: slc/script/dependency_versions.yaml relative to repo root.
+    # Try legacy location (next to this file) only for backward compatibility.
+    repo_root = os.path.dirname(__file__)
+    candidates = [
+        os.path.join(repo_root, "slc", "script", filename),  # new location
+        os.path.join(repo_root, filename),  # legacy root placement
+    ]
+    path = None
+    for candidate in candidates:
+        if os.path.exists(candidate):
+            path = candidate
+            break
+    if not path:
+        raise FileNotFoundError(
+            "Dependency versions file not found in any expected location: "
+            + ", ".join(candidates)
+        )
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f) or {}
+            # Preserve order (PyYAML already returns dict preserving order in Py3.7+)
+            return data
+    except Exception as e:
+        raise RuntimeError(f"Failed to parse dependency versions file {path}: {e}")
+
+
+# Centralized dependency versions (shared with scripts) loaded at import time.
+DEP_VERSIONS = _load_dep_versions()
