@@ -57,24 +57,48 @@ import sys
 import argparse
 import logging
 from typing import Dict
+import yaml
 
 # Module-level logger (configured once in main)
 logger = logging.getLogger(__name__)
 
-# ---------------------------------------------------------------------------
-# Centralized dependency version definitions
-# Update in one place; all pkg.slt output will reflect the change.
-# Optionally these could be loaded from an external JSON/TOML/YAML file later.
-# ---------------------------------------------------------------------------
-DEP_VERSIONS: Dict[str, str] = {
-    "openthread": "0.1.5",
-    "bluetooth_le_host": "0.0.6",
-    "rail_module": "0.0.5",
-    "wifi": "0.0.7",
-    "platform_nwp_siwx91x": "0.0.3",
-    "bluetooth_le_siwx91x": "0.0.3",
-    "lwip": "0.0.5",
-}
+def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, str]:
+    """Load dependency versions from shared YAML file at repo root.
+
+    Falls back to embedded defaults if file is missing (so the script remains
+    usable in isolation), but logs a warning encouraging creation of the file.
+    """
+    # Attempt to locate the file relative to this script first, then cwd.
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    candidates = [
+        os.path.join(script_dir, filename),  # same directory (slc/script)
+        os.path.join(script_dir, "..", "..", filename),  # legacy repo root location
+        os.path.join(os.getcwd(), filename),  # current working directory fallback
+    ]
+    for path in candidates:
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    data = yaml.safe_load(f) or {}
+                    logger.debug("Loaded dependency versions from %s", path)
+                    return data
+            except Exception as e:
+                logger.error("Failed parsing dependency versions file %s: %s", path, e)
+                break
+    # Fallback defaults (should mirror committed YAML); warn about fallback.
+    logger.warning("dependency_versions.yaml not found; using embedded fallback versions")
+    return {
+        "openthread": "0.1.5",
+        "bluetooth_le_host": "0.0.6",
+        "rail_module": "0.0.5",
+        "wifi": "0.0.7",
+        "platform_nwp_siwx91x": "0.0.3",
+        "bluetooth_le_siwx91x": "0.0.3",
+        "lwip": "0.0.5",
+    }
+
+
+DEP_VERSIONS: Dict[str, str] = load_dep_versions()
 
 def build_content_strings(matter_version: str):
     """Return content templates filled with the provided Matter version.
