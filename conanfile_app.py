@@ -15,7 +15,7 @@ class matter_appRecipe(ConanFile):
     # Package reference
     user = "silabs"
     name = "matter_app"
-    version = "2.7.0-0.dev"
+    version = "2.6.0-0.dev"
 
     # Basic Conan metadata
     description = "matter sample-app package"
@@ -41,7 +41,7 @@ class matter_appRecipe(ConanFile):
         ],
     }
     # Other attributes
-    revision_mode = "scm"
+    # revision_mode = "scm"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
