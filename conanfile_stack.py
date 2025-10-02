@@ -39,7 +39,7 @@ class matterRecipe(ConanFile):
     }
 
     # Other attributes
-    revision_mode = "scm"
+    # revision_mode = "scm"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
