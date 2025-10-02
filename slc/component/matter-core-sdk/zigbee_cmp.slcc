@@ -1,6 +1,6 @@
 id: matter_zigbee_cmp
 package: matter
-label: tracing
+label: zigbee cmp
 description: >
   Enables Zigbee components required in a matter cmp project
 category: Matter|Core
@@ -9,25 +9,22 @@ metadata:
   sbom:
     license: Zlib
 requires:
-  - name: zigbee_ble_dmp_cli
+# For compatibility with the Zigbee token manager
+  - name: common_token_manager_dynamic
+  - name: common_token_manager
+
   - name: zigbee_address_table
   - name: zigbee_application_bootloader
   - name: zigbee_security_link_keys
   - name: zigbee_source_route
   - name: zigbee_stack_diagnostics
   - name: zigbee_ipc
-  - name: zigbee_gp
   - name: zigbee_zll
   - name: zigbee_zcl_framework_core
-  - name: zigbee_zcl_cli
-  - name: zigbee_core_cli
   - name: zigbee_groups_server
   - name: zigbee_identify
   - name: zigbee_counters
   - name: zigbee_find_and_bind_target
-  - name: zigbee_green_power_common
-  - name: zigbee_green_power_client
-  - name: zigbee_green_power_client_cli
   - name: zigbee_interpan
   - name: zigbee_zll_commissioning_common
   - name: zigbee_zll_commissioning_server
@@ -40,12 +37,13 @@ requires:
   - name: zigbee_zll_utility_server
   - name: zigbee_scan_dispatch
   - name: zigbee_update_tc_link_key
-  - name: zigbee_debug_print
   - name: zigbee_pro_stack
 provides:
   - name: matter_zigbee_cmp
-
+        
 define:
   - name: OS_CFG_COMPAT_INIT
-  - name: SL_CLI_TICK_ENABLE
-    value: 0
+
+template_contribution:
+  - name: gcc_compiler_option
+    value: -Dsl_zigbee_af_core_println(format,...)=do{(void)(format);(void)(__VA_ARGS__);}while(0)
