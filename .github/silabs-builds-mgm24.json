@@ -5,6 +5,10 @@
             {
                 "boards": ["brd4316a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4316a"],
+                "arguments": ["--copy-sources"]
             }
         ]
     },
@@ -13,6 +17,10 @@
             {
                 "boards": ["brd4316a", "brd4317a", "brd4318a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4316a", "brd4317a", "brd4318a"],
+                "arguments": ["--copy-sources"]
             }
         ]
     } 

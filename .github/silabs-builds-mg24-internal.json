@@ -12,6 +12,10 @@
             {
                 "boards": ["brd2703a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd2703a"],
+                "arguments": ["--copy-sources"]
             }
         ]
     }
