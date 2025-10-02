@@ -15,7 +15,7 @@ class matter_appRecipe(ConanFile):
     # Package reference
     user = "silabs"
     name = "matter_app"
-    version = "2.6.0-0.dev"
+    version = "2.6.1-0.dev"
 
     # Basic Conan metadata
     description = "matter sample-app package"
