@@ -183,7 +183,7 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
                 else:
                     pruned.append(d)
             dirs[:] = pruned
-    # Check if a .slcp or .slcw file exists in the current directory
+        # Check if a .slcp or .slcw file exists in the current directory
         if any(file.endswith((".slcp", ".slcw")) for file in files):
             if common:
                 # Force use of the 'all' content only
