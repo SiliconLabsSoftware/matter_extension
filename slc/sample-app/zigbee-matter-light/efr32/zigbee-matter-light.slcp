@@ -153,8 +153,6 @@ configuration:
   - condition: [iostream_usart]
     name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
     value: "1"
-  - name: SL_CLI_PROMPT_STRING
-    value: '"TriProtocol>"'
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
     condition: [matter_ble_side_channel]
