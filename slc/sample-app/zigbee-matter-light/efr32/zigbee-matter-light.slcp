@@ -234,14 +234,14 @@ define:
 
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/sl_cmp_config.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/sl_cmp_config.h
   - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/zcl/zcl_config.zap
     file_id: zap_config
     directory: common
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
     directory: btconf
     unless: [matter_ble_dmp_test, matter_gatt_static]
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/btconf/gatt_configuration.btconf
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/gatt_configuration.btconf
     directory: btconf
     condition: [matter_ble_dmp_test]
   - path: ../../../../provision.mattpconf

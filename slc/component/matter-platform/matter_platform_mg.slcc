@@ -45,6 +45,10 @@ requires:
     condition: [matter_wifi]
   - name: power_manager
     condition: [matter_wifi]
+  - name: common_token_manager_dynamic
+    condition: [device_series_3]
+  - name: common_token_manager
+    condition: [device_series_3]
   - name: freertos
   - name: sleeptimer
   - name: dmadrv

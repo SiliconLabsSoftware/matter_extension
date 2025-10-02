@@ -11,13 +11,11 @@ sdk_extension:
     vendor: silabs
 
 component:
+  - id: matter_zigbee_multiprotocol_common
+    from: matter
   - id: device_init
   - id: sl_main
   - id: clock_manager
-  - id: common_token_manager_dynamic
-    condition: [device_series_3]
-  - id: common_token_manager
-    condition: [device_series_3]
   - id: matter_buttons
     from: matter
   - id: matter_leds
@@ -97,9 +95,6 @@ component:
   - id: matter_si70xx_sensor
     from: matter
     condition: [hardware_board_has_si70xx]
-  - id: matter_zigbee_multiprotocol_common
-    from: matter
-    condition: [matter_zigbee_cmp]
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -110,9 +105,9 @@ component:
   # Matter Zigbee Components
   - instance: [example]
     id: cli
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common, matter_zigbee_debug]
   - id: iostream_stdio
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -125,16 +120,16 @@ requires:
       - device_series_3
       
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-thermostat/silabs/config/sl_cmp_config.h
-    condition: [matter_zigbee_cmp]
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/sl_cmp_config.h
+    condition: [matter_zigbee_multiprotocol_common]
   - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-thermostat/silabs/config/zcl/zcl_config.zap
     file_id: zap_config
     directory: common
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-thread-app.zap
     directory: common
     file_id: zap_config
-    unless: [matter_zigbee_cmp]
+    unless: [matter_zigbee_multiprotocol_common]
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
@@ -202,10 +197,10 @@ configuration:
     condition: [matter_thread_coap_cert_libs]
   - name: SL_STACK_SIZE
     value: "4608"
-    unless: [matter_zigbee_cmp]
+    unless: [matter_zigbee_multiprotocol_common]
   - name: SL_STACK_SIZE
     value: "5120"
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
     value: "1536"
     unless: [device_series_3]
@@ -220,53 +215,53 @@ configuration:
 # CMP configs for Zigbee Matter
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
     value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_SECURITY_TYPE
     value: SLI_ZIGBEE_NETWORK_SECURITY_TYPE_3_0
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
     value: "1"
-    condition: [iostream_eusart, matter_zigbee_cmp]
+    condition: [iostream_eusart, matter_zigbee_multiprotocol_common]
   - name: SL_IOSTREAM_EUSART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
     value: "1"
-    condition: [iostream_eusart, matter_zigbee_cmp]
+    condition: [iostream_eusart, matter_zigbee_multiprotocol_common]
   - name: SL_CLI_PROMPT_STRING
     value: '"TriProtocol>"'
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_IOSTREAM_EUSART_VCOM_RX_BUFFER_SIZE
     value: 128 # Increase from default for open thread
-    condition: [iostream_eusart, matter_zigbee_cmp]
+    condition: [iostream_eusart, matter_zigbee_multiprotocol_common]
   - name: SL_HEAP_SIZE
     value: 40960 # Standard Matter HEAP size
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: LIB_MEM_CFG_HEAP_SIZE
     value: 0
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_OPENTHREAD_RTOS_TASK_PRIORITY
     value: 49 #Same as Zigbee
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_CLI_HELP_DESCRIPTION_ENABLED
     value: 0 # Code space savings
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_CLI_EOL_STRING
     value: '"\r\n"'
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_LEGACY_HAL_DISABLE_WATCHDOG
     value: 1
-    condition: [matter_zigbee_cmp]
+    condition: [matter_zigbee_multiprotocol_common]
 # series 3 requires more stack in zb stacks
   - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
     value: 1500
-    condition: [device_series_3, matter_zigbee_cmp]
+    condition: [device_series_3, matter_zigbee_multiprotocol_common]
   - name: SL_ZIGBEE_STACK_RTOS_TASK_STACK_SIZE
     value: 5800
-    condition: [device_series_3, matter_zigbee_cmp]
+    condition: [device_series_3, matter_zigbee_multiprotocol_common]
   - name: SL_ZIGBEE_APP_FRAMEWORK_RTOS_TASK_STACK_SIZE
     value: 6000
-    condition: [device_series_3, matter_zigbee_cmp]
+    condition: [device_series_3, matter_zigbee_multiprotocol_common]
   - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
     value: 600
-    condition: [device_series_2, matter_zigbee_cmp]
+    condition: [device_series_2, matter_zigbee_multiprotocol_common]
 
 toolchain_settings:
   - option: cxx_standard
