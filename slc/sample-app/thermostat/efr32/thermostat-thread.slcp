@@ -225,9 +225,6 @@ configuration:
   - name: SL_IOSTREAM_EUSART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
     value: "1"
     condition: [iostream_eusart, matter_zigbee_multiprotocol_common]
-  - name: SL_CLI_PROMPT_STRING
-    value: '"TriProtocol>"'
-    condition: [matter_zigbee_multiprotocol_common]
   - name: SL_IOSTREAM_EUSART_VCOM_RX_BUFFER_SIZE
     value: 128 # Increase from default for open thread
     condition: [iostream_eusart, matter_zigbee_multiprotocol_common]
