@@ -10,8 +10,6 @@ sdk_extension:
     version: "2.6.1"
 
 component:
-  - id: matter_zigbee_multiprotocol_common
-    from: matter
   - id: device_init
   - id: sl_main
   - id: clock_manager
