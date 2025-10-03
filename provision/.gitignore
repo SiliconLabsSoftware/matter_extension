@@ -1,8 +1,12 @@
 # Files
-latest.json
-*.bak
+__*
 *-
+*.bak
+latest.json
+.DS_Store
 
 # Folders
 build
+support
 temp
+support
