@@ -8,7 +8,7 @@ def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
-            return [commit_sha: result.commit_sha, run_number: result.run_number, bypass_results: result.bypass_send_results_gh, pr_number: result.pr_number]
+            return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_send_results_gh, pr_number: result.pr_number]
         }
     }
 }
@@ -19,6 +19,9 @@ def parse_upload_artifacts_output(output) {
 
         def run_number_matcher = output =~ /Workflow run number - (\d+)/
         def run_number = run_number_matcher ? run_number_matcher[0][1] : null
+
+        def workflow_id_matcher = output =~ /Workflow ID - (\d+)/
+        def workflow_id = workflow_id_matcher ? workflow_id_matcher[0][1] : null
 
         def bypass_matcher = output =~ /Bypass sending test results to GitHub/
         def bypass_send_results_gh = bypass_matcher ? true : false
@@ -42,7 +45,7 @@ def parse_upload_artifacts_output(output) {
         }
         echo "Bypass sending test results to GitHub? ${bypass_send_results_gh}"
 
-        return [commit_sha: commit_sha, run_number: run_number, bypass_results: bypass_send_results_gh, pr_number: pr_number]
+        return [commit_sha: commit_sha, run_number: run_number, workflow_id: workflow_id, bypass_results: bypass_send_results_gh, pr_number: pr_number]
 }
 
 def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary) {

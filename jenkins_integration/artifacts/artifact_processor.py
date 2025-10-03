@@ -43,17 +43,17 @@ def download_and_upload_artifacts(workflow_id, branch_name, run_number, sqa=Fals
     try:
         artifact_info = _download_and_extract_artifacts(workflow_id)
         print("Uploading individual artifacts to UBAI.")
-        _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, run_number)
+        _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, run_number, workflow_id)
         print("Uploading merged artifacts to UBAI and Artifactory.")
         _upload_merged_artifacts(artifact_info['artifact_file'], artifact_info['artifact_name'], 
-                               branch_name, run_number)
+                               branch_name, run_number, workflow_id)
         print("Artifact download and upload process completed successfully.")
     except Exception as e:
         print(f"Error during artifact processing: {e}")
         raise RuntimeError(f"Failed to process artifacts: {e}")
 
 
-def upload_binaries_individually_to_ubai(binaries_folder, branch_name, run_number):
+def upload_binaries_individually_to_ubai(binaries_folder, branch_name, run_number, workflow_id=None):
     """
     Upload individual binary files from the extracted artifact folder to UBAI.
     
@@ -61,6 +61,7 @@ def upload_binaries_individually_to_ubai(binaries_folder, branch_name, run_numbe
         binaries_folder (str): Path to the folder containing binaries.
         branch_name (str): Branch name for the upload.
         run_number (int): Build number for the upload.
+        workflow_id (int, optional): GitHub workflow ID for formatting build number.
         
     Raises:
         ValueError: If parameters are invalid
@@ -74,7 +75,7 @@ def upload_binaries_individually_to_ubai(binaries_folder, branch_name, run_numbe
         for artifact in os.listdir(binaries_folder):
             artifact_path = os.path.join(binaries_folder, artifact)
             print(f"Processing artifact: {artifact}")
-            _process_individual_artifact(artifact, artifact_path, build_type, branch_name, run_number)
+            _process_individual_artifact(artifact, artifact_path, build_type, branch_name, run_number, workflow_id)
         print("Individual binary uploads completed successfully.")
     except Exception as e:
         error_msg = f"Failed to upload individual binaries: {e}"
@@ -214,7 +215,7 @@ def _extract_artifact(artifact_file):
         raise RuntimeError(f"Failed to extract {artifact_name}: {e}")
 
 
-def _upload_individual_artifacts(extracted_folder, branch_name, run_number):
+def _upload_individual_artifacts(extracted_folder, branch_name, run_number, workflow_id=None):
     """
     Upload individual binary artifacts to UBAI.
     
@@ -222,17 +223,18 @@ def _upload_individual_artifacts(extracted_folder, branch_name, run_number):
         extracted_folder (str): Path to the extracted artifacts folder
         branch_name (str): Branch name for the upload
         run_number (int): Build number for the upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
         
     Raises:
         RuntimeError: If upload fails
     """
     try:
-        upload_binaries_individually_to_ubai(extracted_folder, branch_name, run_number)
+        upload_binaries_individually_to_ubai(extracted_folder, branch_name, run_number, workflow_id)
     except Exception as e:
         raise RuntimeError(f"Failed to upload individual artifacts: {e}")
 
 
-def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_number):
+def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_number, workflow_id=None):
     """
     Upload the merged artifact to both UBAI and Artifactory.
     
@@ -241,6 +243,7 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_numb
         artifact_name (str): Name of the artifact
         branch_name (str): Branch name for the upload
         run_number (int): Build number for the upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
         
     Raises:
         RuntimeError: If upload fails
@@ -252,7 +255,8 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_numb
             stack="matter",
             target="matter",
             branch_name=branch_name,
-            run_number=run_number
+            run_number=run_number,
+            workflow_id=workflow_id
         )
         upload_to_artifactory(artifact_file, artifact_name, branch_name, str(run_number))
     except Exception as e:
@@ -303,7 +307,7 @@ def _extract_build_type(binaries_folder):
         raise ValueError(f"Could not extract build type from folder name: {binaries_folder}")
 
 
-def _process_individual_artifact(artifact_name, artifact_path, build_type, branch_name, run_number):
+def _process_individual_artifact(artifact_name, artifact_path, build_type, branch_name, run_number, workflow_id=None):
     """
     Process an individual artifact based on its type.
     
@@ -313,47 +317,48 @@ def _process_individual_artifact(artifact_name, artifact_path, build_type, branc
         build_type (str): Build type (e.g., 'standard', 'release')
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     if artifact_name == "chip-tool":
-        _upload_chip_tool(artifact_path, branch_name, run_number)
+        _upload_chip_tool(artifact_path, branch_name, run_number, workflow_id)
     elif artifact_name == "chip-ota-provider-app":
-        _upload_chip_ota_provider(artifact_path, branch_name, run_number)
+        _upload_chip_ota_provider(artifact_path, branch_name, run_number, workflow_id)
     elif artifact_name == "provision.zip":
-        _upload_provision_zip(artifact_path, branch_name, run_number)
+        _upload_provision_zip(artifact_path, branch_name, run_number, workflow_id)
     elif artifact_name == "ota-scripts.zip":
-        _upload_ota_scripts(artifact_path, branch_name, run_number)
+        _upload_ota_scripts(artifact_path, branch_name, run_number, workflow_id)
     elif os.path.isdir(artifact_path):
         if artifact_name == "WiFi-Firmware":
-            _upload_wifi_firmware(artifact_path, branch_name, run_number)
+            _upload_wifi_firmware(artifact_path, branch_name, run_number, workflow_id)
         else:
-            _upload_board_artifacts(artifact_name, artifact_path, build_type, branch_name, run_number)
+            _upload_board_artifacts(artifact_name, artifact_path, build_type, branch_name, run_number, workflow_id)
 
 
-def _upload_chip_tool(artifact_path, branch_name, run_number):
+def _upload_chip_tool(artifact_path, branch_name, run_number, workflow_id=None):
     """Upload chip-tool artifact to UBAI."""
     print("Uploading chip-tool to UBAI.")
-    upload_to_ubai(artifact_path, "Chiptool", "linux-arm64-ipv6only-clang", branch_name, run_number)
+    upload_to_ubai(artifact_path, "Chiptool", "linux-arm64-ipv6only-clang", branch_name, run_number, workflow_id=workflow_id)
 
 
-def _upload_chip_ota_provider(artifact_path, branch_name, run_number):
+def _upload_chip_ota_provider(artifact_path, branch_name, run_number, workflow_id=None):
     """Upload chip-ota-provider-app artifact to UBAI."""
     print("Uploading chip-ota-provider-app to UBAI.")
-    upload_to_ubai(artifact_path, "OTA", "linux-arm64-ipv6only-clang", branch_name, run_number)
+    upload_to_ubai(artifact_path, "OTA", "linux-arm64-ipv6only-clang", branch_name, run_number, workflow_id=workflow_id)
 
 
-def _upload_provision_zip(artifact_path, branch_name, run_number):
+def _upload_provision_zip(artifact_path, branch_name, run_number, workflow_id=None):
     """Upload provision.zip artifact to UBAI."""
     print("Uploading provision to UBAI.")
-    upload_to_ubai(artifact_path, "matter_provision", "matter", branch_name, run_number)
+    upload_to_ubai(artifact_path, "matter_provision", "matter", branch_name, run_number, workflow_id=workflow_id)
 
 
-def _upload_ota_scripts(artifact_path, branch_name, run_number):
+def _upload_ota_scripts(artifact_path, branch_name, run_number, workflow_id=None):
     """Upload ota-scripts.zip artifact to UBAI."""
     print("Uploading ota-scripts to UBAI.")
-    upload_to_ubai(artifact_path, "matter", "matter", branch_name, run_number)
+    upload_to_ubai(artifact_path, "matter", "matter", branch_name, run_number, workflow_id=workflow_id)
 
 
-def _upload_wifi_firmware(wifi_firmware_path, branch_name, run_number):
+def _upload_wifi_firmware(wifi_firmware_path, branch_name, run_number, workflow_id=None):
     """
     Upload WiFi firmware artifacts to UBAI.
     
@@ -361,15 +366,16 @@ def _upload_wifi_firmware(wifi_firmware_path, branch_name, run_number):
         wifi_firmware_path (str): Path to the WiFi-Firmware directory
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     print("Processing WiFi-Firmware artifacts.")
     for board_folder in os.listdir(wifi_firmware_path):
         board_path = os.path.join(wifi_firmware_path, board_folder)
         if os.path.isdir(board_path):
-            _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_number)
+            _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_number, workflow_id)
 
 
-def _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_number):
+def _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_number, workflow_id=None):
     """
     Upload WiFi firmware files for a specific board.
     
@@ -378,6 +384,7 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_numbe
         board_folder (str): Board folder name
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     ubai_app_name = f"WiFi-Firmware-{board_folder}"
     for dirpath, _, filenames in os.walk(board_path):
@@ -385,10 +392,10 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, run_numbe
             if fw_file.endswith('.rps'):
                 fw_file_path = os.path.join(dirpath, fw_file)
                 print(f"Uploading WiFi firmware: {fw_file_path}")
-                upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, run_number)
+                upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, run_number, workflow_id=workflow_id)
 
 
-def _upload_board_artifacts(board_id, board_path, build_type, branch_name, run_number):
+def _upload_board_artifacts(board_id, board_path, build_type, branch_name, run_number, workflow_id=None):
     """
     Upload board-specific artifacts to UBAI.
     
@@ -398,6 +405,7 @@ def _upload_board_artifacts(board_id, board_path, build_type, branch_name, run_n
         build_type (str): Build type
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     board_id_upper = board_id.upper()
     print(f"Processing board ID: {board_id_upper}")
@@ -405,10 +413,10 @@ def _upload_board_artifacts(board_id, board_path, build_type, branch_name, run_n
         app_name_path = os.path.join(board_path, app_name_folder)
         print(f"Sample App Path: {app_name_path}")
         if os.path.isdir(app_name_path):
-            _process_board_app(app_name_folder, app_name_path, board_id_upper, build_type, branch_name, run_number)
+            _process_board_app(app_name_folder, app_name_path, board_id_upper, build_type, branch_name, run_number, workflow_id)
 
 
-def _process_board_app(app_name_folder, app_name_path, board_id, build_type, branch_name, run_number):
+def _process_board_app(app_name_folder, app_name_path, board_id, build_type, branch_name, run_number, workflow_id=None):
     """
     Process a board application and upload its artifacts.
     
@@ -419,12 +427,13 @@ def _process_board_app(app_name_folder, app_name_path, board_id, build_type, bra
         build_type (str): Build type
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     app_info = _determine_app_info(app_name_folder, board_id, build_type)
     print(f"Sample App Name: {app_info['app_name']}")
     artifact_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_folder) and os.path.isdir(artifact_folder):
-        _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, run_number)
+        _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, run_number, workflow_id)
 
 
 def _determine_app_info(app_name_folder, board_id, build_type):
@@ -462,7 +471,7 @@ def _determine_app_info(app_name_folder, board_id, build_type):
         }
 
 
-def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, run_number):
+def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, run_number, workflow_id=None):
     """
     Upload board artifact files to UBAI.
     
@@ -472,6 +481,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
         board_id (str): Board identifier
         branch_name (str): Branch name for upload
         run_number (int): Build number for upload
+        workflow_id (int, optional): GitHub workflow ID for formatting build number
     """
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
@@ -480,7 +490,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
             new_file_path = os.path.join(artifact_folder, new_file_name)
             os.rename(file_path, new_file_path)
             print(f"Renamed file {file_name} to {new_file_name}.")
-            upload_to_ubai(new_file_path, app_info['app_name'], board_id, branch_name, run_number)
+            upload_to_ubai(new_file_path, app_info['app_name'], board_id, branch_name, run_number, workflow_id=workflow_id)
 
 
 def _generate_new_file_name(file_name, app_info, board_id):
