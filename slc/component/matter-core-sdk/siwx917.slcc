@@ -96,6 +96,7 @@ include:
 - path: third_party/matter_sdk/src/app/common
   file_list:
   - path: CompatEnumNames.h
+  - path: CompatClusterObjects.h
 - path: third_party/matter_sdk/src/lwip/silabs
   file_list:
   - path: lwipopts-wf200.h
