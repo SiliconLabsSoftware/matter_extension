@@ -23,33 +23,18 @@ except IndexError:
     REPO_ROOT = _RECIPE_PATH.parent  # fallback; unusual layout
 
 
-class matterRecipe(ConanFile):
-    # Attributes: https://docs.conan.io/2/reference/conanfile/attributes.html
-    user = "silabs"
+try:
+    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
+    if str(_PKG_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PKG_ROOT))
+except Exception:
+    pass
+from _shared.base_recipe import MatterBaseRecipe
 
-    # Basic Conan metadata
+
+class matterRecipe(MatterBaseRecipe):
+    # Specific description (can override base if needed)
     description = "Matter extension for Simplicity SDK Suite"
-    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
-    author = "Silicon Laboratories Inc."
-    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = (
-        "https://github.com/SiliconLabsSoftware/matter_extension"
-    )  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse
-    topics = "silabs"  # You can add more topics
-
-    # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/[>=1]@silabs"
-
-    # Custom Silabs metadata
-    sl_metadata = {
-        "slack_channel": "#matter-development",
-        "team": "MATTER",
-        "confluence_doc": "",
-        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",  # Ex: https://jira.silabs.com/projects/<space>/summary
-        "maintainers": [
-            {"name": "sashaha", "email": "sashaha@silabs.com"},
-        ],
-    }
 
     # Other attributes
     # revision_mode = "scm"
@@ -106,7 +91,7 @@ class matterRecipe(ConanFile):
         versions file consumed by both scripts and recipes.
         """
 
-        for dep_name, dep_version in DEP_VERSIONS.items():  # preserves insertion order (Python 3.7+)
+        for dep_name, dep_version in self.dep_versions.items():  # preserves insertion order (Python 3.7+)
             self.requires(f"{dep_name}/{dep_version}@{self.user}")
 
     def slt_requirements(self):
@@ -311,25 +296,3 @@ class matterRecipe(ConanFile):
             raise FileNotFoundError(f"SLCE file not found: {filename}")
         # Maintain previous usage of a relative string path
         return f"./{filename}"
-
-
-def _load_dep_versions(filename: str = "dependency_versions.yaml") -> dict:
-    """Load dependency versions from shared YAML file.
-    """
-    target = REPO_ROOT / "slc" / "script" / filename
-    if not target.exists():
-        raise FileNotFoundError(
-            f"Dependency versions file not found at expected canonical path: {target}"
-        )
-    try:
-        with target.open("r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-            return data
-    except Exception as e:
-        raise RuntimeError(
-            f"Failed to parse dependency versions file {target}: {e}"
-        )
-
-
-# Centralized dependency versions (shared with scripts) loaded at import time.
-DEP_VERSIONS = _load_dep_versions()

@@ -1,4 +1,5 @@
 import os
+import sys
 from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
@@ -21,36 +22,19 @@ except IndexError:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-class matter_appRecipe(ConanFile):
-    # Attributes: https://docs.conan.io/2/reference/conanfile/attributes.html
-    # Package reference
-    user = "silabs"
+try:
+    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
+    if str(_PKG_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PKG_ROOT))
+except Exception:
+    pass
+from _shared.base_recipe import MatterBaseRecipe
+
+
+class matter_appRecipe(MatterBaseRecipe):
     name = "matter_app"
     version = "2.6.1-0.dev"
-
-    # Basic Conan metadata
     description = "matter sample-app package"
-    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
-    author = "Silicon Laboratories Inc."
-    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = (
-        "https://github.com/SiliconLabsSoftware/matter_extension"
-    )  # Ex: https://stash.silabs.com/projects/<space>/repos/<project>/browse
-    topics = "silabs"  # You can add more topics
-
-    # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/[>=1]@silabs"
-
-    # Custom Silabs metadata
-    sl_metadata = {
-        "slack_channel": "#matter-development",
-        "team": "MATTER",
-        "confluence_doc": "",
-        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",  # Ex: https://jira.silabs.com/projects/<space>/summary
-        "maintainers": [
-            {"name": "sashaha", "email": "sashaha@silabs.com"},
-        ],
-    }
     # Other attributes
     # revision_mode = "scm"
 

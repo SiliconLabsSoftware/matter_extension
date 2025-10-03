@@ -61,11 +61,13 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 ## File Descriptions  
 
-- **`matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.  
-- **`matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
-- **`matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.  
-- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package.  
-- **`remotes.json`** – File containing URLs needed for Conan to search packages.  
+- **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.  
+- **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
+- **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.   
+- **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.  
+- **`slc/script/dependency_versions.yaml`** - Used as a single source of truth for dendencies
+- **`slc/script/matter_package_version`** - Used as a single source of trurth for matter package version
+- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package. 
 - **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.  
 
 ---
@@ -74,14 +76,15 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 ```
 root/
-├── packages/
-│   ├── matter/
+├── packages
+│   ├── _shared
+│   │   └── base_recipe.py
+│   ├── matter
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
-│   ├── matter_sample_app/
-│   │   └── conanfile.py
-│   ├── remotes/
-│   └── README.md
+│   ├── matter_app
+│   │   ├── conanfile.py
+│   ├── README.md
 └── slc/
     └── scripts/
 ```
