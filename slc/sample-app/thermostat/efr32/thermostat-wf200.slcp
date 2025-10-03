@@ -35,6 +35,8 @@ component:
 
   - id: matter_efr32_ncp
     from: matter
+  - id: matter_lwip
+    from: matter
   - id: matter_wifi
     from: matter
   - id: wf200_ncp
