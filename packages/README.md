@@ -59,6 +59,17 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 ---
 
+## File Descriptions  
+
+- **`matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.  
+- **`matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
+- **`matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.  
+- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package.  
+- **`remotes.json`** – File containing URLs needed for Conan to search packages.  
+- **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.  
+
+---
+
 ## Directory Layout  
 
 ```
