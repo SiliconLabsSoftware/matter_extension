@@ -7,7 +7,8 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.6.1"
+    version: "2.7.0"
+    vendor: silabs
 
 component:
   - id: device_init
@@ -29,6 +30,8 @@ component:
     from: matter
 
   - id: matter_efr32_ncp
+    from: matter
+  - id: matter_lwip
     from: matter
   - id: matter_wifi
     from: matter
@@ -145,11 +148,9 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp
-    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/ZclCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:

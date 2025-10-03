@@ -128,23 +128,60 @@ def execute(args, output=False, check=True, env=None, retry=1, dir=None):
 
     if output:
         try:
-            return subprocess.check_output(cmd, shell=True)
+            return subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT, env=env, cwd=dir)
+        except subprocess.CalledProcessError as err:
+            print("{}Command output:\n{}".format(MARGIN, err.output.decode() if err.output else "No output"))
+            print("{}Return code: {}".format(MARGIN, err.returncode))
+            if check:
+                fail(err)
+            return None
         except BaseException as err:
+            print("{}Unexpected error: {}".format(MARGIN, err))
             if check:
                 fail(err)
             return None
     else:
         while retry > 0:
             retry = retry - 1
-            complete = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, shell=True, env=env, cwd=dir)
-            if (0 == complete.returncode):
-                return 0
-            if check:
-                if (0 == retry):
-                    fail("Command failed with code {}".format(complete.returncode))
-                else:
-                    warn("Command failed with code {}. Retrying...".format(complete.returncode))
-        return complete.returncode
+            try:
+                # Capture both stdout and stderr for better debugging
+                result = subprocess.run(cmd, shell=True, env=env, cwd=dir,
+                                        capture_output=True, text=True)
+                if result.returncode == 0:
+                    return 0
+
+                # Print detailed error information
+                print("{}Command failed with return code: {}".format(MARGIN, result.returncode))
+                if result.stdout:
+                    print("{}STDOUT:\n{}".format(MARGIN, result.stdout))
+                if result.stderr:
+                    print("{}STDERR:\n{}".format(MARGIN, result.stderr))
+
+                # Special handling for common error codes
+                if result.returncode == 127:
+                    print("{}ERROR: Command not found. Check if '{}' is installed and in PATH.".format(MARGIN, args[0]))
+                    # Try to find the command
+                    which_result = subprocess.run(['which', args[0]], capture_output=True, text=True)
+                    if 0 == which_result.returncode:
+                        print("{}Command '{}' not found in PATH".format(MARGIN, args[0]))
+                        print("{}Current PATH: {}".format(MARGIN, env.get('PATH', 'Not set')))
+                    else:
+                        print("{}Command '{}' found at: {}".format(MARGIN, args[0], which_result.stdout.strip()))
+
+                if check and retry == 0:
+                    fail("Command failed with code {}".format(result.returncode))
+                elif retry > 0:
+                    warn("Command failed with code {}. Retrying...".format(result.returncode))
+            except FileNotFoundError as err:
+                print("{}File not found error: {}".format(MARGIN, err))
+                if check:
+                    fail("Command '{}' not found".format(args[0]))
+            except Exception as err:
+                print("{}Unexpected error executing command: {}".format(MARGIN, err))
+                if check:
+                    fail("Command execution failed: {}".format(err))
+
+        return result.returncode if 'result' in locals() else -1
 
 
 def fail(message, paths=None):
