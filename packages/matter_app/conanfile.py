@@ -1,4 +1,5 @@
 import os
+import sys
 from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
@@ -6,41 +7,36 @@ from typing import Iterable, Optional, Generator
 import sys
 import yaml
 from pathlib import Path
+
+# -------------------------------------------------------------
+# Global repository path inference
+# Expect structure: <repo_root>/packages/matter_app/conanfile.py
+# Exposed as REPO_ROOT for helpers needing to scan the full repository.
+# -------------------------------------------------------------
+_RECIPE_PATH = Path(__file__).resolve()
+try:
+    REPO_ROOT = _RECIPE_PATH.parents[2]
+except IndexError:
+    REPO_ROOT = _RECIPE_PATH.parent  # fallback if layout unexpected
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-class matter_appRecipe(ConanFile):
-    # Attributes: https://docs.conan.io/2/reference/conanfile/attributes.html
-    # Package reference
+try:
+    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
+    if str(_PKG_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PKG_ROOT))
+except Exception:
+    pass
+from _shared.base_recipe import MatterBaseRecipe
+
+
+class matter_appRecipe(MatterBaseRecipe):
     name = "matter_app"
-    version = "0.0.202509221539" #FIXME: This version number is a boo boo.
-    user = "silabs"
-
-    # Basic Conan metadata
-    description = "matter SampleApp package"
-    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
-    author = "Silicon Laboratories Inc."
-    homepage = "" # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = "" # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse
-    topics = ("silabs") # You can add more topics
-
-    # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/1.2.6@silabs"
-
-    # Custom Silabs metadata
-    sl_metadata = {
-        "slack_channel": "",
-        "team": "",
-        "confluence_doc": "",
-        "jira_project": "", # E.g.,: https://jira.silabs.com/projects/<space>/summary
-        "maintainers": [
-            {"name": "NA", "email": "NA@silabs.com"},
-        ],
-    }
-
+    version = "2.6.1-0.dev"
+    description = "matter sample-app package"
     # Other attributes
-    #revision_mode = "scm"
+    # revision_mode = "scm"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -108,20 +104,13 @@ class matter_appRecipe(ConanFile):
         
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        slcp_files = list(map(str, Path(os.getcwd()).rglob("*.slcp")))
-        slcw_files = list(map(str, Path(os.getcwd()).rglob("*.slcw")))
-
-        for slcp_file in slcp_files + slcw_files:
-            # slcp_related_files should return empty list if the desired_quality and desired_packages are not matched
-            slcp_related_files = silabs_package_assistant.list_files_in_slc_file(
-                slc_file_path=slcp_file,
-                desired_qualities=['production', 'evaluation'],
-                desired_packages=['matter'],
-                fail_on_missing_files=False,
+        files_to_package.update(
+            self._gather_slc_release_files(
+                desired_qualities=["production", "evaluation"],
+                desired_packages=["matter"],
+                assistant=silabs_package_assistant,
             )
-            if (len(slcp_related_files) > 0):
-                files_to_package.update(slcp_file)
-                files_to_package.update(slcp_related_files)
+        )
 
         files_to_package = {file for file in files_to_package if os.path.exists(file) and not os.path.isdir(file)}
 
@@ -157,20 +146,13 @@ class matter_appRecipe(ConanFile):
         
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        slcp_files = list(map(str, Path(os.getcwd()).rglob("*.slcp")))
-        slcw_files = list(map(str, Path(os.getcwd()).rglob("*.slcw")))
-
-        for slcp_file in slcp_files + slcw_files:
-            # slcp_related_files should return empty list if the desired_quality and desired_packages are not matched
-            slcp_related_files = silabs_package_assistant.list_files_in_slc_file(
-                slc_file_path=slcp_file,
-                desired_qualities=['production', 'evaluation'],
-                desired_packages=['matter'],
-                fail_on_missing_files=False,
+        files_to_package.update(
+            self._gather_slc_release_files(
+                desired_qualities=["production", "evaluation"],
+                desired_packages=["matter"],
+                assistant=silabs_package_assistant,
             )
-            if (len(slcp_related_files) > 0):
-                files_to_package.update(slcp_file)
-                files_to_package.update(slcp_related_files)
+        )
 
         files_to_package = {file for file in files_to_package if os.path.exists(file) and not os.path.isdir(file)}
 
@@ -194,4 +176,41 @@ class matter_appRecipe(ConanFile):
 
         # SDK Packages
         self.buildenv_info.append_path("SLC_SDK_PACKAGE_PATH", self.package_folder)
+
+    # --------------------- Helpers ---------------------
+    def _gather_slc_release_files(
+        self,
+        desired_qualities: list[str],
+        desired_packages: list[str],
+        assistant,
+    ) -> set:
+        """Discover .slcp/.slcw files (excluding third_party) and collect related release files.
+
+        Returns a set of file paths including the SLC definition file itself plus any related files
+        when the assistant reports matches for the given qualities/packages.
+        """
+        collected: set[str] = set()
+        # Scan from repository root (requested) rather than just the recipe source folder
+        root = REPO_ROOT.resolve()
+        # Scan once for both extensions
+        for slc_file in root.rglob("*.slc*"):
+            if "third_party" in slc_file.parts:
+                continue
+            if not slc_file.suffix in (".slcp", ".slcw"):
+                continue
+            rel_path = str(slc_file)
+            try:
+                related = assistant.list_files_in_slc_file(
+                    slc_file_path=rel_path,
+                    desired_qualities=desired_qualities,
+                    desired_packages=desired_packages,
+                    fail_on_missing_files=False,
+                )
+            except Exception as e:
+                self.output.warning(f"Failed processing {rel_path}: {e}")
+                continue
+            if related:
+                collected.add(rel_path)
+                collected.update(related)
+        return collected
 

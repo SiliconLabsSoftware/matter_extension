@@ -1,0 +1,12 @@
+ # Centralized dependency versions consumed by both Conan recipes and generation scripts.
+# To bump a version, edit here. Keep keys in stable, logical order for minimal diff noise.
+# NOTE: Only include packages actually required anywhere (scripts or recipes). Unused keys can be removed later.
+openthread: 0.1.5
+bluetooth_le_host: 0.0.6
+rail_module: 0.0.5
+multiprotocol: 0.1.4
+zigbee: 0.1.5
+platform_nwp_siwx91x: 0.0.6
+bluetooth_le_siwx91x: 0.0.6
+lwip: 0.0.5
+wifi: 0.0.4

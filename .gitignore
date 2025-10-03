@@ -8,6 +8,14 @@
 # Platforms
 .DS_Store
 
+# Package Manager/Conan
+*conanbuild.sh
+*conanbuildenv.sh
+*conanrun.sh
+*conanrunenv.sh
+*deactivate_conanbuild.sh
+*deactivate_conanrun.sh
+
 # Build System
 out/
 /src/test_driver/nrfconnect/build/

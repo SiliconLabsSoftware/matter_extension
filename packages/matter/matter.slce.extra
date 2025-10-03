@@ -1955,11 +1955,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/BDXDiagnosticLogsProvider.cpp
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/BDXDiagnosticLogsProvider.h
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/DiagnosticLogsCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/DiagnosticLogsCluster.h
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/DiagnosticLogsProviderDelegate.h
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/Upgrading.md
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/diagnostic-logs-server.cpp
   - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/diagnostic-logs-server.h
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/tests/TestDiagnosticLogsCluster.cpp
   - third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/app_config_dependent_sources.gni
@@ -2412,9 +2418,14 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/thread-network-directory-server/thread-network-directory-server.cpp
   - third_party/matter_sdk/src/app/clusters/thread-network-directory-server/thread-network-directory-server.h
   - third_party/matter_sdk/src/app/clusters/time-format-localization-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/time-format-localization-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/time-format-localization-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/time-format-localization-server.cpp
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/tests/SampleDeviceProvider.h
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/tests/TestTimeFormatLocalizationCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/time-format-localization-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/time-format-localization-server/time-format-localization-cluster.h
   - third_party/matter_sdk/src/app/clusters/time-synchronization-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
   - third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.h
@@ -2975,7 +2986,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_12.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_13.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_14.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_15.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_7.yaml
@@ -3140,7 +3150,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OO_2_7.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OO_3_2_Simulated.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OPCREDS_3_3.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OPCREDS_3_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OPCREDS_3_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OPCREDS_3_7.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_OTCCM_1_2.yaml
@@ -3387,6 +3396,8 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/templates/app/clusters-shared-Global-Ids.h.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/clusters-shared-Structs.h.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/clusters-shared-Structs.ipp.zapt
+  - third_party/matter_sdk/src/app/zap-templates/templates/app/codedriven-callback.h.zapt
+  - third_party/matter_sdk/src/app/zap-templates/templates/app/codedriven-init-shutdown.cpp.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/endpoint_config.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/gen_config.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/ids/Attributes.h.zapt
@@ -3453,6 +3464,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/global-enums.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/global-structs.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/group-key-mgmt-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/groupcast-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/groups-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/icd-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/identify-cluster.xml
