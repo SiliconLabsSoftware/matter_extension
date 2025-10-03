@@ -1,10 +1,11 @@
 id: matter
-version: 2.6.1
+version: 2.7.0
 description: "Matter extension for Simplicity SDK Suite"
 label: "Silicon Labs Matter"
+vendor: silabs
 sdk:
   id: simplicity_sdk
-  version: 2025.6.1
+  version: 2025.6.2
 upgrade_manifest:
   - path: upgrade.slcu
 supplier: Silicon Laboratories Inc.
@@ -48,4 +49,4 @@ component_path:
   - path: slc/component/sdk-content/zap
 documentation:
   - docset: matter
-    version: 2.6.1
+    version: 2.7.0

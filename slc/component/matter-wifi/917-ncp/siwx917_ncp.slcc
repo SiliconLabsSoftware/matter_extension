@@ -15,18 +15,19 @@ config_file:
       file_id: lwipopts
 
 provides:
-  - name: siwx917_ncp
-  - name: efx_ncp_custom_host_mcu
+- name: siwx917_ncp
+- name: efx_ncp_custom_host_mcu
 
 recommends:
   - id: uartdrv_eusart
+    vendor: silabs
     instance: [vcom]
 
 requires:
-  - name: wiseconnect3_common
-  - name: sl_si91x_spi_bus
-  - name: device_init_dpll
-  - name: spidrv_instance
+- name: wiseconnect3_common
+- name: sl_si91x_spi_bus
+- name: device_init_dpll
+- name: spidrv_instance
 
 include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp
@@ -64,23 +65,26 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
 
 define:
-  - name: RS911X_WIFI
-  - name: EXP_BOARD
-    value: 1
-  - name: CHIP_9117
-    value: 1
-  - name: SL_WFX_CONFIG_SCAN
-    value: 1
-  - name: SL_WFX_USE_SPI
-  - name: EFX32_RS911X
-    value: 1
-  - name: RSI_WLAN_ENABLE
-  - name: RSI_SPI_INTERFACE
-  - name: RSI_WITH_OS
-  - name: SL_WIFI_COMPONENT_INCLUDED
-  - name: __WEAK
-    value: "__attribute__((weak))"
+- name: RS911X_WIFI
+- name: EXP_BOARD
+  value: 1
+- name: CHIP_9117
+  value: 1
+- name: SL_WFX_CONFIG_SCAN
+  value: 1
+- name: SL_WFX_USE_SPI
+- name: EFX32_RS911X
+  value: 1
+- name: RSI_WLAN_ENABLE
+- name: RSI_SPI_INTERFACE
+- name: RSI_WITH_OS
+- name: SL_WIFI_COMPONENT_INCLUDED
+- name: __WEAK
+  value: "__attribute__((weak))"
 
 toolchain_settings:
-  - option: gcc_compiler_option
-    value: -Wno-unused-parameter
+- option: gcc_compiler_option
+  value: -Wno-unused-parameter
+- option: gcc_compiler_option
+  value: "-Wno-cpp"
+  unless: [hardware_board]

@@ -343,7 +343,8 @@ class AutoCommand(Command):
 
     # Used for backwards compatibility
     OUTGOING_OPTIONAL = [
-        ID.kTestEventTriggerKey
+        ID.kTestEventTriggerKey,
+        ID.kOtaKey
     ]
 
     INCOMING = [
