@@ -49,10 +49,9 @@ pipeline
                     } else {
                         branch_name = env.BRANCH_NAME
                     }
-
+                    def formatted_build_number = "${workflow_id}.${run_number}"
                     parallelNodes['MG24 Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
-                            def formatted_build_number = "${workflow_id}.${run_number}"
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
                                 '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
@@ -62,7 +61,6 @@ pipeline
 
                     parallelNodes['917-SoC Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
-                            def formatted_build_number = "${workflow_id}.${run_number}"
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
                                 'lighting-app','wifi','BRD4338A','917_soc', "tests/test_matter_wifi_ci.py", branch_name, formatted_build_number)
