@@ -80,7 +80,6 @@ component:
   - { from: matter, id: matter_network_commissioning }
   - { from: matter, id: matter_operational_credentials }
   - { from: matter, id: matter_administrator_commissioning }
-  - { from: matter, id: matter_time_format_localization }
   - { from: matter, id: matter_on_off }
   - { from: matter, id: matter_scenes }
   - { from: matter, id: matter }
@@ -154,11 +153,6 @@ configuration:
   - condition: [iostream_usart]
     name: SL_IOSTREAM_USART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
     value: "1"
-  - condition: [iostream_eusart]
-    name: SL_IOSTREAM_EUSART_VCOM_RESTRICT_ENERGY_MODE_TO_ALLOW_RECEPTION
-    value: "1"
-  - name: SL_CLI_PROMPT_STRING
-    value: '"TriProtocol>"'
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
     condition: [matter_ble_side_channel]
@@ -168,16 +162,6 @@ configuration:
     condition: [matter_ble_dmp_test]
   - name: SL_BT_CONFIG_MAX_CONNECTIONS
     value: 4
-  - name: LIB_MEM_CFG_HEAP_SIZE
-    value: 0
-  - name: SL_CLI_HELP_DESCRIPTION_ENABLED
-    value: 0
-  - name: SL_PSA_ITS_SUPPORT_V1_DRIVER
-    value: 0
-  - name: SL_PSA_ITS_SUPPORT_V2_DRIVER
-    value: 0
-  - name: SL_PSA_ITS_SUPPORT_V3_DRIVER
-    value: 1
   - name: SL_IOSTREAM_EUSART_VCOM_RX_BUFFER_SIZE
     value: 128 # Increase from default for open thread
     condition:
@@ -248,17 +232,19 @@ define:
 
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/sl_cmp_config.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/sl_cmp_config.h
   - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/zcl/zcl_config.zap
     file_id: zap_config
     directory: common
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
     directory: btconf
     unless: [matter_ble_dmp_test, matter_gatt_static]
-  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/btconf/gatt_configuration.btconf
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/gatt_configuration.btconf
     directory: btconf
     condition: [matter_ble_dmp_test]
-
+  - path: ../../../../provision.mattpconf
+    directory: provision
+    file_id: provision_config
 source:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
     directory: src
@@ -266,7 +252,7 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/MatterDMCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 include:
