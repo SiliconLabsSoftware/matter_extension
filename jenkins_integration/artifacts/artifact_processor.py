@@ -252,10 +252,10 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, run_numb
         upload_to_ubai(
             file_path=artifact_file,
             app_name="matter",
+            stack="matter",
             target="matter",
             branch_name=branch_name,
             run_number=run_number,
-            stack="matter",
             workflow_id=workflow_id
         )
         upload_to_artifactory(artifact_file, artifact_name, branch_name, str(run_number))
