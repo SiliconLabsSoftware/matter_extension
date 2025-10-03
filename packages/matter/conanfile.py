@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
@@ -8,6 +9,18 @@ import yaml
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
+
+# -------------------------------------------------------------
+# Global repository path inference
+# Expect structure: <repo_root>/packages/matter/conanfile.py
+# REPO_ROOT is used for locating shared metadata (e.g. dependency_versions.yaml)
+# and is intentionally module-level so all helpers/class methods can reuse it.
+# -------------------------------------------------------------
+_RECIPE_PATH = Path(__file__).resolve()
+try:
+    REPO_ROOT = _RECIPE_PATH.parents[2]
+except IndexError:
+    REPO_ROOT = _RECIPE_PATH.parent  # fallback; unusual layout
 
 
 class matterRecipe(ConanFile):
@@ -131,9 +144,7 @@ class matterRecipe(ConanFile):
             "silabs_package_assistant"
         ].module
 
-        if not os.path.exists("matter.slce"):
-            raise FileNotFoundError(f"SLCE file not found: matter.slce")
-        slce_file = "./matter.slce"
+        slce_file = self._get_local_slce_file()
 
         files = silabs_package_assistant.find_slc_files_to_release(
             slc_sdk_or_extension_def_file=slce_file,
@@ -203,9 +214,7 @@ class matterRecipe(ConanFile):
             "silabs_package_assistant"
         ].module
 
-        if not os.path.exists("matter.slce"):
-            raise FileNotFoundError(f"SLCE file not found: matter.slce")
-        slce_file = "./matter.slce"
+        slce_file = self._get_local_slce_file()
 
         files = silabs_package_assistant.find_slc_files_to_release(
             slc_sdk_or_extension_def_file=slce_file,
@@ -292,37 +301,34 @@ class matterRecipe(ConanFile):
 
         return result
 
+    def _get_local_slce_file(self, filename: str = "matter.slce") -> str:
+        """Return relative path to required SLCE definition, raising if missing.
+
+        Keeps logic centralized so build() and package() stay DRY.
+        """
+        filename = os.path.join(REPO_ROOT, filename)
+        if not os.path.exists(filename):
+            raise FileNotFoundError(f"SLCE file not found: {filename}")
+        # Maintain previous usage of a relative string path
+        return f"./{filename}"
+
 
 def _load_dep_versions(filename: str = "dependency_versions.yaml") -> dict:
-    """Load dependency versions from a shared YAML file.
-
-    The file lives next to this conanfile. If missing or malformed, raise to
-    fail fast—keeping version drift visible.
+    """Load dependency versions from shared YAML file.
     """
-    # New canonical location: slc/script/dependency_versions.yaml relative to repo root.
-    # Try legacy location (next to this file) only for backward compatibility.
-    repo_root = os.path.dirname(__file__)
-    candidates = [
-        os.path.join(repo_root, "slc", "script", filename),  # new location
-        os.path.join(repo_root, filename),  # legacy root placement
-    ]
-    path = None
-    for candidate in candidates:
-        if os.path.exists(candidate):
-            path = candidate
-            break
-    if not path:
+    target = REPO_ROOT / "slc" / "script" / filename
+    if not target.exists():
         raise FileNotFoundError(
-            "Dependency versions file not found in any expected location: "
-            + ", ".join(candidates)
+            f"Dependency versions file not found at expected canonical path: {target}"
         )
     try:
-        with open(path, "r", encoding="utf-8") as f:
+        with target.open("r", encoding="utf-8") as f:
             data = yaml.safe_load(f) or {}
-            # Preserve order (PyYAML already returns dict preserving order in Py3.7+)
             return data
     except Exception as e:
-        raise RuntimeError(f"Failed to parse dependency versions file {path}: {e}")
+        raise RuntimeError(
+            f"Failed to parse dependency versions file {target}: {e}"
+        )
 
 
 # Centralized dependency versions (shared with scripts) loaded at import time.

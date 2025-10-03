@@ -96,7 +96,7 @@ def main(argv: Iterable[str]) -> int:
     parser.add_argument(
         "--slce-extra",
         metavar="FILE",
-        default="matter.slce.extra",
+        default="packages/matter/matter.slce.extra",
         help="Path to matter.slce.extra; if provided, insert collected paths as commented lines under the marker '# matter_sdk paths' instead of writing a separate output file",
     )
     parser.add_argument(
