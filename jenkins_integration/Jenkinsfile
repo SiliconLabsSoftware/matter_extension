@@ -87,6 +87,10 @@ pipeline
                     echo "SQA Tests Result: ${sqa_tests_result}"
                     echo "SQA Tests Summary:\n${sqa_tests_summary}"
 
+                    // approve pull request if tests pass
+                    pipelineFunctions.approvePullRequestOnSuccess(sqa_tests_result)
+
+
                     echo "commit_sha: ${commit_sha}"
                     if (!bypass_send_results_gh){
                         pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
