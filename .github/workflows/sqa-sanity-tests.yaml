@@ -23,7 +23,7 @@ jobs:
 
         - name: Create Check Run for Test Results
           id: create_check_run
-          uses: actions/github-script@v7
+          uses: actions/github-script@v8
           with:
               github-token: ${{ steps.generate_app_token.outputs.token }}
               script: |
@@ -42,7 +42,7 @@ jobs:
 
         - name: Wait for Test Results
           id: wait_for_results
-          uses: actions/github-script@v7
+          uses: actions/github-script@v8
           with:
             github-token: ${{ steps.generate_app_token.outputs.token }}
             script: |
@@ -107,7 +107,7 @@ jobs:
 
         - name: Wait for Test Results (refreshed token)
           if: steps.wait_for_results.outputs.completed == 'false'
-          uses: actions/github-script@v7
+          uses: actions/github-script@v8
           with:
             github-token: ${{ steps.refresh_token.outputs.token }}
             script: |
