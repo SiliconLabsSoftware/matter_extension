@@ -10,17 +10,7 @@ import yaml
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-# -------------------------------------------------------------
-# Global repository path inference
-# Expect structure: <repo_root>/packages/matter/conanfile.py
-# REPO_ROOT is used for locating shared metadata (e.g. dependency_versions.yaml)
-# and is intentionally module-level so all helpers/class methods can reuse it.
-# -------------------------------------------------------------
-_RECIPE_PATH = Path(__file__).resolve()
-try:
-    REPO_ROOT = _RECIPE_PATH.parents[2]
-except IndexError:
-    REPO_ROOT = _RECIPE_PATH.parent  # fallback; unusual layout
+## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
 
 
 try:
@@ -79,6 +69,12 @@ class matterRecipe(MatterBaseRecipe):
         "sdkLtsTag": "",
     }
 
+    # Provide a unified folder reference for the recipe logic without needing
+    # to override __init__ (Conan discourages custom __init__ implementations).
+    @property
+    def matter_folder(self) -> str:
+        return str(self.repo_root)
+
     def requirements(self):
         """Declare recipe dependencies using centralized version mapping.
 
@@ -114,8 +110,8 @@ class matterRecipe(MatterBaseRecipe):
         self.info.clear()
 
     def package(self):
-        # Define the source folder for the matter component
-        matter_folder = self.source_folder
+        # Define the source folder for the matter component (centralized via property)
+        matter_folder = self.matter_folder
 
         # Define the files to be included in the package
         files_to_package = {"License"}
@@ -181,8 +177,7 @@ class matterRecipe(MatterBaseRecipe):
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
     def build(self):
-        # Define the source folder for the matter component
-        matter_folder = self.source_folder
+        # Define the source folder for the matter component (property-backed)
 
         # Define the files to be included in the package
         files_to_package = {"License"}
@@ -248,6 +243,8 @@ class matterRecipe(MatterBaseRecipe):
 
         Missing or malformed YAML gracefully degrades with warnings.
         """
+        filename = os.path.join(self.repo_root, filename)
+        os.chdir(self.repo_root)
         result = {
             "extra_files_including_descriptor": set(),
             "git_extra_files": [],
@@ -291,7 +288,7 @@ class matterRecipe(MatterBaseRecipe):
 
         Keeps logic centralized so build() and package() stay DRY.
         """
-        filename = os.path.join(REPO_ROOT, filename)
+        filename = os.path.join(self.repo_root, filename)
         if not os.path.exists(filename):
             raise FileNotFoundError(f"SLCE file not found: {filename}")
         # Maintain previous usage of a relative string path

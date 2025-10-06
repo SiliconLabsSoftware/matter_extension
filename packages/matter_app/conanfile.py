@@ -4,20 +4,10 @@ from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
 from typing import Iterable, Optional, Generator
-import sys
 import yaml
 from pathlib import Path
 
-# -------------------------------------------------------------
-# Global repository path inference
-# Expect structure: <repo_root>/packages/matter_app/conanfile.py
-# Exposed as REPO_ROOT for helpers needing to scan the full repository.
-# -------------------------------------------------------------
-_RECIPE_PATH = Path(__file__).resolve()
-try:
-    REPO_ROOT = _RECIPE_PATH.parents[2]
-except IndexError:
-    REPO_ROOT = _RECIPE_PATH.parent  # fallback if layout unexpected
+## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
@@ -78,6 +68,12 @@ class matter_appRecipe(MatterBaseRecipe):
       "sdkLtsTag": ""
     }
 
+        # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
+        # on self.source_folder so repo-relative operations stay consistent.
+        @property
+        def matter_app_folder(self) -> str:
+                return str(self.repo_root)
+
     def requirements(self):
         pass
 
@@ -95,8 +91,8 @@ class matter_appRecipe(MatterBaseRecipe):
         self.info.clear()
 
     def package(self):
-        # Define the source folder for the matter_app component
-        matter_app_folder = self.source_folder
+        # Define the source folder for the matter_app component (property-backed)
+        matter_app_folder = self.matter_app_folder
 
         # Define the files to be included in the package
         files_to_package = {"License.txt"}
@@ -136,8 +132,8 @@ class matter_appRecipe(MatterBaseRecipe):
 
 
     def build(self):
-        # Define the source folder for the matter_app component
-        matter_app_folder = self.source_folder
+        # Define the source folder for the matter_app component (property-backed)
+        matter_app_folder = self.matter_app_folder
 
         # Define the files to be included in the package
         files_to_package = {"License.txt"}
@@ -190,8 +186,8 @@ class matter_appRecipe(MatterBaseRecipe):
         when the assistant reports matches for the given qualities/packages.
         """
         collected: set[str] = set()
-        # Scan from repository root (requested) rather than just the recipe source folder
-        root = REPO_ROOT.resolve()
+        # Use shared repository root provided by base recipe
+        root = self.repo_root
         # Scan once for both extensions
         for slc_file in root.rglob("*.slc*"):
             if "third_party" in slc_file.parts:

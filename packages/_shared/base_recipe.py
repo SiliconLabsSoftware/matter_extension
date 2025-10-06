@@ -36,6 +36,11 @@ class MatterBaseRecipe(ConanFile):
         # Unified behavior: header-only / content-only style id
         self.info.clear()
 
+    @property
+    def repo_root(self) -> Path:
+        """Repository root directory (shared across all Matter recipes)."""
+        return SHARED_REPO_ROOT
+
     # --------------- Shared dependency versions ---------------
     @property
     def dep_versions(self) -> dict:
