@@ -23,7 +23,10 @@ class Commander:
         args.insert(0, 'commander')
         dev = self.device.str()
         if dev is not None:
-            args.extend(['--device', dev])
+            if dev.startswith('simg3'):
+                args.extend(['--device', 'SixG301'])
+            else:
+                args.extend(['--device', dev])
         if self.conn is None:
             pass
         elif self.conn.serial_num:
@@ -152,14 +155,14 @@ class CertTool:
         self.execute(['gen-att-cert', '-t', 'i', '-l', self.lifetime, '-c', '"Matter PAI"', '-V', self.vid,
                      '-P', self.pid, '-C', paa_certq, '-K', paa_keyq, '-o', pai_certq, '-O', pai_keyq])
 
-    def generateDAC(self, pai_cert, pai_key, dac_cert, dac_key, common_name='Matter DAC'):
+    def generateDAC(self, pai_cert, pai_key, dac_cert, dac_key, common_name=None):
         # Remove existing DAC
         if os.path.exists(dac_cert):
             os.remove(dac_cert)
         if os.path.exists(dac_key):
             os.remove(dac_key)
         # Generate DAC
-        cnq = '"{}"'.format(common_name)
+        cnq = '"{}"'.format(common_name or 'Matter DAC')
         pai_certq = _util.Paths.quote(pai_cert)
         pai_keyq = _util.Paths.quote(pai_key)
         dac_certq = _util.Paths.quote(dac_cert)

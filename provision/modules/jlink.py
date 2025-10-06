@@ -65,14 +65,17 @@ class JLinkChannel(_base.Channel):
         # print("SENT({})".format(sent))
         return sent
 
-    def read(self):
+    def read(self, timeout_s=2):
         # print("Read...")
         chunk = []
         data = []
+        start_time = time.time()
         while (len(chunk) > 0) or (0 == len(data)):
             chunk = self.link.rtt_read(0, 1024)
-            data.extend(chunk)
-        # print("RECEIVED({}): {}".format(len(data), data))
+            if chunk:
+                data.extend(chunk)
+            elif (time.time() - start_time) > timeout_s:
+                return None
         return bytes(data)
 
     def reset(self, do_halt=False):

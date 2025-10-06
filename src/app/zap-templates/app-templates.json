@@ -279,6 +279,7 @@
             "name": "Matter code driven cluster init and shutdown calls",
             "output": "CodeDrivenInitShutdown.cpp"
         }
+
     ],
     "zcl": {
         "cluster": {

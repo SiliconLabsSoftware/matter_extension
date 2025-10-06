@@ -76,6 +76,8 @@ class Protocol(_base.ProvisionProtocol):
         cmd.execute(chan)
         # Sign
         csr_path = args.value(ID.kCsrFile)
+        if csr_path is None:
+            raise ValueError("Missing CSR")
         signer = _pki.SigningServer(base_dir, csr_path, pai_cert_path, pai_key_path, dac_path)
         signer.sign()
 
@@ -88,7 +90,7 @@ class Command:
     READ = 4
     CSR = 5
 
-    def __init__(self, paths, args, cid, name, send_values=True):
+    def __init__(self, paths, args, cid, name, send_values=True, needs_response=True):
         self.paths = paths
         self.args = args
         self.id = cid
@@ -98,6 +100,7 @@ class Command:
         self.in_map = {}
         self.send_values = send_values
         self.incoming = Context()
+        self.needs_response = needs_response
 
     def add(self, a, include_nulls=False, feedback=False):
         if include_nulls or (a.value is not None):
@@ -194,7 +197,11 @@ class Command:
         return req
 
     def receivePackage(self, chan, counter, req):
+        if not self.needs_response:
+            return True
         res = chan.read()
+        if (res is None):
+            self.fail(req, None, "No response.")
         # print("{}<< Response({}): {}".format(_util.MARGIN, len(res), res.hex()))
         pack = Buffer(None, res[:(len(res) - Protocol.kChecksumSize)])
         # Decode header
@@ -343,7 +350,8 @@ class AutoCommand(Command):
 
     # Used for backwards compatibility
     OUTGOING_OPTIONAL = [
-        ID.kTestEventTriggerKey
+        ID.kTestEventTriggerKey,
+        ID.kOtaKey
     ]
 
     INCOMING = [
@@ -394,4 +402,4 @@ class ReadCommand(Command):
 class FinishCommand(Command):
 
     def __init__(self, paths, args):
-        super().__init__(paths, args, Command.FINISH, 'Finish', False)
+        super().__init__(paths, args, Command.FINISH, 'Finish', False, False)
