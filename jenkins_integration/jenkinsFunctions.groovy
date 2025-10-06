@@ -145,7 +145,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                                 echo ${TESTBED_NAME}
                                 ${commanderPath} --version
                                 ./workspace_setup.sh
-                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native ${testSuite}" > ${test_log_file} 2>&1 || true
+                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} ${testSuite}" > ${test_log_file} 2>&1 || true
                             """, returnStdout: true).trim()
                             def output = readFile(test_log_file).trim()
                             echo "Test log file output:\n ${output}"
