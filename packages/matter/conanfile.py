@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
@@ -9,32 +10,21 @@ import yaml
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
+## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
 
-class matterRecipe(ConanFile):
-    # Attributes: https://docs.conan.io/2/reference/conanfile/attributes.html
-    user = "silabs"
 
-    # Basic Conan metadata
+try:
+    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
+    if str(_PKG_ROOT) not in sys.path:
+        sys.path.insert(0, str(_PKG_ROOT))
+except Exception:
+    pass
+from _shared.base_recipe import MatterBaseRecipe
+
+
+class matterRecipe(MatterBaseRecipe):
+    # Specific description (can override base if needed)
     description = "Matter extension for Simplicity SDK Suite"
-    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
-    author = "Silicon Laboratories Inc."
-    homepage = ""  # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse/README.md
-    url = ""  # E.g.,: https://stash.silabs.com/projects/<space>/repos/<project>/browse
-    topics = "silabs"  # You can add more topics
-
-    # Python module for .slc files parsing/expansion
-    python_requires = "silabs_package_assistant/1.2.6@silabs"
-
-    # Custom Silabs metadata
-    sl_metadata = {
-        "slack_channel": "",
-        "team": "",
-        "confluence_doc": "",
-        "jira_project": "",  # E.g.,: https://jira.silabs.com/projects/<space>/summary
-        "maintainers": [
-            {"name": "NA", "email": "NA@silabs.com"},
-        ],
-    }
 
     # Other attributes
     # revision_mode = "scm"
@@ -79,8 +69,32 @@ class matterRecipe(ConanFile):
         "sdkLtsTag": "",
     }
 
+    # Provide a unified folder reference for the recipe logic without needing
+    # to override __init__ (Conan discourages custom __init__ implementations).
+    @property
+    def matter_folder(self) -> str:
+        return str(self.repo_root)
+
     def requirements(self):
-        pass
+        """Declare recipe dependencies using centralized version mapping.
+
+        Rationale:
+            Centralizing dependency versions makes alignment with other tooling
+            (e.g. generation scripts) simpler and reduces risk of version skew.
+
+        To update a version, modify the DEP_VERSIONS mapping defined below the
+        class. Optionally, future work could externalize this to a single
+        versions file consumed by both scripts and recipes.
+        """
+
+        for dep_name, dep_version in self.dep_versions.items():  # preserves insertion order (Python 3.7+)
+            self.requires(f"{dep_name}/{dep_version}@{self.user}")
+
+    def slt_requirements(self):
+        req = {}
+        req["zap"] = "~"
+        req["slc_cli"] = "~"
+        return req
 
     def layout(self):
         pass
@@ -96,42 +110,26 @@ class matterRecipe(ConanFile):
         self.info.clear()
 
     def package(self):
-        # Define the source folder for the matter component
-        matter_folder = self.source_folder
+        # Define the source folder for the matter component (centralized via property)
+        matter_folder = self.matter_folder
 
         # Define the files to be included in the package
-        files_to_package = {"License.txt"}
+        files_to_package = {"License"}
         extra_files = []
 
-        slce_extra_file_path = "matter.slce.extra"
-        if os.path.exists(slce_extra_file_path):
-            files_to_package.add(slce_extra_file_path)
-            # Check SLCE.extra extra_files attribute and add them to the files to package
-            with open(slce_extra_file_path, "r") as file:
-                yaml_data = yaml.safe_load(file)
-
-                # extra_files is an optional field in SLCE.extra file
-                extra_files = yaml_data.get("extra_files")
-                if extra_files:
-                    for file in extra_files:
-                        if os.path.exists(file):
-                            files_to_package.add(file)
-                        else:
-                            self.output.warning(
-                                f"Warning: File does not exist and will be skipped: {file}"
-                            )
+        # Process matter.slce.extra (shared helper)
+        extra_info = self._process_slce_extra()
+        files_to_package.update(extra_info["extra_files_including_descriptor"])  # includes descriptor itself
 
         silabs_package_assistant = self.python_requires[
             "silabs_package_assistant"
         ].module
 
-        if not os.path.exists("matter.slce"):
-            raise FileNotFoundError(f"SLCE file not found: matter.slce")
-        slce_file = "./matter.slce"
+        slce_file = self._get_local_slce_file()
 
         files = silabs_package_assistant.find_slc_files_to_release(
             slc_sdk_or_extension_def_file=slce_file,
-            desired_qualities=["production", "evaluation"],
+            desired_qualities=["production", "evaluation", "experimental"],
             fail_on_missing_files=False,
             include_slcp=False,
             include_slcc=True,
@@ -179,45 +177,24 @@ class matterRecipe(ConanFile):
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
     def build(self):
-        # Define the source folder for the matter component
-        matter_folder = self.source_folder
+        # Define the source folder for the matter component (property-backed)
 
         # Define the files to be included in the package
-        files_to_package = {"License.txt"}
+        files_to_package = {"License"}
         extra_files = []
         git_extra_files = []
 
-        slce_extra_file_path = "matter.slce.extra"
-        if os.path.exists(slce_extra_file_path):
-            files_to_package.add(slce_extra_file_path)
-            # Check SLCE.extra extra_files attribute and add them to the files to package
-            with open(slce_extra_file_path, "r") as file:
-                yaml_data = yaml.safe_load(file)
-
-                # extra_files is an optional field in SLCE.extra file
-                extra_files = yaml_data.get("extra_files")
-                if extra_files:
-                    for file in extra_files:
-                        if os.path.exists(file):
-                            files_to_package.add(file)
-                        else:
-                            self.output.warning(
-                                f"Warning: File does not exist and will be skipped: {file}"
-                            )
-
-                # git_extra_files is an optional field in SLCE.extra file
-                git_extra_files = yaml_data.get("git_extra_files")
-                if git_extra_files:
-                    files_to_package.update(git_extra_files)
-                git_path_mapping = yaml_data.get("git_path_mapping")
+        # Process matter.slce.extra (shared helper)
+        extra_info = self._process_slce_extra()
+        files_to_package.update(extra_info["extra_files_including_descriptor"])  # includes descriptor itself
+        git_extra_files = extra_info["git_extra_files"]
+        git_path_mapping = extra_info["git_path_mapping"]
 
         silabs_package_assistant = self.python_requires[
             "silabs_package_assistant"
         ].module
 
-        if not os.path.exists("matter.slce"):
-            raise FileNotFoundError(f"SLCE file not found: matter.slce")
-        slce_file = "./matter.slce"
+        slce_file = self._get_local_slce_file()
 
         files = silabs_package_assistant.find_slc_files_to_release(
             slc_sdk_or_extension_def_file=slce_file,
@@ -254,3 +231,65 @@ class matterRecipe(ConanFile):
         self.buildenv_info.append_path(
             "SLC_SDK_PACKAGE_PATH", self.package_folder
         )
+
+    # ------------------------- Helpers -------------------------
+    def _process_slce_extra(self, filename: str = "matter.slce.extra") -> dict:
+        """Parse matter.slce.extra and collect extra packaging metadata.
+
+        Returns a dictionary with keys:
+            extra_files_including_descriptor: set of files (descriptor + validated extra_files)
+            git_extra_files: list of additional git export file paths (may be empty)
+            git_path_mapping: list of path mapping entries (may be empty or None)
+
+        Missing or malformed YAML gracefully degrades with warnings.
+        """
+        filename = os.path.join(self.repo_root, filename)
+        os.chdir(self.repo_root)
+        result = {
+            "extra_files_including_descriptor": set(),
+            "git_extra_files": [],
+            "git_path_mapping": [],
+        }
+        if not os.path.exists(filename):
+            return result
+
+        result["extra_files_including_descriptor"].add(filename)
+        try:
+            with open(filename, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+        except Exception as e:
+            self.output.warning(f"Failed to parse {filename}: {e}")
+            return result
+
+        # extra_files
+        extra_files = data.get("extra_files") or []
+        for path in extra_files:
+            if os.path.exists(path):
+                result["extra_files_including_descriptor"].add(path)
+            else:
+                self.output.warning(
+                    f"matter.slce.extra: referenced extra file missing and skipped: {path}"
+                )
+
+        # git extras
+        git_extra_files = data.get("git_extra_files") or []
+        if git_extra_files:
+            result["git_extra_files"] = git_extra_files
+
+        # path mapping
+        git_path_mapping = data.get("git_path_mapping") or []
+        if git_path_mapping:
+            result["git_path_mapping"] = git_path_mapping
+
+        return result
+
+    def _get_local_slce_file(self, filename: str = "matter.slce") -> str:
+        """Return relative path to required SLCE definition, raising if missing.
+
+        Keeps logic centralized so build() and package() stay DRY.
+        """
+        filename = os.path.join(self.repo_root, filename)
+        if not os.path.exists(filename):
+            raise FileNotFoundError(f"SLCE file not found: {filename}")
+        # Maintain previous usage of a relative string path
+        return f"./{filename}"
