@@ -120,7 +120,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", commit_sha)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke", run_number)
                 }
             }
        }
