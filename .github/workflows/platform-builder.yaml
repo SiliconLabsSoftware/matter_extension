@@ -68,7 +68,7 @@ on:
             sixg301-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
 
 jobs:
     mg24-build-job:

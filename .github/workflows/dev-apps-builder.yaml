@@ -53,7 +53,6 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            sixg301-support: true
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
@@ -164,8 +163,16 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             wifi-soc-support: false
-            sixg301-support: true
-    
+
+    build-platform-app:
+        name: Build Platform App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "platform-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+
     build-sqa-tools:
         name: Build SQA Tools
         needs: set-build-type
