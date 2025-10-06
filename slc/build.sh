@@ -152,7 +152,7 @@ build_with_arg() {
     local board="$1"
     local components="$2"
     
-    if [ ! -z "$components" ]; then
+    if [ -n "$components" ]; then
         echo "--with $board,$components"
     else
         echo "--with $board"
@@ -161,8 +161,8 @@ build_with_arg() {
 
 build_without_arg() {
     local components="$1"
-    
-    if [ ! -z "$components" ]; then
+
+    if [ -n "$components" ]; then
         echo "--without $components"
     else
         echo ""
@@ -240,11 +240,11 @@ if [ "$skip_gen" = false ]; then
         # Other solutions
         else            
             # Get bootloader arguments
-            BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS" "Bootloader")
+            BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
             BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
             
             # Get application arguments
-            APPLICATION_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS" "Application")
+            APPLICATION_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
             APPLICATION_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
            
             # Generate bootloader first
