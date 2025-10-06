@@ -71,7 +71,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                     def commanderDir = ""
                     sshagent(['svc_gsdk-ssh']) {
                         checkout scm: [$class                            : 'GitSCM',
-                                        branches                         : [[name: 'matter_github_jenkins_support']],
+                                        branches                         : [[name: 'master']],
                                         browser                          : [$class: 'Stash',
                                         repoUrl: 'https://stash.silabs.com/scm/utf/utf_app_matter.git/'],
                                         userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',

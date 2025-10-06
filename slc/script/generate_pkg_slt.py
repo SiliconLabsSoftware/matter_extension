@@ -62,6 +62,7 @@ import yaml
 # Module-level logger (configured once in main)
 logger = logging.getLogger(__name__)
 
+
 def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, str]:
     """Load dependency versions from shared YAML file at repo root.
 
@@ -99,6 +100,7 @@ def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, s
 
 
 DEP_VERSIONS: Dict[str, str] = load_dep_versions()
+
 
 def build_content_strings(matter_version: str):
     """Return content templates filled with the provided Matter version.
@@ -156,6 +158,7 @@ matter = {{ version = "{matter_version}", installer ="conan"}}
         pkg_slt_content_all,
     )
 
+
 def resolve_matter_version(cli_version: Optional[str]) -> str:
     """Determine the Matter package version to embed.
 
@@ -183,14 +186,16 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
     except FileNotFoundError:
         logger.debug("Version file %s not found", version_file)
 
-    logger.error("Unable to determine Matter package version: provide --matter-version or create '%s' with a version string.", os.path.basename(version_file))
+    logger.error("Unable to determine Matter package version: provide --matter-version or create '%s' with a version string.",
+                 os.path.basename(version_file))
     sys.exit(1)
 
 
 def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
     logger.info(f"Using Matter package version: {matter_version}")
 
-    pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(matter_version)
+    pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(
+        matter_version)
 
     for root, dirs, files in os.walk(base_directory):
         # Skip whole subtree if root matches an exclude pattern
@@ -230,14 +235,18 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
         except Exception as e:
             logger.error(f"Failed to generate pkg.slt in {pkg_slt_path}: {e}")
 
+
 def main():
     # Set up argument parser
     parser = argparse.ArgumentParser(description="Generate pkg.slt files in directories containing .slcp files.")
-    parser.add_argument("--directory", "-d", default=os.getcwd(), help="Base directory to search for .slcp files. Defaults to current working directory.")
+    parser.add_argument("--directory", "-d", default=os.getcwd(),
+                        help="Base directory to search for .slcp files. Defaults to current working directory.")
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
-    parser.add_argument("--common", action="store_true", help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
+    parser.add_argument("--common", action="store_true",
+                        help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
     parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
-    parser.add_argument("--exclude", "-e", action="append", default=[], help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
+    parser.add_argument("--exclude", "-e", action="append", default=[],
+                        help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     args = parser.parse_args()
 
     # Configure logging once here so all helper functions share configuration
@@ -256,6 +265,7 @@ def main():
     if exclude_patterns and args.verbose:
         logger.debug(f"Exclude patterns: {exclude_patterns}")
     generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
+
 
 if __name__ == "__main__":
     main()
