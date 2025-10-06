@@ -182,7 +182,7 @@ jobs:
             platform: siwx-soc
 
     sixg301-build-job:
-        if: ${{ inputs.sixg301-support }}
+        if: ${{ inputs.thread-support && inputs.sixg301-support }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'
