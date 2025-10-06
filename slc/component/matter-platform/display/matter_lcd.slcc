@@ -46,7 +46,7 @@ include:
     file_list:
       - path: RefrigeratorUI.h
       - path: RefrigeratorIcons.h
-  - path: third_party/matter_sdk/examples/multi-sensor-app/include
+  - path: third_party/matter_sdk/examples/multi-sensor-app/silabs/include
     condition: [matter_multi_sensor_app]
     file_list:
       - path: SensorsUI.h
