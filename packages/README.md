@@ -65,8 +65,8 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
 - **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.   
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.  
-- **`slc/script/dependency_versions.yaml`** - Used as a single source of truth for dendencies
-- **`slc/script/matter_package_version`** - Used as a single source of trurth for matter package version
+- **`slc/scripts/dependency_versions.yaml`** – Used as a single source of truth for dependencies
+- **`slc/scripts/matter_package_version`** – Used as a single source of truth for Matter package version
 - **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package. 
 - **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.  
 

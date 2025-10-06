@@ -95,7 +95,7 @@ class matter_appRecipe(MatterBaseRecipe):
         matter_app_folder = self.matter_app_folder
 
         # Define the files to be included in the package
-        files_to_package = {"License.txt"}
+        files_to_package = {"License"}
 
         
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
@@ -136,7 +136,7 @@ class matter_appRecipe(MatterBaseRecipe):
         matter_app_folder = self.matter_app_folder
 
         # Define the files to be included in the package
-        files_to_package = {"License.txt"}
+        files_to_package = {"License"}
         git_extra_files = []
 
         
