@@ -56,7 +56,7 @@ jobs:
               uses: ./.github/actions/install-tools
 
             - name: Build ${{ inputs.example-app }}
-              uses: SiliconLabsSoftware/matter_build_action@NOJIRA/arm_gcc_update
+              uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
