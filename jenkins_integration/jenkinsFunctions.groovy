@@ -174,8 +174,8 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        // Need to modify this regex once new test results are available in stash SQA Matter (remove thread/wifi portion)?
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter_(wifi|thread)_ci\.py::(test_tc[\w_]+)\s+-\s+(.*)/
+        // Updated regex to handle both old test_matter_(wifi|thread)_ci.py and new test_matter_ci.py patterns
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w_]+)\s+-\s+(.*)/
         if (matcher.find()) {
             def testCase = "${matcher[0][3]} - ${matcher[0][4]}"
             unstable("Failed test: ${testCase}")
