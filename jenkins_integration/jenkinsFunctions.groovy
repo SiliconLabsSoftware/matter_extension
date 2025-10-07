@@ -174,12 +174,11 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        // Updated regex to handle both old test_matter_(wifi|thread)_ci.py and new test_matter_ci.py patterns
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w_]+)\s+-\s+(.*)/
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
         if (matcher.find()) {
-            def testCase = "${matcher[0][3]} - ${matcher[0][4]}"
+            def testCase = "${matcher[0][2]} - ${matcher[0][3]}"
             unstable("Failed test: ${testCase}")
-            if (matcher[0][3] == "test_tc00_network_commissioning") {
+            if (matcher[0][2] == "test_tc00_network_commissioning") {
                 failedTests = ["${testCase}"]
             } else {
                 failedTests << testCase
