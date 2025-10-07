@@ -16,7 +16,7 @@
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light":  [
@@ -26,7 +26,7 @@
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
             }
         ]
     } 

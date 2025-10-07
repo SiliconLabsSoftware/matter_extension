@@ -209,6 +209,13 @@ jobs:
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
+            - name: Merge copy-sources artifacts
+              uses: actions/upload-artifact/merge@v4
+              with:
+                name: "dev-copy-sources-artifacts"
+                delete-merged: true
+                pattern: "*-copy-sources"
+
     wait-for-test-results:
         name: Wait for Test Results
         needs: merge-apps

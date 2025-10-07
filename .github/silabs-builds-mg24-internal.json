@@ -15,7 +15,7 @@
             },
             {
                 "boards": ["brd2703a"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     }

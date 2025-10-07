@@ -7,7 +7,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
@@ -19,7 +19,7 @@
             },
             {
                 "boards": ["brd4186c", "brd4187c"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     }

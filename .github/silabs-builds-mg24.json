@@ -8,7 +8,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light": [
@@ -18,7 +18,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'", "--copy-sources"]
+                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"]
             }
         ]
     },
@@ -31,7 +31,7 @@
             },
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--copy-sources"]
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light":  [
@@ -41,7 +41,7 @@
             },
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
             }
         ]
     },
