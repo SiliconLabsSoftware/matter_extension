@@ -164,4 +164,4 @@ if [ "$skip_gen" = false ]; then
     fi
 fi
 
-make all -C $OUTPUT_DIR -f $MAKE_FILE -j13
+make all -C $OUTPUT_DIR -f $MAKE_FILE -j13 CFLAGS="-Wno-error=enum-int-mismatch"
