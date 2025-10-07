@@ -13,6 +13,7 @@ config_file:
     override:
       component: "%extension-wiseconnect3_sdk%wifi_resources"
       file_id: lwipopts
+      vendor: silabs
 
 provides:
 - name: siwx917_ncp

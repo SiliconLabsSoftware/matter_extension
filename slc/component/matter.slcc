@@ -12,6 +12,7 @@ config_file:
     override:
       component: freertos
       file_id: freertos_config
+      vendor: silabs
   - path: slc/config/sl_matter_config.h
     file_id: matter_config
   # ICD configuration is needed by the core SDK (ICD end device or not)
