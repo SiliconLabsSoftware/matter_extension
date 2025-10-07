@@ -6,6 +6,7 @@ def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
+def formatted_build_number = ""
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
@@ -49,7 +50,7 @@ pipeline
                     } else {
                         branch_name = env.BRANCH_NAME
                     }
-                    def formatted_build_number = "${workflow_id}.${run_number}"
+                    formatted_build_number = "${workflow_id}.${run_number}"
                     parallelNodes['MG24 Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
@@ -120,7 +121,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", run_number)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke", formatted_build_number)
                 }
             }
        }
@@ -143,7 +144,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", commit_sha)
+                    pipelineFunctions.trigger_sqa_pipelines("regression", formatted_build_number)
                 }
             }
        }

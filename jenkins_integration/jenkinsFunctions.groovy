@@ -190,7 +190,7 @@ def parse_test_results_failures(output) {
 }
 
 // TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, run_number)
+def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
@@ -203,14 +203,14 @@ def trigger_sqa_pipelines(pipeline_type, run_number)
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
                     sh 'pwd && ls -al'
                     dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${run_number}")
+                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
                     }
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
                         regression_list.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${run_number}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
@@ -221,7 +221,7 @@ def trigger_sqa_pipelines(pipeline_type, run_number)
                         regression_list_main.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${run_number}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
