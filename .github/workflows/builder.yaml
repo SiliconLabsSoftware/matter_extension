@@ -69,6 +69,8 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
-                  path: out/*/*/artifact
+                  path: |
+                      out/*/*/artifact/**
+                      !out/*/*-copy-sources/artifact/**
                   if-no-files-found: warn
                   overwrite: true

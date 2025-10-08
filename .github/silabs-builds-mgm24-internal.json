@@ -5,6 +5,10 @@
             {
                 "boards": ["brd4337a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
@@ -13,6 +17,10 @@
             {
                 "boards": ["brd4319a_a00", "brd2704a", "brd4337a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4319a_a00", "brd2704a", "brd4337a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     } 

@@ -12,12 +12,20 @@
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light":  [
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
                 "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+            },
+            {
+                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
+                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
             }
         ]
     } 
