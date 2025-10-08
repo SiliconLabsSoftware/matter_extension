@@ -344,6 +344,9 @@
             "ClusterRevision"
         ],
         "General Commissioning": [
+            "FeatureMap",
+            "ClusterRevision",
+            "Breadcrumb",
             "RegulatoryConfig",
             "LocationCapability",
             "BasicCommissioningInfo",
@@ -816,6 +819,9 @@
         "Power Topology": [
             "FeatureMap"
         ],
+        "Power Source": [
+            "ClusterRevision"
+        ],
         "Valve Configuration and Control": [
             "RemainingDuration"
         ],
@@ -954,5 +960,6 @@
     },
     "uiOptions": {
         "showProfileId": false
-    }
+    },
+    "upgradeRules": "./upgrade-rules-matter.json"
 }
