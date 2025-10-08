@@ -59,7 +59,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, testSuite, branchName, runNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -112,12 +112,12 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "SDK_URL=N/A",        // ?
                             "STUDIO_URL=N/A",     // ?
                             "BRANCH_NAME=$branchName", // ?
-                            "SDK_BUILD_NUM=$runNumber",
+                            "SDK_BUILD_NUM=\"${formattedBuildNumber}\"",
                             "TESTBED_NAME=${deviceGroup}",
                             "GROUP_ID=${deviceGroupId}",
                             "HARNESS_TEMPLATE=${harnessTemplate}",
                             "BUILD_URL=$BUILD_URL",
-                            "JENKIN_RUN_NUM=$runNumber",
+                            "JENKIN_RUN_NUM=\"${formattedBuildNumber}\"",
                             "JENKINS_JOB_NAME=$JOB_NAME",
                             "JENKINS_SERVER_NAME=$JENKINS_URL",
                             "JENKINS_TEST_RESULTS_URL=$JOB_URL$BUILD_NUMBER/testReport",
@@ -145,7 +145,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                                 echo ${TESTBED_NAME}
                                 ${commanderPath} --version
                                 ./workspace_setup.sh
-                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native ${testSuite}" > ${test_log_file} 2>&1 || true
+                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/test_matter_ci.py" > ${test_log_file} 2>&1 || true
                             """, returnStdout: true).trim()
                             def output = readFile(test_log_file).trim()
                             echo "Test log file output:\n ${output}"
@@ -174,12 +174,11 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        // Need to modify this regex once new test results are available in stash SQA Matter (remove thread/wifi portion)?
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter_(wifi|thread)_ci\.py::(test_tc[\w_]+)\s+-\s+(.*)/
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
         if (matcher.find()) {
-            def testCase = "${matcher[0][3]} - ${matcher[0][4]}"
+            def testCase = "${matcher[0][2]} - ${matcher[0][3]}"
             unstable("Failed test: ${testCase}")
-            if (matcher[0][3] == "test_tc00_network_commissioning") {
+            if (matcher[0][2] == "test_tc00_network_commissioning") {
                 failedTests = ["${testCase}"]
             } else {
                 failedTests << testCase
@@ -191,7 +190,7 @@ def parse_test_results_failures(output) {
 }
 
 // TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, commit_sha)
+def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
@@ -204,14 +203,14 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
                     sh 'pwd && ls -al'
                     dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
                     }
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
                         regression_list.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
@@ -222,7 +221,7 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
                         regression_list_main.each { regression_type ->
                             dir('sqa-pipelines') {
                                 try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
                                 } catch (e) {
                                     unstable("Error when triggering ${regression_type}: ${e.message}")
                                     errorOccurred = true
