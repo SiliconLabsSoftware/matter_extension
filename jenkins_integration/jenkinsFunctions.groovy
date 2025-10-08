@@ -59,6 +59,32 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
+/**
+ * Send SonarQube results to GitHub PR using Python script
+ */
+def send_sonar_results_to_github(commit_sha, result, status, sonar_output, pr_number, branch_name, target_branch) {
+    withCredentials([
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ]) {
+        // Escape sonar output for shell command
+        def escapedOutput = sonar_output.replace('"', '\\"').replace('`', '\\`').replace('$', '\\$')
+        
+        sh """
+            python3 -u jenkins_integration/github/send_sonar_results_to_github.py \\
+                --github_token \${GITHUB_ACCESS_TOKEN} \\
+                --repo_owner "SiliconLabsSoftware" \\
+                --repo_name "matter_extension" \\
+                --pr_number ${pr_number} \\
+                --commit_sha ${commit_sha} \\
+                --result ${result} \\
+                --status ${status} \\
+                --branch_name "${branch_name}" \\
+                --target_branch "${target_branch}" \\
+                --sonar_output "${escapedOutput}"
+        """
+    }
+}
+
 def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, testSuite, branchName, runNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
@@ -241,6 +267,95 @@ def trigger_sqa_pipelines(pipeline_type, commit_sha)
         }
     }
 }
+
+/**
+ * Publishes static analysis results to SonarQube.
+ */
+def publishSonarAnalysis() {
+
+        // Use the SonarQube environment defined in Jenkins
+        withSonarQubeEnv('Silabs SonarQube') {
+        
+        // Use credentials stored in Jenkins
+        withCredentials([string(credentialsId: 'sonarqube_token', variable: 'SONAR_SECRET')]) {
+
+            // Create necessary directories
+            sh "mkdir -p ${env.WORKSPACE}/sonar"
+            sh "mkdir -p ${env.WORKSPACE}/sonar-cache"
+            sh "mkdir -p ${env.WORKSPACE}/sonar-user-home"
+
+            // Prepare global SonarQube parameters
+            def sonarqubeParams = [
+                "-Dsonar.projectKey=matter_extension",
+                "-Dsonar.projectBaseDir=${env.WORKSPACE}",
+                "-Dsonar.working.directory=${env.WORKSPACE}/sonar",
+                "-Dsonar.token=${SONAR_SECRET}",
+                "-Dsonar.cfamily.cache.enabled=true",
+                "-Dsonar.cfamily.cache.path=${env.WORKSPACE}/sonar-cache",
+                "-Dsonar.userHome=${env.WORKSPACE}/sonar-user-home",
+                "-Duser.home=${env.WORKSPACE}/sonar-user-home",
+                "-Dsonar.qualitygate.wait=true",
+                "-Dsonar.cfamily.threads=32",
+                "-Dsonar.sourceEncoding=UTF-8",
+                "-Dsonar.sources=.",
+                "-Dsonar.inclusions=**/*.c,**/*.h,**/*.cpp,**/*.hpp",
+                "-Dsonar.exclusions=third_party/**"
+            ]
+
+            // Handle pull request analysis if applicable
+            if (env.CHANGE_ID) {
+                sonarqubeParams += [
+                    "-Dsonar.pullrequest.key=${env.CHANGE_ID}",
+                    "-Dsonar.pullrequest.branch=${env.CHANGE_BRANCH}",
+                    "-Dsonar.pullrequest.base=${env.CHANGE_TARGET}"
+                ]
+            } else {
+                sonarqubeParams += ["-Dsonar.branch.name=${env.BRANCH_NAME}"]
+            }
+
+            // Capture the sonar-scanner output with error handling
+            def sonarOutput = ""
+            def qualityGateResult = "FAIL"
+            def qualityGateStatus = "FAILED"
+            def commit_sha = env.GIT_COMMIT ?: "unknown"
+
+            try {
+                sonarOutput = sh(script: "sonar-scanner ${sonarqubeParams.join(' ')}", returnStdout: true).trim()
+                echo "SonarQube Scanner Output:\n${sonarOutput}"
+
+                // Parse quality gate status from output
+                def qualityGateMatcher = sonarOutput =~ /QUALITY GATE STATUS:\s*(PASSED|FAILED)/
+                if (qualityGateMatcher.find()) {
+                    qualityGateStatus = qualityGateMatcher[0][1]
+                    qualityGateResult = (qualityGateStatus == "PASSED") ? "PASS" : "FAIL"
+                } else {
+                    qualityGateResult = "PASS"
+                }
+
+                // Parse SCM revision ID from output (with fallback)
+                def scmRevisionMatcher = sonarOutput =~ /SCM revision ID '([a-fA-F0-9]+)'/
+                if (scmRevisionMatcher.find()) {
+                    commit_sha = scmRevisionMatcher[0][1]
+                    echo "Extracted SCM revision ID: ${commit_sha}"
+                } else {
+                    echo "SCM revision ID not found, using fallback: ${commit_sha}"
+                }
+
+            } catch (Exception e) {
+                echo "SonarQube scanner failed with error: ${e.getMessage()}"
+                sonarOutput = "SonarQube analysis failed: ${e.getMessage()}"
+                qualityGateResult = "FAIL"
+                qualityGateStatus = "FAILED"
+            }
+
+            echo "Static Analysis Quality Gate Status: ${qualityGateStatus}"
+            echo "Static Analysis Result: ${qualityGateResult}"
+
+            return [status: qualityGateStatus, result: qualityGateResult, output: sonarOutput, commit_sha: commit_sha]
+        }
+    }
+}
+
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
