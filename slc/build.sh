@@ -28,22 +28,22 @@
 #   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
 #       output in: out/brd4187c/lighting-app-thread/
 #
-#   --with_app option : Allows to specify additional components for the application build for solutions only. 
+#   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored. 
 #   Example
 #   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --with_app '<component1>,<component2>'
 #       output in: out/brd4187c/lighting-app-thread/
 #
-#   --without_app option : Allows to exclude specific components from the application build for solutions only. 
+#   --without_app option : Allows to exclude specific components from the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
 #   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --without_app '<component1>,<component2>'
 #       output in: out/brd4187c/lighting-app-thread/
 #
-#   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only.
+#   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
 #   ./slc/build.sh slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw brd4187c --with_bootloader '<component1>,<component2>'
 #       output in: out/brd4187c/thermostat-917-ncp-solution/
 #
-#   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only.
+#   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
 #   ./slc/build.sh slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw brd4187c --without_bootloader '<component1>,<component2>'
 #       output in: out/brd4187c/thermostat-917-ncp-solution/
