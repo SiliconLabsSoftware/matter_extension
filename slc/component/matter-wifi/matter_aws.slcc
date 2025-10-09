@@ -28,6 +28,7 @@ config_file:
     override:
       component: "%extension-matter%matter_wifi"
       file_id: matter_wifi_config
+      vendor: silabs
 
 define:
   - name: SL_MATTER_ENABLE_AWS

@@ -1,5 +1,6 @@
 label: closure-app-thread-bootloader
 quality: production
+package: matter
 description: Matter workspace containing both a Matter bootloader and Closure App over Thread Example
 project:
   - path: ../../../sample-app/closure-app/efr32/closure-app-thread.slcp
