@@ -197,8 +197,6 @@ source:
 
 define:
   - name: CCP_SI917_BRINGUP
-  - name: KVS_MAX_ENTRIES
-    value: "255"
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
