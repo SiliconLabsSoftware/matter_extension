@@ -28,6 +28,26 @@
 #   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
 #       output in: out/brd4187c/lighting-app-thread/
 #
+#   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored. 
+#   Example
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --with_app '<component1>,<component2>'
+#       output in: out/brd4187c/lighting-app-thread/
+#
+#   --without_app option : Allows to exclude specific components from the application build for solutions only. If provided for .slcp file, silently ignored.
+#   Example
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --without_app '<component1>,<component2>'
+#       output in: out/brd4187c/lighting-app-thread/
+#
+#   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only. If provided for .slcp file, silently ignored.
+#   Example
+#   ./slc/build.sh slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw brd4187c --with_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/thermostat-917-ncp-solution/
+#
+#   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only. If provided for .slcp file, silently ignored.
+#   Example
+#   ./slc/build.sh slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw brd4187c --without_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/thermostat-917-ncp-solution/
+#
 
 MATTER_ROOT=$( pwd -P )
 : "${GSDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
@@ -75,6 +95,10 @@ fi
 shift
 shift
 skip_gen=false
+WITH_APP_COMPONENTS=""
+WITHOUT_APP_COMPONENTS=""
+WITH_BOOTLOADER_COMPONENTS=""
+WITHOUT_BOOTLOADER_COMPONENTS=""
 while [ $# -gt 0 ]; do
     case "$1" in
     --clean)
@@ -95,6 +119,26 @@ while [ $# -gt 0 ]; do
         shift
         shift
         ;;
+    --with_app)
+        WITH_APP_COMPONENTS="$2"
+        shift
+        shift
+        ;;
+    --without_app)
+        WITHOUT_APP_COMPONENTS="$2"
+        shift
+        shift
+        ;;
+    --with_bootloader)
+        WITH_BOOTLOADER_COMPONENTS="$2"
+        shift
+        shift
+        ;;
+    --without_bootloader)
+        WITHOUT_BOOTLOADER_COMPONENTS="$2"
+        shift
+        shift
+        ;;
     *)
         CONFIG_ARGS+="$1 "
         shift
@@ -102,6 +146,29 @@ while [ $# -gt 0 ]; do
     esac
 done
 echo $CONFIG_ARGS
+
+# Helper functions to build component arguments
+build_with_arg() {
+    local board="$1"
+    local components="$2"
+    
+    if [ -n "$components" ]; then
+        echo "--with $board,$components"
+    else
+        echo "--with $board"
+    fi
+}
+
+build_without_arg() {
+    local components="$1"
+
+    if [ -n "$components" ]; then
+        echo "--without $components"
+    else
+        echo ""
+    fi
+}
+
 # Generate project
 
 if ! [ -x "$(command -v slc)" ]; then
@@ -157,10 +224,38 @@ if [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
 fi
 
 if [ "$skip_gen" = false ]; then
-    slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=3500 -o makefile
-    if [ $? -ne 0 ]; then
-        echo "FAILED TO Generate : $SILABS_APP_PATH"
-        exit 1
+    if [[ "$SILABS_APP_PATH" == *.slcw ]]; then 
+        if [[ "$SILABS_APP_PATH" != *917-soc* ]]; then
+            # Get bootloader arguments
+            BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
+            BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
+        
+            # Generate bootloader
+            echo "Generating bootloader..."    
+            slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=1800
+            if [ $? -ne 0 ]; then
+                echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
+                exit 1
+            fi
+        fi
+        
+        # Get application args
+        APP_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
+        APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
+
+        echo "Generating application..."
+        slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=1800
+        if [ $? -ne 0 ]; then
+            echo "FAILED TO Generate application for: $SILABS_APP_PATH"
+            exit 1
+        fi
+    else
+        # Generate .slcp projects
+        slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=3500 -o makefile
+        if [ $? -ne 0 ]; then
+            echo "FAILED TO Generate : $SILABS_APP_PATH"
+            exit 1
+        fi
     fi
 fi
 
