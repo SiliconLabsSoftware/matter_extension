@@ -69,18 +69,6 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
-    build-lock-app:
-        name: Build Lock App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "lock-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
-            ncp-wf200-support: true
-            ncp-rs911x-support: true
-
     build-thermostat-app:
         name: Build Thermostat App
         needs: set-build-type
@@ -90,7 +78,6 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
-            ncp-rs911x-support: true
 
     build-window-app:
         name: Build Window App
