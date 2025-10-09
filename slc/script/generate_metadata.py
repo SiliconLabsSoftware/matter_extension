@@ -67,7 +67,7 @@ def recurse_dir(file_or_dir):
                 board_type = "917-soc"
 
             if brd not in demos_map['demos'].keys():
-                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {'917-soc': [], '917-ncp': [], '917-ncp-brd4357a': [], 'wf200': [], 'rs911x': []}}
+                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {'917-soc': [], '917-ncp': [], '917-ncp-brd4357a': [], 'wf200': []}}
 
             if tech_ == 'OpenThread':
                 demos_map['demos'][brd][tech_].append(str(os.path.basename(file_or_dir).replace('.s37', '')))
@@ -267,7 +267,7 @@ for brd, val in demos_map['demos'].items():
                     qualityProp.set('value', "PRODUCTION")
                     description.text = "".join("This is a Matter " + demo_name_ +
                                                 " Application for " + brd.upper() #+ " to be used with Wi-Fi " +
-                                                + (' with SiWx917 Wi-Fi SoC' if "soc" in board_type else (" to be used with Wi-Fi " + ('RS9116' if board_type == 'rs911x' else board_type.upper()))))
+                                                + (' with SiWx917 Wi-Fi SoC' if "soc" in board_type else (" to be used with Wi-Fi " + board_type.upper())))
 
 outputString = ET.tostring(demos, encoding='UTF-8')
 dom = xml.dom.minidom.parseString(outputString)
