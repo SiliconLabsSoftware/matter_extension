@@ -6,7 +6,7 @@ on:
 
 jobs:
   check_testing_header:
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     steps:
       - name: Check for "**Testing Done:**" section in PR
         id: check-testing
