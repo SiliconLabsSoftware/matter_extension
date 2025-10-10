@@ -19,6 +19,7 @@ include:
     - path: Binding.h
     - path: EthernetNetworkDiagnostics.h
     - path: FixedLabel.h
+    - path: GeneralCommissioning.h
     - path: GeneralDiagnostics.h
     - path: GroupKeyManagement.h
     - path: SoftwareDiagnostics.h
