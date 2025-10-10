@@ -50,10 +50,8 @@ fi
 
 # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
 if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-    if [[ "$SILABS_APP_PATH" == *917-soc* ]]; then
-        SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
-        MAKE_FILE=$SILABS_APP.solution.Makefile
-    fi
+    SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
+    MAKE_FILE=$SILABS_APP.solution.Makefile
     PROJECT_FLAG="-w"
     OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP-solution"
 
