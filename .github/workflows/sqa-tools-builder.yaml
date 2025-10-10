@@ -16,12 +16,31 @@ env:
 
 jobs:
   package-scripts:
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
       with:
         submodules: false
+    
+    - name: Install zip utility
+      shell: bash
+      run: |
+        if ! command -v zip &> /dev/null; then
+          echo "Installing zip utility..."
+          if command -v apt-get &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y zip
+          elif command -v yum &> /dev/null; then
+            sudo yum install -y zip
+          elif command -v brew &> /dev/null; then
+            brew install zip
+          else
+            echo "Package manager not found. Please install zip manually."
+            exit 1
+          fi
+        else
+          echo "zip utility is already installed"
+        fi
     
     #zip Provision folder
     - name: Zip provisioning tool
@@ -64,7 +83,7 @@ jobs:
     - name: Mark repository as safe for Git
       shell: bash
       run: |
-        git config --global --add safe.directory /__w/matter_extension/matter_extension
+        git config --global --add safe.directory $(pwd)
 
     - name: Initialize required submodules
       shell: bash
@@ -79,17 +98,9 @@ jobs:
           zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
           mv "${ota_file}" ../../sqa-tools/
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
-          
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: sqa-tools-zip
-        path: sqa-tools
-        if-no-files-found: error
-        overwrite: true
 
   build-sqa-tools:
-    runs-on: ubuntu-latest
+    runs-on: [silabs-internal, austin]
     container:
       image: ghcr.io/project-chip/chip-build-crosscompile:81
 
@@ -102,7 +113,7 @@ jobs:
       - name: Mark repository as safe for Git
         shell: bash
         run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
+          git config --global --add safe.directory $(pwd)
 
       - name: Initialize required submodules
         shell: bash
@@ -116,7 +127,7 @@ jobs:
           ./scripts/checkout_submodules.py --platform linux
 
       - name: Run bootstrap action
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v1.2.0
 
       # Builds chip-tool
       - name: Build chip-tool
@@ -147,22 +158,40 @@ jobs:
           cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sqa-tools-binaries
-          path: sqa-tools
-          if-no-files-found: error
-          overwrite: true
     
     # copy wifi firmware
   copy-wifi-firmware:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
+    runs-on: [silabs-internal, austin]
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Setup SLT
+        id: setup-action
+        uses: SiliconLabsInternal/action-setup-slt@main
+
+      - name: Check SLT version
+        run: |
+          echo "SLT version installed: ${{ steps.setup-action.outputs.slt-version }}"
+          echo "SLT executable path : ${{ steps.setup-action.outputs.slt-path }}"
+          echo "conan_engine version installed: ${{ steps.setup-action.outputs.conan-engine-version }}"
+          echo "conan_engine executable path: ${{ steps.setup-action.outputs.conan-engine-path }}"
+          echo "conan version installed: ${{ steps.setup-action.outputs.conan-version }}"
+          echo "conan executable path: ${{ steps.setup-action.outputs.conan-path }}"
+          
+      - name: install wiseconnect firmware packages
+        continue-on-error: true
+        run: |
+          conan remote add wiseconnect-conan-sqa https://artifactory.silabs.net/artifactory/api/conan/wiseconnect-conan-sqa
+          slt install -f packages/wifi_firmware.slt
+      
+      - name: locate wifi packages
+        run: |
+          echo "WISECONNECT3_DIR=$(slt where nwp_firmware_siwx91x)" >> $GITHUB_ENV
+
       - name: Create WiFi firmware directories
         shell: bash
         run: |
@@ -172,30 +201,4 @@ jobs:
         shell: bash
         run: |
           cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS9116W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.4/
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS916W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.5/
           echo "WiFi firmware files copied successfully."
-
-      - name: Upload WiFi firmware artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: sqa-tools-wifi-firmware
-          path: sqa-tools
-          if-no-files-found: error
-          overwrite: true
-
-  merge-artifacts:
-    runs-on: ubuntu-latest
-    needs:
-        - build-sqa-tools
-        - package-scripts
-        - copy-wifi-firmware
-    if: success()
-
-    steps:
-      - name: Merge sqa-tools Artifacts
-        uses: actions/upload-artifact/merge@v4
-        with:
-          name: sqa-tools-${{ inputs.build-type }}
-          delete-merged: true
-          pattern: sqa-tools-*

@@ -1,21 +1,10 @@
 {
     "standard": {
-        "default": [
-            {
-                "boards": [],
-                "arguments": [""]
-            }
-        ]
-    },
-    "full": {
+
         "default": [
             {
                 "boards": ["brd2703a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd2703a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     }
