@@ -1,55 +1,106 @@
-# Matter SiWx917 SoC Lighting Example (Wi-Fi)
+# Matter SiWx917 SoC Lighting Example
 
-The SiWx917 SoC Lighting example provides a baseline demonstration of a lighting
-device (On/Off, Level, Color), built using Matter and the Silicon Labs
-Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi
-network. Commissioning occurs over BLE after which the Wi-Fi credentials are
-provisioned.
+The SiWx917 SoC lighting example provides a baseline demonstration of a Light control
+device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled
+by a Matter controller over Wifi network.
 
-For general information and prerequisites see the online Silicon Labs Matter
-documentation: https://docs.silabs.com/matter (Wi-Fi demo guide).
+The SiWx917 device can be commissioned over Bluetooth Low Energy where the device
+and the Matter controller will exchange security information with the Rendez-vous
+procedure.
 
-## Region Code (917 Wi-Fi Projects)
+If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
+needed commissioning information for the BLE connection and starting the
+Rendez-vous procedure.
 
-Set the region code in the Wi-Fi interface source (see SiWx917 platform
-documentation). Acceptable region codes are defined in the SiWx917 SDK header
-`sl_si91x_types.h`.
+The lighting example is intended to serve both as a means to explore the
+workings of Matter as well as a template for creating real products based on the
+Silicon Labs platform.
 
-## User Interface
+For more general information on running matter applications and pre-requisites please look at online 
+documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.7.0/matter-wifi)
 
-**LED 0** – Device / network state (see Thread README for patterns).
+## Region code Setting (917 WiFi projects)
 
-**LED 1** – Simulated light state (On / Off).
+In Wifi configurations, the region code can be set in this
+[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
+The available region codes can be found
+[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
 
-**Button 0** – Start / restart BLE advertising (fast 30 s -> slow, stops after 15 min) and prints QR URL.
+## Lighting Example User Interface
 
-**Button 1** – Toggle light state.
+**LCD** 
 
-Factory reset: Hold Button 0 for 6 seconds (LEDs blink while pending).
+The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
 
-## Provision & Control
+![QR Code](qr_code_img.png)
 
-Commissioning over BLE + Wi-Fi using `chip-tool`:
+A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+
+**The URL can also be printed by issuing the following matter shell command:**
 
 ```shell
-chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840
+matterCli> onboardingcodes ble qrcodeurl
 ```
 
-Control examples:
+Log output example:
 
 ```shell
-chip-tool onoff on 1 1
-chip-tool levelcontrol move-to-level 64 0 0 0 1 1
-chip-tool colorcontrol move-to-hue-and-saturation 100 200 0 0 1 1
+[SVR] Copy/paste the below URL in a browser to see the QR Code:
+[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
 ```
 
-## Files
+Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
 
-* `lighting-app-917-soc.slcw` – SiWx917 SoC solution
-* `lighting-app-917-soc.slcp` – Application project (duplicate for merge)
-* `pkg.slt` – Package version lock
+**LED 0** 
 
-## Notes
+Shows the overall state of the device and its connectivity. The following states are possible:
 
-As with the Thread variant, the solution file still references the original
-`sample-app` project path pending full migration.
+-   _Short Flash On (50 ms on/950 ms off)_ ; The device is in the unprovisioned (unpaired) state and is waiting for a commissioning application to connect.
+
+-   _Rapid Even Flashing_ ; (100 ms on/100 ms off)_ &mdash; The device is in the unprovisioned state and a commissioning application is connected through Bluetooth LE.
+
+-   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
+provisioned, but does not yet have full service
+connectivity.
+
+-   _Solid On_ ; The device is fully provisioned and has full service connectivity.
+
+**LED 1** 
+
+Simulates the Light The following states are possible:
+
+-   _Solid On_ ; Light is on
+-   _Off_ ; Light is off
+
+    
+**Push Button 0**
+
+-   _Press and Release_ : Start, or restart, BLE advertisement in fast mode. It will advertise in this mode
+for 30 seconds. The device will then switch to a slower interval advertisement.
+After 15 minutes, the advertisement stops. In addition, this button should also print the QR Code URL to the RTT logs.
+
+-   _Pressed and hold for 6 s_ : Initiates the factory reset of the device.
+ Releasing the button within the 6-second window cancels the factory reset
+ procedure. **LEDs** blink in unison when the factory reset procedure is
+ initiated.
+
+**Push Button 1** 
+
+- Toggles the light state On/Off
+
+## Provision and Control
+
+You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.7.0/matter-thread/raspi-img)
+
+    
+More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+
+
+Here is an example with the CHIPTool:
+
+```shell
+chip-tool pairing ble-wifi <Node-ID> $SSID $PSK 20202021 3840
+
+chip-tool onoff on <Node-ID> 1
+```

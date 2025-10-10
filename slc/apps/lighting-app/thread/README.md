@@ -1,69 +1,112 @@
-# Matter EFR32 Lighting Example (Thread)
+# Matter EFR32 Lighting Example
 
-The EFR32 Lighting example provides a baseline demonstration of a lighting
-device (On/Off, Level, Color), built using Matter and the Silicon Labs
-Simplicity SDK. It can be commissioned by a Matter controller over a
-Thread network (commissioning over BLE + Thread provisioning).
+The EFR32 lighting example provides a baseline demonstration of a Light control
+device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled
+by a Matter controller over an Openthread network.
 
-If an LCD is enabled, the WSTK LCD shows a QR Code containing the
-commissioning information. Scan it with a Matter controller application
-(`chip-tool`, Android, iOS, Matter Hub, etc.) to start commissioning.
+The EFR32 device can be commissioned over Bluetooth Low Energy where the device
+and the Matter controller will exchange security information with the Rendez-vous
+procedure. If using Thread, Thread Network credentials are then provided to the
+EFR32 device which will then join the Thread network.
 
-For general information and prerequisites see the online Silicon Labs
-Matter documentation: https://docs.silabs.com/matter (Thread demo guide).
+If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
+needed commissioning information for the BLE connection and starting the
+Rendez-vous procedure.
 
-## User Interface
+The lighting example is intended to serve both as a means to explore the
+workings of Matter as well as a template for creating real products based on the
+Silicon Labs platform.
 
-**LED 0** – Shows overall device / network state:
+For more general information on running matter applications and pre-requisites please look at online 
+documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
+[Demo instructions for Thread](https://docs.silabs.com/matter/2.7.0/matter-thread)
 
-* Short Flash On (50 ms on / 950 ms off): Unprovisioned, waiting for commissioning
-* Rapid Even Flash (100 ms on / 100 ms off): Unprovisioned, BLE connection active
-* Short Flash Off (950 ms on / 50 ms off): Provisioned, not fully connected
-* Solid On: Fully provisioned and Thread + service connectivity established
+## Lighting Example User Interface
 
-**LED 1** – Simulated light state (On = solid, Off = off) when configured.
+**LCD** 
 
+The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+
+![QR Code](qr_code_img.png)
+
+A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+
+**The URL can also be printed by issuing the following matter shell command:**
+
+```shell
+matterCli> onboardingcodes ble qrcodeurl
+```
+
+Log output example:
+
+```shell
+[SVR] Copy/paste the below URL in a browser to see the QR Code:
+[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+```
+
+Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+
+**LED 0** 
+
+Shows the overall state of the device and its connectivity. The following states are possible:
+
+-   _Short Flash On (50 ms on/950 ms off)_ ; The device is in the unprovisioned (unpaired) state and is waiting for a commissioning application to connect.
+
+-   _Rapid Even Flashing_ ; (100 ms on/100 ms off)_ &mdash; The device is in the unprovisioned state and a commissioning application is connected through Bluetooth LE.
+
+-   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
+provisioned, but does not yet have full Thread network or service
+connectivity.
+
+-   _Solid On_ ; The device is fully provisioned and has full Thread
+ network and service connectivity.
+
+**LED 1** 
+
+Simulates the Light The following states are possible:
+
+-   _Solid On_ ; Light is on
+-   _Off_ ; Light is off
+
+    
 **Push Button 0**
-* Press & Release: Start / restart BLE advertising (fast for 30 s then slow; stops after 15 min). Prints QR Code URL to RTT.
-* Hold 6 s: Factory reset (LEDs blink together while pending; release before timeout to cancel).
 
-**Push Button 1** (if present) – Toggles the light (On/Off) and updates clusters.
+-   _Press and Release_ : Start, or restart, BLE advertisement in fast mode. It will advertise in this mode
+for 30 seconds. The device will then switch to a slower interval advertisement.
+After 15 minutes, the advertisement stops. In addition, this button should also print the QR Code URL to the RTT logs.
 
-## Enabling LCD / LEDs
+-   _Pressed and hold for 6 s_ : Initiates the factory reset of the device.
+ Releasing the button within the 6-second window cancels the factory reset
+ procedure. **LEDs** blink in unison when the factory reset procedure is
+ initiated.
 
-If not already present in the project:
-* Install **QR Code** component (installs LCD dependency automatically)
-* Install **Simple LED** (instances led0 / led1) and **WSTK LED Support** components
+**Push Button 1** 
 
-## Provision & Control
+- Toggles the light state On/Off
 
-Example `chip-tool` commissioning over Thread (replace `<operationalDataset>`):
+## Enabling LCD and LEDs in a Project
+
+If an LCD is supported by the board but not enabled in a project it can be enabled in Studio by installing the _Display_ component under _Silicon Labs Matter->Matter->Platform->Display_
+
+To enable the QR Code install the _QR Code_ component under _Silicon Labs Matter->Matter->Platform->QR Code_. (All the dependencies including LCD are installed automatically, there is no need to explicitly install the _Display_ component in this case.)
+
+If LEDs are supported by the board but not enabled in a project they can be enabled as follows:
+-   Install instances (led0 and led1) of the _Simple LED_ component under _Platform->Driver->LED->Simple LED_
+-   Install the WSTK LED Support component under _Silicon Labs Matter->Matter->Platform->WSTK LED Support_
+
+## Provision and Control
+
+You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.7.0/matter-thread/raspi-img)
+
+
+    
+More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+
+
+Here is an example with the CHIPTool:
 
 ```shell
 chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
-```
 
-Sample cluster commands:
-
-```shell
 chip-tool onoff on 1 1
-chip-tool levelcontrol move-to-level 128 0 0 0 1 1
-chip-tool colorcontrol move-to-hue-and-saturation 120 180 0 0 1 1
 ```
-
-## Files
-
-This folder contains unified Thread solution / project artifacts:
-
-* `lighting-app-series-2.slcw` – Series 2 bootloader + app solution
-* `lighting-app-series-2-internal.slcw` – Series 2 internal flash bootloader + app
-* `lighting-app-series-3.slcw` – Series 3 bootloader + app solution
-* `lighting-app.slcp` – Application project (copied from `sample-app` pending full merge)
-* `pkg.slt` – Package version lock
-
-## Notes
-
-The `.slcw` solution files still reference the original `sample-app` project
-path. The duplicated `lighting-app.slcp` is added here to support the
-ongoing merge of `sample-app` and `solutions`. Future cleanup will retarget
-the solution entries to the local `.slcp` and remove legacy locations.

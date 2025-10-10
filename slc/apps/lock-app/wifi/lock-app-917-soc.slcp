@@ -249,10 +249,10 @@ template_contribution:
     value: 1
 
 readme:
-  - path: ./README_WiFi.md
+  - path: ./README.md
 ui_hints:
   highlight:
-    - path: README_WiFi.md
+    - path: README.md
       focus: false
 
 tag:
