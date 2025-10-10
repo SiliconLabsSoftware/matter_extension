@@ -1,12 +1,12 @@
-label: thermostat-app-series-2
+label: thermostat-app-series-3
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Thermostat over Thread Example
 project:
-  - path: ./thermostat-app.slcp
+  - path: ./thermostat.slcp
     id: application
-    output: thermostat-app
-  - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+    output: thermostat
+  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader
 post_build:
