@@ -1,4 +1,4 @@
-label: zigbee-matter-light-series-2
+label: zigbee-matter-light-series-3
 quality: production
 package: matter
 description: Matter + Zigbee Light (Thread) with bootloader (Series 3)

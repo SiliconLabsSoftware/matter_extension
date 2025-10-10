@@ -3,7 +3,7 @@ quality: production
 package: matter
 description: Matter workspace containing both a Matter bootloader and Closure App over Thread Example
 project:
-  - path:./closure-app.slcp
+  - path: ./closure-app.slcp
     id: application
     output: closure-app
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp

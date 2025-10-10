@@ -1,4 +1,4 @@
-label: thermostat-series-2-internal
+label: thermostat-app-series-2-internal
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Thermostat over Thread Example

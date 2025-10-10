@@ -1,10 +1,10 @@
-label: thermostat-app-wifi
+label: thermostat-ap-917-soc
 quality: production
 package: matter
 description: Matter Thermostat Wi-Fi SoC solution
 project:
   - path: ./thermostat-app-917-soc.slcp
     id: application
-    output: thermostat-app-wifi
+    output: thermostat-app-917-soc
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

@@ -146,7 +146,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-917-ncp.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
@@ -156,7 +156,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-wf200.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-wf200
