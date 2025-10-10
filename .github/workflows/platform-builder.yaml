@@ -146,7 +146,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-series-2.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
@@ -156,7 +156,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/series-2/${{ inputs.example-app }}-wf200-bootloader.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-wf200
@@ -166,7 +166,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-siwx.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/siwx917/${{ inputs.example-app }}-917-soc.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-917-soc.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
