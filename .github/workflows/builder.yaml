@@ -18,11 +18,17 @@ on:
             platform:
                 required: true
                 type: string
+            use-windows:
+                required: false
+                type: boolean
+                default: false
+            
 
 jobs:
     build:
         name: ${{ inputs.platform }}-build-job
-        runs-on: ubuntu-latest
+        # Select runner based on the boolean input (dash in input name requires bracket notation)
+        runs-on: ${{ inputs['use-windows'] == true && 'windows-latest' || 'ubuntu-latest' }}
         container:
             image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2
 

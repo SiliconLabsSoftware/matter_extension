@@ -1,24 +1,30 @@
 name: Build Dev apps
 
 on:
-    push:
-        branches:
-            - main
-            - "release_*"
-    pull_request:
-        branches:
-            - main
-            - "release_*"
+  push:
+    branches:
+      - main
+      - "release_*"
+  pull_request:
+    branches:
+      - main
+      - "release_*"
             
-    workflow_dispatch:
-        inputs:
-            build-type:
-                description: "The build type to use"
-                required: true
-                type: choice
-                options:
-                    - standard
-                    - full
+  workflow_dispatch:
+    inputs:
+      build-type:
+        description: "The build type to use"
+        required: true
+        type: choice
+        options:
+          - standard
+          - full
+      use-windows:
+        description: "Whether to use Windows"
+        required: false
+        type: boolean
+        default: false
+
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
@@ -53,6 +59,7 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-windows: true #set for testing
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
