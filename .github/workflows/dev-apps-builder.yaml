@@ -59,7 +59,7 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-windows: ${{ github.event.inputs.use-windows }}
+            use-windows: true #set for testing
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
