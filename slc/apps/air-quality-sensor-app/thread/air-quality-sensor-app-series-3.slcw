@@ -3,7 +3,7 @@ quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Air Quality over Thread Example on Series 3.
 project:
-  - path: ../../../sample-app/air-quality-sensor-app/efr32/air-quality-sensor-app-thread.slcp
+  - path: ./air-quality-sensor-app-thread.slcp
     id: application
     output: air-quality-sensor-app-thread
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
