@@ -1,0 +1,8 @@
+label: multi-sensor-app-917-soc
+quality: production
+package: matter
+description: Matter solution for Multi-Sensor App over WiFi
+project:
+  - path: ./multi-sensor-app-917-soc.slcp
+    id: application
+    output: multi-sensor-app-917-soc

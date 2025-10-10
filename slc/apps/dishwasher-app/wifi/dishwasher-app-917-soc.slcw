@@ -1,0 +1,8 @@
+label: dishwasher-app-917-soc
+quality: production
+package: matter
+description: Matter solution for Dishwasher App over WiFi
+project:
+  - path: ./dishwasher-app-917-soc.slcp
+    id: application
+    output: dishwasher-app-917-soc

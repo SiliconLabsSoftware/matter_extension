@@ -1,0 +1,8 @@
+label: fan-control-app-917-soc
+quality: production
+package: matter
+description: Matter solution for Fan Control App over WiFi
+project:
+  - path: ./fan-control-app-917-soc.slcp
+    id: application
+    output: fan-control-app-917-soc

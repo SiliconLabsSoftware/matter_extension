@@ -1,0 +1,73 @@
+
+name: Promote Matter Package to SQA
+
+on:
+  workflow_dispatch:
+    inputs:
+      package-name:
+        description: "Name of the package (default matter)"
+        required: false
+      package-version:
+        description: 'Matter package version (default, 2.6.2)'
+        required: false
+      package-revision:
+        description: 'Conan package hash (package-revision)'
+        required: true
+      package-ref:
+        description: 'Conan package reference (package-name/version)'
+        required: false
+
+jobs:
+  promote:
+    runs-on: [silabs-internal, austin]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: true
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension_private/matter_extension_private
+          git submodule update --init
+      
+      - name: Setup SLT
+        id: setup-slt
+        uses: SiliconLabsInternal/action-setup-slt@main
+      
+      - name: Check SLT version
+        run: |
+          echo "SLT version installed: ${{ steps.setup-slt.outputs.slt-version }}"
+          echo "SLT executable path : ${{ steps.setup-slt.outputs.slt-path }}"
+          echo "conan_engine version installed: ${{ steps.setup-slt.outputs.conan-engine-version }}"
+          echo "conan_engine executable path: ${{ steps.setup-slt.outputs.conan-engine-path }}"
+          echo "conan version installed: ${{ steps.setup-slt.outputs.conan-version }}"
+          echo "conan executable path: ${{ steps.setup-slt.outputs.conan-path }}"
+
+      - name: Setup Conan remotes
+        id: add-conan-remotes
+        run: |
+          make install_download_remotes
+          conan remote list
+      
+      - name: set variables
+        run: |
+          echo "PACKAGE_NAME=${{ github.event.inputs.package-name || 'matter' }}" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION=${{ github.event.inputs.package-version || '2.6.2' }}" >> $GITHUB_ENV
+          echo "PACKAGE_REVISION=${{ github.event.inputs.package-revision }}" >> $GITHUB_ENV
+      
+      - name: Promote Conan Package
+        uses: SiliconLabsInternal/action-conan-promote@main
+        with:
+          package-name: ${{ env.PACKAGE_NAME }}
+          package-version: ${{ env.PACKAGE_VERSION }}
+          recipe-revision: ${{ env.PACKAGE_REVISION }}
+          package-id: ${{ env.PACKAGE_ID }}
+          source-remote: 'matter-conan-dev'
+          source-remote-url: 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
+          destination-remote: 'matter-conan-sqa'
+          destination-remote-url: 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa'
+          remote-username: ${{ secrets.SARTHAK_JF_USERNAME }}
+          remote-token: ${{ secrets.SARTHAK_JF_TOKEN }}
+

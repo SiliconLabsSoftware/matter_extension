@@ -1,0 +1,8 @@
+label: light-switch-app-917-soc
+quality: production
+package: matter
+description: Matter solution for Light Switch App over WiFi
+project:
+  - path: ./light-switch-app-917-soc.slcp
+    id: application
+    output: light-switch-app-917-soc
