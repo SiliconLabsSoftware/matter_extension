@@ -1,4 +1,4 @@
-label: multi-sensor-app-thread-bootloader
+label: multi-sensor-app-series-3
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Multi-Sensor over Thread Example on Series 3.

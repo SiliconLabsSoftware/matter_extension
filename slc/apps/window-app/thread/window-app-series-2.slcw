@@ -1,4 +1,4 @@
-label: window-app-thread-bootloader
+label: window-app-series-2
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Window over Thread Example

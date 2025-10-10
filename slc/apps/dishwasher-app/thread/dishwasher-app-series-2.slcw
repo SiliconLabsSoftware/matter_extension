@@ -1,4 +1,4 @@
-label: dishwasher-app-thread-bootloader
+label: dishwasher-app-series-2
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Dishwasher over Thread Example

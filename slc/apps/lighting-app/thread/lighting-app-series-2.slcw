@@ -1,4 +1,4 @@
-label: lighting-app-thread-bootloader
+label: lighting-app-series-2
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Lighting over Thread Example

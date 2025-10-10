@@ -1,4 +1,4 @@
-label: refrigerator-app-thread-bootloader
+label: refrigerator-app-series-3
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Refrigerator over Thread Example on Series 3.

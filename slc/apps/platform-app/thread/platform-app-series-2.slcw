@@ -1,4 +1,4 @@
-label: platform-app-thread-bootloader
+label: platform-app-series-2
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Platform over Thread Example

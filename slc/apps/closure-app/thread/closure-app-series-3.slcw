@@ -1,4 +1,4 @@
-label: closure-app-thread-bootloader
+label: closure-app-series-3
 quality: production
 package: matter
 description: Matter solution containing both a Matter bootloader and Closure over Thread Example on Series 3.

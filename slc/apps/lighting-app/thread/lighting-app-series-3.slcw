@@ -1,4 +1,4 @@
-label: lighting-app-thread-bootloader
+label: lighting-app-series-3
 quality: production
 package: matter
 description: Matter workspace container both a Matter bootloader and Lighting over Thread Example on Series 3
