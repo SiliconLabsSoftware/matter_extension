@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and Refrigerato
 project:
   - path: ./refrigerator-app.slcp
     id: application
-    output: refrigerator-app-thread
+    output: refrigerator-app
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

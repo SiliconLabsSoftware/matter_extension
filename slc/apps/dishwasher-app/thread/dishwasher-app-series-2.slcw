@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and Dishwasher 
 project:
   - path: ./dishwasher-app.slcp
     id: application
-    output: dishwasher-app-thread
+    output: dishwasher-app
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

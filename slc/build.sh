@@ -6,27 +6,27 @@
 #   ./slc/build.sh <slcp/slcw path> <board>
 #
 #   Example .slcp usage:
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app.slcp brd4187c
+#       output in: out/brd4187c/lighting-app/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
-#       output in: out/brd4187c/lighting-app-thread-solution/
+#   ./slc/build.sh slc/solutions/lighting-app/series-2/lighting-app-bootloader.slcw brd4187c
+#       output in: out/brd4187c/lighting-app-solution/
 #
 #   Example --configuration option usage:
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
+#       output in: out/brd4187c/lighting-app/
 #
 #   --skip_gen option : Allows to skip the slc gen step and only run the make commande to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
 #                       This option only works if the project as previously been generated
 #   Example
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --skip_gen
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app.slcp brd4187c --skip_gen
+#       output in: out/brd4187c/lighting-app/
 #
 #   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
 #   Example
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#       output in: out/brd4187c/lighting-app/
 #
 
 MATTER_ROOT=$( pwd -P )

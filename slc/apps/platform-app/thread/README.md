@@ -44,7 +44,7 @@ To build this project, follow the build steps detailed in:
 You can replicate the build command for your specific application.
 E.g. (For a Linux/Mac system)
 ```
-python3 slc/sl_build.py MyNewApp/platform-app-thread.slcw brd4187c
+python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c
 ```
 
 # Expected Behaviour

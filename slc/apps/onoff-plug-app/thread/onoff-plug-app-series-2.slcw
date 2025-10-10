@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and OnOff Plug 
 project:
   - path: ./onoff-plug-app.slcp
     id: application
-    output: onoff-plug-app-thread
+    output: onoff-plug-app
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

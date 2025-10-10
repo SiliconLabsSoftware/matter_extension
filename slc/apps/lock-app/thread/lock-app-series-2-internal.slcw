@@ -5,7 +5,7 @@ description: Internal variant (deprecated placeholder) of Lock over Thread with 
 project:
   - path: ./lock-app.slcp
     id: application
-    output: lock-app-thread
+    output: lock-app
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

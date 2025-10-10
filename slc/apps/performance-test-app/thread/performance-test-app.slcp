@@ -1,4 +1,4 @@
-project_name: performance-test-app-thread
+project_name: performance-test-app
 label: Performance Test Application
 description: >
   Matter Performance Test Application
@@ -207,7 +207,7 @@ toolchain_settings:
     value: gnu++17
 
 config_file:
-  - path: performance-test-app-thread.zap
+  - path: performance-test-app.zap
     directory: common
     file_id: zap_config
   - path: performance-test-cluster.xml

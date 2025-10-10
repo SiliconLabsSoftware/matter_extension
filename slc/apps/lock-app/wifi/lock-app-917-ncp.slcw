@@ -1,11 +1,11 @@
-label: air-quality-sensor-app-series-2-internal
+label: lock-app-917-ncp
 quality: production
 package: matter
-description: Matter solution containing both a Matter bootloader and Air Quality over Thread Example.
+description: Matter solution containing both a Matter bootloader and Lock over WiFi Example
 project:
-  - path: ./air-quality-sensor-app.slcp
+  - path: ./lock-app-917-ncp.slcp
     id: application
-    output: air-quality-sensor-app
+    output: lock-app-917-ncp
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

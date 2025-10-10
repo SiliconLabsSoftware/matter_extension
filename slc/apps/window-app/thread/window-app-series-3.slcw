@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and Window over
 project:
   - path: ./window-app.slcp
     id: application
-    output: window-app-thread
+    output: window-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader

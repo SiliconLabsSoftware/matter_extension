@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and Closure ove
 project:
   - path: ./closure-app.slcp
     id: application
-    output: closure-app-thread
+    output: closure-app
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
     id: bootloader
     output: matter-bootloader

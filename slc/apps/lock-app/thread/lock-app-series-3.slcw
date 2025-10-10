@@ -5,7 +5,7 @@ description: Matter solution containing both a Matter bootloader and Lock over T
 project:
   - path: ./lock-app.slcp
     id: application
-    output: lock-app-thread
+    output: lock-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader
