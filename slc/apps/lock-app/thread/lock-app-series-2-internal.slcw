@@ -1,0 +1,13 @@
+label: lock-app-thread-internal-bootloader
+quality: production
+package: matter
+description: Internal variant (deprecated placeholder) of Lock over Thread with bootloader (Series 2)
+project:
+  - path: ./lock-app.slcp
+    id: application
+    output: lock-app-thread
+  - path: ../../../sample-app/bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

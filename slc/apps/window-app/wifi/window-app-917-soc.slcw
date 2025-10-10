@@ -1,0 +1,10 @@
+label: window-app-wifi
+quality: production
+package: matter
+description: Matter Window Wi-Fi SoC solution
+project:
+  - path: ./window-app-917-soc.slcp
+    id: application
+    output: window-app-wifi
+post_build:
+  path: ../../../postbuild/matter_wifi_soc.slpb

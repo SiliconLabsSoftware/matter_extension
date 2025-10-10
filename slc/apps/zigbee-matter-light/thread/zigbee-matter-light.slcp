@@ -1,0 +1,133 @@
+project_name: zigbee-matter-light-thread
+label: Zigbee+Matter Light
+description: Combined Zigbee + Matter Lighting App (Thread + Zigbee + BLE)
+quality: production
+package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.7.0"
+
+component:
+  - id: device_init
+  - id: sl_main
+  - id: clock_manager
+  - id: cli
+  - id: iostream_stdio
+  - id: segger_rtt
+  - id: zigbee_address_table
+  - id: zigbee_application_bootloader
+  - id: zigbee_security_link_keys
+  - id: zigbee_source_route
+  - id: zigbee_stack_diagnostics
+  - id: zigbee_ipc
+  - id: zigbee_gp
+  - id: zigbee_zcl_framework_core
+  - id: zigbee_zcl_cli
+  - id: zigbee_core_cli
+  - id: zigbee_color_control_server
+  - id: zigbee_groups_server
+  - id: zigbee_identify
+  - id: zigbee_level_control
+  - id: zigbee_on_off
+  - id: zigbee_counters
+  - id: zigbee_find_and_bind_target
+  - id: zigbee_green_power_common
+  - id: zigbee_green_power_client
+  - id: zigbee_green_power_client_cli
+  - id: zigbee_interpan
+  - id: zigbee_network_creator
+  - id: zigbee_network_creator_security
+  - id: zigbee_network_steering
+  - id: zigbee_reporting
+  - id: zigbee_scenes
+  - id: zigbee_basic
+  - id: zigbee_scan_dispatch
+  - id: zigbee_update_tc_link_key
+  - id: zigbee_debug_print
+  - id: zigbee_pro_stack
+  - id: bluetooth_feature_gatt
+  - id: bluetooth_feature_gatt_server
+  - id: bluetooth_feature_legacy_advertiser
+  - id: bluetooth_feature_connection
+  - id: bluetooth_feature_connection_role_peripheral
+  - id: bluetooth_feature_system
+  - id: bluetooth_feature_sm
+  - id: bluetooth_stack
+  - id: ot_stack_ftd
+  - id: matter_platform_mg
+  - id: matter_groups
+  - id: matter_group_key_mgmt
+  - id: matter_descriptor
+  - id: matter_localization_configuration
+  - id: matter_crypto
+  - id: matter_basic_information
+  - id: matter_lighting
+  - id: matter_network_commissioning
+  - id: matter_operational_credentials
+  - id: matter_administrator_commissioning
+  - id: matter_on_off
+  - id: matter_scenes
+  - id: matter
+  - id: matter_ota_support
+  - id: matter_ota_requestor
+  - id: matter_software_diagnostics
+  - id: matter_access_control
+  - id: matter_general_commissioning
+  - id: matter_identify
+  - id: matter_general_diagnostics
+  - id: matter_color_control
+  - id: matter_level_control
+  - id: matter_user_label
+  - id: matter_fixed_label
+  - id: matter_shell
+  - id: matter_power_source
+  - id: app_common
+  - id: matter_provision_default
+  - id: matter_log_uart
+  - id: matter_zigbee_multiprotocol_common
+  - id: matter_ble_side_channel
+  - id: matter_unit_localization
+  - id: matter_default_lcd_config
+  - id: matter_buttons
+  - id: matter_configuration_over_swo
+  - id: matter_ble
+  - id: matter_thread_network_diagnostics
+  - id: matter_thread
+  - id: matter_leds
+
+config_file:
+  - path: ../../../../third_party/matter_sdk/examples/zigbee-matter-light/silabs/config/zcl/zcl_config.zap
+    file_id: zap_config
+  - path: ../../../../provision.mattpconf
+    file_id: provision_config
+
+include:
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: AppTask.h
+      - path: CHIPProjectConfig.h
+      - path: LightingManager.h
+
+source:
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/LightingManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
+
+define:
+  - name: CHIP_CRYPTO_PLATFORM
+    value: "1"
+  - name: _WANT_REENT_SMALL
+    value: "1"
+  - name: IS_DEMO_LIGHT
+    value: "1"
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: "40960"
+  - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
+    value: "4092"
+
+readme:
+  - path: ./README.md

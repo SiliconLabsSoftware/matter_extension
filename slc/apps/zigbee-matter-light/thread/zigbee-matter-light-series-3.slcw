@@ -1,0 +1,13 @@
+label: zigbee-matter-light-thread-bootloader
+quality: production
+package: matter
+description: Matter + Zigbee Light (Thread) with bootloader (Series 3)
+project:
+  - path: ./zigbee-matter-light.slcp
+    id: application
+    output: zigbee-matter-light-thread
+  - path: ../../../sample-app/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

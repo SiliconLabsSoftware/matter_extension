@@ -1,0 +1,8 @@
+label: closure-app-917-soc
+quality: production
+package: matter
+description: Matter solution for Closure App over WiFi
+project:
+  - path: ./closure-app-917-soc.slcp
+    id: application
+    output: closure-app-917-soc

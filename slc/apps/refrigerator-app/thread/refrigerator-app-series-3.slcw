@@ -1,0 +1,13 @@
+label: refrigerator-app-thread-bootloader
+quality: production
+package: matter
+description: Matter solution containing both a Matter bootloader and Refrigerator over Thread Example on Series 3.
+project:
+  - path: ./refrigerator-app.slcp
+    id: application
+    output: refrigerator-app-thread
+  - path: ../../../sample-app/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

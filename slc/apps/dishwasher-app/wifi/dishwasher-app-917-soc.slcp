@@ -1,0 +1,97 @@
+project_name: dishwasher-app-917-soc
+label: Matter Dishwasher
+description: Matter Dishwasher App (Wi-Fi)
+quality: production
+package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.7.0"
+
+component:
+  - id: matter_leds
+  - id: matter
+  - id: matter_wifi_ble
+  - id: matter_crypto_tinycrypt_siwx917
+  - id: matter_wifi
+  - id: matter_access_control
+  - id: matter_administrator_commissioning
+  - id: matter_basic_information
+  - id: matter_descriptor
+  - id: matter_fixed_label
+  - id: matter_general_commissioning
+  - id: matter_general_diagnostics
+  - id: matter_group_key_mgmt
+  - id: matter_identify
+  - id: matter_localization_configuration
+  - id: matter_network_commissioning
+  - id: matter_operational_credentials
+  - id: matter_ota_requestor
+  - id: matter_ota_support
+  - id: matter_software_diagnostics
+  - id: matter_thread_network_diagnostics
+  - id: matter_time_format_localization
+  - id: matter_user_label
+  - id: matter_wifi_network_diagnostics
+  - id: matter_configuration_over_swo
+  - id: segger_rtt
+  - id: toolchain_gcc_common
+  - id: matter_shell
+  - id: matter_default_lcd_config
+  - id: matter_log_uart
+  - id: matter_lwip
+  - id: sl_si91x_lwip_stack
+  - id: wifi_resources
+  - id: sl_si91x_common_flash_nvm3
+  - id: sl_si91x_wireless
+  - id: wifi
+  - id: basic_network_config_manager
+  - id: si91x_mem_config_3
+  - id: sl_si91x_basic_buffers
+  - id: sl_si91x_mcu
+  - id: freertos
+  - id: slist
+  - id: sl_assert
+  - id: cmsis_rtos2_init
+  - id: matter_platform_siwx917
+  - id: wiseconnect3_common
+  - id: sl_si91x_soc_soft_reset
+  - id: ble
+  - id: sl_si91x_button_917
+  - id: sl_si91x_led_917
+  - id: matter_dishwasher
+  - id: app_common
+
+config_file:
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/data_model/dishwasher-wifi-app.zap
+    file_id: zap_config
+  - path: ../../../../provision.mattpconf
+    file_id: provision_config
+
+include:
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: AppTask.h
+      - path: CHIPProjectConfig.h
+      - path: Dishwasher.h
+
+source:
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/Dishwasher.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/DataModelCallbacks.cpp
+
+define:
+  - name: CHIP_CRYPTO_PLATFORM
+    value: "1"
+  - name: _WANT_REENT_SMALL
+    value: "1"
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: "40960"
+  - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
+    value: "4092"
+
+readme:
+  - path: ./README_WiFi.md

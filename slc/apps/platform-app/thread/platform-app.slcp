@@ -1,0 +1,79 @@
+project_name: platform-app-thread
+label: Matter Platform
+description: Matter Platform App (Thread)
+quality: production
+package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.7.0"
+
+component:
+  - id: matter_leds
+  - id: matter_buttons
+  - id: matter
+  - id: matter_platform_mg
+  - id: matter_ble
+  - id: matter_thread
+  - id: ot_stack_mtd
+  - id: matter_shell
+  - id: matter_crypto
+  - id: matter_gatt_static
+  - id: matter_provision_default
+  - id: matter_access_control
+  - id: matter_basic_information
+  - id: matter_descriptor
+  - id: matter_fixed_label
+  - id: matter_general_commissioning
+  - id: matter_general_diagnostics
+  - id: matter_network_commissioning
+  - id: matter_operational_credentials
+  - id: matter_ota_support
+  - id: matter_ota_requestor
+  - id: matter_software_diagnostics
+  - id: matter_thread_network_diagnostics
+  - id: matter_time_format_localization
+  - id: matter_user_label
+  - id: matter_wifi_network_diagnostics
+  - id: matter_default_lcd_config
+  - id: matter_configuration_over_swo
+  - id: matter_segger_rtt
+  - id: matter_log_uart
+  - id: app_common
+  - id: matter_platform_app
+
+config_file:
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/data_model/platform-app-thread.zap
+    file_id: zap_config
+  - path: ../../../../provision.mattpconf
+    file_id: provision_config
+
+include:
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: AppTask.h
+      - path: CHIPProjectConfig.h
+      - path: PlatformManager.h
+
+source:
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/src/PlatformManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/src/DataModelCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/src/PlatformCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform-app/silabs/src/PlatformFirmwareManagement.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+
+define:
+  - name: CHIP_CRYPTO_PLATFORM
+    value: "1"
+  - name: _WANT_REENT_SMALL
+    value: "1"
+  - name: NVM3_DEFAULT_NVM_SIZE
+    value: "40960"
+  - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
+    value: "4092"
+
+readme:
+  - path: ./README.md
