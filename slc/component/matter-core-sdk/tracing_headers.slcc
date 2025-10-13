@@ -24,5 +24,9 @@ include:
       - path: macros.h
   - path: third_party/matter_sdk/src/platform/silabs/tracing
     file_list:
+      - path: SilabsTracingConfig.h
       - path: SilabsTracingMacros.h
       - path: SilabsTracingTypes.h
+  - path: third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: FreeRTOSRuntimeStats.h

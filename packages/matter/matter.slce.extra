@@ -807,6 +807,7 @@ extra_files:
   - slc/component/matter-core-sdk/libasn1.slcc
   - slc/component/matter-core-sdk/libqrcode_common.slcc
   - slc/component/matter-core-sdk/tracing_headers.slcc
+  - third_party/matter_sdk/src/platform/silabs/tracing/SilabsTracingConfig.h
   - slc/component/matter-core-sdk/libopenthread_spinel_ncp.slcc
   - slc/component/matter-core-sdk/libopenthread_platform_utils.slcc
   - slc/component/matter-core-sdk/libchipcore.slcc
@@ -1734,9 +1735,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.cpp
   - third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.h
   - third_party/matter_sdk/src/app/clusters/access-control-server/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/access-control-server/access-control-server.cpp
+  - third_party/matter_sdk/src/app/clusters/access-control-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/access-control-server/access-control-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/access-control-server/access-control-cluster.h
   - third_party/matter_sdk/src/app/clusters/access-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/access-control-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/access-control-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/access-control-server/tests/TestAccessControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/account-login-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/account-login-server/account-login-delegate.h
   - third_party/matter_sdk/src/app/clusters/account-login-server/account-login-server.cpp
@@ -2022,11 +2027,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/fixed-label-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/fixed-label-server/tests/TestFixedLabelCluster.cpp
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/TemporaryTestCoupling.cpp
+  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-server.cpp
-  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-server.h
+  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/general-commissioning-cluster.h
+  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/general-commissioning-server/tests/TestGeneralCommissioningCluster.cpp
   - third_party/matter_sdk/src/app/clusters/general-diagnostics-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/general-diagnostics-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/general-diagnostics-server/CodegenIntegration.h
@@ -2185,9 +2192,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/on-off-server/on-off-server.cpp
   - third_party/matter_sdk/src/app/clusters/on-off-server/on-off-server.h
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/operational-credentials-server.cpp
+  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/operational-credentials-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/operational-credentials-cluster.h
+  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/TestOperationalCredentials.cpp
   - third_party/matter_sdk/src/app/clusters/operational-state-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/operational-state-server/README.md
   - third_party/matter_sdk/src/app/clusters/operational-state-server/app_config_dependent_sources.cmake
@@ -2502,6 +2513,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/zone-management-server/zone-management-server.cpp
   - third_party/matter_sdk/src/app/clusters/zone-management-server/zone-management-server.h
   - third_party/matter_sdk/src/app/common/BUILD.gn
+  - third_party/matter_sdk/src/app/common/CompatClusterObjects.h
   - third_party/matter_sdk/src/app/common/CompatEnumNames.h
   - third_party/matter_sdk/src/app/common/templates/config-data.yaml
   - third_party/matter_sdk/src/app/common/templates/templates.json
@@ -3531,6 +3543,8 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/zone-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/manufacturers.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/test/mode-select-extensions.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/upgrade-rules/disable-singleton-attributes.js
+  - third_party/matter_sdk/src/app/zap-templates/zcl/upgrade-rules-matter.json
   - third_party/matter_sdk/src/app/zap-templates/zcl/validate.sh
   - third_party/matter_sdk/src/app/zap-templates/zcl/zcl-with-test-extensions.json
   - third_party/matter_sdk/src/app/zap-templates/zcl/zcl.json
