@@ -20,6 +20,10 @@
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            },
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix lto", "'--with matter_no_debug;matter,toolchain_gcc_lto'", "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter'"]
             }
         ]
     },

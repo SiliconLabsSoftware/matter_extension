@@ -1,0 +1,177 @@
+name: Code Size Analysis
+
+on:
+    workflow_call:
+        inputs:
+            build-type:
+                required: true
+                type: string
+            artifact-name:
+                required: true
+                type: string
+
+jobs:
+    code-size-analysis:
+        name: Code Size Analysis
+        runs-on: ubuntu-latest
+        if: ${{ inputs.build-type == 'full' }}
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+
+            - name: Download map file artifacts
+              uses: actions/download-artifact@v4
+              with:
+                  name: ${{ inputs.artifact-name }}
+                  path: ./map-files
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: '3.11'
+
+            - name: Install code size analyzer
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install code_size_analyzer_client-python>=1.0.1
+
+            - name: Run code size analysis
+              env:
+                  BRANCH_NAME: ${{ github.ref_name }}
+                  BUILD_NUMBER: ${{ github.run_number }}
+              run: |
+                  echo "Build number: $BUILD_NUMBER"
+                  echo "Branch name: $BRANCH_NAME"
+                  
+                  # Extract app name from path
+                  extract_app_from_path() {
+                      local path=$1
+                      # Get the solution directory 
+                      local solution_dir=$(echo "$path" | cut -d'/' -f3)
+                      
+                      local app_name
+                      if [[ "$solution_dir" == *"zigbee-matter-light"* ]]; then
+                          app_name="zigbee-matter-light"
+                      elif [[ "$solution_dir" == *"thermostat"* ]]; then
+                          app_name="thermostat-app"
+                      else
+                          # Extract everything up to and including -app
+                          app_name=$(echo "$solution_dir" | sed -E 's/^([^-]+-app).*$/\1/')
+                      fi
+                      
+                      echo "$app_name"
+                  }
+                  
+                  # Determine protocol from path
+                  determine_protocol() {
+                      local path=$1
+                      if [[ "$path" == *"917-soc"* ]]; then
+                          echo "wifi"
+                      elif [[ "$path" == *"917-ncp"* ]]; then
+                          echo "917-ncp"  
+                      elif [[ "$path" == *"rs911x"* ]]; then
+                          echo "rs911x"
+                      elif [[ "$path" == *"wf200"* ]]; then
+                          echo "wf200"
+                      else
+                          echo "thread"
+                      fi
+                  }
+                  
+                  # Determine build options from path
+                  determine_build_options() {
+                      local path=$1
+                      if [[ "$path" == *"lto"* ]]; then
+                          echo "-lto"
+                      else
+                          echo ""
+                      fi
+                  }
+                  
+                  # Perform code analysis
+                  perform_code_analysis() {
+                      local map_file_path=$1
+                      
+                      # Extract board from path
+                      local brd=$(echo "$map_file_path" | cut -d'/' -f2)
+                      
+                      # Extract app, protocol, and options from path
+                      local app=$(extract_app_from_path "$map_file_path")
+                      local protocol=$(determine_protocol "$map_file_path")
+                      local options=$(determine_build_options "$map_file_path")
+                      
+                      echo "Processing: $map_file_path"
+                      echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
+                      
+                      # Add NCP tagging to app name for NCP protocols
+                      if [ "$protocol" = "917-ncp" ] || [ "$protocol" = "rs911x" ] || [ "$protocol" = "wf200" ]; then
+                          app="${app}-${protocol}"
+                      fi
+                      
+                      # Determine example type
+                      if [ "$protocol" = "thread" ]; then
+                          example_type="OpenThread"
+                      elif [ "$protocol" = "wifi" ] || [ "$protocol" = "rs911x" ] || [ "$protocol" = "wf200" ] || [ "$protocol" = "917-ncp" ]; then
+                          example_type="WiFi"
+                      fi
+                      
+                      # Determine family and target part
+                      if [ "$brd" = "brd4187c" ]; then
+                          family="MG24"
+                          target_part="efr32mg24b210f1536im48"
+                      elif [ "$brd" = "brd4407a" ]; then
+                          family="MG301"  
+                          target_part="simg301m114lih"
+                      elif [ "$brd" = "brd4338a" ]; then
+                          family="Si917"
+                          target_part="siwg917m111mgtba"
+                      fi
+                      
+                      application_name="slc-${app}-release-${family}"
+                      output_file="${app}-${example_type}-${family}.json"
+                      
+                      # Differentiate LTO vs non-LTO builds
+                      if [[ "$options" != *"-lto"* ]]; then
+                          application_name="${application_name}-nolto"
+                          output_file="${output_file}-nolto"
+                      fi
+                      
+                      echo "  Running analysis:"
+                      echo "    Application name: $application_name"
+                      echo "    Output file: $output_file"
+                      
+                      # Run code size analysis
+                      unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+                      if code_size_analyzer_cli \
+                          --map_file "$map_file_path" \
+                          --stack_name matter \
+                          --target_part "$target_part" \
+                          --compiler gcc \
+                          --target_board "$brd" \
+                          --app_name "$application_name" \
+                          --service_url https://code-size-analyzer.silabs.net \
+                          --branch_name "$BRANCH_NAME" \
+                          --build_number "b${BUILD_NUMBER}" \
+                          --output_file "$output_file" \
+                          --store_results True \
+                          --verify_ssl False \
+                          --uc_component_branch_name "silabs_slc/$BRANCH_NAME"; then
+                          echo "  Analysis completed successfully"
+                      else
+                          echo "  Analysis failed"
+                      fi
+                  }
+                  
+                  # List available map files
+                  echo "Available map files:"
+                  find ./map-files -name "*.map" | sort
+                  echo ""
+                  
+                  # Process all map files 
+                  echo "Processing all discovered map files..."
+                  find ./map-files -name "*.map" | while read map_file; do
+                      perform_code_analysis "$map_file" || true
+                  done
+                  
+                  echo "Code size analysis completed"

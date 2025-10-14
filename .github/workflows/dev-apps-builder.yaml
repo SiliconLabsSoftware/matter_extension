@@ -37,7 +37,7 @@ jobs:
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      echo "build-type=full" >> $GITHUB_OUTPUT # TEMP full build on PR for testing
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
                       if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
@@ -208,6 +208,25 @@ jobs:
                 name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                 delete-merged: true
                 pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+
+            - name: Merge map file artifacts
+              if: ${{ needs.set-build-type.outputs.build-type == 'full' }}
+              uses: actions/upload-artifact/merge@v4
+              with:
+                name: "dev-map-files"
+                delete-merged: true
+                pattern: "*-${{ needs.set-build-type.outputs.build-type }}-map-files"
+
+    code-size-analysis:
+        name: Code Size Analysis
+        needs: 
+            - set-build-type
+            - merge-apps
+        if: ${{ needs.set-build-type.outputs.build-type == 'full' }}
+        uses: ./.github/workflows/code-size-analysis.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            artifact-name: "dev-map-files"
 
     wait-for-test-results:
         name: Wait for Test Results
