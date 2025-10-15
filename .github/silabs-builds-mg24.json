@@ -58,7 +58,7 @@
         ],
         "thermostat": [
             {
-                "boards": ["brd4186c"],
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix cmp-concurrent","'--with matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
             }
         ]
