@@ -205,8 +205,9 @@ jobs:
 
       - name: package version update
         run: |
-          echo "Package Version: ${{ steps.get-package-version.outputs.package-version }}"
-          echo "PACKAGE_VERSION=${{ steps.get-package-version.outputs.package-version }}" >> $GITHUB_ENV
+          echo "Prerelease Number: ${{ steps.get-package-version.outputs.prerelease-number }}"
+          echo "SL_PRERELEASE=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
+          pip install yaml
           make generate_pkg_slt
 
       - name: Publish package

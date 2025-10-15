@@ -22,10 +22,14 @@
 # Source of truth for version
 PACKAGE_VERSION_FILE := slc/script/matter_package_version
 # Allow override via environment: if PACKAGE_VERSION is exported it wins; otherwise read the file.
-ifeq ($(origin PACKAGE_VERSION), undefined)
 PACKAGE_VERSION := $(shell cat $(PACKAGE_VERSION_FILE))
+ifeq ($(origin SL_PRERELEASE), undefined)
+$(info Using PACKAGE_VERSION from $(PACKAGE_VERSION_FILE): $(PACKAGE_VERSION))
 else
-$(info Using PACKAGE_VERSION from environment: $(PACKAGE_VERSION))
+SL_PRERELEASE_FILE := packages/.prerelease
+SL_PRERELEASE_QUALITY := $(shell cat $(SL_PRERELEASE_FILE))
+PACKAGE_VERSION := $(PACKAGE_VERSION)-$(SL_PRERELEASE_QUALITY).$(SL_PRERELEASE)
+$(info Using PACKAGE_VERSION with pre-release: $(PACKAGE_VERSION))
 endif
 PACKAGE_REFERENCE := matter/$(PACKAGE_VERSION)@silabs
 
