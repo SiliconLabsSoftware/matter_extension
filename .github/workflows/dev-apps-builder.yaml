@@ -258,7 +258,7 @@ jobs:
         uses: ./.github/workflows/upload-packages.yaml
         secrets: inherit
         with:
-            use_sqa_remote: false
+            upload_packages: true
             
     notify:  
         needs: upload-packages

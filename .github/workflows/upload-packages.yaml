@@ -3,19 +3,18 @@ name: upload-packages
 on:
   workflow_dispatch:
     inputs:
-      use_sqa_remote:
-        description: 'Use SQA remote (matter-conan-sqa)?'
+      upload_packages:
+        description: 'Use SQA remote for upload (default is dev remote)'
         required: false
-        type: boolean
         default: false
-
+        type: boolean
   workflow_call:
     inputs:
-      use_sqa_remote:
-        description: 'Use SQA remote (matter-conan-sqa)?'
-        required: false
-        type: boolean
-        default: false
+        upload_packages:
+          description: 'Use SQA remote for upload (default is dev remote)'
+          required: false
+          default: false
+          type: boolean
     outputs:
       package-ref:
         description: 'Stack package reference (legacy single ref)'
@@ -124,6 +123,26 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: true
+      - name: set upload package
+        id: set-publish-flag
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="${GITHUB_REF_NAME}"
+          UPLOAD_INPUT="${{ inputs.upload_packages }}"  # 'true' or 'false' (workflow_dispatch/workflow_call)
+          PUBLISH=false
+          # Conditions: input must be true AND branch matches allowed patterns
+          if [[ "${UPLOAD_INPUT}" == "true" ]]; then
+            if [[ "${BRANCH}" == "main" || "${BRANCH}" == release* || "${BRANCH}" == feature/* ]]; then
+              PUBLISH=true
+            fi
+          fi
+          echo "Resolved branch: ${BRANCH}"
+          echo "upload_packages input: ${UPLOAD_INPUT}"
+          echo "Computed publish flag: ${PUBLISH}"
+          # Export to environment for later steps
+          echo "PUBLISH=${PUBLISH}" >> "$GITHUB_ENV"
+
       - name: Setup SLT
         id: setup-action
         uses: SiliconLabsInternal/action-setup-slt@main
@@ -152,10 +171,6 @@ jobs:
         id: set-remote
         run: |
           echo "SL_PRERELEASE=packages/.prerelease" >> $GITHUB_ENV
-          if [ "${{ github.event.inputs.use_sqa_remote }}" = "true" ]; then
-            echo "REMOTE_NAME=matter-conan-sqa" >> $GITHUB_ENV
-            echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa" >> $GITHUB_ENV
-          else
             echo "REMOTE_NAME=matter-conan-dev" >> $GITHUB_ENV
             echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev" >> $GITHUB_ENV
           fi
@@ -207,7 +222,7 @@ jobs:
         run: |
           echo "Prerelease Number: ${{ steps.get-package-version.outputs.prerelease-number }}"
           echo "SL_PRERELEASE=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
-          pip install yaml
+          pip install --upgrade PyYAML
           make generate_pkg_slt
 
       - name: Publish package
@@ -220,7 +235,7 @@ jobs:
           remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
           remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
           create: true
-          publish: true
+          publish: ${{ env.PUBLISH }}
           stack-name: "matter"
 
       - name: Capture Package Outputs
@@ -250,7 +265,7 @@ jobs:
           remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
           remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
           create: true
-          publish: true
+          publish: ${{ env.PUBLISH }}
           stack-name: "matter_app"
           
       - name: Capture Package Outputs
