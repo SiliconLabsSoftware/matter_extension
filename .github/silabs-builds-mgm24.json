@@ -14,7 +14,7 @@
         "platform-app": [
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix icd","'--with matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
             }
         ]
     },
@@ -27,6 +27,12 @@
             {
                 "boards": ["brd4316a", "brd4317a", "brd4318a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4316a"],
+                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
             }
         ]
     } 
