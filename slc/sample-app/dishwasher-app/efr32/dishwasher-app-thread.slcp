@@ -28,7 +28,6 @@ component:
     from: matter
   - id: matter_ble
     from: matter
-  - id: ot_stack_ftd
   - id: matter_thread
     from: matter
   - id: rail_util_pti

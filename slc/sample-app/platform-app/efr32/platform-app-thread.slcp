@@ -93,15 +93,12 @@ component:
   - id: matter_segger_rtt
     from: matter
     # ICD configurations
-  - id: matter_icd_core
-    from: matter
-    condition: [matter_icd_management]
   - id: matter_test_event_trigger
     from: matter
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - id: matter_icd_checkin_sender
     from: matter
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -117,11 +114,11 @@ config_file:
   - path: ../../../../third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-app.zap
     file_id: zap_config
     directory: common
-    unless: [matter_icd_management]
+    unless: [matter_icd_core]
   - path: ../../../../third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-icd-app.zap
     file_id: zap_config
     directory: common
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
@@ -193,41 +190,41 @@ configuration:
   # Default ICD configurations
   - name: CHIP_CONFIG_ENABLE_ICD_LIT
     value: 1
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: CHIP_CONFIG_ENABLE_ICD_CIP
     value: 1
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: CHIP_CONFIG_ENABLE_ICD_UAT
     value: 1
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: CHIP_CONFIG_ENABLE_ICD_DSLS
     value: 1
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
 
 
   - name: SL_IDLE_MODE_DURATION_S
     value: "600"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "5000"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
 
   - name: SL_TRANSPORT_IDLE_INTERVAL
     value: "900"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
-    condition: [matter_icd_management]
+    condition: [matter_icd_core]
 
 toolchain_settings:
   - option: cxx_standard

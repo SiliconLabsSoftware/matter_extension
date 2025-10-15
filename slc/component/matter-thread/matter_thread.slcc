@@ -20,7 +20,7 @@ requires:
   - name: ot_stack_tcp_stubs
     condition: [ot_cert_libs]
   - name: ot_stack_ftd
-    unless: [matter_icd_management]
+    unless: [matter_icd_core]
 
 define:
   - name: SL_OPENTHREAD_CERT_LIB
