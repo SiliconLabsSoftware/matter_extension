@@ -6,16 +6,10 @@ on:
     inputs:
       package-name:
         description: "Name of the package (default matter)"
-        required: false
-      package-version:
-        description: 'Matter package version (default, 2.6.2)'
-        required: false
+        required: true
       package-revision:
         description: 'Conan package hash (package-revision)'
         required: true
-      package-ref:
-        description: 'Conan package reference (package-name/version)'
-        required: false
 
 jobs:
   promote:
@@ -61,9 +55,7 @@ jobs:
         uses: SiliconLabsInternal/action-conan-promote@main
         with:
           package-name: ${{ env.PACKAGE_NAME }}
-          package-version: ${{ env.PACKAGE_VERSION }}
           recipe-revision: ${{ env.PACKAGE_REVISION }}
-          package-id: ${{ env.PACKAGE_ID }}
           source-remote: 'matter-conan-dev'
           source-remote-url: 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
           destination-remote: 'matter-conan-sqa'
