@@ -33,3 +33,4 @@ jobs:
           github_token: ${{ github.token }}
           dependabot_token: ${{ steps.generate-token.outputs.token }}
           conan_repos: silabs-conan-production nwk-15-4-conan-sqa wiseconnect-conan-sqa netstack-conan-sqa
+          ignore_packages: matter matter_app
