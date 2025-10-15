@@ -151,7 +151,7 @@ jobs:
       - name: Set Conan remote variables
         id: set-remote
         run: |
-          echo "SL_PRERELEASE=.prerelease" >> $GITHUB_ENV
+          echo "SL_PRERELEASE=packages/.prerelease" >> $GITHUB_ENV
           if [ "${{ github.event.inputs.use_sqa_remote }}" = "true" ]; then
             echo "REMOTE_NAME=matter-conan-sqa" >> $GITHUB_ENV
             echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa" >> $GITHUB_ENV
