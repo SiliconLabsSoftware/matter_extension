@@ -171,9 +171,8 @@ jobs:
         id: set-remote
         run: |
           echo "SL_PRERELEASE=packages/.prerelease" >> $GITHUB_ENV
-            echo "REMOTE_NAME=matter-conan-dev" >> $GITHUB_ENV
-            echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev" >> $GITHUB_ENV
-          fi
+          echo "REMOTE_NAME=matter-conan-dev" >> $GITHUB_ENV
+          echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev" >> $GITHUB_ENV
       
       - name: Mark repository as safe for Git
         shell: bash
