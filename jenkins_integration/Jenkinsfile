@@ -67,6 +67,14 @@ pipeline
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, formatted_build_number)
                         }
                     }
+                    parallelNodes['SiMG301 Lighting-App'] = {
+                        pipelineFunctions.actionWithRetry {
+                            failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
+                                'gsdkMontrealNode','utf-matter-thread-4407a-ci',
+                                '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
+                                branch_name, formatted_build_number)
+                        }
+                    }
 
                     parallelNodes.failFast = false
                     parallel parallelNodes
@@ -82,6 +90,11 @@ pipeline
                     if (failed_tests_917 && failed_tests_917.failedCount > 0) {
                         totalFailedTests += failed_tests_917.failedCount
                         failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
+                    }
+
+                    if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
+                        totalFailedTests += failed_tests_4407a.failedCount
+                        failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
                     }
 
                     def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
