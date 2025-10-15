@@ -1,6 +1,6 @@
 # Matter Platform Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs MG24/MG26 and Rainier.
+A minimal Matter platform example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
 
 <hr>
 
