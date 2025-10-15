@@ -23,7 +23,7 @@
 PACKAGE_VERSION_FILE := slc/script/matter_package_version
 # Allow override via environment: if PACKAGE_VERSION is exported it wins; otherwise read the file.
 PACKAGE_VERSION := $(shell cat $(PACKAGE_VERSION_FILE))
-ifeq ($(origin SL_PRERELEASE_NUMBER), undefined)
+ifeq ($(strip $(SL_PRERELEASE_NUMBER)),)
 $(info Using PACKAGE_VERSION from $(PACKAGE_VERSION_FILE): $(PACKAGE_VERSION))
 else
 SL_PRERELEASE_FILE := packages/.prerelease
