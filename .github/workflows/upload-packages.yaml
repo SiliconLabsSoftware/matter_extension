@@ -188,6 +188,26 @@ jobs:
       - name: remove-all-local-packages
         run: |
           make remove_all_matter_packages
+      
+      - name: get-package-version
+        id: get-package-version
+        uses: SiliconLabsInternal/action-conan-create-publish@v2
+        with:
+          conanfile-path: 'packages/matter/conanfile.py'
+          remote-name: ${{ env.REMOTE_NAME }}
+          remote-url: ${{ env.REMOTE_URL }}
+          remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
+          remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
+          create: false
+          publish: false
+          #package-user: ${{ github.actor }}
+          stack-name: "matter"
+
+      - name: package version update
+        run: |
+          echo "Package Version: ${{ steps.get-package-version.outputs.package-version }}"
+          echo "PACKAGE_VERSION=${{ steps.get-package-version.outputs.package-version }}" >> $GITHUB_ENV
+          make generate_pkg_slt
 
       - name: Publish package
         id: publish-stack-package
@@ -200,7 +220,6 @@ jobs:
           remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
           create: true
           publish: true
-          #package-user: ${{ github.actor }}
           stack-name: "matter"
 
       - name: Capture Package Outputs
