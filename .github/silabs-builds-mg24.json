@@ -26,6 +26,12 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix icd","--with_app 'matter_icd_core;matter'"] 
             }
+        ],
+        "thermostat": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix cmp-concurrent","'--with matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+            }
         ]
     },
     "full": {
