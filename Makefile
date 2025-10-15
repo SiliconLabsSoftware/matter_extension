@@ -13,16 +13,20 @@
 	upload_stack_package \
 	remove_all_matter_packages \
 	remove_all_packages \
-	comment_revision_mode \
-	uncomment_revision_mode \
 	update_version
 	enable_editable \
 	disable_editable \
-	editable_status
+	editable_status \
+	update_matter_version
 
 # Source of truth for version
 PACKAGE_VERSION_FILE := slc/script/matter_package_version
+# Allow override via environment: if PACKAGE_VERSION is exported it wins; otherwise read the file.
+ifeq ($(origin PACKAGE_VERSION), undefined)
 PACKAGE_VERSION := $(shell cat $(PACKAGE_VERSION_FILE))
+else
+$(info Using PACKAGE_VERSION from environment: $(PACKAGE_VERSION))
+endif
 PACKAGE_REFERENCE := matter/$(PACKAGE_VERSION)@silabs
 
 # ---------------------------------------------------------------------------
@@ -50,16 +54,6 @@ editable_status: ## Show whether the local Matter package is in editable mode
 	else \
 		echo "Status: DISABLED"; \
 	fi
-
-uncomment_revision_mode: ## Uncomment revision_mode = "scm"
-	@echo "uncommenting revision_mode = \"scm\""
-	@sed -i '' 's/^#*[[:space:]]*revision_mode = .*/    revision_mode = "scm"/' packages/matter/conanfile.py
-	@sed -i '' 's/^#*[[:space:]]*revision_mode = .*/    revision_mode = "scm"/' packages/matter_app/conanfile.py
-
-comment_revision_mode: ##Comment revision_mode = "scm"
-	@echo "commenting revision_mode = \"scm\""
-	@sed -i '' 's/^[[:space:]]*revision_mode = .*/# &/' packages/matter/conanfile.py
-	@sed -i '' 's/^[[:space:]]*revision_mode = .*/# &/' packages/matter_app/conanfile.py
 
 remove_all_matter_packages: ## Remove all local matter packages
 	@echo "Removing all matter packages"
@@ -101,11 +95,11 @@ update_slce_extra: ## Update the SLCE extra
 
 generate_pkg_slt: ## Generate the pkg.slt file
 	@echo "Generating pkg.slt"
-	python3 slc/script/generate_pkg_slt.py --verbose -d slc
+	python3 slc/script/generate_pkg_slt.py --verbose -d slc --matter-version $(PACKAGE_VERSION)
 
 generate_pkg_slt_common:update_version ## Generate the pkg.slt.common file
 	@echo "Generating pkg.slt common"
-	python3 slc/script/generate_pkg_slt.py --verbose -d slc --common
+	python3 slc/script/generate_pkg_slt.py --verbose -d slc --common --matter-version $(PACKAGE_VERSION)
 
 update_version: package_version ## Update version in conanfile.py and conanfile_app.py to PACKAGE_VERSION
 	@echo "Updating version to $(PACKAGE_VERSION) in conanfile.py and conanfile_app.py"

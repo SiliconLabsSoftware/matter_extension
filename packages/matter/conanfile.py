@@ -14,8 +14,7 @@ _REPO_ROOT = _RECIPE_PATH.parents[2]
 
 
 class matterRecipe(ConanFile):
-    user = "silabs"
-    version = "2.7.0-alpha.3"
+    name = "matter"
     slce_file = "matter.slce"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
@@ -37,8 +36,6 @@ class matterRecipe(ConanFile):
     def set_version(self):
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        if not self.name:
-            self.name = silabs_package_assistant.get_name(self.slce_file)
         if not self.version:
             self.version = silabs_package_assistant.get_version(self.slce_file)
         # if not self.channel:
@@ -47,6 +44,7 @@ class matterRecipe(ConanFile):
             self.user = silabs_package_assistant.get_user()
             if self.user == "silabs":
                 self.revision_mode = "scm"
+                self.output.info("Using revision mode SCM")
         
         self.output.info(f"Resolved context: {self.name}, {self.version}, {self.channel}, {self.user}")
 

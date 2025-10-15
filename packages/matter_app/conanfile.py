@@ -21,11 +21,8 @@ except IndexError:
 
 
 class matter_appRecipe(ConanFile):
-    # Former base class attributes
-    user = "silabs"
     slce_file = "matter.slce"
     name = "matter_app"
-    version = "2.7.0-alpha.3"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"

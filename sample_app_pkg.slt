@@ -4,5 +4,4 @@ version = "0"
  
 [dependency]
 # Get a specific version of the package
-matter_app = { version = "2.7.0-alpha.3", installer ="conan"}
-
+matter_app = { version = "2.7.0-0.dev", installer ="conan"}

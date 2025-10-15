@@ -151,20 +151,13 @@ jobs:
       - name: Set Conan remote variables
         id: set-remote
         run: |
+          echo "SL_PRERELEASE=.prerelease" >> $GITHUB_ENV
           if [ "${{ github.event.inputs.use_sqa_remote }}" = "true" ]; then
             echo "REMOTE_NAME=matter-conan-sqa" >> $GITHUB_ENV
             echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa" >> $GITHUB_ENV
-            echo "SL_PRERELEASE=.prerelease" >> $GITHUB_ENV
           else
             echo "REMOTE_NAME=matter-conan-dev" >> $GITHUB_ENV
             echo "REMOTE_URL=https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev" >> $GITHUB_ENV
-            if [ -n "${{ github.event.pull_request.number }}" ]; then
-              echo "PACKAGE_CHANNEL=pr-${{ github.event.pull_request.number }}" >> $GITHUB_ENV
-            elif [ -n "${{ github.head_ref }}" ]; then
-              echo "PACKAGE_CHANNEL=${{ github.head_ref }}" >> $GITHUB_ENV
-            else
-              echo "PACKAGE_CHANNEL=${{ github.ref_name }}" >> $GITHUB_ENV
-            fi
           fi
       
       - name: Mark repository as safe for Git

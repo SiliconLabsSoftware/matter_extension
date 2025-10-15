@@ -652,10 +652,6 @@ def main():
     # Initial pre-steps (mimic original script top lines)
     env = os.environ.copy()
 
-    if not flags['ci']:
-        # Comment revision_mode="scm"
-        run(["make", "comment_revision_mode"])
-
     # Handle rebuild options
     if flags['rebuild_all']:
         logger.info("Rebuilding all packages (app and stack)...")
@@ -780,8 +776,6 @@ def main():
     logger.debug("Changing dir to Matter Root = %s", matter_root)
     os.chdir(matter_root)
     if not flags['ci']:
-        # uncomment revision_mode="scm"
-        run(["make", "uncomment_revision_mode"])
         run(["make", "disable_editable"])
     logger.info("Build complete.")
 

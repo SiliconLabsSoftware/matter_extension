@@ -193,6 +193,20 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
                  os.path.basename(version_file))
     sys.exit(1)
 
+def generate_sample_app_pkg_slt(verbose, matter_version, exclude_patterns):
+    logger.info(f"Generating sample_app_pkg.slt for Matter version: {matter_version}")
+    pkg_slt_path = "sample_app_pkg.slt"
+    pkg_slt_content = f"""# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+matter_app = {{ version = "{matter_version}", installer ="conan"}}
+"""
+    with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
+        pkg_slt_file.write(pkg_slt_content)
+    logger.debug(f"Generated sample_app_pkg.slt in: {pkg_slt_path}")
 
 def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
     logger.info(f"Using Matter package version: {matter_version}")
@@ -249,6 +263,8 @@ def main():
     parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
+    parser.add_argument("--update-sample-app-pkg","-s", default=True,
+                        help="Update sample_app_pkg.slt")
     args = parser.parse_args()
 
     # Configure logging once here so all helper functions share configuration
@@ -267,6 +283,8 @@ def main():
     if exclude_patterns and args.verbose:
         logger.debug(f"Exclude patterns: {exclude_patterns}")
     generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
+    if args.update_sample_app_pkg:
+        generate_sample_app_pkg_slt(args.verbose, matter_version, exclude_patterns)
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ version = "0"
  
 [dependency]
 # Get a specific version of the package
-matter = { version = "2.7.0-alpha.3", installer ="conan"}
+matter = { version = "2.7.0-0.dev", installer ="conan"}
 openthread = { version = "3.0.0-alpha.0", installer ="conan"}
 multiprotocol = { version = "1.0.0-alpha.1", installer ="conan"}
 zigbee = { version = "9.0.0-alpha.0", installer ="conan"}
