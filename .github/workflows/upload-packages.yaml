@@ -117,7 +117,7 @@ jobs:
       app-package-revision: ${{ steps.publish-app-package.outputs.package-revision }}
       app-prerelease-qualifier: ${{ steps.publish-app-package.outputs.prerelease-qualifier }}
       app-prerelease-number: ${{ steps.publish-app-package.outputs.prerelease-number }}
-    runs-on: [silabs-internal, austin]
+    runs-on: [silabs-internal]
     steps:      
       - name: Checkout repository
         uses: actions/checkout@v5
