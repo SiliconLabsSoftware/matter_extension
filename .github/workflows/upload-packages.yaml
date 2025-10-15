@@ -220,7 +220,7 @@ jobs:
       - name: package version update
         run: |
           echo "Prerelease Number: ${{ steps.get-package-version.outputs.prerelease-number }}"
-          echo "SL_PRERELEASE=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
+          echo "SL_PRERELEASE_NUMBER=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
           pip install --upgrade PyYAML
           make generate_pkg_slt
 
