@@ -18,7 +18,7 @@
 // <SL_MATTER_LOG_AUTOMATION=> Automation
 // <i> Default: SL_MATTER_LOG_DETAIL
 #ifndef SL_MATTER_LOG_LEVEL
-#define SL_MATTER_LOG_LEVEL SL_MATTER_LOG_DETAIL
+#define SL_MATTER_LOG_LEVEL SL_MATTER_LOG_PROGRESS
 #endif
 
 // <q SILABS_LOG_ENABLED> Enable Silabs specific log used in matter
