@@ -24,7 +24,7 @@
         "platform-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","'--with matter_icd_management;matter'"] 
+                "arguments": ["--output_suffix icd","'--with mater_icd_core;matter'"] 
             }
         ]
     },

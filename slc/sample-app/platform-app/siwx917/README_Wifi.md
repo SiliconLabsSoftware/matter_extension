@@ -22,11 +22,11 @@ A minimal Matter platform example supporting essential clusters on Silicon Labs 
 
 # Introduction
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over WiFi network. This platform app serves as a foundation for building more complex Matter applications.
+This sample app demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over a WiFi network. This platform app serves as a foundation for building more complex Matter applications.
 
-For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.7.0/matter-wifi)
+For more information on running Matter applications and pre-requisites please refer to the online 
+documentation for Matter available at docs.silabs.com. Follow the instructions for the desired Matter over Wi-Fi application.
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/latest/matter-wifi)
 
 ## Region code Setting (917 WiFi projects)
 
