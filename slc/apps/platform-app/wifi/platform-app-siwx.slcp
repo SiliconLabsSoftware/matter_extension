@@ -1,4 +1,4 @@
-project_name: platform-app-917-soc
+project_name: platform-c
 label: Matter Platform
 description: >
   Matter Platform App
@@ -257,10 +257,10 @@ template_contribution:
     value: 1
 
 readme:
-  - path: ./README_WiFi.md
+  - path: ./README.md
 ui_hints:
   highlight:
-    - path: README_WiFi.md
+    - path: README.md
       focus: false
 
 tag:
