@@ -24,7 +24,7 @@ common:
   # (Left empty intentionally for now to demonstrate per-platform override capability.)
 
 thread:
-  openthread: 3.0.0-alpha.0
+  openthread: 3.0.0-alpha.1
   multiprotocol: 1.0.0-alpha.1
   zigbee: 9.0.0-alpha.0
   bluetooth_le_host: 11.0.0-alpha.2
