@@ -9,6 +9,12 @@
                 "boards": ["'brd4338a;wiseconnect3_sdk'"],               
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
+        ],
+        "platform-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core;matter'"] 
+            }
         ]
     },
     "full": {
@@ -20,6 +26,12 @@
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core;matter'"] 
             }
         ]
     },
