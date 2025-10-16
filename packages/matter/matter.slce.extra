@@ -796,7 +796,6 @@ extra_files:
   - slc/component/matter-core-sdk/libasn1.slcc
   - slc/component/matter-core-sdk/libqrcode_common.slcc
   - slc/component/matter-core-sdk/tracing_headers.slcc
-  - slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
   - slc/component/matter-core-sdk/libopenthread_spinel_ncp.slcc
   - slc/component/matter-core-sdk/libopenthread_platform_utils.slcc
   - slc/component/matter-core-sdk/libchipcore.slcc
@@ -1241,6 +1240,7 @@ extra_files:
   - slc/inc/access/AccessBuildConfig.h
   - slc/inc/lwip/lwip_buildconfig.h
   - slc/inc/platform/CHIPDeviceBuildConfig.h
+  - slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
   - slc/inc/codegen/CodegenProcessingBuildConfig.h
   - slc/inc/system/SystemBuildConfig.h
   - slc/inc/inet/InetBuildConfig.h
