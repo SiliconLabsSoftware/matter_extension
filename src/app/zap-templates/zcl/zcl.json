@@ -381,6 +381,9 @@
             "OperatingMode",
             "FeatureMap"
         ],
+        "Identify": [
+            "ClusterRevision"
+        ],
         "Joint Fabric Datastore": [
             "Status"
         ],
