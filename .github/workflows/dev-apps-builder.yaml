@@ -171,6 +171,7 @@ jobs:
         with:
             example-app: "platform-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
 
     build-sqa-tools:
         name: Build SQA Tools
