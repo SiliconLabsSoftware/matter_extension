@@ -13,7 +13,7 @@
         "platform-app": [
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix icd","'--with matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core;matter'"] 
             }
         ]
     },
@@ -31,7 +31,7 @@
         "platform-app": [
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix icd","'--with matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core;matter'"] 
             }
         ]
     },
