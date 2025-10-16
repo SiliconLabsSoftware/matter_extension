@@ -239,7 +239,7 @@ fi
 
 if [ "$skip_gen" = false ]; then
 	if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-		if [[ "$SILABS_APP_PATH" != *917-soc* ]]; then
+		if [[ "$SILABS_APP_PATH" != *-siwx* ]]; then
 			# Get bootloader arguments
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
 			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
