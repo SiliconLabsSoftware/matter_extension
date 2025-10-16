@@ -12,6 +12,10 @@
 // <i> Default: 16
 #define TRACING_RUNTIME_STATS_MAX_TASKS 16
 
+// <q TRACING_TIME_TRACKER_STORAGE_SIZE> Maximum number of tasks to report
+// <i> Default: 512
+#define TRACING_TIME_TRACKER_STORAGE_SIZE 512
+
 // <<< end of configuration section >>>
 
 #endif // PLATFORM_SILABS_TRACING_SILABSTRACINGCONFIG_H_
