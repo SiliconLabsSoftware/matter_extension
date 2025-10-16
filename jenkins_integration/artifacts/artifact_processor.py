@@ -448,21 +448,10 @@ def _determine_app_info(app_name_folder, board_id, build_type):
     Returns:
         dict: Application information containing app_name and cmp_type
     """
-    if "bootloader" in app_name_folder:
-        return {
-            'app_name': f"{board_id}-bootloader",
-            'cmp_type': ""
-        }
-    elif "thread" in app_name_folder:
+    if "series-" in app_name_folder:
         return {
             'app_name': f"{board_id}-OpenThread",
             'cmp_type': ""
-        }
-    elif "zigbee-matter-light" in app_name_folder:
-        cmp_type = "-thread-sequential" if "sequential" in app_name_folder else "-thread-concurrent"
-        return {
-            'app_name': f"{board_id}-OpenThread",
-            'cmp_type': cmp_type
         }
     else:
         return {
@@ -486,37 +475,11 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            new_file_name = _generate_new_file_name(file_name, app_info, board_id)
+            new_file_name = file_name
             new_file_path = os.path.join(artifact_folder, new_file_name)
             os.rename(file_path, new_file_path)
             print(f"Renamed file {file_name} to {new_file_name}.")
             upload_to_ubai(new_file_path, app_info['app_name'], board_id, branch_name, run_number, workflow_id=workflow_id)
-
-
-def _generate_new_file_name(file_name, app_info, board_id):
-    """
-    Generate a new file name based on the application type and board ID.
-    
-    Args:
-        file_name (str): Original file name
-        app_info (dict): Application information
-        board_id (str): Board identifier
-        
-    Returns:
-        str: New file name
-    """
-    file_ext = file_name.split(".")[-1]
-    if "bootloader" in app_info['app_name']:
-        return f"{board_id.lower()}-bootloader.{file_ext}"
-    else:
-        sample_app = _extract_sample_app_name(file_name)
-        cmp_type = app_info['cmp_type']
-        if "." not in sample_app:
-            return f"{sample_app}{cmp_type}.{file_ext}"
-        else:
-            sample_app_base = sample_app.rsplit(".", 1)[0]
-            return f"{sample_app_base}{cmp_type}.{file_ext}"
-
 
 def _extract_sample_app_name(file_name):
     """
@@ -528,9 +491,7 @@ def _extract_sample_app_name(file_name):
     Returns:
         str: Extracted sample app name
     """
-    if "internal-bootloader" in file_name:
-        return file_name.split("-internal-bootloader")[0]
-    elif "bootloader" in file_name:
-        return file_name.split("-bootloader")[0]
+    if "series-" in file_name:
+        return file_name.split("-series")[0]
     else:
         return file_name 

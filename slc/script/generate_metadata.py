@@ -262,7 +262,7 @@ for brd, val in demos_map['demos'].items():
                     imageFileProp.set('value', asset_prefix + os.path.join("demos", brd, technology, demoFilename))
                     readmeFileProp.set('key', 'core.readmeFiles')
                     readmeFileProp.set(
-                        'value',  os.path.join("slc","sample-app", '-'.join([demo_name.replace(" ", "-").replace("SiWx917-","").replace("-example","").replace('.rps',''), 'app']) if 'thermostat' not in demo_name else "thermostat", ("siwx917" if "soc" in board_type else "efr32"),"README_WiFi.md"))
+                        'value',  os.path.join("slc","sample-app", '-'.join([demo_name.replace(" ", "-").replace("SiWx917-","").replace("-example","").replace('.rps',''), 'app']) if 'thermostat' not in demo_name else "thermostat", ("siwx917" if "soc" in board_type else "efr32"),"README.md"))
 
                     filtersProp.set('key', 'filters')
                     filtersProp.set('value', "Type|" + ("SoC" if "soc" in board_type else "NCP") + " Project\\ Difficulty|Advanced Wireless\\ Technology|Matter")
