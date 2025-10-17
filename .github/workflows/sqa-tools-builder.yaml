@@ -166,14 +166,12 @@ jobs:
       - name: Create WiFi firmware directories
         shell: bash
         run: |
-          mkdir -p sqa-tools/WiFi-Firmware/siwx917 sqa-tools/WiFi-Firmware/rs911x/{Evk_1.4,Evk_1.5}
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917
 
       - name: Copy WiFi firmware files
         shell: bash
         run: |
           cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS9116W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.4/
-          cp ${WISECONNECT_SDK_ROOT}/firmware/RS916W.2.*.rps sqa-tools/WiFi-Firmware/rs911x/Evk_1.5/
           echo "WiFi firmware files copied successfully."
 
       - name: Upload WiFi firmware artifacts

@@ -276,6 +276,12 @@
     ]
   },
   {
+    "clusterCode": "groupcast-server",
+    "value": [
+      "%extension-matter%matter_groupcast"
+    ]
+  },
+  {
     "clusterCode": "groups-server",
     "value": [
       "%extension-matter%matter_groups"

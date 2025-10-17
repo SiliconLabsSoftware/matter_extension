@@ -48,8 +48,7 @@ jobs:
                       third_party/mqtt \
                       third_party/nlassert \
                       third_party/nlio \
-                      third_party/QR-Code-generator \
-                      third_party/wiseconnect-wifi-bt-sdk
+                      third_party/QR-Code-generator
                   # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
 
             - name: Install tools

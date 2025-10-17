@@ -253,9 +253,6 @@ components:
   - toolchain_gcc_common
   - wf200_ncp
   - matter_drivers_series_2_wifi_wf200
-  - wiseconnect_sapi
-  - matter_drivers_series_2_wifi_rs911x
-  - rs911x_ncp
   - matter_si70xx_sensor
   - matter_memory_monitoring
   - matter_crypto
@@ -642,12 +639,6 @@ components:
   - toolchain_gcc_common
   - wf200_ncp
   - matter_drivers_series_2_wifi_wf200
-  - wiseconnect_sapi
-  - matter_drivers_series_2_wifi_rs911x
-  - rs911x_ncp
-  - wiseconnect_sapi
-  - matter_drivers_series_2_wifi_rs911x
-  - rs911x_ncp
   - wf200_ncp
   - matter_drivers_series_2_wifi_wf200
   - toolchain_gcc_common
@@ -1041,9 +1032,6 @@ extra_files:
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/wf200/wf200_ncp.slcc
   - slc/component/matter-wifi/wf200/matter_drivers_series_2_wifi_wf200.slcc
-  - slc/component/matter-wifi/rs911x/wiseconnect_sapi.slcc
-  - slc/component/matter-wifi/rs911x/matter_drivers_series_2_wifi_rs911x.slcc
-  - slc/component/matter-wifi/rs911x/rs911x_ncp.slcc
   - slc/component/matter-platform/sensors/matter_si70xx_sensor.slcc
   - slc/component/matter-platform/memory-monitoring/matter_memory_monitoring.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
@@ -1145,7 +1133,6 @@ extra_files:
   - slc/component/sdk-content/zap/app/static-cluster-config/TimeFormatLocalization.h
   - slc/component/sdk-content/zap/app/static-cluster-config/FixedLabel.h
   - slc/component/sdk-content/zap/app/static-cluster-config/Binding.h
-  - slc/component/sdk-content/wiseconnect-wifi-bt-sdk/sapi/driver/device_interface/spi/rsi_spi_iface_init.c
   - slc/solutions/onoff-plug-app/siwx917/onoff-plug-app-917-soc.slcw
   - slc/solutions/onoff-plug-app/siwx917/pkg.slt
   - slc/solutions/onoff-plug-app/series-3/pkg.slt
@@ -1171,7 +1158,6 @@ extra_files:
   - slc/solutions/thermostat/siwx917/thermostat-917-soc.slcw
   - slc/solutions/thermostat/series-3/pkg.slt
   - slc/solutions/thermostat/series-3/thermostat-thread-bootloader.slcw
-  - slc/solutions/thermostat/series-2/thermostat-rs911x-bootloader.slcw
   - slc/solutions/thermostat/series-2/thermostat-wf200-bootloader.slcw
   - slc/solutions/thermostat/series-2/thermostat-thread-internal-bootloader.slcw
   - slc/solutions/thermostat/series-2/pkg.slt
@@ -1184,7 +1170,6 @@ extra_files:
   - slc/solutions/lock-app/series-3/pkg.slt
   - slc/solutions/lock-app/series-3/lock-app-thread-bootloader.slcw
   - slc/solutions/lock-app/series-2/lock-app-917-ncp-bootloader.slcw
-  - slc/solutions/lock-app/series-2/lock-app-rs911x-bootloader.slcw
   - slc/solutions/lock-app/series-2/lock-app-wf200-bootloader.slcw
   - slc/solutions/lock-app/series-2/pkg.slt
   - slc/solutions/lock-app/series-2/lock-app-thread-internal-bootloader.slcw
@@ -1303,7 +1288,6 @@ extra_files:
   - slc/sample-app/thermostat/efr32/thermostat-thread.slcp
   - slc/sample-app/thermostat/efr32/README_WiFi.md
   - slc/sample-app/thermostat/efr32/README.md
-  - slc/sample-app/thermostat/efr32/thermostat-rs911x.slcp
   - slc/sample-app/thermostat/efr32/pkg.slt
   - slc/sample-app/thermostat/efr32/thermostat-917-ncp.slcp
   - slc/sample-app/fan-control-app/siwx917/README_WiFi.md
@@ -1318,7 +1302,6 @@ extra_files:
   - slc/sample-app/lock-app/efr32/pkg.slt
   - slc/sample-app/lock-app/efr32/lock-app-wf200.slcp
   - slc/sample-app/lock-app/efr32/lock-app-thread.slcp
-  - slc/sample-app/lock-app/efr32/lock-app-rs911x.slcp
   - slc/sample-app/closure-app/siwx917/closure-app-917-soc.slcp
   - slc/sample-app/closure-app/siwx917/README_WiFi.md
   - slc/sample-app/closure-app/siwx917/pkg.slt

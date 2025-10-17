@@ -19,9 +19,6 @@
 [submodule "third_party/QR-Code-generator"]
 	path = third_party/QR-Code-generator
 	url = https://github.com/nayuki/QR-Code-generator.git
-[submodule "third_party/wiseconnect-wifi-bt-sdk"]
-	path = third_party/wiseconnect-wifi-bt-sdk
-	url = https://github.com/SiliconLabs/wiseconnect-wifi-bt-sdk.git
 [submodule "third_party/matter_support"]
 	path = third_party/matter_support
 	url = https://github.com/SiliconLabsSoftware/matter_support.git
