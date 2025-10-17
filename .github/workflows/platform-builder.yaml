@@ -69,6 +69,10 @@ on:
                 required: false
                 type: boolean
                 default: true
+            use-windows:
+                required: false
+                type: boolean
+                default: false
 
 jobs:
     mg24-build-job:
@@ -80,6 +84,7 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
+            use-windows: ${{ github.event.inputs.use-windows }}
 
     mg24-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
