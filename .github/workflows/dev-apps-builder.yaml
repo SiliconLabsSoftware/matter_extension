@@ -37,7 +37,7 @@ jobs:
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                      echo "build-type=full" >> $GITHUB_OUTPUT # TEMP full build for testing
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
                       if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
