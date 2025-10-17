@@ -486,7 +486,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            new_file_name = _generate_new_file_name(file_name, app_info, board_id)
+            new_file_name = file_name
             new_file_path = os.path.join(artifact_folder, new_file_name)
             os.rename(file_path, new_file_path)
             print(f"Renamed file {file_name} to {new_file_name}.")
@@ -528,9 +528,7 @@ def _extract_sample_app_name(file_name):
     Returns:
         str: Extracted sample app name
     """
-    if "internal-bootloader" in file_name:
-        return file_name.split("-internal-bootloader")[0]
-    elif "bootloader" in file_name:
-        return file_name.split("-bootloader")[0]
+    if "series-" in file_name:
+        return file_name.split("-series")[0]
     else:
         return file_name 
