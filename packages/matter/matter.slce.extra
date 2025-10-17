@@ -1133,7 +1133,6 @@ extra_files:
   - slc/component/sdk-content/zap/app/static-cluster-config/TimeFormatLocalization.h
   - slc/component/sdk-content/zap/app/static-cluster-config/FixedLabel.h
   - slc/component/sdk-content/zap/app/static-cluster-config/Binding.h
-  - slc/component/sdk-content/wiseconnect-wifi-bt-sdk/sapi/driver/device_interface/spi/rsi_spi_iface_init.c
   - slc/solutions/onoff-plug-app/siwx917/onoff-plug-app-917-soc.slcw
   - slc/solutions/onoff-plug-app/siwx917/pkg.slt
   - slc/solutions/onoff-plug-app/series-3/pkg.slt

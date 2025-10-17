@@ -49,8 +49,7 @@ jobs:
           third_party/mqtt \
           third_party/nlassert \
           third_party/nlio \
-          third_party/QR-Code-generator \
-          third_party/wiseconnect-wifi-bt-sdk
+          third_party/QR-Code-generator
       
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
@@ -102,8 +101,7 @@ jobs:
             third_party/mqtt \
             third_party/nlassert \
             third_party/nlio \
-            third_party/QR-Code-generator \
-            third_party/wiseconnect-wifi-bt-sdk
+            third_party/QR-Code-generator
       
       - name: Trust SDK 
         shell: bash
