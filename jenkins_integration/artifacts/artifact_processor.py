@@ -528,9 +528,7 @@ def _extract_sample_app_name(file_name):
     Returns:
         str: Extracted sample app name
     """
-    if "internal-bootloader" in file_name:
-        return file_name.split("-internal-bootloader")[0]
-    elif "bootloader" in file_name:
-        return file_name.split("-bootloader")[0]
+    if "series-" in file_name:
+        return file_name.split("-series")[0]
     else:
         return file_name 
