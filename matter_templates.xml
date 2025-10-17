@@ -154,23 +154,6 @@
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterLockOverWiFi" label="Matter - NCP Lock over Wi-Fi"
-               description="This project builds a Matter Lock for Wi-Fi RS9116 that can be developed inside Simplicity Studio">
-    <properties key="namespace" value="template.uc"/>
-    <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.lock-app.efr32.lock-app-rs911x.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/lock-app/efr32/lock-app-rs911x.slcp"/>
-    <properties key="readmeFiles" value="slc/sample-app/lock-app/efr32/README_WiFi.md"/>
-    <properties key="boardCompatibility" value="brd4186c brd4187c com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*efr32mg24.*"/>
-    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
-    <properties key="toolchainCompatibility" value="gcc"/>
-    <properties key="category" value="Matter Application"/>
-    <properties key="quality" value="PRODUCTION"/>
-    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="core.hidden" value="true"/>
-  </descriptors>
-  <descriptors name="MatterLockOverWiFi" label="Matter - NCP Lock over Wi-Fi"
                description="This project builds a Matter Lock for Wi-Fi 917NCP that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
@@ -321,23 +304,6 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Beginner Wireless\ Technology|Matter"/>
-    <properties key="core.hidden" value="true"/>
-  </descriptors>
-  <descriptors name="MatterThermostatOverWiFi" label="Matter - SoC Thermostat over Wi-Fi"
-               description="This project builds a Matter Thermostat for Wi-Fi RS9116 that can be developed inside Simplicity Studio">
-    <properties key="namespace" value="template.uc"/>
-    <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.sample-app.thermostat.efr32.thermostat-rs911x.slcp"/>
-    <properties key="projectFilePaths" value="slc/sample-app/thermostat/efr32/thermostat-rs911x.slcp"/>
-    <properties key="readmeFiles" value="slc/sample-app/thermostat/efr32/README_WiFi.md"/>
-    <properties key="boardCompatibility" value="brd4186c brd4187c com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*efr32mg24.*"/>
-    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
-    <properties key="toolchainCompatibility" value="gcc"/>
-    <properties key="category" value="Matter Application"/>
-    <properties key="quality" value="PRODUCTION"/>
-    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterThermostatOverWiFi" label="Matter - NCP Thermostat over Wi-Fi"
@@ -529,23 +495,6 @@
     <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.sample-app.lock-app.efr32.lock-app-thread.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverWifiSolution" label="Matter - NCP Lock over Wi-Fi with internal Bootloader"
-               description="This project builds a Matter Lock app for Wi-Fi RS9116 and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
-    <properties key="namespace" value="template.solution.uc"/>
-    <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.solutions.lock-app.series-2.lock-app-rs911x-bootloader.slcw"/>
-    <properties key="projectFilePaths" value="slc/solutions/lock-app/series-2/lock-app-rs911x-bootloader.slcw"/>
-    <properties key="readmeFiles" value="slc/sample-app/lock-app/efr32/README_WiFi.md"/>
-    <properties key="boardCompatibility" value=" brd4186c brd4187c  com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*efr32mg24.*"/>
-    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
-    <properties key="toolchainCompatibility" value="gcc"/>
-    <properties key="category" value="Matter Application"/>
-    <properties key="quality" value="PRODUCTION"/>
-    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.sample-app.lock-app.efr32.lock-app-rs911x.slcp"/>
-  </descriptors>
-  <descriptors name="MatterLockOverWifiSolution" label="Matter - NCP Lock over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Lock app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
@@ -629,23 +578,6 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.sample-app.thermostat.efr32.thermostat-thread.slcp"/>
-  </descriptors>
-  <descriptors name="MatterThermostatOverWifiSolution" label="Matter - NCP Thermostat over Wi-Fi with internal Bootloader"
-               description="This project builds a Matter Thermostat app for Wi-Fi RS9116 and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
-    <properties key="namespace" value="template.solution.uc"/>
-    <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.solutions.thermostat.series-2.thermostat-rs911x-bootloader.slcw"/>
-    <properties key="projectFilePaths" value="slc/solutions/thermostat/series-2/thermostat-rs911x-bootloader.slcw"/>
-    <properties key="readmeFiles" value="slc/sample-app/thermostat/efr32/README_WiFi.md"/>
-    <properties key="boardCompatibility" value="brd4186c brd4187c  com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*efr32mg24.*"/>
-    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
-    <properties key="toolchainCompatibility" value="gcc"/>
-    <properties key="category" value="Matter Application"/>
-    <properties key="quality" value="PRODUCTION"/>
-    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.sample-app.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.sample-app.thermostat.efr32.thermostat-rs911x.slcp"/>
   </descriptors>
   <descriptors name="MatterThermostatOverWifiSolution" label="Matter - NCP Thermostat over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Thermostat app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">

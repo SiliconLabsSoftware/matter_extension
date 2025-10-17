@@ -45,12 +45,6 @@ def should_exclude(root, path):
         return True
     
     full_path = os.path.join(root, path)
-    
-    # Check for wiseconnect_wifi_bt_sdk specific includes
-    if "wiseconnect-wifi-bt-sdk/" in full_path:
-        if not any(include in full_path for include in wiseconnect_wifi_bt_sdk_includes):
-            #print(f"Excluding wiseconnect_wifi_bt_sdk path: {full_path}")
-            return True
 
     # Exclude submodules
     if "third_party/" in full_path:
