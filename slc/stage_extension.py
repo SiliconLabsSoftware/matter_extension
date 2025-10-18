@@ -53,7 +53,6 @@ wiseconnect_wifi_bt_sdk_includes = [
 matter_support_includes = [
     'provision',
     'tinycrypt',
-    'si91x',
     'lwip'
 ]
 
