@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-#This script is creates cluster components from the src/app/clusters directory
-#USAGE : python3 slc/script/gen_cluster_components.py
+# This script is creates cluster components from the src/app/clusters directory
+# USAGE : python3 slc/script/gen_cluster_components.py
 
 
 import os
@@ -10,10 +10,12 @@ import shutil
 import json
 import yaml
 
-root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
+root = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
 os.chdir(root)
 cluster_dir_path = "third_party/matter_sdk/src/app/clusters"
-cluster_xml_path = ["third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"] 
+cluster_xml_path = [
+    "third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"
+]
 
 # Create a dictionary of all the clusters from Cluster_Dir_Path with the headers, source files,
 # and if it is a server cluster or not
@@ -35,11 +37,11 @@ for subdir in subdirs:
         # Check if the file is a source file
         elif file.endswith(".c") or file.endswith(".cpp"):
             sources.append(os.path.join(cluster_dir_path, subdir, file))
-        
+
         # Replace hyphens with underscores in the subdirectory name to form the cluster component name
         clustercomponentname = subdir.replace("-", "_")
         clustername = clustercomponentname
-        
+
         # Determine if the cluster is a server or client
         if "server" in clustercomponentname:
             clientOrServer = " Server"
@@ -47,7 +49,7 @@ for subdir in subdirs:
         if "client" in clustername:
             clientOrServer = " Client"
             clustername = clustercomponentname.replace("_client", "")
-        
+
         # Set the include path for the cluster
         include = os.path.join(cluster_dir_path, subdir)
 
@@ -70,7 +72,7 @@ for clustercomponentname in cluster_data.keys():
     clusternames.append(cluster_data[clustercomponentname]["clustername"])
 
 namecategories = {}
-#create dictionary with categories and names mapped to clustername
+# create dictionary with categories and names mapped to clustername
 for xml_path in cluster_xml_path:
     for xmlfile in os.listdir(xml_path):
         filename = xmlfile.split(".")[0]
@@ -124,18 +126,19 @@ for xml_path in cluster_xml_path:
                     clustername = "ota_provider"
                     namecategories[clustername] = {}
                     namecategories[clustername]["category"] = category
-                    namecategories[clustername]["name"] = name.replace("Requestor", "Provider")
+                    namecategories[clustername]["name"] = name.replace(
+                        "Requestor", "Provider")
                 else:
                     namecategories[clustername] = {}
                     namecategories[clustername]["category"] = category
                     namecategories[clustername]["name"] = name
-            else :
+            else:
                 namecategories[clustername] = {}
                 namecategories[clustername]["category"] = "General"
                 namecategories[clustername]["name"] = clustername
 
-#add category and name from xml to the cluster_data           
-#For the except condition check the name of the xml files and update the above loop to match clustername
+# add category and name from xml to the cluster_data
+# For the except condition check the name of the xml files and update the above loop to match clustername
 for clustercomponentname in cluster_data.keys():
     try:
         clustername = cluster_data[clustercomponentname]["clustername"]
@@ -153,31 +156,35 @@ for clustercomponentname in sorted(cluster_data.keys()):
     try:
         # Special cases for filename differences
         if "client" in clustername:
-            category = cluster_data[clustername.replace("_client", "")]["category"]
+            category = cluster_data[clustername.replace(
+                "_client", "")]["category"]
         else:
             category = cluster_data[clustercomponentname]["category"]
     except:
         category = "General"
-    
+
     category_str = "category: Clusters|{}".format(category)
     filedata.append(category_str)
     try:
-        name = cluster_data[clustercomponentname]["name"].replace("_", " ").replace("matter ", "")
+        name = cluster_data[clustercomponentname]["name"].replace(
+            "_", " ").replace("matter ", "")
     except:
         name = clustername.replace("_", " ").replace("matter ", "").title()
     if "ota" in clustername:
         name = name.replace('Ota', 'OTA')
-    
-    label = "{}{} Cluster".format(name, cluster_data[clustercomponentname]['clientOrServer'])
+
+    label = "{}{} Cluster".format(
+        name, cluster_data[clustercomponentname]['clientOrServer'])
     description = "description: >\n  Implementation of the {}.".format(label)
     description += f"\n  The user has to enable the {label} in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality."
     filedata.append(description)
-    
+
     if cluster_data[clustercomponentname]['clientOrServer'] == " Client":
         clustername = clustername + "_client"
 
-    #get data from current SLCC file
-    component_location = os.path.join(component_dir, "matter_{}.slcc".format(clustername))
+    # get data from current SLCC file
+    component_location = os.path.join(
+        component_dir, "matter_{}.slcc".format(clustername))
     includes = []
     source_data = []
     defines = []
@@ -189,20 +196,21 @@ for clustercomponentname in sorted(cluster_data.keys()):
         current_include_data = content.get('include', [])
         current_define_data = content.get('define', [])
 
-        #merge with extracted source and include data and remove duplicates
+        # merge with extracted source and include data and remove duplicates
         for path in current_source_data:
             source_data.append(path["path"])
-        if len(current_include_data)>1:
+        if len(current_include_data) > 1:
             include = {}
             for i in range(len(current_include_data)):
                 if current_include_data[i]["path"] not in cluster_data[clustercomponentname]["include"]:
                     headers = []
                     for header in current_include_data[i]["file_list"]:
                         headers.append(header["path"])
-                    include = {"path": current_include_data[i]["path"], "file_list": headers}
+                    include = {
+                        "path": current_include_data[i]["path"], "file_list": headers}
                     includes.append(include)
-        
-        #merge with extracted define data and remove duplicates
+
+        # merge with extracted define data and remove duplicates
         for define in current_define_data:
             df = {}
             df["name"] = define["name"]
@@ -210,19 +218,21 @@ for clustercomponentname in sorted(cluster_data.keys()):
             defines.append(df)
         os.remove(component_location)
     except Exception as e:
-        print("EXCEPTION for component ", e , component_location)
+        print("EXCEPTION for component ", e, component_location)
 
-    source_data = list(set(source_data + cluster_data[clustercomponentname]["sources"]))
+    source_data = list(
+        set(source_data + cluster_data[clustercomponentname]["sources"]))
     if len(cluster_data[clustercomponentname]["headers"]) > 0:
-        include = {"path": cluster_data[clustercomponentname]["include"], "file_list": cluster_data[clustercomponentname]["headers"]}
+        include = {"path": cluster_data[clustercomponentname]["include"],
+                   "file_list": cluster_data[clustercomponentname]["headers"]}
         includes.append(include)
     current_define_data = []
-    
+
     id_str = "matter_" + clustername
     id = "id: {}".format(id_str)
     filedata.append(id)
     filedata.append("package: matter")
-    
+
     label_str = "label: {}".format(label)
     filedata.append(label_str)
     # special case as only component with experimental quality
@@ -240,7 +250,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
 
     if len(source_data) > 0:
         filedata.append("source:")
-        for src in sorted(source_data,key=str.casefold):
+        for src in sorted(source_data, key=str.casefold):
             path = "  - path: {}".format(src)
             filedata.append(path)
 
@@ -250,7 +260,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
             path = "  - path: {}".format(include["path"])
             filedata.append(path)
             filedata.append("    file_list:")
-            for header in sorted(include["file_list"],key=str.casefold):
+            for header in sorted(include["file_list"], key=str.casefold):
                 path = "      - path: {}".format(header)
                 filedata.append(path)
 
@@ -273,17 +283,18 @@ for clustercomponentname in sorted(cluster_data.keys()):
 print("Cluster components created successfully.")
 
 # Create the cluster-to-component-dependencies.json
-jsonfilepath = os.path.join(root, "src/app/zap-templates/cluster-to-component-dependencies.json")
+jsonfilepath = os.path.join(
+    root, "src/app/zap-templates/cluster-to-component-dependencies.json")
 lst = []
 
 # Iterate over each cluster component name in the cluster_data dictionary
 for clustercomponentname in sorted(cluster_data.keys()):
     # Initialize an empty dictionary to store the dependencies for the current cluster component
     dependanciesDic = {}
-    
+
     # Get the cluster name for the current cluster component
     clustername = cluster_data[clustercomponentname]["clustername"]
-    
+
     try:
         # Try to get the cluster code by converting the name to lowercase
         clusterCode = cluster_data[clustercomponentname]["name"].lower()
@@ -291,26 +302,26 @@ for clustercomponentname in sorted(cluster_data.keys()):
         # If an exception occurs, generate the cluster code by replacing parts of the cluster name
         clusterCode = clustername.replace("matter_", "")
         clusterCode = clusterCode.replace("_", " ")
-    
+
     # Determine if the cluster is a server or client and adjust the cluster code accordingly
     if cluster_data[clustercomponentname]["clientOrServer"] == "" or cluster_data[clustercomponentname]["clientOrServer"] == " Server":
         clusterCode = clusterCode + "-server"
     else:
         clusterCode = clusterCode + "-client"
         clustername = clustername + "_client"
-    
+
     # Create the value string for the dependency
     value_str = "%extension-matter%matter_" + clustername
-    
+
     # Special case handling for OTA requestor
     if "matter_ota_requestor" in value_str:
         clusterCode = clusterCode.replace("provider", "requestor")
-    
+
     # Add the cluster code and value to the dependencies dictionary
     dependanciesDic["clusterCode"] = clusterCode
     value = [value_str]
     dependanciesDic["value"] = value
-    
+
     # Append the dependencies dictionary to the list
     lst.append(dependanciesDic)
 
@@ -330,10 +341,12 @@ with open(matter_sdk_zcl_file_path, 'r') as file:
     data = json.load(file)
 
 # Update paths in the list
-data['xmlRoot'] = [f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
+data['xmlRoot'] = [
+    f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
 
 # Update manufacturersXml path
-data['manufacturersXml'] = "../../../../third_party/matter_sdk/" + data['manufacturersXml'].split('./')[-1]
+data['manufacturersXml'] = "../../../../third_party/matter_sdk/" + \
+    data['manufacturersXml'].split('./')[-1]
 
 # Write the updated JSON back to the file
 with open(matter_extension_zcl_file_path, 'w') as file:

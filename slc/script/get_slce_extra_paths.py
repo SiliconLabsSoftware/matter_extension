@@ -50,6 +50,7 @@ import sys
 from pathlib import Path
 from typing import Iterable, List, Optional
 
+
 def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: Optional[str]) -> List[Path]:
     results: List[Path] = []
     root = root.resolve()
@@ -77,22 +78,29 @@ def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: Optio
     # Relative output is handled by caller (to allow different bases)
     return results
 
+
 def main(argv: Iterable[str]) -> int:
     parser = argparse.ArgumentParser(
         description="Recursively list paths under a folder and write them to a file."
     )
-    parser.add_argument("--roots", nargs="+", help="One or more root folders to walk")
-    parser.add_argument("--output", nargs="?", help="File to write the list into (ignored if --slce-extra is used)")
-    parser.add_argument("--absolute", action="store_true", help="Write absolute paths instead of relative")
+    parser.add_argument("--roots", nargs="+",
+                        help="One or more root folders to walk")
+    parser.add_argument("--output", nargs="?",
+                        help="File to write the list into (ignored if --slce-extra is used)")
+    parser.add_argument("--absolute", action="store_true",
+                        help="Write absolute paths instead of relative")
     parser.add_argument(
         "--relative-base",
         choices=["cwd", "root"],
         default="cwd",
         help="When not using --absolute, choose base for relative paths: 'cwd' (current working directory) or 'root' (the provided root folder). Default: cwd",
     )
-    parser.add_argument("--include-dirs", action="store_true", help="Include directory entries (default: only files)")
-    parser.add_argument("--pattern", help="Optional glob pattern filter (applied to each path)")
-    parser.add_argument("--newline", choices=["lf", "crlf"], default="lf", help="Line ending style (only for file output)")
+    parser.add_argument("--include-dirs", action="store_true",
+                        help="Include directory entries (default: only files)")
+    parser.add_argument(
+        "--pattern", help="Optional glob pattern filter (applied to each path)")
+    parser.add_argument("--newline", choices=["lf", "crlf"],
+                        default="lf", help="Line ending style (only for file output)")
     parser.add_argument(
         "--slce-extra",
         metavar="FILE",
@@ -137,12 +145,14 @@ def main(argv: Iterable[str]) -> int:
                 pattern=args.pattern,
             )
         except Exception as e:
-            print(f"Error while collecting paths under {r}: {e}", file=sys.stderr)
+            print(
+                f"Error while collecting paths under {r}: {e}", file=sys.stderr)
             return 2
         aggregated.extend(collected)
 
     # Always-include specific paths (must exist)
-    always_include = [Path("third_party/matter_sdk/src/app/common/templates/config-data.yaml")]
+    always_include = [
+        Path("third_party/matter_sdk/src/app/common/templates/config-data.yaml")]
     for extra in always_include:
         if not (extra.exists() and extra.is_file()):
             print(f"Error: required file not found: {extra}", file=sys.stderr)
@@ -195,7 +205,8 @@ def main(argv: Iterable[str]) -> int:
     if args.slce_extra:
         target_file = Path(args.slce_extra)
         if not target_file.exists():
-            print(f"Error: --slce-extra file not found: {target_file}", file=sys.stderr)
+            print(
+                f"Error: --slce-extra file not found: {target_file}", file=sys.stderr)
             return 4
         try:
             text = target_file.read_text(encoding="utf-8").splitlines()
@@ -205,9 +216,11 @@ def main(argv: Iterable[str]) -> int:
 
         marker = "# matter_sdk paths"
         try:
-            idx = next(i for i, line in enumerate(text) if line.strip() == marker)
+            idx = next(i for i, line in enumerate(
+                text) if line.strip() == marker)
         except StopIteration:
-            print(f"Error: marker '{marker}' not found in {target_file}", file=sys.stderr)
+            print(
+                f"Error: marker '{marker}' not found in {target_file}", file=sys.stderr)
             return 6
 
         # Find where to stop (next line that looks like a top-level key 'word:'), skipping any existing generated lines
@@ -238,7 +251,8 @@ def main(argv: Iterable[str]) -> int:
         print(f"Inserted {len(paths)} paths under marker in {target_file}")
     else:
         if not args.output:
-            print("Error: output file required when --slce-extra is not used", file=sys.stderr)
+            print(
+                "Error: output file required when --slce-extra is not used", file=sys.stderr)
             return 8
         out_path = Path(args.output)
         try:
@@ -251,6 +265,7 @@ def main(argv: Iterable[str]) -> int:
             return 3
         print(f"Wrote {len(paths)} paths to {out_path}")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))

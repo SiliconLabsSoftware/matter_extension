@@ -45,7 +45,8 @@ def _sanitize_slc_path(slc_path: str) -> str:
         raise ValueError("Binary location must point to an 'slc' executable.")
 
     # Basic character screening (extra-safe even though we avoid shell=True)
-    invalid_chars = [';', '&', '|', '<', '>', '$', '`', '(', ')', '{', '}', '[', ']', '\\', '\'', '"', '..']
+    invalid_chars = [';', '&', '|', '<', '>', '$', '`',
+                     '(', ')', '{', '}', '[', ']', '\\', '\'', '"', '..']
     for ch in invalid_chars:
         if ch in slc_path:
             raise ValueError("Binary location contains invalid characters.")
@@ -94,7 +95,8 @@ def validate_slcc_files(directory: str, slc_cmd: str, stash: bool = False) -> bo
             results: List[str] = []
             if file.endswith(".slcc"):
                 file_path = os.path.join(root, file)
-                cmd = [slc_cmd, "--daemon", "validate", file_path, "--extension-path=./"]
+                cmd = [slc_cmd, "--daemon", "validate",
+                       file_path, "--extension-path=./"]
                 try:
                     completed = subprocess.run(
                         cmd,
@@ -106,7 +108,8 @@ def validate_slcc_files(directory: str, slc_cmd: str, stash: bool = False) -> bo
                 except subprocess.CalledProcessError as e:
                     out = (e.stdout or "")
                     err = (e.stderr or "")
-                    combined = (out + ("\n" if out and err else "") + err).strip()
+                    combined = (
+                        out + ("\n" if out and err else "") + err).strip()
                     results.append(combined)
                     success = False
                 except FileNotFoundError as e:
@@ -129,13 +132,15 @@ def validate_upgrade_file(directory: str, slc_cmd: str, stash: bool = False) -> 
     """
     upgrade_path = os.path.join(directory, "upgrade.slcu")
     if not os.path.isfile(upgrade_path):
-        logger.debug("No upgrade.slcu found at %s; skipping upgrade validation.", upgrade_path)
+        logger.debug(
+            "No upgrade.slcu found at %s; skipping upgrade validation.", upgrade_path)
         return
 
     cmd = [slc_cmd, "validate-upgrade", upgrade_path]
     results: List[str] = []
     try:
-        completed = subprocess.run(cmd, check=True, capture_output=True, text=True)
+        completed = subprocess.run(
+            cmd, check=True, capture_output=True, text=True)
         results.append((completed.stdout or "").strip())
         logger.info("Upgrade file validation successful.\n")
     except subprocess.CalledProcessError as e:
@@ -242,7 +247,8 @@ def main(argv: List[str]) -> int:
             logger.info("Validation successful! No issues detected.")
             return 0
         else:
-            logger.info("Validation warnings/errors. Please see the above logs.")
+            logger.info(
+                "Validation warnings/errors. Please see the above logs.")
             return 1
     except ValueError as ex:
         logger.error(str(ex))

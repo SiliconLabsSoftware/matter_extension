@@ -24,6 +24,7 @@ import subprocess
 import json
 from sl_create_new_app import createApp
 
+
 class Upgrade:
     def __init__(self, reference_project_file, matter_extension_version, verbose=False):
         self.EXAMPLE_USAGE = "python slc/sl_project_upgrade.py <PathToReferenceProjectFile(.slcp)> <matterExtensionVersion>"
@@ -50,18 +51,19 @@ class Upgrade:
             self.errors += 1
             self.print_usage_and_exit()
         if not os.path.exists(self.reference_project_file):
-            logging.error(f"Reference Project File does not exist: {self.reference_project_file}")
+            logging.error(
+                f"Reference Project File does not exist: {self.reference_project_file}")
             self.errors += 1
             sys.exit(1)
         if not self.reference_project_file.endswith('.slcp'):
-            logging.error("Reference Project File should have a .slcp extension")
+            logging.error(
+                "Reference Project File should have a .slcp extension")
             self.errors += 1
             sys.exit(1)
 
     def print_usage_and_exit(self):
         logging.info(self.EXAMPLE_USAGE)
         sys.exit(1)
-
 
     def git_merge_files(self, base_path, local_path, remote_path):
         """
@@ -74,14 +76,18 @@ class Upgrade:
                 'git', 'merge-file', local_path, base_path, remote_path
             ], check=False, capture_output=True, text=True)
             if result.returncode == 1:
-                logging.warning(f"Conflict detected while merging.\n  base: {base_path}\n  local: {local_path}\n  remote: {remote_path}")
-                logging.warning(f"Please resolve the conflict manually in {local_path}.")
+                logging.warning(
+                    f"Conflict detected while merging.\n  base: {base_path}\n  local: {local_path}\n  remote: {remote_path}")
+                logging.warning(
+                    f"Please resolve the conflict manually in {local_path}.")
                 self.warnings += 1
             elif result.returncode != 0:
-                logging.error(f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path} . Error: {result.stderr}")
+                logging.error(
+                    f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path} . Error: {result.stderr}")
                 self.errors += 1
         except subprocess.CalledProcessError as e:
-            logging.error(f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}. Exception: {e}")
+            logging.error(
+                f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}. Exception: {e}")
             self.errors += 1
 
     def read_file(self, path):
@@ -110,12 +116,15 @@ class Upgrade:
             self.reference_project_file, "-extid", f"matter:{self.matter_extension_version}"
         ]
         subprocess.run(upgrade_cmd)
-        logging.info(f"Project {self.reference_project_file} upgraded to Matter Extension v{self.matter_extension_version}")
+        logging.info(
+            f"Project {self.reference_project_file} upgraded to Matter Extension v{self.matter_extension_version}")
 
         # Now perform three-way merge for all files in customer_paths using git merge-file
-        json_path = os.path.join(os.path.dirname(self.reference_project_file), '.bak', 'source_and_include_paths.json')
+        json_path = os.path.join(os.path.dirname(
+            self.reference_project_file), '.bak', 'source_and_include_paths.json')
         if not os.path.exists(json_path):
-            logging.warning(f"source_and_include_paths.json not found at {json_path}, skipping merge.")
+            logging.warning(
+                f"source_and_include_paths.json not found at {json_path}, skipping merge.")
             self.warnings += 1
             return
         with open(json_path, 'r') as f:
@@ -135,7 +144,8 @@ class Upgrade:
             back_dict = build_dict_by_filename(backups_paths)
 
             # Only merge files that exist in all three
-            common_filenames = set(sdk_dict.keys()) & set(cust_dict.keys()) & set(back_dict.keys())
+            common_filenames = set(sdk_dict.keys()) & set(
+                cust_dict.keys()) & set(back_dict.keys())
             for fname in sorted(common_filenames):
                 matter_sdk = sdk_dict[fname]
                 cust = cust_dict[fname]
@@ -144,7 +154,8 @@ class Upgrade:
                 local_path = os.path.abspath(cust)
                 remote_path = os.path.abspath(matter_sdk)
                 if not (os.path.exists(base_path) and os.path.exists(local_path) and os.path.exists(remote_path)):
-                    logging.warning(f"Skipping merge for {cust} due to missing file.")
+                    logging.warning(
+                        f"Skipping merge for {cust} due to missing file.")
                     self.warnings += 1
                     continue
                 self.git_merge_files(base_path, local_path, remote_path)
@@ -152,17 +163,24 @@ class Upgrade:
 
     def print_summary(self):
         if self.errors > 0:
-            print("\033[91m[FAILURE]\033[0m One or more errors occurred during the upgrade. See log above.")
+            print(
+                "\033[91m[FAILURE]\033[0m One or more errors occurred during the upgrade. See log above.")
         elif self.warnings > 0:
-            print("\033[93m[WARNING]\033[0m Upgrade completed with warnings. See log above.")
+            print(
+                "\033[93m[WARNING]\033[0m Upgrade completed with warnings. See log above.")
         else:
             print("\033[92m[SUCCESS]\033[0m Upgrade completed successfully.")
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Upgrade a Matter project to a specified Matter extension version.")
-    parser.add_argument("-p", "--reference_project_file", dest="reference_project_file", required=False, help="Path to the reference .slcp project file")
-    parser.add_argument("-m", "--matter_extension_version", dest="matter_extension_version", required=False, help="Matter extension version to upgrade to")
-    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose (debug) logging")
+    parser = argparse.ArgumentParser(
+        description="Upgrade a Matter project to a specified Matter extension version.")
+    parser.add_argument("-p", "--reference_project_file", dest="reference_project_file",
+                        required=False, help="Path to the reference .slcp project file")
+    parser.add_argument("-m", "--matter_extension_version", dest="matter_extension_version",
+                        required=False, help="Matter extension version to upgrade to")
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help="Enable verbose (debug) logging")
     # Accept positional arguments for backward compatibility
     parser.add_argument("args", nargs="*", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -174,7 +192,8 @@ def main():
             args.reference_project_file = args.args[0]
             args.matter_extension_version = args.args[1]
         else:
-            parser.error("reference_project_file and matter_extension_version are required.")
+            parser.error(
+                "reference_project_file and matter_extension_version are required.")
 
     upgrade = Upgrade(
         reference_project_file=args.reference_project_file,
@@ -186,9 +205,11 @@ def main():
 
     def upgrade_project(self):
         # Three-way merge for all files in customer_paths using git merge-file
-        json_path = os.path.join(os.path.dirname(self.reference_project_file), '.bak', 'source_and_include_paths.json')
+        json_path = os.path.join(os.path.dirname(
+            self.reference_project_file), '.bak', 'source_and_include_paths.json')
         if not os.path.exists(json_path):
-            print(f"source_and_include_paths.json not found at {json_path}, skipping merge.")
+            print(
+                f"source_and_include_paths.json not found at {json_path}, skipping merge.")
             return
         with open(json_path, 'r') as f:
             paths = json.load(f)
@@ -205,7 +226,8 @@ def main():
             cust_dict = build_dict_by_filename(customer_paths)
             back_dict = build_dict_by_filename(backups_paths)
 
-            common_filenames = set(sdk_dict.keys()) & set(cust_dict.keys()) & set(back_dict.keys())
+            common_filenames = set(sdk_dict.keys()) & set(
+                cust_dict.keys()) & set(back_dict.keys())
             for fname in sorted(common_filenames):
                 matter_sdk = sdk_dict[fname]
                 cust = cust_dict[fname]
@@ -221,11 +243,15 @@ def main():
                         'git', 'merge-file', local_path, base_path, remote_path
                     ], check=False)
                     if result.returncode == 1:
-                        print(f"Conflict detected while merging. Please resolve manually in {local_path}.")
+                        print(
+                            f"Conflict detected while merging. Please resolve manually in {local_path}.")
                     elif result.returncode != 0:
-                        print(f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}")
+                        print(
+                            f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}")
                 except Exception as e:
-                    print(f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}. Exception: {e}")
+                    print(
+                        f"git merge-file failed for local: {local_path}, base: {base_path}, remote: {remote_path}. Exception: {e}")
+
 
 if __name__ == "__main__":
     main()

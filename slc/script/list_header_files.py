@@ -10,21 +10,26 @@ import yaml
     and populates the "include:" section with a list of any header files within the directories that
     the .c or .cpp files under the "source:" section reside in
 '''
-rootDir  = os.getcwd()
+rootDir = os.getcwd()
 dirToSearch = rootDir + "/slc/component/matter-core-sdk"
 # These directories do not include any source files within the components
-includeWholeDir =  [rootDir + "/src/include/platform", rootDir + "/src/include/platform/internal",
-                    rootDir + "/src/platform/logging", rootDir + "/src/include/platform/internal/testing",
-                    rootDir + "/src/lib/dnssd/platform",   rootDir +"/src/lib/dnssd/platform",
-                    rootDir + "/src/app/common",          rootDir + "/src/platform/silabs/multi-ota",
-                    rootDir +  "/src/lwip/silabs",         rootDir + "/examples/platform/silabs/display",
-                    rootDir + "/examples/platform/silabs"]
+includeWholeDir = [rootDir + "/src/include/platform", rootDir + "/src/include/platform/internal",
+                   rootDir + "/src/platform/logging", rootDir +
+                   "/src/include/platform/internal/testing",
+                   rootDir + "/src/lib/dnssd/platform",   rootDir + "/src/lib/dnssd/platform",
+                   rootDir + "/src/app/common",          rootDir + "/src/platform/silabs/multi-ota",
+                   rootDir + "/src/lwip/silabs",         rootDir +
+                   "/examples/platform/silabs/display",
+                   rootDir + "/examples/platform/silabs"]
 # Way source code is written requires SLC to perform weird gymnastics when writing out filepath
-specialCases =       ["src/app/util", "src/dnssd/platform", "src/app/data-model"]
+specialCases = ["src/app/util", "src/dnssd/platform", "src/app/data-model"]
 # Main platform components
-mainComponents =     ["efr32.slcc", "efr32_wifi.slcc", "siwx917.slcc"]
-manualFiles = ["matter_nlassert.slcc", "matter_includes.slcc", "matter_nlio.slcc"]
+mainComponents = ["efr32.slcc", "efr32_wifi.slcc", "siwx917.slcc"]
+manualFiles = ["matter_nlassert.slcc",
+               "matter_includes.slcc", "matter_nlio.slcc"]
 # Returns dictionary of slcc files to included header files
+
+
 def find_slcc_files(directory):
     if not os.path.exists(directory):
         raise ValueError("Directory does not exist.")
@@ -36,6 +41,8 @@ def find_slcc_files(directory):
                 slccFiles.append(os.path.join(root, file))
     return slccFiles
 # Returns include directories in the provided slcc file
+
+
 def get_included_dirs(file_path):
     includeDirectories = []
     try:
@@ -50,6 +57,8 @@ def get_included_dirs(file_path):
     except:
         pass
     return includeDirectories
+
+
 def add_key_value_to_yaml(file_path: str, foundIncludesDirs):
     try:
         # Open the YAML file for reading and writing
@@ -73,8 +82,9 @@ def add_key_value_to_yaml(file_path: str, foundIncludesDirs):
                     # Add whole include directory to efr32 components
                     for file_name in os.listdir(dir):
                         if file_name.endswith(".h") or file_name.endswith(".hpp") or file_name.endswith(".ipp"):
-                            file_list.append({"path":file_name})
-                    yaml_data["include"].append({"path": relativeDir, "file_list": file_list})
+                            file_list.append({"path": file_name})
+                    yaml_data["include"].append(
+                        {"path": relativeDir, "file_list": file_list})
                     fileModified = True
             # Add include files for the given directories
             for dir in foundIncludesDirs:
@@ -89,21 +99,26 @@ def add_key_value_to_yaml(file_path: str, foundIncludesDirs):
                             file_name = header
                             for dirToChange in specialCases:
                                 if relativeDir.startswith(dirToChange):
-                                    file_name = dirToChange.split("/", 2)[2] + "/" + header
-                                    directory = dirToChange.split("/", 2)[0] + "/" + dirToChange.split("/", 2)[1]
+                                    file_name = dirToChange.split(
+                                        "/", 2)[2] + "/" + header
+                                    directory = dirToChange.split(
+                                        "/", 2)[0] + "/" + dirToChange.split("/", 2)[1]
                             file_list.append({"path": file_name})
                     if file_list:
-                        yaml_data["include"].append({"path": directory, "file_list": file_list})
+                        yaml_data["include"].append(
+                            {"path": directory, "file_list": file_list})
                         fileModified = True
             if fileModified:
                 with open(file_path, 'w') as file:
-                    yaml.safe_dump(yaml_data, file, default_flow_style=False, sort_keys=False, indent=4)
+                    yaml.safe_dump(
+                        yaml_data, file, default_flow_style=False, sort_keys=False, indent=4)
     except FileNotFoundError:
         raise FileNotFoundError(f"The file '{file_path}' does not exist.")
+
+
 # Main function
 slccFiles = find_slcc_files(dirToSearch)
 for slccFile in slccFiles:
     foundHeaders = []
     foundIncDirs = get_included_dirs(slccFile)
     add_key_value_to_yaml(slccFile, set(foundIncDirs))
-    

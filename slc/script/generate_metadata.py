@@ -22,8 +22,8 @@ out_folder_dir = sys.argv[1]
 examples_dir = os.path.join(root_dir, "Examples")
 root_sub_dirs = os.listdir(root_dir)
 internal_boards = ['brd4319f']
-internal_sample_apps = ['performance-test-app','platform-app','lock-li']
-with open(os.path.join(root_dir,"third_party","matter_private","jenkins","pipeline_metadata.yml"), 'r') as stream:
+internal_sample_apps = ['performance-test-app', 'platform-app', 'lock-li']
+with open(os.path.join(root_dir, "third_party", "matter_private", "jenkins", "pipeline_metadata.yml"), 'r') as stream:
     pipeline_metadata = yaml.safe_load(stream)
 
 matterExtensionVersion = pipeline_metadata['toolchain_info']['matterExtensionVersion']
@@ -42,6 +42,7 @@ demos_map = {
 Recurse all directories to remove undesired files and Scan Examples folder to account for all demos present
 '''
 
+
 def recurse_dir(file_or_dir):
 
     if os.path.isdir(file_or_dir):
@@ -50,7 +51,7 @@ def recurse_dir(file_or_dir):
             recurse_dir(os.path.join(file_or_dir, unit))
     else:
         if '.ds_store' in file_or_dir.lower():
-            os.remove(file_or_dir)        
+            os.remove(file_or_dir)
         elif '.s37' in file_or_dir or '.rps' in file_or_dir:
             for leaf in file_or_dir.split('/'):
                 if 'BRD' in leaf:
@@ -58,7 +59,8 @@ def recurse_dir(file_or_dir):
                 elif 'OpenThread' in leaf or 'WiFi' in leaf:
                     tech_ = leaf
 
-            board_type = (str(os.path.basename(file_or_dir).replace('.s37', '')).replace('.rps','').split('-'))[-1]
+            board_type = (str(os.path.basename(file_or_dir).replace(
+                '.s37', '')).replace('.rps', '').split('-'))[-1]
             if board_type == "ncp":
                 board_type = "917-ncp"
             elif board_type == "brd4357a":
@@ -67,13 +69,16 @@ def recurse_dir(file_or_dir):
                 board_type = "917-soc"
 
             if brd not in demos_map['demos'].keys():
-                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {'917-soc': [], '917-ncp': [], '917-ncp-brd4357a': [], 'wf200': [], 'rs911x': []}}
+                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {
+                    '917-soc': [], '917-ncp': [], '917-ncp-brd4357a': [], 'wf200': [], 'rs911x': []}}
 
             if tech_ == 'OpenThread':
-                demos_map['demos'][brd][tech_].append(str(os.path.basename(file_or_dir).replace('.s37', '')))
+                demos_map['demos'][brd][tech_].append(
+                    str(os.path.basename(file_or_dir).replace('.s37', '')))
             elif tech_ == 'WiFi':
-                demos_map['demos'][brd][tech_][board_type].append(str(os.path.basename(file_or_dir).replace('.s37', '').replace('.rps','')))
-  
+                demos_map['demos'][brd][tech_][board_type].append(
+                    str(os.path.basename(file_or_dir).replace('.s37', '').replace('.rps', '')))
+
 
 recurse_dir(out_folder_dir)
 
@@ -82,6 +87,7 @@ recurse_dir(out_folder_dir)
 def is_internal_app(demo_name, internal_apps):
     """Check if the demo name contains any internal app names."""
     return any(internal_app in demo_name for internal_app in internal_apps)
+
 
 '''
 generate demo metadata
@@ -102,7 +108,7 @@ for brd, val in demos_map['demos'].items():
                 # Skip internal apps
                 if is_internal_app(demo_, internal_sample_apps):
                     continue
-                    
+
                 demo_name = ""
 
                 for name in demo_.split("-"):
@@ -120,7 +126,8 @@ for brd, val in demos_map['demos'].items():
                     demo_name_ = demo_name.strip()
 
                 demo_name = demo_name.strip()
-                demo_name_ = ' '.join(elem.capitalize() for elem in demo_name_.split())
+                demo_name_ = ' '.join(elem.capitalize()
+                                      for elem in demo_name_.split())
 
                 # logic for demo_name_ generation for zigbee matter light variants
                 iscmp = True if demo_name == "zigbee matter light" else False
@@ -142,13 +149,14 @@ for brd, val in demos_map['demos'].items():
                 qualityProp = ET.SubElement(demo, 'property')
                 description = ET.SubElement(demo, 'description')
 
-                demo.set('name', brd.lower()+".demo."+(demo_name + " app thread").replace(" ", "_"))
+                demo.set('name', brd.lower()+".demo." +
+                         (demo_name + " app thread").replace(" ", "_"))
                 demo.set('label', "Matter" + " - " + "SoC " +
-                        demo_name_ + " over Thread")
+                         demo_name_ + " over Thread")
 
                 blurbProp.set('key', 'demos.blurb')
-                blurbProp.set('value', "Matter"+ " - " + "SoC " +
-                            demo_name_ + " app")
+                blurbProp.set('value', "Matter" + " - " + "SoC " +
+                              demo_name_ + " app")
 
                 partCompatibilityProp.set('key', 'core.partCompatibility')
                 partCompatibilityProp.set('value', ".*")
@@ -162,11 +170,11 @@ for brd, val in demos_map['demos'].items():
 
                 readmeFileProp.set('key', 'core.readmeFiles')
 
-                # append special cases for README path generation here 
+                # append special cases for README path generation here
                 special_readme_dir_cases = {
                     "thermostat", "zigbee-matter-light"
                 }
-                
+
                 demo_name_dir = demo_name.replace(" ", "-")
                 if demo_name_dir in special_readme_dir_cases:
                     readme_dir = demo_name_dir
@@ -174,19 +182,20 @@ for brd, val in demos_map['demos'].items():
                     readme_dir = '-'.join([demo_name_dir, 'app'])
 
                 readmeFileProp.set(
-                    'value',  os.path.join("slc","sample-app", readme_dir, "efr32","README.md"))
+                    'value',  os.path.join("slc", "sample-app", readme_dir, "efr32", "README.md"))
 
                 filtersProp.set('key', 'filters')
-                filtersProp.set('value', "Type|SoC Project\\ Difficulty|Advanced Wireless\\ Technology|Matter")
+                filtersProp.set(
+                    'value', "Type|SoC Project\\ Difficulty|Advanced Wireless\\ Technology|Matter")
 
                 qualityProp.set('key', 'core.quality')
                 qualityProp.set('value', "PRODUCTION")
                 if iscmp:
                     description.text = "".join("This is a " + demo_name_ +
-                                                " Application over Thread for " + brd.upper())
+                                               " Application over Thread for " + brd.upper())
                 else:
                     description.text = "".join("This is a Matter " + demo_name_ +
-                                                " Application over Thread for " + brd.upper())
+                                               " Application over Thread for " + brd.upper())
 
         elif technology == 'WiFi':
             for board_type in val[technology].keys():
@@ -195,7 +204,7 @@ for brd, val in demos_map['demos'].items():
                     # Skip internal apps
                     if is_internal_app(demo_, internal_sample_apps):
                         continue
-                        
+
                     for name in demo_.split("-"):
                         if name == 'app':
                             break
@@ -220,7 +229,8 @@ for brd, val in demos_map['demos'].items():
                     else:
                         demo_name_ = demo_name.strip()
 
-                    demo_name_ = ' '.join(elem.capitalize() for elem in demo_name_.split())
+                    demo_name_ = ' '.join(elem.capitalize()
+                                          for elem in demo_name_.split())
                     demo_name = demo_name.strip()
                     demo = ET.SubElement(demos, 'demo')
                     blurbProp = ET.SubElement(demo, 'property')
@@ -233,41 +243,45 @@ for brd, val in demos_map['demos'].items():
                     description = ET.SubElement(demo, 'description')
 
                     demo.set('name', brd.lower()+".demo." +
-                                "".join(demo_name.replace(" ", "_")) + "_app_" +  ("siwx917" if "soc" in board_type else board_type.replace("-", "_")))
+                             "".join(demo_name.replace(" ", "_")) + "_app_" + ("siwx917" if "soc" in board_type else board_type.replace("-", "_")))
                     demo.set('label', "Matter" + " - " + ("SoC" if "soc" in board_type else "NCP") + " " +
-                                demo_name_ + " over Wi-Fi")
+                             demo_name_ + " over Wi-Fi")
 
                     blurbProp.set('key', 'demos.blurb')
-                    blurbProp.set('value', "Matter"+ " - " + ("SiWx917 SoC" if "soc" in board_type else "NCP") + " " +
-                                    demo_name_ + " app")
+                    blurbProp.set('value', "Matter" + " - " + ("SiWx917 SoC" if "soc" in board_type else "NCP") + " " +
+                                  demo_name_ + " app")
 
                     partCompatibilityProp.set('key', 'core.partCompatibility')
                     partCompatibilityProp.set('value', ".*")
 
-                    boardCompatibilityProp.set('key', 'core.boardCompatibility')
+                    boardCompatibilityProp.set(
+                        'key', 'core.boardCompatibility')
                     boardCompatibilityProp.set('value', brd.lower())
 
                     imageFileProp.set('key', 'demos.imageFile')
                     if "soc" in board_type:
-                        #exception for thermostat app name 
-                        if demo_name=="thermostat":
+                        # exception for thermostat app name
+                        if demo_name == "thermostat":
                             demo_name = "SiWx917-thermostat-example"
-                        demoFilename = demo_name.replace(' ','-') + ".rps"
+                        demoFilename = demo_name.replace(' ', '-') + ".rps"
                     else:
-                        demoFilename = (("".join(demo_name+" "+board_type if 'thermostat' in demo_name else demo_name+" app"+" "+board_type)).replace(" ", "-") + ".s37")
-                    imageFileProp.set('value', asset_prefix + os.path.join("demos", brd, technology, demoFilename))
+                        demoFilename = (("".join(
+                            demo_name+" "+board_type if 'thermostat' in demo_name else demo_name+" app"+" "+board_type)).replace(" ", "-") + ".s37")
+                    imageFileProp.set(
+                        'value', asset_prefix + os.path.join("demos", brd, technology, demoFilename))
                     readmeFileProp.set('key', 'core.readmeFiles')
                     readmeFileProp.set(
-                        'value',  os.path.join("slc","sample-app", '-'.join([demo_name.replace(" ", "-").replace("SiWx917-","").replace("-example","").replace('.rps',''), 'app']) if 'thermostat' not in demo_name else "thermostat", ("siwx917" if "soc" in board_type else "efr32"),"README_WiFi.md"))
+                        'value',  os.path.join("slc", "sample-app", '-'.join([demo_name.replace(" ", "-").replace("SiWx917-", "").replace("-example", "").replace('.rps', ''), 'app']) if 'thermostat' not in demo_name else "thermostat", ("siwx917" if "soc" in board_type else "efr32"), "README_WiFi.md"))
 
                     filtersProp.set('key', 'filters')
-                    filtersProp.set('value', "Type|" + ("SoC" if "soc" in board_type else "NCP") + " Project\\ Difficulty|Advanced Wireless\\ Technology|Matter")
+                    filtersProp.set('value', "Type|" + ("SoC" if "soc" in board_type else "NCP") +
+                                    " Project\\ Difficulty|Advanced Wireless\\ Technology|Matter")
 
                     qualityProp.set('key', 'core.quality')
                     qualityProp.set('value', "PRODUCTION")
                     description.text = "".join("This is a Matter " + demo_name_ +
-                                                " Application for " + brd.upper() #+ " to be used with Wi-Fi " +
-                                                + (' with SiWx917 Wi-Fi SoC' if "soc" in board_type else (" to be used with Wi-Fi " + ('RS9116' if board_type == 'rs911x' else board_type.upper()))))
+                                               " Application for " + brd.upper()  # + " to be used with Wi-Fi " +
+                                               + (' with SiWx917 Wi-Fi SoC' if "soc" in board_type else (" to be used with Wi-Fi " + ('RS9116' if board_type == 'rs911x' else board_type.upper()))))
 
 outputString = ET.tostring(demos, encoding='UTF-8')
 dom = xml.dom.minidom.parseString(outputString)
@@ -276,4 +290,4 @@ pretty_xml_as_string = dom.toprettyxml()
 demosXmlFilePath = os.path.join(root_dir, "matter_demos.xml")
 with open(demosXmlFilePath, "w") as demosXmlFile:
     demosXmlFile.write(pretty_xml_as_string)
-    print("Successfully generated",demosXmlFilePath)
+    print("Successfully generated", demosXmlFilePath)

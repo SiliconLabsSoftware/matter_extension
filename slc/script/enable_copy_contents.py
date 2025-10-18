@@ -58,8 +58,10 @@ header_macros = {
 def file_exist(header, header_abs_path, header_list, include_path):
 
     if os.path.exists(header_abs_path):
-        idx = next((index for (index, d) in enumerate(header_map) if include_path in d), None)
-        indx = next((index for (index, d) in enumerate(header_list) if include_path in d), None)
+        idx = next((index for (index, d) in enumerate(
+            header_map) if include_path in d), None)
+        indx = next((index for (index, d) in enumerate(
+            header_list) if include_path in d), None)
         if idx is not None:
 
             if header in header_map[idx][include_path]:
@@ -85,7 +87,8 @@ def recurse_dir(file_or_dir, parent_dir='', phase=0):
     if os.path.isdir(file_or_dir):
         subdirs = os.listdir(file_or_dir)
         for unit in subdirs:
-            recurse_dir(str(os.path.join(file_or_dir, unit)), parent_dir, phase)
+            recurse_dir(str(os.path.join(file_or_dir, unit)),
+                        parent_dir, phase)
     elif os.path.isfile(file_or_dir):
         file_ = str(os.path.basename(file_or_dir))
         if (('thread.slcp' in file_ or '.slcc' in file_) or (phase == 3 and file_.split('.')[-1] in ['h', 'hpp', 'c', 'cpp'])):
@@ -155,10 +158,12 @@ def find_headers_in_file(file, header_file_list):
 
                         for dir in include_dirs:
                             if '..' not in str(os.path.relpath(header_relPath, dir)).split('/')[0]:
-                                header_relpath = str(os.path.relpath(header_relPath, dir))
+                                header_relpath = str(
+                                    os.path.relpath(header_relPath, dir))
                                 break
 
-                header_name = str(os.path.basename(str(inc_line.group())[10:-1]))
+                header_name = str(os.path.basename(
+                    str(inc_line.group())[10:-1]))
 
             # skip if header is a standard c/cpp header
             if (header_name.split(".")[0] in (std_c_headers + std_cpp_headers + SKIP_LIST)) and not header_relpath == 'lwip/errno.h':
@@ -195,17 +200,20 @@ def resolve_header_file(header_map, header_file_list, header_list):
         for include_path in include_dirs:
 
             found = False
-            header_abs_path = str(os.path.join(ROOT, include_path, header)).replace("\\", "/")
+            header_abs_path = str(os.path.join(
+                ROOT, include_path, header)).replace("\\", "/")
 
             # check if header file exists and map it to the correct include dir
-            found = file_exist(header, header_abs_path, header_list, include_path)
+            found = file_exist(header, header_abs_path,
+                               header_list, include_path)
             if found:
                 headers_found += 1
                 break
 
         if not found:
             for rel in additional_relpaths:
-                header_abs_path = str(os.path.join(ROOT, 'src/' + rel, header)).replace("\\", "/")
+                header_abs_path = str(os.path.join(
+                    ROOT, 'src/' + rel, header)).replace("\\", "/")
                 if file_exist(rel + header, header_abs_path, header_list, 'src'):
                     found = True
                     headers_found += 1
@@ -234,9 +242,11 @@ def resolve_file(file):
             for dict in header_list:
                 for include_dir, file_list in dict.items():
                     for file_ in file_list:
-                        resolve_file(str(os.path.join(ROOT, include_dir, file_)))
+                        resolve_file(
+                            str(os.path.join(ROOT, include_dir, file_)))
                         if str(os.path.join(ROOT, include_dir, file_)) not in RESOLVED_FILES:
-                            RESOLVED_FILES.append(str(os.path.join(ROOT, include_dir, file_)))
+                            RESOLVED_FILES.append(
+                                str(os.path.join(ROOT, include_dir, file_)))
         else:
             if file not in RESOLVED_FILES:
                 RESOLVED_FILES.append(file)
@@ -244,7 +254,8 @@ def resolve_file(file):
 
 def update(inc_dir, val, file):
     # loads yaml object and maintains configuration of file (indents, spacing, comments .. etc)
-    matter_component, ind, bsi = ruamel.yaml.util.load_yaml_guess_indent(open(file))
+    matter_component, ind, bsi = ruamel.yaml.util.load_yaml_guess_indent(
+        open(file))
 
     header_file = ''
     full_path = inc_dir + '/' + val
@@ -271,11 +282,14 @@ def update(inc_dir, val, file):
                     print(h)
                     if v == header_file:
                         return
-            matter_component['include'][idx]['file_list'].append({'path': header_file})
+            matter_component['include'][idx]['file_list'].append(
+                {'path': header_file})
         else:
-            matter_component['include'][idx]['file_list'] = [{'path': header_file}]
+            matter_component['include'][idx]['file_list'] = [
+                {'path': header_file}]
     elif 'slc/inc' == inc_dir:
-        matter_component['include'].append(({'path': inc_dir, 'file_list': [{'path': val}]}))
+        matter_component['include'].append(
+            ({'path': inc_dir, 'file_list': [{'path': val}]}))
     else:
         return
 
@@ -295,89 +309,122 @@ def update_header_key(inc_dir, val, lib=""):
     if lib is not None:
         match lib:
             case 'core' | 'crypto' | 'controller':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchip'+lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchip'+lib+'.slcc')))
             case 'support' | 'system' | 'ble' | 'inet' | 'messaging' | 'transport':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'layer.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'layer.slcc')))
                 if lib == 'inet':
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'layer_wifi.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'layer_wifi.slcc')))
             case 'shell':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_'+lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_'+lib+'.slcc')))
             case 'nlassert':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_'+lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_'+lib+'.slcc')))
             case 'wifi':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'matter_efr32_ncp.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-wifi', 'matter_efr32_ncp.slcc')))
             case 'common' | 'trace':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk',  'app_common.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk',  'app_common.slcc')))
             case 'rs911x_ncp':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x',  lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x',  lib+'.slcc')))
             case 'deviceinfoprovider':
                 update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                        'matter-core-sdk',  'libmatterdeviceinfoproviderexample.slcc')))
             case 'devicelayer':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'.slcc')))
                 if os.path.exists(str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'_wifi.slcc'))):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'_wifi.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'_wifi.slcc')))
             case 'qrcode':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libqrcode_common.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'libqrcode_common.slcc')))
             case 'pigweed':
                 if 'pw_preprocessor' == val.split("/")[0] or 'pw_polyfill' == val.split("/")[0] or 'pw_span' == val.split("/")[0] or 'pw_tokenizer' in inc_dir:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_tokenizer.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_tokenizer.slcc')))
                 elif 'pw_containers' == val.split("/")[0]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'intrusive_list.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'intrusive_list.slcc')))
                 elif 'gtest' == val.split("/")[0] or 'pw_unit_test' == val.split("/")[0] == val.split("/")[0]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_span_test.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_span_test.slcc')))
                 elif 'lib' == val.split("/")[0] or 'pw_result' == val.split("/")[0] or 'pw_function' == val.split("/")[0] or 'stdcompat' in inc_dir or 'lib/fit' in inc_dir:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_protobuf.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_protobuf.slcc')))
                 elif 'pw_log' in val.split("/")[0]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_log_tokenized.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_log_tokenized.slcc')))
                 elif 'pw_work_queue' == val.split("/")[0] or 'pw_sync' == val.split("/")[0] or 'pw_thread' == val.split("/")[0] or 'pw_string' == val.split("/")[0] or 'pw_assert' == val.split("/")[0]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_work_queue.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_work_queue.slcc')))
                 elif 'pw_hdlc' in val.split("/")[0] or 'pw_rpc' == val.split("/")[0] or 'pw_sys_io' == val.split("/")[0] or 'pw_toolchain' == val.split("/")[0]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_rpc.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'pw_rpc.slcc')))
                 else:
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-core-sdk', val.split("/")[0] + '.slcc')))
             case 'dnssd' | 'address_resolve':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'.slcc')))
                 if lib == 'dnssd' and os.path.exists(str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'_wifi.slcc'))):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'_wifi.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'_wifi.slcc')))
             case 'protocols':
                 if 'secure_channel' == val.split("/")[1]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libsecurechannel.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'libsecurechannel.slcc')))
                 elif 'bdx' == val.split("/")[1]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libbdx.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'libbdx.slcc')))
                 else:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchip'+lib+'.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchip'+lib+'.slcc')))
             case 'platform' | 'openthread' | 'nlio':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'efr32.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'efr32.slcc')))
                 if 'thread' not in val.lower() and os.path.exists(str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'efr32_wifi.slcc'))):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'efr32_wifi.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'efr32_wifi.slcc')))
             case 'lwip':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'matter_lwip.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-wifi', 'matter_lwip.slcc')))
             case 'matter_platform':
                 if 'dic' in inc_dir.lower():
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'matter_aws.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-wifi', 'matter_aws.slcc')))
                 elif 'rs911x' in str(os.path.join(inc_dir, val)):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x', 'rs911x_ncp.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x', 'rs911x_ncp.slcc')))
                 elif 'SiWx917' in str(os.path.join(inc_dir, val)):
                     if 'system_si917.h' in val:
                         update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                                'matter-platform', 'siwx917_soc_custom_startup.slcc')))
                     else:
-                        update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'matter_platform_siwx917.slcc')))
+                        update(inc_dir, val, file=str(os.path.join(
+                            COMPONENT_DIRECTORY, 'matter-platform', 'matter_platform_siwx917.slcc')))
                 elif val in efr32_headers or (val in ['efr32/' + s for s in efr32_headers]):
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,'matter-platform', 'matter_platform_mg.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-platform', 'matter_platform_mg.slcc')))
                 elif 'ICDSubscriptionCallback.h' in val:
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-core-sdk', 'efr32_icd_subscription_callback.slcc')))
                 elif 'matter_shell.h' in val:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_shell.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-platform', 'shell', 'matter_shell.slcc')))
                 elif 'lcd.h' in val or 'demo-ui' in val:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'display', 'matter_lcd.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-platform', 'display', 'matter_lcd.slcc')))
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-platform', 'display', 'matter_lcd_917SOC.slcc')))
                 elif 'uart.h' in val:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'uart', 'matter_uart.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-platform', 'uart', 'matter_uart.slcc')))
                 elif 'MemMonitoring.h' in val:
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-platform', 'memory-monitoring', 'matter_memory_monitoring.slcc')))
@@ -385,48 +432,64 @@ def update_header_key(inc_dir, val, lib=""):
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-core-sdk', 'silabs_factory_data_provider.slcc')))
                 elif 'spi_multiplex.h' == val.split('/')[-1] or 'wf200' in str(os.path.join(inc_dir, val)).lower():
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'wf200', 'wf200_ncp.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-wifi', 'wf200', 'wf200_ncp.slcc')))
                 elif 'creds' in val.lower():
                     update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY,
                            'matter-core-sdk', 'efr32_attestation_credentials.slcc')))
                 else:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'app_common.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'app_common.slcc')))
             case 'wf200':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'wf200', 'wf200_ncp.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-wifi', 'wf200', 'wf200_ncp.slcc')))
             case 'nlunit-test':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libnlunit_test.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'libnlunit_test.slcc')))
             case 'setup_payload':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libsetuppayload.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'libsetuppayload.slcc')))
             case 'wiseconnect':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x', 'wiseconnect_sapi.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-wifi', 'rs911x', 'wiseconnect_sapi.slcc')))
             case 'clusters':
                 if 'basic-information' in inc_dir:
                     cluster_file = 'basic'
                 else:
-                    cluster_file = ((inc_dir.split("/")[3]).replace("-server", "")).replace("-", "_")
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-clusters', 'matter_' + cluster_file + '.slcc')))
+                    cluster_file = (
+                        (inc_dir.split("/")[3]).replace("-server", "")).replace("-", "_")
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-clusters', 'matter_' + cluster_file + '.slcc')))
             case 'app':
                 if 'data-model' == val.split("/")[1] or 'MessageDef' == val.split("/")[1]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchipdatamodel.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchipdatamodel.slcc')))
                 elif 'server' == val.split("/")[1]:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchipappserver.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', 'libchipappserver.slcc')))
                 elif 'clusters' == val.split("/")[1]:
                     if 'ota-requestor' == val.split("/")[2]:
-                        update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-clusters', 'matter_ota_requestor.slcc')))
+                        update(inc_dir, val, file=str(os.path.join(
+                            COMPONENT_DIRECTORY, 'matter-clusters', 'matter_ota_requestor.slcc')))
                 else:
-                    update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'_common.slcc')))
+                    update(inc_dir, val, file=str(os.path.join(
+                        COMPONENT_DIRECTORY, 'matter-core-sdk', lib+'_common.slcc')))
             case 'tracing':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'tracing.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'tracing.slcc')))
             case 'matter':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'tracing.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'tracing.slcc')))
             case 'FirmwareBuildTime.h':
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-platform', 'config', 'matter_includes.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-platform', 'config', 'matter_includes.slcc')))
             case 'include':
                 pass
             case 'format':
                 pass
             case _:
-                update(inc_dir, val, file=str(os.path.join(COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'.slcc')))
+                update(inc_dir, val, file=str(os.path.join(
+                    COMPONENT_DIRECTORY, 'matter-core-sdk', 'lib'+lib+'.slcc')))
     else:
         pass
 
@@ -479,7 +542,8 @@ def update_components():
                 for header in headers_list:
                     match header.split("/")[0]:
                         case 'lib':
-                            update_header_key(inc_root, header, lib=header.split("/")[1])
+                            update_header_key(
+                                inc_root, header, lib=header.split("/")[1])
                         case 'CHIPVersion.h':
                             update_header_key(inc_root, header, lib='support')
                         case 'pw_log_backend':
@@ -488,27 +552,34 @@ def update_components():
                             update_header_key(inc_root, header, lib='pigweed')
                         case 'platform':
                             if inc_root == 'src/include':
-                                update_header_key(inc_root, header, lib='devicelayer')
+                                update_header_key(
+                                    inc_root, header, lib='devicelayer')
                             elif 'wifi' in str(os.path.join(inc_root, header)):
                                 update_header_key(inc_root, header, lib='wifi')
                             elif 'rs911x' in str(os.path.join(inc_root, header)):
-                                update_header_key(inc_root, header, lib='rs911x_ncp')
+                                update_header_key(
+                                    inc_root, header, lib='rs911x_ncp')
                             else:
-                                update_header_key(inc_root, header,  lib=header.split("/")[0])
+                                update_header_key(
+                                    inc_root, header,  lib=header.split("/")[0])
                         case _:
                             if inc_root == 'src/platform/silabs/efr32':
-                                update_header_key(inc_root, header, lib='platform')
+                                update_header_key(
+                                    inc_root, header, lib='platform')
                             elif inc_root == 'slc/inc':
                                 if 'brd' in header.split("/")[0]:
-                                    update_header_key(inc_root, header,  lib='lwip')
+                                    update_header_key(
+                                        inc_root, header,  lib='lwip')
                                 elif 'sl_matter_config.h' in header:
                                     continue
                                 else:
-                                    update_header_key(inc_root, header,  lib=header.split("/")[0])
+                                    update_header_key(
+                                        inc_root, header,  lib=header.split("/")[0])
                             else:
                                 if 'sl_matter_config.h' in header:
                                     continue
-                                update_header_key(inc_root, header,  lib=header.split("/")[0])
+                                update_header_key(
+                                    inc_root, header,  lib=header.split("/")[0])
             elif 'examples/platform/silabs' in inc_root:
                 for header in headers_list:
                     update_header_key(inc_root, header, lib='matter_platform')
@@ -520,16 +591,19 @@ def update_components():
                     update_header_key(inc_root, header, lib='nlio')
             elif inc_root == 'examples/providers':
                 for header in headers_list:
-                    update_header_key(inc_root, header, lib='deviceinfoprovider')
+                    update_header_key(inc_root, header,
+                                      lib='deviceinfoprovider')
             elif inc_root == 'src/platform/silabs/efr32/wifi':
                 for header in headers_list:
                     update_header_key(inc_root, header, lib='wifi')
             elif 'src/lib' in inc_root:
                 for header in headers_list:
-                    update_header_key(inc_root, header,  lib=header.split('/')[0])
+                    update_header_key(inc_root, header,
+                                      lib=header.split('/')[0])
             elif 'rs911x' in inc_root:
                 for header in headers_list:
-                    update_header_key(inc_root, header,  lib='rs911x_ncp_extension')
+                    update_header_key(inc_root, header,
+                                      lib='rs911x_ncp_extension')
             elif ('examples/platform' in inc_root and not 'rs911x' in inc_root) or 'zzz_generated/app-common' == inc_root or 'third_party/nlassert' in inc_root:
                 for header in headers_list:
                     update_header_key(inc_root, header,  lib='common')
@@ -537,16 +611,19 @@ def update_components():
                 if len(inc_root.split("/")) > 1:
                     for header in headers_list:
                         print(inc_root)
-                        update_header_key(inc_root, header,  lib=inc_root.split("/")[1])
+                        update_header_key(inc_root, header,
+                                          lib=inc_root.split("/")[1])
                 else:
                     for header in headers_list:
                         update_header_key(inc_root, header,  lib=inc_root)
             elif 'nlunit-test' in inc_root:
                 for header in headers_list:
-                    update_header_key(inc_root, header,  lib=inc_root.split("/")[1])
+                    update_header_key(inc_root, header,
+                                      lib=inc_root.split("/")[1])
             elif 'pigweed' == inc_root:
                 for header in headers_list:
-                    update_header_key(inc_root, header,  lib=inc_root.split("/")[1])
+                    update_header_key(inc_root, header,
+                                      lib=inc_root.split("/")[1])
             elif 'QRCode' in inc_root:
                 for header in headers_list:
                     update_header_key(inc_root, header,  lib='qrcode')
@@ -581,7 +658,8 @@ def main(params):
     for step in range(3):
         if step < 2:
             for file in os.listdir(COMPONENT_DIR):
-                recurse_dir(str(os.path.join(COMPONENT_DIR, file)), parent_dir=file, phase=step+1)
+                recurse_dir(str(os.path.join(COMPONENT_DIR, file)),
+                            parent_dir=file, phase=step+1)
 
         if zap_generated_dir is not None and step == 2:
             recurse_dir(zap_generated_dir, parent_dir=file, phase=step+1)

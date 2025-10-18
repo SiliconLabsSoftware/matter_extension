@@ -24,19 +24,22 @@ import argparse
 import logging
 from pathlib import Path
 
-# This string should remain empty on the main branch. Update it only when a release branch is created. 
+# This string should remain empty on the main branch. Update it only when a release branch is created.
 # Coordinate with the studio team to determine the appropriate ZAP version for the release.
 # Version string example :  "v2024.08.14-nightly"
 # TODO: empty this once CSA is update, needed for TE2
 SIMPLICITY_STUDIO_ZAP_VERSION = "v2025.09.10-nightly"
 
+
 def get_zap_version():
     if SIMPLICITY_STUDIO_ZAP_VERSION:
-        logging.info(f"Using SIMPLICITY_STUDIO_ZAP_VERSION: {SIMPLICITY_STUDIO_ZAP_VERSION}")
-        return SIMPLICITY_STUDIO_ZAP_VERSION    
+        logging.info(
+            f"Using SIMPLICITY_STUDIO_ZAP_VERSION: {SIMPLICITY_STUDIO_ZAP_VERSION}")
+        return SIMPLICITY_STUDIO_ZAP_VERSION
     # Check if the environment variable SILABS_MATTER_ROOT is set
     if "SILABS_MATTER_ROOT" not in os.environ:
-        logging.info("SILABS_MATTER_ROOT not set, using default path for Matter root")
+        logging.info(
+            "SILABS_MATTER_ROOT not set, using default path for Matter root")
         silabs_chip_root = Path(__file__).resolve().parents[2]
     else:
         silabs_chip_root = os.environ["SILABS_MATTER_ROOT"]
@@ -44,7 +47,8 @@ def get_zap_version():
 
     zap_version = ""
     # Construct the path to the zap.json file
-    zap_path = os.path.join(silabs_chip_root, "third_party", "matter_sdk", "scripts", "setup", "zap.json")
+    zap_path = os.path.join(silabs_chip_root, "third_party",
+                            "matter_sdk", "scripts", "setup", "zap.json")
     logging.info(f"Looking for zap.json at: {zap_path}")
     # Load the JSON data from the zap.json file
     with open(zap_path) as f:
@@ -68,14 +72,18 @@ def get_zap_version():
     logging.warning("No ZAP version found in zap.json")
     return zap_version
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Get ZAP version")
-    parser.add_argument('--docker', action='store_true', help='Print only the version string (for automation)')
-    parser.add_argument('--verbose', action='store_true', help='Enable debug/info logging output')
+    parser.add_argument('--docker', action='store_true',
+                        help='Print only the version string (for automation)')
+    parser.add_argument('--verbose', action='store_true',
+                        help='Enable debug/info logging output')
     args = parser.parse_args()
 
     if args.verbose:
-        logging.basicConfig(level=logging.INFO, format='[%(levelname)s] %(message)s')
+        logging.basicConfig(level=logging.INFO,
+                            format='[%(levelname)s] %(message)s')
     else:
         logging.basicConfig(level=logging.WARNING)
 

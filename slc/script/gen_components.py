@@ -3,8 +3,9 @@
 # This script generates Matter SLC components out of the output of a Matter GN build (compile_commands.json).
 # The compile_commands.json file must reside in the directory where it is placed by the GN build.
 # Example usage:
-#./slc/script/gen_components.py out/lock-app/BRD4161A/compile_commands.json
+# ./slc/script/gen_components.py out/lock-app/BRD4161A/compile_commands.json
 
+import enable_copy_contents
 import os
 import sys
 import yaml
@@ -12,57 +13,63 @@ import json
 import pathlib
 
 
-root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
+root = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
 enable_copy_contents_path = str(os.path.join(root, 'slc', 'script'))
 sys.path.append(enable_copy_contents_path)
 
-import enable_copy_contents
 # If adding a new app, update this along with APP_NAME_THREAD
 APP_NAME = ['lock', 'lighting', 'light-switch', 'window', 'thermostat']
 APP_NAME_COMMON = 'lock_common', 'lighting_common', 'thermostat_common', 'window_common'
 APP_NAME_SILABS = 'silabs_lock', 'silabs_lighting', 'silabs_thermostat', 'silabs_window'
 
 # If adding a new app, update this along with APP_NAME
-APP_NAME_THREAD = ['lock-app', 'lighting-app', 'light-switch-app', 'window-app', 'thermostat']
+APP_NAME_THREAD = ['lock-app', 'lighting-app',
+                   'light-switch-app', 'window-app', 'thermostat']
 APP_NAME_WIFI = [s + '-wifi' for s in APP_NAME_THREAD]
-APP_NAME_ALL = APP_NAME_THREAD + [s + '-wifi' for s in APP_NAME_THREAD] 
+APP_NAME_ALL = APP_NAME_THREAD + [s + '-wifi' for s in APP_NAME_THREAD]
 
 MATTER_APP = ""
 
 if __name__ == '__main__':
 
     # loop through the provided list of compile_commands file paths
-    for compile_commands_file_path in sys.argv[1:]:    
+    for compile_commands_file_path in sys.argv[1:]:
 
         wifi = False
-        # check if file compile_commands.json file exists 
-        if os.path.isfile(os.path.join(root,compile_commands_file_path)):
+        # check if file compile_commands.json file exists
+        if os.path.isfile(os.path.join(root, compile_commands_file_path)):
             for app in APP_NAME_THREAD:
                 if app in compile_commands_file_path:
-                    # figure out app name from path of compile_commands.json file 
+                    # figure out app name from path of compile_commands.json file
                     MATTER_APP = app
-                    break        
+                    break
             if 'wifi' in compile_commands_file_path:
                 wifi = True
             libs = {}
             if MATTER_APP == "":
-                print("Could Not found a matching app for {app}".format(app=compile_commands_file_path))
+                print("Could Not found a matching app for {app}".format(
+                    app=compile_commands_file_path))
                 sys.exit(1)
 
             with open(compile_commands_file_path) as f:
-                compile_commands = json.load(f) # Load compile_commands.json
+                compile_commands = json.load(f)  # Load compile_commands.json
 
-            for cmd in compile_commands: # Loop through compile_commands.json
-    
-                dir = pathlib.Path(cmd['directory']) # Grab directory from compile_commands object
+            for cmd in compile_commands:  # Loop through compile_commands.json
 
-                file = (dir / cmd['file']).resolve() # concatenates the 'directory' and 'file' fields and resolves the resulting path which makes the path absolute, without any symlinks .. etc
+                # Grab directory from compile_commands object
+                dir = pathlib.Path(cmd['directory'])
 
-                command = cmd['command'] # extracts the 'command' field from the dictionary entry and stores it in command var
+                # concatenates the 'directory' and 'file' fields and resolves the resulting path which makes the path absolute, without any symlinks .. etc
+                file = (dir / cmd['file']).resolve()
 
-                obj_path = pathlib.Path(command.split(' ')[-1])  # splits the command at every white space and grabs the last component of the command which is the path to the generated object file
+                # extracts the 'command' field from the dictionary entry and stores it in command var
+                command = cmd['command']
 
-                lib = obj_path.stem.split('.')[0] # splits the path of the generated object file at every '.' and grabs the first element which
+                # splits the command at every white space and grabs the last component of the command which is the path to the generated object file
+                obj_path = pathlib.Path(command.split(' ')[-1])
+
+                # splits the path of the generated object file at every '.' and grabs the first element which
+                lib = obj_path.stem.split('.')[0]
 
                 # skips the command if it has anything to do with pigweed ..
                 if 'pigweed' in obj_path.parts or lib.startswith('pw_'):
@@ -89,53 +96,66 @@ if __name__ == '__main__':
                         'options': set(),
                         'defines': set(),
                     }
-                libs[lib]['src'].add(str(file.relative_to(pathlib.Path.cwd()))) # grabs the path of the 'file', finds its relative path to the current working directory, and stores that in 'src' entry of the dict
+                # grabs the path of the 'file', finds its relative path to the current working directory, and stores that in 'src' entry of the dict
+                libs[lib]['src'].add(str(file.relative_to(pathlib.Path.cwd())))
 
-                inc = map( # creates a map object 
+                inc = map(  # creates a map object
 
                     # this initial lambda function takes the filtered list of arguments (any arg that starts with -I), removes the -I/-system prefix
                     # resolves the path to a path relative to the current working directory and finally turns it into a string
-                    #lambda x: str((dir / x.removeprefix('-I').removeprefix('-isystem')).resolve().relative_to(pathlib.Path.cwd())),
-                    lambda x: str((dir / x.replace('-I', '', 1).replace('-isystem', '', 1)).resolve().relative_to(pathlib.Path.cwd())), # For python-3.8
+                    # lambda x: str((dir / x.removeprefix('-I').removeprefix('-isystem')).resolve().relative_to(pathlib.Path.cwd())),
+                    lambda x: str((dir / x.replace('-I', '', 1).replace('-isystem', '', 1)
+                                   ).resolve().relative_to(pathlib.Path.cwd())),  # For python-3.8
 
-                    filter(# the filter function here is filtering the list of arguements given in the 'command' and removing any that start with '-I'
-                        # returns an iterator object that is the input of the lambda function above 
+                    filter(  # the filter function here is filtering the list of arguements given in the 'command' and removing any that start with '-I'
+                        # returns an iterator object that is the input of the lambda function above
 
-                        lambda x: x.startswith('-I') or x.startswith('-isystem'),
+                        lambda x: x.startswith(
+                            '-I') or x.startswith('-isystem'),
 
-                        command.split(' ') # splits the 'command' at every whitespace and turns it into a list which is input to lambda on the line above
+                        # splits the 'command' at every whitespace and turns it into a list which is input to lambda on the line above
+                        command.split(' ')
                     )
                 )
-                
-                libs[lib]['inc'] |= set(inc) # turns the filtered 'inc' map from the previous operation into a 'set' object and updates the 'inc'
-                                            # entry of the dictionary 
 
-                opt = filter( # filters the list of the arguements of 'command' by only including any g++ option that starts with -f or -W, returns iterator object
+                # turns the filtered 'inc' map from the previous operation into a 'set' object and updates the 'inc'
+                libs[lib]['inc'] |= set(inc)
+                # entry of the dictionary
+
+                opt = filter(  # filters the list of the arguements of 'command' by only including any g++ option that starts with -f or -W, returns iterator object
                     lambda x: x.startswith('-f') or x.startswith('-W'),
-                    command.split(' ') # splits the 'command' at every whitespace and turns it into a list which is input to lambda on the line above
+                    # splits the 'command' at every whitespace and turns it into a list which is input to lambda on the line above
+                    command.split(' ')
 
                 )
-                libs[lib]['options'] |= set(opt)# turns the filtered 'opt' iterator from the previous operation into a 'set' object and updates the 'opt'
-                                                # entry of the dictionary 
+                # turns the filtered 'opt' iterator from the previous operation into a 'set' object and updates the 'opt'
+                libs[lib]['options'] |= set(opt)
+                # entry of the dictionary
 
-                defines = map(# creates a map object
-                    #lambda x: x.removeprefix('"-D').removesuffix('"') if x.startswith('"') else x.removeprefix('-D'), # removes the -D prefix and any quotation marks from substring
-                    lambda x: x.replace('"-D', '', 1).replace('"', '', 1) if x.startswith('"') else x.replace('-D', '', 1), # removes the -D prefix and any quotation marks from substring # For Python-3.8
+                defines = map(  # creates a map object
+                    # lambda x: x.removeprefix('"-D').removesuffix('"') if x.startswith('"') else x.removeprefix('-D'), # removes the -D prefix and any quotation marks from substring
+                    # removes the -D prefix and any quotation marks from substring # For Python-3.8
+                    lambda x: x.replace(
+                        '"-D', '', 1).replace('"', '', 1) if x.startswith('"') else x.replace('-D', '', 1),
 
-                    filter(# filters the command by only including arguments starting with the -D flag, which indicates MACROS and DEFINES, returns and iterator object
-                        lambda x: x.startswith(('-D', '"-D')), 
-                        command.split(' ') # splits the command string at every whitespace and returns a list 
+                    filter(  # filters the command by only including arguments starting with the -D flag, which indicates MACROS and DEFINES, returns and iterator object
+                        lambda x: x.startswith(('-D', '"-D')),
+                        # splits the command string at every whitespace and returns a list
+                        command.split(' ')
                     )
                 )
 
+                # update 'defines' entry of the dict
+                libs[lib]['defines'] |= set(defines)
 
-                libs[lib]['defines'] |= set(defines) # update 'defines' entry of the dict
-
-            os.makedirs('slc/component/matter-core-sdk', exist_ok=True) # creates directories recursively 
+            # creates directories recursively
+            os.makedirs('slc/component/matter-core-sdk', exist_ok=True)
             for name, data in libs.items():
-                name = name.lower().replace('-', '_') # takes name of library and replaces char '-' with '_'
-                # Rename app component to app-common 
-                if name in [s.lower().replace('-', '_') for s in APP_NAME_COMMON]: # check if name is in APP_NAME_COMMON (with '-' switch to '_')
+                # takes name of library and replaces char '-' with '_'
+                name = name.lower().replace('-', '_')
+                # Rename app component to app-common
+                # check if name is in APP_NAME_COMMON (with '-' switch to '_')
+                if name in [s.lower().replace('-', '_') for s in APP_NAME_COMMON]:
                     name = 'app_common'
 
                 # Skip APP_NAME_COMMON
@@ -154,24 +174,30 @@ if __name__ == '__main__':
                 if name in ['minimal_mdns', 'lwip']:
                     continue
 
-                with open(f"slc/component/matter-core-sdk/{name}.slcc", 'w') as f: # creates an SLCC file and opens in write mode 
-                    component = {} #creates a dict called component 
-                    component['id'] = name # creates an "id" entry and sets its value to 'name'
-                    component['description'] = name # does the same thing as the line above
-                    component['quality'] = 'production' 
+                # creates an SLCC file and opens in write mode
+                with open(f"slc/component/matter-core-sdk/{name}.slcc", 'w') as f:
+                    component = {}  # creates a dict called component
+                    # creates an "id" entry and sets its value to 'name'
+                    component['id'] = name
+                    # does the same thing as the line above
+                    component['description'] = name
+                    component['quality'] = 'production'
                     component['package'] = 'Matter'
                     component['category'] = 'Matter|Core'
                     component['label'] = name
-                    component['provides'] = [{'name': f'matter_{name}'}] # creates a 'provides' entry in the component dict and assigns it to a list of dicts
+                    # creates a 'provides' entry in the component dict and assigns it to a list of dicts
+                    component['provides'] = [{'name': f'matter_{name}'}]
                     component['source'] = []
-                    component['ui_hints'] =  {'visibility': 'never'}
-                    for src in sorted(data['src']): # loops the 'src' set in data pertaining to the library 'name'
+                    component['ui_hints'] = {'visibility': 'never'}
+                    # loops the 'src' set in data pertaining to the library 'name'
+                    for src in sorted(data['src']):
                         if any(path in src for path in ["zzz_generated/" + MATTER_APP, 'freertos_bluetooth.c']):
                             # Skip sources related to sample apps
                             continue
 
                         if "silabs/third_party/connectedhomeip" in src:
-                            src = src.partition("silabs/third_party/connectedhomeip")[-1].lstrip('/')
+                            src = src.partition(
+                                "silabs/third_party/connectedhomeip")[-1].lstrip('/')
 
                         # Skip any references to third_party/silabs
                         if 'third_party/silabs' in src:
@@ -206,10 +232,12 @@ if __name__ == '__main__':
 
                         component['source'].append({'path': src})
 
-                    component['include'] = [] # creates an 'includes' entry in the component dict and assigns it an empty list 
-                    for inc in sorted(data['inc']): # sorts the 'inc' set entry in the data dict and loops it
+                    # creates an 'includes' entry in the component dict and assigns it an empty list
+                    component['include'] = []
+                    # sorts the 'inc' set entry in the data dict and loops it
+                    for inc in sorted(data['inc']):
                         # Skip includes related to simplicity SDK and sample apps
-                        if any(path in inc for path in ['openthread', compile_commands_file_path.replace('compile_commands.json', "", 1)+'gen/include', compile_commands_file_path.replace('compile_commands.json', "", 1)+'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/efr32/include"]): # For Python-3.8
+                        if any(path in inc for path in ['openthread', compile_commands_file_path.replace('compile_commands.json', "", 1)+'gen/include', compile_commands_file_path.replace('compile_commands.json', "", 1)+'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/efr32/include"]):  # For Python-3.8
                             continue
                         if any(path in inc for path in ['openthread', sys.argv[1].removesuffix('compile_commands.json') + 'gen/include', sys.argv[1].removesuffix('compile_commands.json') + 'protocol_buffer', 'RTT', "zzz_generated/" + MATTER_APP, "examples/" + MATTER_APP + "/silabs/include"]):
                             continue
@@ -240,7 +268,7 @@ if __name__ == '__main__':
                             continue
 
                         if 'out' == str(inc.split(os.sep)[0]):
-                            continue 
+                            continue
 
                         # Skip lwip
                         if 'lwip' in inc:
@@ -249,7 +277,7 @@ if __name__ == '__main__':
                         # Skip zzz_generated
                         if 'zzz_generated' in inc:
                             continue
-                        
+
                         # Skip wifi NCP extension includes
                         if 'wifi' in inc or 'wf200' in inc or 'rs9116' in inc:
                             # Adding for SiWx917 SoC
@@ -257,7 +285,8 @@ if __name__ == '__main__':
                                 continue
 
                         if "silabs/third_party/connectedhomeip" in inc:
-                            inc = inc.partition("silabs/third_party/connectedhomeip")[-1].lstrip('/')
+                            inc = inc.partition(
+                                "silabs/third_party/connectedhomeip")[-1].lstrip('/')
 
                         if inc == '':
                             continue
@@ -265,18 +294,21 @@ if __name__ == '__main__':
                         if ('/platform/silabs/efr32' in inc or '/platform/silabs/SiWx917' in inc) and not ('efr32' in name or 'siwx917' in name):
                             continue
 
-                        component['include'].append({'path': inc}) # appends a dict with a 'path: inc' entry to the list of includes 
-                    component['define'] = [] # creates a 'define' entry in the component dict and assigns it an empty list 
-                    for define in sorted(data['defines']): # sorts the 'define' set in the data dict and loops it 
+                        # appends a dict with a 'path: inc' entry to the list of includes
+                        component['include'].append({'path': inc})
+                    # creates a 'define' entry in the component dict and assigns it an empty list
+                    component['define'] = []
+                    # sorts the 'define' set in the data dict and loops it
+                    for define in sorted(data['defines']):
                         value = None
-                        if '=' in define: # looks for defines and splits the string to a define, value pair 
+                        if '=' in define:  # looks for defines and splits the string to a define, value pair
                             define, value = define.split('=')
 
                         if define.startswith(('DISPLAY_ENABLED', 'QR_CODE_ENABLED')):
                             # Skip defines related to LCD
                             continue
-                        
-                        if define.startswith(('__', 'SL_', 'NVM3_', 'MBEDTLS_','SILABS_LOG', 'HARD_FAULT_LOG', 'EFR32', 'CORTEXM3', 'CONFIG', 'BOARD', 'BRD', 'PLATFORM', 'KVS', 'LWIP', 'WF200', 'CHIP_MINMDNS_', 'EFX32', 'RS911X', 'RSI', 'NDEBUG', 'CCP_', 'SIWX', 'TINYCRYPT', 'LITTLE_', 'OPTIMIZE_TINYCRYPT', 'CHIP_917', 'CHIP_9117', 'ENABLE_', 'BLE_', 'ROM_', 'DEBUG_', 'FLASH_', 'TA_DEEP_', 'ROM_WIRELESS' , 'EXECUTION_' , 'HARD_FAULT_LOG_ENABLE' , 'ROMDRIVER_PRESENT' , 'SILABS_LOG_ENABLED' , 'SI917' , 'SILABS_OTA_ENABLED' , '_CHIP_9118')) or define in ['USE_NVM3', 'MICRO', 'PLAT', 'PHY', 'CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI','ENABLE_WSTK_LEDS', 'OTA_PERIODIC_TIMEOUT']:
+
+                        if define.startswith(('__', 'SL_', 'NVM3_', 'MBEDTLS_', 'SILABS_LOG', 'HARD_FAULT_LOG', 'EFR32', 'CORTEXM3', 'CONFIG', 'BOARD', 'BRD', 'PLATFORM', 'KVS', 'LWIP', 'WF200', 'CHIP_MINMDNS_', 'EFX32', 'RS911X', 'RSI', 'NDEBUG', 'CCP_', 'SIWX', 'TINYCRYPT', 'LITTLE_', 'OPTIMIZE_TINYCRYPT', 'CHIP_917', 'CHIP_9117', 'ENABLE_', 'BLE_', 'ROM_', 'DEBUG_', 'FLASH_', 'TA_DEEP_', 'ROM_WIRELESS', 'EXECUTION_', 'HARD_FAULT_LOG_ENABLE', 'ROMDRIVER_PRESENT', 'SILABS_LOG_ENABLED', 'SI917', 'SILABS_OTA_ENABLED', '_CHIP_9118')) or define in ['USE_NVM3', 'MICRO', 'PLAT', 'PHY', 'CHIP_DEVICE_CONFIG_THREAD_ENABLE_CLI', 'ENABLE_WSTK_LEDS', 'OTA_PERIODIC_TIMEOUT']:
                             # Skip defines related to simplicity SDK and LWIP
                             continue
 
@@ -288,9 +320,11 @@ if __name__ == '__main__':
                             # Blanket skip sleepy related defines that come from the lock-app
                             continue
 
-                        if value is not None: # if the value is not empty string, create a dict with the following keys and values and assigns it to the 'define' entry in the component dict
-                            component['define'].append({'name': define, 'value': value}) 
+                        if value is not None:  # if the value is not empty string, create a dict with the following keys and values and assigns it to the 'define' entry in the component dict
+                            component['define'].append(
+                                {'name': define, 'value': value})
                         else:
                             component['define'].append({'name': define})
-                    yaml.dump(component, f, Dumper=yaml.SafeDumper, default_flow_style=False, indent=4) 
-                    # inserts the data in the component dict to the open SLCC file passed as 'f' in YAML format 
+                    yaml.dump(component, f, Dumper=yaml.SafeDumper,
+                              default_flow_style=False, indent=4)
+                    # inserts the data in the component dict to the open SLCC file passed as 'f' in YAML format

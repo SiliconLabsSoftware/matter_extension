@@ -31,23 +31,26 @@ import logging
 import sys
 from io import BufferedWriter
 
-# The prefix represents a base file path commonly found on Windows machines. 
+# The prefix represents a base file path commonly found on Windows machines.
 prefix = r"C:\Users\longusername\.silabs\slt\installs\conan\p\matter_extension"
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
 
 def count_file_path_lengths(directory, prefix, verbose):
     # Dictionary to store counts grouped in blocks of 10
     grouped_paths = {}
     for root, _, files in os.walk(directory):
         for file in files:
-            relative_path = os.path.relpath(os.path.join(root, file), directory)
+            relative_path = os.path.relpath(
+                os.path.join(root, file), directory)
             updated_path = os.path.join(prefix, relative_path)
             path_length = len(updated_path)
             # Log a warning for file paths longer than 240
             if path_length > 240:
-                logger.warning(f"File path exceeds 240 characters: {relative_path}")
+                logger.warning(
+                    f"File path exceeds 240 characters: {relative_path}")
 
             # Group lengths in blocks of 10
             if path_length > 240:
@@ -58,12 +61,15 @@ def count_file_path_lengths(directory, prefix, verbose):
 
     return grouped_paths
 
+
 def write_long_file_paths(grouped_paths, output_file):
     if not grouped_paths:  # Check if there are no file paths exceeding 240 characters
-        logger.info("No file paths exceeding 240 characters were detected. Nothing will be written to the file.")
+        logger.info(
+            "No file paths exceeding 240 characters were detected. Nothing will be written to the file.")
         return
 
-    logger.info(f"Updated file paths with length > 240 have been written to {output_file}")
+    logger.info(
+        f"Updated file paths with length > 240 have been written to {output_file}")
     with open(output_file, 'wb') as file:  # Open in binary mode for BufferedWriter
         buffer = BufferedWriter(file)
         try:
@@ -72,14 +78,17 @@ def write_long_file_paths(grouped_paths, output_file):
                 for path in paths:
                     buffer.write(f"  {path}\n".encode('utf-8'))
                 buffer.write(b"\n")
-            buffer.write(f"file paths are calculated by adding a prefix: {prefix}, of length {len(prefix)}  to the paths\n".encode('utf-8'))
+            buffer.write(
+                f"file paths are calculated by adding a prefix: {prefix}, of length {len(prefix)}  to the paths\n".encode('utf-8'))
         except Exception as e:
             logger.error(f"Error while writing to file: {e}")
         finally:
             buffer.flush()
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Analyze file path lengths in a directory.")
+    parser = argparse.ArgumentParser(
+        description="Analyze file path lengths in a directory.")
     parser.add_argument(
         "--directory",
         required=True,
@@ -112,14 +121,16 @@ def main():
     if not args.ci:
         if grouped_paths:
             # Log grouped counts
-            logger.info("Updated file path length counts grouped in blocks of 10:")
+            logger.info(
+                "Updated file path length counts grouped in blocks of 10:")
             for group, paths in sorted(grouped_paths.items()):
                 logger.info(f"{group}-{group+9}: {len(paths)}")
 
         # Write long file paths to a file
         write_long_file_paths(grouped_paths, output_file)
         if grouped_paths:
-            logger.info(f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
+            logger.info(
+                f"File paths are calculated by adding a prefix: {prefix}, of length {len(prefix)} to the paths")
 
     # CI mode: exit with status 0 on success, 1 on failure
     if args.ci:
@@ -129,6 +140,7 @@ def main():
         else:
             print("No file paths exceeding 240 characters were detected. Success.")
             sys.exit(0)
+
 
 if __name__ == "__main__":
     main()

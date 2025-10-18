@@ -73,8 +73,10 @@ def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, s
     script_dir = os.path.dirname(os.path.abspath(__file__))
     candidates = [
         os.path.join(script_dir, filename),  # same directory (slc/script)
-        os.path.join(script_dir, "..", "..", filename),  # legacy repo root location
-        os.path.join(os.getcwd(), filename),  # current working directory fallback
+        # legacy repo root location
+        os.path.join(script_dir, "..", "..", filename),
+        # current working directory fallback
+        os.path.join(os.getcwd(), filename),
     ]
     for path in candidates:
         if os.path.exists(path):
@@ -84,10 +86,12 @@ def load_dep_versions(filename: str = "dependency_versions.yaml") -> Dict[str, s
                     logger.debug("Loaded dependency versions from %s", path)
                     return data
             except Exception as e:
-                logger.error("Failed parsing dependency versions file %s: %s", path, e)
+                logger.error(
+                    "Failed parsing dependency versions file %s: %s", path, e)
                 break
     # Fallback defaults (should mirror committed YAML); warn about fallback.
-    logger.warning("dependency_versions.yaml not found; using embedded fallback versions")
+    logger.warning(
+        "dependency_versions.yaml not found; using embedded fallback versions")
     return {
         "openthread": "0.1.5",
         "bluetooth_le_host": "0.0.6",
@@ -179,7 +183,8 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
         with open(version_file, "r", encoding="utf-8") as vf:
             version = vf.read().strip()
             if version:
-                logger.debug("Matter version read from file %s: %s", version_file, version)
+                logger.debug("Matter version read from file %s: %s",
+                             version_file, version)
                 return version
             else:
                 logger.warning("Version file %s is empty", version_file)
@@ -238,13 +243,16 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
 
 def main():
     # Set up argument parser
-    parser = argparse.ArgumentParser(description="Generate pkg.slt files in directories containing .slcp files.")
+    parser = argparse.ArgumentParser(
+        description="Generate pkg.slt files in directories containing .slcp files.")
     parser.add_argument("--directory", "-d", default=os.getcwd(),
                         help="Base directory to search for .slcp files. Defaults to current working directory.")
-    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
+    parser.add_argument("--verbose", "-v", action="store_true",
+                        help="Enable verbose logging.")
     parser.add_argument("--common", action="store_true",
                         help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
-    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
+    parser.add_argument(
+        "--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     args = parser.parse_args()
@@ -252,19 +260,23 @@ def main():
     # Configure logging once here so all helper functions share configuration
     log_level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=log_level, format="%(message)s")
-    logger.debug("Logging initialized (level=%s)", logging.getLevelName(log_level))
+    logger.debug("Logging initialized (level=%s)",
+                 logging.getLevelName(log_level))
     matter_version = resolve_matter_version(args.matter_version)
     # Flatten comma-separated patterns
     exclude_patterns = []
     for entry in args.exclude:
         if entry:
-            exclude_patterns.extend([p.strip() for p in entry.split(',') if p.strip()])
+            exclude_patterns.extend([p.strip()
+                                    for p in entry.split(',') if p.strip()])
     if not exclude_patterns:
         exclude_patterns = ["third_party"]
-        logger.info("No --exclude provided; defaulting to exclude: %s", exclude_patterns)
+        logger.info(
+            "No --exclude provided; defaulting to exclude: %s", exclude_patterns)
     if exclude_patterns and args.verbose:
         logger.debug(f"Exclude patterns: {exclude_patterns}")
-    generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
+    generate_pkg_slt_files(args.directory, args.verbose,
+                           args.common, matter_version, exclude_patterns)
 
 
 if __name__ == "__main__":

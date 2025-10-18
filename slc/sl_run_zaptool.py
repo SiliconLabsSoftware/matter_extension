@@ -8,10 +8,14 @@ from sl_create_new_app import createApp
 
 EXAMPLE_USAGE = "python slc/sl_run_zaptool.py <PathToReferenceZapFile(.zap)>"
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Run zaptool with a reference .zap file.")
-    parser.add_argument("zapfile", metavar="PathToReferenceZapFile", type=str, help="Path to the .zap file")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    parser = argparse.ArgumentParser(
+        description="Run zaptool with a reference .zap file.")
+    parser.add_argument("zapfile", metavar="PathToReferenceZapFile",
+                        type=str, help="Path to the .zap file")
+    parser.add_argument("--verbose", action="store_true",
+                        help="Enable verbose logging")
     args = parser.parse_args()
 
     # Set up logging
@@ -36,6 +40,7 @@ def main():
     except subprocess.CalledProcessError as e:
         logging.error(f"zaptool failed: {e}")
         exit(1)
+
 
 if __name__ == "__main__":
     main()

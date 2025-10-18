@@ -5,6 +5,7 @@ import sys
 import pathlib
 import re
 
+
 def append_tag_to_version(filename, version_string, tag):
     with open(filename, 'r') as file:
         filedata = file.read()
@@ -15,14 +16,18 @@ def append_tag_to_version(filename, version_string, tag):
     with open(filename, 'w') as file:
         file.write(new_filedata)
 
+
 def main():
-    parser = argparse.ArgumentParser(description='Parse files for a given version string and append a provided tag.')
+    parser = argparse.ArgumentParser(
+        description='Parse files for a given version string and append a provided tag.')
     parser.add_argument('-f', '--file', required=True, help='File(s) to parse')
-    parser.add_argument('-v', '--version', required=True, help='Version to search for in the file')
+    parser.add_argument('-v', '--version', required=True,
+                        help='Version to search for in the file')
     parser.add_argument('-t', '--tag', required=True, help='tag to append')
     args = parser.parse_args()
 
     append_tag_to_version(args.file, args.version, args.tag)
+
 
 if __name__ == "__main__":
     main()
