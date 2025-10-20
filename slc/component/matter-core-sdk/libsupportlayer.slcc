@@ -91,6 +91,7 @@ include:
     -   path: PoolWrapper.h
     -   path: SpanSearchValue.h
     -   path: ReadOnlyBuffer.h
+    -   path: ReferenceCountedPtr.h
   - path: third_party/matter_sdk/src/lib/support/verhoeff
     file_list:
     -   path: Verhoeff.h
