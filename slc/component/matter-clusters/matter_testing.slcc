@@ -17,6 +17,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/testing
     file_list:
       - path: AttributeTesting.h
+      - path: TestReadWriteAttribute.h
 template_contribution:
   - name: component_catalog
     value: matter_testing
