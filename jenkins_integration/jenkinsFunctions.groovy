@@ -241,35 +241,70 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
     }
 }
 
-def create_and_upload_package()
-{
+def create_and_upload_package(Map args = [:]) {
     echo "Creating and uploading package..."
-    def REPO_ROOT = pwd()
-    MATTER_CONANFILE_PATH = "${REPO_ROOT}/packages/matter/conanfile.py"
-    REMOTE_NAME = "matter-conan-dev"
-    REMOTE_URL = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
-    CREATE = true
-    PUBLISH = true
-    MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py"
-    // Add your package creation and upload logic here
-    withCredentials([gitUsernamePassword(credentialsId: 'github-app')]) {
-        if (fileExists('conan-promote/')) 
-        {
-            dir('conan-promote') 
-            {
-                sh "git checkout v2"
-            }
-            } 
-        else 
-        {
-            sh "git clone https://github.com/SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote"
-        }
-        
-        sh'''
-        uv run --no-dev --project . ./src/create_publish.py --conanfile-path ${MATTER_CONANFILE_PATH} --remote-username ${SL_USERNAME} --remote-token ${SL_PASSWORD} --stack-name matter  --remote-url ${REMOTE_URL} --remote-name ${REMOTE_NAME} --create ${CREATE} --publish ${PUBLISH}
-        '''
 
+    // Determine repo root (allow override)
+    def REPO_ROOT = args.repoRoot ?: pwd()
+
+    // Local scoped vars
+    def MATTER_CONANFILE_PATH     = "${REPO_ROOT}/packages/matter/conanfile.py"
+    def MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py" // reserved for future use
+    def REMOTE_NAME               = args.remoteName ?: "matter-conan-dev"
+    def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
+    def CREATE                    = (args.create   ?: true)
+    def PUBLISH                   = (args.publish  ?: true)
+
+    // Pre-flight checks
+    if (!fileExists(MATTER_CONANFILE_PATH)) {
+        error("Conanfile not found: ${MATTER_CONANFILE_PATH}")
     }
+    if (!fileExists("${REPO_ROOT}/src/create_publish.py")) {
+        error("create_publish.py missing at ${REPO_ROOT}/src/create_publish.py")
+    }
+    // Ensure uv tool available
+    sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
+
+    withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')]) {
+        // Prepare promote helper repository
+        if (fileExists('conan-promote')) {
+            dir('conan-promote') {
+                sh 'git fetch --tags --prune'
+                sh 'git checkout v2'
+                sh 'git reset --hard origin/v2'
+            }
+        } else {
+            sh 'git clone https://github.com/SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote'
+        }
+
+        // Use env vars to avoid leaking secrets via command echo
+        withEnv([
+            "CONAN_REMOTE_USER=${SL_USERNAME}",
+            "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
+            "CONAN_REMOTE_URL=${REMOTE_URL}",
+            "CONAN_REMOTE_NAME=${REMOTE_NAME}",
+            "CONAN_CREATE=${CREATE}",
+            "CONAN_PUBLISH=${PUBLISH}" 
+        ]) {
+            def publishCmd = """
+                uv run --no-dev --project . ./src/create_publish.py \
+                  --conanfile-path ${MATTER_CONANFILE_PATH} \
+                  --remote-username ${CONAN_REMOTE_USER} \
+                  --remote-token ${CONAN_REMOTE_TOKEN} \
+                  --stack-name matter \
+                  --remote-url ${CONAN_REMOTE_URL} \
+                  --remote-name ${CONAN_REMOTE_NAME} \
+                  --create ${CONAN_CREATE} \
+                  --publish ${CONAN_PUBLISH}
+            """.stripIndent().trim()
+
+            // Mask token in log preview
+            echo publishCmd.replace(CONAN_REMOTE_TOKEN, '****')
+            sh(script: publishCmd)
+        }
+    }
+
+    echo "Package creation/upload completed."
 }
 
 
