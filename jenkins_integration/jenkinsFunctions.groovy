@@ -258,10 +258,7 @@ def create_and_upload_package(Map args = [:]) {
     // Pre-flight checks
     if (!fileExists(MATTER_CONANFILE_PATH)) {
         error("Conanfile not found: ${MATTER_CONANFILE_PATH}")
-    }
-    if (!fileExists("${REPO_ROOT}/src/create_publish.py")) {
-        error("create_publish.py missing at ${REPO_ROOT}/src/create_publish.py")
-    }
+    } 
     // Ensure uv tool available
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
@@ -277,6 +274,10 @@ def create_and_upload_package(Map args = [:]) {
             sh 'git clone https://github.com/SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote'
         }
 
+        if (!fileExists("conan-promote/src/create_publish.py")) {
+            error("create_publish.py missing at conan-promote/src/create_publish.py")
+        }
+
         // Use env vars to avoid leaking secrets via command echo
         withEnv([
             "CONAN_REMOTE_USER=${SL_USERNAME}",
@@ -287,7 +288,7 @@ def create_and_upload_package(Map args = [:]) {
             "CONAN_PUBLISH=${PUBLISH}" 
         ]) {
             def publishCmd = """
-                uv run --no-dev --project . ./src/create_publish.py \
+                uv run --no-dev --project . conan-promote/src/create_publish.py \
                   --conanfile-path ${MATTER_CONANFILE_PATH} \
                   --remote-username ${CONAN_REMOTE_USER} \
                   --remote-token ${CONAN_REMOTE_TOKEN} \
