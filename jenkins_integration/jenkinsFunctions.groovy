@@ -273,7 +273,7 @@ def create_and_upload_package(Map args = [:]) {
                 sh 'git reset --hard origin/v2'
             }
         } else {
-            sh 'git clone https://github.com/SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote'
+            sh 'git clone git@github.com:SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote'
         }
 
         if (!fileExists("conan-promote/src/create_publish.py")) {
