@@ -28,6 +28,7 @@ include:
     - path: TimeFormatLocalization.h
     - path: AccessControl.h
     - path: OperationalCredentials.h
+    - path: UserLabel.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h
