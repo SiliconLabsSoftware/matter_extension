@@ -382,7 +382,10 @@
             "FeatureMap"
         ],
         "Identify": [
-            "ClusterRevision"
+            "ClusterRevision",
+            "FeatureMap",
+            "IdentifyTime",
+            "IdentifyType"
         ],
         "Joint Fabric Datastore": [
             "Status"
@@ -441,6 +444,11 @@
             "cluster_error_boolean",
             "global_struct",
             "nullable_global_struct"
+        ],
+        "User Label": [
+            "LabelList",
+            "ClusterRevision",
+            "FeatureMap"
         ],
         "Thread Border Router Management": [
             "BorderRouterName",
@@ -916,6 +924,10 @@
         ],
         "Unit Localization": [
             "TemperatureUnit"
+        ],
+        "Localization Configuration": [
+            "ClusterRevision",
+            "SupportedLocales"
         ],
         "TLS Certificate Management": [
             "ClusterRevision",
