@@ -117,3 +117,23 @@ jobs:
         run: |
           set -e
           python3 -u './slc/script/validate_components.py' slc/component slc
+
+  sbom-validation:
+    name: Validate SBOM Metadata
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Install PyYAML dependency
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install PyYAML
+
+      - name: Run SBOM validation script
+        shell: bash
+        run: |
+          set -e
+          python3 -u './slc/script/find_missing_sbom.py' slc/component --verbose
