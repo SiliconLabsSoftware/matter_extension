@@ -20,6 +20,19 @@ pipeline
                 }
             }
         }
+        stage('Create and Upload Package')
+        {
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("pkgmgr")}
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest') {
+                        def result = pipelineFunctions.create_and_upload_package()
+                    }
+                }
+            }
+        }
         stage('Upload Artifacts') {
             steps {
                 script {

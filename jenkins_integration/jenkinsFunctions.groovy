@@ -240,6 +240,39 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
         }
     }
 }
+
+def create_and_upload_package()
+{
+    echo "Creating and uploading package..."
+    def REPO_ROOT = pwd()
+    MATTER_CONANFILE_PATH = "${REPO_ROOT}/packages/matter/conanfile.py"
+    REMOTE_NAME = "matter-conan-dev"
+    REMOTE_URL = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
+    CREATE = true
+    PUBLISH = true
+    MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py"
+    // Add your package creation and upload logic here
+    withCredentials([gitUsernamePassword(credentialsId: 'github-app')]) {
+        if (fileExists('conan-promote/')) 
+        {
+            dir('conan-promote') 
+            {
+                sh "git checkout v2"
+            }
+            } 
+        else 
+        {
+            sh "git clone https://github.com/SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote"
+        }
+        
+        sh'''
+        uv run --no-dev --project . ./src/create_publish.py --conanfile-path ${MATTER_CONANFILE_PATH} --remote-username ${SL_USERNAME} --remote-token ${SL_PASSWORD} --stack-name matter  --remote-url ${REMOTE_URL} --remote-name ${REMOTE_NAME} --create ${CREATE} --publish ${PUBLISH}
+        '''
+
+    }
+}
+
+
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
