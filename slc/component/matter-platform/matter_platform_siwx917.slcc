@@ -19,7 +19,6 @@ requires:
   - name: matter_siwx917
   - name: matter_siwx917_common
   - name: sl_si91x_trng
-  - name: siwx917_soc_custom_hal
   - name: nvm3_default
   - name: memory_manager
   - name: memory_manager_pool
