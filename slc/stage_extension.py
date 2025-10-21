@@ -27,7 +27,7 @@ exclude_root_directories = [
     'matter_extension/slc/tools'
 ]
 
-exlude_submodules = [
+exclude_submodules = [
     'simplicity_sdk',
     'wifi_sdk',
     'matter_private',
@@ -70,7 +70,7 @@ def should_exclude(root, path):
 
     # Exclude submodules
     if "third_party/" in full_path:
-        if any(exclude in full_path for exclude in exlude_submodules):
+        if any(exclude in full_path for exclude in exclude_submodules):
             # print(f"Excluding submodule path: {full_path}")
             return True
 
