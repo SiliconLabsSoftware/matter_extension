@@ -102,7 +102,7 @@ You can provision and control the Matter device using the python controller, chi
 
 
     
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README_WiFi.md)
+More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 Here is some CHIPTool examples:
 
