@@ -6,50 +6,68 @@
        pinned dependency versions (Matter + platform-specific extras).
 
 OVERVIEW
-    This tool walks a base directory (recursively) and, for every directory
-    containing at least one .slcp or .slcw file, (re)writes a pkg.slt file.
+    Walk a base directory (recursively) and, for every directory containing at
+    least one .slcp or .slcw file, (re)write a pkg.slt file. Existing files are
+    overwritten for consistency (idempotent output).
 
-VERSION RESOLUTION
-    - The Matter package version is resolved in this priority order:
-        1. Explicit --matter-version CLI argument.
-        2. Contents of the local 'matter_package_version' file located next to
-           this script.
-    - No hardcoded Matter version lives in the script logic.
+MATTER VERSION RESOLUTION (priority)
+    1. Explicit --matter-version CLI argument.
+    2. Contents of a local file named 'matter_package_version' located alongside
+       this script.
+    If neither yields a non-empty value the script exits with code 1.
 
-DEPENDENCY VERSION SOURCE
-    - All non-Matter dependency versions (openthread, wifi, lwip, etc.) are
-      centrally defined once in the DEP_VERSIONS dictionary near the top of
-      the file. Updating those constants automatically updates all generated
-      pkg.slt files.
+DEPENDENCY VERSIONS SOURCE
+    Non-Matter dependency versions (e.g. openthread, bluetooth_le_host, lwip,
+    rail_module, platform_nwp_siwx91x) are loaded from a YAML file
+    'dependency_versions.yaml'
 
 PLATFORM HEURISTICS (when --common is NOT used)
-    - If the directory path does not contain 'siwx917'      -> append Thread / BLE host set.
-    - If the directory path contains 'siwx917'              -> append Wi-Fi / 91x set.
-    - Otherwise                                             -> only the Matter dependency.
-    - The logic can be extended easily if new platform markers are needed.
+    - Path components NOT containing 'siwx917' => Thread / BLE host group appended.
+    - Path components containing 'siwx917'     => Wi-Fi 91x group appended.
+    - In all cases the Matter dependency itself is included first.
+    Extend this logic by adjusting the conditional in generate_pkg_slt_files.
 
 --common MODE
-    - When --common is supplied, every discovered project receives a uniform
-      pkg.slt containing only the Matter dependency (using the shared template).
+    Every discovered project receives uniform content consisting of just the
+    Matter dependency (plus future universally shared dependencies if added to
+    the 'common' group in the YAML).
+
+SAMPLE APP PACKAGE
+    Passing --update-sample-app-pkg (enabled by default, flag: -s) also writes
+    a standalone 'sample_app_pkg.slt' in the current working directory, pointing
+    at 'matter_app' rather than 'matter'. Disable by supplying
+        --update-sample-app-pkg False
+    (Any non-empty value other than the default boolean True will be treated as
+    truthy by argparse unless refined; see flag handling below.)
+
+EXCLUDES
+    Directories can be skipped using --exclude/-e. Each value is a substring
+    match applied to full directory paths. Multiple excludes can be provided by
+    repeating -e or supplying comma-separated values. If no excludes are
+    provided, 'third_party' is excluded by default.
 
 SAFETY / IDEMPOTENCE
-    - Existing pkg.slt files are overwritten (by design) to ensure consistency.
+    Output is deterministic given the same inputs (YAML, flags, version). Files
+    are always overwritten, eliminating drift.
 
 USAGE EXAMPLES
-    python3 generate_pkg_slt.py -d slc                      # heuristic mode
-    python3 generate_pkg_slt.py -d slc --common             # uniform content
-    python3 generate_pkg_slt.py -d slc --matter-version 2.7.0-beta.1
-    python3 generate_pkg_slt.py --verbose
+    python3 slc/script/generate_pkg_slt.py -d slc                      # heuristic mode
+    python3 slc/script/generate_pkg_slt.py -d slc --common             # uniform content
+    python3 slc/script/generate_pkg_slt.py -d slc --matter-version 2.7.0-beta.1
+    python3 slc/script/generate_pkg_slt.py -d slc -e build,temp,legacy # exclude multiple
+    python3 slc/script/generate_pkg_slt.py --verbose
+    python3 slc/script/generate_pkg_slt.py --update-sample-app-pkg False
 
-ARGUMENTS
-    --directory, -d     Base directory to search (default: cwd)
-    --verbose, -v       Verbose logging
-    --common            Force universal content (ignore platform heuristics)
-    --matter-version    Override Matter version (else read matter_package_version)
+ARGUMENT SUMMARY
+    --directory, -d               Base directory to search (default: cwd)
+    --verbose, -v                 Enable verbose logging
+    --common                      Ignore platform heuristics; emit Matter-only pkg.slt
+    --matter-version              Override Matter version (else read matter_package_version file)
+    --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
+    --update-sample-app-pkg, -s   Generate sample_app_pkg.slt (default: True)
 
-OUTPUT
-    - Creates / overwrites pkg.slt files and logs each generated path.
-    - Directories can be excluded via --exclude/-e (repeatable / comma-separated).
+EXIT CODES
+    0 on success; 1 if the Matter version cannot be resolved.
 """
 
 import os
