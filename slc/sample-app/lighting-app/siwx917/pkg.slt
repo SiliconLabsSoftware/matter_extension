@@ -5,12 +5,12 @@ version = "0"
 [dependency]
 # Get a specific version of the package
 matter = { version = "2.7.0-0.dev", installer ="conan"}
-platform_nwp_siwx91x = { version = "0.0.6", installer ="conan"}
-bluetooth_le_siwx91x = { version = "0.0.6", installer ="conan"}
-lwip = { version = "0.0.5", installer ="conan"}
-bluetooth_le_host = { version = "0.0.7", installer ="conan"}
-bluetooth_common = { version = "0.0.7", installer ="conan"}
-bgapi_protocol = { version = "0.0.7", installer ="conan"}
-bluetooth_le_controller = { version = "0.0.7", installer ="conan"}
-platform = { version = "0.0.5", installer ="conan"}
-rail_library = { version = "0.0.5", installer ="conan"}
+platform_nwp_siwx91x = { version = ">= 0.0.6 <0.0.7", installer ="conan"}
+bluetooth_le_siwx91x = { version = ">= 0.0.6 <0.0.7", installer ="conan"}
+lwip = { version = ">= 0.0.5 <0.0.6", installer ="conan"}
+bluetooth_le_host = { version = ">= 0.0.7 <0.0.8", installer ="conan"}
+bluetooth_common = { version = ">= 0.0.7 <0.0.8", installer ="conan"}
+bgapi_protocol = { version = ">= 0.0.7 <0.0.8", installer ="conan"}
+bluetooth_le_controller = { version = ">= 0.0.7 <0.0.8", installer ="conan"}
+platform = { version = ">=6.0.0 <6.0.1", installer ="conan"}
+rail_library = { version = ">=0.0.5 <0.0.6", installer ="conan"}

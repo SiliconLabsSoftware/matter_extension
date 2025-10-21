@@ -24,18 +24,18 @@ common:
   # (Left empty intentionally for now to demonstrate per-platform override capability.)
 
 thread:
-  openthread: 3.0.0-alpha.1
-  multiprotocol: 1.0.0-alpha.1
-  zigbee: 9.0.0-alpha.0
-  bluetooth_le_host: 11.0.0-alpha.2
+  openthread: '>=3.0.0 <3.0.1'
+  multiprotocol: '>=1.0.0 <1.0.1'
+  zigbee: '>=9.0.0 <9.0.1'
+  bluetooth_le_host: '>=11.0.0 <11.0.1'
 
 wifi:
-  platform_nwp_siwx91x: 0.0.6
-  bluetooth_le_siwx91x: 0.0.6
-  lwip: 0.0.5
-  bluetooth_le_host: 0.0.7
-  bluetooth_common: 0.0.7
-  bgapi_protocol: 0.0.7
-  bluetooth_le_controller: 0.0.7
-  platform: 0.0.5
-  rail_library: 0.0.5
+  platform_nwp_siwx91x: '>= 0.0.6 <0.0.7'
+  bluetooth_le_siwx91x: '>= 0.0.6 <0.0.7'
+  lwip: '>= 0.0.5 <0.0.6'
+  bluetooth_le_host: '>= 0.0.7 <0.0.8'
+  bluetooth_common: '>= 0.0.7 <0.0.8'
+  bgapi_protocol: '>= 0.0.7 <0.0.8'
+  bluetooth_le_controller: '>= 0.0.7 <0.0.8'
+  platform: '>=6.0.0 <6.0.1'
+  rail_library: '>=0.0.5 <0.0.6'
