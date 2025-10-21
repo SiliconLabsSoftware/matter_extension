@@ -38,13 +38,8 @@ define:
   - name: MATTER_TRACING_ENABLED
     value: 1
   - name: MATTER_TRACING_BUILD_CONFIG_H_
-  - name: TRACING_RUNTIME_STATS
-    value: 0
-  - name: TRACING_RUNTIME_STATS_MAX_TASKS
-    value: 16
   - name: SERIALIZED_TIME_TRACKERS_SIZE_BYTES
     value: 512
-  - name: PLATFORM_SILABS_TRACING_SILABSTRACINGCONFIG_H_
 
 requires:
   - name: matter_tracing_headers
