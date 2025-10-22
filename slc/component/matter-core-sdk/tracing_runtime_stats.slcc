@@ -19,6 +19,10 @@ define:
   - name: TRACING_RUNTIME_STATS_MAX_TASKS
     value: 16
 
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/FreeRTOSRuntimeStats.c
+    directory: src
+
 requires:
   - name: matter_tracing_headers
   - name: matter_tracing
