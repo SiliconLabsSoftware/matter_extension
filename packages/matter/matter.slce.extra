@@ -98,6 +98,7 @@ components:
   - libsystemlayer
   - efr32_icd_subscription_callback
   - matter_tracing
+  - matter_tracing_runtime_stats
   - responders
   - efr32
   - configuration_data
