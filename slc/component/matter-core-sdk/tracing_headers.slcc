@@ -30,7 +30,6 @@ include:
     file_list:
       - path: FreeRTOSRuntimeStats.h
 
-
 config_file:
   - path: slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
     file_id: silabs_tracing_config

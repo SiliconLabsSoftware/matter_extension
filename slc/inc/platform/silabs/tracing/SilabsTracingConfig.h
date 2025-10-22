@@ -3,7 +3,7 @@
 #define PLATFORM_SILABS_TRACING_SILABSTRACINGCONFIG_H_
 
 // Enable FreeRTOS runtime statistics collection
-#define TRACING_RUNTIME_STATS 1
+#define TRACING_RUNTIME_STATS 0
 
 // Maximum number of tasks to track for runtime statistics.
 #define TRACING_RUNTIME_STATS_MAX_TASKS 16
