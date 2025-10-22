@@ -23,6 +23,7 @@ def formatted_build_number = ""
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
+    options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
     stages {
         stage('Initialize') {
             steps {
