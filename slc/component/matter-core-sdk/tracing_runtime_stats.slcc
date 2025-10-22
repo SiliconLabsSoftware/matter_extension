@@ -21,7 +21,6 @@ define:
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/FreeRTOSRuntimeStats.c
-    directory: src
 
 requires:
   - name: matter_tracing_headers
