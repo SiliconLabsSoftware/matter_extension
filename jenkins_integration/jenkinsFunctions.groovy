@@ -271,10 +271,8 @@ def create_and_upload_package(Map args = [:]) {
             sshagent(['svc_gsdk-ssh']) {
                 checkout scm: [$class                       : 'GitSCM',
                                 branches                         : [[name: 'v2']],
-                                browser                          : [$class: 'GithubWeb',
-                                repoUrl: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git'],
                                 userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
-                                url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]]
+                                url: 'git@github.com:SiliconLabsInternal/action-conan-create-publish.git']]]
             }
 
             if (!fileExists("conan-promote/src/create_publish.py")) {
