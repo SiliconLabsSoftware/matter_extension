@@ -262,48 +262,50 @@ def create_and_upload_package(Map args = [:]) {
     // Ensure uv tool available
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
-    withCredentials([usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
-    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    withCredentials([
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ]) {
-        // Prepare promote helper repository
-        if (fileExists('conan-promote')) {
-            dir('conan-promote') {
-                sh 'git fetch --tags --prune'
-                sh 'git checkout v2'
-                sh 'git reset --hard origin/v2'
+        // Checkout conan create/publish script
+        dir('conan-promote') {
+            sshagent(['svc_gsdk-ssh']) {
+                checkout scm: [$class                       : 'GitSCM',
+                                branches                         : [[name: 'v2']],
+                                browser                          : [$class: 'github',
+                                repoUrl: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git'],
+                                userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
+                                url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]]
             }
-        } else {
-            sh 'git clone git@github.com:SiliconLabsInternal/action-conan-promote.git --branch v2 conan-promote'
-        }
 
-        if (!fileExists("conan-promote/src/create_publish.py")) {
-            error("create_publish.py missing at conan-promote/src/create_publish.py")
-        }
+            if (!fileExists("conan-promote/src/create_publish.py")) {
+                error("create_publish.py missing at conan-promote/src/create_publish.py")
+            }
 
-        // Use env vars to avoid leaking secrets via command echo
-        withEnv([
-            "CONAN_REMOTE_USER=${SL_USERNAME}",
-            "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
-            "CONAN_REMOTE_URL=${REMOTE_URL}",
-            "CONAN_REMOTE_NAME=${REMOTE_NAME}",
-            "CONAN_CREATE=${CREATE}",
-            "CONAN_PUBLISH=${PUBLISH}" 
-        ]) {
-            def publishCmd = """
-                uv run --no-dev --project . conan-promote/src/create_publish.py \
-                  --conanfile-path ${MATTER_CONANFILE_PATH} \
-                  --remote-username ${CONAN_REMOTE_USER} \
-                  --remote-token ${CONAN_REMOTE_TOKEN} \
-                  --stack-name matter \
-                  --remote-url ${CONAN_REMOTE_URL} \
-                  --remote-name ${CONAN_REMOTE_NAME} \
-                  --create ${CONAN_CREATE} \
-                  --publish ${CONAN_PUBLISH}
-            """.stripIndent().trim()
+            // Use env vars to avoid leaking secrets via command echo
+            withEnv([
+                "CONAN_REMOTE_USER=${SL_USERNAME}",
+                "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
+                "CONAN_REMOTE_URL=${REMOTE_URL}",
+                "CONAN_REMOTE_NAME=${REMOTE_NAME}",
+                "CONAN_CREATE=${CREATE}",
+                "CONAN_PUBLISH=${PUBLISH}" 
+            ]) {
+                def publishCmd = """
+                    uv run --no-dev --project . conan-promote/src/create_publish.py \\
+                      --conanfile-path ${MATTER_CONANFILE_PATH} \\
+                      --remote-username \${CONAN_REMOTE_USER} \\
+                      --remote-token \${CONAN_REMOTE_TOKEN} \\
+                      --stack-name matter \\
+                      --remote-url \${CONAN_REMOTE_URL} \\
+                      --remote-name \${CONAN_REMOTE_NAME} \\
+                      --create \${CONAN_CREATE} \\
+                      --publish \${CONAN_PUBLISH}
+                """.stripIndent().trim()
 
-            // Mask token in log preview
-            echo publishCmd.replace(CONAN_REMOTE_TOKEN, '****')
-            sh(script: publishCmd)
+                // Mask token in log preview
+                echo publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')
+                sh(script: publishCmd)
+            }
         }
     }
 
