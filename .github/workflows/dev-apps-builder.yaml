@@ -1,6 +1,8 @@
 name: Build Dev apps
 
 on:
+    schedule:
+        - cron: '0 22 * * *' # 6 pm EST daily
     push:
         branches:
             - main
@@ -36,6 +38,8 @@ jobs:
               run: |
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+                      echo "build-type=full" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
