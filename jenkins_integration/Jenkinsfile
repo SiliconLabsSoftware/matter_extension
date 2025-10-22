@@ -1,12 +1,23 @@
 #!groovy
 @Library('gsdk-shared-lib@master')
 
+def pipelineProperties = []
+
+// Configure pollSCM triggers
+if(env.BRANCH_NAME == 'main'){
+    // Trigger daily at 8pm EST (2 hrs after github trigger)
+    pipelineProperties << pipelineTriggers([pollSCM('0 0 * * *')])
+}
+
+properties(pipelineProperties)
+
 def commit_sha = ""
 def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
 def formatted_build_number = ""
+
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
