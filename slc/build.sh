@@ -71,6 +71,31 @@ build_without_arg() {
 	fi
 }
 
+# Helper function to run slc generate with retry on timeout
+run_slc_generate_with_retry() {
+	local cmd="$*"
+	echo "Running: slc $cmd"
+	
+	# Capture both exit code and output
+	local output
+	output=$(slc $cmd 2>&1)
+	local exit_code=$?
+	echo "$output"
+	
+	# If failed, check if it's a timeout and retry once
+	if [ $exit_code -ne 0 ]; then
+		if echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
+			echo "Timeout detected. Retrying slc generate command once more..."
+			slc $cmd
+			exit_code=$?
+		else
+			echo "First attempt failed with exit code $exit_code (not a timeout - no retry)"
+		fi
+	fi
+	
+	return $exit_code
+}
+
 MATTER_ROOT=$(pwd -P)
 : "${GSDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 
@@ -251,7 +276,7 @@ if [ "$skip_gen" = false ]; then
 
 			# Generate bootloader
 			echo "Generating bootloader..."
-			slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=10000
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=1800
 			if [ $? -ne 0 ]; then
 				echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
 				exit 1
@@ -263,14 +288,14 @@ if [ "$skip_gen" = false ]; then
 		APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 		echo "Generating application..."
-		slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=10000
+		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=1800
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate application for: $SILABS_APP_PATH"
 			exit 1
 		fi
 	else
 		# Generate .slcp projects
-		slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=10000 -o makefile
+		run_slc_generate_with_retry generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=3500 -o makefile
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate : $SILABS_APP_PATH"
 			exit 1
