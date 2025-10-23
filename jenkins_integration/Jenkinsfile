@@ -8,7 +8,7 @@ if(env.BRANCH_NAME == 'main'){
     // Trigger daily at 7pm EST (1 hr after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('0 23 * * *')])
 } else if(env.BRANCH_NAME == 'feature/MATTER-5231-test'){
-    pipelineProperties << pipelineTriggers([pollSCM('*/5 * * * *')])
+    pipelineProperties << pipelineTriggers([pollSCM('0 */2 * * *')])
 }
 
 properties(pipelineProperties)
