@@ -246,6 +246,9 @@ def create_and_upload_package(Map args = [:]) {
 
     // Determine repo root (allow override)
     def REPO_ROOT = args.repoRoot ?: pwd()
+    dir(REPO_ROOT) {
+        sh ' conan config install -t file packages/remotes.json'
+    }
 
     // Local scoped vars
     def MATTER_CONANFILE_PATH     = "${REPO_ROOT}/packages/matter/conanfile.py"
