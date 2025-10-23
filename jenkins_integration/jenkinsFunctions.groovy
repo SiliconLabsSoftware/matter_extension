@@ -274,8 +274,9 @@ def create_and_upload_package(Map args = [:]) {
             sh 'ls -la'
 
             // Use env vars to avoid leaking secrets via command echo
+            withCredentials([
             usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
-            {
+            ]) {
             withEnv([
                 "CONAN_REMOTE_USER=${SL_USERNAME}",
                 "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
