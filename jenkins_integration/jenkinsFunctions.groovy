@@ -262,10 +262,7 @@ def create_and_upload_package(Map args = [:]) {
     // Ensure uv tool available
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
-    withCredentials([
-        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
-        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
-    ]) {
+    withCredentials([gitUsernamePassword(credentialsId: 'github-app')]) {
         // Checkout conan create/publish script
         dir('conan-promote') {
             sshagent(['svc_gsdk-ssh']) {
