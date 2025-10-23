@@ -1347,6 +1347,8 @@ extra_files:
   - slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp
   - slc/sample-app/lighting-app/efr32/README.md
   - slc/sample-app/lighting-app/efr32/pkg.slt
+  - slc/sample-app/platform-app/siwx917/platform-app-917-soc.slcp
+  - slc/sample-app/platform-app/siwx917/README_WiFi.md
   - tools/matter_rpi_image/README.md
   - tools/pymattertool/README.md
   - tools/pymattertool/main.py

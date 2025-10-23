@@ -9,7 +9,7 @@ on:
         branches:
             - main
             - "release_*"
-            
+
     workflow_dispatch:
         inputs:
             build-type:
@@ -25,7 +25,6 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-
     set-build-type:
         runs-on: ubuntu-latest
         outputs:
@@ -138,7 +137,7 @@ jobs:
         with:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-    
+
     build-performance-test-app:
         name: Build Performance Test App
         needs: set-build-type
@@ -168,7 +167,6 @@ jobs:
         with:
             example-app: "platform-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
 
     build-sqa-tools:
         name: Build SQA Tools
@@ -203,9 +201,9 @@ jobs:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v4
               with:
-                name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
-                delete-merged: true
-                pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+                  name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
+                  delete-merged: true
+                  pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
     wait-for-test-results:
         name: Wait for Test Results
