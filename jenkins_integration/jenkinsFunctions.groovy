@@ -265,11 +265,16 @@ def create_and_upload_package(Map args = [:]) {
         // Checkout conan create/publish script
         dir('conan-promote') {
             checkout([$class: 'GitSCM',
-                branches: [[name: 'main']],
+                branches: [[name: '*/v2']],
                 userRemoteConfigs: [[credentialsId: 'github-app', 
                 url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
             ])
             dir('action-conan-create-publish') {
+                if (!fileExists("src/create_publish.py")) {
+                    sh 'pwd'
+                    sh 'ls -la'
+                    error("create_publish.py missing at src/create_publish.py")
+                }
 
             // Use env vars to avoid leaking secrets via command echo
             withEnv([
