@@ -270,7 +270,8 @@ def create_and_upload_package(Map args = [:]) {
                 url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
             ])
             dir('action-conan-create-publish') {
-
+            sh 'pwd'
+            sh 'ls -la'
 
             // Use env vars to avoid leaking secrets via command echo
             withEnv([
