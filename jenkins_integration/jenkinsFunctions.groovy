@@ -269,10 +269,10 @@ def create_and_upload_package(Map args = [:]) {
                 userRemoteConfigs: [[credentialsId: 'github-app', 
                 url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
             ])
-
-            if (!fileExists("conan-promote/action-conan-create-publish/src/create_publish.py")) {
-                error("create_publish.py missing at conan-promote/action-conan-create-publish/src/create_publish.py")
-            }
+            dir('action-conan-create-publish') {
+                if (!fileExists("src/create_publish.py")) {
+                    error("create_publish.py missing at src/create_publish.py")
+                }
 
             // Use env vars to avoid leaking secrets via command echo
             withEnv([
@@ -284,7 +284,7 @@ def create_and_upload_package(Map args = [:]) {
                 "CONAN_PUBLISH=${PUBLISH}" 
             ]) {
                 def publishCmd = """
-                    uv run --no-dev --project . conan-promote/src/create_publish.py \\
+                    uv run --no-dev --project . src/create_publish.py \\
                       --conanfile-path ${MATTER_CONANFILE_PATH} \\
                       --remote-username \${CONAN_REMOTE_USER} \\
                       --remote-token \${CONAN_REMOTE_TOKEN} \\
@@ -299,6 +299,7 @@ def create_and_upload_package(Map args = [:]) {
                 echo publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')
                 sh(script: publishCmd)
             }
+        }
         }
 
     echo "Package creation/upload completed."
