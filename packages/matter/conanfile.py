@@ -15,7 +15,7 @@ _REPO_ROOT = _RECIPE_PATH.parents[2]
 
 class matterRecipe(ConanFile):
     name = "matter"
-    slce_file = "matter.slce"
+    slce_file = os.path.join(_REPO_ROOT, "matter.slce")
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
