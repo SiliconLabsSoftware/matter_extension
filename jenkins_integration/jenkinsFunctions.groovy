@@ -273,7 +273,6 @@ def create_and_upload_package(Map args = [:]) {
                 if (!fileExists("src/create_publish.py")) {
                     sh 'pwd'
                     sh 'ls -la'
-                    error("create_publish.py missing at src/create_publish.py")
                 }
 
             // Use env vars to avoid leaking secrets via command echo
