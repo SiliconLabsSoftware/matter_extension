@@ -82,14 +82,23 @@ run_slc_generate_with_retry() {
 	local exit_code=$?
 	echo "$output"
 	
-	# If failed, check if it's a timeout and retry once
+	# If failed, check the type of error
 	if [ $exit_code -ne 0 ]; then
-		if echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
+		# Check for ConcurrentModificationException
+		if echo "$output" | grep -q "ConcurrentModificationException: Internal Error. Please see logs."; then
+			echo "ConcurrentModificationException detected. Exporting logs..."
+			slc --exportLogs=out/artifacts/log
+			echo "Logs exported to out/artifacts/log"
+			echo "Retrying slc generate command after ConcurrentModificationException..."
+			slc $cmd
+			exit_code=$?
+		# Check for timeout
+		elif echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
 			echo "Timeout detected. Retrying slc generate command once more..."
 			slc $cmd
 			exit_code=$?
 		else
-			echo "First attempt failed with exit code $exit_code (not a timeout - no retry)"
+			echo "First attempt failed with exit code $exit_code (not a timeout or ConcurrentModificationException - no retry)"
 		fi
 	fi
 	
