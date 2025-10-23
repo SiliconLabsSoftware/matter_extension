@@ -262,16 +262,9 @@ def create_and_upload_package(Map args = [:]) {
     // Ensure uv tool available
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
-    withCredentials([gitUsernamePassword(credentialsId: 'github-app')]) {
-        // Checkout conan create/publish script
-        dir('conan-promote') {
-            sshagent(['svc_gsdk-ssh']) {
-                checkout scm: [$class                       : 'GitSCM',
-                                branches                         : [[name: 'v2']],
-                                userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
-                                url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]]
-            }
-
+    dir('conan-promote')
+    {
+        checkout scmGit(branches: [[name: '*/v2']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-app', url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']])
             if (!fileExists("conan-promote/src/create_publish.py")) {
                 error("create_publish.py missing at conan-promote/src/create_publish.py")
             }
