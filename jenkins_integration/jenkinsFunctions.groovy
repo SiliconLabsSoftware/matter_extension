@@ -264,12 +264,11 @@ def create_and_upload_package(Map args = [:]) {
 
         // Checkout conan create/publish script
         dir('conan-promote') {
-            checkout scm: [[
-                [$class               : 'GitSCM',
+            checkout([$class: 'GitSCM',
                 branches: [[name: '*/v2']],
                 userRemoteConfigs: [[credentialsId: 'github-app', 
                 url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
-            ]]]
+            ])
 
             if (!fileExists("conan-promote/src/create_publish.py")) {
                 error("create_publish.py missing at conan-promote/src/create_publish.py")
