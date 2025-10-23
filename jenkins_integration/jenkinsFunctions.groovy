@@ -271,6 +271,8 @@ def create_and_upload_package(Map args = [:]) {
             ])
             dir('action-conan-create-publish') {
                 if (!fileExists("src/create_publish.py")) {
+                    sh 'pwd'
+                    sh 'ls -la'
                     error("create_publish.py missing at src/create_publish.py")
                 }
 
