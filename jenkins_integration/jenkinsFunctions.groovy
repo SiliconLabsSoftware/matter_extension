@@ -270,8 +270,8 @@ def create_and_upload_package(Map args = [:]) {
                 url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
             ])
 
-            if (!fileExists("conan-promote/src/create_publish.py")) {
-                error("create_publish.py missing at conan-promote/src/create_publish.py")
+            if (!fileExists("conan-promote/action-conan-create-publish/src/create_publish.py")) {
+                error("create_publish.py missing at conan-promote/action-conan-create-publish/src/create_publish.py")
             }
 
             // Use env vars to avoid leaking secrets via command echo
