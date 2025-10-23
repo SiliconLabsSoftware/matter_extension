@@ -274,13 +274,15 @@ def create_and_upload_package(Map args = [:]) {
             sh 'ls -la'
 
             // Use env vars to avoid leaking secrets via command echo
+            usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
+            {
             withEnv([
                 "CONAN_REMOTE_USER=${SL_USERNAME}",
                 "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
                 "CONAN_REMOTE_URL=${REMOTE_URL}",
                 "CONAN_REMOTE_NAME=${REMOTE_NAME}",
                 "CONAN_CREATE=${CREATE}",
-                "CONAN_PUBLISH=${PUBLISH}" 
+                "CONAN_PUBLISH=${PUBLISH}"
             ]) {
                 def publishCmd = """
                     uv run --no-dev action-conan-create-publish \\
