@@ -8,8 +8,8 @@ on:
         type: string
 
 concurrency:
-    group: sqa-tools-builder-${{ github.ref }}
-    cancel-in-progress: true
+  group: sqa-tools-builder-${{ github.ref }}
+  cancel-in-progress: true
 
 env:
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
@@ -18,75 +18,79 @@ jobs:
   package-scripts:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v5
-      with:
-        submodules: false
-    
-    #zip Provision folder
-    - name: Zip provisioning tool
-      shell: bash
-      run: |
-        set -euo pipefail
-        LC_ALL=C
-        
-        # Constants / paths
-        SRC_DIR=provision
-        OUT_DIR=sqa-tools
-        ARCHIVE=provision.zip
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: false
 
-        # On error, show a small subset of the source tree for debugging
-        trap 'echo "[ERROR] Provision zip step failed; sample tree:"; find "${SRC_DIR}" -maxdepth 3 -type f 2>/dev/null | head -100' ERR
+      # Zip Provision folder
+      - name: Zip provisioning tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          LC_ALL=C
 
-        # Validate source directory exists early
-        [[ -d "${SRC_DIR}" ]] || { echo "Missing ${SRC_DIR} directory" >&2; exit 1; }
+          # Constants / paths
+          SRC_DIR=third_party/matter_support/provision
+          OUT_DIR=sqa-tools
+          ARCHIVE=provision.zip
 
-        echo "Creating ${ARCHIVE} (excluding hardware-specific and cache paths)..."
-        # -r recursive, -9 max compression, -X omit extra file attributes for reproducibility, -q quiet
-        zip -r -9 -X -q "${ARCHIVE}" "${SRC_DIR}" \
-          -x "${SRC_DIR}/support/efr32*" \
-          -x "${SRC_DIR}/support/si917*" \
-          -x "${SRC_DIR}/modules/__pycache__/*"
+          # On error, show a small subset of the source tree for debugging
+          trap 'echo "[ERROR] Provision zip step failed; sample tree:"; find "${SRC_DIR}" -maxdepth 3 -type f 2>/dev/null | head -100' ERR
 
-        # Sanity check: ensure archive has more than just the header lines (very small archives will have only a couple of lines in listing)
-        if ! unzip -l "${ARCHIVE}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
-          echo "Archive ${ARCHIVE} appears empty; failing." >&2
-            exit 1
-        fi
+          # Validate source directory exists early
+          [[ -d "${SRC_DIR}" ]] || { echo "Missing ${SRC_DIR} directory" >&2; exit 1; }
 
-        # Output directory + move
-        mkdir -p "${OUT_DIR}"
-        mv "${ARCHIVE}" "${OUT_DIR}/"
+          echo "Creating ${ARCHIVE} (excluding hardware-specific and cache paths)..."
+          # -r recursive, -9 max compression, -X omit extra file attributes for reproducibility, -q quiet
+          zip -r -9 -X -q "${ARCHIVE}" "${SRC_DIR}" \
+            -x "${SRC_DIR}/support/efr32*" \
+            -x "${SRC_DIR}/support/si917*" \
+            -x "${SRC_DIR}/modules/__pycache__/*" \
+            -x "${SRC_DIR}/headers/*" \
+            -x "${SRC_DIR}/libs/*" \
+            -x "${SRC_DIR}/args.gni" \
+            -x "${SRC_DIR}/BUILD.gn"
 
-        echo "Archive size: $(du -h ${OUT_DIR}/${ARCHIVE} | cut -f1)"
-        echo "Provisioning tool zipped successfully: ${OUT_DIR}/${ARCHIVE}"
+          # Sanity check: ensure archive has more than just the header lines (very small archives will have only a couple of lines in listing)
+          if ! unzip -l "${ARCHIVE}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
+            echo "Archive ${ARCHIVE} appears empty; failing." >&2
+              exit 1
+          fi
 
-    - name: Mark repository as safe for Git
-      shell: bash
-      run: |
-        git config --global --add safe.directory /__w/matter_extension/matter_extension
+          # Output directory + move
+          mkdir -p "${OUT_DIR}"
+          mv "${ARCHIVE}" "${OUT_DIR}/"
 
-    - name: Initialize required submodules
-      shell: bash
-      run: |
-        git submodule update --init third_party/matter_sdk
-    
-    - name: Zip OTA scripts
-      shell: bash
-      run: |
+          echo "Archive size: $(du -h ${OUT_DIR}/${ARCHIVE} | cut -f1)"
+          echo "Provisioning tool zipped successfully: ${OUT_DIR}/${ARCHIVE}"
+
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
+
+      - name: Zip OTA scripts
+        shell: bash
+        run: |
           ota_file="ota-scripts.zip"
           cd third_party/matter_sdk/
           zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
           mv "${ota_file}" ../../sqa-tools/
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
-          
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: sqa-tools-zip
-        path: sqa-tools
-        if-no-files-found: error
-        overwrite: true
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sqa-tools-zip
+          path: sqa-tools
+          if-no-files-found: error
+          overwrite: true
 
   build-sqa-tools:
     runs-on: ubuntu-latest
@@ -98,7 +102,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: false
-      
+
       - name: Mark repository as safe for Git
         shell: bash
         run: |
@@ -124,7 +128,7 @@ jobs:
         run: |
           cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
-      
+
       # Builds OTA provider
       - name: Build OTA provider
         shell: bash
@@ -155,7 +159,7 @@ jobs:
           path: sqa-tools
           if-no-files-found: error
           overwrite: true
-    
+
     # copy wifi firmware
   copy-wifi-firmware:
     runs-on: ubuntu-latest
@@ -185,9 +189,9 @@ jobs:
   merge-artifacts:
     runs-on: ubuntu-latest
     needs:
-        - build-sqa-tools
-        - package-scripts
-        - copy-wifi-firmware
+      - build-sqa-tools
+      - package-scripts
+      - copy-wifi-firmware
     if: success()
 
     steps:
