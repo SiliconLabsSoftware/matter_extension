@@ -4,7 +4,6 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom
 import pathlib
 import sys
-import yaml
 
 
 ###########################################################################################
@@ -23,10 +22,15 @@ examples_dir = os.path.join(root_dir, "Examples")
 root_sub_dirs = os.listdir(root_dir)
 internal_boards = ['brd4319f']
 internal_sample_apps = ['performance-test-app','platform-app','lock-li']
-with open(os.path.join(root_dir,"third_party","matter_private","jenkins","pipeline_metadata.yml"), 'r') as stream:
-    pipeline_metadata = yaml.safe_load(stream)
 
-matterExtensionVersion = pipeline_metadata['toolchain_info']['matterExtensionVersion']
+# Read version from matter.slce file
+matter_slce_path = os.path.join(root_dir, "matter.slce")
+with open(matter_slce_path, 'r') as stream:
+    for line in stream:
+        if line.startswith('version:'):
+            matterExtensionVersion = line.split(':')[1].strip()
+            break
+
 asset_prefix = "asset://extension.matter_"+matterExtensionVersion+"/"
 
 if not os.path.exists(out_folder_dir):

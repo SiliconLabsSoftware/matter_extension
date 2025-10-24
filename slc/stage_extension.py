@@ -30,7 +30,6 @@ exclude_root_directories = [
 exclude_submodules = [
     'simplicity_sdk',
     'wifi_sdk',
-    'matter_private',
     'third_party_hw_drivers_extension'
 ]
 
