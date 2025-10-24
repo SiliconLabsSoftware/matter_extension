@@ -29,11 +29,6 @@
 [submodule "nlassert"]
 	path = third_party/nlassert
 	url = https://github.com/nestlabs/nlassert.git
-[submodule "third_party/matter_private"]
-	path = third_party/matter_private
-	url = ssh://git@stash.silabs.com/wmn_tools/matter_private.git
-	branch = release_2.7-1.4
-	update = none
 [submodule "third_party/third_party_hw_drivers_extension"]
 	path = third_party/third_party_hw_drivers_extension
 	url = https://github.com/SiliconLabs/third_party_hw_drivers_extension.git

@@ -5,12 +5,12 @@ import groovy.json.JsonSlurper
 
 def pipeline()
 {
-    stage('Checkout matter_private and load Jenkinsfile')
+    stage('Checkout matter_extension')
     {
         node('buildNFS')
         {
             // ************************************************************************************
-            //  Clone Matter repo, checkout corresponding branch, checkout matter_private submodule
+            //  Clone Matter repo, checkout corresponding branch
             // ************************************************************************************           
             def scmVars = checkout scm: [$class              : 'GitSCM',
                             branches                         : scm.branches,
@@ -37,17 +37,10 @@ def pipeline()
                 isNewCommitDetected = true
             }
         }
-           
-            sh """
-                git submodule update --init  --checkout third_party/matter_private
-            """
-            // Load metadata from the submodule
-            pipelineFunctions = load 'third_party/matter_private/jenkins/Jenkinsfile'
         
             // export the NFS overlay
             sh 'sudo exportfs -af'
         } 
-        pipelineFunctions.runScript()
     }
 }
 
