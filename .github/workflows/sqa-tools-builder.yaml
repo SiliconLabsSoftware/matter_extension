@@ -21,7 +21,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          submodules: true
+          submodules: false
+
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      - name: Initialize required submodules
+        shell: bash
+        run: git submodule update --init \
+          third_party/matter_sdk \
+          third_party/matter_support
 
       # Zip Provision folder
       - name: Zip provisioning tool
@@ -64,16 +75,6 @@ jobs:
 
           echo "Archive size: $(du -h ${OUT_DIR}/${ARCHIVE} | cut -f1)"
           echo "Provisioning tool zipped successfully: ${OUT_DIR}/${ARCHIVE}"
-
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init third_party/matter_sdk
 
       - name: Zip OTA scripts
         shell: bash
