@@ -29,11 +29,9 @@ jobs:
           git config --global --add safe.directory /__w/matter_extension/matter_extension
 
       - name: Initialize required submodules
+        shell: bash
         run: |
-          cd matter_extension
-
-          git submodule update --init \
-            third_party/matter_sdk \
+          git submodule update --init third_party/matter_sdk \
             third_party/matter_support
 
       # Zip Provision folder
