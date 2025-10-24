@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          submodules: false
+          submodules: true
 
       # Zip Provision folder
       - name: Zip provisioning tool
