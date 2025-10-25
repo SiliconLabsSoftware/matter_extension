@@ -17,7 +17,7 @@ class MatterBaseRecipe(ConanFile):
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
     url = "https://github.com/SiliconLabsSoftware/matter_extension"
     topics = "silabs"
-    python_requires = "silabs_package_assistant/[>=1]@silabs"
+    python_requires = "silabs_package_assistant/[~1]@silabs"
 
     # Central SL metadata
     sl_metadata = {
