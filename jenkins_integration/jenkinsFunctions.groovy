@@ -250,7 +250,7 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
  * @param create Whether to create the package
  * @param publish Whether to publish the package
  */
-def executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish) {
+def executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish, String slPrerelease) {
     withCredentials([
         usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
     ]) {
@@ -261,7 +261,7 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
             "CONAN_REMOTE_NAME=${remoteName}",
             "CONAN_CREATE=${create}",
             "CONAN_PUBLISH=${publish}",
-            "SL_PRERELEASE=packages/.prerelease"
+            "SL_PRERELEASE=${slPrerelease}"
         ]) {
             def publishCmd = """
                 uv run --no-dev action-conan-create-publish \\
@@ -298,6 +298,7 @@ def create_and_upload_package(Map args = [:]) {
     def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
     def CREATE                    = (args.create   ?: true)
     def PUBLISH                   = (args.publish  ?: true)
+    def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
 
     // Pre-flight checks
     if (!fileExists(MATTER_CONANFILE_PATH)) {
@@ -319,9 +320,9 @@ def create_and_upload_package(Map args = [:]) {
             
             // Execute the conan action using the reusable function
             // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false)
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH)
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH,SL_PRERELEASE)
         }
     }
 
