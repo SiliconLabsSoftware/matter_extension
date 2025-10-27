@@ -241,13 +241,54 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
     }
 }
 
+/**
+ * Execute the conan create/publish action script with provided parameters
+ * @param conanfilePath Path to the conanfile.py
+ * @param stackName Name of the stack (e.g., 'matter')
+ * @param remoteUrl Conan remote URL
+ * @param remoteName Conan remote name
+ * @param create Whether to create the package
+ * @param publish Whether to publish the package
+ */
+def executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish) {
+    withCredentials([
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
+    ]) {
+        withEnv([
+            "CONAN_REMOTE_USER=${SL_USERNAME}",
+            "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
+            "CONAN_REMOTE_URL=${remoteUrl}",
+            "CONAN_REMOTE_NAME=${remoteName}",
+            "CONAN_CREATE=${create}",
+            "CONAN_PUBLISH=${publish}",
+            "SL_PRERELEASE=packages/.prerelease"
+        ]) {
+            def publishCmd = """
+                uv run --no-dev action-conan-create-publish \\
+                  --conanfile-path ${conanfilePath} \\
+                  --remote-username \${CONAN_REMOTE_USER} \\
+                  --remote-token \${CONAN_REMOTE_TOKEN} \\
+                  --stack-name ${stackName} \\
+                  --remote-url \${CONAN_REMOTE_URL} \\
+                  --remote-name \${CONAN_REMOTE_NAME} \\
+                  --create \${CONAN_CREATE} \\
+                  --publish \${CONAN_PUBLISH}
+            """.stripIndent().trim()
+
+            // Mask token in log preview
+            echo publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')
+            sh(script: publishCmd)
+        }
+    }
+}
+
 def create_and_upload_package(Map args = [:]) {
     echo "Creating and uploading package..."
 
     // Determine repo root (allow override)
     def REPO_ROOT = args.repoRoot ?: pwd()
     dir(REPO_ROOT) {
-        sh ' conan config install -t file packages/remotes.json'
+        sh 'conan config install -t file packages/remotes.json'
     }
 
     // Local scoped vars
@@ -265,50 +306,26 @@ def create_and_upload_package(Map args = [:]) {
     // Ensure uv tool available
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
-        // Checkout conan create/publish script
-        dir('conan-promote') {
-            checkout([$class: 'GitSCM',
-                branches: [[name: 'main']],
-                userRemoteConfigs: [[credentialsId: 'github-app', 
-                url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
-            ])
-            dir('action-conan-create-publish') {
+    // Checkout conan create/publish script
+    dir('conan-promote') {
+        checkout([$class: 'GitSCM',
+            branches: [[name: 'main']],
+            userRemoteConfigs: [[credentialsId: 'github-app', 
+            url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
+        ])
+        dir('action-conan-create-publish') {
             sh 'pwd'
             sh 'ls -la'
-
-            // Use env vars to avoid leaking secrets via command echo
-            withCredentials([
-                usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
-            ]) {
-                withEnv([
-                    "CONAN_REMOTE_USER=${SL_USERNAME}",
-                    "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
-                    "CONAN_REMOTE_URL=${REMOTE_URL}",
-                    "CONAN_REMOTE_NAME=${REMOTE_NAME}",
-                    "CONAN_CREATE=${CREATE}",
-                    "CONAN_PUBLISH=${PUBLISH}"
-                ]) {
-                def publishCmd = """
-                    uv run --no-dev action-conan-create-publish \\
-                      --conanfile-path ${MATTER_CONANFILE_PATH} \\
-                      --remote-username \${CONAN_REMOTE_USER} \\
-                      --remote-token \${CONAN_REMOTE_TOKEN} \\
-                      --stack-name matter \\
-                      --remote-url \${CONAN_REMOTE_URL} \\
-                      --remote-name \${CONAN_REMOTE_NAME} \\
-                      --create \${CONAN_CREATE} \\
-                      --publish \${CONAN_PUBLISH}
-                """.stripIndent().trim()
-
-                // Mask token in log preview
-                echo publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')
-                sh(script: publishCmd)
-            }
+            
+            // Execute the conan action using the reusable function
+            // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH)
         }
-        }
+    }
 
     echo "Package creation/upload completed."
-}
 }
 
 
