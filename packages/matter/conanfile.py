@@ -15,6 +15,7 @@ _REPO_ROOT = _RECIPE_PATH.parents[2]
 
 class matterRecipe(ConanFile):
     name = "matter"
+    user = "silabs"
     slce_file = os.path.join(_REPO_ROOT, "matter.slce")
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
@@ -40,11 +41,7 @@ class matterRecipe(ConanFile):
             self.version = silabs_package_assistant.get_version(self.slce_file)
         # if not self.channel:
         #     self.channel = silabs_package_assistant.get_channel()
-        if not self.user:
-            self.user = silabs_package_assistant.get_user()
-            if self.user == "silabs":
-                self.revision_mode = "scm"
-                self.output.info("Using revision mode SCM")
+        self.revision_mode = "scm"
         
         self.output.info(f"Resolved context: {self.name}, {self.version}, {self.channel}, {self.user}")
 
@@ -99,7 +96,13 @@ class matterRecipe(ConanFile):
         return _REPO_ROOT
 
     def requirements(self):
-        pass
+        self.requires("openthread/3.0.0-alpha.1@silabs")
+        self.requires("multiprotocol/1.0.0-alpha.1@silabs")
+        self.requires("zigbee/9.0.0-alpha.0@silabs")
+        self.requires("bluetooth_le_host/11.0.0-alpha.2@silabs")
+        self.requires("platform_nwp_siwx91x/4.0.0-alpha.4@silabs")
+        self.requires("bluetooth_le_siwx91x/4.0.0-alpha.4@silabs")
+        self.requires("lwip/1.0.0@silabs")
 
     def slt_requirements(self):
         req = {}

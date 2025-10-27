@@ -14,15 +14,13 @@ import yaml
 ## Embedded shared logic (flattened so there is ONLY ONE ConanFile subclass in this file)
 
 _RECIPE_PATH = Path(__file__).resolve()
-try:
-    _REPO_ROOT = _RECIPE_PATH.parents[2]
-except IndexError:
-    _REPO_ROOT = _RECIPE_PATH.parent
+_REPO_ROOT = _RECIPE_PATH.parents[2]
 
 
 class matter_appRecipe(ConanFile):
-    slce_file = "matter.slce"
+    slce_file = os.path.join(_REPO_ROOT, "matter_app.slce")
     name = "matter_app"
+    user = "silabs"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
@@ -46,10 +44,7 @@ class matter_appRecipe(ConanFile):
             self.version = silabs_package_assistant.get_version(self.slce_file)
         # if not self.channel:
         #     self.channel = silabs_package_assistant.get_channel()
-        if not self.user:
-            self.user = silabs_package_assistant.get_user()
-            if self.user == "silabs":
-                self.revision_mode = "scm"
+        self.revision_mode = "scm"
         
         self.output.info(f"Resolved context: {self.name}, {self.version}, {self.channel}, {self.user}")
 
