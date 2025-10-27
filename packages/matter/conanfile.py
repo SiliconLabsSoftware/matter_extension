@@ -96,13 +96,13 @@ class matterRecipe(ConanFile):
         return _REPO_ROOT
 
     def requirements(self):
-        self.requires("openthread/3.0.0-alpha.1@silabs")
-        self.requires("multiprotocol/1.0.0-alpha.1@silabs")
-        self.requires("zigbee/9.0.0-alpha.0@silabs")
-        self.requires("bluetooth_le_host/11.0.0-alpha.2@silabs")
-        self.requires("platform_nwp_siwx91x/4.0.0-alpha.4@silabs")
-        self.requires("bluetooth_le_siwx91x/4.0.0-alpha.4@silabs")
-        self.requires("lwip/1.0.0@silabs")
+        self.requires("openthread/[>=3.0.0 <3.0.1, include_prerelease]@silabs", run=True)
+        self.requires("multiprotocol/[>=1.0.0 <1.0.1, include_prerelease]@silabs", run=True)
+        self.requires("zigbee/[>=9.0.0 <9.0.1, include_prerelease]@silabs", run=True)
+        self.requires("bluetooth_le_host/[>=11.0.0 <11.0.1, include_prerelease]@silabs", run=True)
+        self.requires("platform_nwp_siwx91x/[>=4.0.0 <4.0.1, include_prerelease]@silabs", run=True)
+        self.requires("bluetooth_le_siwx91x/[>=4.0.0 <4.0.1, include_prerelease]@silabs", run=True)
+        self.requires("lwip/[>=1.0.0 <1.0.1, include_prerelease]@silabs", run=True)
 
     def slt_requirements(self):
         req = {}

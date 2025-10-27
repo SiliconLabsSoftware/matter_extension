@@ -18,9 +18,9 @@ _REPO_ROOT = _RECIPE_PATH.parents[2]
 
 
 class matter_appRecipe(ConanFile):
-    slce_file = os.path.join(_REPO_ROOT, "matter.slce")
     name = "matter_app"
     user = "silabs"
+    slce_file = os.path.join(_REPO_ROOT, "matter.slce")
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
     author = "Silicon Laboratories Inc."
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
@@ -232,14 +232,3 @@ class matter_appRecipe(ConanFile):
                 collected.add(rel_path)
                 collected.update(related)
         return collected
-
-    def _get_local_slce_file(self, filename: str = "matter.slce") -> str:
-        """Return relative path to required SLCE definition, raising if missing.
-
-        Keeps logic centralized so build() and package() stay DRY.
-        """
-        filename = os.path.join(self.repo_root, filename)
-        if not os.path.exists(filename):
-            raise FileNotFoundError(f"SLCE file not found: {filename}")
-        # Maintain previous usage of a relative string path
-        return f"{filename}"
