@@ -18,7 +18,7 @@ _REPO_ROOT = _RECIPE_PATH.parents[2]
 
 
 class matter_appRecipe(ConanFile):
-    slce_file = os.path.join(_REPO_ROOT, "matter_app.slce")
+    slce_file = os.path.join(_REPO_ROOT, "matter.slce")
     name = "matter_app"
     user = "silabs"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
