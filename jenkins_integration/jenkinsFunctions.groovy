@@ -264,7 +264,7 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
             "SL_PRERELEASE=${slPrerelease}"
         ]) {
             def publishCmd = """
-                uv run --no-dev action-conan-create-publish \\
+                uv run --project action-conan-create-publish \\
                   --conanfile-path ${conanfilePath} \\
                   --remote-username \${CONAN_REMOTE_USER} \\
                   --remote-token \${CONAN_REMOTE_TOKEN} \\
