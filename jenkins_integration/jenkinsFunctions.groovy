@@ -275,8 +275,11 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
                   --publish \${CONAN_PUBLISH}
             """.stripIndent().trim()
 
-            // Mask token in log preview
-            echo publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')
+            // Print the command in CI logs (with token masked for security)
+            echo "=== Executing Conan Command for ${stackName} ==="
+            echo "Command: ${publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')}"
+            echo "================================================"
+            
             sh(script: publishCmd)
         }
     }
