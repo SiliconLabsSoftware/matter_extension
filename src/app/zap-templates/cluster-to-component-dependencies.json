@@ -450,12 +450,6 @@
     ]
   },
   {
-    "clusterCode": "pump configuration and control-client",
-    "value": [
-      "%extension-matter%matter_pump_configuration_and_control_client"
-    ]
-  },
-  {
     "clusterCode": "pump configuration and control-server",
     "value": [
       "%extension-matter%matter_pump_configuration_and_control"
@@ -543,12 +537,6 @@
     "clusterCode": "testing-server",
     "value": [
       "%extension-matter%matter_testing"
-    ]
-  },
-  {
-    "clusterCode": "thermostat-client",
-    "value": [
-      "%extension-matter%matter_thermostat_client"
     ]
   },
   {

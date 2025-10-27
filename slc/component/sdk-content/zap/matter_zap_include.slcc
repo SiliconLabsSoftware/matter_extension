@@ -17,6 +17,7 @@ include:
     - path: AdministratorCommissioning.h
     - path: BasicInformation.h
     - path: Binding.h
+    - path: Descriptor.h
     - path: EthernetNetworkDiagnostics.h
     - path: FixedLabel.h
     - path: GeneralCommissioning.h
