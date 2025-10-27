@@ -306,8 +306,6 @@ def create_and_upload_package(Map args = [:]) {
     def MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py" // reserved for future use
     def REMOTE_NAME               = args.remoteName ?: "matter-conan-dev"
     def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
-    def CREATE                    = (args.create   ?: true)
-    def PUBLISH                   = (args.publish  ?: true)
     def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
 
     // Pre-flight checks
@@ -333,9 +331,9 @@ def create_and_upload_package(Map args = [:]) {
             echo "Getting the package versions"
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
             echo "Uploading the matter component package"
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
             echo "Uploading the matter app package"
-            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,CREATE,PUBLISH,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
         }
     }
 
