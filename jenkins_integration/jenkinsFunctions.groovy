@@ -240,6 +240,182 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
         }
     }
 }
+
+/**
+ * Read and extract package information from conan_package_output.json
+ * @param jsonFileName Optional custom JSON filename (defaults to 'conan_package_output.json')
+ * @return Map containing extracted package information or empty map if file not found/invalid
+ */
+def extractPackageInfoFromJson(String jsonFileName = 'conan_package_output.json') {
+    def packageInfo = [:]
+    
+    if (fileExists(jsonFileName)) {
+        try {
+            def jsonContent = readFile(jsonFileName)
+            def jsonData = readJSON text: jsonContent
+            
+            packageInfo = [
+                prerelease_number: jsonData.prerelease_number ?: "",
+                prerelease_qualifier: jsonData.prerelease_qualifier ?: "",
+                package_ref: jsonData.package_ref ?: "",
+                full_package_ref: jsonData.full_package_ref ?: "",
+                package_name: jsonData.package_name ?: "",
+                package_version: jsonData.package_version ?: "",
+                package_user: jsonData.package_user ?: "",
+                package_channel: jsonData.package_channel ?: "",
+                recipe_revision: jsonData.recipe_revision ?: "",
+                package_id: jsonData.package_id ?: "",
+                package_revision: jsonData.package_revision ?: ""
+            ]
+            
+            echo "Extracted package information from ${jsonFileName}:"
+            packageInfo.each { key, value ->
+                if (value) {
+                    echo "  ${key}: ${value}"
+                }
+            }
+            
+            // Store key information in environment variables for broader access
+            if (packageInfo.prerelease_number) {
+                env.SL_PRERELEASE_NUMBER = packageInfo.prerelease_number
+            }
+            if (packageInfo.package_ref) {
+                env.CONAN_PACKAGE_REF = packageInfo.package_ref
+            }
+            if (packageInfo.package_version) {
+                env.CONAN_PACKAGE_VERSION = packageInfo.package_version
+            }
+            
+        } catch (Exception e) {
+            echo "Error parsing ${jsonFileName}: ${e.getMessage()}"
+            unstable("Failed to parse package output JSON: ${jsonFileName}")
+        }
+    } else {
+        echo "Warning: ${jsonFileName} not found"
+        unstable("Package output JSON file not found: ${jsonFileName}")
+    }
+    
+    return packageInfo
+}
+
+/**
+ * Execute the conan create/publish action script with provided parameters
+ * @param conanfilePath Path to the conanfile.py
+ * @param stackName Name of the stack (e.g., 'matter')
+ * @param remoteUrl Conan remote URL
+ * @param remoteName Conan remote name
+ * @param create Whether to create the package
+ * @param publish Whether to publish the package
+ */
+def executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish, String slPrerelease) {
+    withCredentials([
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
+    ]) {
+        withEnv([
+            "CONAN_REMOTE_USER=${SL_USERNAME}",
+            "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
+            "CONAN_REMOTE_URL=${remoteUrl}",
+            "CONAN_REMOTE_NAME=${remoteName}",
+            "CONAN_CREATE=${create}",
+            "CONAN_PUBLISH=${publish}",
+            "SL_PRERELEASE=${slPrerelease}"
+        ]) {
+            def publishCmd = """
+                uv run --no-dev action-conan-create-publish \\
+                  --conanfile-path ${conanfilePath} \\
+                  --remote-username \${CONAN_REMOTE_USER} \\
+                  --remote-token \${CONAN_REMOTE_TOKEN} \\
+                  --stack-name ${stackName} \\
+                  --remote-url \${CONAN_REMOTE_URL} \\
+                  --remote-name \${CONAN_REMOTE_NAME} \\
+                  --create \${CONAN_CREATE} \\
+                  --publish \${CONAN_PUBLISH}
+            """.stripIndent().trim()     
+            sh(script: publishCmd)
+        }
+    }
+}
+
+/**
+ * Create and upload Conan packages for Matter components
+ * @param args Map containing optional parameters:
+ *   - repoRoot: Repository root path (defaults to current directory)
+ *   - remoteName: Conan remote name (defaults to "matter-conan-dev") 
+ *   - remoteUrl: Conan remote URL (defaults to Artifactory Matter dev repository)
+ * @return Map containing:
+ *   - prerelease_number: The prerelease number extracted from the package
+ *   - package_ref: The package reference
+ *   - package_version: The package version
+ */
+def create_and_upload_package(Map args = [:]) {
+    echo "Creating and uploading package..."
+
+    // Determine repo root (allow override)
+    def REPO_ROOT = args.repoRoot ?: pwd()
+    
+    dir(REPO_ROOT) {
+        sh 'conan config install -t file packages/remotes.json'
+    }
+
+    // Local scoped vars
+    def MATTER_CONANFILE_PATH     = "${REPO_ROOT}/packages/matter/conanfile.py"
+    def MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py" // reserved for future use
+    def REMOTE_NAME               = args.remoteName ?: "matter-conan-dev"
+    def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
+    def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
+    def SL_PRERELEASE_NUMBER      = ""// Initialize prerelease number variable
+
+    // Pre-flight checks
+    if (!fileExists(MATTER_CONANFILE_PATH)) {
+        error("Conanfile not found: ${MATTER_CONANFILE_PATH}")
+    } 
+    // Ensure uv tool available
+    sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
+
+    // Checkout conan create/publish script
+    dir('conan-promote') {
+        checkout([$class: 'GitSCM',
+            branches: [[name: 'feature/json_output']],
+            userRemoteConfigs: [[credentialsId: 'github-app', 
+            url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
+        ])
+        dir('action-conan-create-publish') {
+            sh 'pwd'
+            sh 'slt update --self'
+            
+            // Execute the conan action using the reusable function
+            // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
+            echo "Getting the package versions"
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
+            
+            // Extract package information using reusable function
+            def packageInfo = extractPackageInfoFromJson()
+            SL_PRERELEASE_NUMBER = packageInfo.prerelease_number
+            dir(REPO_ROOT) {
+                echo pwd()
+                // Install required Python dependencies (handle externally managed environment)
+                sh '''
+                    # Try system package first, fallback to pip with --break-system-packages
+                    apt update && apt install -y python3-yaml || pip3 install --break-system-packages pyyaml
+                '''
+                sh 'make generate_pkg_slt_common'
+            }
+            echo "Uploading the matter component package"
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            echo "Uploading the matter app package"
+            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            // Run after the final upload is done, matter and matter_app package should have same version and revision
+            extractPackageInfoFromJson()
+        }
+    }
+
+    echo "Package creation/upload completed."
+    echo "Package ref: ${env.CONAN_PACKAGE_REF}"
+    echo "Package Version: ${env.CONAN_PACKAGE_VERSION}"
+    echo "Full Package ref: ${env.CONAN_FULL_PACKAGE_REF}"
+}
+
+
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
