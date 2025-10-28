@@ -273,20 +273,7 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
                   --remote-name \${CONAN_REMOTE_NAME} \\
                   --create \${CONAN_CREATE} \\
                   --publish \${CONAN_PUBLISH}
-            """.stripIndent().trim()
-
-            // Print the command in CI logs (with token masked for security)
-            echo "=== Executing Conan Command for ${stackName} ==="
-            echo "Parameters:"
-            echo "  - CONAN_CREATE: ${env.CONAN_CREATE}"
-            echo "  - CONAN_PUBLISH: ${env.CONAN_PUBLISH}"
-            echo "  - Stack Name: ${stackName}"
-            echo "  - Remote URL: ${env.CONAN_REMOTE_URL}"
-            echo "  - Remote Name: ${env.CONAN_REMOTE_NAME}"
-            echo "  - Conanfile Path: ${conanfilePath}"
-            echo "Command: ${publishCmd.replace(env.CONAN_REMOTE_TOKEN, '****')}"
-            echo "================================================"
-            
+            """.stripIndent().trim()     
             sh(script: publishCmd)
         }
     }
