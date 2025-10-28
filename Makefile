@@ -96,15 +96,9 @@ generate_pkg_slt: ## Generate the pkg.slt file
 	@echo "Generating pkg.slt"
 	python3 slc/script/generate_pkg_slt.py --verbose -d slc --matter-version $(PACKAGE_VERSION)
 
-generate_pkg_slt_common:update_version ## Generate the pkg.slt.common file
+generate_pkg_slt_common: ## Generate the pkg.slt.common file
 	@echo "Generating pkg.slt common"
 	python3 slc/script/generate_pkg_slt.py --verbose -d slc --common --matter-version $(PACKAGE_VERSION)
-
-update_version: package_version ## Update version in conanfile.py and conanfile_app.py to PACKAGE_VERSION
-	@echo "Updating version to $(PACKAGE_VERSION) in conanfile.py and conanfile_app.py"
-	@sed -i '' 's/version = "[^"]*"/version = "$(PACKAGE_VERSION)"/' packages/matter/conanfile.py
-	@sed -i '' 's/version = "[^"]*"/version = "$(PACKAGE_VERSION)"/' packages/matter_app/conanfile.py
-	@echo "Version updated successfully"
 
 upload_app_package: package_version ## Upload the app package
 	@echo "Uploading app package (version $(PACKAGE_VERSION))..."
