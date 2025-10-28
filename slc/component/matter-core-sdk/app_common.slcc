@@ -46,7 +46,6 @@ include:
     -   path: util/attribute-storage-null-handling.h
     -   path: util/odd-sized-integers.h
     -   path: util/generic-callbacks.h
-    -   path: util/AttributesChangedListener.h
     -   path: util/IMClusterCommandHandler.h
     -   path: util/MarkAttributeDirty.h
 label: app_common
