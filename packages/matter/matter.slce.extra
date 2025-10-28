@@ -1364,6 +1364,8 @@ extra_files:
   - slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp
   - slc/sample-app/lighting-app/efr32/README.md
   - slc/sample-app/lighting-app/efr32/pkg.slt
+  - slc/sample-app/platform-app/siwx917/platform-app-917-soc.slcp
+  - slc/sample-app/platform-app/siwx917/README_WiFi.md
   - tools/matter_rpi_image/README.md
   - tools/pymattertool/README.md
   - tools/pymattertool/main.py
@@ -1792,6 +1794,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/basic-information/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/basic-information/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/basic-information/tests/TestBasicInformationCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/basic-information/tests/TestBasicInformationReadWrite.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/BindingManager.h
@@ -1929,9 +1932,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.cpp
   - third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.h
   - third_party/matter_sdk/src/app/clusters/descriptor/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/descriptor/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/descriptor/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/descriptor/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor.cpp
+  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.h
+  - third_party/matter_sdk/src/app/clusters/descriptor/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/descriptor/tests/TestDescriptorCluster.cpp
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/DeviceEnergyManagementTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/app_config_dependent_sources.cmake
@@ -2277,10 +2284,6 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/power-topology-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/power-topology-server/power-topology-server.cpp
   - third_party/matter_sdk/src/app/clusters/power-topology-server/power-topology-server.h
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/app_config_dependent_sources.cmake
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/pump-configuration-and-control-client.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.gni
@@ -2481,9 +2484,9 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-cluster.h
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-delegate.h
-  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-server.cpp
-  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-server.h
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/app_config_dependent_sources.gni
@@ -3004,9 +3007,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_8.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_10.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_11.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_12.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_13.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_14.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_7.yaml
@@ -3321,7 +3321,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/test-ember-api.h
   - third_party/matter_sdk/src/app/tests/test-interaction-model-api.cpp
   - third_party/matter_sdk/src/app/tests/test-interaction-model-api.h
-  - third_party/matter_sdk/src/app/util/AttributesChangedListener.h
   - third_party/matter_sdk/src/app/util/BUILD.gn
   - third_party/matter_sdk/src/app/util/DataModelHandler.cpp
   - third_party/matter_sdk/src/app/util/DataModelHandler.h

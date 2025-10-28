@@ -23,7 +23,7 @@
         "thermostat": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent","--with_app 'matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
             }
         ]
     },
@@ -51,7 +51,7 @@
         "thermostat": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent","--with_app 'matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
             }
         ]
     }
