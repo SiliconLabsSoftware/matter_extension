@@ -404,6 +404,8 @@ def create_and_upload_package(Map args = [:]) {
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
             echo "Uploading the matter app package"
             executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            // Run after the final upload is done, matter and matter_app package should have same version and revision
+            extractPackageInfoFromJson()
         }
     }
 
