@@ -353,6 +353,8 @@ def create_and_upload_package(Map args = [:]) {
             }
             dir(REPO_ROOT) {
                 echo pwd()
+                // Install required Python dependencies
+                sh 'pip3 install pyyaml'
                 sh 'make generate_pkg_slt_common'
             }
             echo "Uploading the matter component package"
