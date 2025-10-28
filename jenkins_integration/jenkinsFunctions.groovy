@@ -324,7 +324,7 @@ def create_and_upload_package(Map args = [:]) {
         ])
         dir('action-conan-create-publish') {
             sh 'pwd'
-            sh 'ls -la'
+            sh 'slt update --self'
             
             // Execute the conan action using the reusable function
             // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
