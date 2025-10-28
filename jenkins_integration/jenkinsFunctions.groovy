@@ -295,7 +295,6 @@ def create_and_upload_package(Map args = [:]) {
 
     // Determine repo root (allow override)
     def REPO_ROOT = args.repoRoot ?: pwd()
-    def prereleaseNumber = "" 
     
     dir(REPO_ROOT) {
         sh 'conan config install -t file packages/remotes.json'
