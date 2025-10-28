@@ -353,8 +353,11 @@ def create_and_upload_package(Map args = [:]) {
             }
             dir(REPO_ROOT) {
                 echo pwd()
-                // Install required Python dependencies
-                sh 'pip3 install pyyaml'
+                // Install required Python dependencies (handle externally managed environment)
+                sh '''
+                    # Try system package first, fallback to pip with --break-system-packages
+                    apt update && apt install -y python3-yaml || pip3 install --break-system-packages pyyaml
+                '''
                 sh 'make generate_pkg_slt_common'
             }
             echo "Uploading the matter component package"
