@@ -38,7 +38,8 @@ jobs:
                       echo "build-type=full" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
-                      fi
+                  else
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
     build-lighting-app:
