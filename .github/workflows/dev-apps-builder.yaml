@@ -5,7 +5,6 @@ on:
         - cron: '0 22 * * *' # 6 pm EST daily
     push:
         branches:
-            - main
             - "release_*"
     pull_request:
         branches:
@@ -43,7 +42,7 @@ jobs:
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                      if [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
                       else
                           echo "build-type=standard" >> $GITHUB_OUTPUT
