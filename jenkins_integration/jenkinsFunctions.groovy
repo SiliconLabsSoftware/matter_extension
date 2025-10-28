@@ -317,10 +317,10 @@ def create_and_upload_package(Map args = [:]) {
             // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
             echo "Getting the package versions"
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
-            echo "Uploading the matter component package"
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
-            echo "Uploading the matter app package"
-            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            // echo "Uploading the matter component package"
+            // executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            // echo "Uploading the matter app package"
+            // executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
         }
     }
 
