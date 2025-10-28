@@ -408,12 +408,9 @@ def create_and_upload_package(Map args = [:]) {
     }
 
     echo "Package creation/upload completed."
-    return [
-        prerelease_number: SL_PRERELEASE_NUMBER,
-        package_ref: env.CONAN_PACKAGE_REF ?: "",
-        package_version: env.CONAN_PACKAGE_VERSION ?: "",
-        full_package_ref: env.CONAN_FULL_PACKAGE_REF ?: ""
-    ]
+    echo "Package ref: ${env.CONAN_PACKAGE_REF}"
+    echo "Package Version: ${env.CONAN_PACKAGE_VERSION}"
+    echo "Full Package ref: ${env.CONAN_FULL_PACKAGE_REF}"
 }
 
 
