@@ -242,6 +242,63 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
 }
 
 /**
+ * Read and extract package information from conan_package_output.json
+ * @param jsonFileName Optional custom JSON filename (defaults to 'conan_package_output.json')
+ * @return Map containing extracted package information or empty map if file not found/invalid
+ */
+def extractPackageInfoFromJson(String jsonFileName = 'conan_package_output.json') {
+    def packageInfo = [:]
+    
+    if (fileExists(jsonFileName)) {
+        try {
+            def jsonContent = readFile(jsonFileName)
+            def jsonData = readJSON text: jsonContent
+            
+            packageInfo = [
+                prerelease_number: jsonData.prerelease_number ?: "",
+                prerelease_qualifier: jsonData.prerelease_qualifier ?: "",
+                package_ref: jsonData.package_ref ?: "",
+                full_package_ref: jsonData.full_package_ref ?: "",
+                package_name: jsonData.package_name ?: "",
+                package_version: jsonData.package_version ?: "",
+                package_user: jsonData.package_user ?: "",
+                package_channel: jsonData.package_channel ?: "",
+                recipe_revision: jsonData.recipe_revision ?: "",
+                package_id: jsonData.package_id ?: "",
+                package_revision: jsonData.package_revision ?: ""
+            ]
+            
+            echo "Extracted package information from ${jsonFileName}:"
+            packageInfo.each { key, value ->
+                if (value) {
+                    echo "  ${key}: ${value}"
+                }
+            }
+            
+            // Store key information in environment variables for broader access
+            if (packageInfo.prerelease_number) {
+                env.SL_PRERELEASE_NUMBER = packageInfo.prerelease_number
+            }
+            if (packageInfo.package_ref) {
+                env.CONAN_PACKAGE_REF = packageInfo.package_ref
+            }
+            if (packageInfo.package_version) {
+                env.CONAN_PACKAGE_VERSION = packageInfo.package_version
+            }
+            
+        } catch (Exception e) {
+            echo "Error parsing ${jsonFileName}: ${e.getMessage()}"
+            unstable("Failed to parse package output JSON: ${jsonFileName}")
+        }
+    } else {
+        echo "Warning: ${jsonFileName} not found"
+        unstable("Package output JSON file not found: ${jsonFileName}")
+    }
+    
+    return packageInfo
+}
+
+/**
  * Execute the conan create/publish action script with provided parameters
  * @param conanfilePath Path to the conanfile.py
  * @param stackName Name of the stack (e.g., 'matter')
@@ -331,26 +388,9 @@ def create_and_upload_package(Map args = [:]) {
             echo "Getting the package versions"
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
             
-            // Read the output JSON file and extract prerelease_number
-            if (fileExists('conan_package_output.json')) {
-                try {
-                    def jsonContent = readFile('conan_package_output.json')
-                    def jsonData = readJSON text: jsonContent
-                    def prereleaseNumber = jsonData.prerelease_number ?: ""
-                    
-                    echo "Extracted package information:"
-                    echo "SL_PRERELEASE_NUMBER: ${prereleaseNumber}"
-
-                    // Store additional useful information for potential return
-                    env.SL_PRERELEASE_NUMBER = prereleaseNumber
-                } catch (Exception e) {
-                    echo "Error parsing conan_package_output.json: ${e.getMessage()}"
-                    unstable("Failed to parse package output JSON")
-                }
-            } else {
-                echo "Warning: conan_package_output.json not found"
-                unstable("Package output JSON file not found")
-            }
+            // Extract package information using reusable function
+            def packageInfo = extractPackageInfoFromJson()
+            SL_PRERELEASE_NUMBER = packageInfo.prerelease_number
             dir(REPO_ROOT) {
                 echo pwd()
                 // Install required Python dependencies (handle externally managed environment)
@@ -369,9 +409,10 @@ def create_and_upload_package(Map args = [:]) {
 
     echo "Package creation/upload completed."
     return [
-        prerelease_number: prereleaseNumber,
+        prerelease_number: SL_PRERELEASE_NUMBER,
         package_ref: env.CONAN_PACKAGE_REF ?: "",
-        package_version: env.CONAN_PACKAGE_VERSION ?: ""
+        package_version: env.CONAN_PACKAGE_VERSION ?: "",
+        full_package_ref: env.CONAN_FULL_PACKAGE_REF ?: ""
     ]
 }
 
