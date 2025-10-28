@@ -295,7 +295,7 @@ def create_and_upload_package(Map args = [:]) {
 
     // Determine repo root (allow override)
     def REPO_ROOT = args.repoRoot ?: pwd()
-    def prereleaseNumber = "" // Initialize prerelease number variable
+    def prereleaseNumber = "" 
     
     dir(REPO_ROOT) {
         sh 'conan config install -t file packages/remotes.json'
@@ -307,6 +307,7 @@ def create_and_upload_package(Map args = [:]) {
     def REMOTE_NAME               = args.remoteName ?: "matter-conan-dev"
     def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
     def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
+    def SL_PRERELEASE_NUMBER      = ""// Initialize prerelease number variable
 
     // Pre-flight checks
     if (!fileExists(MATTER_CONANFILE_PATH)) {
@@ -336,13 +337,13 @@ def create_and_upload_package(Map args = [:]) {
                 try {
                     def jsonContent = readFile('conan_package_output.json')
                     def jsonData = readJSON text: jsonContent
-                    SL_PRERELEASE_NUMBER = jsonData.prerelease_number ?: ""
+                    def prereleaseNumber = jsonData.prerelease_number ?: ""
                     
                     echo "Extracted package information:"
-                    echo "SL_PRERELEASE_NUMBER: ${SL_PRERELEASE_NUMBER}"
+                    echo "SL_PRERELEASE_NUMBER: ${prereleaseNumber}"
 
                     // Store additional useful information for potential return
-                    env.CONAN_PRERELEASE_NUMBER = SL_PRERELEASE_NUMBER
+                    env.SL_PRERELEASE_NUMBER = prereleaseNumber
                 } catch (Exception e) {
                     echo "Error parsing conan_package_output.json: ${e.getMessage()}"
                     unstable("Failed to parse package output JSON")
