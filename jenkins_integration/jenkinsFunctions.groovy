@@ -189,58 +189,6 @@ def parse_test_results_failures(output) {
     return [failedTests: failedTests, failedCount: failedCount]
 }
 
-// TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
-{
-    if(sqaFunctions.isProductionJenkinsServer())
-    {
-        def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-metrics']
-        def errorOccurred = false
-        try{
-            sshagent(['svc_gsdk-ssh']) {
-                if(pipeline_type == "smoke") {
-                    sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    sh 'pwd && ls -al'
-                    dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    }
-                } else {
-                    if(env.BRANCH_NAME.startsWith("release")){
-                        regression_list.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
-                            }
-                        }
-                    } else {
-                        regression_list_main.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e) {
-            unstable("Error when triggering SQA pipelines: ${e.message}")
-            errorOccurred = true
-        }
-        if (errorOccurred) {
-            currentBuild.result = 'UNSTABLE'
-        }
-    }
-}
-
 /**
  * Read and extract package information from conan_package_output.json
  * @param jsonFileName Optional custom JSON filename (defaults to 'conan_package_output.json')
