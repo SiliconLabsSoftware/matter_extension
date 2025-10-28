@@ -1,32 +1,52 @@
 import os
-import sys
+from pathlib import Path
 from conan import ConanFile
 from conan.tools.scm import Git
 from conan.tools.files import copy, update_conandata
 from typing import Iterable, Optional, Generator
 import yaml
-from pathlib import Path
 
 ## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-try:
-    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
-    if str(_PKG_ROOT) not in sys.path:
-        sys.path.insert(0, str(_PKG_ROOT))
-except Exception:
-    pass
-from _shared.base_recipe import MatterBaseRecipe
+## Embedded shared logic (flattened so there is ONLY ONE ConanFile subclass in this file)
+
+_RECIPE_PATH = Path(__file__).resolve()
+_REPO_ROOT = _RECIPE_PATH.parents[2]
 
 
-class matter_appRecipe(MatterBaseRecipe):
+class matter_appRecipe(ConanFile):
     name = "matter_app"
-    version = "2.6.1-0.dev"
+    user = "silabs"
+    slce_file = os.path.join(_REPO_ROOT, "matter.slce")
+    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
+    author = "Silicon Laboratories Inc."
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
+    url = "https://github.com/SiliconLabsSoftware/matter_extension"
+    topics = ("silabs",)
+    python_requires = "silabs_package_assistant/[>=1]@silabs"
+
+    sl_metadata = {
+        "slack_channel": "#matter-development",
+        "team": "MATTER",
+        "confluence_doc": "",
+        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
+        "maintainers": [],
+    }
     description = "matter sample-app package"
-    # Other attributes
-    # revision_mode = "scm"
+    
+    def set_version(self):
+        silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
+
+        if not self.version:
+            self.version = silabs_package_assistant.get_version(self.slce_file)
+        # if not self.channel:
+        #     self.channel = silabs_package_assistant.get_channel()
+        self.revision_mode = "scm"
+        
+        self.output.info(f"Resolved context: {self.name}, {self.version}, {self.channel}, {self.user}")
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -68,11 +88,15 @@ class matter_appRecipe(MatterBaseRecipe):
       "sdkLtsTag": ""
     }
 
-        # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
-        # on self.source_folder so repo-relative operations stay consistent.
-        @property
-        def matter_app_folder(self) -> str:
-                return str(self.repo_root)
+    # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
+    # on self.source_folder so repo-relative operations stay consistent.
+    @property
+    def matter_app_folder(self) -> str:
+        return str(self.repo_root)
+
+    @property
+    def repo_root(self) -> Path:  # provided previously by base
+        return _REPO_ROOT
 
     def requirements(self):
         pass
@@ -86,8 +110,7 @@ class matter_appRecipe(MatterBaseRecipe):
     def export(self):
         pass
 
-    def package_id(self):
-        # Completely clear all the info, resulting ``package_id`` will be the same
+    def package_id(self):  # unified content-only id
         self.info.clear()
 
     def package(self):
@@ -102,7 +125,7 @@ class matter_appRecipe(MatterBaseRecipe):
 
         files_to_package.update(
             self._gather_slc_release_files(
-                desired_qualities=["production", "evaluation"],
+                desired_qualities=["production", "evaluation", "internal"],
                 desired_packages=["matter"],
                 assistant=silabs_package_assistant,
             )
@@ -209,4 +232,3 @@ class matter_appRecipe(MatterBaseRecipe):
                 collected.add(rel_path)
                 collected.update(related)
         return collected
-
