@@ -352,7 +352,6 @@ def create_and_upload_package(Map args = [:]) {
                 unstable("Package output JSON file not found")
             }
             dir(REPO_ROOT) {
-                pip install --upgrade PyYAML
                 make generate_pkg_slt_common
             }
             echo "Uploading the matter component package"
