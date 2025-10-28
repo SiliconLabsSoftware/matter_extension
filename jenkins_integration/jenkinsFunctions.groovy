@@ -352,7 +352,8 @@ def create_and_upload_package(Map args = [:]) {
                 unstable("Package output JSON file not found")
             }
             dir(REPO_ROOT) {
-                make generate_pkg_slt_common
+                echo pwd()
+                sh 'make generate_pkg_slt_common'
             }
             echo "Uploading the matter component package"
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
