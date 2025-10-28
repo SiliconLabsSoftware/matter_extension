@@ -279,11 +279,24 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
     }
 }
 
+/**
+ * Create and upload Conan packages for Matter components
+ * @param args Map containing optional parameters:
+ *   - repoRoot: Repository root path (defaults to current directory)
+ *   - remoteName: Conan remote name (defaults to "matter-conan-dev") 
+ *   - remoteUrl: Conan remote URL (defaults to Artifactory Matter dev repository)
+ * @return Map containing:
+ *   - prerelease_number: The prerelease number extracted from the package
+ *   - package_ref: The package reference
+ *   - package_version: The package version
+ */
 def create_and_upload_package(Map args = [:]) {
     echo "Creating and uploading package..."
 
     // Determine repo root (allow override)
     def REPO_ROOT = args.repoRoot ?: pwd()
+    def prereleaseNumber = "" // Initialize prerelease number variable
+    
     dir(REPO_ROOT) {
         sh 'conan config install -t file packages/remotes.json'
     }
@@ -317,14 +330,44 @@ def create_and_upload_package(Map args = [:]) {
             // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
             echo "Getting the package versions"
             executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
-            // echo "Uploading the matter component package"
-            // executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
-            // echo "Uploading the matter app package"
-            // executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            
+            // Read the output JSON file and extract prerelease_number
+            if (fileExists('conan_package_output.json')) {
+                try {
+                    def jsonContent = readFile('conan_package_output.json')
+                    def jsonData = readJSON text: jsonContent
+                    SL_PRERELEASE_NUMBER = jsonData.prerelease_number ?: ""
+                    
+                    echo "Extracted package information:"
+                    echo "SL_PRERELEASE_NUMBER: ${SL_PRERELEASE_NUMBER}"
+
+                    // Store additional useful information for potential return
+                    env.CONAN_PRERELEASE_NUMBER = SL_PRERELEASE_NUMBER
+                } catch (Exception e) {
+                    echo "Error parsing conan_package_output.json: ${e.getMessage()}"
+                    unstable("Failed to parse package output JSON")
+                }
+            } else {
+                echo "Warning: conan_package_output.json not found"
+                unstable("Package output JSON file not found")
+            }
+            dir(REPO_ROOT) {
+                pip install --upgrade PyYAML
+                make generate_pkg_slt_common
+            }
+            echo "Uploading the matter component package"
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            echo "Uploading the matter app package"
+            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
         }
     }
 
     echo "Package creation/upload completed."
+    return [
+        prerelease_number: prereleaseNumber,
+        package_ref: env.CONAN_PACKAGE_REF ?: "",
+        package_version: env.CONAN_PACKAGE_VERSION ?: ""
+    ]
 }
 
 
