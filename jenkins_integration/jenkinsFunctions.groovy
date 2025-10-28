@@ -305,7 +305,7 @@ def create_and_upload_package(Map args = [:]) {
     // Checkout conan create/publish script
     dir('conan-promote') {
         checkout([$class: 'GitSCM',
-            branches: [[name: 'main']],
+            branches: [[name: 'feature/json_output']],
             userRemoteConfigs: [[credentialsId: 'github-app', 
             url: 'https://github.com/SiliconLabsInternal/action-conan-create-publish.git']]
         ])
