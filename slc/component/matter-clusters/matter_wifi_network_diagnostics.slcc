@@ -18,7 +18,6 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server
     file_list:
       - path: wifi-network-diagnostics-cluster.h
-      - path: wifi-network-diagnostics-logic.h
       - path: WiFiDiagnosticsTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
