@@ -285,6 +285,46 @@ def executeConanCreatePublishAction(String conanfilePath, String stackName, Stri
 }
 
 /**
+ * Execute the conan promote action script with provided parameters
+ * @param stackName Name of the stack (e.g., 'matter', 'matter_app')
+ * @param sourceRemoteUrl Source Conan remote URL
+ * @param sourceRemoteName Source Conan remote name
+ * @param destinationRemoteUrl Destination Conan remote URL
+ * @param destinationRemoteName Destination Conan remote name
+ * @param packageVersion Version of the package to promote
+ */
+def executeConanPromoteAction(String stackName, String sourceRemoteUrl, String sourceRemoteName, String destinationRemoteUrl, String destinationRemoteName, String packageVersion) {
+    withCredentials([
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME')
+    ]) {
+        withEnv([
+            "CONAN_REMOTE_USER=${SL_USERNAME}",
+            "CONAN_REMOTE_TOKEN=${SL_PASSWORD}",
+            "SOURCE_REMOTE_URL=${sourceRemoteUrl}",
+            "SOURCE_REMOTE_NAME=${sourceRemoteName}",
+            "DESTINATION_REMOTE_URL=${destinationRemoteUrl}",
+            "DESTINATION_REMOTE_NAME=${destinationRemoteName}",
+            "PACKAGE_VERSION=${packageVersion}",
+            "PACKAGE_NAME=${stackName}"
+        ]) {
+            def promoteCmd = """
+                uv run --no-dev action-conan-promote \\
+                  --package-name \${PACKAGE_NAME} \\
+                  --package-version \${PACKAGE_VERSION} \\
+                  --source-remote-name \${SOURCE_REMOTE_NAME} \\
+                  --source-remote-url \${SOURCE_REMOTE_URL} \\
+                  --destination-remote-name \${DESTINATION_REMOTE_NAME} \\
+                  --destination-remote-url \${DESTINATION_REMOTE_URL} \\
+                  --remote-username \${CONAN_REMOTE_USER} \\
+                  --remote-token \${CONAN_REMOTE_TOKEN}
+            """.stripIndent().trim()
+            sh(script: promoteCmd)
+        }
+    }
+}
+
+
+/**
  * Create and upload Conan packages for Matter components
  * @param args Map containing optional parameters:
  *   - repoRoot: Repository root path (defaults to current directory)
@@ -308,10 +348,12 @@ def create_and_upload_package(Map args = [:]) {
     // Local scoped vars
     def MATTER_CONANFILE_PATH     = "${REPO_ROOT}/packages/matter/conanfile.py"
     def MATTER_APP_CONANFILE_PATH = "${REPO_ROOT}/packages/matter_app/conanfile.py" // reserved for future use
-    def REMOTE_NAME               = args.remoteName ?: "matter-conan-dev"
-    def REMOTE_URL                = args.remoteUrl  ?: "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
+    def DEV_REMOTE_NAME           = "matter-conan-dev"
+    def DEV_REMOTE_URL            = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
+    def SQA_REMOTE_NAME           = "matter-conan-sqa"
+    def SQA_REMOTE_URL            = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa"
     def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
-    def SL_PRERELEASE_NUMBER      = ""// Initialize prerelease number variable
+    def SL_PRERELEASE_NUMBER      = "" // Initialize prerelease number variable
 
     // Pre-flight checks
     if (!fileExists(MATTER_CONANFILE_PATH)) {
@@ -321,7 +363,7 @@ def create_and_upload_package(Map args = [:]) {
     sh 'command -v uv >/dev/null 2>&1 || { echo "uv not found in PATH"; exit 1; }'
 
     // Checkout conan create/publish script
-    dir('conan-promote') {
+    dir('conan repos') {
         checkout([$class: 'GitSCM',
             branches: [[name: 'main']],
             userRemoteConfigs: [[credentialsId: 'github-app', 
@@ -334,7 +376,7 @@ def create_and_upload_package(Map args = [:]) {
             // Execute the conan action using the reusable function
             // executeConanCreatePublishAction(String conanfilePath, String stackName, String remoteUrl, String remoteName, boolean create, boolean publish)
             echo "Getting the package versions"
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,false,false,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH, 'matter', DEV_REMOTE_URL, DEV_REMOTE_NAME, false, false, SL_PRERELEASE)
             
             // Extract package information using reusable function
             def packageInfo = extractPackageInfoFromJson()
@@ -349,18 +391,33 @@ def create_and_upload_package(Map args = [:]) {
                 sh 'make generate_pkg_slt_common'
             }
             echo "Uploading the matter component package"
-            executeConanCreatePublishAction(MATTER_CONANFILE_PATH,'matter',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_CONANFILE_PATH, 'matter', DEV_REMOTE_URL, DEV_REMOTE_NAME, true, true, SL_PRERELEASE)
             echo "Uploading the matter app package"
-            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH,'matter_app',REMOTE_URL,REMOTE_NAME,true,true,SL_PRERELEASE)
+            executeConanCreatePublishAction(MATTER_APP_CONANFILE_PATH, 'matter_app', DEV_REMOTE_URL, DEV_REMOTE_NAME, true, true, SL_PRERELEASE)
             // Run after the final upload is done, matter and matter_app package should have same version and revision
             extractPackageInfoFromJson()
+            echo "Package creation and upload to matter-conan-dev completed."
         }
-    }
 
-    echo "Package creation/upload completed."
-    echo "Package ref: ${env.CONAN_PACKAGE_REF}"
-    echo "Package Version: ${env.CONAN_PACKAGE_VERSION}"
-    echo "Full Package ref: ${env.CONAN_FULL_PACKAGE_REF}"
+        checkout([$class: 'GitSCM',
+            branches: [[name: 'main']],
+            userRemoteConfigs: [[credentialsId: 'github-app',
+            url: 'https://github.com/SiliconLabsInternal/action-conan-promote.git']]
+        ])
+        dir('action-conan-promote') {
+            sh 'pwd'
+            sh 'slt update --self'
+            echo 'promoting packages to SQA'
+            echo "Start promoting matter/${CONAN_PACKAGE_VERSION} to matter-conan-sqa"
+            // executeConanPromoteAction(String stackName, String sourceRemoteUrl, String sourceRemoteName, String destinationRemoteUrl, String destinationRemoteName, String packageVersion)
+            executeConanPromoteAction('matter', DEV_REMOTE_URL, DEV_REMOTE_NAME, SQA_REMOTE_URL, SQA_REMOTE_NAME, CONAN_PACKAGE_VERSION)
+            echo "Done promoting matter/${CONAN_PACKAGE_VERSION} to matter-conan-sqa"
+            echo "Start promoting matter_app/${CONAN_PACKAGE_VERSION} to matter-conan-sqa"
+            executeConanPromoteAction('matter_app', DEV_REMOTE_URL, DEV_REMOTE_NAME, SQA_REMOTE_URL, SQA_REMOTE_NAME, CONAN_PACKAGE_VERSION)
+            echo "Done promoting matter_app/${CONAN_PACKAGE_VERSION} to matter-conan-sqa"
+        }
+
+    }
 }
 
 
