@@ -73,38 +73,47 @@ build_without_arg() {
 
 # Helper function to run slc generate with retry on timeout
 run_slc_generate_with_retry() {
-	echo "Running: slc $*"
-	
-	# Capture both exit code and output
-	local output
-	output=$(slc "$@" 2>&1)
-	local exit_code=$?
-	echo "$output"
-	
-	# If failed, check the type of error
-	if [ $exit_code -ne 0 ]; then
+	local max_retries=3
+	local attempt=1
+	local exit_code=0
+	local output=""
+
+	while [ $attempt -le $max_retries ]; do
+		echo "Running: slc $* (attempt $attempt/$max_retries)"
+		output=$(slc "$@" 2>&1)
+		exit_code=$?
+		echo "$output"
+
+		if [ $exit_code -eq 0 ]; then
+			break
+		fi
+
 		# Check for ConcurrentModificationException
 		if echo "$output" | grep -q "ConcurrentModificationException: Internal Error. Please see logs."; then
 			echo "ConcurrentModificationException detected. Exporting logs..."
 			slc --exportLogs=out/artifacts/log
 			echo "Logs exported to out/artifacts/log"
-			echo "Retrying slc generate command after ConcurrentModificationException..."
-			local retry_output
-			retry_output=$(slc "$@" 2>&1)
-			echo "$retry_output"
-			exit_code=$?
+			if [ $attempt -lt $max_retries ]; then
+				echo "Retrying slc generate command after ConcurrentModificationException..."
+				sleep 1
+			else
+				echo "Maximum retries reached after ConcurrentModificationException."
+			fi
 		# Check for timeout
 		elif echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
-			echo "Timeout detected. Retrying slc generate command once more..."
-			local retry_output
-			retry_output=$(slc "$@" 2>&1)
-			echo "$retry_output"
-			exit_code=$?
+			if [ $attempt -lt $max_retries ]; then
+				echo "Timeout detected. Retrying slc generate command..."
+				sleep 1
+			else
+				echo "Maximum retries reached after timeout."
+			fi
 		else
-			echo "First attempt failed with exit code $exit_code (not a timeout or ConcurrentModificationException - no retry)"
+			echo "Attempt $attempt failed with exit code $exit_code (not a timeout or ConcurrentModificationException - no retry)"
+			break
 		fi
-	fi
-	
+
+		attempt=$((attempt + 1))
+	done
 	return $exit_code
 }
 
