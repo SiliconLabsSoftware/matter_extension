@@ -2,6 +2,14 @@
 @Library('gsdk-shared-lib@master')
 
 def pipelineProperties = []
+pipelineProperties << disableConcurrentBuilds()
+// TODO: Implement UPLOAD_PACKAGE and PROMOTE
+// pipelineProperties << parameters([
+//         // Allows us to manually trigger a Full Build by passing a parameter (boolean) from Jenkins.
+//         booleanParam(name: 'UPLOAD_PACKAGE', defaultValue: false, description: 'Set to true if want to upload packages to matter-conan-dev (true for main or release_* branches)'),
+//         // Allows us to manually trigger a promotion to SQA by passing a parameter (boolean) from Jenkins.
+//         booleanParam(name: 'PROMOTE', defaultValue: false, description: 'Set to true if want to promote the build to SQA (true for main or release_* branches)')
+//     ])
 
 // Configure pollSCM triggers
 if(env.BRANCH_NAME == 'main'){
@@ -141,7 +149,7 @@ pipeline
         stage('Create and Upload Package')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" }
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" || UPLOAD_PACKAGE == "true" }
             }
             steps {
                 script {
