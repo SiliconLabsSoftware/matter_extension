@@ -2498,7 +2498,6 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/tests/TestWiFiNetworkDiagnosticsCluster.cpp
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-cluster.cpp
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-cluster.h
-  - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-logic.cpp
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-logic.h
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/app_config_dependent_sources.cmake

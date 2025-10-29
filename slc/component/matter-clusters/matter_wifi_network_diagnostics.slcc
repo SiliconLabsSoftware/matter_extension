@@ -14,7 +14,6 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-logic.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server
     file_list:
