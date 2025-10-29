@@ -157,10 +157,17 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             }
                         }
                     }
+                    sh "pwd"
+                    sh "ls -R ./"
                     sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
+                    // TODO: Archive the html report and device logs together.
                     archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
                     junit: 'reports/junit_report.xml'
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+//                     if(branchName.startsWith("PR-"){
+//                         echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter%20Extension%20GitHub/view/change-requests/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+//                     } else {
+//                         echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter%20Extension%20GitHub/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+//                     }
                 }
             }
         }
