@@ -5,10 +5,10 @@ Usage:
     build.py <slcp/slcw path> <board> [options] [CONFIG ...]
 
 Examples:
-    ./build.py slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
-    ./build.py slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --skip_gen
-    ./build.py slc/sample-app/zigbee-matter-light/efr32/zigbee-matter-light.slcp brd1019a --with matter_zigbee_sequential;matter
-    ./build.py slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c \
+    ./build.py slc/apps/lighting-app/thread/lighting-app.slcp brd4187c
+    ./build.py slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --skip_gen
+    ./build.py slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp brd1019a --with matter_zigbee_sequential;matter
+    ./build.py slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c \
             --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:"1.0.0-1.0"
 
 Options:
@@ -533,50 +533,21 @@ def classify_extra_args(raw_extras):
 def detect_project(app_path: Path, flags: dict):
     name = app_path.name
     logger.debug("Detecting project type for: %s", name)
-    logger.debug("CMake flag enabled: %s", flags['cmake'])
     
-    if flags['cmake']:
-        logger.debug("Using CMake generator logic")
-        if name.endswith('.slcw'):
-            logger.debug("Detected .slcw file (solution)")
-            if '917-soc' in name:
-                logger.debug("Detected 917-soc solution")
-                silabs_app = name.replace(".slcw","")
-                make_file = f"{silabs_app}.solution.Makefile"
-            else:
-                logger.debug("Detected bootloader solution")
-                silabs_app = name.replace("-bootloader.slcw","")  # strip -bootloader.slcw
-                make_file = f"{silabs_app}-bootloader.solution.Makefile"
-            project_flag = "-w"
-        elif name.endswith('.slcp'):
-            logger.debug("Detected .slcp file (project)")
-            silabs_app = name.replace(".slcp","")
-            project_flag = "-p"
-            make_file = f"{silabs_app}.Makefile"
-        else:
-            logger.error("Invalid file extension: %s", name)
-            sys.exit("Provided path must end with .slcp or .slcw")
+    # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
+    if name.endswith('.slcw'):
+        logger.debug("Detected .slcw file (solution)")
+        silabs_app = name.replace(".slcw", "")  # basename equivalent
+        make_file = f"{silabs_app}.solution.Makefile"
+        project_flag = "-w"
+    elif name.endswith('.slcp'):
+        logger.debug("Detected .slcp file (project)")
+        silabs_app = name.replace(".slcp", "")  # basename equivalent
+        project_flag = "-p"
+        make_file = f"{silabs_app}.Makefile"
     else:
-        logger.debug("Using Makefile generator logic")
-        if name.endswith('.slcw'):
-            logger.debug("Detected .slcw file (solution)")
-            if '917-soc' in name:
-                logger.debug("Detected 917-soc solution")
-                silabs_app = name.replace(".slcw","")
-                make_file = f"{silabs_app}.solution.Makefile"
-            else:
-                logger.debug("Detected bootloader solution")
-                silabs_app = name.replace("-bootloader.slcw","")  # strip -bootloader.slcw
-                make_file = f"{silabs_app}-bootloader.solution.Makefile"
-            project_flag = "-w"
-        elif name.endswith('.slcp'):
-            logger.debug("Detected .slcp file (project)")
-            silabs_app = name.replace(".slcp","")
-            project_flag = "-p"
-            make_file = f"{silabs_app}.Makefile"
-        else:
-            logger.error("Invalid file extension: %s", name)
-            sys.exit("Provided path must end with .slcp or .slcw")
+        logger.error("Invalid file extension: %s", name)
+        sys.exit("Provided path must end with .slcp or .slcw")
     
     logger.debug("Project detection results:")
     logger.debug("  - name: %s", name)
@@ -800,7 +771,7 @@ def main():
     if not flags['skip_gen']:
         if app_path.suffix == '.slcw':
             # Handle .slcw solution files - generate bootloader and application separately
-            if "917-soc" not in str(app_path):
+            if "-siwx" not in str(app_path):
                 # Generate bootloader for non-917-soc solutions
                 logger.info("Generating bootloader...")
                 bootloader_with_arg = build_with_arg(args.board, flags['with_bootloader_components'])
