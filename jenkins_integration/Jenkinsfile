@@ -71,7 +71,7 @@ pipeline
                         }
                     }
 
-                    parallelNodes['917-SoC Lighting-App'] = {
+                    parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
