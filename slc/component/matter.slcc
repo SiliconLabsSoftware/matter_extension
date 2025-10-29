@@ -23,9 +23,9 @@ config_file:
   - path: slc/inc/matter/tracing/build_config.h
     file_id: build_config
     directory: matter/tracing
-  - path: third_party/matter_sdk/src/platform/silabs/tracing/SilabsTracingConfig.h
+  - path: slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
     file_id: silabs_tracing_config
-    directory: matter/tracing
+    directory: platform/silabs/tracing
 toolchain_settings:
   - option: gcc_compiler_option
     value: -Wno-deprecated-declarations
