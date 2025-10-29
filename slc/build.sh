@@ -71,6 +71,52 @@ build_without_arg() {
 	fi
 }
 
+# Helper function to run slc generate with retry on timeout
+run_slc_generate_with_retry() {
+	local max_retries=3
+	local attempt=1
+	local exit_code=0
+	local output=""
+
+	while [ $attempt -le $max_retries ]; do
+		echo "Running: slc $* (attempt $attempt/$max_retries)"
+		output=$(slc "$@" 2>&1)
+		exit_code=$?
+		echo "$output"
+
+		if [ $exit_code -eq 0 ]; then
+			break
+		fi
+
+		# Check for ConcurrentModificationException
+		if echo "$output" | grep -q "ConcurrentModificationException: Internal Error. Please see logs."; then
+			echo "ConcurrentModificationException detected. Exporting logs..."
+			slc --exportLogs=out/artifacts/log
+			echo "Logs exported to out/artifacts/log"
+			if [ $attempt -lt $max_retries ]; then
+				echo "Retrying slc generate command after ConcurrentModificationException..."
+				sleep 1
+			else
+				echo "Maximum retries reached after ConcurrentModificationException."
+			fi
+		# Check for timeout
+		elif echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
+			if [ $attempt -lt $max_retries ]; then
+				echo "Timeout detected. Retrying slc generate command..."
+				sleep 1
+			else
+				echo "Maximum retries reached after timeout."
+			fi
+		else
+			echo "Attempt $attempt failed with exit code $exit_code (not a timeout or ConcurrentModificationException - no retry)"
+			break
+		fi
+
+		attempt=$((attempt + 1))
+	done
+	return $exit_code
+}
+
 MATTER_ROOT=$(pwd -P)
 : "${GSDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 
@@ -251,7 +297,7 @@ if [ "$skip_gen" = false ]; then
 
 			# Generate bootloader
 			echo "Generating bootloader..."
-			slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=10000
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=3500
 			if [ $? -ne 0 ]; then
 				echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
 				exit 1
@@ -263,14 +309,14 @@ if [ "$skip_gen" = false ]; then
 		APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 		echo "Generating application..."
-		slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=10000
+		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate application for: $SILABS_APP_PATH"
 			exit 1
 		fi
 	else
 		# Generate .slcp projects
-		slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=10000 -o makefile
+		run_slc_generate_with_retry generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=3500 -o makefile
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate : $SILABS_APP_PATH"
 			exit 1
