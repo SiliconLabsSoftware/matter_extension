@@ -12,7 +12,7 @@ metadata:
 provides:
   - name: matter_electrical_energy_measurement
 source:
-  - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/electrical-energy-measurement-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server
     file_list:
