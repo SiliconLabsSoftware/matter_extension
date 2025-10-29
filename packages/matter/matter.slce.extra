@@ -26,6 +26,7 @@ components:
   - libqrcode_common
   - matter_tracing_headers
   - libopenthread_spinel_ncp
+  - matter_tracing_runtime_stats
   - libopenthread_platform_utils
   - libchipcore
   - siwx917
@@ -176,6 +177,7 @@ components:
   - matter_service_area
   - matter_webrtc_transport_requestor
   - matter_account_login
+  - matter_groupcast
   - matter_user_label
   - matter_power_source
   - matter_target_navigator
@@ -316,6 +318,7 @@ components:
   - libqrcode_common
   - matter_tracing_headers
   - libopenthread_spinel_ncp
+  - matter_tracing_runtime_stats
   - libopenthread_platform_utils
   - libchipcore
   - siwx917
@@ -562,6 +565,7 @@ components:
   - matter_service_area
   - matter_webrtc_transport_requestor
   - matter_account_login
+  - matter_groupcast
   - matter_user_label
   - matter_power_source
   - matter_target_navigator
@@ -640,7 +644,6 @@ components:
 extra_files:
   - matter_demos.xml
   - matter.slce
-  - .prerelease
   - LICENSE
   - requirements.txt
   - sled-library.json
@@ -649,27 +652,14 @@ extra_files:
   - matter_templates.xml
   - conanfile.py
   - README.md
+  - matter.slce.extra
   - provision.mattpconf
   - upgrade.slcu
   - .clang-format
-  - Jenkinsfile
   - matter_dependencies.slt
   - sample_app_pkg.slt
   - matter.slsdk
   - matter_docs.xml
-  - provision/parameters.yaml
-  - provision/defaults.json
-  - provision/csa_openssl.cnf
-  - provision/requirements.txt
-  - provision/versions.yaml
-  - provision/apackUpgradeEmptyResult.py
-  - provision/apack.json
-  - provision/README.md
-  - provision/provision.py
-  - provision/apackGenerateNothing.py
-  - provision/silabs_creds.tmpl
-  - provision/devices.yaml
-  - provision/bluet.py
   - tools/iot_reports.py
   - slc/build.py
   - slc/sl_build.py
@@ -684,9 +674,10 @@ extra_files:
   - silabs_utils/performance_test_commands.cpp
   - silabs_utils/performance_test_commands.h
   - packages/remotes.json
+  - packages/.prerelease
   - packages/README.md
   - packages/wifi_firmware.slt
-  - packages/remotes_upload.json
+  - packages/matter_dependencies.slt
   - jenkins_integration/config.py
   - jenkins_integration/jenkinsFunctions.groovy
   - jenkins_integration/utils.py
@@ -711,8 +702,10 @@ extra_files:
   - jenkins_integration/github/send_results_to_github.py
   - jenkins_integration/github/github_workflow.py
   - packages/matter_app/conanfile.py
+  - packages/matter_app/pkg.slt
   - packages/matter/conanfile.py
   - packages/matter/matter.slce.extra
+  - packages/matter/pkg.slt
   - examples/zigbee-matter-light/config/zcl/zcl_config.matter
   - third_party/mqtt/stack/mqtt.c
   - third_party/mqtt/stack/mqtt_opts.h
@@ -768,6 +761,7 @@ extra_files:
   - slc/script/build_ot_rcp.py
   - slc/script/validate_matter_templates.py
   - slc/script/verify_package_matter.py
+  - slc/script/find_missing_sbom.py
   - slc/script/tag_release_version.py
   - slc/script/matter_package_version
   - slc/script/validate_components.py
@@ -775,6 +769,172 @@ extra_files:
   - slc/image/qr_code_img.png
   - slc/postbuild/ws_default_application_bootloader.slpb
   - slc/postbuild/matter_wifi_soc.slpb
+  - slc/apps/openthread-border-router-doc/README.md
+  - slc/apps/openthread-border-router-doc/pkg.slt
+  - slc/apps/openthread-border-router-doc/openthread-border-router-doc.slcp
+  - slc/apps/onoff-plug-app/wifi/README.md
+  - slc/apps/onoff-plug-app/wifi/pkg.slt
+  - slc/apps/onoff-plug-app/wifi/onoff-plug-app-siwx.slcw
+  - slc/apps/onoff-plug-app/wifi/onoff-plug-app-siwx.slcp
+  - slc/apps/onoff-plug-app/thread/README.md
+  - slc/apps/onoff-plug-app/thread/onoff-plug-app-series-3.slcw
+  - slc/apps/onoff-plug-app/thread/pkg.slt
+  - slc/apps/onoff-plug-app/thread/onoff-plug-app-series-2.slcw
+  - slc/apps/onoff-plug-app/thread/onoff-plug-app-series-2-internal.slcw
+  - slc/apps/onoff-plug-app/thread/onoff-plug-app.slcp
+  - slc/apps/light-switch-app/wifi/light-switch-app-siwx.slcp
+  - slc/apps/light-switch-app/wifi/light-switch-app-siwx.slcw
+  - slc/apps/light-switch-app/wifi/README.md
+  - slc/apps/light-switch-app/wifi/pkg.slt
+  - slc/apps/light-switch-app/thread/light-switch-app-series-2.slcw
+  - slc/apps/light-switch-app/thread/light-switch-app-series-3.slcw
+  - slc/apps/light-switch-app/thread/README.md
+  - slc/apps/light-switch-app/thread/light-switch-app-series-2-internal.slcw
+  - slc/apps/light-switch-app/thread/pkg.slt
+  - slc/apps/light-switch-app/thread/light-switch-app.slcp
+  - slc/apps/platform-app/wifi/README_WiFi.md
+  - slc/apps/platform-app/wifi/README.md
+  - slc/apps/platform-app/wifi/pkg.slt
+  - slc/apps/platform-app/wifi/platform-app-siwx.slcw
+  - slc/apps/platform-app/wifi/platform-app-siwx.slcp
+  - slc/apps/platform-app/thread/platform-app-series-2.slcw
+  - slc/apps/platform-app/thread/platform-app-series-2-internal.slcw
+  - slc/apps/platform-app/thread/platform-app-series-3.slcw
+  - slc/apps/platform-app/thread/README.md
+  - slc/apps/platform-app/thread/pkg.slt
+  - slc/apps/platform-app/thread/platform-app.slcp
+  - slc/apps/air-quality-sensor-app/wifi/air-quality-sensor-app-siwx.slcw
+  - slc/apps/air-quality-sensor-app/wifi/air-quality-sensor-app-siwx.slcp
+  - slc/apps/air-quality-sensor-app/wifi/README.md
+  - slc/apps/air-quality-sensor-app/wifi/pkg.slt
+  - slc/apps/air-quality-sensor-app/thread/air-quality-sensor-app.slcp
+  - slc/apps/air-quality-sensor-app/thread/README.md
+  - slc/apps/air-quality-sensor-app/thread/pkg.slt
+  - slc/apps/air-quality-sensor-app/thread/air-quality-sensor-app-series-2.slcw
+  - slc/apps/air-quality-sensor-app/thread/air-quality-sensor-app-series-2-internal.slcw
+  - slc/apps/air-quality-sensor-app/thread/air-quality-sensor-app-series-3.slcw
+  - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/readme.md
+  - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/pkg.slt
+  - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
+  - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/readme.md
+  - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/pkg.slt
+  - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
+  - slc/apps/bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+  - slc/apps/bootloaders/bootloader-storage-external-single-series-2/readme.md
+  - slc/apps/bootloaders/bootloader-storage-external-single-series-2/pkg.slt
+  - slc/apps/thermostat/wifi/thermostat-wf200.slcw
+  - slc/apps/thermostat/wifi/thermostat-wf200.slcp
+  - slc/apps/thermostat/wifi/thermostat-siwx.slcw
+  - slc/apps/thermostat/wifi/thermostat-siwx.slcp
+  - slc/apps/thermostat/wifi/README_WiFi.md
+  - slc/apps/thermostat/wifi/README.md
+  - slc/apps/thermostat/wifi/pkg.slt
+  - slc/apps/thermostat/wifi/thermostat-917-ncp.slcw
+  - slc/apps/thermostat/wifi/thermostat-917-ncp.slcp
+  - slc/apps/thermostat/thread/README.md
+  - slc/apps/thermostat/thread/thermostat-series-3.slcw
+  - slc/apps/thermostat/thread/pkg.slt
+  - slc/apps/thermostat/thread/thermostat-series-2.slcw
+  - slc/apps/thermostat/thread/thermostat.slcp
+  - slc/apps/thermostat/thread/thermostat-series-2-internal.slcw
+  - slc/apps/fan-control-app/wifi/fan-control-app-siwx.slcw
+  - slc/apps/fan-control-app/wifi/fan-control-app-siwx.slcp
+  - slc/apps/fan-control-app/wifi/README.md
+  - slc/apps/fan-control-app/wifi/pkg.slt
+  - slc/apps/lock-app/wifi/lock-app-917-ncp.slcp
+  - slc/apps/lock-app/wifi/lock-app-917-ncp.slcw
+  - slc/apps/lock-app/wifi/lock-app-siwx.slcp
+  - slc/apps/lock-app/wifi/lock-app-siwx.slcw
+  - slc/apps/lock-app/wifi/README_WiFi.md
+  - slc/apps/lock-app/wifi/README.md
+  - slc/apps/lock-app/wifi/pkg.slt
+  - slc/apps/lock-app/wifi/lock-app-wf200.slcp
+  - slc/apps/lock-app/wifi/lock-app-wf200.slcw
+  - slc/apps/lock-app/thread/lock-app-series-2.slcw
+  - slc/apps/lock-app/thread/lock-app.slcp
+  - slc/apps/lock-app/thread/lock-app-series-3.slcw
+  - slc/apps/lock-app/thread/README.md
+  - slc/apps/lock-app/thread/pkg.slt
+  - slc/apps/lock-app/thread/lock-app-series-2-internal.slcw
+  - slc/apps/closure-app/wifi/closure-app-siwx.slcp
+  - slc/apps/closure-app/wifi/closure-app-siwx.slcw
+  - slc/apps/closure-app/wifi/README.md
+  - slc/apps/closure-app/wifi/pkg.slt
+  - slc/apps/closure-app/thread/closure-app-series-2.slcw
+  - slc/apps/closure-app/thread/closure-app-series-3.slcw
+  - slc/apps/closure-app/thread/README.md
+  - slc/apps/closure-app/thread/pkg.slt
+  - slc/apps/closure-app/thread/closure-app.slcp
+  - slc/apps/closure-app/thread/closure-app-series-2-internal.slcw
+  - slc/apps/multi-sensor-app/wifi/multi-sensor-app-siwx.slcw
+  - slc/apps/multi-sensor-app/wifi/multi-sensor-app-siwx.slcp
+  - slc/apps/multi-sensor-app/wifi/README.md
+  - slc/apps/multi-sensor-app/wifi/pkg.slt
+  - slc/apps/multi-sensor-app/config/sl_matter_sensor_config.h
+  - slc/apps/multi-sensor-app/thread/multi-sensor-app-series-3.slcw
+  - slc/apps/multi-sensor-app/thread/multi-sensor-app-series-2.slcw
+  - slc/apps/multi-sensor-app/thread/README.md
+  - slc/apps/multi-sensor-app/thread/pkg.slt
+  - slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp
+  - slc/apps/multi-sensor-app/thread/multi-sensor-app-series-2-internal.slcw
+  - slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
+  - slc/apps/zigbee-matter-light/thread/target_behaviour.png
+  - slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
+  - slc/apps/zigbee-matter-light/thread/README.md
+  - slc/apps/zigbee-matter-light/thread/pkg.slt
+  - slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-3.slcw
+  - slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2.slcw
+  - slc/apps/performance-test-app/thread/performance-test-app-series-2-internal.slcw
+  - slc/apps/performance-test-app/thread/performance-test-app.slcp
+  - slc/apps/performance-test-app/thread/README.md
+  - slc/apps/performance-test-app/thread/performance-test-app-series-2.slcw
+  - slc/apps/performance-test-app/thread/pkg.slt
+  - slc/apps/performance-test-app/thread/performance-test-app-series-3.slcw
+  - slc/apps/performance-test-app/thread/performance-test-app.zap
+  - slc/apps/performance-test-app/thread/performance-test-cluster.xml
+  - slc/apps/window-app/wifi/README_WiFi.md
+  - slc/apps/window-app/wifi/README.md
+  - slc/apps/window-app/wifi/pkg.slt
+  - slc/apps/window-app/wifi/window-app-siwx.slcw
+  - slc/apps/window-app/wifi/window-app-siwx.slcp
+  - slc/apps/window-app/wifi/window-app-917-ncp.slcp
+  - slc/apps/window-app/wifi/window-app-917-ncp.slcw
+  - slc/apps/window-app/thread/README.md
+  - slc/apps/window-app/thread/window-app-series-2.slcw
+  - slc/apps/window-app/thread/pkg.slt
+  - slc/apps/window-app/thread/window-app-series-2-internal.slcw
+  - slc/apps/window-app/thread/window-app-series-3.slcw
+  - slc/apps/window-app/thread/window-app.slcp
+  - slc/apps/refrigerator-app/wifi/README.md
+  - slc/apps/refrigerator-app/wifi/refrigerator-app-siwx.slcw
+  - slc/apps/refrigerator-app/wifi/refrigerator-app-siwx.slcp
+  - slc/apps/refrigerator-app/wifi/pkg.slt
+  - slc/apps/refrigerator-app/thread/refrigerator-app-series-2-internal.slcw
+  - slc/apps/refrigerator-app/thread/refrigerator-app-series-2.slcw
+  - slc/apps/refrigerator-app/thread/README.md
+  - slc/apps/refrigerator-app/thread/pkg.slt
+  - slc/apps/refrigerator-app/thread/refrigerator-app-series-3.slcw
+  - slc/apps/refrigerator-app/thread/refrigerator-app.slcp
+  - slc/apps/dishwasher-app/wifi/README.md
+  - slc/apps/dishwasher-app/wifi/pkg.slt
+  - slc/apps/dishwasher-app/wifi/dishwasher-app-siwx.slcp
+  - slc/apps/dishwasher-app/wifi/dishwasher-app-siwx.slcw
+  - slc/apps/dishwasher-app/thread/dishwasher-app-series-2.slcw
+  - slc/apps/dishwasher-app/thread/dishwasher-app-series-2-internal.slcw
+  - slc/apps/dishwasher-app/thread/dishwasher-app-series-3.slcw
+  - slc/apps/dishwasher-app/thread/dishwasher-app.slcp
+  - slc/apps/dishwasher-app/thread/README.md
+  - slc/apps/dishwasher-app/thread/pkg.slt
+  - slc/apps/lighting-app/wifi/lighting-app-siwx.slcw
+  - slc/apps/lighting-app/wifi/lighting-app-siwx.slcp
+  - slc/apps/lighting-app/wifi/README.md
+  - slc/apps/lighting-app/wifi/pkg.slt
+  - slc/apps/lighting-app/thread/lighting-app-series-2.slcw
+  - slc/apps/lighting-app/thread/lighting-app.slcp
+  - slc/apps/lighting-app/thread/lighting-app-series-3.slcw
+  - slc/apps/lighting-app/thread/README.md
+  - slc/apps/lighting-app/thread/lighting-app-series-2-internal.slcw
+  - slc/apps/lighting-app/thread/pkg.slt
   - slc/component/matter-core-sdk/libopenthread_cli_mtd.slcc
   - slc/component/matter-core-sdk/libcredentials.slcc
   - slc/component/matter-core-sdk/address_policy.slcc
@@ -794,8 +954,8 @@ extra_files:
   - slc/component/matter-core-sdk/libasn1.slcc
   - slc/component/matter-core-sdk/libqrcode_common.slcc
   - slc/component/matter-core-sdk/tracing_headers.slcc
-  - third_party/matter_sdk/src/platform/silabs/tracing/SilabsTracingConfig.h
   - slc/component/matter-core-sdk/libopenthread_spinel_ncp.slcc
+  - slc/component/matter-core-sdk/tracing_runtime_stats.slcc
   - slc/component/matter-core-sdk/libopenthread_platform_utils.slcc
   - slc/component/matter-core-sdk/libchipcore.slcc
   - slc/component/matter-core-sdk/siwx917.slcc
@@ -947,6 +1107,7 @@ extra_files:
   - slc/component/matter-clusters/matter_service_area.slcc
   - slc/component/matter-clusters/matter_webrtc_transport_requestor.slcc
   - slc/component/matter-clusters/matter_account_login.slcc
+  - slc/component/matter-clusters/matter_groupcast.slcc
   - slc/component/matter-clusters/matter_user_label.slcc
   - slc/component/matter-clusters/matter_power_source.slcc
   - slc/component/matter-clusters/matter_target_navigator.slcc
@@ -1124,116 +1285,18 @@ extra_files:
   - slc/component/sdk-content/zap/app/static-cluster-config/EthernetNetworkDiagnostics.h
   - slc/component/sdk-content/zap/app/static-cluster-config/BasicInformation.h
   - slc/component/sdk-content/zap/app/static-cluster-config/AccessControl.h
+  - slc/component/sdk-content/zap/app/static-cluster-config/UserLabel.h
+  - slc/component/sdk-content/zap/app/static-cluster-config/LocalizationConfiguration.h
+  - slc/component/sdk-content/zap/app/static-cluster-config/Descriptor.h
   - slc/component/sdk-content/zap/app/static-cluster-config/WiFiNetworkDiagnostics.h
   - slc/component/sdk-content/zap/app/static-cluster-config/SoftwareDiagnostics.h
   - slc/component/sdk-content/zap/app/static-cluster-config/GeneralDiagnostics.h
   - slc/component/sdk-content/zap/app/static-cluster-config/AdministratorCommissioning.h
   - slc/component/sdk-content/zap/app/static-cluster-config/OperationalCredentials.h
   - slc/component/sdk-content/zap/app/static-cluster-config/TimeFormatLocalization.h
+  - slc/component/sdk-content/zap/app/static-cluster-config/GeneralCommissioning.h
   - slc/component/sdk-content/zap/app/static-cluster-config/FixedLabel.h
   - slc/component/sdk-content/zap/app/static-cluster-config/Binding.h
-  - slc/solutions/onoff-plug-app/siwx917/onoff-plug-app-917-soc.slcw
-  - slc/solutions/onoff-plug-app/siwx917/pkg.slt
-  - slc/solutions/onoff-plug-app/series-3/pkg.slt
-  - slc/solutions/onoff-plug-app/series-3/onoff-plug-app-thread-bootloader.slcw
-  - slc/solutions/onoff-plug-app/series-2/pkg.slt
-  - slc/solutions/onoff-plug-app/series-2/onoff-plug-app-thread-bootloader.slcw
-  - slc/solutions/onoff-plug-app/series-2/onoff-plug-app-thread-internal-bootloader.slcw
-  - slc/solutions/light-switch-app/siwx917/pkg.slt
-  - slc/solutions/light-switch-app/siwx917/light-switch-app-917-soc.slcw
-  - slc/solutions/light-switch-app/series-3/light-switch-app-thread-bootloader.slcw
-  - slc/solutions/light-switch-app/series-3/pkg.slt
-  - slc/solutions/light-switch-app/series-2/light-switch-app-thread-internal-bootloader.slcw
-  - slc/solutions/light-switch-app/series-2/light-switch-app-thread-bootloader.slcw
-  - slc/solutions/light-switch-app/series-2/pkg.slt
-  - slc/solutions/platform-app/series-3/platform-app-thread-bootloader.slcw
-  - slc/solutions/platform-app/series-3/pkg.slt
-  - slc/solutions/platform-app/series-2/platform-app-thread-internal-bootloader.slcw
-  - slc/solutions/platform-app/series-2/platform-app-thread-bootloader.slcw
-  - slc/solutions/platform-app/series-2/pkg.slt
-  - slc/solutions/air-quality-sensor-app/siwx917/air-quality-sensor-app-917-soc.slcw
-  - slc/solutions/air-quality-sensor-app/siwx917/pkg.slt
-  - slc/solutions/air-quality-sensor-app/series-3/pkg.slt
-  - slc/solutions/air-quality-sensor-app/series-3/air-quality-sensor-app-thread-bootloader.slcw
-  - slc/solutions/air-quality-sensor-app/series-2/air-quality-sensor-app-thread-internal-bootloader.slcw
-  - slc/solutions/air-quality-sensor-app/series-2/pkg.slt
-  - slc/solutions/air-quality-sensor-app/series-2/air-quality-sensor-app-thread-bootloader.slcw
-  - slc/solutions/thermostat/siwx917/thermostat-rs911x-bootloader.slcw
-  - slc/solutions/thermostat/siwx917/thermostat-wf200-bootloader.slcw
-  - slc/solutions/thermostat/siwx917/pkg.slt
-  - slc/solutions/thermostat/siwx917/thermostat-917-ncp-bootloader.slcw
-  - slc/solutions/thermostat/siwx917/thermostat-917-soc.slcw
-  - slc/solutions/thermostat/series-3/pkg.slt
-  - slc/solutions/thermostat/series-3/thermostat-thread-bootloader.slcw
-  - slc/solutions/thermostat/series-2/thermostat-wf200-bootloader.slcw
-  - slc/solutions/thermostat/series-2/thermostat-thread-internal-bootloader.slcw
-  - slc/solutions/thermostat/series-2/pkg.slt
-  - slc/solutions/thermostat/series-2/thermostat-thread-bootloader.slcw
-  - slc/solutions/fan-control-app/siwx917/pkg.slt
-  - slc/solutions/fan-control-app/siwx917/fan-control-app-917-soc.slcw
-  - slc/solutions/lock-app/siwx917/lock-app-917-ncp-bootloader.slcw
-  - slc/solutions/lock-app/siwx917/lock-app-rs911x-bootloader.slcw
-  - slc/solutions/lock-app/siwx917/lock-app-917-soc.slcw
-  - slc/solutions/lock-app/siwx917/lock-app-wf200-bootloader.slcw
-  - slc/solutions/lock-app/siwx917/pkg.slt
-  - slc/solutions/lock-app/series-3/pkg.slt
-  - slc/solutions/lock-app/series-3/lock-app-thread-bootloader.slcw
-  - slc/solutions/lock-app/series-2/pkg.slt
-  - slc/solutions/lock-app/series-2/lock-app-thread-internal-bootloader.slcw
-  - slc/solutions/lock-app/series-2/lock-app-thread-bootloader.slcw
-  - slc/solutions/closure-app/siwx917/closure-app-917-soc.slcw
-  - slc/solutions/closure-app/siwx917/pkg.slt
-  - slc/solutions/closure-app/series-3/pkg.slt
-  - slc/solutions/closure-app/series-3/closure-app-thread-bootloader.slcw
-  - slc/solutions/closure-app/series-2/closure-app-thread-internal-bootloader.slcw
-  - slc/solutions/closure-app/series-2/pkg.slt
-  - slc/solutions/closure-app/series-2/closure-app-thread-bootloader.slcw
-  - slc/solutions/multi-sensor-app/siwx917/multi-sensor-app-917-soc.slcw
-  - slc/solutions/multi-sensor-app/siwx917/pkg.slt
-  - slc/solutions/multi-sensor-app/series-3/pkg.slt
-  - slc/solutions/multi-sensor-app/series-3/multi-sensor-app-thread-bootloader.slcw
-  - slc/solutions/multi-sensor-app/series-2/multi-sensor-app-thread-internal-bootloader.slcw
-  - slc/solutions/multi-sensor-app/series-2/pkg.slt
-  - slc/solutions/multi-sensor-app/series-2/multi-sensor-app-thread-bootloader.slcw
-  - slc/solutions/zigbee-matter-light/series-3/pkg.slt
-  - slc/solutions/zigbee-matter-light/series-3/zigbee-matter-light-bootloader.slcw
-  - slc/solutions/zigbee-matter-light/series-2/zigbee-matter-light-internal-bootloader.slcw
-  - slc/solutions/zigbee-matter-light/series-2/pkg.slt
-  - slc/solutions/zigbee-matter-light/series-2/zigbee-matter-light-bootloader.slcw
-  - slc/solutions/performance-test-app/series-3/performance-test-app-thread-bootloader.slcw
-  - slc/solutions/performance-test-app/series-3/pkg.slt
-  - slc/solutions/performance-test-app/series-2/performance-test-app-thread-bootloader.slcw
-  - slc/solutions/performance-test-app/series-2/performance-test-app-thread-internal-bootloader.slcw
-  - slc/solutions/performance-test-app/series-2/pkg.slt
-  - slc/solutions/window-app/siwx917/pkg.slt
-  - slc/solutions/window-app/siwx917/window-app-917-soc.slcw
-  - slc/solutions/window-app/siwx917/window-app-917-ncp-bootloader.slcw
-  - slc/solutions/window-app/series-3/window-app-thread-bootloader.slcw
-  - slc/solutions/window-app/series-3/pkg.slt
-  - slc/solutions/window-app/series-2/window-app-thread-bootloader.slcw
-  - slc/solutions/window-app/series-2/pkg.slt
-  - slc/solutions/window-app/series-2/window-app-thread-internal-bootloader.slcw
-  - slc/solutions/refrigerator-app/siwx917/pkg.slt
-  - slc/solutions/refrigerator-app/siwx917/refrigerator-app-917-soc.slcw
-  - slc/solutions/refrigerator-app/series-3/refrigerator-app-thread-bootloader.slcw
-  - slc/solutions/refrigerator-app/series-3/pkg.slt
-  - slc/solutions/refrigerator-app/series-2/refrigerator-app-thread-bootloader.slcw
-  - slc/solutions/refrigerator-app/series-2/pkg.slt
-  - slc/solutions/refrigerator-app/series-2/refrigerator-app-thread-internal-bootloader.slcw
-  - slc/solutions/dishwasher-app/siwx917/dishwasher-app-917-soc.slcw
-  - slc/solutions/dishwasher-app/siwx917/pkg.slt
-  - slc/solutions/dishwasher-app/series-3/dishwasher-app-thread-bootloader.slcw
-  - slc/solutions/dishwasher-app/series-3/pkg.slt
-  - slc/solutions/dishwasher-app/series-2/dishwasher-app-thread-bootloader.slcw
-  - slc/solutions/dishwasher-app/series-2/pkg.slt
-  - slc/solutions/dishwasher-app/series-2/dishwasher-app-thread-internal-bootloader.slcw
-  - slc/solutions/lighting-app/siwx917/lighting-app-917-soc.slcw
-  - slc/solutions/lighting-app/siwx917/pkg.slt
-  - slc/solutions/lighting-app/series-3/lighting-app-thread-bootloader.slcw
-  - slc/solutions/lighting-app/series-3/pkg.slt
-  - slc/solutions/lighting-app/series-2/lighting-app-thread-internal-bootloader.slcw
-  - slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw
-  - slc/solutions/lighting-app/series-2/pkg.slt
   - slc/config/scripts/upgrade_validation.lua
   - slc/config/scripts/icd_server_validation.lua
   - slc/config/scripts/upgrade_config_to_2.5.1.lua
@@ -1258,112 +1321,9 @@ extra_files:
   - slc/inc/inet/InetBuildConfig.h
   - slc/inc/setup_payload/CHIPAdditionalDataPayloadBuildConfig.h
   - slc/inc/matter/tracing/build_config.h
+  - slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
   - slc/inc/openthread/platform/openthread-system.h
   - slc/inc/app/icd/server/ICDServerBuildConfig.h
-  - slc/sample-app/openthread-border-router-doc/README.md
-  - slc/sample-app/openthread-border-router-doc/pkg.slt
-  - slc/sample-app/openthread-border-router-doc/openthread-border-router-doc.slcp
-  - slc/sample-app/onoff-plug-app/siwx917/onoff-plug-app-917-soc.slcp
-  - slc/sample-app/onoff-plug-app/siwx917/README_WiFi.md
-  - slc/sample-app/onoff-plug-app/siwx917/pkg.slt
-  - slc/sample-app/onoff-plug-app/efr32/README.md
-  - slc/sample-app/onoff-plug-app/efr32/pkg.slt
-  - slc/sample-app/onoff-plug-app/efr32/onoff-plug-app-thread.slcp
-  - slc/sample-app/light-switch-app/siwx917/README_WiFi.md
-  - slc/sample-app/light-switch-app/siwx917/pkg.slt
-  - slc/sample-app/light-switch-app/siwx917/light-switch-app-917-soc.slcp
-  - slc/sample-app/light-switch-app/efr32/README.md
-  - slc/sample-app/light-switch-app/efr32/pkg.slt
-  - slc/sample-app/light-switch-app/efr32/light-switch-app-thread.slcp
-  - slc/sample-app/platform-app/efr32/README.md
-  - slc/sample-app/platform-app/efr32/pkg.slt
-  - slc/sample-app/platform-app/efr32/platform-app-thread.slcp
-  - slc/sample-app/air-quality-sensor-app/siwx917/air-quality-sensor-app-917-soc.slcp
-  - slc/sample-app/air-quality-sensor-app/siwx917/README_WiFi.md
-  - slc/sample-app/air-quality-sensor-app/siwx917/pkg.slt
-  - slc/sample-app/air-quality-sensor-app/efr32/air-quality-sensor-app-thread.slcp
-  - slc/sample-app/air-quality-sensor-app/efr32/README.md
-  - slc/sample-app/air-quality-sensor-app/efr32/pkg.slt
-  - slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/readme.md
-  - slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/pkg.slt
-  - slc/sample-app/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
-  - slc/sample-app/bootloaders/bootloader-storage-single-4096k-series-3/readme.md
-  - slc/sample-app/bootloaders/bootloader-storage-single-4096k-series-3/pkg.slt
-  - slc/sample-app/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
-  - slc/sample-app/bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
-  - slc/sample-app/bootloaders/bootloader-storage-external-single-series-2/readme.md
-  - slc/sample-app/bootloaders/bootloader-storage-external-single-series-2/pkg.slt
-  - slc/sample-app/thermostat/siwx917/thermostat-wf200.slcp
-  - slc/sample-app/thermostat/siwx917/README_WiFi.md
-  - slc/sample-app/thermostat/siwx917/thermostat-rs911x.slcp
-  - slc/sample-app/thermostat/siwx917/pkg.slt
-  - slc/sample-app/thermostat/siwx917/thermostat-917-ncp.slcp
-  - slc/sample-app/thermostat/siwx917/thermostat-917-soc.slcp
-  - slc/sample-app/thermostat/efr32/thermostat-thread.slcp
-  - slc/sample-app/thermostat/efr32/README_WiFi.md
-  - slc/sample-app/thermostat/efr32/README.md
-  - slc/sample-app/thermostat/efr32/pkg.slt
-  - slc/sample-app/fan-control-app/siwx917/README_WiFi.md
-  - slc/sample-app/fan-control-app/siwx917/pkg.slt
-  - slc/sample-app/fan-control-app/siwx917/fan-control-app-917-soc.slcp
-  - slc/sample-app/lock-app/siwx917/lock-app-917-ncp.slcp
-  - slc/sample-app/lock-app/siwx917/lock-app-917-soc.slcp
-  - slc/sample-app/lock-app/siwx917/README_WiFi.md
-  - slc/sample-app/lock-app/siwx917/pkg.slt
-  - slc/sample-app/lock-app/siwx917/lock-app-wf200.slcp
-  - slc/sample-app/lock-app/siwx917/lock-app-rs911x.slcp
-  - slc/sample-app/lock-app/efr32/README_WiFi.md
-  - slc/sample-app/lock-app/efr32/README.md
-  - slc/sample-app/lock-app/efr32/pkg.slt
-  - slc/sample-app/lock-app/efr32/lock-app-thread.slcp
-  - slc/sample-app/closure-app/siwx917/closure-app-917-soc.slcp
-  - slc/sample-app/closure-app/siwx917/README_WiFi.md
-  - slc/sample-app/closure-app/siwx917/pkg.slt
-  - slc/sample-app/closure-app/efr32/closure-app-thread.slcp
-  - slc/sample-app/closure-app/efr32/README.md
-  - slc/sample-app/closure-app/efr32/pkg.slt
-  - slc/sample-app/multi-sensor-app/siwx917/README_WiFi.md
-  - slc/sample-app/multi-sensor-app/siwx917/multi-sensor-app-917-soc.slcp
-  - slc/sample-app/multi-sensor-app/siwx917/pkg.slt
-  - slc/sample-app/multi-sensor-app/config/sl_matter_sensor_config.h
-  - slc/sample-app/multi-sensor-app/efr32/multi-sensor-app-thread.slcp
-  - slc/sample-app/multi-sensor-app/efr32/README.md
-  - slc/sample-app/multi-sensor-app/efr32/pkg.slt
-  - slc/sample-app/zigbee-matter-light/efr32/target_behaviour.png
-  - slc/sample-app/zigbee-matter-light/efr32/zigbee-matter-light.slcp
-  - slc/sample-app/zigbee-matter-light/efr32/README.md
-  - slc/sample-app/zigbee-matter-light/efr32/pkg.slt
-  - slc/sample-app/performance-test-app/efr32/README.md
-  - slc/sample-app/performance-test-app/efr32/performance-test-app-thread.zap
-  - slc/sample-app/performance-test-app/efr32/pkg.slt
-  - slc/sample-app/performance-test-app/efr32/performance-test-app-thread.slcp
-  - slc/sample-app/performance-test-app/efr32/performance-test-cluster.xml
-  - slc/sample-app/window-app/siwx917/README_WiFi.md
-  - slc/sample-app/window-app/siwx917/pkg.slt
-  - slc/sample-app/window-app/siwx917/window-app-917-soc.slcp
-  - slc/sample-app/window-app/siwx917/window-app-917-ncp.slcp
-  - slc/sample-app/window-app/efr32/window-app-thread.slcp
-  - slc/sample-app/window-app/efr32/README_WiFi.md
-  - slc/sample-app/window-app/efr32/README.md
-  - slc/sample-app/window-app/efr32/pkg.slt
-  - slc/sample-app/refrigerator-app/siwx917/README_WiFi.md
-  - slc/sample-app/refrigerator-app/siwx917/pkg.slt
-  - slc/sample-app/refrigerator-app/siwx917/refrigerator-app-917-soc.slcp
-  - slc/sample-app/refrigerator-app/efr32/refrigerator-app-thread.slcp
-  - slc/sample-app/refrigerator-app/efr32/README.md
-  - slc/sample-app/refrigerator-app/efr32/pkg.slt
-  - slc/sample-app/dishwasher-app/siwx917/dishwasher-app-917-soc.slcp
-  - slc/sample-app/dishwasher-app/siwx917/README_WiFi.md
-  - slc/sample-app/dishwasher-app/siwx917/pkg.slt
-  - slc/sample-app/dishwasher-app/efr32/dishwasher-app-thread.slcp
-  - slc/sample-app/dishwasher-app/efr32/README.md
-  - slc/sample-app/dishwasher-app/efr32/pkg.slt
-  - slc/sample-app/lighting-app/siwx917/lighting-app-917-soc.slcp
-  - slc/sample-app/lighting-app/siwx917/README_WiFi.md
-  - slc/sample-app/lighting-app/siwx917/pkg.slt
-  - slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp
-  - slc/sample-app/lighting-app/efr32/README.md
-  - slc/sample-app/lighting-app/efr32/pkg.slt
   - tools/matter_rpi_image/README.md
   - tools/pymattertool/README.md
   - tools/pymattertool/main.py
@@ -1380,140 +1340,8 @@ extra_files:
   - tools/matter_rpi_image/scripts/configurations.sh
   - tools/matter_rpi_image/scripts/templates/configurations_wlan0.sh
   - tools/matter_rpi_image/scripts/templates/configurations_eth0.sh
-  - provision/images/sixg3_psa3_nvm3k2.s37
-  - provision/images/efr32mg24_psa3_nvm3k2_boot.s37
-  - provision/images/sixg3_psa3_nvm3k3.s37
-  - provision/images/efr32mg24_psa12_nvm3k2.s37
-  - provision/images/efr32mg24_csr_oids.s37
-  - provision/images/efr32mg24_psa12_nvm3k1.s37
-  - provision/images/sixg3x8m_csr_oids.s37
-  - provision/images/sixg3x8m_psa3_nvm3k3.s37
-  - provision/images/sixg3w_csr_oids.s37
-  - provision/images/efr32mg24_psa3_nvm3k3.s37
-  - provision/images/efr32mg24_psa3_nvm3k2.s37
-  - provision/images/sixg3k_psa3_nvm3k3.s37
-  - provision/images/sixg3k_csr_oids.s37
-  - provision/images/efr32mg26_ram.s37
-  - provision/images/sixg3l_csr_oids.s37
-  - provision/images/si917_nvm3k2.rps
-  - provision/images/si917_nvm3k3.rps
-  - provision/images/efr32mg26_psa3_nvm3k2.s37
-  - provision/images/efr32mg26_psa3_nvm3k3.s37
-  - provision/images/efr32mg24_psa123_nvm3k2.s37
-  - provision/images/efr32mg26_psa3_nvm3k2_boot.s37
-  - provision/images/si917y_nvm3k3.rps
-  - provision/images/si917_csr_oids.rps
-  - provision/images/efr32mg26_csr_oids.s37
-  - provision/images/sixg3x_csr_oids.s37
-  - provision/images/sixg3w_psa3_nvm3k3.s37
-  - provision/images/si917y_nvm3k2.rps
-  - provision/images/si917y_csr_oids.rps
-  - provision/images/efr32mg24_ram.s37
   - provision/support/JLinkDevices.xml
-  - provision/modules/parameters.yaml
-  - provision/modules/jlink.py
-  - provision/modules/formatter.py
-  - provision/modules/credentials.py
-  - provision/modules/device.py
-  - provision/modules/util.py
-  - provision/modules/arguments.py
-  - provision/modules/exporter.py
-  - provision/modules/protocol.py
-  - provision/modules/tools.py
-  - provision/modules/channel.py
-  - provision/modules/signing_server.py
-  - provision/modules/parameters.py
-  - provision/modules/bluetooth.py
-  - provision/modules/defaults.py
-  - provision/modules/versions.py
-  - provision/modules/manager.py
-  - provision/inputs/certs.json
-  - provision/inputs/csr.json
-  - provision/inputs/develop.json
-  - provision/inputs/spake2p.json
-  - provision/inputs/silabs.json
-  - provision/modules/v2_0/encoding.py
-  - provision/modules/v2_0/arguments.py
-  - provision/modules/v2_0/exporter.py
-  - provision/modules/v2_0/protocol.py
-  - provision/modules/v1_0/parameters.yaml
-  - provision/modules/v1_0/encoding.py
-  - provision/modules/v1_0/arguments.py
-  - provision/modules/v1_0/exporter.py
-  - provision/modules/v1_0/protocol.py
-  - provision/modules/v1_3/arguments.py
-  - provision/modules/v1_3/protocol.py
-  - provision/modules/v1_2/arguments.py
-  - provision/modules/v1_2/protocol.py
-  - provision/support/sixg3/SIXG301.elf
-  - provision/support/mgm24/Series2_bobcat.elf
   - provision/support/efr32mg26/EFR32XG26.JLinkScript
-  - provision/support/efr32mg26/Series2UD.elf
-  - provision/support/efr32mg26/EFR32XG26.elf
-  - provision/support/si917/RS9117_SF_4MB_42bsp.elf
-  - provision/samples/light/1/pai_key.der
-  - provision/samples/light/1/dac_key.der
-  - provision/samples/light/1/certs.p12
-  - provision/samples/light/1/dac_cert.pem
-  - provision/samples/light/1/cd.bin
-  - provision/samples/light/1/dac_cert.der
-  - provision/samples/light/1/dac_key.pem
-  - provision/samples/light/1/pai_key.pem
-  - provision/samples/light/1/pai_cert.der
-  - provision/samples/light/1/pai_cert.pem
-  - provision/samples/light/3/pai_key.der
-  - provision/samples/light/3/dac_key.der
-  - provision/samples/light/3/certs.p12
-  - provision/samples/light/3/dac_cert.pem
-  - provision/samples/light/3/cd.bin
-  - provision/samples/light/3/dac_cert.der
-  - provision/samples/light/3/dac_key.pem
-  - provision/samples/light/3/pai_key.pem
-  - provision/samples/light/3/pai_cert.der
-  - provision/samples/light/3/pai_cert.pem
-  - provision/samples/light/2/pai_key.der
-  - provision/samples/light/2/dac_key.der
-  - provision/samples/light/2/certs.p12
-  - provision/samples/light/2/dac_cert.pem
-  - provision/samples/light/2/cd.bin
-  - provision/samples/light/2/dac_cert.der
-  - provision/samples/light/2/dac_key.pem
-  - provision/samples/light/2/pai_key.pem
-  - provision/samples/light/2/pai_cert.der
-  - provision/samples/light/2/pai_cert.pem
-  - provision/samples/switch/1/pai_key.der
-  - provision/samples/switch/1/dac_key.der
-  - provision/samples/switch/1/certs.p12
-  - provision/samples/switch/1/dac_cert.pem
-  - provision/samples/switch/1/cd.bin
-  - provision/samples/switch/1/dac_cert.der
-  - provision/samples/switch/1/dac_key.pem
-  - provision/samples/switch/1/pai_key.pem
-  - provision/samples/switch/1/pai_cert.der
-  - provision/samples/switch/1/pai_cert.pem
-  - provision/samples/switch/3/pai_key.der
-  - provision/samples/switch/3/dac_key.der
-  - provision/samples/switch/3/certs.p12
-  - provision/samples/switch/3/dac_cert.pem
-  - provision/samples/switch/3/cd.bin
-  - provision/samples/switch/3/dac_cert.der
-  - provision/samples/switch/3/dac_key.pem
-  - provision/samples/switch/3/pai_key.pem
-  - provision/samples/switch/3/pai_cert.der
-  - provision/samples/switch/3/pai_cert.pem
-  - provision/samples/switch/2/pai_key.der
-  - provision/samples/switch/2/dac_key.der
-  - provision/samples/switch/2/certs.p12
-  - provision/samples/switch/2/dac_cert.pem
-  - provision/samples/switch/2/cd.bin
-  - provision/samples/switch/2/dac_cert.der
-  - provision/samples/switch/2/dac_key.pem
-  - provision/samples/switch/2/pai_key.pem
-  - provision/samples/switch/2/pai_cert.der
-  - provision/samples/switch/2/pai_cert.pem
-  - provision/test/assets/BRD4166A.zip
-  - provision/test/assets/BRD4187C.zip
-  - provision/test/assets/BRD4186C.zip
   # matter_sdk paths
   - third_party/matter_sdk/src/app/AppConfig.h
   - third_party/matter_sdk/src/app/AttributeAccessInterface.h
@@ -1792,6 +1620,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/basic-information/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/basic-information/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/basic-information/tests/TestBasicInformationCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/basic-information/tests/TestBasicInformationReadWrite.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/BindingManager.h
@@ -1929,9 +1758,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.cpp
   - third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.h
   - third_party/matter_sdk/src/app/clusters/descriptor/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/descriptor/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/descriptor/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/descriptor/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor.cpp
+  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.h
+  - third_party/matter_sdk/src/app/clusters/descriptor/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/descriptor/tests/TestDescriptorCluster.cpp
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/DeviceEnergyManagementTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/device-energy-management-server/app_config_dependent_sources.cmake
@@ -1971,10 +1804,10 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/ecosystem-information-server/ecosystem-information-server.cpp
   - third_party/matter_sdk/src/app/clusters/ecosystem-information-server/ecosystem-information-server.h
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/EnergyReportingTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/electrical-energy-measurement-server.cpp
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/electrical-energy-measurement-server.h
   - third_party/matter_sdk/src/app/clusters/electrical-grid-conditions-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/electrical-grid-conditions-server/ElectricalGridConditionsTestEventTriggerHandler.h
@@ -2277,10 +2110,6 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/power-topology-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/power-topology-server/power-topology-server.cpp
   - third_party/matter_sdk/src/app/clusters/power-topology-server/power-topology-server.h
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/app_config_dependent_sources.cmake
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-client/pump-configuration-and-control-client.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.gni
@@ -2390,11 +2219,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/testing/AttributeTesting.cpp
   - third_party/matter_sdk/src/app/clusters/testing/AttributeTesting.h
   - third_party/matter_sdk/src/app/clusters/testing/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/testing/TestReadWriteAttribute.h
-  - third_party/matter_sdk/src/app/clusters/thermostat-client/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/thermostat-client/app_config_dependent_sources.cmake
-  - third_party/matter_sdk/src/app/clusters/thermostat-client/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/thermostat-client/thermostat-client.cpp
+  - third_party/matter_sdk/src/app/clusters/testing/ClusterTester.h
   - third_party/matter_sdk/src/app/clusters/thermostat-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
   - third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.h
@@ -2456,6 +2281,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/CertificateTable.h
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/CertificateTableImpl.cpp
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/CertificateTableImpl.h
+  - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/IncrementingIdHelper.h
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/tls-certificate-management-server/tls-certificate-management-server.cpp
@@ -2481,9 +2307,9 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-cluster.cpp
+  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-cluster.h
   - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-delegate.h
-  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-server.cpp
-  - third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/valve-configuration-and-control-server.h
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/app_config_dependent_sources.gni
@@ -2517,8 +2343,6 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/tests/TestWiFiNetworkDiagnosticsCluster.cpp
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-cluster.cpp
   - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-cluster.h
-  - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-logic.cpp
-  - third_party/matter_sdk/src/app/clusters/wifi-network-diagnostics-server/wifi-network-diagnostics-logic.h
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/app_config_dependent_sources.gni
@@ -2746,6 +2570,7 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/TestBasicCommandPathRegistry.cpp
   - third_party/matter_sdk/src/app/tests/TestBufferedReadCallback.cpp
   - third_party/matter_sdk/src/app/tests/TestBuilderParser.cpp
+  - third_party/matter_sdk/src/app/tests/TestCertificateTableImpl.cpp
   - third_party/matter_sdk/src/app/tests/TestCheckInHandler.cpp
   - third_party/matter_sdk/src/app/tests/TestClosureControlClusterLogic.cpp
   - third_party/matter_sdk/src/app/tests/TestClosureControlClusterObjects.cpp
@@ -3004,9 +2829,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_8.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_10.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_11.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_12.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_13.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_14.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DD_1_7.yaml
@@ -3321,7 +3143,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/test-ember-api.h
   - third_party/matter_sdk/src/app/tests/test-interaction-model-api.cpp
   - third_party/matter_sdk/src/app/tests/test-interaction-model-api.h
-  - third_party/matter_sdk/src/app/util/AttributesChangedListener.h
   - third_party/matter_sdk/src/app/util/BUILD.gn
   - third_party/matter_sdk/src/app/util/DataModelHandler.cpp
   - third_party/matter_sdk/src/app/util/DataModelHandler.h
@@ -3418,6 +3239,8 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/templates/app/clusters-shared-Structs.ipp.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/codedriven-callback.h.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/codedriven-init-shutdown.cpp.zapt
+  - third_party/matter_sdk/src/app/zap-templates/templates/app/devices-Ids.h.zapt
+  - third_party/matter_sdk/src/app/zap-templates/templates/app/devices-Types.h.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/endpoint_config.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/gen_config.zapt
   - third_party/matter_sdk/src/app/zap-templates/templates/app/ids/Attributes.h.zapt
@@ -6135,6 +5958,9 @@ extra_files:
   - third_party/matter_sdk/zzz_generated/app-common/clusters/shared/GlobalIds.h
   - third_party/matter_sdk/zzz_generated/app-common/clusters/shared/Structs.h
   - third_party/matter_sdk/zzz_generated/app-common/clusters/shared/Structs.ipp
+  - third_party/matter_sdk/zzz_generated/app-common/devices/BUILD.gn
+  - third_party/matter_sdk/zzz_generated/app-common/devices/Ids.h
+  - third_party/matter_sdk/zzz_generated/app-common/devices/Types.h
   - third_party/matter_sdk/zzz_generated/chip-tool/zap-generated/cluster/Commands.h
   - third_party/matter_sdk/zzz_generated/chip-tool/zap-generated/cluster/ComplexArgumentParser.cpp
   - third_party/matter_sdk/zzz_generated/chip-tool/zap-generated/cluster/ComplexArgumentParser.h
