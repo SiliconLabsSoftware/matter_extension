@@ -3,7 +3,7 @@
     "standard": {
         "default": [
             {
-                "boards": ["brd4116a", "brd4117a", "brd4118a"],
+                "boards": ["brd4116a"],
                 "arguments": [""]
             },
             {
