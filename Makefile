@@ -16,12 +16,14 @@
 	enable_editable \
 	disable_editable \
 	editable_status \
-	update_matter_version
+	update_matter_version \
+	resolve_matter_version
 
-# Source of truth for version
-PACKAGE_VERSION_FILE := slc/script/matter_package_version
+# Alternative: Define as a variable that can be used throughout the Makefile
+RESOLVED_MATTER_VERSION := $(shell python3 slc/script/generate_pkg_slt.py --version-only)
+
 # Allow override via environment: if PACKAGE_VERSION is exported it wins; otherwise read the file.
-PACKAGE_VERSION := $(shell cat $(PACKAGE_VERSION_FILE))
+PACKAGE_VERSION := $(RESOLVED_MATTER_VERSION)
 ifeq ($(strip $(SL_PRERELEASE_NUMBER)),)
 $(info Using PACKAGE_VERSION from $(PACKAGE_VERSION_FILE): $(PACKAGE_VERSION))
 else

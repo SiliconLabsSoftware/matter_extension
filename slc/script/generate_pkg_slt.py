@@ -12,8 +12,7 @@ OVERVIEW
 VERSION RESOLUTION
     - The Matter package version is resolved in this priority order:
         1. Explicit --matter-version CLI argument.
-        2. Contents of the local 'matter_package_version' file located next to
-           this script.
+        2. Version field from the matter.slce file in the extension root.
     - No hardcoded Matter version lives in the script logic.
 
 DEPENDENCY VERSION SOURCE
@@ -45,7 +44,7 @@ ARGUMENTS
     --directory, -d     Base directory to search (default: cwd)
     --verbose, -v       Verbose logging
     --common            Force universal content (ignore platform heuristics)
-    --matter-version    Override Matter version (else read matter_package_version)
+    --matter-version    Override Matter version (else read from matter.slce)
 
 OUTPUT
     - Creates / overwrites pkg.slt files and logs each generated path.
@@ -164,8 +163,8 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     Priority:
       1. --matter-version CLI argument if provided
-      2. Contents of local file 'matter_package_version' located alongside this script
-    Exits with error if neither source provides a version.
+      2. Version field from matter.slce file in the extension root
+    Exits with error if no source provides a version.
     """
     if cli_version:
         logger.debug("Matter version provided via CLI: %s", cli_version)
@@ -173,21 +172,26 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     logger.debug("Script directory: %s", script_dir)
-    version_file = os.path.join(script_dir, "matter_package_version")
 
+    # Try matter.slce file
+    slce_file = os.path.join(script_dir, "..", "..", "matter.slce")
     try:
-        with open(version_file, "r", encoding="utf-8") as vf:
-            version = vf.read().strip()
-            if version:
-                logger.debug("Matter version read from file %s: %s", version_file, version)
-                return version
-            else:
-                logger.warning("Version file %s is empty", version_file)
+        with open(slce_file, "r", encoding="utf-8") as sf:
+            slce_data = yaml.safe_load(sf)
+            if slce_data and "version" in slce_data:
+                version = str(slce_data["version"]).strip()
+                if version:
+                    version = version+"-0.dev"
+                    logger.debug("Matter version read from matter.slce: %s", version)
+                    return version
+                else:
+                    logger.warning("Version field in %s is empty", slce_file)
     except FileNotFoundError:
-        logger.debug("Version file %s not found", version_file)
+        logger.debug("matter.slce file %s not found", slce_file)
+    except Exception as e:
+        logger.warning("Failed to parse matter.slce file %s: %s", slce_file, e)
 
-    logger.error("Unable to determine Matter package version: provide --matter-version or create '%s' with a version string.",
-                 os.path.basename(version_file))
+    logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter.slce has a valid version field.")
     sys.exit(1)
 
 
@@ -244,7 +248,8 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
     parser.add_argument("--common", action="store_true",
                         help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
-    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
+    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter.slce file.")
+    parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     args = parser.parse_args()
@@ -254,6 +259,12 @@ def main():
     logging.basicConfig(level=log_level, format="%(message)s")
     logger.debug("Logging initialized (level=%s)", logging.getLevelName(log_level))
     matter_version = resolve_matter_version(args.matter_version)
+    
+    # If only version resolution is requested, print and exit
+    if args.version_only:
+        print(matter_version)
+        sys.exit(0)  # Explicit success exit code
+    
     # Flatten comma-separated patterns
     exclude_patterns = []
     for entry in args.exclude:
