@@ -239,7 +239,7 @@ jobs:
         run: |
           echo "Generating common lock file"
           make install_matter_dependencies
-          echo "LOCKFILE_PATH='packages/matter_dependencies.lock'" >> "$GITHUB_ENV"
+          echo "LOCKFILE_PATH=packages/matter_dependencies.lock" >> "$GITHUB_ENV"
 
       - name: Publish package
         id: publish-stack-package
