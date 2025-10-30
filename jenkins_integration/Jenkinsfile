@@ -3,14 +3,7 @@
 
 def pipelineProperties = []
 pipelineProperties << disableConcurrentBuilds()
-// TODO: Implement UPLOAD_PACKAGE and PROMOTE
-// pipelineProperties << parameters([
-//         // Allows us to manually trigger a Full Build by passing a parameter (boolean) from Jenkins.
-//         booleanParam(name: 'UPLOAD_PACKAGE', defaultValue: false, description: 'Set to true if want to upload packages to matter-conan-dev (true for main or release_* branches)'),
-//         // Allows us to manually trigger a promotion to SQA by passing a parameter (boolean) from Jenkins.
-//         booleanParam(name: 'PROMOTE', defaultValue: false, description: 'Set to true if want to promote the build to SQA (true for main or release_* branches)')
-//     ])
-
+// TODO: Implement UPLOAD_PACKAGE and PROMOTE https://jira.silabs.com/browse/MATTER-5630
 // Configure pollSCM triggers
 if(env.BRANCH_NAME == 'main'){
     // Trigger daily at 7pm EST (1 hr after github trigger)
