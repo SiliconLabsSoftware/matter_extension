@@ -5,8 +5,8 @@ def pipelineProperties = []
 
 // Configure pollSCM triggers
 if(env.BRANCH_NAME == 'main'){
-    // Trigger daily at 8pm EST (2 hrs after github trigger)
-    pipelineProperties << pipelineTriggers([pollSCM('0 0 * * *')])
+    // Trigger daily at 9pm EST (3 hrs after github trigger)
+    pipelineProperties << pipelineTriggers([pollSCM('0 1 * * *')])
 }
 
 properties(pipelineProperties)
