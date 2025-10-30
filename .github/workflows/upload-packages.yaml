@@ -153,8 +153,6 @@ jobs:
       - name: Setup SLT
         id: setup-action
         uses: SiliconLabsInternal/action-setup-slt@main
-        with: 
-          use-unstable: true
 
       - name: Check SLT version
         run: |
