@@ -18,7 +18,8 @@
 	editable_status \
 	comment_revision_mode \
 	uncomment_revision_mode \
-	update_matter_version
+	update_matter_version \
+	install_matter_dependencies
 
 # Source of truth for version
 PACKAGE_VERSION_FILE := slc/script/matter_package_version
@@ -135,4 +136,8 @@ uncomment_revision_mode: ## Uncomment the revision_mode = "scm" line in conanfil
 			fi; \
 		fi; \
 	done
+
+install_matter_dependencies: ## SLT matter dependencies to create lockfile
+	@echo "Running slt install -f packages/matter_dependencies.slt"
+	slt install -f packages/matter_dependencies.slt
 

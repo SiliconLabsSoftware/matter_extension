@@ -233,6 +233,13 @@ jobs:
           echo "SL_PRERELEASE_NUMBER=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
           pip install --upgrade PyYAML
           make generate_pkg_slt
+      
+      - name: Generate common lock file
+        ## Expected lockfile output at packages/matter_dependencies.lock
+        run: |
+          echo "Generating common lock file"
+          make install_matter_dependencies
+          echo "LOCKFILE_PATH='packages/matter_dependencies.lock'" >> "$GITHUB_ENV"
 
       - name: Publish package
         id: publish-stack-package
@@ -276,6 +283,7 @@ jobs:
           create: true
           publish: ${{ env.PUBLISH }}
           stack-name: "matter_app"
+          lockfile-path: ${{ env.LOCKFILE_PATH }}
           
       - name: Capture Package Outputs
         id: capture-app-package
