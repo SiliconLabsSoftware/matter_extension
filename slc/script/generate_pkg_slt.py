@@ -287,7 +287,7 @@ def main():
     parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
-    parser.add_argument("--update-sample-app-pkg","-s", default=True,
+    parser.add_argument("--update-sample-app-pkg", "-s", default=True,
                         help="Update sample_app_pkg.slt")
     args = parser.parse_args()
 
