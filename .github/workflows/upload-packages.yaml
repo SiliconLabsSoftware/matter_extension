@@ -236,8 +236,8 @@ jobs:
         ## Expected lockfile output at packages/matter_dependencies.lock
         run: |
           echo "Generating common lock file"
-          make install_matter_dependencies
-          echo "LOCKFILE_PATH=packages/matter_dependencies.lock" >> "$GITHUB_ENV"
+          make install_stack_package
+          echo "LOCKFILE_PATH=packages/matter/pkg.lock" >> "$GITHUB_ENV"
 
       - name: Publish package
         id: publish-stack-package
