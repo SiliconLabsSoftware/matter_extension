@@ -141,15 +141,42 @@ def main(argv: Iterable[str]) -> int:
             return 2
         aggregated.extend(collected)
 
-    # Always-include specific paths (must exist)
-    always_include = [Path("third_party/matter_sdk/src/app/common/templates/config-data.yaml")]
-    for extra in always_include:
+    # Always-include specific paths:
+    #  * Required file(s) that must exist (error if missing)
+    #  * Optional directory (zzz_generated) included when present
+    required_always_include_files = [
+        Path("third_party/matter_sdk/src/app/common/templates/config-data.yaml"),
+    ]
+    optional_always_include_dirs = [
+        Path("third_party/matter_sdk/zzz_generated"),
+    ]
+
+    # Handle required files (must exist & be files)
+    for extra in required_always_include_files:
         if not (extra.exists() and extra.is_file()):
             print(f"Error: required file not found: {extra}", file=sys.stderr)
             return 9
         resolved = extra.resolve()
         if resolved not in aggregated:
             aggregated.append(resolved)
+
+    # Handle optional directories (include if existing; no error if absent)
+    for opt_dir in optional_always_include_dirs:
+        if opt_dir.exists() and opt_dir.is_dir():
+            resolved = opt_dir.resolve()
+            # Include every file inside (recursively), ignoring hidden entries (reusing collect_paths logic)
+            try:
+                generated_files = collect_paths(
+                    root=resolved,
+                    include_dirs=False,  # Only files as per requirement
+                    absolute=True,
+                    pattern=None,
+                )
+                for gf in generated_files:
+                    if gf.is_file() and gf not in aggregated:
+                        aggregated.append(gf)
+            except Exception as e:
+                print(f"Warning: failed to enumerate files in optional directory {resolved}: {e}", file=sys.stderr)
 
     # De-duplicate while preserving order
     seen = set()
