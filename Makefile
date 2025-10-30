@@ -16,10 +16,11 @@
 	enable_editable \
 	disable_editable \
 	editable_status \
+	comment_revision_mode \
+	uncomment_revision_mode \
 	update_matter_version \
-	resolve_matter_version
+	install_matter_dependencies
 
-# Alternative: Define as a variable that can be used throughout the Makefile
 RESOLVED_MATTER_VERSION := $(shell python3 slc/script/generate_pkg_slt.py --version-only)
 
 # Allow override via environment: if PACKAGE_VERSION is exported it wins; otherwise read the file.
@@ -46,7 +47,7 @@ enable_editable: ## Put the local Matter package into Conan editable mode
 disable_editable: ## Remove the local Matter package from Conan editable mode
 	@echo "Disabling editable mode for $(PACKAGE_REFERENCE) (if present)"
 	@if conan editable list | grep -q "$(PACKAGE_REFERENCE)"; then \
-		conan editable remove -r $(PACKAGE_REFERENCE) || { echo 'Failed to disable editable mode'; exit 1; }; \
+		conan editable remove -r "*" || { echo 'Failed to disable editable mode'; exit 1; }; \
 		echo "Editable mode DISABLED for $(PACKAGE_REFERENCE)"; \
 	else \
 		echo "Package $(PACKAGE_REFERENCE) is not in editable mode"; \
@@ -80,11 +81,11 @@ create_app_package: package_version ## Build the app package
 
 install_app_package: package_version ## Install the app package
 	@echo "Installing app package (version $(PACKAGE_VERSION))..."
-	slt install -f sample_app_pkg.slt
+	slt install -f packages/matter_app/pkg.slt
 
 install_stack_package: package_version ## Install the stack package
 	@echo "Installing stack package (version $(PACKAGE_VERSION))..."
-	slt install -f pkg.slt
+	slt install -f packages/matter/pkg.slt
 
 install_download_remotes: ## Install the remotes
 	@echo "Installing remotes from packages/remotes.json"
@@ -109,3 +110,34 @@ upload_app_package: package_version ## Upload the app package
 upload_stack_package: package_version ## Upload the stack package
 	@echo "Uploading stack package (version $(PACKAGE_VERSION))..."
 	conan upload matter/$(PACKAGE_VERSION)@silabs -r matter-conan-dev
+
+comment_revision_mode: ## Comment out the revision_mode = "scm" line in conanfile.py files
+	@echo "Commenting out revision_mode = \"scm\" in conanfile.py files"
+	@for file in packages/*/conanfile.py; do \
+		if [ -f "$$file" ]; then \
+			if grep -q "^[[:space:]]*self\.revision_mode = \"scm\"" "$$file"; then \
+				sed -i '' 's/^[[:space:]]*self\.revision_mode = "scm"/        # self.revision_mode = "scm"/' "$$file"; \
+				echo "Commented revision_mode in $$file"; \
+			else \
+				echo "No uncommented revision_mode found in $$file"; \
+			fi; \
+		fi; \
+	done
+
+uncomment_revision_mode: ## Uncomment the revision_mode = "scm" line in conanfile.py files
+	@echo "Uncommenting revision_mode = \"scm\" in conanfile.py files"
+	@for file in packages/*/conanfile.py; do \
+		if [ -f "$$file" ]; then \
+			if grep -q "^[[:space:]]*# self\.revision_mode = \"scm\"" "$$file"; then \
+				sed -i '' 's/^[[:space:]]*# self\.revision_mode = "scm"/        self.revision_mode = "scm"/' "$$file"; \
+				echo "Uncommented revision_mode in $$file"; \
+			else \
+				echo "No commented revision_mode found in $$file"; \
+			fi; \
+		fi; \
+	done
+
+install_matter_dependencies: ## SLT matter dependencies to create lockfile
+	@echo "Running slt install -f packages/matter_dependencies.slt"
+	slt install -f packages/matter_dependencies.slt
+
