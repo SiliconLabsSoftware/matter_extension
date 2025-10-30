@@ -4,6 +4,7 @@ version = "0"
  
 [dependency]
 # Get a specific version of the package
+matter = { version = "2.8.0-0.dev", installer ="conan", prerelease = true}
 openthread =  { version = ">=3.0.0 <3.0.1", installer ="conan", prerelease = true}
 bluetooth_le_host =  { version = ">=11.0.0 <11.0.1", installer ="conan", prerelease = true}
 rail_module =  { version = ">=3.0.0 <3.0.1", installer ="conan", prerelease = true}
