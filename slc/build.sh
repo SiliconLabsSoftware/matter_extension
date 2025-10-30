@@ -6,27 +6,27 @@
 #   ./slc/build.sh <slcp/slcw path> <board>
 #
 #   Example .slcp usage:
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c
+#       output in: out/brd4187c/lighting-app/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
-#       output in: out/brd4187c/lighting-app-thread-solution/
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c
+#       output in: out/brd4187c/lighting-app-solution/
 #
 #   Example --configuration option usage:
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
+#       output in: out/brd4187c/lighting-app/
 #
 #   --skip_gen option : Allows to skip the slc gen step and only run the make commande to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
 #                       This option only works if the project as previously been generated
 #   Example
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --skip_gen
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --skip_gen
+#       output in: out/brd4187c/lighting-app/
 #
 #   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
 #   Example
-#   ./slc/build.sh slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
-#       output in: out/brd4187c/lighting-app-thread/
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#       output in: out/brd4187c/lighting-app/
 #
 #   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
@@ -71,6 +71,52 @@ build_without_arg() {
 	fi
 }
 
+# Helper function to run slc generate with retry on timeout
+run_slc_generate_with_retry() {
+	local max_retries=3
+	local attempt=1
+	local exit_code=0
+	local output=""
+
+	while [ $attempt -le $max_retries ]; do
+		echo "Running: slc $* (attempt $attempt/$max_retries)"
+		output=$(slc "$@" 2>&1)
+		exit_code=$?
+		echo "$output"
+
+		if [ $exit_code -eq 0 ]; then
+			break
+		fi
+
+		# Check for ConcurrentModificationException
+		if echo "$output" | grep -q "ConcurrentModificationException: Internal Error. Please see logs."; then
+			echo "ConcurrentModificationException detected. Exporting logs..."
+			slc --exportLogs=out/artifacts/log
+			echo "Logs exported to out/artifacts/log"
+			if [ $attempt -lt $max_retries ]; then
+				echo "Retrying slc generate command after ConcurrentModificationException..."
+				sleep 1
+			else
+				echo "Maximum retries reached after ConcurrentModificationException."
+			fi
+		# Check for timeout
+		elif echo "$output" | grep -q "Follow-up generation did not complete within.*seconds"; then
+			if [ $attempt -lt $max_retries ]; then
+				echo "Timeout detected. Retrying slc generate command..."
+				sleep 1
+			else
+				echo "Maximum retries reached after timeout."
+			fi
+		else
+			echo "Attempt $attempt failed with exit code $exit_code (not a timeout or ConcurrentModificationException - no retry)"
+			break
+		fi
+
+		attempt=$((attempt + 1))
+	done
+	return $exit_code
+}
+
 MATTER_ROOT=$(pwd -P)
 : "${GSDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 
@@ -92,15 +138,10 @@ fi
 
 # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
 if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-	if [[ "$SILABS_APP_PATH" == *917-soc* ]]; then
-		SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
-		MAKE_FILE=$SILABS_APP.solution.Makefile
-	else
-		SILABS_APP=$(basename "$SILABS_APP_PATH" -bootloader.slcw)
-		MAKE_FILE=$SILABS_APP-bootloader.solution.Makefile
-	fi
-	PROJECT_FLAG="-w"
-	OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP-solution"
+    SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
+    MAKE_FILE=$SILABS_APP.solution.Makefile
+    PROJECT_FLAG="-w"
+    OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP-solution"
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
 	SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)
@@ -244,14 +285,14 @@ fi
 
 if [ "$skip_gen" = false ]; then
 	if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-		if [[ "$SILABS_APP_PATH" != *917-soc* ]]; then
+		if [[ "$SILABS_APP_PATH" != *-siwx* ]]; then
 			# Get bootloader arguments
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
 			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
 
 			# Generate bootloader
 			echo "Generating bootloader..."
-			slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=10000
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=3500
 			if [ $? -ne 0 ]; then
 				echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
 				exit 1
@@ -263,14 +304,14 @@ if [ "$skip_gen" = false ]; then
 		APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 		echo "Generating application..."
-		slc generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=10000
+		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate application for: $SILABS_APP_PATH"
 			exit 1
 		fi
 	else
 		# Generate .slcp projects
-		slc generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=10000 -o makefile
+		run_slc_generate_with_retry generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=3500 -o makefile
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate : $SILABS_APP_PATH"
 			exit 1
