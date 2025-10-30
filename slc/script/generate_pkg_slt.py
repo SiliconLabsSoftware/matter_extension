@@ -12,33 +12,31 @@ OVERVIEW
 
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
-    2. Contents of a local file named 'matter_package_version' located alongside
-       this script.
-    If neither yields a non-empty value the script exits with code 1.
+    2. Version field from the matter.slce file in the extension root (auto-appended with "-0.dev").
 
 DEPENDENCY VERSIONS SOURCE
-    Non-Matter dependency versions (e.g. openthread, bluetooth_le_host, lwip,
-    rail_module, platform_nwp_siwx91x) are loaded from a YAML file
-    'dependency_versions.yaml'
+    Non-Matter dependency versions are loaded from 'dependency_versions.yaml' which
+    supports both grouped format (common/thread/wifi) and legacy flat format.
+    Groups allow fine-grained control over which dependencies are included for each platform.
 
 PLATFORM HEURISTICS (when --common is NOT used)
-    - Path components NOT containing 'siwx917' => Thread / BLE host group appended.
-    - Path components containing 'siwx917'     => Wi-Fi 91x group appended.
-    - In all cases the Matter dependency itself is included first.
-    Extend this logic by adjusting the conditional in generate_pkg_slt_files.
+    - Path components NOT containing 'wifi' => Thread group dependencies appended.
+    - Path components containing 'wifi'     => Wi-Fi group dependencies appended.
+    - Common group dependencies are included for all platforms.
+    - Matter dependency is always included first.
 
 --common MODE
     Every discovered project receives uniform content consisting of just the
-    Matter dependency (plus future universally shared dependencies if added to
-    the 'common' group in the YAML).
+    Matter dependency plus any dependencies in the 'common' group.
 
 SAMPLE APP PACKAGE
-    Passing --update-sample-app-pkg (enabled by default, flag: -s) also writes
-    a standalone 'sample_app_pkg.slt' in the current working directory, pointing
-    at 'matter_app' rather than 'matter'. Disable by supplying
-        --update-sample-app-pkg False
-    (Any non-empty value other than the default boolean True will be treated as
-    truthy by argparse unless refined; see flag handling below.)
+    By default (--update-sample-app-pkg True), also generates 'sample_app_pkg.slt' 
+    in the current working directory, pointing at 'matter_app' rather than 'matter'.
+    Disable with --update-sample-app-pkg False.
+
+VERSION-ONLY MODE
+    Use --version-only to resolve and print just the Matter version without 
+    generating any pkg.slt files. Useful for scripting and Makefiles.
 
 EXCLUDES
     Directories can be skipped using --exclude/-e. Each value is a substring
@@ -56,13 +54,15 @@ USAGE EXAMPLES
     python3 slc/script/generate_pkg_slt.py -d slc --matter-version 2.7.0-beta.1
     python3 slc/script/generate_pkg_slt.py -d slc -e build,temp,legacy # exclude multiple
     python3 slc/script/generate_pkg_slt.py --verbose
+    python3 slc/script/generate_pkg_slt.py --version-only              # just print version
     python3 slc/script/generate_pkg_slt.py --update-sample-app-pkg False
 
 ARGUMENT SUMMARY
     --directory, -d               Base directory to search (default: cwd)
     --verbose, -v                 Enable verbose logging
-    --common                      Ignore platform heuristics; emit Matter-only pkg.slt
-    --matter-version              Override Matter version (else read matter_package_version file)
+    --common                      Ignore platform heuristics; emit Matter + common deps only
+    --matter-version              Override Matter version (else read from matter.slce)
+    --version-only                Only resolve and print Matter version, then exit
     --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
     --update-sample-app-pkg, -s   Generate sample_app_pkg.slt (default: True)
 
@@ -185,7 +185,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     Priority:
       1. --matter-version CLI argument if provided
-      2. Contents of local file 'matter_package_version' located alongside this script
+      2. Version field from matter.slce file in the extension root
     Exits with error if neither source provides a version.
     """
     if cli_version:
@@ -194,21 +194,26 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     logger.debug("Script directory: %s", script_dir)
-    version_file = os.path.join(script_dir, "matter_package_version")
-
+    
+    # Try matter.slce file
+    slce_file = os.path.join(script_dir, "..", "..", "matter.slce")
     try:
-        with open(version_file, "r", encoding="utf-8") as vf:
-            version = vf.read().strip()
-            if version:
-                logger.debug("Matter version read from file %s: %s", version_file, version)
-                return version
-            else:
-                logger.warning("Version file %s is empty", version_file)
+        with open(slce_file, "r", encoding="utf-8") as sf:
+            slce_data = yaml.safe_load(sf)
+            if slce_data and "version" in slce_data:
+                version = str(slce_data["version"]).strip()
+                if version:
+                    version = version+"-0.dev"
+                    logger.debug("Matter version read from matter.slce: %s", version)
+                    return version
+                else:
+                    logger.warning("Version field in %s is empty", slce_file)
     except FileNotFoundError:
-        logger.debug("Version file %s not found", version_file)
+        logger.debug("matter.slce file %s not found", slce_file)
+    except Exception as e:
+        logger.warning("Failed to parse matter.slce file %s: %s", slce_file, e)
 
-    logger.error("Unable to determine Matter package version: provide --matter-version or create '%s' with a version string.",
-                 os.path.basename(version_file))
+    logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter.slce has a valid version field.")
     sys.exit(1)
 
 def generate_sample_app_pkg_slt(verbose, matter_version, exclude_patterns):
@@ -254,7 +259,7 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
             pkg_slt_content = pkg_slt_content_all
         else:
             path_components = os.path.normpath(root).split(os.path.sep)
-            if "siwx917" not in path_components:
+            if "wifi" not in path_components:
                 pkg_slt_content = pkg_slt_content_common + pkg_slt_content_thread
                 # logger.debug("efr app contents = %s", pkg_slt_content_thread)
             else:
@@ -278,7 +283,8 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
     parser.add_argument("--common", action="store_true",
                         help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
-    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter_package_version file.")
+    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter.slce file.")
+    parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     parser.add_argument("--update-sample-app-pkg","-s", default=True,
@@ -290,6 +296,12 @@ def main():
     logging.basicConfig(level=log_level, format="%(message)s")
     logger.debug("Logging initialized (level=%s)", logging.getLevelName(log_level))
     matter_version = resolve_matter_version(args.matter_version)
+    
+    # If only version resolution is requested, print and exit
+    if args.version_only:
+        print(matter_version)
+        sys.exit(0)  # Explicit success exit code
+    
     # Flatten comma-separated patterns
     exclude_patterns = []
     for entry in args.exclude:
