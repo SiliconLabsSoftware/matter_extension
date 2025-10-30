@@ -13,7 +13,6 @@ Examples:
 
 Options:
     --skip_gen              Skip the `slc generate` step (assumes project previously generated).
-    --sisdk <path>          Override SISDK root (defaults to third_party/simplicity_sdk).
     --output_suffix <sfx>   Append a suffix to the output directory name.
     --jobs / -j <N>         Parallel build jobs for make (default 13).
     --rebuild_app           Clean and rebuild only the application components.
@@ -29,11 +28,9 @@ Options:
     -n / --dry_run          Print the steps without executing build/generate/make.
 
 Backward compatibility positional inference:
-    For older invocations that supplied a SISDK path or output suffix *without* flags:
-        build.py <app> <board> /path/to/sisdk customsuffix --skip_gen
-    The first non-dash argument after <board> that is an existing directory and looks like a SDK
-    (contains 'simplicity' or 'sdk' or has a 'extension' subdir) will be treated as --sisdk.
-    The next non-dash bare token (not containing ':' and not recognized as config) becomes --output_suffix.
+    For older invocations that supplied an output suffix *without* flags:
+        build.py <app> <board> customsuffix --skip_gen
+    The first non-dash bare token (not containing ':' and not recognized as config) becomes --output_suffix.
     All remaining tokens are forwarded to slc generate as configuration args.
 
 All remaining unrecognized arguments are forwarded verbatim to the slc generate command
@@ -281,7 +278,6 @@ def parse_args():
 Optional Arguments:
   -h, --help            Show this help message and exit
   --skip_gen            Skip the 'slc generate' step (assumes project previously generated)
-  --sisdk <path>        Override SISDK root (defaults to third_party/simplicity_sdk)
   --output_suffix <sfx> Append a suffix to the output directory name
   --jobs, -j <N>        Parallel build jobs for make (default: 13)
   --rebuild_app         Clean and rebuild only the application components
@@ -352,13 +348,13 @@ All remaining unrecognized arguments are forwarded to the slc generate command.
     return known
 
 
-KNOWN_FLAGS = {"--skip_gen", "--sisdk", "--output_suffix", "--jobs", "-j", "-v", "--verbose", "-n", "--dry_run", "--rebuild_app", "--rebuild_stack", "--rebuild_all", "--ci", "--with", "--cmake", "--enable_editable", "--disable_editable", "--editable_status", "--with_app", "--without_app", "--with_bootloader", "--without_bootloader"}
+KNOWN_FLAGS = {"--skip_gen", "--output_suffix", "--jobs", "-j", "-v", "--verbose", "-n", "--dry_run", "--rebuild_app", "--rebuild_stack", "--rebuild_all", "--ci", "--with", "--cmake", "--enable_editable", "--disable_editable", "--editable_status", "--with_app", "--without_app", "--with_bootloader", "--without_bootloader"}
 
 
 def classify_extra_args(raw_extras):
     """Extract our known flags while preserving unknown config args list.
 
-    Returns dict with keys: skip_gen(bool), sisdk(str|None), output_suffix(str|None),
+    Returns dict with keys: skip_gen(bool), output_suffix(str|None),
     jobs(int), verbose(bool), dry_run(bool), rebuild_app(bool), rebuild_stack(bool), 
     rebuild_all(bool), ci(bool), with_options(str|None), cmake(bool), enable_editable(bool), 
     disable_editable(bool), editable_status(bool), with_app_components(str|None), 
@@ -366,7 +362,6 @@ def classify_extra_args(raw_extras):
     without_bootloader_components(str|None), config_args(list[str]).
     """
     skip_gen = False
-    sisdk = None
     output_suffix = None
     jobs = 13
     verbose = False
@@ -386,9 +381,8 @@ def classify_extra_args(raw_extras):
     without_bootloader_components = None
     config_args = []
     i = 0
-    # Pass 0: optional positional inference for sisdk and output suffix.
-    # Only attempt if corresponding explicit flags not already present.
-    inferred_sisdk = False
+    # Pass 0: optional positional inference for output suffix.
+    # Only attempt if corresponding explicit flag not already present.
     inferred_suffix = False
     if raw_extras:
         scan_indices = []
@@ -398,27 +392,11 @@ def classify_extra_args(raw_extras):
             scan_indices.append(idx)
         for idx in scan_indices:
             tok = raw_extras[idx]
-            if sisdk is None and not inferred_sisdk:
-                # Candidate sisdk path
-                if os.path.isdir(tok):
-                    # Heuristic: directory hint contains typical sdk markers
-                    markers = ['simplicity', 'sdk', 'extension']
-                    try:
-                        listing = os.listdir(tok)
-                    except Exception:
-                        listing = []
-                    if any(m in tok.lower() for m in markers) or any(m in ' '.join(listing).lower() for m in markers):
-                        sisdk = tok
-                        inferred_sisdk = True
-                        logger.debug("(compat) Inferred --sisdk=%s", sisdk)
-                        continue
             if output_suffix is None and not inferred_suffix and not tok.startswith('-') and ':' not in tok:
                 # Avoid taking a likely configuration argument (heuristic: contains '=' or ':')
-                if tok != sisdk:  # don't reuse sisdk path
-                    output_suffix = tok
-                    inferred_suffix = True
-                    logger.debug("(compat) Inferred --output_suffix=%s", output_suffix)
-            if inferred_sisdk and inferred_suffix:
+                output_suffix = tok
+                inferred_suffix = True
+                logger.debug("(compat) Inferred --output_suffix=%s", output_suffix)
                 break
 
     while i < len(raw_extras):
@@ -426,11 +404,6 @@ def classify_extra_args(raw_extras):
         if token == "--skip_gen":
             skip_gen = True
             i += 1
-        elif token == "--sisdk":
-            if i + 1 >= len(raw_extras):
-                sys.exit("--sisdk requires a path argument")
-            sisdk = raw_extras[i + 1]
-            i += 2
         elif token == "--output_suffix":
             if i + 1 >= len(raw_extras):
                 sys.exit("--output_suffix requires a value")
@@ -510,8 +483,6 @@ def classify_extra_args(raw_extras):
             without_bootloader_components = token[len("--without_bootloader "):]
             i += 1
         # Skip tokens already consumed by positional inference (do not double-add)
-        elif inferred_sisdk and token == sisdk:
-            i += 1
         elif inferred_suffix and token == output_suffix:
             i += 1
         else:
@@ -527,7 +498,7 @@ def classify_extra_args(raw_extras):
         # Warning will be logged later after logging is configured
         enable_editable = False
     
-    return dict(skip_gen=skip_gen, sisdk=sisdk, output_suffix=output_suffix,
+    return dict(skip_gen=skip_gen, output_suffix=output_suffix,
                 jobs=jobs, verbose=verbose, dry_run=dry_run, rebuild_app=rebuild_app, 
                 rebuild_stack=rebuild_stack, rebuild_all=rebuild_all, ci=ci, with_options=with_options, cmake=cmake, 
                 enable_editable=enable_editable, disable_editable=disable_editable, editable_status=editable_status, 
@@ -688,185 +659,192 @@ def main():
         if not args.app_path or args.app_path == 'dummy':
             return
     
-    logger.info("slt update --self")
-    if not flags['dry_run']:
-        run(["slt", "update", "--self"], verbose=flags['verbose'])
-
-    app_path = Path(args.app_path)
-    if not app_path.exists():
-        logger.error("Application path not found: %s", app_path)
-        sys.exit(1)
-
-    silabs_app, make_file, project_flag, app_name = detect_project(app_path, flags)
-    output_dir = derive_output_dir(args.board, silabs_app, app_path, flags['output_suffix'])
-
-    # Initial pre-steps (mimic original script top lines)
-    env = os.environ.copy()
-
-    # Handle rebuild options
-    if flags['rebuild_all']:
-        logger.info("Rebuilding all packages (app and stack)...")
-        logger.debug("Removing all matter packages...")
-        clean_cmd = ["make", "remove_all_matter_packages", "-f", "Makefile"]
-        if flags['dry_run']:
-            logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_cmd))
-        else:
-            run(clean_cmd, env=env, verbose=flags['verbose'])
-
-    if flags['rebuild_app'] or flags['rebuild_all']:
-        logger.info("Rebuilding application components...")
-        clean_app_cmd = ["make", "create_app_package", "-f", "Makefile"]
-        if flags['dry_run']:
-            logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_app_cmd))
-        else:
-            run(clean_app_cmd, env=env, verbose=flags['verbose'], check=False)  # May not exist in all makefiles
-
-    if flags['rebuild_stack'] or flags['rebuild_all']:
-        logger.info("Rebuilding stack components...")
-        clean_stack_cmd = ["make", "create_stack_package", "-f", "Makefile"]
-        if flags['dry_run']:
-            logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_stack_cmd))
-        else:
-            run(clean_stack_cmd, env=env, verbose=flags['verbose'], check=False)  # May not exist in all makefiles
-
-    if flags['ci']:
-        logger.info("make install_app_package")
-        install_app_command = ["make", "install_app_package"]
-        proc = run(install_app_command, capture=True, verbose=flags['verbose'])
-        where_matter_app_command = ["slt", "where", "matter_app"]
-        proc = run(where_matter_app_command, capture=True, verbose=flags['verbose'])
-        sample_app_path = (proc.stdout).strip()
-        logger.info("Sample app path: %s", sample_app_path)
-        # Change directory to sample app path
-        try:
-            os.chdir(sample_app_path)
-        except FileNotFoundError:
-            logger.error("Cannot cd to sample app path: %s", sample_app_path)
-            sys.exit(1)
-    else:
-        sample_app_path = str(matter_root)
-
-    # Determine GSDK root
-    gsdk_root = flags['sisdk'] or str(matter_root / ' App dir = ' / 'simplicity_sdk')
-    logger.debug("current path = %s", os.getcwd())
-    app_dir = app_path.parent
-    os.chdir(app_dir)
-    if not flags['ci']:
-        logger.debug("current working directory %s",os.getcwd())
-        run(["slt", "install"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
-        logger.debug("Done slt install")
-    else:
-        # slt install within the project directory of app_path
-        logger.debug("App dir = %s", app_dir)
+    # Wrap main build logic in try-finally to ensure disable_editable always runs
+    try:
+        logger.info("slt update --self")
         if not flags['dry_run']:
-            logger.debug("Running SLT install...")
-            run(["slt", "install"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
+            run(["slt", "update", "--self"], verbose=flags['verbose'])
+
+        app_path = Path(args.app_path)
+        if not app_path.exists():
+            logger.error("Application path not found: %s", app_path)
+            sys.exit(1)
+
+        silabs_app, make_file, project_flag, app_name = detect_project(app_path, flags)
+        output_dir = derive_output_dir(args.board, silabs_app, app_path, flags['output_suffix'])
+
+        # Initial pre-steps (mimic original script top lines)
+        env = os.environ.copy()
+
+        # Handle rebuild options
+        if flags['rebuild_all']:
+            logger.info("Rebuilding all packages (app and stack)...")
+            logger.debug("Removing all matter packages...")
+            clean_cmd = ["make", "remove_all_matter_packages", "-f", "Makefile"]
+            if flags['dry_run']:
+                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_cmd))
+            else:
+                run(clean_cmd, env=env, verbose=flags['verbose'])
+
+        if flags['rebuild_app'] or flags['rebuild_all']:
+            logger.info("Rebuilding application components...")
+            clean_app_cmd = ["make", "create_app_package", "-f", "Makefile"]
+            if flags['dry_run']:
+                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_app_cmd))
+            else:
+                run(clean_app_cmd, env=env, verbose=flags['verbose'], check=False)  # May not exist in all makefiles
+
+        if flags['rebuild_stack'] or flags['rebuild_all']:
+            logger.info("Rebuilding stack components...")
+            clean_stack_cmd = ["make", "create_stack_package", "-f", "Makefile"]
+            if flags['dry_run']:
+                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_stack_cmd))
+            else:
+                run(clean_stack_cmd, env=env, verbose=flags['verbose'], check=False)  # May not exist in all makefiles
+
+        if flags['ci']:
+            logger.info("make install_app_package")
+            install_app_command = ["make", "install_app_package"]
+            proc = run(install_app_command, capture=True, verbose=flags['verbose'])
+            where_matter_app_command = ["slt", "where", "matter_app"]
+            proc = run(where_matter_app_command, capture=True, verbose=flags['verbose'])
+            sample_app_path = (proc.stdout).strip()
+            logger.info("Sample app path: %s", sample_app_path)
+            # Change directory to sample app path
+            try:
+                os.chdir(sample_app_path)
+            except FileNotFoundError:
+                logger.error("Cannot cd to sample app path: %s", sample_app_path)
+                sys.exit(1)
         else:
-            logger.info("[DRY-RUN] Would run: slt install in %s", app_dir)
+            sample_app_path = str(matter_root)
 
-    run(["slt", "locate", "matter"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
+        # Determine GSDK root (use default path)
+        logger.debug("current path = %s", os.getcwd())
+        app_dir = app_path.parent
+        os.chdir(app_dir)
+        if not flags['ci']:
+            logger.debug("current working directory %s",os.getcwd())
+            run(["slt", "install"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
+            logger.debug("Done slt install")
+        else:
+            # slt install within the project directory of app_path
+            logger.debug("App dir = %s", app_dir)
+            if not flags['dry_run']:
+                logger.debug("Running SLT install...")
+                run(["slt", "install"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
+            else:
+                logger.info("[DRY-RUN] Would run: slt install in %s", app_dir)
 
-    # Environment (.env or locate tools)
-    read_env_file(matter_root, env, verbose=flags['verbose'])
-    
-    #update out dir to be same as dev dir
-    output_dir = os.path.join(matter_root,str(output_dir))
+        run(["slt", "locate", "matter"], verbose=flags['verbose'], capture=True, ignore_error_patterns=IGNORABLE_ERROR_PATTERNS)
+
+        # Environment (.env or locate tools)
+        read_env_file(matter_root, env, verbose=flags['verbose'])
+        
+        #update out dir to be same as dev dir
+        output_dir = os.path.join(matter_root,str(output_dir))
 
 
-    # slc generate
-    if not flags['skip_gen']:
-        if app_path.suffix == '.slcw':
-            # Handle .slcw solution files - generate bootloader and application separately
-            if "-siwx" not in str(app_path):
-                # Generate bootloader for non-917-soc solutions
-                logger.info("Generating bootloader...")
-                bootloader_with_arg = build_with_arg(args.board, flags['with_bootloader_components'])
-                bootloader_without_arg = build_without_arg(flags['without_bootloader_components'])
+        # slc generate
+        if not flags['skip_gen']:
+            if app_path.suffix == '.slcw':
+                # Handle .slcw solution files - generate bootloader and application separately
+                if "-siwx" not in str(app_path):
+                    # Generate bootloader for non-917-soc solutions
+                    logger.info("Generating bootloader...")
+                    bootloader_with_arg = build_with_arg(args.board, flags['with_bootloader_components'])
+                    bootloader_without_arg = build_without_arg(flags['without_bootloader_components'])
+                    
+                    bootloader_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name)]
+                    bootloader_cmd.extend(bootloader_with_arg)
+                    bootloader_cmd.extend(bootloader_without_arg)
+                    bootloader_cmd.extend(["-pids", "bootloader"])
+                    bootloader_cmd.extend(flags['config_args'])
+                    bootloader_cmd.extend(["--generator-timeout=1800"])
+                    
+                    if flags['dry_run']:
+                        logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in bootloader_cmd))
+                    else:
+                        run(bootloader_cmd, env=env)
+
+                # Generate application for all .slcw files
+                logger.info("Generating application...")
+                app_with_arg = build_with_arg(args.board, flags['with_app_components'])
+                app_without_arg = build_without_arg(flags['without_app_components'])
                 
-                bootloader_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name)]
-                bootloader_cmd.extend(bootloader_with_arg)
-                bootloader_cmd.extend(bootloader_without_arg)
-                bootloader_cmd.extend(["-pids", "bootloader"])
-                bootloader_cmd.extend(flags['config_args'])
-                bootloader_cmd.extend(["--generator-timeout=1800"])
+                app_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name)]
+                app_cmd.extend(app_with_arg)
+                app_cmd.extend(app_without_arg)
+                app_cmd.extend(["-pids", "application"])
+                app_cmd.extend(flags['config_args'])
+                app_cmd.extend(["--generator-timeout=1800"])
                 
                 if flags['dry_run']:
-                    logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in bootloader_cmd))
+                    logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in app_cmd))
                 else:
-                    run(bootloader_cmd, env=env)
-
-            # Generate application for all .slcw files
-            logger.info("Generating application...")
-            app_with_arg = build_with_arg(args.board, flags['with_app_components'])
-            app_without_arg = build_without_arg(flags['without_app_components'])
-            
-            app_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name)]
-            app_cmd.extend(app_with_arg)
-            app_cmd.extend(app_without_arg)
-            app_cmd.extend(["-pids", "application"])
-            app_cmd.extend(flags['config_args'])
-            app_cmd.extend(["--generator-timeout=1800"])
-            
-            if flags['dry_run']:
-                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in app_cmd))
+                    run(app_cmd, env=env)
             else:
-                run(app_cmd, env=env)
+                # Handle .slcp project files - single generation step
+                # Construct board argument with optional --with options
+                # Merge board with --with options using comma separation
+                if flags['with_options']:
+                    board_arg = f"{args.board},{flags['with_options']}"
+                else:
+                    board_arg = args.board
+
+                # Choose generator based on --cmake flag
+                generator = "cmake" if flags['cmake'] else "makefile"
+                logger.info("Output dir = %s", output_dir)
+                logger.info("App name = %s", app_name)
+                gen_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name), "--with", board_arg]
+                gen_cmd.extend(flags['config_args'])
+                gen_cmd.extend(["--generator-timeout=2000", "-o", generator])
+                logger.info("Generating project files using %s generator...", generator)
+                logger.debug("Current Dir = %s", os.getcwd())
+                if flags['dry_run']:
+                    logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in gen_cmd))
+                else:
+                    # Always stream slc generate output so logs are visible regardless of --verbose
+                    run(gen_cmd, env=env)
         else:
-            # Handle .slcp project files - single generation step
-            # Construct board argument with optional --with options
-            # Merge board with --with options using comma separation
-            if flags['with_options']:
-                board_arg = f"{args.board},{flags['with_options']}"
-            else:
-                board_arg = args.board
+            logger.info("Skipping generation step (--skip_gen)")
 
-            # Choose generator based on --cmake flag
-            generator = "cmake" if flags['cmake'] else "makefile"
-            logger.info("Output dir = %s", output_dir)
-            logger.info("App name = %s", app_name)
-            gen_cmd = ["slc", "generate", "-d", output_dir, project_flag, str(app_name), "--with", board_arg]
-            gen_cmd.extend(flags['config_args'])
-            gen_cmd.extend(["--generator-timeout=2000", "-o", generator])
-            logger.info("Generating project files using %s generator...", generator)
-            logger.debug("Current Dir = %s", os.getcwd())
+        # Build step - choose between make and cmake
+        if flags['cmake']:
+            # Use cmake build with preset
+            cmake_presets_path = os.path.join(output_dir,"cmake_gcc")
+            os.chdir(cmake_presets_path)
+            cmake_cmd = ["cmake", "--workflow", "--preset", "project"]
+            logger.info("Building via cmake with preset...")
+            logger.debug("CMake presets path: %s", cmake_presets_path)
+            
             if flags['dry_run']:
-                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in gen_cmd))
+                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in cmake_cmd))
             else:
-                # Always stream slc generate output so logs are visible regardless of --verbose
-                run(gen_cmd, env=env)
-    else:
-        logger.info("Skipping generation step (--skip_gen)")
-
-    # Build step - choose between make and cmake
-    if flags['cmake']:
-        # Use cmake build with preset
-        cmake_presets_path = os.path.join(output_dir,"cmake_gcc")
-        os.chdir(cmake_presets_path)
-        cmake_cmd = ["cmake", "--workflow", "--preset", "project"]
-        logger.info("Building via cmake with preset...")
-        logger.debug("CMake presets path: %s", cmake_presets_path)
+                # Always stream cmake output
+                run(cmake_cmd, env=env, verbose=True)
+        else:
+            # Use make build
+            make_cmd = ["make", "all", "-C", str(output_dir), "-f", make_file, f"-j{flags['jobs']}"]    
+            logger.info("Building via make...")
+            if flags['dry_run']:
+                logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in make_cmd))
+            else:
+                # Always stream make output
+                run(make_cmd, env=env, verbose=True)
         
-        if flags['dry_run']:
-            logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in cmake_cmd))
-        else:
-            # Always stream cmake output
-            run(cmake_cmd, env=env, verbose=True)
-    else:
-        # Use make build
-        make_cmd = ["make", "all", "-C", str(output_dir), "-f", make_file, f"-j{flags['jobs']}"]    
-        logger.info("Building via make...")
-        if flags['dry_run']:
-            logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in make_cmd))
-        else:
-            # Always stream make output
-            run(make_cmd, env=env, verbose=True)
-    
-    # Return to matter root
-    logger.debug("Changing dir to Matter Root = %s", matter_root)
-    os.chdir(matter_root)
-    if not flags['ci']:
-        run(["make", "disable_editable"])
-    logger.info("Build complete.")
+        logger.info("Build complete.")
+        
+    finally:
+        # Always ensure we return to matter root and disable editable mode (except in CI)
+        logger.debug("Changing dir to Matter Root = %s", matter_root)
+        os.chdir(matter_root)
+        if not flags['ci']:
+            try:
+                run(["make", "disable_editable"])
+                logger.debug("Disabled editable mode")
+            except Exception as e:
+                logger.warning("Failed to disable editable mode: %s", e)
 
 if __name__ == '__main__':
     try:
