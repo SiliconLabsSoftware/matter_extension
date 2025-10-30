@@ -64,30 +64,36 @@ class MatterEditableManager:
         self.package_reference = f"{self.package_name}/{self.package_version}@silabs"
 
     def _resolve_package_version(self) -> str:
-        """Resolve the Matter package version from version file.
+        """Resolve the Matter package version using generate_pkg_slt.py script.
 
-        Priority:
-          1. <workspace_root>/slc/script/matter_package_version
-          2. <this_script_dir>/script/matter_package_version
-        Falls back to '0.0.0-dev' if not found or empty.
+        Uses: python3 slc/script/generate_pkg_slt.py --version-only
+        Raises SystemExit if script fails or is not found.
         """
-        candidates = [
-            self.workspace_root / "slc" / "script" / "matter_package_version",
-            Path(__file__).resolve().parent / "script" / "matter_package_version",
-        ]
-        for path in candidates:
-            try:
-                if path.is_file():
-                    content = path.read_text(encoding="utf-8").strip()
-                    if content:
-                        logger.debug("Resolved Matter package version '%s' from %s", content, path)
-                        return content
-                    else:
-                        logger.warning("Version file %s is empty", path)
-            except Exception as e:
-                logger.debug("Failed reading version file %s: %s", path, e)
-        logger.warning("Matter package version file not found; defaulting to 0.0.0-dev")
-        return "0.0.0-dev"
+        script_path = self.workspace_root / "slc" / "script" / "generate_pkg_slt.py"
+        
+        if not script_path.is_file():
+            logger.error("generate_pkg_slt.py script not found at %s", script_path)
+            sys.exit(1)
+        
+        try:
+            result = subprocess.run(
+                ["python3", str(script_path), "--version-only"],
+                capture_output=True,
+                text=True,
+                cwd=self.workspace_root,
+                check=False
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                version = result.stdout.strip()
+                logger.debug("Resolved Matter package version '%s' from generate_pkg_slt.py", version)
+                return version
+            else:
+                error_msg = result.stderr.strip() if result.stderr else "no error output"
+                logger.error("generate_pkg_slt.py script failed: %s", error_msg)
+                sys.exit(1)
+        except Exception as e:
+            logger.error("Failed running generate_pkg_slt.py script: %s", e)
+            sys.exit(1)
     
     def run_conan_command(self, command: list) -> bool:
         """Run a conan command and return success status"""
