@@ -203,7 +203,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
             if slce_data and "version" in slce_data:
                 version = str(slce_data["version"]).strip()
                 if version:
-                    version = version+"-0.dev"
+                    version = version + "-0.dev"
                     logger.debug("Matter version read from matter.slce: %s", version)
                     return version
                 else:
