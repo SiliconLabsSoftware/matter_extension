@@ -287,8 +287,9 @@ def main():
     parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
-    parser.add_argument("--update-sample-app-pkg", "-s", default=True,
-                        help="Update sample_app_pkg.slt")
+    parser.add_argument("--update-sample-app-pkg", "-s", type=lambda x: x.lower() in ('true', '1', 'yes', 'on'), 
+                        default=True, metavar="BOOL",
+                        help="Update sample_app_pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
     args = parser.parse_args()
 
     # Configure logging once here so all helper functions share configuration
