@@ -48,7 +48,7 @@ jobs:
             - name: Setup Conan remotes
               id: add-conan-remotes
               run: |
-                make install_download_remotes
+                make install_remotes
                 conan remote list
             
             - name: Update SLT
@@ -81,11 +81,10 @@ jobs:
             - name: Install GCC, CMAKE, commander
               id: setup-conan
               run: |
-                    conan config show "*"
-                    slt update  --self
-                    slt install commander
-                    slt install gcc-arm-none-eabi --engine conan
-                    slt install cmake --engine conan 
+                conan config show "*"
+                slt install commander
+                slt install gcc-arm-none-eabi --engine conan
+                slt install cmake --engine conan 
             
             - name: Create Matter app package
               run: make create_app_package

@@ -42,7 +42,7 @@ jobs:
       - name: Setup Conan remotes
         id: add-conan-remotes
         run: |
-          make install_download_remotes
+          make install_remotes
           conan remote list
       
       - name: set variables

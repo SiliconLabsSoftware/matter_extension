@@ -4,7 +4,7 @@
 	package_version \
 	install_app_package \
 	install_stack_package \
-	install_download_remotes \
+	install_remotes \
 	update_slce_extra \
 	generate_pkg_slt \
 	generate_pkg_slt_common \
@@ -86,7 +86,7 @@ install_stack_package: package_version ## Install the stack package
 	@echo "Installing stack package from packages/matter/pkg.slt..."
 	slt install -f packages/matter/pkg.slt
 
-install_download_remotes: ## Install the remotes
+install_remotes: ## Install the remotes
 	@echo "Installing remotes from packages/remotes.json"
 	conan config install -t file packages/remotes.json
 
