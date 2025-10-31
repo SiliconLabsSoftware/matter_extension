@@ -30,8 +30,8 @@ PLATFORM HEURISTICS (when --common is NOT used)
     Matter dependency plus any dependencies in the 'common' group.
 
 SAMPLE APP PACKAGE
-    By default (--update-sample-app-pkg True), also generates 'sample_app_pkg.slt' 
-    in the current working directory, pointing at 'matter_app' rather than 'matter'.
+    By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt' 
+    in the packages/matter_app directory, pointing at 'matter_app' rather than 'matter'.
     Disable with --update-sample-app-pkg False.
 
 VERSION-ONLY MODE
@@ -64,7 +64,7 @@ ARGUMENT SUMMARY
     --matter-version              Override Matter version (else read from matter.slce)
     --version-only                Only resolve and print Matter version, then exit
     --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
-    --update-sample-app-pkg, -s   Generate sample_app_pkg.slt (default: True)
+    --update-sample-app-pkg, -s   Generate packages/matter_app/pkg.slt (default: True)
 
 EXIT CODES
     0 on success; 1 if the Matter version cannot be resolved.
@@ -151,7 +151,7 @@ version = "0"
  
 [dependency]
 # Get a specific version of the package
-matter = {{ version = "{matter_version}", installer ="conan"}}
+matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
 """
 
     def merged_lines(group_name: str) -> str:
@@ -169,7 +169,7 @@ matter = {{ version = "{matter_version}", installer ="conan"}}
         for name, ver in merged.items():
             if name == "matter":
                 continue
-            lines.append(f"{name} = {{ version = \"{ver}\", installer =\"conan\"}}\n")
+            lines.append(f"{name} = {{ version = \"{ver}\", installer =\"conan\", prerelease=true }}\n")
         return "".join(lines)
 
     thread_block = merged_lines("thread")
@@ -203,7 +203,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
             if slce_data and "version" in slce_data:
                 version = str(slce_data["version"]).strip()
                 if version:
-                    version = version + "-0.dev"
+                    version = version+"-0.dev"
                     logger.debug("Matter version read from matter.slce: %s", version)
                     return version
                 else:
@@ -216,20 +216,19 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
     logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter.slce has a valid version field.")
     sys.exit(1)
 
-def generate_sample_app_pkg_slt(verbose, matter_version, exclude_patterns):
-    logger.info(f"Generating sample_app_pkg.slt for Matter version: {matter_version}")
-    pkg_slt_path = "sample_app_pkg.slt"
+def generate_pkg_slt(verbose, pkg_slt_path, stack, matter_version, exclude_patterns):
+    logger.info(f"Generating {pkg_slt_path} for Matter version: {matter_version}")
     pkg_slt_content = f"""# Version defaults to "0" if not defined
 version = "0"
  
  
 [dependency]
 # Get a specific version of the package
-matter_app = {{ version = "{matter_version}", installer ="conan"}}
+{stack} = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
 """
     with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
         pkg_slt_file.write(pkg_slt_content)
-    logger.debug(f"Generated sample_app_pkg.slt in: {pkg_slt_path}")
+    logger.debug(f"Generated {pkg_slt_path}")
 
 def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
     logger.info(f"Using Matter package version: {matter_version}")
@@ -289,7 +288,10 @@ def main():
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     parser.add_argument("--update-sample-app-pkg", "-s", type=lambda x: x.lower() in ('true', '1', 'yes', 'on'), 
                         default=True, metavar="BOOL",
-                        help="Update sample_app_pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
+                        help="Update packages/matter_app/pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
+    parser.add_argument("--update-stack-pkg", "-k", type=lambda x: x.lower() in ('true', '1', 'yes', 'on'), 
+                        default=True, metavar="BOOL",
+                        help="Update packages/matter/pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
     args = parser.parse_args()
 
     # Configure logging once here so all helper functions share configuration
@@ -315,8 +317,9 @@ def main():
         logger.debug(f"Exclude patterns: {exclude_patterns}")
     generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
     if args.update_sample_app_pkg:
-        generate_sample_app_pkg_slt(args.verbose, matter_version, exclude_patterns)
-
+        generate_pkg_slt(args.verbose, 'packages/matter_app/pkg.slt', 'matter_app', matter_version, exclude_patterns)
+    if args.update_stack_pkg:
+        generate_pkg_slt(args.verbose, 'packages/matter/pkg.slt', 'matter', matter_version, exclude_patterns)
 
 if __name__ == "__main__":
     main()
