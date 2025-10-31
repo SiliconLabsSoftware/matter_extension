@@ -1,47 +1,48 @@
 {
     "standard": {
+
         "default": [
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],               
+                "boards": ["brd4338a"],               
                 "arguments": [""]
             },
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'"],               
+                "boards": ["brd4338a"],               
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "platform-app": [
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core'"] 
             }
         ]
     },
     "full": {
         "default": [
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],
+                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a","brd2911a"],
                 "arguments": [""]
             },
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd2605a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd2708a;wiseconnect3_sdk'","'brd2911a;wiseconnect3_sdk'"],
+                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a","brd2911a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "platform-app": [
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             }
         ]
     },
     "custom-sqa": {
         "lock-app" :[
             {
-                "boards": ["'brd4338a;wiseconnect3_sdk'"],
+                "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ]
     } 

@@ -1,7 +1,7 @@
 name: Build SQA apps
 
 on:
-    workflow_dispatch:
+    workflow_call:
 
 concurrency:
     group: sqa-build-examples-${{github.ref}}
@@ -32,7 +32,7 @@ jobs:
 
         steps:
             - name: Merge artifacts
-              uses: actions/upload-artifact/merge@v5
+              uses: actions/upload-artifact/merge@v4
               with:
                   name: "sample-apps-custom-sqa"
                   delete-merged: true

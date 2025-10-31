@@ -129,24 +129,24 @@ def main():
             missing_files.append(file_path)
 
         # Trigger VerifyVendorSilabs for additional checks
-        if not verifier.verify_vendor_silabs_file(file_path):
+        if not verifier.verify_file(file_path):
             logger.warning(f"'vendor: silabs' NOT found in: {file_path}")
             missing_vendor_files.append(file_path)
 
-    # Save missing files to files
+    # Save missing files to a file
     if missing_files:
-        write_list_to_file(
-            missing_files,
-            "missing_package_matter.txt",
-            "List of files without 'package: matter' or 'id: matter' saved to {output_file}",
-        )
+        output_file = "missing_package_matter.txt"
+        with open(output_file, 'w') as f:
+            for file_path in missing_files:
+                f.write(file_path + '\n')
+        logger.info(f"List of files without 'package: matter' or 'id: matter' saved to {output_file}")
 
     if missing_vendor_files:
-        write_list_to_file(
-            missing_vendor_files,
-            "missing_vendor_silabs.txt",
-            "List of files without 'vendor: silabs' saved to {output_file}",
-        )
+        output_vendor_file = "missing_vendor_silabs.txt"
+        with open(output_vendor_file, 'w') as f:
+            for file_path in missing_vendor_files:
+                f.write(file_path + '\n')
+        logger.info(f"List of files without 'vendor: silabs' saved to {output_vendor_file}")
 
     if not missing_files and not missing_vendor_files:
         logger.info("All .slcc, .slcp, .slcw, and .slce files contain the required strings.")

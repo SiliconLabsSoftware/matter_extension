@@ -4,4 +4,4 @@ version = "0"
  
 [dependency]
 # Get a specific version of the package
-matter = { version = ">=2.8.0 <2.8.1", installer ="conan", prerelease=true }
+nwp_firmware_siwx91x = { version = "2.15.0", installer ="conan"}

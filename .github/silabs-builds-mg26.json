@@ -1,4 +1,3 @@
-
 {
     "standard": {
         "default": [
@@ -14,13 +13,13 @@
         "platform-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core'"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app 'matter_zigbee_concurrent,matter_zigbee_multiprotocol_common'"]
             }
         ]
     },
@@ -28,34 +27,26 @@
 
         "default": [
             {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
+                "boards": ["brd4116a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light":  [
             {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
-            },
-            {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             }
         ],
         "platform-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app 'matter_icd_core'"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app 'matter_zigbee_concurrent,matter_zigbee_multiprotocol_common'"]
             }
         ]
     } 
