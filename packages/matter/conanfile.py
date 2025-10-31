@@ -22,7 +22,7 @@ class matterRecipe(ConanFile):
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
     url = "https://github.com/SiliconLabsSoftware/matter_extension"
     topics = ("silabs",)
-    python_requires = "silabs_package_assistant/[>=1.0]@silabs"
+    python_requires = "silabs_package_assistant/1.5.1@silabs"
 
     sl_metadata = {
         "slack_channel": "#matter-development",
