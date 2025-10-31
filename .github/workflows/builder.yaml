@@ -34,7 +34,7 @@ jobs:
             
             - name: Setup SLT
               id: setup-action
-              uses: SiliconLabsSoftware/matter_build_action@action/setup-slt
+              uses: SiliconLabsSoftware/matter_build_action/action-setup-slt@action/setup-slt
 
             - name: Check SLT version
               run: |
