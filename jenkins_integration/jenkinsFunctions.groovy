@@ -157,11 +157,9 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             }
                         }
                     }
-                    sh """
-                        apt-get update && apt-get install -y zip || true
-                        zip -j ./reports/test-results-${appName}-${board}.zip ./reports/pytest-report.html ./reports/test_tc*.txt || true
-                    """
-                    archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.zip"
+                    sh "tar -czf ./reports/test-results-${appName}-${board}.tar.gz -C ./reports pytest-report.html test_tc*.txt || true"
+
+                    archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.tar.gz"
                     junit: 'reports/junit_report.xml'
                     if(branchName.startsWith("PR-")){
                         echo "See test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter%20Extension%20GitHub/view/change-requests/job/${BRANCH_NAME}/${BUILD_NUMBER}/"
