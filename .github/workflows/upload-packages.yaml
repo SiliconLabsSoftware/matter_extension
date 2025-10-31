@@ -206,32 +206,6 @@ jobs:
           which arm-none-eabi-gcc && arm-none-eabi-gcc --version || echo "GCC not found"
           which cmake && cmake --version || echo "CMake not found"  
       
-      # Remove all matter packages and regenerate with channel set
-      - name: remove-local-packages
-        run: |
-          make remove_matter_packages
-      
-      - name: get-package-version
-        id: get-package-version
-        uses: SiliconLabsInternal/action-conan-create-publish@main
-        with:
-          conanfile-path: 'packages/matter/conanfile.py'
-          remote-name: ${{ env.REMOTE_NAME }}
-          remote-url: ${{ env.REMOTE_URL }}
-          remote-username:  ${{ secrets.SARTHAK_JF_USERNAME }}
-          remote-token:  ${{ secrets.SARTHAK_JF_TOKEN }}
-          create: false
-          publish: false
-          #package-user: ${{ github.actor }}
-          stack-name: "matter"
-
-      - name: package version update
-        run: |
-          echo "Prerelease Number: ${{ steps.get-package-version.outputs.prerelease-number }}"
-          echo "SL_PRERELEASE_NUMBER=${{ steps.get-package-version.outputs.prerelease-number }}" >> $GITHUB_ENV
-          pip install --upgrade PyYAML
-          make generate_pkg_slt
-      
       - name: Generate common lock file
         ## Expected lockfile output at packages/matter_dependencies.lock
         run: |
