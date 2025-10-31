@@ -22,7 +22,7 @@ concurrency:
 jobs:
 
     set-build-type:
-        runs-on: [silabs-internal, austin]
+        runs-on: ubuntu-latest
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
         steps:

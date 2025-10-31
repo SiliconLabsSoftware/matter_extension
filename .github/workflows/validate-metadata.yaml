@@ -15,7 +15,7 @@ concurrency:
 jobs:
   validate-package-field:
     name: Validate Matter Extension Package Field
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -53,7 +53,7 @@ jobs:
 
   validate-file-path-lengths:
     name: Validate Matter Extension File Path Lengths
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v5
@@ -108,7 +108,7 @@ jobs:
 
   validate-matter-templates:
     name: Validate Matter Templates
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v5
@@ -134,7 +134,7 @@ jobs:
    
   validate-components:
     name: Validate Components
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
     steps:

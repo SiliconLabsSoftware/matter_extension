@@ -16,7 +16,7 @@ env:
 
 jobs:
   package-scripts:
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
       uses: actions/checkout@v5
@@ -100,7 +100,7 @@ jobs:
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
 
   build-sqa-tools:
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
     container:
       image: ghcr.io/project-chip/chip-build-crosscompile:81
 
@@ -161,7 +161,7 @@ jobs:
     
     # copy wifi firmware
   copy-wifi-firmware:
-    runs-on: [silabs-internal, austin]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
