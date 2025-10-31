@@ -204,14 +204,7 @@ jobs:
           echo "PATH: $PATH"
           conan config show "*"
           which arm-none-eabi-gcc && arm-none-eabi-gcc --version || echo "GCC not found"
-          which cmake && cmake --version || echo "CMake not found"  
-      
-      - name: Generate common lock file
-        ## Expected lockfile output at packages/matter_dependencies.lock
-        run: |
-          echo "Generating common lock file"
-          make install_stack_package
-          echo "LOCKFILE_PATH=packages/matter/pkg.lock" >> "$GITHUB_ENV"
+          which cmake && cmake --version || echo "CMake not found"
 
       - name: Publish package
         id: publish-stack-package
@@ -241,7 +234,14 @@ jobs:
           echo "Package ID: ${{ steps.publish-stack-package.outputs.package-id }}"
           echo "Package Revision: ${{ steps.publish-stack-package.outputs.package-revision }}"
           echo "Prerelease Qualifier: ${{ steps.publish-stack-package.outputs.prerelease-qualifier }}"
-          echo "Prerelease Number: ${{ steps.publish-stack-package.outputs.prerelease-number }}"
+          echo "Prerelease Number: ${{ steps.publish-stack-package.outputs.prerelease-number }}"  
+      
+      - name: Generate common lock file
+        ## Expected lockfile output at packages/matter_dependencies.lock
+        run: |
+          echo "Generating common lock file"
+          make install_stack_package
+          echo "LOCKFILE_PATH=packages/matter/pkg.lock" >> "$GITHUB_ENV"
 
       - name: Publish package
         id: publish-app-package
