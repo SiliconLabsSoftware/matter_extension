@@ -157,7 +157,10 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             }
                         }
                     }
-                    sh "zip -j ./reports/test-results-${appName}-${board}.zip ./reports/pytest-report.html ./reports/test_tc*.txt || true"
+                    sh """
+                        apt-get update && apt-get install -y zip || true
+                        zip -j ./reports/test-results-${appName}-${board}.zip ./reports/pytest-report.html ./reports/test_tc*.txt || true
+                    """
                     archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.zip"
                     junit: 'reports/junit_report.xml'
                     if(branchName.startsWith("PR-")){
