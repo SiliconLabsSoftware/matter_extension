@@ -207,9 +207,9 @@ jobs:
           which cmake && cmake --version || echo "CMake not found"  
       
       # Remove all matter packages and regenerate with channel set
-      - name: remove-all-local-packages
+      - name: remove-local-packages
         run: |
-          make remove_all_matter_packages
+          make remove_matter_packages
       
       - name: get-package-version
         id: get-package-version

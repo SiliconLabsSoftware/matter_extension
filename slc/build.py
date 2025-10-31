@@ -680,7 +680,7 @@ def main():
         if flags['rebuild_all']:
             logger.info("Rebuilding all packages (app and stack)...")
             logger.debug("Removing all matter packages...")
-            clean_cmd = ["make", "remove_all_matter_packages", "-f", "Makefile"]
+            clean_cmd = ["make", "remove_matter_packages", "-f", "Makefile"]
             if flags['dry_run']:
                 logger.info("[DRY-RUN] Would run: %s", " ".join(shlex.quote(c) for c in clean_cmd))
             else:

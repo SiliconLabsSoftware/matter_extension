@@ -44,7 +44,7 @@ class matter_appRecipe(ConanFile):
             self.version = silabs_package_assistant.get_version(self.slce_file)
         # if not self.channel:
         #     self.channel = silabs_package_assistant.get_channel()
-        # self.revision_mode = "scm"
+        self.revision_mode = "scm"
         
         self.output.info(f"Resolved context: {self.name}, {self.version}, {self.channel}, {self.user}")
 

@@ -61,7 +61,6 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.  
 - **`slc/scripts/dependency_versions.yaml`** – Used as a single source of truth for dependencies
 - **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package. 
-- **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.  
 
 ---
 

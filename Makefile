@@ -10,7 +10,7 @@
 	generate_pkg_slt_common \
 	upload_app_package \
 	upload_stack_package \
-	remove_all_matter_packages \
+	remove_matter_packages \
 	remove_all_packages \
 	update_version
 	enable_editable \
@@ -60,7 +60,7 @@ editable_status: ## Show whether the local Matter package is in editable mode
 		echo "Status: DISABLED"; \
 	fi
 
-remove_all_matter_packages: ## Remove all local matter packages
+remove_matter_packages: ## Remove all local matter packages
 	@echo "Removing all matter packages"
 	conan remove "mat*" --confirm 
 
@@ -79,11 +79,11 @@ create_app_package: package_version ## Build the app package
 	conan export-pkg packages/matter_app/conanfile.py
 
 install_app_package: package_version ## Install the app package
-	@echo "Installing app package (version $(PACKAGE_VERSION))..."
+	@echo "Installing app package from packages/matter_app/pkg.slt..."
 	slt install -f packages/matter_app/pkg.slt
 
 install_stack_package: package_version ## Install the stack package
-	@echo "Installing stack package (version $(PACKAGE_VERSION))..."
+	@echo "Installing stack package from packages/matter/pkg.slt..."
 	slt install -f packages/matter/pkg.slt
 
 install_download_remotes: ## Install the remotes
