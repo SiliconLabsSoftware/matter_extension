@@ -1,10 +1,13 @@
 name: Build Dev apps
 
 on:
-    push:
+    schedule:
+        - cron: '0 22 * * *' # 6 pm EST daily
+    pull_request:
         branches:
-          - "feature/*"
-        
+            - main
+            - "release_*"
+
     workflow_dispatch:
         inputs:
             build-type:
