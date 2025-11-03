@@ -2,8 +2,12 @@
     "standard": {
         "default": [
             {
-                "boards": [],
+                "boards": ["brd4351a_a02"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
