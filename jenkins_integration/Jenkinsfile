@@ -178,12 +178,7 @@ pipeline
     post {
         failure {
             script {
-                echo "DEBUG: Branch name is: ${env.BRANCH_NAME}"
-                echo "DEBUG: PR number is: ${pr_number}"
-                echo "DEBUG: Checking conditions for Slack notification..."
-                
-                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("task")) ) {
-                    echo "DEBUG: Conditions met, sending Slack notification"
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || true)) {
                     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss UTC", TimeZone.getTimeZone('UTC'))
                     def buildDuration = currentBuild.duration ? "${Math.round(currentBuild.duration / 1000)}s" : "Unknown"
                     def failedStage = currentBuild.description ? currentBuild.description : "Unknown stage"
@@ -191,7 +186,6 @@ pipeline
                     def failureMessage = """🚨 *PIPELINE FAILURE ALERT* 🚨
                     
 *Repository:* Matter Extension
-*Branch:* `${env.BRANCH_NAME}`
 *Build Number:* #${env.BUILD_NUMBER}
 *Status:* ❌ FAILED
 *Duration:* ${buildDuration}
@@ -222,10 +216,6 @@ pipeline
                     slackSend(channel: 'matter-release-build-notifications',
                               color: 'danger',
                               message: failureMessage)
-                } else {
-                    echo "DEBUG: Conditions not met for Slack notification"
-                    echo "DEBUG: Branch check: ${env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("task")}"
-                    echo "DEBUG: PR check: ${!pr_number}"
                 }
             }
         }
