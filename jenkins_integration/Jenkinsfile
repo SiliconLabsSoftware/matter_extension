@@ -18,6 +18,54 @@ def pr_number = ""
 def bypass_send_results_gh = ""
 def formatted_build_number = ""
 
+def sendSlackNotification(String messageType, String status, String summary = "", String color = "") {
+    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
+    def statusEmoji = status == "PASS" ? "✅" : "❌"
+    def alertEmoji = status == "PASS" ? "🎉" : "🚨"
+    
+    def notificationColor = color ?: (status == "PASS" ? "good" : "danger")
+    
+    def message = """${alertEmoji} *${messageType.toUpperCase()}* ${alertEmoji}
+                    
+*Repository:* Matter Extension
+*Branch:* `${env.BRANCH_NAME}`
+*Build Number:* #${env.BUILD_NUMBER}
+*Status:* ${statusEmoji} ${status}
+*Timestamp:* ${currentTime} UTC
+
+📋 *Details:*"""
+    
+    if (commit_sha) {
+        message += "\n• *Commit SHA:* `${commit_sha}`"
+    }
+    if (run_number) {
+        message += "\n• *GitHub Workflow Run:* #${run_number}"
+    }
+    if (workflow_id) {
+        message += "\n• *Workflow ID:* ${workflow_id}"
+    }
+    
+    if (summary && summary.trim()) {
+        message += "\n\n📊 *Summary:*\n${summary}"
+    }
+    
+    message += "\n\n🔗 *Links:*"
+    message += "\n• <${env.BUILD_URL}|Jenkins Build>"
+    message += "\n• <${env.BUILD_URL}console|Console Output>"
+    
+    if (commit_sha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commit_sha}|GitHub Commit>"
+    }
+    
+    if (status == "FAIL") {
+        message += "\n\n⚠️ *Action Required:* Please investigate and resolve the issue."
+    }
+    
+    slackSend(channel: 'matter-release-build-notifications',
+              color: notificationColor,
+              message: message)
+}
+
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
@@ -122,18 +170,10 @@ pipeline
                     }
                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
                         if (sqa_tests_result == "FAIL") {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'danger',
-                                      message: "[FAIL] Sanity tests failed for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\nGitHub Workflow Run Number: ${run_number}\n" +
-                                               "See summary:\n${sqa_tests_summary}\nJenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
                         } else {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'good',
-                                      message: "[PASS] All tests passed successfully for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\n GitHub Workflow Run Number: ${run_number}\n" +
-                                               "Jenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.")
                             echo "All tests passed successfully."
                         }
                     }
@@ -179,42 +219,7 @@ pipeline
         failure {
             script {
                 if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || true)) {
-                    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
-                    def failedStage = currentBuild.description ? currentBuild.description : "Unknown stage"
-                    
-                    def failureMessage = """🚨 *PIPELINE FAILURE ALERT* 🚨
-                    
-*Repository:* Matter Extension
-*Branch:* `${env.BRANCH_NAME}`
-*Build Number:* #${env.BUILD_NUMBER}
-*Status:* ❌ FAILED
-*Timestamp:* ${currentTime} UTC
-
-📋 *Build Details:*"""
-                    
-                    if (commit_sha) {
-                        failureMessage += "\n• *Commit SHA:* `${commit_sha}`"
-                    }
-                    if (run_number) {
-                        failureMessage += "\n• *GitHub Workflow Run:* #${run_number}"
-                    }
-                    if (workflow_id) {
-                        failureMessage += "\n• *Workflow ID:* ${workflow_id}"
-                    }
-                    
-                    failureMessage += "\n\n🔗 *Links:*"
-                    failureMessage += "\n• <${env.BUILD_URL}|Jenkins Build>"
-                    failureMessage += "\n• <${env.BUILD_URL}console|Console Output>"
-                    
-                    if (commit_sha) {
-                        failureMessage += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commit_sha}|GitHub Commit>"
-                    }
-                    
-                    failureMessage += "\n\n⚠️ *Action Required:* Please investigate and resolve the pipeline failure."
-                    
-                    slackSend(channel: 'matter-release-build-notifications',
-                              color: 'danger',
-                              message: failureMessage)
+                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.")
                 }
             }
         }
