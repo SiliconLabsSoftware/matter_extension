@@ -48,6 +48,15 @@
 #   ./slc/build.sh slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw brd4187c --without_bootloader '<component1>,<component2>'
 #       output in: out/brd4187c/thermostat-917-ncp-solution/
 #
+#   -pids option : Allows to build only specific parts of a solution (.slcw) project. If provided for .slcp file, silently ignored.
+#   Valid arguments: 'bootloader' or 'application'
+#   Example bootloader-only build:
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids bootloader
+#       output in: out/brd4187c/lighting-app-solution/ (builds only bootloader)
+#   Example application-only build:
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids application
+#       output in: out/brd4187c/lighting-app-solution/ (builds only application)
+#
 
 # Helper functions to build component arguments
 build_with_arg() {
@@ -162,6 +171,9 @@ WITH_APP_COMPONENTS=""
 WITHOUT_APP_COMPONENTS=""
 WITH_BOOTLOADER_COMPONENTS=""
 WITHOUT_BOOTLOADER_COMPONENTS=""
+PIDS_ARG=""
+GENERATE_BOOTLOADER=true
+GENERATE_APPLICATION=true
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--clean)
@@ -218,6 +230,22 @@ while [ $# -gt 0 ]; do
 		;;
 	--without_bootloader\ *)
 		WITHOUT_BOOTLOADER_COMPONENTS="${1#--without_bootloader }"
+		shift
+		;;
+
+	-pids)
+		PIDS_ARG="$2"
+		if [ "$PIDS_ARG" = "bootloader" ]; then
+			GENERATE_BOOTLOADER=true
+			GENERATE_APPLICATION=false
+		elif [ "$PIDS_ARG" = "application" ]; then
+			GENERATE_BOOTLOADER=false
+			GENERATE_APPLICATION=true
+		else
+			echo "ERROR: Invalid -pids argument: $PIDS_ARG. Must be 'bootloader' or 'application'"
+			exit 1
+		fi
+		shift
 		shift
 		;;
 
@@ -285,7 +313,7 @@ fi
 
 if [ "$skip_gen" = false ]; then
 	if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-		if [[ "$SILABS_APP_PATH" != *-siwx* ]]; then
+		if [[ "$SILABS_APP_PATH" != *-siwx* ]] && [ "$GENERATE_BOOTLOADER" = true ]; then
 			# Get bootloader arguments
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
 			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
@@ -299,15 +327,17 @@ if [ "$skip_gen" = false ]; then
 			fi
 		fi
 
-		# Get application args
-		APP_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
-		APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
+		if [ "$GENERATE_APPLICATION" = true ]; then
+			# Get application args
+			APP_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
+			APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
-		echo "Generating application..."
-		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
-		if [ $? -ne 0 ]; then
-			echo "FAILED TO Generate application for: $SILABS_APP_PATH"
-			exit 1
+			echo "Generating application..."
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
+			if [ $? -ne 0 ]; then
+				echo "FAILED TO Generate application for: $SILABS_APP_PATH"
+				exit 1
+			fi
 		fi
 	else
 		# Generate .slcp projects
@@ -319,4 +349,18 @@ if [ "$skip_gen" = false ]; then
 	fi
 fi
 
-make all -C $OUTPUT_DIR -f $MAKE_FILE -j13
+if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; then
+	# Use bootloader makefile instead of solution makefile
+	echo "Building bootloader only..."
+	make all -C $OUTPUT_DIR/matter-bootloader -f matter-bootloader-storage-external-single.Makefile -j13
+elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; then
+	# Use application makefile instead of solution makefile
+	echo "Building application only..."
+	# Find the application makefile
+	APP_MAKEFILE=$(find $OUTPUT_DIR -mindepth 2 -maxdepth 2 -name "*.Makefile" ! -name "*.solution.Makefile" | head -1)
+	APP_DIR=$(dirname "$APP_MAKEFILE")
+	APP_MAKEFILE_NAME=$(basename "$APP_MAKEFILE")
+	make all -C $APP_DIR -f $APP_MAKEFILE_NAME -j13
+else
+	make all -C $OUTPUT_DIR -f $MAKE_FILE -j13
+fi
