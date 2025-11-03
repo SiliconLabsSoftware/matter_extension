@@ -188,7 +188,6 @@ pipeline
 *Branch:* `${env.BRANCH_NAME}`
 *Build Number:* #${env.BUILD_NUMBER}
 *Status:* ❌ FAILED
-*Duration:* ${buildDuration}
 *Timestamp:* ${currentTime} UTC
 
 📋 *Build Details:*"""
