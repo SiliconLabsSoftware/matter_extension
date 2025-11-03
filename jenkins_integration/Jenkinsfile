@@ -173,4 +173,49 @@ pipeline
             }
        }
     }
+    post {
+        failure {
+            script {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_")) && !pr_number) {
+                    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss UTC", TimeZone.getTimeZone('UTC'))
+                    def buildDuration = currentBuild.duration ? "${Math.round(currentBuild.duration / 1000)}s" : "Unknown"
+                    def failedStage = currentBuild.description ? currentBuild.description : "Unknown stage"
+                    
+                    def failureMessage = """🚨 *PIPELINE FAILURE ALERT* 🚨
+                    
+*Repository:* Matter Extension
+*Build Number:* #${env.BUILD_NUMBER}
+*Status:* ❌ FAILED
+*Duration:* ${buildDuration}
+*Timestamp:* ${currentTime}
+
+📋 *Build Details:*"""
+                    
+                    if (commit_sha) {
+                        failureMessage += "\n• *Commit SHA:* `${commit_sha}`"
+                    }
+                    if (run_number) {
+                        failureMessage += "\n• *GitHub Workflow Run:* #${run_number}"
+                    }
+                    if (workflow_id) {
+                        failureMessage += "\n• *Workflow ID:* ${workflow_id}"
+                    }
+                    
+                    failureMessage += "\n\n🔗 *Links:*"
+                    failureMessage += "\n• <${env.BUILD_URL}|Jenkins Build>"
+                    failureMessage += "\n• <${env.BUILD_URL}console|Console Output>"
+                    
+                    if (commit_sha) {
+                        failureMessage += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commit_sha}|GitHub Commit>"
+                    }
+                    
+                    failureMessage += "\n\n⚠️ *Action Required:* Please investigate and resolve the pipeline failure."
+                    
+                    slackSend(channel: 'matter-release-build-notifications',
+                              color: 'danger',
+                              message: failureMessage)
+                }
+            }
+        }
+    }
 }
