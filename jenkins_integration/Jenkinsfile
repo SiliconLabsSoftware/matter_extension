@@ -35,14 +35,14 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 
 📋 *Details:*"""
     
-    if (commit_sha) {
-        message += "\n• *Commit SHA:* `${commit_sha}`"
+    if (this.commit_sha) {
+        message += "\n• *Commit SHA:* `${this.commit_sha}`"
     }
-    if (run_number) {
-        message += "\n• *GitHub Workflow Run:* #${run_number}"
+    if (this.run_number) {
+        message += "\n• *GitHub Workflow Run:* #${this.run_number}"
     }
-    if (workflow_id) {
-        message += "\n• *Workflow ID:* ${workflow_id}"
+    if (this.workflow_id) {
+        message += "\n• *Workflow ID:* ${this.workflow_id}"
     }
     
     if (summary && summary.trim()) {
@@ -53,8 +53,8 @@ def sendSlackNotification(String messageType, String status, String summary = ""
     message += "\n• <${env.BUILD_URL}|Jenkins Build>"
     message += "\n• <${env.BUILD_URL}console|Console Output>"
     
-    if (commit_sha) {
-        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commit_sha}|GitHub Commit>"
+    if (this.commit_sha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${this.commit_sha}|GitHub Commit>"
     }
     
     if (status == "FAIL") {
