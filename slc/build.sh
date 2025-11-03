@@ -236,11 +236,9 @@ while [ $# -gt 0 ]; do
 	-pids)
 		PIDS_ARG="$2"
 		if [ "$PIDS_ARG" = "bootloader" ]; then
-			GENERATE_BOOTLOADER=true
 			GENERATE_APPLICATION=false
 		elif [ "$PIDS_ARG" = "application" ]; then
 			GENERATE_BOOTLOADER=false
-			GENERATE_APPLICATION=true
 		else
 			echo "ERROR: Invalid -pids argument: $PIDS_ARG. Must be 'bootloader' or 'application'"
 			exit 1
