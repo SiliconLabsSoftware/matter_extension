@@ -1,8 +1,8 @@
 {
  "remotes": [
   {
-   "name": "testing",
-   "url": "https://conan-prerelease.silabs.net",
+   "name": "silabs-conan-production",
+   "url": "https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production",
    "verify_ssl": true
   }
  ]
