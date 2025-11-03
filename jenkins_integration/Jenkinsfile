@@ -22,7 +22,7 @@ pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
     options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
-    stages {
+    stages {vdfdfz vfx
         stage('Initialize') {
             steps {
                 script {
