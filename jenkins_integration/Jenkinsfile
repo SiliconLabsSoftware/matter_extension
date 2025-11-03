@@ -76,8 +76,6 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
-                    //add testing error to test pipeline
-                    error("Testing pipeline failure for Slack notifications")
                 }
             }
         }
