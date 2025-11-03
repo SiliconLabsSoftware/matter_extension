@@ -179,17 +179,18 @@ pipeline
         failure {
             script {
                 if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || true)) {
-                    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss UTC", TimeZone.getTimeZone('UTC'))
+                    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
                     def buildDuration = currentBuild.duration ? "${Math.round(currentBuild.duration / 1000)}s" : "Unknown"
                     def failedStage = currentBuild.description ? currentBuild.description : "Unknown stage"
                     
                     def failureMessage = """🚨 *PIPELINE FAILURE ALERT* 🚨
                     
 *Repository:* Matter Extension
+*Branch:* `${env.BRANCH_NAME}`
 *Build Number:* #${env.BUILD_NUMBER}
 *Status:* ❌ FAILED
 *Duration:* ${buildDuration}
-*Timestamp:* ${currentTime}
+*Timestamp:* ${currentTime} UTC
 
 📋 *Build Details:*"""
                     
