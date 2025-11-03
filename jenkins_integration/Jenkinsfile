@@ -22,12 +22,14 @@ pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
     options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
-    stages {vdfdfz vfx
+    stages {
         stage('Initialize') {
             steps {
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
+                    //add testing error to test pipeline
+                    error("Testing pipeline failure for Slack notifications")
                 }
             }
         }
