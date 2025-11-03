@@ -217,7 +217,7 @@ pipeline
         failure {
             script {
                 if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_"))) {
-                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.", "", commit_sha ?: "", run_number ?: "", workflow_id ?: "")
+                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.", "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
                 }
             }
         }
