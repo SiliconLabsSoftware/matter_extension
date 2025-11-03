@@ -18,7 +18,7 @@ def pr_number = ""
 def bypass_send_results_gh = ""
 def formatted_build_number = ""
 
-def sendSlackNotification(String messageType, String status, String summary = "", String color = "") {
+def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
     def statusEmoji = status == "PASS" ? "✅" : "❌"
     def alertEmoji = status == "PASS" ? "🎉" : "🚨"
@@ -35,14 +35,14 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 
 📋 *Details:*"""
     
-    if (this.commit_sha) {
-        message += "\n• *Commit SHA:* `${this.commit_sha}`"
+    if (commitSha) {
+        message += "\n• *Commit SHA:* `${commitSha}`"
     }
-    if (this.run_number) {
-        message += "\n• *GitHub Workflow Run:* #${this.run_number}"
+    if (runNumber) {
+        message += "\n• *GitHub Workflow Run:* #${runNumber}"
     }
-    if (this.workflow_id) {
-        message += "\n• *Workflow ID:* ${this.workflow_id}"
+    if (workflowId) {
+        message += "\n• *Workflow ID:* ${workflowId}"
     }
     
     if (summary && summary.trim()) {
@@ -53,8 +53,8 @@ def sendSlackNotification(String messageType, String status, String summary = ""
     message += "\n• <${env.BUILD_URL}|Jenkins Build>"
     message += "\n• <${env.BUILD_URL}console|Console Output>"
     
-    if (this.commit_sha) {
-        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${this.commit_sha}|GitHub Commit>"
+    if (commitSha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commitSha}|GitHub Commit>"
     }
     
     if (status == "FAIL") {
@@ -170,10 +170,10 @@ pipeline
                     }
                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
                         if (sqa_tests_result == "FAIL") {
-                            sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary)
+                            sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary, "", commit_sha, run_number, workflow_id)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
                         } else {
-                            sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.")
+                            sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.", "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
                     }
@@ -219,7 +219,7 @@ pipeline
         failure {
             script {
                 if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || true)) {
-                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.")
+                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.", "", commit_sha ?: "", run_number ?: "", workflow_id ?: "")
                 }
             }
         }
