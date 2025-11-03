@@ -176,7 +176,7 @@ pipeline
     post {
         failure {
             script {
-                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_")) && !pr_number) {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("task_"))) {
                     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss UTC", TimeZone.getTimeZone('UTC'))
                     def buildDuration = currentBuild.duration ? "${Math.round(currentBuild.duration / 1000)}s" : "Unknown"
                     def failedStage = currentBuild.description ? currentBuild.description : "Unknown stage"
