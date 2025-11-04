@@ -152,5 +152,39 @@ pipeline
                 }
             }
         }
+        stage('Trigger SQA Smoke Pipeline')
+        {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    pipelineFunctions.trigger_sqa_pipelines("smoke", formatted_build_number)
+                }
+            }
+       }
+       stage('Upload SQA Artifacts') {
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, run_number=run_number)
+                    }
+                }
+            }
+        }
+        stage('Trigger SQA Regression Pipelines') 
+        {
+            when {
+                expression {  env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    pipelineFunctions.trigger_sqa_pipelines("regression", formatted_build_number)
+                }
+            }
+       }
     }
 }
