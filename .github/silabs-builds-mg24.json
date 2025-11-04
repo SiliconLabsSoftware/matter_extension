@@ -105,7 +105,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
@@ -185,7 +185,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
@@ -199,7 +199,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
@@ -213,7 +213,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],

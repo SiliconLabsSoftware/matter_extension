@@ -28,13 +28,13 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix 917-ncp-ota-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix 917-ncp-multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
@@ -48,7 +48,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix 917-ncp-multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
@@ -62,7 +62,7 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix 917-ncp-multi-ota",
                               "'--without matter_ota_support;matter'",
-                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
