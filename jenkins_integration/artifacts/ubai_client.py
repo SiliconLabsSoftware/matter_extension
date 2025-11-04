@@ -41,6 +41,7 @@ def upload_to_ubai(file_path, app_name, target, branch_name, build_number, stack
         print(f"Error uploading {file_path} to UBAI: {e}")
 
 
+# TODO: Need to change or remove this
 def search_file_in_ubai(branch_name, build_number, sqa):
     """
     Check if the final artifact is already uploaded to UBAI.

@@ -67,14 +67,13 @@ def upload_binaries_individually_to_ubai(binaries_folder, branch_name, build_num
         RuntimeError: If upload fails
     """
     _validate_binaries_upload_parameters(binaries_folder, branch_name, build_number)
-    build_type = _extract_build_type(binaries_folder)
-    print(f"Starting individual binary uploads for build type: {build_type}")
+    print(f"Starting individual binary uploads")
     
     try:
         for artifact in os.listdir(binaries_folder):
             artifact_path = os.path.join(binaries_folder, artifact)
             print(f"Processing artifact: {artifact}")
-            _process_individual_artifact(artifact, artifact_path, build_type, branch_name, build_number)
+            _process_individual_artifact(artifact, artifact_path, branch_name, build_number)
         print("Individual binary uploads completed successfully.")
     except Exception as e:
         error_msg = f"Failed to upload individual binaries: {e}"
@@ -283,33 +282,13 @@ def _validate_binaries_upload_parameters(binaries_folder, branch_name, build_num
         raise ValueError("Run number must be a positive integer")
 
 
-def _extract_build_type(binaries_folder):
-    """
-    Extract build type from the binaries folder name.
-    
-    Args:
-        binaries_folder (str): Path to the binaries folder
-        
-    Returns:
-        str: The build type (e.g., 'standard', 'release')
-        
-    Raises:
-        ValueError: If build type cannot be extracted
-    """
-    try:
-        return binaries_folder.split('artifacts-')[1]
-    except (IndexError, AttributeError):
-        raise ValueError(f"Could not extract build type from folder name: {binaries_folder}")
-
-
-def _process_individual_artifact(artifact_name, artifact_path, build_type, branch_name, build_number):
+def _process_individual_artifact(artifact_name, artifact_path, branch_name, build_number):
     """
     Process an individual artifact based on its type.
     
     Args:
         artifact_name (str): Name of the artifact
         artifact_path (str): Path to the artifact
-        build_type (str): Build type (e.g., 'standard', 'release')
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
@@ -325,7 +304,7 @@ def _process_individual_artifact(artifact_name, artifact_path, build_type, branc
         if artifact_name == "WiFi-Firmware":
             _upload_wifi_firmware(artifact_path, branch_name, build_number)
         else:
-            _upload_board_artifacts(artifact_name, artifact_path, build_type, branch_name, build_number)
+            _upload_board_artifacts(artifact_name, artifact_path, branch_name, build_number)
 
 
 def _upload_chip_tool(artifact_path, branch_name, build_number):
@@ -387,14 +366,13 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_num
                 upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, build_number)
 
 
-def _upload_board_artifacts(board_id, board_path, build_type, branch_name, build_number):
+def _upload_board_artifacts(board_id, board_path, branch_name, build_number):
     """
     Upload board-specific artifacts to UBAI.
 
     Args:
         board_id (str): Board identifier
         board_path (str): Path to the board directory
-        build_type (str): Build type
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
@@ -404,10 +382,10 @@ def _upload_board_artifacts(board_id, board_path, build_type, branch_name, build
         app_name_path = os.path.join(board_path, app_name_folder)
         print(f"Sample App Path: {app_name_path}")
         if os.path.isdir(app_name_path):
-            _process_board_app(app_name_folder, app_name_path, board_id_upper, build_type, branch_name, build_number)
+            _process_board_app(app_name_folder, app_name_path, board_id_upper, branch_name, build_number)
 
 
-def _process_board_app(app_name_folder, app_name_path, board_id, build_type, branch_name, build_number):
+def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, build_number):
     """
     Process a board application and upload its artifacts.
 
@@ -415,38 +393,38 @@ def _process_board_app(app_name_folder, app_name_path, board_id, build_type, bra
         app_name_folder (str): Application folder name
         app_name_path (str): Path to the application directory
         board_id (str): Board identifier
-        build_type (str): Build type
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
-    app_info = _determine_app_info(app_name_folder, board_id, build_type)
+    app_info = _determine_app_info(app_name_folder, board_id)
     print(f"Sample App Name: {app_info['app_name']}")
     artifact_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_folder) and os.path.isdir(artifact_folder):
         _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, build_number)
 
 
-def _determine_app_info(app_name_folder, board_id, build_type):
+def _determine_app_info(app_name_folder, board_id):
     """
     Determine application information based on folder name.
 
     Args:
         app_name_folder (str): Application folder name
         board_id (str): Board identifier
-        build_type (str): Build type
 
     Returns:
         dict: Application information containing app_name and cmp_type
     """
     if "series-" in app_name_folder:
-        return {
-            'app_name': f"{board_id}-OpenThread",
-            'cmp_type': ""
-        }
+        app_name = f"{board_id}-OpenThread"
     else:
-        return {
-            'app_name': f"{board_id}-WiFi",
-            'cmp_type': ""
+        app_name = f"{board_id}-WiFi"
+    if app_name_folder.split("solution")[1] is not None:
+        app_name_suffix = app_name_folder.split("solution")[1]
+        if "sequential" in app_name_suffix:
+            app_name_suffix = app_name_suffix.split("sequential")[1]
+        app_name = f"{app_name}{app_name_suffix}"
+    return {
+            'app_name': app_name,
         }
 
 

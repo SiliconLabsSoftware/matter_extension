@@ -30,26 +30,26 @@ pipeline
                 }
             }
         }
-//         stage('Upload Artifacts') {
-//             steps {
-//                 script {
-//                     retry(3) {
-//                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-//                             pipelineFunctions.actionWithRetry {
-//                                 def result = pipelineFunctions.upload_artifacts()
-//                                 commit_sha = result.commit_sha
-//                                 run_number = result.run_number
-//                                 workflow_id = result.workflow_id
-//                                 bypass_send_results_gh = result.bypass_send_results
-//                                 pr_number = result.pr_number
-//                                 echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
-//                                 buildDescription("GitHub Workflow Run Number: ${run_number}")
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
+        stage('Upload Artifacts') {
+            steps {
+                script {
+                    retry(3) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            pipelineFunctions.actionWithRetry {
+                                def result = pipelineFunctions.upload_artifacts()
+                                commit_sha = result.commit_sha
+                                run_number = result.run_number
+                                workflow_id = result.workflow_id
+                                bypass_send_results_gh = result.bypass_send_results
+                                pr_number = result.pr_number
+                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
+                                buildDescription("GitHub Workflow Run Number: ${run_number}")
+                            }
+                        }
+                    }
+                }
+            }
+        }
 //         stage('Execute CI Tests')
 //         {
 //             steps {
@@ -136,17 +136,17 @@ pipeline
 //                 }
 //             }
 //         }
-//         stage('Trigger SQA Smoke Pipeline')
-//         {
-//             when {
-//                 expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-//             }
-//             steps {
-//                 script {
-//                     pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
-//                 }
-//             }
-//        }
+        stage('Trigger SQA Smoke Pipeline')
+        {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
+                }
+            }
+       }
        stage('Upload SQA Artifacts') {
        // Comment out for now
 //             when {
@@ -156,7 +156,7 @@ pipeline
                 script {
                     retry(3) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, run_number=run_number)
+                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha)
                         }
                     }
                 }

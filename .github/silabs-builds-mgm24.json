@@ -40,19 +40,19 @@
         "lighting-app": [
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix ota-v2",
+                "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "lock-app": [
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix ota-v2",
+                "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix ota-v3",
+                "arguments": ["--output_suffix ota-3",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ]

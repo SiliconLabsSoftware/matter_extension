@@ -37,14 +37,14 @@
         "lock-app" :[
             {
                 "boards": ["brd4351a"],
-                "arguments": ["--output_suffix ota-v2",
+                "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "lighting-app": [
             {
                 "boards": ["brd4351a"],
-                "arguments": ["--output_suffix ota-v2",
+                "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
