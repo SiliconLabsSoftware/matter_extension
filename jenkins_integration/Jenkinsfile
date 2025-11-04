@@ -16,7 +16,6 @@ def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
-def formatted_build_number = ""
 
 pipeline
 {
@@ -61,13 +60,12 @@ pipeline
 //                     } else {
 //                         branch_name = env.BRANCH_NAME
 //                     }
-//                     formatted_build_number = "${workflow_id}.${run_number}"
 //                     parallelNodes['MG24 Lighting-App'] = {
 //                         pipelineFunctions.actionWithRetry {
 //                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
 //                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
 //                                 '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
-//                                 branch_name, formatted_build_number)
+//                                 branch_name, env.BUILD_NUMBER)
 //                         }
 //                     }
 //
@@ -75,7 +73,7 @@ pipeline
 //                         pipelineFunctions.actionWithRetry {
 //                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
 //                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
-//                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, formatted_build_number)
+//                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
 //                         }
 //                     }
 //                     parallelNodes['SiMG301 Lighting-App'] = {
@@ -83,7 +81,7 @@ pipeline
 //                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
 //                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
 //                                 '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
-//                                 branch_name, formatted_build_number)
+//                                 branch_name, env.BUILD_NUMBER)
 //                         }
 //                     }
 //
@@ -145,7 +143,7 @@ pipeline
 //             }
 //             steps {
 //                 script {
-//                     pipelineFunctions.trigger_sqa_pipelines("smoke", formatted_build_number)
+//                     pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
 //                 }
 //             }
 //        }
@@ -171,7 +169,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", formatted_build_number)
+                    pipelineFunctions.trigger_sqa_pipelines("regression", env.BUILD_NUMBER)
                 }
             }
        }

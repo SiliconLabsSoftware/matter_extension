@@ -58,18 +58,13 @@
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
                 "arguments": ["--output_suffix 917-soc-lto",
                               "'--with wiseconnect_toolchain_gcc_lto;wiseconnect3_sdk'"]
-            },
-            {
-                "boards": ["'brd4338a;wiseconnect3_sdk'"],
-                "arguments": ["--output_suffix 917-soc-ext-ble",
-                              "'--with matter_gatt_additional_advertising;matter'"]
             }
         ],
         "lock-app" :[
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
                 "arguments": ["--output_suffix 917-soc-ota-v2",
-                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:'2'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["'brd4338a;wiseconnect3_sdk'"],
