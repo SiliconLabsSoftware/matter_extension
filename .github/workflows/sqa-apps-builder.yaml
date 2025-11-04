@@ -1,7 +1,10 @@
 name: Build SQA apps
 
 on:
-    workflow_dispatch:
+  push:
+# workflow_call:
+# workflow_run:
+
 
 concurrency:
     group: sqa-build-examples-${{github.ref}}
@@ -14,26 +17,134 @@ jobs:
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
-            mg24-internal-support: false
-            mgm24-support: false
+            ncp-917-support: true
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
-
+    
+#    build-lighting-app:
+#        name: Build Lighting App
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "lighting-app"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: true
+#            mgm24-internal-support: false
+#            mg26-support: true
+#            mg26-internal-support: true
+#            mgm26-support: false
+#            mgm26-internal-support: true
+#            wifi-soc-support: true
+#            sixg301-support: true
+#
+#    build-window-app:
+#        name: Build Window App
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "window-app"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: true
+#            mg26-support: true
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#            ncp-917-support: true
+#
+#    build-dishwasher-app:
+#        name: Build Dishwasher App
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "dishwasher-app"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-support: true
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#
+#    build-thermostat:
+#        name: Build Thermostat
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "thermostat"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-support: false
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#            ncp-917-support: true
+#
+#    build-light-switch-app:
+#        name: Build Light Switch App
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "light-switch-app"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-support: false
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#
+#    build-multi-sensor-app:
+#        name: Build Multi Sensor App
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "multi-sensor-app"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-support: false
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#
+#    build-zigbee-matter-light:
+#        name: Build Zigbee Matter Light
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "zigbee-matter-light"
+#            build-type: "custom-sqa"
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-support: true
+#            mg26-internal-support: false
+#            mgm26-support: false
+#            mgm26-internal-support: false
+#            sixg301-support: true
 
     merge-apps:
-        name: Merge App Artifacts
+        name: Merge SQA App Artifacts
         runs-on: ubuntu-latest
         needs:
             - build-lock-app
-        if: success()
+#            - build-lighting-app
+#            - build-window-app
+#            - build-dishwasher-app
+#            - build-thermostat
+#            - build-light-switch-app
+#            - build-multi-sensor-app
+#            - build-zigbee-matter-light
+#        if: success()
 
         steps:
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v5
               with:
-                  name: "sample-apps-custom-sqa"
+                  name: "sqa-artifacts"
                   delete-merged: true
                   pattern: "*-custom-sqa"

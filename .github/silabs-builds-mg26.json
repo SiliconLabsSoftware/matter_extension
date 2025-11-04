@@ -58,5 +58,120 @@
                 "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
             }
         ]
+    },
+    "custom-sqa": {
+        "lighting-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v3",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            }
+        ],
+        "window-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            }
+        ],
+        "dishwasher-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix multi-ota-enc",
+                              "'--without matter_ota_support;matter'",
+                              "'--with matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+            }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v2-sequential",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
+                              "'--with matter_zigbee_sequential;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v2-concurrent",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
+                              "'--with matter_zigbee_concurrent;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v3-sequential",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
+                              "'--with matter_zigbee_sequential;matter'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix ota-v3-concurrent",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
+                              "'--with matter_zigbee_concurrent;matter'"]
+            },
+
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix high-bw-phy",
+                              "'--with zigbee_high_datarate_phy,matter_zigbee_concurrent;matter'"]
+            }
+        ]
     } 
 }

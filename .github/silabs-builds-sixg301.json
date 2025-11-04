@@ -54,5 +54,33 @@
                 "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
             }
         ]
+    },
+    "custom-sqa": {
+        "lighting-app": [
+            {
+                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix ota-v2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix ota-v2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "zigbee-matter-light":  [
+              {
+                  "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                  "arguments": ["--output_suffix sequential-ota-v2","'--with matter_zigbee_sequential;matter'",
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+              },
+              {
+                  "boards": ["brd1019a", "brd2719a","brd4407a", "brd4408a"],
+                  "arguments": ["--output_suffix cmp-concurrent-ota-v2","'--with matter_zigbee_concurrent;matter'",
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+              }
+          ]
     }
 }
