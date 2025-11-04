@@ -35,7 +35,7 @@ pipeline
         stage('Create and Upload Package')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" }
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" || true }
             }
             steps {
                 script {
