@@ -1,0 +1,14 @@
+# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+openthread =  { version = ">=3.0.0 <3.0.1", installer ="conan", prerelease = true}
+bluetooth_le_host =  { version = ">=11.0.0 <11.0.1", installer ="conan", prerelease = true}
+rail_module =  { version = ">=3.0.0 <3.0.1", installer ="conan", prerelease = true}
+multiprotocol =  { version = ">=1.0.0 <1.0.1", installer ="conan", prerelease = true}
+zigbee =  { version = ">=9.0.0 <9.0.1", installer ="conan", prerelease = true}
+platform_nwp_siwx91x =  { version = ">=4.0.0 <4.0.1", installer ="conan", prerelease = true}
+bluetooth_le_siwx91x =  { version = ">=4.0.0 <4.0.1", installer ="conan", prerelease = true}
+lwip =  { version = ">=1.0.0 <1.0.1", installer ="conan", prerelease = true}
