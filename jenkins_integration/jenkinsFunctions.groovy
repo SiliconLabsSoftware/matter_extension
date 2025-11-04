@@ -352,8 +352,8 @@ def create_and_upload_package(Map args = [:]) {
     def DEV_REMOTE_URL            = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev"
     def SQA_REMOTE_NAME           = "matter-conan-sqa"
     def SQA_REMOTE_URL            = "https://artifactory.silabs.net/artifactory/api/conan/matter-conan-sqa"
-    def SILABS_REMOTE_NAME        = "silabs-conan-dev"
-    def SILABS_REMOTE_URL         = "https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-dev"
+    def SILABS_REMOTE_NAME        = "silabs-conan-production"
+    def SILABS_REMOTE_URL         = "https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production"
     def SL_PRERELEASE             = "${REPO_ROOT}/packages/.prerelease"
     def SL_PRERELEASE_NUMBER      = "" // Initialize prerelease number variable
 
