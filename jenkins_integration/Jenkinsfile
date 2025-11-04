@@ -32,19 +32,6 @@ pipeline
                 }
             }
         }
-        stage('Create and Upload Package')
-        {
-            when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" || true }
-            }
-            steps {
-                script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest') {
-                        def result = pipelineFunctions.create_and_upload_package()
-                    }
-                }
-            }
-        }
         stage('Upload Artifacts') {
             steps {
                 script {
@@ -148,6 +135,19 @@ pipeline
                                                "Jenkins Job URL: ${env.BUILD_URL}")
                             echo "All tests passed successfully."
                         }
+                    }
+                }
+            }
+        }
+        stage('Create and Upload Package')
+        {
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" }
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest') {
+                        def result = pipelineFunctions.create_and_upload_package()
                     }
                 }
             }
