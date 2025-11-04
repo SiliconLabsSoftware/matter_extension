@@ -233,7 +233,7 @@ class matterRecipe(ConanFile):
         )
 
     # ------------------------- Helpers -------------------------
-    def _process_slce_extra(self, filename: str = "packages/matter/matter.slce.extra") -> dict:
+    def _process_slce_extra(self, filename: Optional[str] = None) -> dict:
         """Parse matter.slce.extra and collect extra packaging metadata.
 
         Returns a dictionary with keys:
@@ -243,7 +243,10 @@ class matterRecipe(ConanFile):
 
         Missing or malformed YAML gracefully degrades with warnings.
         """
-        filename = os.path.join(self.repo_root, filename)
+        if filename is None:
+            filename = os.path.join(self.repo_root, "packages/matter/matter.slce.extra")
+        else:
+            filename = os.path.join(self.repo_root, filename)
         os.chdir(self.repo_root)
         result = {
             "extra_files_including_descriptor": set(),
