@@ -311,9 +311,9 @@ def executeConanPromoteAction(String stackName, String sourceRemoteUrl, String s
                 uv run --no-dev action-conan-promote \\
                   --package-name \${PACKAGE_NAME} \\
                   --package-version \${PACKAGE_VERSION} \\
-                  --source-remote-name \${SOURCE_REMOTE_NAME} \\
+                  --source-remote \${SOURCE_REMOTE_NAME} \\
                   --source-remote-url \${SOURCE_REMOTE_URL} \\
-                  --destination-remote-name \${DESTINATION_REMOTE_NAME} \\
+                  --destination-remote \${DESTINATION_REMOTE_NAME} \\
                   --destination-remote-url \${DESTINATION_REMOTE_URL} \\
                   --remote-username \${CONAN_REMOTE_USER} \\
                   --remote-token \${CONAN_REMOTE_TOKEN}
