@@ -73,6 +73,11 @@
             },
             {
                 "boards": ["brd4116a"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            },
+            {
+                "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
@@ -82,11 +87,6 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix lto",
-                              "'--with toolchain_gcc_lto'"]
             }
         ],
         "lock-app": [
@@ -97,23 +97,9 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4116a"],
                 "arguments": ["--output_suffix lto",
                               "'--with toolchain_gcc_lto'"]
-            }
-        ],
-        "window-app": [
+            },
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota",
@@ -126,20 +112,7 @@
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
-        ],
-        "dishwasher-app": [
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            }
+        ]
         ],
         "zigbee-matter-light": [
             {

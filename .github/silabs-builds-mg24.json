@@ -103,6 +103,11 @@
             },
             {
                 "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            },
+            {
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
@@ -112,11 +117,6 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix lto",
-                              "'--with toolchain_gcc_lto'"]
             }
         ],
         "lighting-app": [
@@ -129,6 +129,23 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-3",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota",
+                              "'--without_app matter_ota_support;matter'",
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota-enc",
+                              "'--without_app matter_ota_support;matter'",
+                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
         ],
         "light-switch-app": [
@@ -178,48 +195,6 @@
                               "'--with matter_platform_low_power;matter'",
                               "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            }
-        ],
-        "window-app": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            }
-        ],
-        "dishwasher-app": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
-            }
-        ],
-        "thermostat": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
         ]
     }  

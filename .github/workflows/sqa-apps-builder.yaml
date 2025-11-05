@@ -44,6 +44,8 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: false
 
     build-dishwasher-app:
         name: Build Dishwasher App
@@ -57,6 +59,8 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: false
 
     build-thermostat:
         name: Build Thermostat
@@ -72,6 +76,8 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: false
 
     build-light-switch-app:
         name: Build Light Switch App
@@ -86,6 +92,8 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -100,6 +108,8 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
+            sixg301-support: false
 
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
@@ -114,6 +124,7 @@ jobs:
             mg26-internal-support: false
             mgm26-support: false
             mgm26-internal-support: false
+            wifi-soc-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts
