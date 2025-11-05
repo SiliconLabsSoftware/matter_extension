@@ -93,11 +93,11 @@ def _validate_artifact_parameters(workflow_id, branch_name, build_number):
     Raises:
         ValueError: If any parameter is invalid
     """
-    if not workflow_id or workflow_id <= 0:
+    if not workflow_id or int(workflow_id) <= 0:
         raise ValueError("Workflow ID must be a positive integer")
     if not branch_name or not branch_name.strip():
         raise ValueError("Branch name cannot be empty")
-    if not build_number or build_number <= 0:
+    if not build_number or int(build_number) <= 0:
         raise ValueError("Run number must be a positive integer")
 
 
@@ -271,14 +271,11 @@ def _validate_binaries_upload_parameters(binaries_folder, branch_name, build_num
     """
     if not binaries_folder or not os.path.exists(binaries_folder):
         raise ValueError(f"Binaries folder does not exist: {binaries_folder}")
-    
     if not os.path.isdir(binaries_folder):
         raise ValueError(f"Binaries folder must be a directory: {binaries_folder}")
-    
     if not branch_name or not branch_name.strip():
         raise ValueError("Branch name cannot be empty")
-    
-    if not build_number or build_number <= 0:
+    if not build_number or int(build_number) <= 0:
         raise ValueError("Run number must be a positive integer")
 
 
