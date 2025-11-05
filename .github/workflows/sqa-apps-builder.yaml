@@ -7,9 +7,9 @@ on:
       - Build Dev apps
     types:
       - completed
-    branches:
-    # - 'release_*'
-      - 'add_sqa_binaries'
+#    branches:
+#    # - 'release_*'
+#      - 'add_sqa_binaries'
 
 
 concurrency:
