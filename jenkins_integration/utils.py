@@ -34,7 +34,7 @@ def parse_arguments():
     parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
     
     args = parser.parse_args()
-    args.sqa = args.sqa.lower() == 'true'
+    args.sqa = True if args.sqa == 'true' else False
     return args
 
 
