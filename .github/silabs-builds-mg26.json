@@ -112,7 +112,6 @@
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
-        ]
         ],
         "zigbee-matter-light": [
             {
