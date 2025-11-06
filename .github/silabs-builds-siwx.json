@@ -121,6 +121,20 @@
                               "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL,LF_FSM_CLOCK_SELECTION:RC_KHZ_CLK_SEL",
                               "'--with sl_si91x_sleep_timer_clock_selection;wiseconnect3_sdk, sl_si91x_lf_fsm_clock_selection;wiseconnect3_sdk'"]
             }
+        ],
+        "closure-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["'brd4338a;wiseconnect3_sdk'", "'brd4342a;wiseconnect3_sdk'", "'brd4343a;wiseconnect3_sdk'"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
         ]
     } 
 }

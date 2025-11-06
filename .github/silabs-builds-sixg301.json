@@ -81,6 +81,20 @@
                   "arguments": ["--output_suffix cmp-concurrent-ota-2","'--with matter_zigbee_concurrent;matter'",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               }
-          ]
+          ],
+        "closure-app": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ]
     }
 }
