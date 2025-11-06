@@ -419,14 +419,20 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         app_name = f"{board_id}-OpenThread"
     else:
         app_name = f"{board_id}-WiFi"
-    if sqa:
-        if app_name_folder.split("solution")[1] is not None:
-            app_name_suffix = app_name_folder.split("solution")[1]
-            if "sequential" in app_name_suffix:
-                app_name_suffix = app_name_suffix.split("sequential")[1]
+    cmp_type = None
+    if app_name_folder.split("solution")[1] is not None:
+        app_name_suffix = app_name_folder.split("solution")[1]
+        if "sequential" in app_name_suffix:
+            cmp_type = "sequential"
+            app_name_suffix = app_name_suffix.split("sequential")[1]
+        elif "cmp-concurrent" in app_name_suffix:
+            cmp_type = "concurrent"
+            app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
+        if sqa:
             app_name = f"{app_name}{app_name_suffix}"
     return {
             'app_name': app_name,
+            'cmp_type': cmp_type
         }
 
 
@@ -444,7 +450,11 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            new_file_name = file_name
+            if app_info['cmp_type'] is not None:
+                name_part, ext = file_name.rsplit('.', 1)
+                new_file_name = f"{name_part}-{app_info['cmp_type']}.{ext}"
+            else:
+                new_file_name = file_name
             new_file_path = os.path.join(artifact_folder, new_file_name)
             os.rename(file_path, new_file_path)
             print(f"Renamed file {file_name} to {new_file_name}.")
