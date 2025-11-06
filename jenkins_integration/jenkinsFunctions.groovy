@@ -135,7 +135,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "UTF_COMMANDER_PATH=${commanderPath}",
                             "TCM_SIMPLICITYCOMMANDER=${commanderPath}",
                             "SECMGR_COMMANDER_PATH=${commanderPath}",
-                            "CSA_MATTER_VERSION=1.4",
+                            "CSA_MATTER_VERSION=1.5",
                             "PATH+COMMANDER_PATH=${commanderDir}"
                         ])
                         {
@@ -195,7 +195,7 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
     if(sqaFunctions.isProductionJenkinsServer())
     {
         def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-metrics']
+        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-power', 'regression-rf', 'smoke-rf']
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {

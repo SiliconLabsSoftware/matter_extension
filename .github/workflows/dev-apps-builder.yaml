@@ -41,38 +41,38 @@ jobs:
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
-#    build-lighting-app:
-#        name: Build Lighting App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "lighting-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-air-quality-sensor-app:
-#        name: Build Air Quality Sensor App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "air-quality-sensor-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-light-switch-app:
-#        name: Build Light Switch App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "light-switch-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#    build-lock-app:
-#        name: Build Lock App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "lock-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            ncp-917-support: true
-#            ncp-wf200-support: true
+    build-lighting-app:
+        name: Build Lighting App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lighting-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-air-quality-sensor-app:
+        name: Build Air Quality Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "air-quality-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-light-switch-app:
+        name: Build Light Switch App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "light-switch-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+    build-lock-app:
+        name: Build Lock App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lock-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: true
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -84,85 +84,85 @@ jobs:
             ncp-917-support: true
             ncp-wf200-support: true
 
-#    build-window-app:
-#        name: Build Window App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "window-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            ncp-917-support: true
-#
-#    build-fan-control-app:
-#        name: Build Fan Control App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "fan-control-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            thread-support: false
-#
-#    build-closure-app:
-#        name: Build Closure App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "closure-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-multi-sensor-app:
-#        name: Build Multi Sensor App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "multi-sensor-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-onoff-plug-app:
-#        name: Build OnOff Plug App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "onoff-plug-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-refrigerator-app:
-#        name: Build Refrigerator App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "refrigerator-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#
-#    build-performance-test-app:
-#        name: Build Performance Test App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "performance-test-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            wifi-soc-support: false
-#
-#    build-zigbee-matter-light-app:
-#        name: Build Zigbee Matter Light App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "zigbee-matter-light"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            thread-keyword: ""
-#            mg24-internal-support: false
-#            mgm24-support: false
-#            mgm24-internal-support: false
-#            wifi-soc-support: false
-#
-#    build-platform-app:
-#        name: Build Platform App
-#        needs: set-build-type
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "platform-app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
+    build-window-app:
+        name: Build Window App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "window-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+
+    build-fan-control-app:
+        name: Build Fan Control App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "fan-control-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-closure-app:
+        name: Build Closure App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "closure-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-multi-sensor-app:
+        name: Build Multi Sensor App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "multi-sensor-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-onoff-plug-app:
+        name: Build OnOff Plug App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "onoff-plug-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-refrigerator-app:
+        name: Build Refrigerator App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "refrigerator-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build-performance-test-app:
+        name: Build Performance Test App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "performance-test-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+
+    build-zigbee-matter-light-app:
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            wifi-soc-support: false
+
+    build-platform-app:
+        name: Build Platform App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "platform-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-sqa-tools:
         name: Build SQA Tools
@@ -177,20 +177,20 @@ jobs:
         needs:
             - set-build-type
             - build-sqa-tools
-#            - build-lighting-app
-#            - build-air-quality-sensor-app
-#            - build-light-switch-app
-#            - build-lock-app
+            - build-lighting-app
+            - build-air-quality-sensor-app
+            - build-light-switch-app
+            - build-lock-app
             - build-thermostat-app
-#            - build-window-app
-#            - build-fan-control-app
-#            - build-multi-sensor-app
-#            - build-onoff-plug-app
-#            - build-refrigerator-app
-#            - build-performance-test-app
-#            - build-platform-app
-#            - build-zigbee-matter-light-app
-#            - build-closure-app
+            - build-window-app
+            - build-fan-control-app
+            - build-multi-sensor-app
+            - build-onoff-plug-app
+            - build-refrigerator-app
+            - build-performance-test-app
+            - build-platform-app
+            - build-zigbee-matter-light-app
+            - build-closure-app
         if: success()
 
         steps:

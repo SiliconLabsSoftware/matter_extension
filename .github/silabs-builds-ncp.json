@@ -27,18 +27,18 @@
         "lock-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-ota-2",
+                "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota",
+                "arguments": ["--output_suffix multi-ota",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota-enc",
+                "arguments": ["--output_suffix multi-ota-enc",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
@@ -46,13 +46,13 @@
         "window-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota",
+                "arguments": ["--output_suffix multi-ota",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota-enc",
+                "arguments": ["--output_suffix multi-ota-enc",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
@@ -60,13 +60,13 @@
         "thermostat": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota",
+                "arguments": ["--output_suffix multi-ota",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix 917-ncp-multi-ota-enc",
+                "arguments": ["--output_suffix multi-ota-enc",
                               "'--without_app matter_ota_support;matter'",
                               "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
             }
