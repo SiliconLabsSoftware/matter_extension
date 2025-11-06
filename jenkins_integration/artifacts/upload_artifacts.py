@@ -47,9 +47,6 @@ def main():
     checking for existing artifacts, and coordinating the upload process.
     """
     args = parse_arguments()
-    # TODO: Remove this after testing. Need to wait for artifacts to be uploaded before proceeding.
-    if args.sqa:
-        time.sleep(600)
     workflow_info = determine_workflow_info(args)
     if artifacts_already_uploaded(workflow_info, args.sqa):
         print("Merged artifacts file present in UBAI. Do not download and upload artifacts.")

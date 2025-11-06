@@ -1,10 +1,11 @@
 name: Build SQA apps
 
 on:
-#  push:
-  workflow_run:
-    workflows: [Build Dev apps]
-    types: [completed]
+  push:
+# TODO: this needs to be re-enabled for main and release branches.
+#  workflow_run:
+#    workflows: [Build Dev apps]
+#    types: [completed]
 #    branches:
 #    # - 'release_*'
 #      - 'add_sqa_binaries'
