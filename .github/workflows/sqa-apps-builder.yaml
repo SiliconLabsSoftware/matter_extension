@@ -3,10 +3,8 @@ name: Build SQA apps
 on:
 #  push:
   workflow_run:
-    workflows:
-      - Build Dev apps
-    types:
-      - completed
+    workflows: [Build Dev apps]
+    types: [completed]
 #    branches:
 #    # - 'release_*'
 #      - 'add_sqa_binaries'
