@@ -1,6 +1,7 @@
 name: Build SQA apps
 
 on:
+<<<<<<< HEAD
   push:
 # TODO: this needs to be re-enabled for main and release branches.
 #  workflow_run:
@@ -10,6 +11,15 @@ on:
 #    # - 'release_*'
 #      - 'add_sqa_binaries'
 
+=======
+  workflow_run:
+    workflows: [Build Dev apps]
+    types: [completed]
+    branches:
+      - 'release_*'
+      - 'main' # TODO: Remove when release branch is running
+  workflow_dispatch:
+>>>>>>> a5a958614077cd072ee6a0522345961146668b5d
 
 concurrency:
     group: sqa-build-examples-${{github.ref}}
@@ -19,8 +29,12 @@ jobs:
     build-lock-app:
         name: Build Lock App
         uses: ./.github/workflows/platform-builder.yaml
+<<<<<<< HEAD
         # TODO: need to add condition to all
         # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+=======
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+>>>>>>> a5a958614077cd072ee6a0522345961146668b5d
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
@@ -32,6 +46,10 @@ jobs:
     build-lighting-app:
         name: Build Lighting App
         uses: ./.github/workflows/platform-builder.yaml
+<<<<<<< HEAD
+=======
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+>>>>>>> a5a958614077cd072ee6a0522345961146668b5d
         with:
             example-app: "lighting-app"
             build-type: "custom-sqa"
@@ -42,6 +60,7 @@ jobs:
     build-window-app:
         name: Build Window App
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "window-app"
             build-type: "custom-sqa"
@@ -59,6 +78,7 @@ jobs:
     build-dishwasher-app:
         name: Build Dishwasher App
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "dishwasher-app"
             build-type: "custom-sqa"
@@ -76,6 +96,7 @@ jobs:
     build-thermostat:
         name: Build Thermostat
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
@@ -94,6 +115,7 @@ jobs:
     build-light-switch-app:
         name: Build Light Switch App
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "light-switch-app"
             build-type: "custom-sqa"
@@ -110,6 +132,7 @@ jobs:
     build-multi-sensor-app:
         name: Build Multi Sensor App
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "multi-sensor-app"
             build-type: "custom-sqa"
@@ -126,6 +149,7 @@ jobs:
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
         uses: ./.github/workflows/platform-builder.yaml
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "zigbee-matter-light"
             build-type: "custom-sqa"
@@ -137,6 +161,38 @@ jobs:
             mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
+
+    build-closure-app:
+      name: Build Closure App
+      uses: ./.github/workflows/platform-builder.yaml
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      with:
+        example-app: "closure-app"
+        build-type: "custom-sqa"
+        mg24-support: false
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-internal-support: false
+        mgm26-support: false
+        mgm26-internal-support: false
+        wifi-soc-support: false
+
+    build-platform-app:
+      name: Build Platform App
+      uses: ./.github/workflows/platform-builder.yaml
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      with:
+        example-app: "platform-app"
+        build-type: "custom-sqa"
+        mg24-support: false
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-internal-support: false
+        mgm26-support: false
+        mgm26-internal-support: false
+        wifi-soc-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts
@@ -150,6 +206,8 @@ jobs:
             - build-light-switch-app
             - build-multi-sensor-app
             - build-zigbee-matter-light
+            - build-closure-app
+            - build-platform-app
         if: always()
 
         steps:

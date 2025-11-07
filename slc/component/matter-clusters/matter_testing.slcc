@@ -18,6 +18,7 @@ include:
     file_list:
       - path: AttributeTesting.h
       - path: ClusterTester.h
+      - path: ValidateGlobalAttributes.h
 template_contribution:
   - name: component_catalog
     value: matter_testing
