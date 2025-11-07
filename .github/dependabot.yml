@@ -13,4 +13,6 @@ updates:
     allow:
       - dependency-name: "third_party/matter_sdk"
       - dependency-name: "third_party/matter_support"
+      - dependency-name: "third_party/wifi_sdk"
+      - dependency-name: "third_party/simplicity_sdk"
     target-branch: "main"

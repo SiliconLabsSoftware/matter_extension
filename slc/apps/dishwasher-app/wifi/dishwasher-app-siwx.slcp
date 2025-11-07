@@ -10,7 +10,8 @@ sdk_extension:
     version: "2.8.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "3.5.2"
+    version: "4.0.0"
+    vendor: silabs
 
 component:
   - id: matter_leds
@@ -98,55 +99,37 @@ component:
     from: matter
   # TODO: Remove this in the SiSDK 25Q4 release, where the LwIP fix will be included in the SiSDK.
   - id: sl_si91x_lwip_stack
-    from: wiseconnect3_sdk
 
   - id: wifi_resources
-    from: wiseconnect3_sdk
   - id: sl_si91x_common_flash_nvm3
-    from: wiseconnect3_sdk
   - id: sl_si91x_lwip_stack
-    from: wiseconnect3_sdk
   - id: sl_si91x_wireless
-    from: wiseconnect3_sdk
   - id: wifi
-    from: wiseconnect3_sdk
   - id: basic_network_config_manager
-    from: wiseconnect3_sdk
   - id: si91x_mem_config_3
-    from: wiseconnect3_sdk
   - id: sl_si91x_basic_buffers
-    from: wiseconnect3_sdk
   - id: sl_si91x_mcu
-    from: wiseconnect3_sdk
   - id: freertos
   - id: slist
   - id: sl_assert
   - id: cmsis_rtos2_init
   - id: matter_platform_siwx917
     from: matter
-  - id: wiseconnect3_common
-    from: wiseconnect3_sdk
+  - id: wiseconnect_common
   - id: ble
-    from: wiseconnect3_sdk
   - id: sl_si91x_soc_soft_reset
-    from: wiseconnect3_sdk
   - id: sl_si91x_button_917
     instance: [btn0, btn1]
-    from: wiseconnect3_sdk
   - id: sl_si91x_led_917
     instance: [led0]
     condition: [si917_dev_board]
-    from: wiseconnect3_sdk
   - id: sl_si91x_led_917
     instance: [led0, led1]
     condition: [si917_prod_board]
-    from: wiseconnect3_sdk
   - id: sl_si91x_led_917
     instance: [led0, led1]
     condition: [device_is_917_module_dev_kit]
-    from: wiseconnect3_sdk
   - instance: [timer0]
-    from: wiseconnect3_sdk
     id: ulp_timers_instance
 
 configuration:

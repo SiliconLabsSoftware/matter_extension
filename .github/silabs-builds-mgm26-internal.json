@@ -25,11 +25,11 @@
         "zigbee-matter-light":  [
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ]
     },

@@ -33,42 +33,42 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
         "window-app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multi-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ]
     }
