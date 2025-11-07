@@ -26,11 +26,11 @@
         "zigbee-matter-light":  [
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ]
     },

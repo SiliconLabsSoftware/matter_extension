@@ -13,17 +13,17 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
@@ -41,17 +41,17 @@
         "zigbee-matter-light":  [
             {
                 "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd1019a", "brd2719a","brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
@@ -73,12 +73,12 @@
         "zigbee-matter-light":  [
               {
                   "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
-                  "arguments": ["--output_suffix sequential-ota-2","'--with matter_zigbee_sequential;matter'",
-                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+                  "arguments": ["--output_suffix sequential-ota-2","--with matter_zigbee_sequential",
+                                "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
               },
               {
                   "boards": ["brd1019a", "brd2719a","brd4407a", "brd4408a"],
-                  "arguments": ["--output_suffix cmp-concurrent-ota-2","'--with matter_zigbee_concurrent;matter'",
+                  "arguments": ["--output_suffix cmp-concurrent-ota-2","--with matter_zigbee_concurrent",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               }
           ],

@@ -23,37 +23,14 @@ jobs:
     build:
         name: ${{ inputs.platform }}-build-job
         runs-on: ubuntu-latest
-        container:
-            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2
 
         steps:
             - name: Checkout
               uses: actions/checkout@v5
               with:
-                  submodules: "false" # Do not initialize submodules automatically
-
-            - name: Mark repository as safe for Git
-              shell: bash
-              run: |
-                  git config --global --add safe.directory /__w/matter_extension/matter_extension
-
-            - name: Initialize required submodules
-              shell: bash
-              run: |
-                  git submodule update --init \
-                      third_party/aws_ota_sdk \
-                      third_party/matter_sdk \
-                      third_party/matter_support \
-                      third_party/mbedtls \
-                      third_party/mqtt \
-                      third_party/nlassert \
-                      third_party/nlio \
-                      third_party/QR-Code-generator
-                  # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
-
+                  submodules: "true" # Do not initialize submodules automatically
             - name: Install tools
               uses: ./.github/actions/install-tools
-
             - name: Build ${{ inputs.example-app }}
               uses: SiliconLabsSoftware/matter_build_action@v2.0.0
               with:

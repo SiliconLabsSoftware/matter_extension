@@ -14,23 +14,23 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"]
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
             }
         ],
         "platform-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
@@ -49,23 +49,23 @@
         "zigbee-matter-light":  [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
         "platform-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
@@ -74,27 +74,27 @@
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-sync-false",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                "arguments": ["--output_suffix low-power-async-reports",
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
             },
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power-ota",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
             },
             {
                 "boards": ["brd4187c"],
@@ -109,14 +109,14 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
         "lighting-app": [
@@ -138,36 +138,36 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota-enc",
-                              "'--without_app matter_ota_support;matter'",
-                              "'--with_app matter_multi_image_ota;matter,matter_multi_image_ota_encryption;matter,matter_multi_image_custom_processor;matter'"]
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
         "light-switch-app": [
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power-sync-false",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
             },
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power-ota",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
             },
             {
                 "boards": ["brd4187c"],
@@ -179,22 +179,22 @@
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power-sync-false",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
             },
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power-ota",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+                              "--with matter_platform_low_power",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
+                              "--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\""]
             }
         ]
     }  
