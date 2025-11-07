@@ -28,7 +28,7 @@ from pathlib import Path
 # Coordinate with the studio team to determine the appropriate ZAP version for the release.
 # Version string example :  "v2024.08.14-nightly"
 # TODO: empty this once CSA is update, needed for TE2
-SIMPLICITY_STUDIO_ZAP_VERSION = "v2025.09.10-nightly"
+SIMPLICITY_STUDIO_ZAP_VERSION = ""
 
 def get_zap_version():
     if SIMPLICITY_STUDIO_ZAP_VERSION:
@@ -39,33 +39,12 @@ def get_zap_version():
         logging.info("SILABS_MATTER_ROOT not set, using default path for Matter root")
         silabs_chip_root = Path(__file__).resolve().parents[2]
     else:
-        silabs_chip_root = os.environ["SILABS_MATTER_ROOT"]
+        silabs_chip_root = Path(os.environ["SILABS_MATTER_ROOT"])
         logging.info(f"Using SILABS_MATTER_ROOT: {silabs_chip_root}")
 
-    zap_version = ""
-    # Construct the path to the zap.json file
-    zap_path = os.path.join(silabs_chip_root, "third_party", "matter_sdk", "scripts", "setup", "zap.json")
-    logging.info(f"Looking for zap.json at: {zap_path}")
-    # Load the JSON data from the zap.json file
-    with open(zap_path) as f:
-        zap_json = json.load(f)
-    # Iterate through the packages in the JSON data
-    for package in zap_json.get("packages", []):
-        # Iterate through the tags in each package
-        for tag in package.get("tags", []):
-            # Check if the tag starts with "version:2@"
-            if tag.startswith("version:2@"):
-                # Remove the prefix "version:2@" from the tag to get the version
-                zap_version = tag.removeprefix("version:2@")
-                logging.info(f"Found ZAP version tag: {zap_version}")
-                # Find the last occurrence of "." in the version string
-                suffix_index = zap_version.rfind(".")
-                if suffix_index != -1:
-                    # Remove the suffix after the last "."
-                    zap_version = zap_version[:suffix_index]
-                logging.info(f"Parsed ZAP version: {zap_version}")
-                return zap_version
-    logging.warning("No ZAP version found in zap.json")
+    zap_version_path = silabs_chip_root / "third_party" / "matter_sdk" / "scripts" / "setup" / "zap.version"
+    with open(zap_version_path, 'r') as f:
+        zap_version = f.read().strip()
     return zap_version
 
 if __name__ == "__main__":
