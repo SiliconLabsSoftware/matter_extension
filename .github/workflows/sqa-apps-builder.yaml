@@ -164,7 +164,7 @@ jobs:
       uses: ./.github/workflows/platform-builder.yaml
       if: ${{ github.event.workflow_run.conclusion == 'success' }}
       with:
-        example-app: "closure-app"
+        example-app: "platform-app"
         build-type: "custom-sqa"
         mg24-support: false
         mg24-internal-support: false
