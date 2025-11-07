@@ -18,6 +18,54 @@ def pr_number = ""
 def bypass_send_results_gh = ""
 def formatted_build_number = ""
 
+def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
+    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
+    def statusEmoji = status == "PASS" ? "✅" : "❌"
+    def alertEmoji = status == "PASS" ? "🎉" : "🚨"
+    
+    def notificationColor = color ?: (status == "PASS" ? "good" : "danger")
+    
+    def message = """${alertEmoji} *${messageType.toUpperCase()}* ${alertEmoji}
+                    
+*Repository:* Matter Extension
+*Branch:* `${env.BRANCH_NAME}`
+*Build Number:* #${env.BUILD_NUMBER}
+*Status:* ${statusEmoji} ${status}
+*Timestamp:* ${currentTime} UTC
+
+📋 *Details:*"""
+    
+    if (commitSha) {
+        message += "\n• *Commit SHA:* `${commitSha}`"
+    }
+    if (runNumber) {
+        message += "\n• *GitHub Workflow Run:* #${runNumber}"
+    }
+    if (workflowId) {
+        message += "\n• *Workflow ID:* ${workflowId}"
+    }
+    
+    if (summary && summary.trim()) {
+        message += "\n\n📊 *Summary:*\n${summary}"
+    }
+    
+    message += "\n\n🔗 *Links:*"
+    message += "\n• <${env.BUILD_URL}|Jenkins Build>"
+    message += "\n• <${env.BUILD_URL}console|Console Output>"
+    
+    if (commitSha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commitSha}|GitHub Commit>"
+    }
+    
+    if (status == "FAIL") {
+        message += "\n\n⚠️ *Action Required:* Please investigate and resolve the issue."
+    }
+    
+    slackSend(channel: 'matter-release-build-notifications',
+              color: notificationColor,
+              message: message)
+}
+
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
@@ -120,18 +168,10 @@ pipeline
                     }
                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
                         if (sqa_tests_result == "FAIL") {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'danger',
-                                      message: "[FAIL] Sanity tests failed for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\nGitHub Workflow Run Number: ${run_number}\n" +
-                                               "See summary:\n${sqa_tests_summary}\nJenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary, "", commit_sha, run_number, workflow_id)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
                         } else {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'good',
-                                      message: "[PASS] All tests passed successfully for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\n GitHub Workflow Run Number: ${run_number}\n" +
-                                               "Jenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.", "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
                     }
@@ -172,5 +212,14 @@ pipeline
                 }
             }
        }
+    }
+    post {
+        failure {
+            script {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_"))) {
+                    sendSlackNotification("Pipeline Failure", "FAIL", "Pipeline execution failed. Please check the console output for details.", "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
+                }
+            }
+        }
     }
 }
