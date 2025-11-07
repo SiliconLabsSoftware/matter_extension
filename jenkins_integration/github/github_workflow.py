@@ -251,11 +251,15 @@ def _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
         ValueError: If wrong job type is triggered (PR found in branch workflow)
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
-    for workflow in workflow_runs:
-        if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
-            _validate_branch_workflow(workflow)
-            return _extract_workflow_info(workflow)
-    
+    for i in range(3):
+        for workflow in workflow_runs:
+            if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
+                _validate_branch_workflow(workflow)
+                return _extract_workflow_info(workflow)
+        print(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}. Trying again"
+              f"in 5 minutes")
+        time.sleep(300)
+
     raise RuntimeError(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}")
 
 
