@@ -23,8 +23,41 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
+    check-changes:
+        runs-on: ubuntu-latest
+        outputs:
+            should-run: ${{ steps.check-changes.outputs.should-run }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Check for changes since last run
+              id: check-changes
+              run: |
+                  # Always run for non-schedule event
+                  if [[ "${{ github.event_name }}" != "schedule" ]]; then
+                      echo "should-run=true" >> $GITHUB_OUTPUT
+                      echo "Non-scheduled event, running workflow"
+                      exit 0
+                  fi
+                  
+                  SINCE_TIME=$(date -u -d '24 hours ago' '+%Y-%m-%dT%H:%M:%SZ')
+                  RECENT_COMMITS=$(git rev-list --count --since="$SINCE_TIME" HEAD)
+                  
+                  if [[ $RECENT_COMMITS -gt 0 ]]; then
+                      echo "should-run=true" >> $GITHUB_OUTPUT
+                      echo "Found $RECENT_COMMITS commits in the last 24 hours, running workflow"
+                  else
+                      echo "should-run=false" >> $GITHUB_OUTPUT
+                      echo "No commits in the last 24 hours, skipping workflow"
+                  fi
+
     set-build-type:
         runs-on: ubuntu-latest
+        needs: check-changes
+        if: needs.check-changes.outputs.should-run == 'true'
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
         steps:
@@ -173,6 +206,7 @@ jobs:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
+            - check-changes
             - set-build-type
             - build-sqa-tools
             - build-lighting-app
@@ -189,7 +223,7 @@ jobs:
             - build-platform-app
             - build-zigbee-matter-light-app
             - build-closure-app
-        if: success()
+        if: success() && needs.check-changes.outputs.should-run == 'true'
 
         steps:
             - name: Merge artifacts
