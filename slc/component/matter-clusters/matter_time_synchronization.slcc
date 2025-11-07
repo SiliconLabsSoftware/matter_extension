@@ -14,7 +14,6 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
