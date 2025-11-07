@@ -1,7 +1,6 @@
 name: Build SQA apps
 
 on:
-  push: # TODO: should be removed before merging to main.
   workflow_run:
     workflows: [Build Dev apps]
     types: [completed]
@@ -18,8 +17,7 @@ jobs:
     build-lock-app:
         name: Build Lock App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
@@ -31,8 +29,7 @@ jobs:
     build-lighting-app:
         name: Build Lighting App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "lighting-app"
             build-type: "custom-sqa"
@@ -43,8 +40,7 @@ jobs:
     build-window-app:
         name: Build Window App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "window-app"
             build-type: "custom-sqa"
@@ -63,8 +59,7 @@ jobs:
     build-dishwasher-app:
         name: Build Dishwasher App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "dishwasher-app"
             build-type: "custom-sqa"
@@ -82,8 +77,7 @@ jobs:
     build-thermostat:
         name: Build Thermostat
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
@@ -102,8 +96,7 @@ jobs:
     build-light-switch-app:
         name: Build Light Switch App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "light-switch-app"
             build-type: "custom-sqa"
@@ -120,8 +113,7 @@ jobs:
     build-multi-sensor-app:
         name: Build Multi Sensor App
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "multi-sensor-app"
             build-type: "custom-sqa"
@@ -138,8 +130,7 @@ jobs:
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
         uses: ./.github/workflows/platform-builder.yaml
-        # TODO: re-enable before merging to main
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "zigbee-matter-light"
             build-type: "custom-sqa"
@@ -155,8 +146,7 @@ jobs:
     build-closure-app:
       name: Build Closure App
       uses: ./.github/workflows/platform-builder.yaml
-      # TODO: re-enable before merging to main
-      # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       with:
         example-app: "closure-app"
         build-type: "custom-sqa"
@@ -172,8 +162,7 @@ jobs:
     build-platform-app:
       name: Build Platform App
       uses: ./.github/workflows/platform-builder.yaml
-      # TODO: re-enable before merging to main
-      # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       with:
         example-app: "closure-app"
         build-type: "custom-sqa"
