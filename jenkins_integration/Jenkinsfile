@@ -16,7 +16,6 @@ def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
-def formatted_build_number = ""
 
 def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
@@ -109,13 +108,12 @@ pipeline
                     } else {
                         branch_name = env.BRANCH_NAME
                     }
-                    formatted_build_number = "${workflow_id}.${run_number}"
                     parallelNodes['MG24 Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
                                 '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
-                                branch_name, formatted_build_number)
+                                branch_name, env.BUILD_NUMBER)
                         }
                     }
 
@@ -123,7 +121,7 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
-                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, formatted_build_number)
+                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
                     parallelNodes['SiMG301 Lighting-App'] = {
@@ -131,7 +129,7 @@ pipeline
                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
                                 '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
-                                branch_name, formatted_build_number)
+                                branch_name, env.BUILD_NUMBER)
                         }
                     }
 
@@ -185,33 +183,35 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", formatted_build_number)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
                 }
             }
-       }
-       stage('Upload SQA Artifacts') {
+        }
+        stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, run_number=run_number)
+                    retry(3) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha)
+                        }
                     }
                 }
             }
         }
-        stage('Trigger SQA Regression Pipelines') 
+        stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression {  env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", formatted_build_number)
+                    pipelineFunctions.trigger_sqa_pipelines("regression", env.BUILD_NUMBER)
                 }
             }
-       }
+        }
     }
     post {
         failure {

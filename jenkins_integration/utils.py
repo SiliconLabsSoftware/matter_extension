@@ -28,12 +28,13 @@ def parse_arguments():
     """
     parser = argparse.ArgumentParser(description="Upload build artifacts for Matter project workflows")
     parser.add_argument("--branch_name", required=True, help="Name of the branch or PR (e.g., 'main', 'PR-123')")
+    parser.add_argument("--build_number", required=True, help="Build number from Jenkins (e.g., '1')")
     parser.add_argument("--sqa", required=True, choices=['true', 'false'], help="Boolean flag to indicate SQA builds")
     parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA)")
     parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
     
     args = parser.parse_args()
-    args.sqa = args.sqa.lower() == 'true'
+    args.sqa = True if args.sqa == 'true' else False
     return args
 
 
@@ -69,14 +70,16 @@ def _get_sqa_workflow_info(args):
     """
     try:
         commit_sha = args.commit_sha
-        build_number = args.run_number
+        run_number = args.run_number
+        build_number = args.build_number
         _, workflow_id = get_workflow_info(args.branch_name, commit_sha, sqa=True)
         
         return {
             'commit_sha': commit_sha,
-            'build_number': build_number,
+            'run_number': run_number,
             'workflow_id': workflow_id,
-            'branch_name': args.branch_name
+            'branch_name': args.branch_name,
+            'build_number': build_number,
         }
     except (ValueError, RuntimeError) as e:
         print(f"Failed to get SQA workflow info for branch '{args.branch_name}': {e}")
@@ -102,18 +105,17 @@ def _get_dev_workflow_info(args):
         
         if pr_build_number is None:
             run_number, workflow_id = get_workflow_info(args.branch_name, commit_sha)
-            build_number = run_number
-            branch_name = args.branch_name
         else:
             run_number, workflow_id = get_workflow_info(pr_build_number, commit_sha, pr=True, head_branch=head_branch)
-            build_number = run_number
-            branch_name = args.branch_name
-        
+        branch_name = args.branch_name
+        build_number = args.build_number
+
         return {
             'commit_sha': commit_sha,
-            'build_number': build_number,
+            'run_number': run_number,
             'workflow_id': workflow_id,
-            'branch_name': branch_name
+            'branch_name': branch_name,
+            'build_number': build_number
         }
     except (ValueError, RuntimeError) as e:
         print(f"Failed to get DEV workflow info for branch '{args.branch_name}': {e}")

@@ -23,5 +23,24 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
+    },
+    "custom-sqa": {
+        "window-app" :[
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix ota-3",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix lto",
+                              "'--with toolchain_gcc_lto'"]
+            }
+        ]
     } 
 }

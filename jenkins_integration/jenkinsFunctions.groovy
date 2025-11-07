@@ -4,7 +4,7 @@ def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
@@ -135,7 +135,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "UTF_COMMANDER_PATH=${commanderPath}",
                             "TCM_SIMPLICITYCOMMANDER=${commanderPath}",
                             "SECMGR_COMMANDER_PATH=${commanderPath}",
-                            "CSA_MATTER_VERSION=1.4",
+                            "CSA_MATTER_VERSION=1.5",
                             "PATH+COMMANDER_PATH=${commanderDir}"
                         ])
                         {
@@ -195,7 +195,7 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
     if(sqaFunctions.isProductionJenkinsServer())
     {
         def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-metrics']
+        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-power', 'regression-rf', 'smoke-rf']
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
