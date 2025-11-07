@@ -193,8 +193,9 @@ pipeline
             }
             steps {
                 script {
-                    retry(3) {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        sleep(time: 15, unit: 'MINUTES')
+                        retry(3) {
                             def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha)
                         }
                     }
