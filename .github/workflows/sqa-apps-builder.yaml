@@ -1,17 +1,6 @@
 name: Build SQA apps
 
 on:
-<<<<<<< HEAD
-  push:
-# TODO: this needs to be re-enabled for main and release branches.
-#  workflow_run:
-#    workflows: [Build Dev apps]
-#    types: [completed]
-#    branches:
-#    # - 'release_*'
-#      - 'add_sqa_binaries'
-
-=======
   workflow_run:
     workflows: [Build Dev apps]
     types: [completed]
@@ -19,7 +8,6 @@ on:
       - 'release_*'
       - 'main' # TODO: Remove when release branch is running
   workflow_dispatch:
->>>>>>> a5a958614077cd072ee6a0522345961146668b5d
 
 concurrency:
     group: sqa-build-examples-${{github.ref}}
@@ -29,12 +17,7 @@ jobs:
     build-lock-app:
         name: Build Lock App
         uses: ./.github/workflows/platform-builder.yaml
-<<<<<<< HEAD
-        # TODO: need to add condition to all
-        # if: ${{ github.event.workflow_run.conclusion == 'success' }}
-=======
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
->>>>>>> a5a958614077cd072ee6a0522345961146668b5d
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
@@ -46,10 +29,7 @@ jobs:
     build-lighting-app:
         name: Build Lighting App
         uses: ./.github/workflows/platform-builder.yaml
-<<<<<<< HEAD
-=======
         if: ${{ github.event.workflow_run.conclusion == 'success' }}
->>>>>>> a5a958614077cd072ee6a0522345961146668b5d
         with:
             example-app: "lighting-app"
             build-type: "custom-sqa"

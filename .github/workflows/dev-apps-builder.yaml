@@ -22,7 +22,6 @@ concurrency:
     group: dev-build-examples-${{ github.ref }}
     cancel-in-progress: true
 
-# TODO: Don't forget to change back push to pull request
 jobs:
     set-build-type:
         runs-on: ubuntu-latest
@@ -36,7 +35,7 @@ jobs:
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "schedule" ]]; then
                       echo "build-type=full" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "push" ]]; then
+                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
