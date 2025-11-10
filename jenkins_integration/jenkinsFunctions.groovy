@@ -207,6 +207,7 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
                         sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
                     } else {
                         echo "Directory sqa-pipelines already exists, skipping clone."
+                    }
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
                         regression_list.each { regression_type ->
