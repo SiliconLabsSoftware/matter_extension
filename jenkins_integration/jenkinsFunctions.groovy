@@ -205,8 +205,6 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
                 if(pipeline_type == "smoke") {
                     dir('sqa-pipelines') {
                         sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    } else {
-                        echo "Directory sqa-pipelines already exists, skipping clone."
                     }
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
