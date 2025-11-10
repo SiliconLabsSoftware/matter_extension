@@ -183,7 +183,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke")
                 }
             }
         }
@@ -204,11 +204,11 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("regression")
                 }
             }
         }

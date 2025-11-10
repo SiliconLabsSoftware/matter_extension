@@ -189,43 +189,40 @@ def parse_test_results_failures(output) {
     return [failedTests: failedTests, failedCount: failedCount]
 }
 
-// TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
+def trigger_sqa_pipelines(pipeline_type)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
-        def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-power', 'regression-rf', 'smoke-rf']
+        def smoke_list = ['smoke-thread', 'smoke-wifi', 'smoke-cmp']
+        def regression_list = ['feature-thread', 'feature-wifi', 'regression-thread', 'regression-wifi', 'regression-cmp',
+                               'regression-thread-ota', 'regression-wifi-ota', 'regression-cmp-ota', 'regression-metrics',
+                               'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
+                               'endurance-thread', 'endurance-wifi', 'endurance-cmp']
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
-                if(pipeline_type == "smoke") {
+                if (!fileExists('sqa-pipelines')) {
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    sh 'pwd && ls -al'
-                    dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    }
-                } else {
-                    if(env.BRANCH_NAME.startsWith("release")){
-                        regression_list.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                }
+                if(pipeline_type == "smoke") {
+                        smoke_list.each { smoke_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${smoke_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
-                    } else {
-                        regression_list_main.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                    }
+                } else {
+                    regression_list.each { regression_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(regression_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${regression_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
                     }
