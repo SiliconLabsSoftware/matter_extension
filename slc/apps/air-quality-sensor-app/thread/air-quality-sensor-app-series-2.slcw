@@ -11,3 +11,9 @@ project:
     output: matter-bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+  
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread

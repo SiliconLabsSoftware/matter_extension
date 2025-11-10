@@ -1,0 +1,111 @@
+name: Generate Matter Metadata
+
+on: [workflow_dispatch, push] # TODO: Edit triggers, temp for testing
+
+jobs:
+  generate-metadata:
+    runs-on: silabs-internal
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Setup SLT
+        uses: SiliconLabsInternal/action-setup-slt@main
+
+      - name: Update SLT to latest version
+        run: |
+          echo "Updating SLT to latest version to fix command compatibility..."
+          slt update --self && slt --version
+
+      - name: Setup Conan
+        run: |
+          conan config install packages
+          conan remote list
+          conan config home
+          conan config show "*"
+
+      - name: Install required SLT packages
+        run: |
+          slt install matter -e conan || true
+          slt install devices -e conan || true
+          slt install boards  -e conan || true
+          slt install platform_siwx91x -e conan || true
+
+      - name: Get Config
+        run: |
+          git clean -fxd
+          cp packages/matter/* .
+
+      - name: Set SLT package paths as environment variables
+        id: set-paths
+        run: |          
+          echo "Getting devices package path..."
+          THREAD_DEVICE_PATH=$(slt where devices)
+          echo "Thread Device Path: $THREAD_DEVICE_PATH"
+          
+          echo "Getting boards package path..."
+          THREAD_BOARD_PATH=$(slt where boards)
+          echo "Thread Board Path: $THREAD_BOARD_PATH"
+          
+          echo "Getting platform_siwx91x package path..."
+          SI91X_BASE_PATH=$(slt where platform_siwx91x)
+          echo "Si91x Base Platform Path: $SI91X_BASE_PATH"
+          
+          # For Si91x, append the specific component paths
+          SI91X_DEVICE_PATH="$SI91X_BASE_PATH/components/device/silabs/si91x/mcu/core/chip/component"
+          SI91X_BOARD_PATH="$SI91X_BASE_PATH/components/board/silabs/component"
+          
+          echo ""
+          echo "Final paths:"
+          echo "Thread Device Path: $THREAD_DEVICE_PATH"
+          echo "Thread Board Path: $THREAD_BOARD_PATH"
+          echo "Si91x Device Path: $SI91X_DEVICE_PATH"
+          echo "Si91x Board Path: $SI91X_BOARD_PATH"
+          
+          # Validate all paths were found
+          if [ -n "$THREAD_DEVICE_PATH" ] && [ -n "$THREAD_BOARD_PATH" ] && [ -n "$SI91X_DEVICE_PATH" ] && [ -n "$SI91X_BOARD_PATH" ]; then
+            # Export as environment variables for the next step
+            echo "THREAD_DEVICE_PATH=$THREAD_DEVICE_PATH" >> $GITHUB_ENV
+            echo "SI91X_DEVICE_PATH=$SI91X_DEVICE_PATH" >> $GITHUB_ENV
+            echo "THREAD_BOARD_PATH=$THREAD_BOARD_PATH" >> $GITHUB_ENV
+            echo "SI91X_BOARD_PATH=$SI91X_BOARD_PATH" >> $GITHUB_ENV
+            echo "All paths found and exported to GitHub environment"
+          else
+            echo "ERROR: Could not get all required paths from SLT"
+            echo "Check if packages are properly installed"
+            exit 1
+          fi
+          
+      - name: Substitute environment variables in matter.yml
+        run: |
+          echo "Substituting environment variables in matter.yml..."
+          envsubst < packages/matter/matter.yml > matter.yml
+
+      - name: Generate Studio Metadata
+        uses: SiliconLabsInternal/hwfilter/action/hwstudio@workspace-support
+        id: studio-metadata
+        with:
+          pattern: 'slc/apps/**/*.slc[pw]' 
+          config: matter.yml
+          package_includes: matter
+          quality_excludes: internal
+          output: matter_templates_generated.xml
+
+      - name: Print Generated File Content
+        run: |
+          echo "=== Generated matter_templates_generated.xml Content ==="
+          if [ -f "matter_templates_generated.xml" ]; then
+            echo "File size: $(wc -c < matter_templates_generated.xml) bytes"
+            echo "Line count: $(wc -l < matter_templates_generated.xml) lines"
+            echo "Descriptor count: $(grep -c '<descriptors' matter_templates_generated.xml || echo '0')"
+            echo ""
+            echo "=== FILE CONTENT START ==="
+            cat matter_templates_generated.xml
+            echo ""
+            echo "=== FILE CONTENT END ==="
+          else
+            echo "matter_templates_generated.xml not found"
+            ls -la
+          fi

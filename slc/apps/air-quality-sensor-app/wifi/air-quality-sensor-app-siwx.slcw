@@ -6,3 +6,6 @@ project:
   - path: ./air-quality-sensor-app-siwx.slcp
     id: application
     output: air-quality-sensor-app-siwx
+tag:
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x

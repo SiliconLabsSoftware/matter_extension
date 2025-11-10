@@ -225,9 +225,21 @@ ui_hints:
   highlight:
     - path: README.md
       focus: false
+      
+filter:
+ - name: Type
+   value: 
+   - SoC Project
+ - name: Difficulty
+   value: 
+   - Advanced
+ - name: Wireless Technology
+   value: 
+   - Matter
 
 tag:
-  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

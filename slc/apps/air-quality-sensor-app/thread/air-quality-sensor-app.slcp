@@ -14,6 +14,7 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
+  - id: toolchain_gcc
   - id: common_token_manager_dynamic
     condition: [device_series_3]
   - id: common_token_manager
@@ -204,6 +205,24 @@ ui_hints:
   highlight:
     - path: README.md
       focus: false
+
+filter:
+ - name: Type
+   value: 
+   - SoC Project
+ - name: Difficulty
+   value: 
+   - Advanced
+ - name: Wireless Technology
+   value: 
+   - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+  
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
 
 post_build:
   profile: application
