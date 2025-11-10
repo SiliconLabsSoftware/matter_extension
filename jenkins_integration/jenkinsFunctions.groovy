@@ -199,9 +199,10 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
-                if(pipeline_type == "smoke") {
+                if (!fileExists('sqa-pipelines')) {
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    sh 'pwd && ls -al'
+                }
+                if(pipeline_type == "smoke") {
                     dir('sqa-pipelines') {
                         sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
                     }
