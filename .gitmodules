@@ -1,7 +1,7 @@
 [submodule "third_party/matter_sdk"]
     path = third_party/matter_sdk
     url = https://github.com/SiliconLabsSoftware/matter_sdk.git
-	branch = main
+	branch = release_2.8-1.5
 [submodule "third_party/simplicity_sdk"]
 	path = third_party/simplicity_sdk
 	url = https://github.com/SiliconLabs/simplicity_sdk.git
@@ -22,7 +22,7 @@
 [submodule "third_party/matter_support"]
 	path = third_party/matter_support
 	url = https://github.com/SiliconLabsSoftware/matter_support.git
-	branch = main
+	branch = release_2.8-1.5
 [submodule "nlio"]
 	path = third_party/nlio
 	url = https://github.com/nestlabs/nlio.git
