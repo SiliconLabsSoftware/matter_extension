@@ -199,16 +199,14 @@ def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
+                if (!fileExists('sqa-pipelines')) {
+                    sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
+                }
                 if(pipeline_type == "smoke") {
-                    try {
-                        sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    } catch (Exception e) {
-                        echo "Failed to clone sqa-pipelines (directory may already exist): ${e.message}. Continuing..."
-                    }
-                    sh 'pwd && ls -al'
                     dir('sqa-pipelines') {
                         sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    }
+                    } else {
+                        echo "Directory sqa-pipelines already exists, skipping clone."
                 } else {
                     if(env.BRANCH_NAME.startsWith("release")){
                         regression_list.each { regression_type ->
