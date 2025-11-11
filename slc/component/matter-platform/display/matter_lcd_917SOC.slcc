@@ -77,7 +77,7 @@ source:
     condition:
       - matter_multi_sensor_app
   - path: third_party/matter_sdk/examples/closure-app/silabs/src/ClosureUI.cpp
-    condition: 
+    condition:
       - matter_closure
 define:
   - name: DISPLAY_ENABLED
