@@ -2,7 +2,8 @@
 @Library('gsdk-shared-lib@master')
 
 def pipelineProperties = []
-
+pipelineProperties << disableConcurrentBuilds()
+// TODO: Implement UPLOAD_PACKAGE and PROMOTE https://jira.silabs.com/browse/MATTER-5630
 // Configure pollSCM triggers
 if(env.BRANCH_NAME == 'main'){
     // Trigger daily at 9pm EST (3 hrs after github trigger)
@@ -172,6 +173,19 @@ pipeline
                             sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.", "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
+                    }
+                }
+            }
+        }
+        stage('Create and Upload Package')
+        {
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "main" }
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest') {
+                        def result = pipelineFunctions.create_and_upload_package()
                     }
                 }
             }
