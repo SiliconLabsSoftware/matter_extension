@@ -197,7 +197,7 @@ def trigger_sqa_pipelines(pipeline_type)
         def regression_list = ['feature-thread', 'feature-wifi', 'regression-thread', 'regression-wifi', 'regression-cmp',
                                'regression-ota-thread', 'regression-ota-wifi', 'regression-ota-cmp', 'regression-metrics',
                                'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
-                               'ext-smoke-thread', 'ext-smoke-wifi', 'ext-smoke-cmp'
+                               'ext-smoke-thread', 'ext-smoke-wifi', 'ext-smoke-cmp',
                                'endurance-thread', 'endurance-wifi', 'endurance-cmp']
         def errorOccurred = false
         try{
