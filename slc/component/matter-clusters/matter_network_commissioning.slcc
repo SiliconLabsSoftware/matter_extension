@@ -24,7 +24,6 @@ include:
       - path: constants.h
       - path: network-commissioning.h
       - path: NetworkCommissioningCluster.h
-      - path: NetworkCommissioningLogic.h
       - path: ThreadScanResponse.h
       - path: WifiScanResponse.h
 template_contribution:
