@@ -112,7 +112,7 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
-                                '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
+                                '3251', 'lighting-app','thread','BRD4187C',"",
                                 branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -120,7 +120,7 @@ pipeline
                     parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
+                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -128,7 +128,7 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-                                '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
+                                '4878', 'lighting-app','thread','BRD4407A',"",
                                 branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -183,7 +183,7 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke")
                 }
             }
         }
@@ -204,11 +204,11 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("regression")
                 }
             }
         }
