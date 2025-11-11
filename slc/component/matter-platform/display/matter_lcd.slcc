@@ -50,6 +50,12 @@ include:
     condition: [matter_multi_sensor_app]
     file_list:
       - path: SensorsUI.h
+  - path: third_party/matter_sdk/examples/closure-app/silabs/include
+    condition: [matter_closure]
+    file_list:
+      - path: ClosureUI.h
+      - path: ClosureUIStrings.h
+
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/display/demo-ui.c
   - path: third_party/matter_sdk/examples/platform/silabs/display/lcd.cpp
@@ -65,5 +71,8 @@ source:
   - path: third_party/matter_sdk/examples/multi-sensor-app/silabs/src/SensorsUI.cpp
     condition:
       - matter_multi_sensor_app
+  - path: third_party/matter_sdk/examples/closure-app/silabs/src/ClosureUI.cpp
+    condition: 
+      - matter_closure
 define:
   - name: DISPLAY_ENABLED
