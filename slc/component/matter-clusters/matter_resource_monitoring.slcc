@@ -1,10 +1,10 @@
 category: Clusters|Measurement
 description: >
-  Implementation of the Water Tank Level Monitoring Server Cluster.
-  The user has to enable the Water Tank Level Monitoring Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+  Implementation of the Activated Carbon Filter Monitoring Server Cluster.
+  The user has to enable the Activated Carbon Filter Monitoring Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_resource_monitoring
 package: matter
-label: Water Tank Level Monitoring Server Cluster
+label: Activated Carbon Filter Monitoring Server Cluster
 quality: production
 metadata:
   sbom:
