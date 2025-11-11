@@ -334,7 +334,7 @@ if [ "$skip_gen" = false ]; then
 		fi
 	else
 		# Generate .slcp projects
-		run_slc_generate_with_retry generate -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=180 -o makefile
+		run_slc_generate_with_retry generate -d $OUTPUT_DIR --sdk-package-path $SISDK_ROOT --sdk-package-path $EXTENSION_DIR --sdk-package-path $WISECONNECT3_DIR $PROJECT_FLAG $SILABS_APP_PATH --with $SILABS_BOARD $CONFIG_ARGS --generator-timeout=180 -o makefile
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate : $SILABS_APP_PATH"
 			exit 1
