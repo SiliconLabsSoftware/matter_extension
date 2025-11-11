@@ -115,7 +115,6 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             "SDK_BUILD_NUM=\"${formattedBuildNumber}\"",
                             "TESTBED_NAME=${deviceGroup}",
                             "GROUP_ID=${deviceGroupId}",
-                            "HARNESS_TEMPLATE=${harnessTemplate}",
                             "BUILD_URL=$BUILD_URL",
                             "JENKIN_RUN_NUM=\"${formattedBuildNumber}\"",
                             "JENKINS_JOB_NAME=$JOB_NAME",
@@ -174,7 +173,7 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/ci\/test_matter_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
         if (matcher.find()) {
             def testCase = "${matcher[0][2]} - ${matcher[0][3]}"
             unstable("Failed test: ${testCase}")
