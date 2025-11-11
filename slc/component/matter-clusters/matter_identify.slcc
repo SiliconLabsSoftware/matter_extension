@@ -22,7 +22,7 @@ include:
       - path: IdentifyCluster.h
   - path: third_party/matter_sdk/src/lib/support
     file_list:
-      - path: lib/support/TimerDelegate.h
+      - path: TimerDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_identify
