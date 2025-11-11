@@ -131,7 +131,7 @@ source:
 -   path: third_party/matter_sdk/src/app/EventManagement.cpp
 -   path: third_party/matter_sdk/src/app/FailSafeContext.cpp
 -   path: third_party/matter_sdk/src/app/ReadHandler.cpp
--   path: third_party/matter_sdk/src/app/DefaultTimerDelegate
+-   path: third_party/matter_sdk/src/app/DefaultTimerDelegate.cpp
 -   path: third_party/matter_sdk/src/app/WriteHandler.cpp
 ui_hints:
   visibility: never
