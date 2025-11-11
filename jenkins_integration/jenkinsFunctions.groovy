@@ -59,7 +59,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -145,7 +145,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                                 echo ${TESTBED_NAME}
                                 ${commanderPath} --version
                                 ./workspace_setup.sh
-                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/test_matter_ci.py" > ${test_log_file} 2>&1 || true
+                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness matter_harness_template.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/ci/test_matter_ci.py" > ${test_log_file} 2>&1 || true
                             """, returnStdout: true).trim()
                             def output = readFile(test_log_file).trim()
                             echo "Test log file output:\n ${output}"
