@@ -160,10 +160,22 @@ jobs:
     # copy wifi firmware
   copy-wifi-firmware:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
-
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+      
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/wifi_sdk
+
       - name: Create WiFi firmware directories
         shell: bash
         run: |
@@ -172,7 +184,7 @@ jobs:
       - name: Copy WiFi firmware files
         shell: bash
         run: |
-          cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
+          cp third_party/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
           echo "WiFi firmware files copied successfully."
 
       - name: Upload WiFi firmware artifacts
