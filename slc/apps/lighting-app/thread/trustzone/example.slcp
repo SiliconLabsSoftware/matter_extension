@@ -1,0 +1,75 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: example-ns
+label: Example
+description: |
+  FreeRTOS example
+category: Example|Platform
+package: platform
+quality: production
+filter:
+  - { name: Device Type,  value: [SoC] }
+  - { name: MCU,  value: [32-bit MCU] }
+  - { name: Project Difficulty,  value: [Beginner] }
+ui_hints:
+  highlight:
+  - { path: README.md, focus: true }
+readme:
+  - { path: README.md }
+
+sdk: { id: simplicity_sdk, version: 2024.12.0 }
+
+component:
+  - { id: sl_main }
+  - { id: cpp_support }
+  # Device
+  - { id: device_init }
+  - { id: simple_led, instance: [led0, led1] }
+  - { id: simple_button, instance: [btn0, btn1 ] }
+  - { id: iostream }
+  - { id: iostream_retarget_stdio }
+  - { id: iostream_eusart, instance: [vcom] }
+  # TrustZone
+  - id: bootloader_interface
+  # - id: trustzone_nonsecure
+  # - id: tz_secure_key_library
+
+include:
+  - path: '.'
+    file_list:
+    - { path: app.h }
+
+source:
+  - { path: app.c }
+
+define:
+  - { name: DEBUG_EFM }
+
+configuration:
+  - name: SL_BOARD_ENABLE_VCOM
+    value: 1
+  - name: SL_IOSTREAM_EUSART_VCOM_CONVERT_BY_DEFAULT_LF_TO_CRLF
+    value: 1
+
+toolchain_settings:
+  - { option: optimize, value: debug }
+  - { option: cxx_standard, value: c++17 }
+  - { option: gcc_compiler_option, value: -Wno-unused-parameter }
+
+template_contribution:
+  - name: memory_flash_start
+    value: 0x08006000
+    condition: [bootloader_interface]
+
+  - name: memory_flash_size
+    value: 0x70000
+    condition: [bootloader_interface]
+
+# import:
+#   # Import the config files from the TZ Secure application
+#   - id: example-secure
+
+# post_build:
+#   profile: tz_nonsecure_application
+
+# tag:
+#   - companion:secure_app

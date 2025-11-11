@@ -1,0 +1,18 @@
+label: lighting-app
+description: >
+    Workspace to build trustzone enabled ot-cli-ftd application and accompanying bootloader.
+quality: production
+
+project:
+  - path: ./secure.slcp
+    id: lighting-app-secure
+    output: lighting-app-secure
+  - path: ./nonsecure.slcp
+    id: lighting-app-nonsecure
+    output: lighting-app-nonsecure
+  - path: ../../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+    id: application
+    output: bootloader-storage-internal-single
+
+post_build:
+    profile: ot-tz-workspace

@@ -285,26 +285,13 @@ fi
 
 if [ "$skip_gen" = false ]; then
 	if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-		if [[ "$SILABS_APP_PATH" != *-siwx* ]]; then
-			# Get bootloader arguments
-			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
-			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
-
-			# Generate bootloader
-			echo "Generating bootloader..."
-			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=3500
-			if [ $? -ne 0 ]; then
-				echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
-				exit 1
-			fi
-		fi
 
 		# Get application args
 		APP_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
 		APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 		echo "Generating application..."
-		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
+		run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG $CONFIG_ARGS --generator-timeout=3500
 		if [ $? -ne 0 ]; then
 			echo "FAILED TO Generate application for: $SILABS_APP_PATH"
 			exit 1
