@@ -59,7 +59,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, buildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -112,11 +112,11 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             "SDK_URL=N/A",        // ?
                             "STUDIO_URL=N/A",     // ?
                             "BRANCH_NAME=$branchName", // ?
-                            "SDK_BUILD_NUM=\"${formattedBuildNumber}\"",
+                            "SDK_BUILD_NUM=${buildNumber}",
                             "TESTBED_NAME=${deviceGroup}",
                             "GROUP_ID=${deviceGroupId}",
                             "BUILD_URL=$BUILD_URL",
-                            "JENKIN_RUN_NUM=\"${formattedBuildNumber}\"",
+                            "JENKIN_RUN_NUM=${buildNumber}",
                             "JENKINS_JOB_NAME=$JOB_NAME",
                             "JENKINS_SERVER_NAME=$JENKINS_URL",
                             "JENKINS_TEST_RESULTS_URL=$JOB_URL$BUILD_NUMBER/testReport",
