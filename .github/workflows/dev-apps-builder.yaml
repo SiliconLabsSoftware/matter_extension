@@ -1,6 +1,8 @@
 name: Build Dev apps
 
 on:
+    # TODO: remove on push
+    push:
     schedule:
         - cron: '0 23 * * *' # 6 pm EST daily, changed from 22 to 23 due to Daylight Saving
     pull_request:
@@ -198,10 +200,17 @@ jobs:
                   name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                   delete-merged: true
                   pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
+    # TODO: comment out for testing
+#    wait-for-test-results:
+#        name: Wait for Test Results
+#        needs: merge-apps
+#        uses: ./.github/workflows/sqa-sanity-tests.yaml
+#        secrets:
+#            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
-    wait-for-test-results:
-        name: Wait for Test Results
-        needs: merge-apps
-        uses: ./.github/workflows/sqa-sanity-tests.yaml
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+    build-sqa-apps:
+      name: Build SQA apps
+      needs: wait-for-test-results
+      # if: ${{ startsWith(github.ref_name, 'release_') }}
+      if: ${{ github.ref_name == 'fix/sqa_workflow_trigger_release_branch' }}
+      uses: ./.github/workflows/sqa-apps-builder.yaml
