@@ -14,7 +14,6 @@ jobs:
             mg24-internal-support: false
             mgm24-internal-support: false
             mgm26-support: false
-            allow_failure: true
 
     build-lighting-app:
         name: Build Lighting App
@@ -25,7 +24,6 @@ jobs:
             mg24-internal-support: false
             mgm24-internal-support: false
             mgm26-support: false
-            allow_failure: true
 
     build-window-app:
         name: Build Window App
@@ -44,7 +42,6 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-            allow_failure: true
 
     build-dishwasher-app:
         name: Build Dishwasher App
@@ -62,7 +59,6 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-            allow_failure: true
 
     build-thermostat:
         name: Build Thermostat
@@ -81,7 +77,6 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-            allow_failure: true
 
     build-light-switch-app:
         name: Build Light Switch App
@@ -98,7 +93,6 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-            allow_failure: true
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -115,7 +109,6 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-            allow_failure: true
 
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
@@ -131,7 +124,6 @@ jobs:
             mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
-            allow_failure: true
 
     build-closure-app:
       name: Build Closure App
