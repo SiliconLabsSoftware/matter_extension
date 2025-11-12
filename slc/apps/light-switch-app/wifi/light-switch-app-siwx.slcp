@@ -15,105 +15,61 @@ sdk_extension:
 
 component:
   - id: matter_leds
-    from: matter
   - id: matter
-    from: matter
   - id: matter_wifi_ble
-    from: matter
   - id: matter_crypto_tinycrypt_siwx917
-    from: matter
 
   - id: mbedtls_pki_aws
     condition: [matter_aws]
-    from: matter
   - id: mbedtls_entropy_default_aws
     condition: [matter_aws]
-    from: matter
   - id: matter_wifi
-    from: matter
 
   - id: matter_light_switch
-    from: matter
   - id: app_common
-    from: matter
   - id: matter_provision_flash
-    from: matter
 
   - id: matter_access_control
-    from: matter
   - id: matter_administrator_commissioning
-    from: matter
   - id: matter_basic_information
-    from: matter
   - id: matter_bindings
-    from: matter
   - id: matter_descriptor
-    from: matter
   - id: matter_diagnostic_logs
-    from: matter
   - id: matter_ethernet_network_diagnostics
-    from: matter
   - id: matter_fixed_label
-    from: matter
   - id: matter_general_commissioning
-    from: matter
   - id: matter_general_diagnostics
-    from: matter
   - id: matter_group_key_mgmt
-    from: matter
   - id: matter_groups
-    from: matter
   - id: matter_identify
-    from: matter
   - id: matter_localization_configuration
-    from: matter
   - id: matter_network_commissioning
-    from: matter
   - id: matter_operational_credentials
-    from: matter
   - id: matter_ota_requestor
-    from: matter
   - id: matter_software_diagnostics
-    from: matter
   - id: matter_switch
-    from: matter
   - id: matter_thread_network_diagnostics
-    from: matter
   - id: matter_time_format_localization
-    from: matter
   - id: matter_time_synchronization
-    from: matter
   - id: matter_user_label
-    from: matter
   - id: matter_wifi_network_diagnostics
-    from: matter
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-    from: matter
   - id: segger_rtt
 
   - id: toolchain_gcc_common
-    from: matter
   - id: matter_ota_requestor
-    from: matter
   - id: matter_ota_support
-    from: matter
   - id: matter_shell
-    from: matter
   - id: matter_default_lcd_config
-    from: matter
   # ICD configurations
   # MATTER-4257 : Disabling ICD for light-switch as Button1 is not working as expected for 917SoC Sleepy apps.
   #  - id: matter_icd_core
   #    from: matter
   - id: matter_test_event_trigger
-    from: matter
   - id: matter_icd_management
-    from: matter
   - id: matter_log_uart
-    from: matter
   - id: matter_lwip
-    from: matter
   # TODO: Remove this in the SiSDK 25Q4 release, where the LwIP fix will be included in the SiSDK.
   - id: sl_si91x_lwip_stack
 
@@ -131,7 +87,6 @@ component:
   - id: sl_assert
   - id: cmsis_rtos2_init
   - id: matter_platform_siwx917
-    from: matter
   - id: wiseconnect_common
   - id: sl_si91x_soc_soft_reset
   - id: ble
