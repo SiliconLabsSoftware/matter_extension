@@ -286,22 +286,10 @@ fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
-# Ensure Matter repo is registered as SDK extension
-if [ ! -d "$SISDK_ROOT/extension" ]; then
-	mkdir -p "$SISDK_ROOT/extension"
-fi
 
-EXTENSION_DIR="$SISDK_ROOT/extension/matter_extension"
-if [ ! -L "$EXTENSION_DIR" ]; then
-	ln -s "$MATTER_ROOT" "$EXTENSION_DIR"
-fi
+EXTENSION_DIR=$MATTER_ROOT
+WISECONNECT3_DIR=$MATTER_ROOT/third_party/wifi_sdk
 
-if [ -z "$WISECONNECT3_DIR" ]; then
-	WISECONNECT3_DIR="$SISDK_ROOT/extension/wifi_sdk"
-	if [ ! -L "$WISECONNECT3_DIR" ]; then
-		ln -s "$MATTER_ROOT/third_party/wifi_sdk/" "$WISECONNECT3_DIR"
-	fi
-fi
 
 # Make ZAP available to SLC-CLI
 if [ -z "$STUDIO_ADAPTER_PACK_PATH" ] || [ ! -f "$STUDIO_ADAPTER_PACK_PATH/apack.json" ]; then
