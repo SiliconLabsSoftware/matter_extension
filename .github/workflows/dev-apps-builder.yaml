@@ -210,7 +210,8 @@ jobs:
 
     build-sqa-apps:
       name: Build SQA apps
-      needs: wait-for-test-results
+      # TODO: Comment out for now
+      # needs: wait-for-test-results
       # if: ${{ startsWith(github.ref_name, 'release_') }}
       if: ${{ github.ref_name == 'fix/sqa_workflow_trigger_release_branch' }}
       uses: ./.github/workflows/sqa-apps-builder.yaml

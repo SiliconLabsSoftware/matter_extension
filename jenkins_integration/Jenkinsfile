@@ -188,9 +188,10 @@ pipeline
             }
         }
         stage('Upload SQA Artifacts') {
-            when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-            }
+        // comment out for now
+//             when {
+//                 expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+//             }
             steps {
                 script {
                     retry(3) {
