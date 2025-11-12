@@ -28,7 +28,11 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v5
               with:
-                  submodules: "true" # Do not initialize submodules automatically
+                  submodules: "true" 
+            - name: LFS pull third_party/simplicity_sdk
+              run: |
+                cd third_party/simplicity_sdk
+                git lfs pull
             - name: Install tools
               uses: ./.github/actions/install-tools
             - name: Build ${{ inputs.example-app }}
