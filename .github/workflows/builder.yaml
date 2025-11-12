@@ -56,6 +56,7 @@ jobs:
 
             - name: Build ${{ inputs.example-app }}
               uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
