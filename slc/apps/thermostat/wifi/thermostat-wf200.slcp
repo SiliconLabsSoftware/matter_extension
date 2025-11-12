@@ -64,7 +64,6 @@ component:
   - id: matter_segger_rtt
   - id: matter_default_lcd_config
   #- id: matter_shell
-  #  from: matter
   - id: matter_log_rtt
 
 # Require LCD and QR Code components only on the boards that support LCD

@@ -35,7 +35,6 @@ component:
   - id: matter_log_uart
 
   #  - id: matter_lighting
-  #    from: matter
   - id: app_common
   - id: matter_access_control
   - id: matter_administrator_commissioning

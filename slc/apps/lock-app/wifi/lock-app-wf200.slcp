@@ -62,12 +62,10 @@ component:
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
  # - id: matter_shell
- #   from: matter
   - id: matter_log_rtt
 
 # Disable due to size increase of ICD functionality
 #  - id: matter_default_lcd_config
-#    from: matter
 
 # Require LCD and QR Code components only on the boards that support LCD
 requires:
