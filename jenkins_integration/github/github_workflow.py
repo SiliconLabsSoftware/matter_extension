@@ -386,20 +386,45 @@ def _check_artifacts_ready(commit_sha, job_name):
 def _fetch_check_runs(commit_sha):
     """
     Fetch check runs for a specific commit from GitHub API.
+    Handles pagination to retrieve all check runs if there are more than 100.
     
     Args:
         commit_sha (str): The commit SHA to fetch check runs for
         
     Returns:
-        list: List of check run data from GitHub API
+        list: List of all check run data from GitHub API across all pages
         
     Raises:
         RuntimeError: If the API request fails
     """
     check_runs_url = f"{config.commits_url}/{commit_sha}/check-runs"
-    print(f"Fetching check-runs from URL: {check_runs_url}")
-    response = _make_github_api_request(check_runs_url)
-    return response.json().get('check_runs', [])
+    per_page = 100
+    page = 1
+    
+    url = f"{check_runs_url}?per_page={per_page}&page={page}"
+    print(f"Fetching check-runs from URL: {url}")
+    response = _make_github_api_request(url)
+    response_data = response.json()
+    
+    all_check_runs = response_data.get('check_runs', [])
+    total_count = response_data.get('total_count', len(all_check_runs))
+    
+    print(f"Total check runs: {total_count}, Retrieved: {len(all_check_runs)}")
+    
+    if total_count > per_page:
+        total_pages = (total_count + per_page - 1) // per_page
+        print(f"Fetching {total_pages} pages of check runs")
+        
+        for page in range(2, total_pages + 1):
+            url = f"{check_runs_url}?per_page={per_page}&page={page}"
+            print(f"Fetching check-runs page {page} from URL: {url}")
+            response = _make_github_api_request(url)
+            page_check_runs = response.json().get('check_runs', [])
+            all_check_runs.extend(page_check_runs)
+            print(f"Retrieved {len(page_check_runs)} check runs from page {page}")
+    
+    print(f"Total check runs retrieved: {len(all_check_runs)}")
+    return all_check_runs
 
 
 def _is_test_timeout(check_run):
