@@ -13,7 +13,6 @@ jobs:
             ncp-917-support: true
             mg24-internal-support: false
             mgm24-internal-support: false
-            mgm26-support: false
 
     build-lighting-app:
         name: Build Lighting App
@@ -23,7 +22,6 @@ jobs:
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-internal-support: false
-            mgm26-support: false
 
     build-window-app:
         name: Build Window App
@@ -38,7 +36,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -55,7 +52,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -73,7 +69,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -89,7 +84,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -105,7 +99,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -121,7 +114,6 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
 
@@ -136,7 +128,6 @@ jobs:
         mgm24-support: false
         mgm24-internal-support: false
         mg26-internal-support: false
-        mgm26-support: false
         mgm26-internal-support: false
         wifi-soc-support: false
 
@@ -151,7 +142,6 @@ jobs:
         mgm24-support: false
         mgm24-internal-support: false
         mg26-internal-support: false
-        mgm26-support: false
         mgm26-internal-support: false
         wifi-soc-support: false
 
