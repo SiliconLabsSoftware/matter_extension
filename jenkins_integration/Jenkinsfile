@@ -81,7 +81,7 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
-                    retry(3) {
+                    retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
                                 def result = pipelineFunctions.upload_artifacts()
@@ -189,13 +189,13 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    retry(3) {
+                    retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha)
+                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, workflow_id=workflow_id)
                         }
                     }
                 }

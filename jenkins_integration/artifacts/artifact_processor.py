@@ -41,7 +41,7 @@ def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=Fa
     _validate_artifact_parameters(workflow_id, branch_name, build_number)
     print(f"Starting artifact download and upload process for workflow {workflow_id}")
     try:
-        artifact_info = _download_and_extract_artifacts(workflow_id)
+        artifact_info = _download_and_extract_artifacts(workflow_id, sqa)
         print("Uploading individual artifacts to UBAI.")
         _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, build_number, sqa)
         print("Uploading merged artifacts to UBAI and Artifactory.")
@@ -101,20 +101,20 @@ def _validate_artifact_parameters(workflow_id, branch_name, build_number):
         raise ValueError("Run number must be a positive integer")
 
 
-def _download_and_extract_artifacts(workflow_id):
+def _download_and_extract_artifacts(workflow_id, sqa=False):
     """
     Download artifacts from GitHub Actions and extract them locally.
     
     Args:
         workflow_id (int): Workflow run ID to download artifacts from
-        
+        sqa (bool): Whether to upload SQA artifacts (true/false).
     Returns:
         dict: Information about the downloaded and extracted artifacts
         
     Raises:
         RuntimeError: If downloading or extraction fails
     """
-    artifact_info = _get_artifact_info(workflow_id)
+    artifact_info = _get_artifact_info(workflow_id, sqa)
     artifact_file = _download_artifact(artifact_info['download_url'], artifact_info['name'])
     extracted_folder = _extract_artifact(artifact_file)
     return {
@@ -124,13 +124,13 @@ def _download_and_extract_artifacts(workflow_id):
     }
 
 
-def _get_artifact_info(workflow_id):
+def _get_artifact_info(workflow_id, sqa):
     """
     Get artifact information from GitHub Actions API.
     
     Args:
         workflow_id (int): Workflow run ID
-        
+        sqa (bool): Indicate if we are looking for SQA artifacts.
     Returns:
         dict: Artifact information containing download_url and name
         
@@ -143,7 +143,10 @@ def _get_artifact_info(workflow_id):
     artifacts_data = response.json()
     if not artifacts_data.get('artifacts'):
         raise RuntimeError(f"No artifacts found for workflow {workflow_id}")
-    artifact = artifacts_data['artifacts'][0]
+    if not sqa:
+        artifact = artifacts_data['artifacts'][0]
+    else:
+        artifact = artifacts_data['artifacts'][1]
     return {
         'download_url': artifact['archive_download_url'],
         'name': artifact['name'] + '.zip'

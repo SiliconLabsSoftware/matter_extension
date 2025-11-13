@@ -103,14 +103,13 @@ def _get_branch_latest_sha(branch_name):
     return commit_sha, None, None
 
 
-def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, head_branch=None):
+def get_workflow_info(branch_name, commit_sha, pr=False, head_branch=None):
     """
     Get the workflow run number and ID for a given branch and commit SHA.
     
     Args:
         branch_name (str): The branch name of the workflow or PR number if is a Pull Request.
         commit_sha (str): The commit SHA of the workflow.
-        sqa (bool): Whether to get SQA workflow info (default: False).
         pr (bool): Whether this is a PR workflow (default: False).
         head_branch (str): The head branch for PR workflows (default: None).
         
@@ -121,6 +120,7 @@ def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, head_branch=
         RuntimeError: If the API request fails or no matching workflow is found
         ValueError: If the workflow data is invalid or wrong job type is triggered
     """
+    workflow_name = "Build Dev apps"
     if pr:
         if head_branch:
             pr_url = f"{config.actions_runs_url_pr}&branch={head_branch}"
@@ -129,13 +129,11 @@ def get_workflow_info(branch_name, commit_sha, sqa=False, pr=False, head_branch=
         print(f"Fetching workflow runs from actions/runs event Pull Request URL: {pr_url}")
         response = _make_github_api_request(pr_url)
         workflow_runs = response.json().get('workflow_runs', [])
-        workflow_name = _get_workflow_name(sqa)
         return _find_pr_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
     else:
         print(f"Fetching workflow runs from actions/runs URL: {config.actions_runs_url}")
         response = _make_github_api_request(config.actions_runs_url)
         workflow_runs = response.json().get('workflow_runs', [])
-        workflow_name = _get_workflow_name(sqa)
         return _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
 
 
@@ -221,19 +219,6 @@ def _find_pr_commit_sha(prs_data, pr_number):
     raise RuntimeError(f"No matching PR found for number: {pr_number}")
 
 
-def _get_workflow_name(sqa):
-    """
-    Get the workflow name based on build type.
-    
-    Args:
-        sqa (bool): Whether this is an SQA build
-        
-    Returns:
-        str: The workflow name to search for
-    """
-    return "Build SQA apps" if sqa else "Build Dev apps"
-
-
 def _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name):
     """
     Find a branch workflow that matches the given criteria.
@@ -251,15 +236,10 @@ def _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
         ValueError: If wrong job type is triggered (PR found in branch workflow)
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
-    for i in range(3):
-        for workflow in workflow_runs:
-            if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
-                _validate_branch_workflow(workflow)
-                return _extract_workflow_info(workflow)
-        print(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}. Trying again"
-              f"in 5 minutes")
-        time.sleep(300)
-
+    for workflow in workflow_runs:
+        if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
+            _validate_branch_workflow(workflow)
+            return _extract_workflow_info(workflow)
     raise RuntimeError(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}")
 
 
@@ -299,7 +279,7 @@ def _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
     Returns:
         bool: True if workflow matches criteria
     """
-    return (workflow.get('head_branch') == branch_name and 
+    return (workflow.get('head_branch') == branch_name and
             workflow.get('head_sha') == commit_sha and 
             workflow.get('name') == workflow_name)
 
@@ -373,8 +353,8 @@ def _get_wait_config(sqa):
         dict: Configuration containing job_name, max_retries, and wait_interval
     """
     return {
-        'job_name': "Merge SQA App Artifacts" if sqa else "Merge App Artifacts",
-        'max_retries': 60,
+        'job_name': "Build SQA apps / Merge SQA App Artifacts" if sqa else "Merge App Artifacts",
+        'max_retries': 20,
         'wait_interval': 60
     }
 
@@ -406,20 +386,45 @@ def _check_artifacts_ready(commit_sha, job_name):
 def _fetch_check_runs(commit_sha):
     """
     Fetch check runs for a specific commit from GitHub API.
+    Handles pagination to retrieve all check runs if there are more than 100.
     
     Args:
         commit_sha (str): The commit SHA to fetch check runs for
         
     Returns:
-        list: List of check run data from GitHub API
+        list: List of all check run data from GitHub API across all pages
         
     Raises:
         RuntimeError: If the API request fails
     """
     check_runs_url = f"{config.commits_url}/{commit_sha}/check-runs"
-    print(f"Fetching check-runs from URL: {check_runs_url}")
-    response = _make_github_api_request(check_runs_url)
-    return response.json().get('check_runs', [])
+    per_page = 100
+    page = 1
+    
+    url = f"{check_runs_url}?per_page={per_page}&page={page}"
+    print(f"Fetching check-runs from URL: {url}")
+    response = _make_github_api_request(url)
+    response_data = response.json()
+    
+    all_check_runs = response_data.get('check_runs', [])
+    total_count = response_data.get('total_count', len(all_check_runs))
+    
+    print(f"Total check runs: {total_count}, Retrieved: {len(all_check_runs)}")
+    
+    if total_count > per_page:
+        total_pages = (total_count + per_page - 1) // per_page
+        print(f"Fetching {total_pages} pages of check runs")
+        
+        for page in range(2, total_pages + 1):
+            url = f"{check_runs_url}?per_page={per_page}&page={page}"
+            print(f"Fetching check-runs page {page} from URL: {url}")
+            response = _make_github_api_request(url)
+            page_check_runs = response.json().get('check_runs', [])
+            all_check_runs.extend(page_check_runs)
+            print(f"Retrieved {len(page_check_runs)} check runs from page {page}")
+    
+    print(f"Total check runs retrieved: {len(all_check_runs)}")
+    return all_check_runs
 
 
 def _is_test_timeout(check_run):

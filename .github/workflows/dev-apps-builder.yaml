@@ -62,6 +62,7 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     build-lock-app:
         name: Build Lock App
         needs: set-build-type
@@ -205,3 +206,9 @@ jobs:
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+    build-sqa-apps:
+      name: Build SQA apps
+      needs: wait-for-test-results
+      if: ${{ startsWith(github.ref_name, 'release_') }}
+      uses: ./.github/workflows/sqa-apps-builder.yaml
