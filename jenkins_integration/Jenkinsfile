@@ -67,7 +67,7 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 
 pipeline
 {
-    agent { node { label 'Build-Farm-Large' } }
+    agent { node { label 'Build-Farm' } }
     options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
     stages {
         stage('Initialize') {
