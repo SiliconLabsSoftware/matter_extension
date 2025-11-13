@@ -169,6 +169,7 @@ jobs:
             - build-zigbee-matter-light
             - build-closure-app
             - build-platform-app
+        if: always()
 
         steps:
             - name: Merge artifacts

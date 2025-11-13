@@ -64,6 +64,7 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     build-lock-app:
         name: Build Lock App
         needs: set-build-type
