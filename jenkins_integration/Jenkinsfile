@@ -98,84 +98,84 @@ pipeline
                 }
             }
         }
-//         stage('Execute CI Tests')
-//         {
-//             steps {
-//                 script {
-//                     def parallelNodes = [:]
-//                     if (pr_number != null) {
-//                         branch_name = "PR-${pr_number}"
-//                     } else {
-//                         branch_name = env.BRANCH_NAME
-//                     }
-//                     parallelNodes['MG24 Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
-//                                 '3251', 'lighting-app','thread','BRD4187C',"",
-//                                 branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
-//
-//                     parallelNodes['SIWX Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
-//                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
-//                     parallelNodes['SiMG301 Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-//                                 '4878', 'lighting-app','thread','BRD4407A',"",
-//                                 branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
-//
-//                     parallelNodes.failFast = false
-//                     parallel parallelNodes
-//
-//                     def totalFailedTests = 0
-//                     def failedTestsSummary = []
-//
-//                     if (failed_tests_mg24 && failed_tests_mg24.failedCount > 0) {
-//                         totalFailedTests += failed_tests_mg24.failedCount
-//                         failedTestsSummary << "MG24: ${failed_tests_mg24.failedCount} failed tests - ${failed_tests_mg24.failedTests.join(', ')}"
-//                     }
-//
-//                     if (failed_tests_917 && failed_tests_917.failedCount > 0) {
-//                         totalFailedTests += failed_tests_917.failedCount
-//                         failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
-//                     }
-//
-//                     if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
-//                         totalFailedTests += failed_tests_4407a.failedCount
-//                         failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
-//                     }
-//
-//                     def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
-//                     def sqa_tests_summary = failedTestsSummary.isEmpty() ? "All tests passed successfully." : failedTestsSummary.join('\n')
-//
-//                     echo "SQA Tests Result: ${sqa_tests_result}"
-//                     echo "SQA Tests Summary:\n${sqa_tests_summary}"
-//
-//                     echo "commit_sha: ${commit_sha}"
-//                     if (!bypass_send_results_gh){
-//                         pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
-//                     }
-//                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
-//                         if (sqa_tests_result == "FAIL") {
-//                             sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary, "", commit_sha, run_number, workflow_id)
-//                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
-//                         } else {
-//                             sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.", "", commit_sha, run_number, workflow_id)
-//                             echo "All tests passed successfully."
-//                         }
-//                     }
-//                 }
-//             }
-//         }
+        stage('Execute CI Tests')
+        {
+            steps {
+                script {
+                    def parallelNodes = [:]
+                    if (pr_number != null) {
+                        branch_name = "PR-${pr_number}"
+                    } else {
+                        branch_name = env.BRANCH_NAME
+                    }
+                    parallelNodes['MG24 Lighting-App'] = {
+                        pipelineFunctions.actionWithRetry {
+                            failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
+                                'gsdkMontrealNode','utf-matter-thread-4187c-ci',
+                                '3251', 'lighting-app','thread','BRD4187C',"",
+                                branch_name, env.BUILD_NUMBER)
+                        }
+                    }
+
+                    parallelNodes['SIWX Lighting-App'] = {
+                        pipelineFunctions.actionWithRetry {
+                            failed_tests_917 = pipelineFunctions.execute_sanity_tests(
+                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
+                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
+                        }
+                    }
+                    parallelNodes['SiMG301 Lighting-App'] = {
+                        pipelineFunctions.actionWithRetry {
+                            failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
+                                'gsdkMontrealNode','utf-matter-thread-4407a-ci',
+                                '4878', 'lighting-app','thread','BRD4407A',"",
+                                branch_name, env.BUILD_NUMBER)
+                        }
+                    }
+
+                    parallelNodes.failFast = false
+                    parallel parallelNodes
+
+                    def totalFailedTests = 0
+                    def failedTestsSummary = []
+
+                    if (failed_tests_mg24 && failed_tests_mg24.failedCount > 0) {
+                        totalFailedTests += failed_tests_mg24.failedCount
+                        failedTestsSummary << "MG24: ${failed_tests_mg24.failedCount} failed tests - ${failed_tests_mg24.failedTests.join(', ')}"
+                    }
+
+                    if (failed_tests_917 && failed_tests_917.failedCount > 0) {
+                        totalFailedTests += failed_tests_917.failedCount
+                        failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
+                    }
+
+                    if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
+                        totalFailedTests += failed_tests_4407a.failedCount
+                        failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
+                    }
+
+                    def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
+                    def sqa_tests_summary = failedTestsSummary.isEmpty() ? "All tests passed successfully." : failedTestsSummary.join('\n')
+
+                    echo "SQA Tests Result: ${sqa_tests_result}"
+                    echo "SQA Tests Summary:\n${sqa_tests_summary}"
+
+                    echo "commit_sha: ${commit_sha}"
+                    if (!bypass_send_results_gh){
+                        pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
+                    }
+                    if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
+                        if (sqa_tests_result == "FAIL") {
+                            sendSlackNotification("SQA Tests Failed", "FAIL", sqa_tests_summary, "", commit_sha, run_number, workflow_id)
+                            error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
+                        } else {
+                            sendSlackNotification("SQA Tests Passed", "PASS", "All tests passed successfully.", "", commit_sha, run_number, workflow_id)
+                            echo "All tests passed successfully."
+                        }
+                    }
+                }
+            }
+        }
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
@@ -188,10 +188,9 @@ pipeline
             }
         }
         stage('Upload SQA Artifacts') {
-        // comment out for now
-//             when {
-//                 expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-//             }
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") }
+            }
             steps {
                 script {
                     retry(9) {
