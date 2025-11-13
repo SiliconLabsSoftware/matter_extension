@@ -37,14 +37,16 @@ on:
                 required: false
                 type: boolean
                 default: true
+            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
             mgm24-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
+            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
             mgm24-internal-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
             mg26-support:
                 required: false
                 type: boolean
@@ -53,14 +55,11 @@ on:
                 required: false
                 type: boolean
                 default: true
-            mgm26-support:
-                required: false
-                type: boolean
-                default: true
+            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
             mgm26-internal-support:
                 required: false
                 type: boolean
-                default: true
+                default: false
             sixg301-support:
                 required: false
                 type: boolean

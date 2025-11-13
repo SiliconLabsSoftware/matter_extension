@@ -4,15 +4,60 @@ description: Install required tools and set environment variables.
 runs:
   using: "composite"
   steps:
+    - name: Set CONAN_HOME
+      shell: bash
+      run: |
+        echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
+
     - name: Install ZAP
       shell: bash
       run: |
         ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
         wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
-        unzip zap-linux-x64.zip -d /opt/silabs/zap-linux-x64
+        unzip zap-linux-x64.zip -d /tmp/zap-linux-x64
         rm zap-linux-x64.zip
-
+    
+    - name: Setup SLT
+      id: setup-action
+      uses: SiliconLabsSoftware/action-setup-slt@main
+    
     - name: Set Environment Variables
       shell: bash
       run: |
-        echo "STUDIO_ADAPTER_PACK_PATH=/opt/silabs/zap-linux-x64" >> $GITHUB_ENV
+        echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
+        echo "SLT_PATH=${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_ENV
+        echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
+        echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
+    
+    - name: Install slc-cli
+      shell: bash
+      run: |
+        slt install slc-cli
+    
+    - name: Set Environment Variables
+      shell: bash
+      run: |
+        SLC_CLI_PATH=$(slt where slc-cli)
+        echo "SLC_CLI_PATH=$SLC_CLI_PATH" >> $GITHUB_ENV
+        JAVA_HOME=$(slt where java21)
+        echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
+        echo "$SLC_CLI_PATH" >> $GITHUB_PATH
+        if [ -n "$JAVA_HOME" ]; then
+          echo "$JAVA_HOME/jre/bin" >> $GITHUB_PATH
+        fi
+    
+    - name: Install commander
+      shell: bash
+      run: |
+        slt install commander
+        COMMANDER_PATH=$(slt where commander)
+        echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
+        echo "$COMMANDER_PATH" >> $GITHUB_PATH
+    
+    - name: install gcc-arm-none-eabi
+      shell: bash
+      run: |
+        slt install gcc-arm-none-eabi
+        ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
+        echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
+        echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
