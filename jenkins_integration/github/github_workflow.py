@@ -75,11 +75,13 @@ def get_workflow_info(branch_name):
         print(f"Fetching workflow runs from actions/runs event Pull Request URL: {pr_url}")
         response = _make_github_api_request(pr_url)
         workflow_runs = response.json().get('workflow_runs', [])
+        pr_number = branch_name.split('-')[1]
+        return _find_pr_workflow(workflow_runs, pr_number)
     else:
         print(f"Fetching workflow runs from actions/runs URL: {config.actions_runs_url}")
         response = _make_github_api_request(config.actions_runs_url)
         workflow_runs = response.json().get('workflow_runs', [])
-    return _find_branch_workflow(workflow_runs, branch_name)
+        return _find_branch_workflow(workflow_runs, branch_name)
 
 
 def wait_for_artifacts(commit_sha, sqa=False):
@@ -187,25 +189,24 @@ def _find_branch_workflow(workflow_runs, branch_name):
     raise RuntimeError(f"No matching branch workflow {workflow_name} found for branch: {branch_name}.")
 
 
-def _find_pr_workflow(workflow_runs, pr_number, workflow_name):
+def _find_pr_workflow(workflow_runs, pr_number):
     """
     Find a PR workflow that matches the given criteria.
     
     Args:
         workflow_runs (list): List of workflow runs from GitHub API
         pr_number (str): PR number to match
-        workflow_name (str): Workflow name to match
-        
+
     Returns:
         tuple: (run_number (int), workflow_id (int))
         
     Raises:
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
+    workflow_name = "Build Dev apps"
     for workflow in workflow_runs:
         if _matches_pr_workflow(workflow, pr_number, workflow_name):
             return _extract_workflow_info(workflow)
-    
     raise RuntimeError(f"No matching PR workflow {workflow_name} found for PR: {pr_number}.")
 
 
