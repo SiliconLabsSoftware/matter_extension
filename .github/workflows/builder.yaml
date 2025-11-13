@@ -64,6 +64,15 @@ jobs:
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
 
+            - name: Create asset files
+              if: startsWith(github.ref_name, 'release_')
+              run: |
+                  find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do
+                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
+                      echo '<asset/>' >> "${file}.asset"
+                      echo "Created ${file}.asset"
+                  done
+
             - name: Upload artifacts
               uses: actions/upload-artifact@v5
               with:

@@ -192,53 +192,6 @@ jobs:
         if: success()
 
         steps:
-            - name: Download artifacts for demos
-              if: |
-                  (startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4987')
-              uses: actions/download-artifact@v5
-              with:
-                  pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
-                  path: all-artifacts
-
-            - name: Create demos zip
-              if: |
-                  (startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4987')
-              run: |
-                  mkdir -p demos
-                  
-                  find all-artifacts -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do                      
-                      rel_path="${file#all-artifacts/}"
-                      rel_path="${rel_path#*/}"
-                      
-                      board=$(echo "$rel_path" | cut -d'/' -f1)
-                      app_solution=$(echo "$rel_path" | cut -d'/' -f2)
-                      filename=$(basename "$file")
-                      
-                      app=$(echo "$app_solution" | sed 's/-solution$//')
-                      
-                      target_dir="demos/${board}/${app}"
-                      mkdir -p "$target_dir"
-                      
-                      target_file="${target_dir}/${filename}"
-                      cp "$file" "$target_file"
-
-                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${target_file}.asset"
-                      echo '<asset/>' >> "${target_file}.asset"
-                  done
-                  
-                  mkdir -p demo-staging
-                  zip -r demo-staging/demos.zip demos/
-                  echo "Demos zipped successfully: demo-staging/demos.zip"
-
-            - name: Upload demos artifact
-              if: |
-                  (startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4987')
-              uses: actions/upload-artifact@v5
-              with:
-                  name: demos-${{ needs.set-build-type.outputs.build-type }}
-                  path: demo-staging
-                  if-no-files-found: error
-
             - name: Merge artifacts
               uses: actions/upload-artifact/merge@v5
               with:
