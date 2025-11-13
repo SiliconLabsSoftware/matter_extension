@@ -10,7 +10,7 @@ metadata:
 config_file:
   - path: third_party/matter_sdk/src/lwip/silabs/lwipopts.h
     override:
-      component: "%extension-wiseconnect3_sdk%wifi_resources"
+      component: "wifi_resources"
       file_id: lwipopts
       vendor: silabs
 
