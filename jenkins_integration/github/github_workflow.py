@@ -240,9 +240,6 @@ def _find_branch_workflow(workflow_runs, branch_name, commit_sha, workflow_name)
         if _matches_branch_workflow(workflow, branch_name, commit_sha, workflow_name):
             _validate_branch_workflow(workflow)
             return _extract_workflow_info(workflow)
-    print(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}. Trying again"
-          f"in 5 minutes")
-
     raise RuntimeError(f"No matching branch workflow found for branch: {branch_name} and commit SHA: {commit_sha}")
 
 
