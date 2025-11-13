@@ -1,5 +1,6 @@
 #!groovy
 @Library('gsdk-shared-lib@master')
+def CSA_MATTER_VERSION = "1.5"
 
 def pipelineProperties = []
 
