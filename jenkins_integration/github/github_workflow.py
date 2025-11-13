@@ -354,7 +354,7 @@ def _get_wait_config(sqa):
     """
     return {
         'job_name': "Build SQA apps / Merge SQA App Artifacts" if sqa else "Merge App Artifacts",
-        'max_retries': 60,
+        'max_retries': 10,
         'wait_interval': 60
     }
 

@@ -81,7 +81,7 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
-                    retry(3) {
+                    retry(6) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
                                 def result = pipelineFunctions.upload_artifacts()
