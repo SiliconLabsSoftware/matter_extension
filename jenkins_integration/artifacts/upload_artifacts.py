@@ -17,7 +17,7 @@ Arguments:
     --build_number  Jenkins Run Number (e.g., '2').
     --sqa           Boolean flag to indicate SQA builds (true/false).
     --commit_sha    Commit SHA to use (required for SQA).
-    -- workflow_id  Workflow id of the run (e.g. 19287668054).
+    --workflow_id   Workflow id of the run (e.g. 19287668054).
     --run_number    Workflow run number (required for SQA).
 
 Environment Variables:
