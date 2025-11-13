@@ -59,6 +59,9 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
+  - id: matter_energy_evse
+  - id: matter_electrical_energy_measurement
+  - id: matter_electrical_power_measurement
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
@@ -87,6 +90,22 @@ include:
       - path: CHIPProjectConfig.h
       - path: DishwasherManager.h
       - path: operational-state-delegate-impl.h
+      - path: DataModelHelper.h
+      - path: DeviceEnergyManager.h
+      - path: ElectricalEnergyMeasurementInstance.h
+      - path: ElectricalSensorManager.h
+      - path: PowerTopologyDelegateImpl.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/energy-management-app/energy-management-common/device-energy-management/include
+    file_list:
+      - path: DEMManufacturerDelegate.h
+      - path: DeviceEnergyManagementDelegateImpl.h
+      - path: DeviceEnergyManagementManager.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/energy-management-app/energy-management-common/energy-reporting/include
+    file_list:
+      - path: PowerTopologyDelegate.h
+      - path: ElectricalPowerMeasurementDelegate.h
     directory: include
 
 source:
@@ -99,6 +118,22 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/operational-state-delegate-impl.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/DataModelCallbacks.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/DataModelHelper.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/DeviceEnergyManager.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/ElectricalEnergyMeasurementInstance.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/ElectricalSensorManager.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/src/PowerTopologyDelegateImpl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/energy-management-app/energy-management-common/device-energy-management/src/DeviceEnergyManagementManager.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/energy-management-app/energy-management-common/device-energy-management/src/DeviceEnergyManagementDelegateImpl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/energy-management-app/energy-management-common/energy-reporting/src/ElectricalPowerMeasurementDelegate.cpp
     directory: src
 
 define:
