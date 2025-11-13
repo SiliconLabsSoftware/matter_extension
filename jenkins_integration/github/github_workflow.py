@@ -241,7 +241,7 @@ def _matches_pr_workflow(workflow, pr_number, workflow_name):
     pull_requests = workflow.get('pull_requests', [])
     return (pull_requests and 
             pull_requests[0].get("number") == int(pr_number) and 
-            workflow.get('status') == 'in-progress' and
+            workflow.get('status') == 'in_progress' and
             workflow.get('name') == workflow_name)
 
 
