@@ -198,7 +198,7 @@ def _find_pr_workflow(workflow_runs, pr_number):
         pr_number (str): PR number to match
 
     Returns:
-        tuple: (run_number (int), workflow_id (int))
+        tuple: (run_number (int), workflow_id (int), commit_sha (str))
         
     Raises:
         RuntimeError: If no matching workflow is found or workflow data is invalid
