@@ -140,7 +140,7 @@ jobs:
         if: ${{ inputs.ncp-917-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-ncp.json'
+            json-file-path: './.github/silabs-builds-917-ncp.json'
             path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-917-ncp.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
