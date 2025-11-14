@@ -67,7 +67,7 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 
 pipeline
 {
-    agent { node { label 'Build-Farm' } }
+    agent { node { label 'Build-Farm-Large' } }
     options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
     stages {
         stage('Initialize') {
@@ -189,8 +189,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-            // TODO: temp change
-                expression { env.BRANCH_NAME.startsWith("fix/") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
