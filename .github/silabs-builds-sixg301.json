@@ -44,12 +44,16 @@
                 "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd1019a"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             },
             {
-                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd4407a"],
                 "arguments": ["--output_suffix rainier_concurrent_listening","--with rainier_concurrent_listening"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix rainier_concurrent_listening-copy-sources","--with rainier_concurrent_listening", "--copy-sources"] 
             }
         ],
         "thermostat": [
