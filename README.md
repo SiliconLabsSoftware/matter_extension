@@ -11,7 +11,7 @@ Silicon Labs supports Matter on several different hardware platforms including t
 _To see official release notes containing a list of features and known issues, go to [SiliconLabs/matter_extension/releases](https://github.com/SiliconLabs/matter_extension/releases) and find the corresponding notes for the release you are using._
 
 ---
-
+#wdadadadtest
 ## Setting up the Matter Extension repository
 
 1. Fork the Silicon Labs Matter Extension GitHub repo by clicking "Fork" in the web UI at https://github.com/SiliconLabsSoftware/matter_extension.
