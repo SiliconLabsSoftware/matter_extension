@@ -13,7 +13,6 @@ provides:
 
 include:
 - path: .
-#- path: third_party/matter_sdk/examples/common/QRCode/repo/c
 - path: third_party/matter_sdk/examples/platform/silabs
 - path: third_party/matter_sdk/examples/providers
 - path: third_party/matter_sdk/src

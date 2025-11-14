@@ -21,7 +21,6 @@ define:
 include:
   - path: third_party/aws_ota_sdk/demos/ota/ota_demo_core_mqtt
     file_list:
-#      - path: core_mqtt_config.h
       - path: demo_config.h
       - path: ota_config.h
   - path: third_party/aws_ota_sdk/demos/ota/common/include
@@ -46,17 +45,6 @@ include:
   - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/portable/os
     file_list:
       - path: ota_os_freertos.h
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/3rdparty/tinycbor/src
- #   file_list:
- #     - path: cbor.h
- #     - path: tinycbor-version.h
- #     - path: cborinternal_p.h
- #     - path: compilersupport_p.h
- #     - path: cborjson.h
- #     - path: utf8_p.h
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/coreJSON/source/include
- #   file_list:
- #     - path: core_json.h
 
 template_contribution:
   - name: mbedtls_ssl_content_len_in_requirement
@@ -74,7 +62,3 @@ source:
   - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/ota_mqtt.c
   - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/ota_cbor.c
   - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/portable/os/ota_os_freertos.c
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/coreJSON/source/core_json.c
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/3rdparty/tinycbor/src/cborparser.c
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/3rdparty/tinycbor/src/cborencoder.c
- # - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/3rdparty/tinycbor/src/cborencoder_close_container_checked.c
