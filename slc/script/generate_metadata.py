@@ -31,7 +31,7 @@ with open(matter_slce_path, 'r') as stream:
             matterExtensionVersion = line.split(':')[1].strip()
             break
 
-asset_prefix = "asset://dev-artifacts-full/"
+asset_prefix = "asset://extension.matter_"+matterExtensionVersion+"/"
 
 if not os.path.exists(out_folder_dir):
     print("ERROR: Binaries output folder can't be found!")

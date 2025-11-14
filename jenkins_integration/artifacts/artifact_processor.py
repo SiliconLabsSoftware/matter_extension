@@ -12,6 +12,7 @@ import os
 import shutil
 import sys
 import zipfile
+import re
 
 # Add the workspace root to Python path to enable importing internal modules
 workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,6 +23,58 @@ import jenkins_integration.config as config
 from jenkins_integration.github.github_workflow import _make_github_api_request
 from jenkins_integration.artifacts.ubai_client import upload_to_ubai
 from jenkins_integration.artifacts.artifactory_client import upload_to_artifactory
+
+
+def _get_matter_extension_version():
+    """
+    Extract the version from the matter.slce file.
+    
+    Returns:
+        str: Version string from matter.slce file
+        
+    Raises:
+        RuntimeError: If matter.slce file is not found or version cannot be parsed
+    """
+    matter_slce_path = os.path.join(workspace_root, 'matter.slce')
+    
+    if not os.path.exists(matter_slce_path):
+        raise RuntimeError(f"matter.slce file not found at: {matter_slce_path}")
+    
+    try:
+        with open(matter_slce_path, 'r') as file:
+            content = file.read()
+            
+        version_match = re.search(r'^version:\s*([^\s]+)', content, re.MULTILINE)
+        if version_match:
+            version = version_match.group(1)
+            print(f"Extracted Matter extension version: {version}")
+            return version
+        else:
+            raise RuntimeError("Could not find version field in matter.slce")
+            
+    except Exception as e:
+        raise RuntimeError(f"Failed to read or parse matter.slce file: {e}")
+
+
+def _generate_artifactory_artifact_name(original_name):
+    """
+    Generate a custom artifact name for Artifactory uploads in the format extension.matter_<version>.
+    
+    Args:
+        original_name (str): Original artifact name from GitHub Actions
+        
+    Returns:
+        str: Custom artifact name for Artifactory (e.g., 'extension.matter_2.8.0.zip')
+    """
+    try:
+        version = _get_matter_extension_version()
+        extension = '.zip' if original_name.endswith('.zip') else ''
+        artifactory_name = f"extension.matter_{version}{extension}"
+        print(f"Generated Artifactory artifact name: {artifactory_name}")
+        return artifactory_name
+    except Exception as e:
+        print(f"Warning: Failed to generate custom artifact name, using original: {e}")
+        return original_name
 
 
 def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=False):
@@ -253,7 +306,10 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
             branch_name=branch_name,
             build_number=build_number
         )
-        upload_to_artifactory(artifact_file, artifact_name, branch_name, str(build_number))
+        
+        artifactory_artifact_name = _generate_artifactory_artifact_name(artifact_name)
+        
+        upload_to_artifactory(artifact_file, artifactory_artifact_name, branch_name, str(build_number))
     except Exception as e:
         raise RuntimeError(f"Failed to upload merged artifacts: {e}")
 

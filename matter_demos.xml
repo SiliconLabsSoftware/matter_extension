@@ -4,7 +4,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -14,7 +14,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -24,7 +24,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -34,7 +34,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -44,7 +44,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -54,7 +54,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -64,7 +64,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -74,7 +74,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -84,7 +84,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -94,7 +94,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/thermostat-series-2-solution-cmp-concurrent/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/thermostat-series-2-solution-cmp-concurrent/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -104,7 +104,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -114,7 +114,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -124,7 +124,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4116a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4116a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4116a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -134,7 +134,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -144,7 +144,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -154,7 +154,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -164,7 +164,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -174,7 +174,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -184,7 +184,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -194,7 +194,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -204,7 +204,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -214,7 +214,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -224,7 +224,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -234,7 +234,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2605a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2605a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2605a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -244,7 +244,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -254,7 +254,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -264,7 +264,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -274,7 +274,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -284,7 +284,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -294,7 +294,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -304,7 +304,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -314,7 +314,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -324,7 +324,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -334,7 +334,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -344,7 +344,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -354,7 +354,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -364,7 +364,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4407a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -374,7 +374,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -384,7 +384,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -394,7 +394,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -404,7 +404,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -414,7 +414,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -424,7 +424,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -434,7 +434,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -444,7 +444,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -454,7 +454,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -464,7 +464,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/thermostat-series-2-solution-cmp-concurrent/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/thermostat-series-2-solution-cmp-concurrent/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -474,7 +474,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -484,7 +484,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -494,7 +494,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -504,7 +504,7 @@
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/lock-app-917-ncp-solution/artifact/lock-app-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/lock-app-917-ncp-solution/artifact/lock-app-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -514,7 +514,7 @@
 		<property key="demos.blurb" value="Matter - NCP Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/window-app-917-ncp-solution/artifact/window-app-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/window-app-917-ncp-solution/artifact/window-app-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -524,7 +524,7 @@
 		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/thermostat-917-ncp-solution/artifact/thermostat-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/thermostat-917-ncp-solution/artifact/thermostat-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -534,7 +534,7 @@
 		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -544,7 +544,7 @@
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4187c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -554,7 +554,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -564,7 +564,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -574,7 +574,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -584,7 +584,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -594,7 +594,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -604,7 +604,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -614,7 +614,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -624,7 +624,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -634,7 +634,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -644,7 +644,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -654,7 +654,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4338a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -664,7 +664,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -674,7 +674,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -684,7 +684,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -694,7 +694,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -704,7 +704,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -714,7 +714,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -724,7 +724,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -734,7 +734,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -744,7 +744,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -754,7 +754,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -764,7 +764,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -774,7 +774,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4121a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4121a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4121a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -784,7 +784,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -794,7 +794,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -804,7 +804,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -814,7 +814,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -824,7 +824,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -834,7 +834,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -844,7 +844,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -854,7 +854,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -864,7 +864,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -874,7 +874,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -884,7 +884,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2708a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2708a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2708a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -894,7 +894,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -904,7 +904,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -914,7 +914,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -924,7 +924,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -934,7 +934,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -944,7 +944,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -954,7 +954,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -964,7 +964,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -974,7 +974,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -984,7 +984,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -994,7 +994,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1004,7 +1004,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1014,7 +1014,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2719a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2719a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2719a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1024,7 +1024,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1034,7 +1034,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1044,7 +1044,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1054,7 +1054,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1064,7 +1064,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1074,7 +1074,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1084,7 +1084,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1094,7 +1094,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1104,7 +1104,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1114,7 +1114,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1124,7 +1124,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1134,7 +1134,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2608a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2608a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2608a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1144,7 +1144,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1154,7 +1154,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1164,7 +1164,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1174,7 +1174,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1184,7 +1184,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1194,7 +1194,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1204,7 +1204,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1214,7 +1214,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1224,7 +1224,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1234,7 +1234,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1244,7 +1244,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1254,7 +1254,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4118a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4118a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4118a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1264,7 +1264,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1274,7 +1274,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1284,7 +1284,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1294,7 +1294,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1304,7 +1304,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1314,7 +1314,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1324,7 +1324,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1334,7 +1334,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1344,7 +1344,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1354,7 +1354,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1364,7 +1364,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4342a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4342a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4342a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1374,7 +1374,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1384,7 +1384,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1394,7 +1394,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1404,7 +1404,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1414,7 +1414,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1424,7 +1424,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1434,7 +1434,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1444,7 +1444,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1454,7 +1454,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1464,7 +1464,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1474,7 +1474,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1484,7 +1484,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1494,7 +1494,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd1019a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd1019a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd1019a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1504,7 +1504,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1514,7 +1514,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1524,7 +1524,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1534,7 +1534,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1544,7 +1544,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1554,7 +1554,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1564,7 +1564,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1574,7 +1574,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1584,7 +1584,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1594,7 +1594,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1604,7 +1604,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4343a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4343a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4343a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1614,7 +1614,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/onoff-plug-app-series-3-solution/artifact/onoff-plug-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1624,7 +1624,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/air-quality-sensor-app-series-3-solution/artifact/air-quality-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1634,7 +1634,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/lock-app-series-3-solution/artifact/lock-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1644,7 +1644,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/zigbee-matter-light-series-3-solution-sequential/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1654,7 +1654,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/closure-app-series-3-solution/artifact/closure-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1664,7 +1664,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/thermostat-series-3-solution-cmp-concurrent/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1674,7 +1674,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/multi-sensor-app-series-3-solution/artifact/multi-sensor-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1684,7 +1684,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/zigbee-matter-light-series-3-solution/artifact/zigbee-matter-light-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1694,7 +1694,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/refrigerator-app-series-3-solution/artifact/refrigerator-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1704,7 +1704,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/window-app-series-3-solution/artifact/window-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1714,7 +1714,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/lighting-app-series-3-solution/artifact/lighting-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1724,7 +1724,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/light-switch-app-series-3-solution/artifact/light-switch-app-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1734,7 +1734,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4408a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4408a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4408a/thermostat-series-3-solution/artifact/thermostat-series-3-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1744,7 +1744,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/closure-app-series-2-internal-solution/artifact/closure-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/closure-app-series-2-internal-solution/artifact/closure-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1754,7 +1754,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/lock-app-series-2-internal-solution/artifact/lock-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/lock-app-series-2-internal-solution/artifact/lock-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1764,7 +1764,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/thermostat-series-2-internal-solution/artifact/thermostat-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/thermostat-series-2-internal-solution/artifact/thermostat-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1774,7 +1774,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/refrigerator-app-series-2-internal-solution/artifact/refrigerator-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/refrigerator-app-series-2-internal-solution/artifact/refrigerator-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1784,7 +1784,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/light-switch-app-series-2-internal-solution/artifact/light-switch-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/light-switch-app-series-2-internal-solution/artifact/light-switch-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1794,7 +1794,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/lighting-app-series-2-internal-solution/artifact/lighting-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/lighting-app-series-2-internal-solution/artifact/lighting-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1804,7 +1804,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/window-app-series-2-internal-solution/artifact/window-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/window-app-series-2-internal-solution/artifact/window-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1814,7 +1814,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/multi-sensor-app-series-2-internal-solution/artifact/multi-sensor-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/multi-sensor-app-series-2-internal-solution/artifact/multi-sensor-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1824,7 +1824,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/air-quality-sensor-app-series-2-internal-solution/artifact/air-quality-sensor-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/air-quality-sensor-app-series-2-internal-solution/artifact/air-quality-sensor-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1834,7 +1834,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2703a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2703a/onoff-plug-app-series-2-internal-solution/artifact/onoff-plug-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2703a/onoff-plug-app-series-2-internal-solution/artifact/onoff-plug-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1844,7 +1844,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/zigbee-matter-light-series-2-internal-solution-sequential/artifact/zigbee-matter-light-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/zigbee-matter-light-series-2-internal-solution-sequential/artifact/zigbee-matter-light-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1854,7 +1854,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/closure-app-series-2-internal-solution/artifact/closure-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/closure-app-series-2-internal-solution/artifact/closure-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1864,7 +1864,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/zigbee-matter-light-series-2-internal-solution/artifact/zigbee-matter-light-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/zigbee-matter-light-series-2-internal-solution/artifact/zigbee-matter-light-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1874,7 +1874,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/lock-app-series-2-internal-solution/artifact/lock-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/lock-app-series-2-internal-solution/artifact/lock-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1884,7 +1884,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/thermostat-series-2-internal-solution/artifact/thermostat-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/thermostat-series-2-internal-solution/artifact/thermostat-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1894,7 +1894,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/refrigerator-app-series-2-internal-solution/artifact/refrigerator-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/refrigerator-app-series-2-internal-solution/artifact/refrigerator-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1904,7 +1904,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/light-switch-app-series-2-internal-solution/artifact/light-switch-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/light-switch-app-series-2-internal-solution/artifact/light-switch-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1914,7 +1914,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/lighting-app-series-2-internal-solution/artifact/lighting-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/lighting-app-series-2-internal-solution/artifact/lighting-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1924,7 +1924,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/window-app-series-2-internal-solution/artifact/window-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/window-app-series-2-internal-solution/artifact/window-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1934,7 +1934,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/multi-sensor-app-series-2-internal-solution/artifact/multi-sensor-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/multi-sensor-app-series-2-internal-solution/artifact/multi-sensor-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1944,7 +1944,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/air-quality-sensor-app-series-2-internal-solution/artifact/air-quality-sensor-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/air-quality-sensor-app-series-2-internal-solution/artifact/air-quality-sensor-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1954,7 +1954,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2709a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2709a/onoff-plug-app-series-2-internal-solution/artifact/onoff-plug-app-series-2-internal-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2709a/onoff-plug-app-series-2-internal-solution/artifact/onoff-plug-app-series-2-internal-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1964,7 +1964,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1974,7 +1974,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1984,7 +1984,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -1994,7 +1994,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2004,7 +2004,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2014,7 +2014,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2024,7 +2024,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2034,7 +2034,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2044,7 +2044,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2054,7 +2054,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2064,7 +2064,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2074,7 +2074,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2084,7 +2084,7 @@
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/lock-app-917-ncp-solution/artifact/lock-app-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/lock-app-917-ncp-solution/artifact/lock-app-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2094,7 +2094,7 @@
 		<property key="demos.blurb" value="Matter - NCP Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/window-app-917-ncp-solution/artifact/window-app-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/window-app-917-ncp-solution/artifact/window-app-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2104,7 +2104,7 @@
 		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/thermostat-917-ncp-solution/artifact/thermostat-917-ncp-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/thermostat-917-ncp-solution/artifact/thermostat-917-ncp-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2114,7 +2114,7 @@
 		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2124,7 +2124,7 @@
 		<property key="demos.blurb" value="Matter - NCP Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4186c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4186c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2134,7 +2134,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/fan-control-app-siwx-solution/artifact/fan-control-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/fan-control-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2144,7 +2144,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/closure-app-siwx-solution/artifact/closure-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2154,7 +2154,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/lock-app-siwx-solution/artifact/lock-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2164,7 +2164,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/lighting-app-siwx-solution/artifact/lighting-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2174,7 +2174,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/multi-sensor-app-siwx-solution/artifact/multi-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2184,7 +2184,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/light-switch-app-siwx-solution/artifact/light-switch-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2194,7 +2194,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/onoff-plug-app-siwx-solution/artifact/onoff-plug-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2204,7 +2204,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/thermostat-siwx-solution/artifact/thermostat-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2214,7 +2214,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/refrigerator-app-siwx-solution/artifact/refrigerator-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2224,7 +2224,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/window-app-siwx-solution/artifact/window-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2234,7 +2234,7 @@
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2911a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2911a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2911a/air-quality-sensor-app-siwx-solution/artifact/air-quality-sensor-app-siwx.rps"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/wifi/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2244,7 +2244,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2254,7 +2254,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2264,7 +2264,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2274,7 +2274,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2284,7 +2284,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2294,7 +2294,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2304,7 +2304,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2314,7 +2314,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2324,7 +2324,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2334,7 +2334,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2344,7 +2344,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2354,7 +2354,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4120a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4120a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4120a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2364,7 +2364,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2374,7 +2374,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2384,7 +2384,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2394,7 +2394,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2404,7 +2404,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2414,7 +2414,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2424,7 +2424,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2434,7 +2434,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2444,7 +2444,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2454,7 +2454,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2464,7 +2464,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2474,7 +2474,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd4117a"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd4117a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4117a/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2484,7 +2484,7 @@
 		<property key="demos.blurb" value="Matter - SoC Onoff Plug app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/onoff-plug-app-series-2-solution/artifact/onoff-plug-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2494,7 +2494,7 @@
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/air-quality-sensor-app-series-2-solution/artifact/air-quality-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2504,7 +2504,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lock app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/lock-app-series-2-solution/artifact/lock-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2514,7 +2514,7 @@
 		<property key="demos.blurb" value="Matter - SoC Closure app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/closure-app-series-2-solution/artifact/closure-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2524,7 +2524,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Sequential app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/zigbee-matter-light-series-2-solution-sequential/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2534,7 +2534,7 @@
 		<property key="demos.blurb" value="Matter - SoC Multi Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/multi-sensor-app-series-2-solution/artifact/multi-sensor-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2544,7 +2544,7 @@
 		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/zigbee-matter-light-series-2-solution/artifact/zigbee-matter-light-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2554,7 +2554,7 @@
 		<property key="demos.blurb" value="Matter - SoC Refrigerator app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/refrigerator-app-series-2-solution/artifact/refrigerator-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/refrigerator-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2564,7 +2564,7 @@
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/window-app-series-2-solution/artifact/window-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/window-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2574,7 +2574,7 @@
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/lighting-app-series-2-solution/artifact/lighting-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2584,7 +2584,7 @@
 		<property key="demos.blurb" value="Matter - SoC Light Switch app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/light-switch-app-series-2-solution/artifact/light-switch-app-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
@@ -2594,7 +2594,7 @@
 		<property key="demos.blurb" value="Matter - SoC Thermostat app"/>
 		<property key="core.partCompatibility" value=".*"/>
 		<property key="core.boardCompatibility" value="brd2601b"/>
-		<property key="demos.imageFile" value="asset://dev-artifacts-full/brd2601b/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd2601b/thermostat-series-2-solution/artifact/thermostat-series-2-full.s37"/>
 		<property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
