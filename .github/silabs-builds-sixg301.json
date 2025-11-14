@@ -34,7 +34,7 @@
                 "arguments": [""] 
             },
             {
-                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"] 
             }
         ],
@@ -44,14 +44,26 @@
                 "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
-                "boards": ["brd1019a", "brd2719a","brd4407a", "brd4408a"],
+                "boards": ["brd1019a"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix rainier_concurrent_listening","--with rainier_concurrent_listening"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix rainier_concurrent_listening-copy-sources","--with rainier_concurrent_listening", "--copy-sources"] 
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
+            },
+            {
+                "boards": ["brd4408a"],
+                "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
         ]
     },

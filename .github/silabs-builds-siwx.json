@@ -24,7 +24,7 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a", "brd2911a"],
+                "boards": ["brd4338a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
@@ -32,6 +32,10 @@
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ]
     },
