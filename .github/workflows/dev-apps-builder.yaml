@@ -212,7 +212,6 @@ jobs:
 
     build-sqa-apps:
       name: Build SQA apps
-      # TODO: change here
-      needs: merge-apps
+      needs: wait-for-test-results
       if: ${{ startsWith(github.ref_name, 'fix') }}
       uses: ./.github/workflows/sqa-apps-builder.yaml
