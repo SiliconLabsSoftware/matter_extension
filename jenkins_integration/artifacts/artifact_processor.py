@@ -53,7 +53,7 @@ def _get_matter_extension_version():
             raise RuntimeError("Could not find version field in matter.slce")
             
     except Exception as e:
-        raise RuntimeError(f"Failed to read or parse matter.slce file: {e}")
+        raise RuntimeError(f"Error: {e}")
 
 
 def _generate_artifactory_artifact_name(original_name):
