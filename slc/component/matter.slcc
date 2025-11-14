@@ -61,6 +61,8 @@ include:
     file_list:
       - path: ICDCheckInBackOffStrategy.h
       - path: ICDMonitoringTable.h
+  - path: third_party/matter_sdk/zzz_generated/app-common    
+    unless: [matter_zap_custom_generation]
 requires:
   - name: cpp_support
 
