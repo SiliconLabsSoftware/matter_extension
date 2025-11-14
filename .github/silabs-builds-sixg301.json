@@ -60,6 +60,10 @@
             {
                 "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
+            },
+            {
+                "boards": ["brd4408a"],
+                "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
         ]
     },
