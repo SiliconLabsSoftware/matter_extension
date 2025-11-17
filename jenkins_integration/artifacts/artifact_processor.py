@@ -493,6 +493,9 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         elif "brd4357a" in app_name_suffix:
             app_type = "brd4357a"
             app_name_suffix = app_name_suffix.split("brd4357a")[1]
+        elif "rainier-concurrent-listening":
+            app_type = "concurrent-listening"
+            app_name_suffix = app_name_suffix.split("rainier-concurrent-listening")[1]
         if sqa:
             app_name = f"{app_name}{app_name_suffix}"
     return {
