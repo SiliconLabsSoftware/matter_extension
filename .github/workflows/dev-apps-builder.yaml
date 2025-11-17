@@ -1,8 +1,6 @@
 name: Build Dev apps
 
 on:
-    schedule:
-        - cron: '0 23 * * *' # 6 pm EST daily, changed from 22 to 23 due to Daylight Saving
     pull_request:
         branches:
             - main
