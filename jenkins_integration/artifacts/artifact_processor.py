@@ -489,6 +489,10 @@ def _determine_app_info(app_name_folder, board_id, sqa):
             app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
         elif "icd" in app_name_suffix:
             app_type = "icd"
+            app_name_suffix = app_name_suffix.split("icd")[1]
+        elif "brd4357a" in app_name_suffix:
+            app_type = "brd4357a"
+            app_name_suffix = app_name_suffix.split("brd4357a")[1]
         if sqa:
             app_name = f"{app_name}{app_name_suffix}"
     return {

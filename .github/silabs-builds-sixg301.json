@@ -58,42 +58,54 @@
     "custom-sqa": {
         "lighting-app": [
             {
-                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "lock-app": [
             {
-                "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a", "brd2719a", "brd4407a"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "light-switch-app": [
+            {
+                "boards": ["brd1019a", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "zigbee-matter-light":  [
               {
-                  "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
+                  "boards": ["brd1019a", "brd4407a"],
                   "arguments": ["--output_suffix sequential-ota-2","--with matter_zigbee_sequential",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               },
               {
-                  "boards": ["brd1019a", "brd2719a","brd4407a", "brd4408a"],
+                  "boards": ["brd1019a", "brd2719a","brd4407a"],
                   "arguments": ["--output_suffix cmp-concurrent-ota-2","--with matter_zigbee_concurrent",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               }
           ],
         "closure-app": [
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd1019a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform-app": [
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd1019a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a", "brd4407a"],
+                "arguments": ["--output_suffix ota-3",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ]
     }

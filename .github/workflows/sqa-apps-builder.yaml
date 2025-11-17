@@ -13,6 +13,7 @@ jobs:
             ncp-917-support: true
             mg24-internal-support: false
             mgm24-internal-support: false
+            mg26-internal-support: false
 
     build-lighting-app:
         name: Build Lighting App
@@ -22,6 +23,7 @@ jobs:
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-internal-support: false
+            mg26-internal-support: false
 
     build-window-app:
         name: Build Window App
@@ -29,7 +31,6 @@ jobs:
         with:
             example-app: "window-app"
             build-type: "custom-sqa"
-            ncp-917-support: true
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
@@ -62,7 +63,6 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
-            ncp-917-support: true
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
