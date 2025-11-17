@@ -68,7 +68,6 @@ component:
   - id: sl_si91x_lwip_stack
 
   - id: wifi_resources
-  - id: sl_si91x_lwip_stack
   - id: wifi
   - id: basic_network_config_manager
   - id: sl_si91x_basic_buffers

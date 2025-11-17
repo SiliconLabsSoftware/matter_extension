@@ -42,7 +42,7 @@ include:
     file_list:
       - path: AirQualitySensorUI.h
   - path: third_party/matter_sdk/examples/fan-control-app/silabs/include
-  #  condition: [matter_fan_control_app]
+    condition: [matter_fan_control_app]
     file_list:
       - path: FanControlUI.h
       - path: FanControlIcons.h

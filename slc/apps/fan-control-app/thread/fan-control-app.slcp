@@ -37,7 +37,6 @@ component:
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information
-  - id: matter_color_control
   - id: matter_descriptor
   - id: matter_fixed_label
   - id: matter_general_commissioning
