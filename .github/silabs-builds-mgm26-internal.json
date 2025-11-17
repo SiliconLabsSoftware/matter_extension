@@ -31,6 +31,16 @@
                 "boards": ["brd4350a_a02"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+            }
         ]
     },
     "custom-sqa": {

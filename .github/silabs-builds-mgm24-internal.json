@@ -22,6 +22,16 @@
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+            }
         ]
     },
     "custom-sqa": {

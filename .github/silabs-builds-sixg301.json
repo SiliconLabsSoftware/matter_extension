@@ -65,6 +65,16 @@
                 "boards": ["brd4408a"],
                 "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd2719a"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd2719a"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+            }
         ]
     },
     "custom-sqa": {
