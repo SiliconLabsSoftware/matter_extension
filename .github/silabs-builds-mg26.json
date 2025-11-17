@@ -143,7 +143,7 @@
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix high-bw-phy",
-                              "--with zigbee_high_datarate_phy,matter_zigbee_concurrent"]
+                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
             }
         ],
         "closure-app": [
