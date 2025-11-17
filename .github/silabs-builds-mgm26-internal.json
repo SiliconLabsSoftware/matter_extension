@@ -18,7 +18,7 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
+                "boards": ["brd4351a_a02"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
@@ -28,8 +28,18 @@
                 "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
-                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
+                "boards": ["brd4350a_a02"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ]
     },
