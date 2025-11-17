@@ -3,7 +3,7 @@ label: Matter Multi-PAN Support
 description: Enables Multi-PAN support for Matter over Thread devices
 package: matter
 category: Matter-Thread
-quality: experimental
+quality: evaluation
 metadata:
   sbom:
     license: Zlib
