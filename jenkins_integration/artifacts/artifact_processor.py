@@ -487,6 +487,8 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         elif "cmp-concurrent" in app_name_suffix:
             app_type = "concurrent"
             app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
+        elif "concurrent-listening" in app_name_suffix:
+            app_type = "concurrent-listening"
         elif "icd" in app_name_suffix:
             app_type = "icd"
             app_name_suffix = app_name_suffix.split("icd")[1]
