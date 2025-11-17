@@ -1,21 +1,20 @@
 name: Build Dev apps
 
 on:
-  schedule:
-      - cron: '0 23 * * *' # 6 pm EST daily, changed from 22 to 23 due to Daylight Saving
-  pull_request:
-      branches:
-          - main
-          - "release_*"
-  workflow_dispatch:
-      inputs:
-          build-type:
-              description: "The build type to use"
-              required: true
-              type: choice
-              options:
-                  - standard
-                  - full
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+
+    workflow_dispatch:
+        inputs:
+            build-type:
+                description: "The build type to use"
+                required: true
+                type: choice
+                options:
+                    - standard
+                    - full
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
