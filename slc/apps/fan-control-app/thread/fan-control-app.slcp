@@ -33,7 +33,6 @@ component:
   - id: matter_log_uart
 
   - id: matter_fan_control
-  - id: matter_fan_control_app
   - id: app_common
   - id: matter_access_control
   - id: matter_administrator_commissioning
@@ -46,15 +45,12 @@ component:
   - id: matter_group_key_mgmt
   - id: matter_groups
   - id: matter_identify
-  - id: matter_level_control
   - id: matter_localization_configuration
   - id: matter_network_commissioning
-  - id: matter_on_off
   - id: matter_operational_credentials
   - id: matter_ota_support
   - id: matter_ota_requestor
   - id: matter_power_source
-  - id: matter_scenes
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
@@ -63,6 +59,8 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
+
+  - id: matter_fan_control_app
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
