@@ -95,7 +95,7 @@ configuration:
     value: 0
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/closure-app.zap
+  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/data_model/closure-wifi-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
