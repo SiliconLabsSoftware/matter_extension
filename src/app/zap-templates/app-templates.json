@@ -5,8 +5,7 @@
     "options": {
         "generator": {
             "appendDirectory": "zap-generated",
-            "disableUcComponentOnZclClusterUpdate": "true",
-            "generateStaticTemplates": "false"
+            "disableUcComponentOnZclClusterUpdate": "true"
         }
     },
     "helpers": [
