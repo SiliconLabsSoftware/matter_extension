@@ -18,24 +18,24 @@ def download_and_extract_artifacts(environment = 'staging') {
     
     sh """
         echo "Downloading artifacts from Artifactory using branch/build info"
-        echo "Branch: $BRANCH_NAME, Build: $BUILD_NUMBER"
+        echo "Branch: \$BRANCH_NAME, Build: \$BUILD_NUMBER"
         echo "Environment: ${environment}"
         
-        base_url="https://artifactory.silabs.net/artifactory/gsdk-generic-${environment}/matter_extension_github/$BRANCH_NAME/$BUILD_NUMBER"
+        base_url="https://artifactory.silabs.net/artifactory/gsdk-generic-${environment}/matter_extension_github/\$BRANCH_NAME/\$BUILD_NUMBER"
         
-        echo "Checking available artifacts at: $base_url"
-        artifact_file=$(curl -s "$base_url/" | grep -o 'dev-artifacts-[^"]*\\.zip' | head -1)
+        echo "Checking available artifacts at: \$base_url"
+        artifact_file=\$(curl -s "\$base_url/" | grep -o 'dev-artifacts-[^"]*\\.zip' | head -1)
         
-        if [[ -n "$artifact_file" ]]; then
-            echo "Found artifact: $artifact_file"
-            artifact_url="$base_url/$artifact_file"
+        if [[ -n "\$artifact_file" ]]; then
+            echo "Found artifact: \$artifact_file"
+            artifact_url="\$base_url/\$artifact_file"
             
-            if curl -f -o "$artifact_file" "$artifact_url"; then
-                echo "Successfully downloaded $artifact_file"
-                unzip -o "$artifact_file"
+            if curl -f -o "\$artifact_file" "\$artifact_url"; then
+                echo "Successfully downloaded \$artifact_file"
+                unzip -o "\$artifact_file"
                 echo "Artifact extracted successfully"
             else
-                echo "Failed to download $artifact_file"
+                echo "Failed to download \$artifact_file"
                 exit 1
             fi
         else
@@ -66,15 +66,15 @@ def run_code_size_analysis() {
                     local path=$1
                     local app_name
                     
-                    local solution_dir=$(echo "$path" | grep -oE "[^/]*-solution(-lto)?" | head -1)
+                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*-solution(-lto)?" | head -1)
                     
                     if [ -n "$solution_dir" ]; then
-                        local base_name=$(echo "$solution_dir" | sed -E 's/-solution(-lto)?$//')
+                        local base_name=\$(echo "\$solution_dir" | sed -E 's/-solution(-lto)?\$//')
                         
                         if [[ "$base_name" == *"zigbee-matter-light"* ]]; then
                             app_name="zigbee-matter-light"
                         else
-                            app_name=$(echo "$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\1/')
+                            app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
                             
                             if [[ "$app_name" == *"-"* ]]; then
                                 :
@@ -129,14 +129,14 @@ def run_code_size_analysis() {
                         return 1
                     fi
                     
-                    local app=$(extract_app_from_path "$map_file_path")
+                    local app=\$(extract_app_from_path "\$map_file_path")
                     if [ $? -ne 0 ] || [ -z "$app" ]; then
                         echo "ERROR: Failed to extract app name from $map_file_path"
                         return 1
                     fi
                     
-                    local protocol=$(determine_protocol "$map_file_path")
-                    local options=$(determine_build_options "$map_file_path")
+                    local protocol=\$(determine_protocol "\$map_file_path")
+                    local options=\$(determine_build_options "\$map_file_path")
                     
                     echo "Processing: $map_file_path"
                     echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
@@ -197,7 +197,7 @@ def run_code_size_analysis() {
                 }
                 
                 echo "Available map files:"
-                map_files_found=$(find . -name "*.map" | grep -E "(brd4187c|brd4407a|brd4338a).*/[^/]*-solution(-lto)?/build/debug/" | sort)
+                map_files_found=\$(find . -name "*.map" | grep -E ".*-solution.*/build/debug/" | grep -v bootloader | sort)
                 if [ -z "$map_files_found" ]; then
                     echo "ERROR: No map files found matching solution pattern"
                     echo "All available map files:"
@@ -207,8 +207,23 @@ def run_code_size_analysis() {
                 echo "$map_files_found"
                 echo ""
                 
-                echo "Processing map files..."
-                find . -name "*.map" | grep -E "(brd4187c|brd4407a|brd4338a).*/[^/]*-solution(-lto)?/build/debug/" | while read map_file; do
+                target_apps="lighting-app|lock-app|zigbee-matter-light"
+                echo "Filtering for target apps: $target_apps"
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "(\$target_apps)")
+                
+                if [ -z "$filtered_map_files" ]; then
+                    echo "WARNING: No map files found for target apps ($target_apps)"
+                    echo "Available apps in map files:"
+                    echo "$map_files_found" | sed -E 's|.*/([^/]*-solution[^/]*)/.*|\1|' | sort -u
+                    exit 0
+                fi
+                
+                echo "Target app map files to process:"
+                echo "$filtered_map_files"
+                echo ""
+                
+                echo "Processing map files for target apps only..."
+                echo "$filtered_map_files" | while read map_file; do
                     perform_code_analysis "$map_file" || true
                 done
             '''
