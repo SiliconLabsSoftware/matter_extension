@@ -49,7 +49,7 @@
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix lto",
-                              "--with toolchain_gcc_lto"]
+                              "--with_app toolchain_gcc_lto"]
             }
         ]
     } 

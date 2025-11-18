@@ -59,6 +59,10 @@
         "platform-app": [
             {
                 "boards": ["brd4187c"],
+                "arguments": [""]
+            },
+            {
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             },
             {
@@ -107,7 +111,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto",
-                              "--with toolchain_gcc_lto"]
+                              "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4187c"],
@@ -131,7 +135,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto",
-                              "--with toolchain_gcc_lto"]
+                              "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4187c"],
