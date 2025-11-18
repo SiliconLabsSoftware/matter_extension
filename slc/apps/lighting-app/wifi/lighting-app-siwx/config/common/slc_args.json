@@ -1,0 +1,10 @@
+{
+  "sdkRoot" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/third_party/simplicity_sdk/",
+  "apackRoot" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/slc/tools/zap",
+  "partOpn" : "siwg917m111mgtba",
+  "zcl.matterZclJsonFile" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/src/app/zap-templates/zcl/zcl.json",
+  "zcl.zigbeeZclJsonFile" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/third_party/simplicity_sdk/zigbee/app/zcl/zcl-zap.json",
+  "boards" : "brd4338arevA02,brd4002arevA07",
+  "zcl.matterTemplateJsonFile" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/src/app/zap-templates/app-templates.json",
+  "zcl.zigbeeTemplateJsonFile" : "/home/bhmanda/Developer/github_repo/extension/matter_extension/third_party/simplicity_sdk/zigbee/app/framework/gen-template/gen-templates.json"
+}

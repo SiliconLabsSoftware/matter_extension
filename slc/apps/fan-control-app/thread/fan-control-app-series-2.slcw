@@ -1,7 +1,7 @@
 label: fan-control-app-series-2
 quality: production
 package: matter
-description: Solution containing both a bootloader and a Matter over Fan Control App Example
+description: Solution containing both a bootloader and a Matter over Thread Fan Control App Example
 project:
   - path: ./fan-control-app.slcp
     id: application

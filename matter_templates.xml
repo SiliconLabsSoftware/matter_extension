@@ -51,6 +51,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
+  <descriptors name="MatterFanControlOverThread" label="Matter - SoC Fan-Control over Thread"
+               description="This project builds a Matter Fan-Control app that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/fan-control-app/thread/fan-control-app.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/fan-control-app/thread/README.md"/>
+    <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4120a brd4121a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd1019a brd2719a brd4407a brd4408a brd4319a:0.0.0.A00 com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*simg301.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors>
   <descriptors name="MatterThermostatOverThread" label="Matter - SoC Thermostat over Thread"
                description="This project builds a Matter Thermostat that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
@@ -151,6 +168,23 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors>
+  <descriptors name="MatterFanControlOverWiFi" label="Matter - NCP Fan-Control over Wi-Fi"
+               description="This project builds a Matter Fan-Control for Wi-Fi 917NCP that can be developed inside Simplicity Studio">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.apps.fan-control-app.wifi.fan-control-app-917-ncp.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/fan-control-app/wifi/fan-control-app-917-ncp.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/fan-control-app/wifi/README_WiFi.md"/>
+    <properties key="boardCompatibility" value="brd4186c brd4187c com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterLockOverWiFi" label="Matter - NCP Lock over Wi-Fi"
