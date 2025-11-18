@@ -10,6 +10,7 @@ metadata:
 requires:
   - name: matter_thread
   - name: matter_thread_cli
+  - name: ot_multi_instance_cli
 provides:
   - name: matter_multipan
 define:
