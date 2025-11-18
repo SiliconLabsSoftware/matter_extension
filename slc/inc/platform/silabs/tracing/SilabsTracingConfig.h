@@ -13,7 +13,7 @@
 
 // <q SILABS_TRACING_ENERGY_STATS> Enable energy mode statistics collection
 // <i> Default: 0
-#define SILABS_TRACING_ENERGY_STATS 1
+#define SILABS_TRACING_ENERGY_STATS 0
 
 // <q SILABS_TRACING_ENERGY_TRACES_SECONDS> Time to wait before outputting the results
 // <i> Default: 600
