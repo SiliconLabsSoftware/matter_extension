@@ -97,6 +97,7 @@ jobs:
         with:
             example-app: "fan-control-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
 
     build-closure-app:
         name: Build Closure App
