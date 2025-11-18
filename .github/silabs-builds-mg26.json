@@ -48,11 +48,15 @@
         ],
         "platform-app": [
             {
-                "boards": ["brd4117a"],
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            },
+            {
+                "boards": ["brd4116a"],
                 "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             },
             {
-                "boards": ["brd4117a"],
+                "boards": ["brd4116a"],
                 "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ],
@@ -77,7 +81,7 @@
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix lto",
-                              "--with toolchain_gcc_lto"]
+                              "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4116a"],
@@ -101,7 +105,7 @@
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix lto",
-                              "--with toolchain_gcc_lto"]
+                              "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4116a"],
