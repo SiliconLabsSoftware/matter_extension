@@ -805,7 +805,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.dishwasher-app.thread.dishwasher-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/dishwasher-app/wifi/dishwasher-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/dishwasher-app/thread/dishwasher-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/dishwasher-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -873,7 +873,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.lighting-app.thread.lighting-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/lighting-app/wifi/lighting-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/lighting-app/thread/lighting-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -924,7 +924,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.lock-app.thread.lock-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/lock-app/wifi/lock-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/lock-app/thread/lock-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/lock-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -958,7 +958,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.onoff-plug-app.thread.onoff-plug-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/onoff-plug-app/wifi/onoff-plug-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/onoff-plug-app/thread/onoff-plug-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/onoff-plug-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -992,7 +992,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.multi-sensor-app.thread.multi-sensor-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/multi-sensor-app/wifi/multi-sensor-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/multi-sensor-app/thread/multi-sensor-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/multi-sensor-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -1026,7 +1026,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.thermostat.thread.thermostat-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/thermostat/wifi/thermostat-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/thermostat/thread/thermostat-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
     <properties key="boardCompatibility" value="brd2704a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.*  "/>
@@ -1060,7 +1060,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.window-app.thread.window-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/window-app/wifi/window-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/window-app/thread/window-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/window-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -1484,7 +1484,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.closure-app.thread.closure-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/closure-app/wifi/closure-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/closure-app/thread/closure-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/closure-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.*"/>
