@@ -41,7 +41,7 @@ def validate_matter_templates():
                         file_data.append(result)
             if i[num].attrib["key"]=="readmeFiles":
                 val = i[num].attrib['value']
-                path = os.path.join(Matter_Repo,val)
+                path = os.path.join(val)
                 if not os.path.isfile(path):
                     result = "Could not find file at path: "+i[num].attrib['value']
                     print(result)
