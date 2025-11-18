@@ -13,6 +13,210 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
     }
 }
 
+def download_and_extract_artifacts(environment = 'staging') {
+    echo "Starting artifact download and extraction for branch: ${env.BRANCH_NAME}"
+    
+    sh """
+        echo "Downloading artifacts from Artifactory using branch/build info"
+        echo "Branch: $BRANCH_NAME, Build: $BUILD_NUMBER"
+        echo "Environment: ${environment}"
+        
+        base_url="https://artifactory.silabs.net/artifactory/gsdk-generic-${environment}/matter_extension_github/$BRANCH_NAME/$BUILD_NUMBER"
+        
+        echo "Checking available artifacts at: $base_url"
+        artifact_file=$(curl -s "$base_url/" | grep -o 'dev-artifacts-[^"]*\\.zip' | head -1)
+        
+        if [[ -n "$artifact_file" ]]; then
+            echo "Found artifact: $artifact_file"
+            artifact_url="$base_url/$artifact_file"
+            
+            if curl -f -o "$artifact_file" "$artifact_url"; then
+                echo "Successfully downloaded $artifact_file"
+                unzip -o "$artifact_file"
+                echo "Artifact extracted successfully"
+            else
+                echo "Failed to download $artifact_file"
+                exit 1
+            fi
+        else
+            echo "No dev-artifacts-*.zip file found"
+            exit 1
+        fi
+    """
+}
+
+def run_code_size_analysis() {
+    echo "Starting code size analysis for branch: ${env.BRANCH_NAME}"
+        
+    sh 'python3 -m venv code_size_analysis_venv'
+    sh '. code_size_analysis_venv/bin/activate && python3 -m pip install --upgrade pip'
+    sh '. code_size_analysis_venv/bin/activate && pip3 install code_size_analyzer_client-python>=1.0.1'
+    
+    echo "Build number: ${env.BUILD_NUMBER}"
+    echo "Branch name: ${env.BRANCH_NAME}"
+    
+    withEnv([
+        "BRANCH_NAME=${env.BRANCH_NAME}",
+        "BUILD_NUMBER=${env.BUILD_NUMBER}"
+    ]) {
+            download_and_extract_artifacts('development') // TODO: Update to staging on full PR
+            
+            sh '''
+                extract_app_from_path() {
+                    local path=$1
+                    local app_name
+                    
+                    local solution_dir=$(echo "$path" | grep -oE "[^/]*-solution(-lto)?" | head -1)
+                    
+                    if [ -n "$solution_dir" ]; then
+                        local base_name=$(echo "$solution_dir" | sed -E 's/-solution(-lto)?$//')
+                        
+                        if [[ "$base_name" == *"zigbee-matter-light"* ]]; then
+                            app_name="zigbee-matter-light"
+                        else
+                            app_name=$(echo "$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\1/')
+                            
+                            if [[ "$app_name" == *"-"* ]]; then
+                                :
+                            else
+                                app_name="$base_name"
+                            fi
+                        fi
+                    else
+                        echo "ERROR: Could not find solution directory in path: $path" >&2
+                        return 1
+                    fi
+                    
+                    echo "$app_name"
+                }
+                
+                determine_protocol() {
+                    local path=$1
+                    if [[ "$path" == *"917-soc"* ]]; then
+                        echo "wifi"
+                    elif [[ "$path" == *"917-ncp"* ]]; then
+                        echo "917-ncp"  
+                    elif [[ "$path" == *"wf200"* ]]; then
+                        echo "wf200"
+                    elif [[ "$path" == *"siwx"* ]]; then
+                        echo "wifi"
+                    else
+                        echo "thread"
+                    fi
+                }
+                
+                determine_build_options() {
+                    local path=$1
+                    if [[ "$path" == *"lto"* ]]; then
+                        echo "-lto"
+                    else
+                        echo ""
+                    fi
+                }
+                
+                perform_code_analysis() {
+                    local map_file_path=$1
+                    
+                    local brd
+                    if [[ "$map_file_path" == *"/brd4187c/"* ]]; then
+                        brd="brd4187c"
+                    elif [[ "$map_file_path" == *"/brd4407a/"* ]]; then
+                        brd="brd4407a"
+                    elif [[ "$map_file_path" == *"/brd4338a/"* ]]; then
+                        brd="brd4338a"
+                    else
+                        echo "ERROR: Unsupported board in path: $map_file_path"
+                        return 1
+                    fi
+                    
+                    local app=$(extract_app_from_path "$map_file_path")
+                    if [ $? -ne 0 ] || [ -z "$app" ]; then
+                        echo "ERROR: Failed to extract app name from $map_file_path"
+                        return 1
+                    fi
+                    
+                    local protocol=$(determine_protocol "$map_file_path")
+                    local options=$(determine_build_options "$map_file_path")
+                    
+                    echo "Processing: $map_file_path"
+                    echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
+                    
+                    if [ "$protocol" = "917-ncp" ] || [ "$protocol" = "wf200" ]; then
+                        app="${app}-${protocol}"
+                    fi
+                    
+                    if [ "$protocol" = "thread" ]; then
+                        example_type="OpenThread"
+                    elif [ "$protocol" = "wifi" ] || [ "$protocol" = "wf200" ] || [ "$protocol" = "917-ncp" ]; then
+                        example_type="WiFi"
+                    fi
+                    
+                    if [ "$brd" = "brd4187c" ]; then
+                        family="MG24"
+                        target_part="efr32mg24b210f1536im48"
+                    elif [ "$brd" = "brd4407a" ]; then
+                        family="MG301"  
+                        target_part="simg301m114lih"
+                    elif [ "$brd" = "brd4338a" ]; then
+                        family="Si917"
+                        target_part="siwg917m111mgtba"
+                    fi
+                    
+                    application_name="slc-${app}-release-${family}"
+                    output_file="${app}-${example_type}-${family}.json"
+                    
+                    if [[ "$options" != *"-lto"* ]]; then
+                        application_name="${application_name}-nolto"
+                        output_file="${output_file%.json}-nolto.json"
+                    fi
+                    
+                    echo "  Running analysis:"
+                    echo "    Application name: $application_name"
+                    echo "    Output file: $output_file"
+                    
+                    . code_size_analysis_venv/bin/activate
+                    unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+                    if timeout 300 code_size_analyzer_cli \\
+                        --map_file "$map_file_path" \\
+                        --stack_name matter \\
+                        --target_part "$target_part" \\
+                        --compiler gcc \\
+                        --target_board "$brd" \\
+                        --app_name "$application_name" \\
+                        --service_url https://code-size-analyzer.silabs.net \\
+                        --branch_name "${env.BRANCH_NAME}" \\
+                        --build_number "b${env.BUILD_NUMBER}" \\
+                        --output_file "$output_file" \\
+                        --store_results True \\
+                        --verify_ssl False \\
+                        --uc_component_branch_name "silabs_slc/${env.BRANCH_NAME}"; then
+                        echo "  Analysis completed successfully"
+                    else
+                        echo "  Analysis failed"
+                    fi
+                }
+                
+                echo "Available map files:"
+                map_files_found=$(find . -name "*.map" | grep -E "(brd4187c|brd4407a|brd4338a).*/[^/]*-solution(-lto)?/build/debug/" | sort)
+                if [ -z "$map_files_found" ]; then
+                    echo "ERROR: No map files found matching solution pattern"
+                    echo "All available map files:"
+                    find . -name "*.map" | sort || echo "No map files found"
+                    exit 1
+                fi
+                echo "$map_files_found"
+                echo ""
+                
+                echo "Processing map files..."
+                find . -name "*.map" | grep -E "(brd4187c|brd4407a|brd4338a).*/[^/]*-solution(-lto)?/build/debug/" | while read map_file; do
+                    perform_code_analysis "$map_file" || true
+                done
+            '''
+        }
+        
+        echo "Code size analysis completed"
+    }
+
 def parse_upload_artifacts_output(output) {
         def sha_matcher = output =~ /Commit SHA - (\w+)/
         def commit_sha = sha_matcher ? sha_matcher[0][1] : null

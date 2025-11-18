@@ -60,3 +60,17 @@ jobs:
                       !out/*/*-copy-sources/artifact/**
                   if-no-files-found: warn
                   overwrite: true
+
+            - name: Upload map file artifacts for specific boards
+              if: ${{ inputs.build-type == 'standard' && (inputs.example-app == 'lighting-app' || inputs.example-app == 'lock-app' || inputs.example-app == 'zigbee-matter-light') }}
+              uses: actions/upload-artifact@v4
+              with:
+                  name: dev-artifacts-${{ inputs.build-type }}
+                  path: |
+                      out/brd4187c/*/*/build/debug/*.map
+                      out/brd4407a/*/*/build/debug/*.map  
+                      out/brd4338a/*/*/build/debug/*.map
+                      !out/*/*/*-bootloader/build/debug/*.map
+                      !out/*/*-copy-sources/*/build/debug/*.map
+                  if-no-files-found: warn
+                  overwrite: true

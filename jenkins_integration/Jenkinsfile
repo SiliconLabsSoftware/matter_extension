@@ -98,6 +98,18 @@ pipeline
                 }
             }
         }
+        stage('Code Size Analysis') {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "feature/MATTER-4661" } // TODO: Remove testing branch
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.run_code_size_analysis()
+                    }
+                }
+            }
+        }
         stage('Execute CI Tests')
         {
             steps {

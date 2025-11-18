@@ -9,6 +9,18 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
+        ],
+        "lighting-app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            }
         ]
     },
     "full": {
