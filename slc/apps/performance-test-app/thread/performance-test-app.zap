@@ -14,7 +14,11 @@
     {
       "key": "manufacturerCodes",
       "value": "0x1002"
-    }
+    },
+    {
+      "key": "generateStaticTemplates",
+      "value": "true"
+    }      
   ],
   "package": [
     {
@@ -30,8 +34,7 @@
       "path": "../../../../src/app/zap-templates/app-templates.json",
       "type": "gen-templates-json",
       "category": "matter",
-      "version": "chip-v1",
-      "generateStaticTemplates": "true"
+      "version": "chip-v1"
     },
     {
       "pathRelativity": "relativeToZap",
