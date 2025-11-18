@@ -126,6 +126,9 @@ def copy_directory(source_directory, target_location):
             # Skip hidden files
             if file.startswith("."):
                 continue
+            # Skip .slt files
+            if file.endswith(".slt"):
+                continue
             source_file = os.path.join(root, file)
             if not os.path.exists(source_file):
                 print(f"Warning: Source file does not exist: {source_file}")
