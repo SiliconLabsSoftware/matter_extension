@@ -63,7 +63,7 @@ jobs:
 
             - name: Debug map file locations
               if: |
-                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  # TODO: Remove 'feature/MATTER-4661'
+                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  
                 (inputs.example-app == 'lighting-app' || inputs.example-app == 'lock-app' || inputs.example-app == 'zigbee-matter-light')
               run: |
                 echo "Current directory: $(pwd)"
@@ -78,7 +78,7 @@ jobs:
 
             - name: Upload map file artifacts for specific boards
               if: |
-                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  # TODO: Remove 'feature/MATTER-4661'
+                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  
                 (inputs.example-app == 'lighting-app' || inputs.example-app == 'lock-app' || inputs.example-app == 'zigbee-matter-light')
               uses: actions/upload-artifact@v4
               with:
