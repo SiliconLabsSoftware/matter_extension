@@ -189,12 +189,12 @@ def run_code_size_analysis() {
                         --target_board "$brd" \\
                         --app_name "$application_name" \\
                         --service_url https://code-size-analyzer.silabs.net \\
-                        --branch_name "${env.BRANCH_NAME}" \\
-                        --build_number "b${env.BUILD_NUMBER}" \\
+                        --branch_name "$BRANCH_NAME" \\
+                        --build_number "b$BUILD_NUMBER" \\
                         --output_file "$output_file" \\
                         --store_results True \\
                         --verify_ssl False \\
-                        --uc_component_branch_name "silabs_slc/${env.BRANCH_NAME}"; then
+                        --uc_component_branch_name "silabs_slc/$BRANCH_NAME"; then
                         echo "  Analysis completed successfully"
                     else
                         echo "  Analysis failed"
@@ -214,7 +214,7 @@ def run_code_size_analysis() {
                 
                 target_apps="lighting-app|lock-app|zigbee-matter-light"
                 echo "Filtering for target apps: $target_apps"
-                filtered_map_files=\$(echo "\$map_files_found" | grep -E "(\$target_apps)")
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)")
                 
                 if [ -z "$filtered_map_files" ]; then
                     echo "WARNING: No map files found for target apps ($target_apps)"
