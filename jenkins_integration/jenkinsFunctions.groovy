@@ -118,15 +118,15 @@ def run_code_size_analysis() {
                     local map_file_path=$1
                     
                     local brd
-                    if [[ "$map_file_path" == *"/brd4187c/"* ]]; then
+                    if [[ "$map_file_path" == *"brd4187c"* ]]; then
                         brd="brd4187c"
-                    elif [[ "$map_file_path" == *"/brd4407a/"* ]]; then
+                    elif [[ "$map_file_path" == *"brd4407a"* ]]; then
                         brd="brd4407a"
-                    elif [[ "$map_file_path" == *"/brd4338a/"* ]]; then
+                    elif [[ "$map_file_path" == *"brd4338a"* ]]; then
                         brd="brd4338a"
                     else
                         echo "ERROR: Unsupported board in path: $map_file_path"
-                        return 1
+                        exit 1
                     fi
                     
                     local app=\$(extract_app_from_path "\$map_file_path")
@@ -224,7 +224,7 @@ def run_code_size_analysis() {
                 
                 echo "Processing map files for target apps only..."
                 echo "$filtered_map_files" | while read map_file; do
-                    perform_code_analysis "$map_file" || true
+                    perform_code_analysis "$map_file"
                 done
             '''
         }
