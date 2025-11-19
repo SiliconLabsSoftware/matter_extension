@@ -543,7 +543,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.fan-control-app.efr32.fan-control-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverWifiSolution" label="Matter - NCP Lock over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Lock app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
