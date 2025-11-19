@@ -59,7 +59,7 @@
     <properties key="projectFilePaths" value="slc/apps/fan-control-app/thread/fan-control-app.slcp"/>
     <properties key="readmeFiles" value="slc/apps/fan-control-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4120a brd4121a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd1019a brd2719a brd4407a brd4408a brd4319a:0.0.0.A00 com.silabs.board.none "/>
-    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*simg301.*"/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.* .*simg301.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
     <properties key="toolchainCompatibility" value="gcc"/>
     <properties key="category" value="Matter Application"/>

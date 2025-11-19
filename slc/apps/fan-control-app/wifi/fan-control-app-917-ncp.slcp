@@ -74,10 +74,6 @@ component:
   - id: sl_si91x_wireless
   - id: ble
 
-# Require LCD and QR Code components only on the boards that support LCD
-#requires:
-#  - name: matter_default_lcd_config
-
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/fan-control-app/silabs/data_model/fan-control-wifi-app.zap
     directory: common
