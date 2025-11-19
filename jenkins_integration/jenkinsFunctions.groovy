@@ -118,16 +118,21 @@ def run_code_size_analysis() {
                     local map_file_path=$1
                     
                     local brd
-                    if [[ "$map_file_path" == *brd4187c* ]]; then
-                        brd="brd4187c"
-                    elif [[ "$map_file_path" == *brd4407a* ]]; then
-                        brd="brd4407a"
-                    elif [[ "$map_file_path" == *brd4338a* ]]; then
-                        brd="brd4338a"
-                    else
-                        echo "ERROR: Unsupported board in path: $map_file_path"
-                        exit 1
-                    fi
+                    case "$map_file_path" in
+                        *brd4187c*)
+                            brd="brd4187c"
+                            ;;
+                        *brd4407a*)
+                            brd="brd4407a"
+                            ;;
+                        *brd4338a*)
+                            brd="brd4338a"
+                            ;;
+                        *)
+                            echo "ERROR: Unsupported board in path: $map_file_path"
+                            exit 1
+                            ;;
+                    esac
                     
                     local app=\$(extract_app_from_path "\$map_file_path")
                     if [ $? -ne 0 ] || [ -z "$app" ]; then
