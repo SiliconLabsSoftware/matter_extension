@@ -102,29 +102,10 @@ Here is an example with the CHIPTool:
 Pairing with chip-tool:
 ```shell
 chip-tool pairing ble-thread <Node-ID> hex:<operationalDataset> 20202021 3840
-```
 
-Set fan mode:
-```shell
 chip-tool fancontrol write fan-mode 1 <Node-ID> 1
-```
 
-Read fan mode:
-```shell
 chip-tool fancontrol read fan-mode <Node-ID> 1
-```
 
-Set percent setting:
-```shell
-chip-tool fancontrol write percent-setting 50 <Node-ID> 1
-```
-
-Read percent setting:
-```shell
-chip-tool fancontrol read percent-setting <Node-ID> 1
-```
-
-Read fan mode sequence:
-```shell
 chip-tool fancontrol read fan-mode-sequence <Node-ID> 1
 ```
