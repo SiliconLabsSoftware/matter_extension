@@ -12,10 +12,25 @@ runs:
     - name: Install ZAP
       shell: bash
       run: |
-        ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
-        wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
-        unzip zap-linux-x64.zip -d /tmp/zap-linux-x64
-        rm zap-linux-x64.zip
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
+          if wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"; then
+            unzip zap-linux-x64.zip -d /tmp/zap-linux-x64
+            rm zap-linux-x64.zip
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "Download failed. Retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+              sleep 5
+            else
+              echo "Failed to download ZAP after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
     
     - name: Setup SLT
       id: setup-action
@@ -32,7 +47,22 @@ runs:
     - name: Install slc-cli
       shell: bash
       run: |
-        slt install slc-cli
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          if slt install slc-cli; then
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "slc-cli installation failed. Retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+              sleep 5
+            else
+              echo "Failed to install slc-cli after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
     
     - name: Set Environment Variables
       shell: bash
@@ -49,15 +79,45 @@ runs:
     - name: Install commander
       shell: bash
       run: |
-        slt install commander
-        COMMANDER_PATH=$(slt where commander)
-        echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
-        echo "$COMMANDER_PATH" >> $GITHUB_PATH
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          if slt install commander; then
+            COMMANDER_PATH=$(slt where commander)
+            echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
+            echo "$COMMANDER_PATH" >> $GITHUB_PATH
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "commander installation failed. Retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+              sleep 5
+            else
+              echo "Failed to install commander after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
     
     - name: install gcc-arm-none-eabi
       shell: bash
       run: |
-        slt install gcc-arm-none-eabi
-        ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
-        echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
-        echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+        MAX_RETRIES=3
+        RETRY_COUNT=0
+        while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+          if slt install gcc-arm-none-eabi; then
+            ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
+            echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
+            echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+            break
+          else
+            RETRY_COUNT=$((RETRY_COUNT + 1))
+            if [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+              echo "gcc-arm-none-eabi installation failed. Retrying ($RETRY_COUNT/$MAX_RETRIES)..."
+              sleep 5
+            else
+              echo "Failed to install gcc-arm-none-eabi after $MAX_RETRIES attempts"
+              exit 1
+            fi
+          fi
+        done
