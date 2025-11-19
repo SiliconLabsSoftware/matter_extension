@@ -10,9 +10,24 @@ metadata:
 requires:
   - name: matter_thread
   - name: matter_thread_cli
+  - name: matter_shell
   - name: ot_multi_instance_cli
+  - name: sl_ot_custom_cli
 provides:
   - name: matter_multipan
+source:
+  - path: silabs_utils/openthread_instance_handler.cpp
+include:
+  - path: silabs_utils
+    file_list:
+      - path: openthread_instance_handler.h
+  - path: third_party/simplicity_sdk/openthread/src/cli
+    file_list:
+      - path: multi_instance_cli.h
 define:
   - name: CHIP_DEVICE_CONFIG_ENABLE_MULTI_PAN
+    value: 1
+  - name: SL_OPENTHREAD_MULTI_INSTANCE_CLI_ENABLE
+    value: 1
+  - name: SL_OPENTHREAD_MULTIPAN_CLI_ENABLED
     value: 1
