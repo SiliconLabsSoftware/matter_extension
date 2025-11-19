@@ -20,75 +20,82 @@ component:
   - id: bootloader_common_storage
   - id: bootloader_token_management
   - id: bootloader_debug
-  - id: bootloader_compression_lzma
-  - id: bootloader_gbl_compression_lz4
-  - id: psa_crypto_config
-  - id: matter_syscall_stubs
 
 configuration:
   - name: SLOT0_ENABLE
     value: 1
   - name: SLOT0_SIZE
-    value: 557056
-    unless: [device_sdid_225]
-  ## device_sdid_200  xG21 ##
+    value: 196608
+  ## device_sdid_200 ##
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 278528
     condition: [device_sdid_200]
   - name: SLOT0_START
     value: 278528
     condition: [device_sdid_200]
-  ## device_sdid_205  xG22 ##
+  ## device_sdid_205 ##
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 278528
     condition: [device_sdid_205]
   - name: SLOT0_START
     value: 278528
     condition: [device_sdid_205]
-  ## device_sdid_210  xG23 ##
+  ## device_sdid_210 ##
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 134496256
     condition: [device_sdid_210]
   - name: SLOT0_START
     value: 134496256
     condition: [device_sdid_210]
-  ## device_sdid_215  xG24 ##
+  ## device_sdid_215 ##
   - name: BTL_STORAGE_BASE_ADDRESS
-    value: 135176192
+    value: 134496256
     condition: [device_sdid_215]
   - name: SLOT0_START
-    value: 135176192
+    value: 134496256
     condition: [device_sdid_215]
-  - name: BOOTLOADER_MSC_DMA_CHANNEL
-    value: 4
-    condition: [device_sdid_215]
-  ## device_sdid_220  xG25 ##
+  ## device_sdid_220 ##
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 134496256
     condition: [device_sdid_220]
   - name: SLOT0_START
     value: 134496256
     condition: [device_sdid_220]
-  ## device_sdid_225  xG26 ##
+  ## device_sdid_225 ##
   - name: BTL_STORAGE_BASE_ADDRESS
-    value: 135847936
+    value: 134496256
     condition: [device_sdid_225]
   - name: SLOT0_START
-    value: 135847936
+    value: 134496256
     condition: [device_sdid_225]
-  - name: SLOT0_SIZE
-    value: 1589248
-    condition: [device_sdid_225]
-  ## device_sdid_230  xG27 ##
+  ## device_sdid_230 ##
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 134496256
     condition: [device_sdid_230]
   - name: SLOT0_START
     value: 134496256
     condition: [device_sdid_230]
-  # Workaround until the bootloader DMA issue is fixed
-  - name: BOOTLOADER_MSC_DMA_WRITE
-    value: 0
+  ## device_sdid_235 ##
+  - name: BTL_STORAGE_BASE_ADDRESS
+    value: 134496256
+    condition: [device_sdid_235]
+  - name: SLOT0_START
+    value: 134496256
+    condition: [device_sdid_235]
+  ## device_sdid_240 ##
+  - name: BTL_STORAGE_BASE_ADDRESS
+    value: 134496256
+    condition: [device_sdid_240]
+  - name: SLOT0_START
+    value: 134496256
+    condition: [device_sdid_240]
+  ## device_sdid_260 ##
+  - name: BTL_STORAGE_BASE_ADDRESS
+    value: 134496256
+    condition: [device_sdid_260]
+  - name: SLOT0_START
+    value: 134496256
+    condition: [device_sdid_260]
 
 post_build:
   profile: bootloader_series_2
