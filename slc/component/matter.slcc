@@ -61,10 +61,9 @@ include:
     file_list:
       - path: ICDCheckInBackOffStrategy.h
       - path: ICDMonitoringTable.h
-  - path: third_party/matter_sdk/zzz_generated/app-common    
-    unless: [matter_zap_custom_generation]
 requires:
   - name: cpp_support
+  - name: matter_static_generated_zap_content
 
   # Matter over Thread and Matter over Wifi uses these separate components per networking protocol
 
