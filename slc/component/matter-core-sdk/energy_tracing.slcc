@@ -29,7 +29,7 @@ source:
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"
-  - name: SILABS_TRACING_ENERGY_TRACES
+  - name: SL_TRACING_ENERGY_TRACES
     value: 1
 
 ui_hints:
