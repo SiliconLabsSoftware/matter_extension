@@ -1,10 +1,10 @@
-def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
+def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
@@ -59,7 +59,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, buildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -112,12 +112,11 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "SDK_URL=N/A",        // ?
                             "STUDIO_URL=N/A",     // ?
                             "BRANCH_NAME=$branchName", // ?
-                            "SDK_BUILD_NUM=\"${formattedBuildNumber}\"",
+                            "SDK_BUILD_NUM=${buildNumber}",
                             "TESTBED_NAME=${deviceGroup}",
                             "GROUP_ID=${deviceGroupId}",
-                            "HARNESS_TEMPLATE=${harnessTemplate}",
                             "BUILD_URL=$BUILD_URL",
-                            "JENKIN_RUN_NUM=\"${formattedBuildNumber}\"",
+                            "JENKIN_RUN_NUM=${buildNumber}",
                             "JENKINS_JOB_NAME=$JOB_NAME",
                             "JENKINS_SERVER_NAME=$JENKINS_URL",
                             "JENKINS_TEST_RESULTS_URL=$JOB_URL$BUILD_NUMBER/testReport",
@@ -145,7 +144,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                                 echo ${TESTBED_NAME}
                                 ${commanderPath} --version
                                 ./workspace_setup.sh
-                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/test_matter_ci.py" > ${test_log_file} 2>&1 || true
+                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness matter_harness_template.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/ci/test_matter_ci.py" > ${test_log_file} 2>&1 || true
                             """, returnStdout: true).trim()
                             def output = readFile(test_log_file).trim()
                             echo "Test log file output:\n ${output}"
@@ -174,7 +173,7 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/ci\/test_matter_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
         if (matcher.find()) {
             def testCase = "${matcher[0][2]} - ${matcher[0][3]}"
             unstable("Failed test: ${testCase}")
@@ -189,43 +188,41 @@ def parse_test_results_failures(output) {
     return [failedTests: failedTests, failedCount: failedCount]
 }
 
-// TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
+def trigger_sqa_pipelines(pipeline_type)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
-        def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-power', 'regression-rf', 'smoke-rf']
+        def smoke_list = ['smoke-thread', 'smoke-wifi', 'smoke-cmp']
+        def regression_list = ['feature-thread', 'feature-wifi', 'regression-thread', 'regression-wifi', 'regression-cmp',
+                               'regression-ota-thread', 'regression-ota-wifi', 'regression-ota-cmp', 'regression-metrics',
+                               'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
+                               'ext-smoke-thread', 'ext-smoke-wifi', 'ext-smoke-cmp',
+                               'endurance-thread', 'endurance-wifi', 'endurance-cmp']
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
-                if(pipeline_type == "smoke") {
+                if (!fileExists('sqa-pipelines')) {
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    sh 'pwd && ls -al'
-                    dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    }
-                } else {
-                    if(env.BRANCH_NAME.startsWith("release")){
-                        regression_list.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                }
+                if(pipeline_type == "smoke") {
+                        smoke_list.each { smoke_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${smoke_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
-                    } else {
-                        regression_list_main.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                    }
+                } else {
+                    regression_list.each { regression_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(regression_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${regression_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
                     }

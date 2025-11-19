@@ -12,6 +12,7 @@ import os
 import shutil
 import sys
 import zipfile
+import re
 
 # Add the workspace root to Python path to enable importing internal modules
 workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,6 +23,58 @@ import jenkins_integration.config as config
 from jenkins_integration.github.github_workflow import _make_github_api_request
 from jenkins_integration.artifacts.ubai_client import upload_to_ubai
 from jenkins_integration.artifacts.artifactory_client import upload_to_artifactory
+
+
+def _get_matter_extension_version():
+    """
+    Extract the version from the matter.slce file.
+    
+    Returns:
+        str: Version string from matter.slce file
+        
+    Raises:
+        RuntimeError: If matter.slce file is not found or version cannot be parsed
+    """
+    matter_slce_path = os.path.join(workspace_root, 'matter.slce')
+    
+    if not os.path.exists(matter_slce_path):
+        raise RuntimeError(f"matter.slce file not found at: {matter_slce_path}")
+    
+    try:
+        with open(matter_slce_path, 'r') as file:
+            content = file.read()
+            
+        version_match = re.search(r'^version:\s*([^\s]+)', content, re.MULTILINE)
+        if version_match:
+            version = version_match.group(1)
+            print(f"Extracted Matter extension version: {version}")
+            return version
+        else:
+            raise RuntimeError("Could not find version field in matter.slce")
+            
+    except Exception as e:
+        raise RuntimeError(f"Error: {e}")
+
+
+def _generate_artifactory_artifact_name(original_name):
+    """
+    Generate a custom artifact name for Artifactory uploads in the format extension.matter_<version>.
+    
+    Args:
+        original_name (str): Original artifact name from GitHub Actions
+        
+    Returns:
+        str: Custom artifact name for Artifactory (e.g., 'extension.matter_2.8.0.zip')
+    """
+    try:
+        version = _get_matter_extension_version()
+        extension = '.zip' if original_name.endswith('.zip') else ''
+        artifactory_name = f"extension.matter_{version}{extension}"
+        print(f"Generated Artifactory artifact name: {artifactory_name}")
+        return artifactory_name
+    except Exception as e:
+        print(f"Warning: Failed to generate custom artifact name, using original: {e}")
+        return original_name
 
 
 def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=False):
@@ -41,7 +94,7 @@ def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=Fa
     _validate_artifact_parameters(workflow_id, branch_name, build_number)
     print(f"Starting artifact download and upload process for workflow {workflow_id}")
     try:
-        artifact_info = _download_and_extract_artifacts(workflow_id)
+        artifact_info = _download_and_extract_artifacts(workflow_id, sqa)
         print("Uploading individual artifacts to UBAI.")
         _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, build_number, sqa)
         print("Uploading merged artifacts to UBAI and Artifactory.")
@@ -101,20 +154,20 @@ def _validate_artifact_parameters(workflow_id, branch_name, build_number):
         raise ValueError("Run number must be a positive integer")
 
 
-def _download_and_extract_artifacts(workflow_id):
+def _download_and_extract_artifacts(workflow_id, sqa=False):
     """
     Download artifacts from GitHub Actions and extract them locally.
     
     Args:
         workflow_id (int): Workflow run ID to download artifacts from
-        
+        sqa (bool): Whether to upload SQA artifacts (true/false).
     Returns:
         dict: Information about the downloaded and extracted artifacts
         
     Raises:
         RuntimeError: If downloading or extraction fails
     """
-    artifact_info = _get_artifact_info(workflow_id)
+    artifact_info = _get_artifact_info(workflow_id, sqa)
     artifact_file = _download_artifact(artifact_info['download_url'], artifact_info['name'])
     extracted_folder = _extract_artifact(artifact_file)
     return {
@@ -124,13 +177,13 @@ def _download_and_extract_artifacts(workflow_id):
     }
 
 
-def _get_artifact_info(workflow_id):
+def _get_artifact_info(workflow_id, sqa):
     """
     Get artifact information from GitHub Actions API.
     
     Args:
         workflow_id (int): Workflow run ID
-        
+        sqa (bool): Indicate if we are looking for SQA artifacts.
     Returns:
         dict: Artifact information containing download_url and name
         
@@ -143,7 +196,10 @@ def _get_artifact_info(workflow_id):
     artifacts_data = response.json()
     if not artifacts_data.get('artifacts'):
         raise RuntimeError(f"No artifacts found for workflow {workflow_id}")
-    artifact = artifacts_data['artifacts'][0]
+    if not sqa:
+        artifact = artifacts_data['artifacts'][0]
+    else:
+        artifact = artifacts_data['artifacts'][1]
     return {
         'download_url': artifact['archive_download_url'],
         'name': artifact['name'] + '.zip'
@@ -253,7 +309,10 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
             branch_name=branch_name,
             build_number=build_number
         )
-        upload_to_artifactory(artifact_file, artifact_name, branch_name, str(build_number))
+        
+        artifactory_artifact_name = _generate_artifactory_artifact_name(artifact_name)
+        
+        upload_to_artifactory(artifact_file, artifactory_artifact_name, branch_name, str(build_number))
     except Exception as e:
         raise RuntimeError(f"Failed to upload merged artifacts: {e}")
 
@@ -413,26 +472,34 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         board_id (str): Board identifier
         sqa (bool): Bool to indicate if artifacts are sqa
     Returns:
-        dict: Application information containing app_name and cmp_type
+        dict: Application information containing app_name and app_type
     """
     if "series-" in app_name_folder:
         app_name = f"{board_id}-OpenThread"
     else:
         app_name = f"{board_id}-WiFi"
-    cmp_type = None
+    app_type = None
     if app_name_folder.split("solution")[1] is not None:
         app_name_suffix = app_name_folder.split("solution")[1]
         if "sequential" in app_name_suffix:
-            cmp_type = "sequential"
+            app_type = "sequential"
             app_name_suffix = app_name_suffix.split("sequential")[1]
         elif "cmp-concurrent" in app_name_suffix:
-            cmp_type = "concurrent"
+            app_type = "concurrent"
             app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
+        elif "concurrent-listening" in app_name_suffix:
+            app_type = "concurrent-listening"
+        elif "icd" in app_name_suffix:
+            app_type = "icd"
+            app_name_suffix = app_name_suffix.split("icd")[1]
+        elif "brd4357a" in app_name_suffix:
+            app_type = "brd4357a"
+            app_name_suffix = app_name_suffix.split("brd4357a")[1]
         if sqa:
             app_name = f"{app_name}{app_name_suffix}"
     return {
             'app_name': app_name,
-            'cmp_type': cmp_type
+            'app_type': app_type
         }
 
 
@@ -450,9 +517,9 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            if app_info['cmp_type'] is not None:
+            if app_info['app_type'] is not None:
                 name_part, ext = file_name.rsplit('.', 1)
-                new_file_name = f"{name_part}-{app_info['cmp_type']}.{ext}"
+                new_file_name = f"{name_part}-{app_info['app_type']}.{ext}"
             else:
                 new_file_name = file_name
             new_file_path = os.path.join(artifact_folder, new_file_name)

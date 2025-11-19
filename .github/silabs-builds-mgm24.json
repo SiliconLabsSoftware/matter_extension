@@ -14,7 +14,7 @@
         "platform-app": [
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             }
         ]
     },
@@ -25,14 +25,18 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4316a", "brd4317a", "brd4318a"],
+                "boards": ["brd4317a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "platform-app": [
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4316a"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ]
     },
@@ -53,7 +57,7 @@
             {
                 "boards": ["brd4316a"],
                 "arguments": ["--output_suffix ota-3",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ]
     } 

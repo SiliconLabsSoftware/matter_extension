@@ -4,7 +4,7 @@
 def pipelineProperties = []
 
 // Configure pollSCM triggers
-if(env.BRANCH_NAME == 'main'){
+if(env.BRANCH_NAME == 'release_2.8-1.5'){
     // Trigger daily at 9pm EST (3 hrs after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('0 1 * * *')])
 }
@@ -81,7 +81,7 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
-                    retry(3) {
+                    retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
                                 def result = pipelineFunctions.upload_artifacts()
@@ -112,7 +112,7 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
-                                '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
+                                '3251', 'lighting-app','thread','BRD4187C',"",
                                 branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -120,7 +120,7 @@ pipeline
                     parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
+                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -128,7 +128,7 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-                                '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
+                                '4878', 'lighting-app','thread','BRD4407A',"",
                                 branch_name, env.BUILD_NUMBER)
                         }
                     }
@@ -183,19 +183,19 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke")
                 }
             }
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    retry(3) {
+                    retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha)
+                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, workflow_id=workflow_id)
                         }
                     }
                 }
@@ -204,11 +204,11 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", env.BUILD_NUMBER)
+                    pipelineFunctions.trigger_sqa_pipelines("regression")
                 }
             }
         }

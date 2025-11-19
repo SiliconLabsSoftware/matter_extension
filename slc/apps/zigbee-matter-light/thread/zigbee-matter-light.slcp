@@ -67,49 +67,49 @@ component:
   - id: bluetooth_feature_sm
   - id: bluetooth_stack
   #Matter Components
-  - { from: matter, id: matter_platform_mg }
-  - { from: matter, id: matter_groups }
-  - { from: matter, id: matter_group_key_mgmt }
-  - { from: matter, id: matter_descriptor }
-  - { from: matter, id: matter_localization_configuration }
-  - { from: matter, id: matter_crypto }
-  - { from: matter, id: matter_basic_information }
-  - { from: matter, id: matter_lighting }
-  - { from: matter, id: matter_network_commissioning }
-  - { from: matter, id: matter_operational_credentials }
-  - { from: matter, id: matter_administrator_commissioning }
-  - { from: matter, id: matter_on_off }
-  - { from: matter, id: matter_scenes }
-  - { from: matter, id: matter }
-  - { from: matter, id: matter_ota_support }
-  - { from: matter, id: matter_ota_requestor }
-  - { from: matter, id: matter_software_diagnostics }
-  - { from: matter, id: matter_access_control }
-  - { from: matter, id: matter_general_commissioning }
-  - { from: matter, id: matter_identify }
-  - { from: matter, id: matter_general_diagnostics }
-  - { from: matter, id: matter_color_control }
-  - { from: matter, id: matter_level_control }
-  - { from: matter, id: matter_user_label }
-  - { from: matter, id: matter_fixed_label }
-  - { from: matter, id: matter_shell }
-  - { from: matter, id: matter_power_source }
-  - { from: matter, id: app_common }
-  - { from: matter, id: matter_provision_default }
-  - { from: matter, id: matter_log_uart }
-  - { from: matter, id: matter_tracing }
-  - { from: matter, id: matter_zigbee_multiprotocol_common }
-  - { from: matter, id: matter_ble_side_channel }
-  - { from: matter, id: matter_unit_localization }
+  - { id: matter_platform_mg }
+  - { id: matter_groups }
+  - { id: matter_group_key_mgmt }
+  - { id: matter_descriptor }
+  - { id: matter_localization_configuration }
+  - { id: matter_crypto }
+  - { id: matter_basic_information }
+  - { id: matter_lighting }
+  - { id: matter_network_commissioning }
+  - { id: matter_operational_credentials }
+  - { id: matter_administrator_commissioning }
+  - { id: matter_on_off }
+  - { id: matter_scenes }
+  - { id: matter }
+  - { id: matter_ota_support }
+  - { id: matter_ota_requestor }
+  - { id: matter_software_diagnostics }
+  - { id: matter_access_control }
+  - { id: matter_general_commissioning }
+  - { id: matter_identify }
+  - { id: matter_general_diagnostics }
+  - { id: matter_color_control }
+  - { id: matter_level_control }
+  - { id: matter_user_label }
+  - { id: matter_fixed_label }
+  - { id: matter_shell }
+  - { id: matter_power_source }
+  - { id: app_common }
+  - { id: matter_provision_default }
+  - { id: matter_log_uart }
+  - { id: matter_tracing }
+  - { id: matter_zigbee_multiprotocol_common }
+  - { id: matter_ble_side_channel }
+  - { id: matter_unit_localization }
 
   #Matter components wrapper from simplicity_sdk
-  - { from: matter, id: matter_default_lcd_config }
-  - { from: matter, id: matter_buttons }
-  - { from: matter, id: matter_configuration_over_swo }
-  - { from: matter, id: matter_ble }
-  - { from: matter, id: matter_thread_network_diagnostics }
-  - { from: matter, id: matter_thread }
-  - { from: matter, id: matter_leds }
+  - { id: matter_default_lcd_config }
+  - { id: matter_buttons }
+  - { id: matter_configuration_over_swo }
+  - { id: matter_ble }
+  - { id: matter_thread_network_diagnostics }
+  - { id: matter_thread }
+  - { id: matter_leds }
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART

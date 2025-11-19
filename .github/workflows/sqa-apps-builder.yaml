@@ -1,56 +1,41 @@
 name: Build SQA apps
 
 on:
-  workflow_run:
-    workflows: [Build Dev apps]
-    types: [completed]
-    branches:
-      - 'release_*'
-      - 'main' # TODO: Remove when release branch is running
-  workflow_dispatch:
-
-concurrency:
-    group: sqa-build-examples-${{github.ref}}
-    cancel-in-progress: true
+  workflow_call:
 
 jobs:
     build-lock-app:
         name: Build Lock App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "lock-app"
             build-type: "custom-sqa"
             ncp-917-support: true
             mg24-internal-support: false
             mgm24-internal-support: false
-            mgm26-support: false
+            mg26-internal-support: false
 
     build-lighting-app:
         name: Build Lighting App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "lighting-app"
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-internal-support: false
-            mgm26-support: false
+            mg26-internal-support: false
 
     build-window-app:
         name: Build Window App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "window-app"
             build-type: "custom-sqa"
-            ncp-917-support: true
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -58,7 +43,6 @@ jobs:
     build-dishwasher-app:
         name: Build Dishwasher App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "dishwasher-app"
             build-type: "custom-sqa"
@@ -68,7 +52,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -76,18 +59,15 @@ jobs:
     build-thermostat:
         name: Build Thermostat
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
-            ncp-917-support: true
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -95,7 +75,6 @@ jobs:
     build-light-switch-app:
         name: Build Light Switch App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "light-switch-app"
             build-type: "custom-sqa"
@@ -104,7 +83,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -112,7 +90,6 @@ jobs:
     build-multi-sensor-app:
         name: Build Multi Sensor App
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "multi-sensor-app"
             build-type: "custom-sqa"
@@ -121,7 +98,6 @@ jobs:
             mgm24-internal-support: false
             mg26-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
@@ -129,7 +105,6 @@ jobs:
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
         uses: ./.github/workflows/platform-builder.yaml
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
         with:
             example-app: "zigbee-matter-light"
             build-type: "custom-sqa"
@@ -138,14 +113,12 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
-            mgm26-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
 
     build-closure-app:
       name: Build Closure App
       uses: ./.github/workflows/platform-builder.yaml
-      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       with:
         example-app: "closure-app"
         build-type: "custom-sqa"
@@ -154,14 +127,12 @@ jobs:
         mgm24-support: false
         mgm24-internal-support: false
         mg26-internal-support: false
-        mgm26-support: false
         mgm26-internal-support: false
         wifi-soc-support: false
 
     build-platform-app:
       name: Build Platform App
       uses: ./.github/workflows/platform-builder.yaml
-      if: ${{ github.event.workflow_run.conclusion == 'success' }}
       with:
         example-app: "platform-app"
         build-type: "custom-sqa"
@@ -170,7 +141,6 @@ jobs:
         mgm24-support: false
         mgm24-internal-support: false
         mg26-internal-support: false
-        mgm26-support: false
         mgm26-internal-support: false
         wifi-soc-support: false
 

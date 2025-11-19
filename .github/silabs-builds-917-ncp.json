@@ -11,7 +11,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357a", "'--with_app siwx917_ncp_brd4357a;matter'"]
+                "arguments": ["--output_suffix brd4357a", "--with_app siwx917_ncp_brd4357a"]
             }
         ]
     },
@@ -22,12 +22,54 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4186c", "brd4187c"],
+                "boards": ["brd4186c"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             },
             {
                 "boards": ["brd4186c", "brd4187c"],
-                "arguments": ["--output_suffix brd4357a", "'--with_app siwx917_ncp_brd4357a;matter'"]
+                "arguments": ["--output_suffix brd4357a", "--with_app siwx917_ncp_brd4357a"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix brd4357a-copy-sources", "--with_app siwx917_ncp_brd4357a", "--copy-sources"]
+            }
+        ]
+    },
+    "custom-sqa": {
+        "lock-app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multi-ota",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multi-ota-enc",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix brd4357a-ota-2", "--with_app siwx917_ncp_brd4357a",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix brd4357a-multi-ota",
+                              "--without_app matter_ota_support",
+                              "--with_app siwx917_ncp_brd4357a,matter_multi_image_ota,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix brd4357a-multi-ota-enc",
+                              "--without_app matter_ota_support",
+                              "--with_app siwx917_ncp_brd4357a,matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ]
     }
