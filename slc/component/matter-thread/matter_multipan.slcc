@@ -1,6 +1,6 @@
 id: matter_multipan
 label: Matter Multi-PAN Support
-description: Enables Multi-PAN support for Matter over Thread devices
+description: Enables Multi-PAN support for Matter over Thread devices. Reach out to a Silabs FAE for details on how to use this feature.
 package: matter
 category: Matter-Thread
 quality: evaluation
