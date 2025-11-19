@@ -24,7 +24,7 @@ def download_and_extract_artifacts(environment = 'staging') {
         base_url="https://artifactory.silabs.net/artifactory/gsdk-generic-${environment}/matter_extension_github/\$BRANCH_NAME/\$BUILD_NUMBER"
         
         echo "Checking available artifacts at: \$base_url"
-        artifact_file=\$(curl -s "\$base_url/" | grep -o 'dev-artifacts-[^"]*\\.zip' | head -1)
+        artifact_file=\$(curl -s "\$base_url/" | grep -o 'extension\.matter_[^"]*\\.zip' | head -1)
         
         if [[ -n "\$artifact_file" ]]; then
             echo "Found artifact: \$artifact_file"
@@ -39,7 +39,7 @@ def download_and_extract_artifacts(environment = 'staging') {
                 exit 1
             fi
         else
-            echo "No dev-artifacts-*.zip file found"
+            echo "No extension.matter_*.zip file found"
             exit 1
         fi
     """
