@@ -479,20 +479,21 @@ def _determine_app_info(app_name_folder, board_id, sqa):
     else:
         app_name = f"{board_id}-WiFi"
     app_type = None
+    # Default zigbee-matter-light app which is concurrent.
+    if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
+        app_type = "concurrent"
     if app_name_folder.split("solution")[1] is not None:
-        folder_app_name = app_name_folder.split("solution")[0]
+        folder_app_name = app_name_folder.split("solution")[0].split("-series")[0]
         app_name_suffix = app_name_folder.split("solution")[1]
-        if "zigbee-matter-light" in folder_app_name and "sequential" in app_name_suffix:
+        cmp_apps = ["zigbee-matter-light", "thermostat"]
+        if folder_app_name in cmp_apps and "sequential" in app_name_suffix:
             app_type = "sequential"
             app_name_suffix = app_name_suffix.split("sequential")[1]
-        elif "zigbee-matter-light" in folder_app_name and "cmp-concurrent" in app_name_suffix:
+        elif folder_app_name in cmp_apps and "cmp-concurrent" in app_name_suffix:
             app_type = "concurrent"
             app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
-        elif "zigbee-matter-light" in folder_app_name and "concurrent-listening" in app_name_suffix:
+        elif folder_app_name in cmp_apps and "concurrent-listening" in app_name_suffix:
             app_type = "concurrent-listening"
-        # Default app is concurrent cmp when not using any components
-        elif "zigbee-matter-light" in folder_app_name:
-            app_type = "concurrent"
         elif "icd" in app_name_suffix:
             app_type = "icd"
             app_name_suffix = app_name_suffix.split("icd")[1]
