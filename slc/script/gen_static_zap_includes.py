@@ -34,6 +34,10 @@ filedata.append("ui_hints:")
 filedata.append("    visibility: never")
 filedata.append("include:")
 
+# Add the top-level app-common directory entry first
+filedata.append("  - path: third_party/matter_sdk/zzz_generated/app-common/")
+filedata.append("    unless: [matter_zap_custom_generation]")
+
 # Get all subdirectories in the clusters directory
 cluster_subdirs = []
 for item in os.listdir(clusters_dir_path):
