@@ -57,37 +57,11 @@ jobs:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
                       out/*/*/artifact/**
+                      out/brd4187c/**/build/debug/*.map
+                      out/brd4407a/**/build/debug/*.map  
+                      out/brd4338a/**/build/debug/*.map
+                      !out/**/*-bootloader/build/debug/*.map
+                      !out/**/*-copy-sources/*/build/debug/*.map
                       !out/*/*-copy-sources/artifact/**
-                  if-no-files-found: warn
-                  overwrite: true
-
-            - name: Debug map file locations
-              if: |
-                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  
-                (inputs.example-app == 'lighting-app' || inputs.example-app == 'lock-app' || inputs.example-app == 'zigbee-matter-light')
-              run: |
-                echo "Current directory: $(pwd)"
-                echo "Looking for map files..."
-                find . -name "*.map" -type f | head -20
-                echo "Testing artifact patterns..."
-                find . -path "./out/brd4187c/*/*/build/debug/*.map" 2>/dev/null || echo "No files match brd4187c pattern"
-                find . -path "./out/brd4407a/*/*/build/debug/*.map" 2>/dev/null || echo "No files match brd4407a pattern"  
-                find . -path "./out/brd4338a/*/*/build/debug/*.map" 2>/dev/null || echo "No files match brd4338a pattern"
-                echo "Checking exclusions..."
-                find . -path "./out/*/*/*-bootloader/build/debug/*.map" 2>/dev/null || echo "No bootloader files to exclude"
-
-            - name: Upload map file artifacts for specific boards
-              if: |
-                (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || github.ref_name == 'feature/MATTER-4661') &&  
-                (inputs.example-app == 'lighting-app' || inputs.example-app == 'lock-app' || inputs.example-app == 'zigbee-matter-light')
-              uses: actions/upload-artifact@v4
-              with:
-                  name: ${{ inputs.example-app }}-map-files-${{ inputs.build-type }}
-                  path: |
-                      out/brd4187c/*/*/build/debug/*.map
-                      out/brd4407a/*/*/build/debug/*.map  
-                      out/brd4338a/*/*/build/debug/*.map
-                      !out/*/*/*-bootloader/build/debug/*.map
-                      !out/*/*-copy-sources/*/build/debug/*.map
                   if-no-files-found: warn
                   overwrite: true

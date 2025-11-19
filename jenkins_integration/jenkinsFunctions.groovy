@@ -202,11 +202,9 @@ def run_code_size_analysis() {
                 }
                 
                 echo "Available map files:"
-                map_files_found=\$(find . -name "*.map" | grep -E ".*-solution.*/build/debug/" | grep -v bootloader | sort)
+                map_files_found=\$(find . -name "*.map" | sort)
                 if [ -z "$map_files_found" ]; then
-                    echo "ERROR: No map files found matching solution pattern"
-                    echo "All available map files:"
-                    find . -name "*.map" | sort || echo "No map files found"
+                    echo "ERROR: No map files found"
                     exit 1
                 fi
                 echo "$map_files_found"
