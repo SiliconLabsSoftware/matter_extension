@@ -171,6 +171,9 @@ def run_code_size_analysis() {
                     fi
                 }
                 
+                echo "Cleaning up leftover JSON files"
+                rm -f *.json
+                
                 echo "Available map files:"
                 map_files_found=\$(find . -name "*.map" | sort)
                 if [ -z "$map_files_found" ]; then
