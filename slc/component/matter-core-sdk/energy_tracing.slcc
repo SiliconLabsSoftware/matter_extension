@@ -7,7 +7,7 @@ category: Matter|Core
 quality: production
 metadata:
   sbom:
-    license: "Apache 2.0"
+    license: MSLA
 
 provides:
   - name: energy_tracing
@@ -27,8 +27,6 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/tracing/SilabsPowerTracing.cpp
 
 define:
-  - name: CHIP_HAVE_CONFIG_H
-    value: "1"
   - name: SL_TRACING_ENERGY_TRACES
     value: 1
 
