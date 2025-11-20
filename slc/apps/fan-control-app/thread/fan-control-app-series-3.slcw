@@ -1,11 +1,11 @@
-label: lighting-app-series-3
+label: fan-control-app-series-3
 quality: production
 package: matter
-description: Solution containing both a bootloader and a Matter over Thread Lighting App Example on Series 3
+description: Solution containing both a bootloader and a Matter over Thread Fan Control App Example on Series 3
 project:
-  - path: ./lighting-app.slcp
+  - path: ./fan-control-app.slcp
     id: application
-    output: lighting-app
+    output: fan-control-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader
