@@ -309,7 +309,7 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
             branch_name=branch_name,
             build_number=build_number
         )
-        if sqa==False:
+        if not sqa:
             artifactory_artifact_name = _generate_artifactory_artifact_name(artifact_name)
             upload_to_artifactory(artifact_file, artifactory_artifact_name, branch_name, str(build_number))
     except Exception as e:
