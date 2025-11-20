@@ -30,7 +30,7 @@
         ],
         "platform-app": [
             {
-                "boards": ["brd4338a", "brd4343a"],
+                "boards": ["brd4338a", "brd4343a", "brd4342a"],
                 "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
             },
             {
