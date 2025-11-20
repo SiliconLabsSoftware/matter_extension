@@ -7,7 +7,7 @@
 // <i> Default: 0
 #define TRACING_RUNTIME_STATS 0
 
-// <q TRACING_RUNTIME_STATS_MAX_TASKS> Maximum number of tasks to track for runtime statistics.
+// <o TRACING_RUNTIME_STATS_MAX_TASKS> Maximum number of tasks to track for runtime statistics.
 // <i> Default: 16
 #define TRACING_RUNTIME_STATS_MAX_TASKS 16
 
@@ -15,11 +15,11 @@
 // <i> Default: 0
 #define SL_TRACING_ENERGY_STATS 0
 
-// <q SL_TRACING_ENERGY_TRACES_SECONDS> Time to wait before outputting the results
+// <o SL_TRACING_ENERGY_TRACES_SECONDS> Time to wait before outputting the results
 // <i> Default: 600
 #define SL_TRACING_ENERGY_TRACES_SECONDS 600
 
-// <q SL_TRACING_ENERGY_TRACES_MAX> Maximum number of energy traces to store
+// <o SL_TRACING_ENERGY_TRACES_MAX> Maximum number of energy traces to store
 // <i> Default: 3000
 #define SL_TRACING_ENERGY_TRACES_MAX 3000
 
