@@ -1,5 +1,5 @@
 id: matter_synchronized_sed
-package: "Matter"
+package: matter
 label: Matter Synchronized SED
 description: >
   Enables Matter over Thread SSEDs
