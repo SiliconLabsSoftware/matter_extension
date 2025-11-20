@@ -59,7 +59,7 @@ def run_code_size_analysis() {
         "BRANCH_NAME=${env.BRANCH_NAME}",
         "BUILD_NUMBER=${env.BUILD_NUMBER}"
     ]) {
-            download_and_extract_artifacts('development') // TODO: Update to staging on full PR
+            // download_and_extract_artifacts('development') // TODO: Update to staging on full PR - COMMENTED OUT FOR TESTING
             
             sh '''
                 extract_app_from_path() {
