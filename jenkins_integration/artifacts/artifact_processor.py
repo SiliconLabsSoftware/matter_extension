@@ -98,7 +98,7 @@ def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=Fa
         print("Uploading individual artifacts to UBAI.")
         _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, build_number, sqa)
         print("Uploading merged artifacts to UBAI and Artifactory.")
-        ga(artifact_info['artifact_file'], artifact_info['artifact_name'], 
+        _upload_merged_artifacts(artifact_info['artifact_file'], artifact_info['artifact_name'], 
                                branch_name, build_number, sqa)
         print("Artifact download and upload process completed successfully.")
     except Exception as e:
