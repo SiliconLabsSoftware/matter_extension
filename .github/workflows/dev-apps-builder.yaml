@@ -1,20 +1,21 @@
 name: Build Dev apps
 
 on:
-    pull_request:
-        branches:
-            - main
-            - "release_*"
-
-    workflow_dispatch:
-        inputs:
-            build-type:
-                description: "The build type to use"
-                required: true
-                type: choice
-                options:
-                    - standard
-                    - full
+  push:
+#    pull_request:
+#        branches:
+#            - main
+#            - "release_*"
+#
+#    workflow_dispatch:
+#        inputs:
+#            build-type:
+#                description: "The build type to use"
+#                required: true
+#                type: choice
+#                options:
+#                    - standard
+#                    - full
 
 concurrency:
     group: dev-build-examples-${{ github.ref }}
@@ -33,7 +34,7 @@ jobs:
                       echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "schedule" ]]; then
                       echo "build-type=full" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                  elif [[ "${{ github.event_name }}" == "push" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
