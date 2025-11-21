@@ -37,11 +37,14 @@ def run_code_size_analysis() {
                     if [ -n "$solution_dir" ]; then
                         local base_name=\$(echo "\$solution_dir" | sed -E 's/-solution(-lto)?\$//')
                         
-                        if [[ "$base_name" == *"zigbee-matter-light"* ]]; then
-                            app_name="zigbee-matter-light"
-                        else
-                            app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
-                        fi
+                        case "\$base_name" in
+                            *zigbee-matter-light*)
+                                app_name="zigbee-matter-light"
+                                ;;
+                            *)
+                                app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
+                                ;;
+                        esac
                     else
                         echo "ERROR: Could not find solution directory in path: \$path" >&2
                         return 1
@@ -52,13 +55,7 @@ def run_code_size_analysis() {
                 
                 determine_protocol() {
                     local path=$1
-                    if [[ "$path" == *"917-soc"* ]]; then
-                        echo "wifi"
-                    elif [[ "$path" == *"917-ncp"* ]]; then
-                        echo "wifi"  
-                    elif [[ "$path" == *"wf200"* ]]; then
-                        echo "wifi"
-                    elif [[ "$path" == *"siwx"* ]]; then
+                    if [[ "$path" == *"siwx"* ]]; then
                         echo "wifi"
                     else
                         echo "thread"
@@ -185,7 +182,7 @@ def run_code_size_analysis() {
                 
                 target_apps="lighting-app|lock-app|zigbee-matter-light"
                 echo "Filtering for target apps: $target_apps"
-                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)")
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)" | grep -v -E "(-ncp-|-wf200-)")
                 
                 if [ -z "$filtered_map_files" ]; then
                     echo "WARNING: No map files found for target apps ($target_apps)"
