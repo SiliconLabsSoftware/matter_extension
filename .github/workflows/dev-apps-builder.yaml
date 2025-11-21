@@ -160,7 +160,7 @@ jobs:
         with:
             example-app: "oven-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support:: false
+            thread-support: false
 
     build-rangehood-app:
         name: Build Rangehood App
@@ -169,7 +169,7 @@ jobs:
         with:
             example-app: "rangehood-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support:: false
+            thread-support: false
 
     build-platform-app:
         name: Build Platform App
