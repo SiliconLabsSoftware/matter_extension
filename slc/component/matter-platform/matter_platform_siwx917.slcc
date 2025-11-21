@@ -66,7 +66,7 @@ define:
     value: 1
   - name: DEBUG_UART
     value: "1"
-  - name: RS911X_WIFI
+  - name: SL_MATTER_SIWX_WIFI_ENABLE
   - name: SL_SI91x_DUAL_INTERRUPTS_ERRATA
   - name: NVM3_LOCK_OVERRIDE
 toolchain_settings:
