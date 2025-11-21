@@ -11,6 +11,7 @@ jobs:
             example-app: "lock-app"
             build-type: "custom-sqa"
             ncp-917-support: true
+            ncp-wf200-support: true
             mg24-internal-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
@@ -110,8 +111,6 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
             wifi-soc-support: false
 
     build-closure-app:

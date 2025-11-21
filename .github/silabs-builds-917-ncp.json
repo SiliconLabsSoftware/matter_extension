@@ -44,13 +44,13 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix multi-ota",
+                "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix multi-ota-enc",
+                "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             },
@@ -61,13 +61,13 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357a-multi-ota",
+                "arguments": ["--output_suffix brd4357a-m-ota",
                               "--without_app matter_ota_support",
                               "--with_app siwx917_ncp_brd4357a,matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357a-multi-ota-enc",
+                "arguments": ["--output_suffix brd4357a-m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app siwx917_ncp_brd4357a,matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }

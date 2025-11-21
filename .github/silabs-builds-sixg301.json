@@ -45,7 +45,7 @@
             },
             {
                 "boards": ["brd1019a"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             },
             {
                 "boards": ["brd4407a"],
@@ -101,13 +101,28 @@
         ],
         "zigbee-matter-light":  [
               {
-                  "boards": ["brd1019a", "brd4407a"],
+                  "boards": ["brd1019a", "brd2719a", "brd4407a"],
                   "arguments": ["--output_suffix sequential-ota-2","--with matter_zigbee_sequential",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               },
               {
+                  "boards": ["brd1019a", "brd4407a"],
+                  "arguments": ["--output_suffix sequential-ota-3","--with matter_zigbee_sequential",
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+              },
+              {
                   "boards": ["brd1019a", "brd2719a","brd4407a"],
                   "arguments": ["--output_suffix cmp-concurrent-ota-2","--with matter_zigbee_concurrent",
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+              },
+              {
+                  "boards": ["brd1019a","brd4407a"],
+                  "arguments": ["--output_suffix cmp-concurrent-ota-3","--with matter_zigbee_concurrent",
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+              },
+              {
+                  "boards": ["brd4407a"],
+                  "arguments": ["--output_suffix cmp-concurrent-list-ota-2","--with_app rainier_concurrent_listening",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               }
           ],
