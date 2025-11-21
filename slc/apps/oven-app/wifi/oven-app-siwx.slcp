@@ -59,6 +59,7 @@ component:
   - id: matter_temperature_control
   - id: matter_oven
   - id: matter_mode_base
+  - id: matter_bindings
 
 
   - id: matter_ota_requestor
@@ -122,10 +123,12 @@ include:
       - path: AppTask.h
       - path: OvenManager.h
       - path: AppSupportedTemperatureLevelsDelegate.h
+      - path: OvenBindingHandler.h
       - path: CHIPProjectConfig.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/include
     file_list:
+    - path: CookEndpoints.h
     - path: CookTopEndpoint.h
     - path: CookSurfaceEndpoint.h
     - path: OvenEndpoint.h
@@ -137,9 +140,13 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/DataModelCallbacks.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/OvenBindingHandler.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/AppSupportedTemperatureLevelsDelegate.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookEndpoints.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookSurfaceEndpoint.cpp
     directory: src
