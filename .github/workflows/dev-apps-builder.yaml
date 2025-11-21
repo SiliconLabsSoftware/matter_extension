@@ -160,7 +160,7 @@ jobs:
         with:
             example-app: "oven-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: true
+            thread-support:: true
 
     build-rangehood-app:
         name: Build Rangehood App
@@ -169,7 +169,7 @@ jobs:
         with:
             example-app: "rangehood-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: true
+            thread-support:: true
 
     build-platform-app:
         name: Build Platform App
