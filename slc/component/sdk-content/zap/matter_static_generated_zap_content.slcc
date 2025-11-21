@@ -1,0 +1,2865 @@
+category: Matter|Stack
+description: This component brings in statically-generated ZAP content for Matter
+id: matter_static_generated_zap_content
+label: Statically-generated ZAP content
+package: matter
+provides:
+  - name: matter_static_generated_zap_content
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+ui_hints:
+    visibility: never
+include:
+  - path: third_party/matter_sdk/zzz_generated/app-common/
+    unless: [matter_zap_custom_generation]
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/AccessControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/AccountLogin
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Actions
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ActivatedCarbonFilterMonitoring
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/AdministratorCommissioning
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/AirQuality
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ApplicationBasic
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ApplicationLauncher
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/AudioOutput
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/BallastConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/BasicInformation
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Binding
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/BooleanState
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/BooleanStateConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/BridgedDeviceBasicInformation
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CameraAvSettingsUserLevelManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CameraAvStreamManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CarbonDioxideConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CarbonMonoxideConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Channel
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Chime
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ClosureControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ClosureDimension
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ColorControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CommissionerControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CommodityMetering
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CommodityPrice
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/CommodityTariff
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ContentAppObserver
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ContentControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ContentLauncher
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Descriptor
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DeviceEnergyManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DeviceEnergyManagementMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DiagnosticLogs
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DishwasherAlarm
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DishwasherMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/DoorLock
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/EcosystemInformation
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ElectricalEnergyMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ElectricalGridConditions
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ElectricalPowerMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/EnergyEvse
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/EnergyEvseMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/EnergyPreference
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/EthernetNetworkDiagnostics
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/FanControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/FaultInjection
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/FixedLabel
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/FlowMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/FormaldehydeConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/GeneralCommissioning
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/GeneralDiagnostics
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/GroupKeyManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Groupcast
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Groups
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/HepaFilterMonitoring
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/IcdManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Identify
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/IlluminanceMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/JointFabricAdministrator
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/JointFabricDatastore
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/KeypadInput
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LaundryDryerControls
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LaundryWasherControls
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LaundryWasherMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LevelControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LocalizationConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/LowPower
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/MediaInput
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/MediaPlayback
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Messages
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/MeterIdentification
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/MicrowaveOvenControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/MicrowaveOvenMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ModeSelect
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/NetworkCommissioning
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/NitrogenDioxideConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OccupancySensing
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OnOff
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OperationalCredentials
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OperationalState
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OtaSoftwareUpdateProvider
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OtaSoftwareUpdateRequestor
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OvenCavityOperationalState
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OvenMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/OzoneConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm10ConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm1ConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm25ConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PowerSource
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PowerSourceConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PowerTopology
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PressureMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ProxyConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ProxyDiscovery
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ProxyValid
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PulseWidthModulation
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PumpConfigurationAndControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/PushAvStreamTransport
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RadonConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RefrigeratorAlarm
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RefrigeratorAndTemperatureControlledCabinetMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RelativeHumidityMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RvcCleanMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RvcOperationalState
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/RvcRunMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/SampleMei
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ScenesManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ServiceArea
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/SmokeCoAlarm
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/SoftwareDiagnostics
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/SoilMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Switch
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TargetNavigator
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TemperatureControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TemperatureMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Thermostat
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ThermostatUserInterfaceConfiguration
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ThreadBorderRouterManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ThreadNetworkDiagnostics
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ThreadNetworkDirectory
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TimeFormatLocalization
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TimeSynchronization
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Timer
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TlsCertificateManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TlsClientManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/TotalVolatileOrganicCompoundsConcentrationMeasurement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/UnitLocalization
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/UnitTesting
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/UserLabel
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ValveConfigurationAndControl
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WakeOnLan
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WaterHeaterManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WaterHeaterMode
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WaterTankLevelMonitoring
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WebRTCTransportProvider
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WebRTCTransportRequestor
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WiFiNetworkDiagnostics
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WiFiNetworkManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/WindowCovering
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/ZoneManagement
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: AttributeIds.h
+      - path: Attributes.h
+      - path: Attributes.ipp
+      - path: ClusterId.h
+      - path: CommandIds.h
+      - path: Commands.h
+      - path: Commands.ipp
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: EventIds.h
+      - path: Events.h
+      - path: Events.ipp
+      - path: Ids.h
+      - path: Metadata.h
+      - path: MetadataProvider.h
+      - path: Structs.h
+      - path: Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/shared
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: Attributes.h
+      - path: Enums.h
+      - path: EnumsCheck.h
+      - path: GlobalIds.h
+      - path: Structs.h
+      - path: Structs.ipp
