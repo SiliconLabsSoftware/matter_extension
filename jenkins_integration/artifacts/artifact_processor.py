@@ -488,12 +488,12 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         if folder_app_name in cmp_apps and "sequential" in app_name_suffix:
             app_type = "sequential"
             app_name_suffix = app_name_suffix.split("sequential")[1]
+        elif folder_app_name in cmp_apps and "cmp-concurrent-listening" in app_name_suffix:
+            app_type = "concurrent-listening"
+            app_name_suffix = app_name_suffix.split("cmp-concurrent-listening")[1]
         elif folder_app_name in cmp_apps and "cmp-concurrent" in app_name_suffix:
             app_type = "concurrent"
             app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
-        elif folder_app_name in cmp_apps and "concurrent-listening" in app_name_suffix:
-            app_type = "concurrent-listening"
-            app_name_suffix = app_name_suffix.split("cmp-concurrent-list")[1]
         elif "icd" in app_name_suffix:
             app_type = "icd"
             app_name_suffix = app_name_suffix.split("icd")[1]
