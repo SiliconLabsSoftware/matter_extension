@@ -46,10 +46,8 @@ component:
   - id: matter_time_format_localization
   - id: matter_user_label
   - id: matter_wifi_network_diagnostics
-  - id: matter_thread_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: matter_icd_management
   - id: segger_rtt
   - id: matter_on_off
   - id: matter_temperature_control
