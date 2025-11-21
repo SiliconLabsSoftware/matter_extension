@@ -30,7 +30,6 @@ component:
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information
-#  - id: matter_color_control
   - id: matter_descriptor
   - id: matter_diagnostic_logs
   - id: matter_fixed_label
@@ -39,11 +38,8 @@ component:
   - id: matter_group_key_mgmt
   - id: matter_groups
   - id: matter_identify
-#  - id: matter_level_control
   - id: matter_localization_configuration
   - id: matter_network_commissioning
-  - id: matter_on_off
-  #- id: matter_scenes
   - id: matter_operational_credentials
   - id: matter_software_diagnostics
   - id: matter_time_format_localization
@@ -69,7 +65,6 @@ component:
 
   - id: wifi_resources
   - id: sl_si91x_common_flash_nvm3
-  - id: sl_si91x_lwip_stack
   - id: sl_si91x_wireless
   - id: wifi
   - id: basic_network_config_manager
