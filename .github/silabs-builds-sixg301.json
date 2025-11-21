@@ -17,7 +17,7 @@
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
             }
         ],
         "thermostat": [
@@ -38,6 +38,18 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"] 
             }
         ],
+        "lighting-app": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            }
+        ],
         "zigbee-matter-light":  [
             {
                 "boards": ["brd1019a", "brd2719a", "brd4407a", "brd4408a"],
@@ -46,6 +58,10 @@
             {
                 "boards": ["brd1019a"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             },
             {
                 "boards": ["brd4407a"],

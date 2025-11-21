@@ -28,6 +28,18 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
+        "lighting-app": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix lto", "--with wiseconnect_toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd"]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix lto", "--with wiseconnect_toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd"]
+            }
+        ],
         "platform-app": [
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],

@@ -57,6 +57,11 @@ jobs:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
                       out/*/*/artifact/**
+                      out/brd4187c/**/build/debug/*.map
+                      out/brd4407a/**/build/debug/*.map  
+                      out/brd4338a/**/build/debug/*.map
+                      !out/**/*-bootloader/build/debug/*.map
+                      !out/**/*-copy-sources/*/build/debug/*.map
                       !out/*/*-copy-sources/artifact/**
                   if-no-files-found: warn
                   overwrite: true
