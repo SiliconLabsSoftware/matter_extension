@@ -118,7 +118,7 @@
               {
                   "boards": ["brd1019a","brd4407a"],
                   "arguments": ["--output_suffix cmp-concurrent-ota-3","--with matter_zigbee_concurrent",
-                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
               },
               {
                   "boards": ["brd4407a"],
