@@ -1,10 +1,10 @@
-# Matter Platform Example
+# Matter Template Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
+A minimal Matter Template example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
 
 <hr>
 
-- [Matter Platform Example](#matter-platform-example)
+- [Matter Template Example](#matter-template-example)
 - [Introduction](#introduction)
   - [Region code Setting (917 WiFi projects)](#region-code-setting-917-wifi-projects)
 - [Building](#building)
@@ -22,7 +22,7 @@ A minimal Matter platform example supporting essential clusters on Silicon Labs 
 
 # Introduction
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over a WiFi network. This platform app serves as a foundation for building more complex Matter applications.
+This sample app demonstrates a minimal Matter Template implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over a WiFi network. This Template app serves as a foundation for building more complex Matter applications.
 
 For more information on running Matter applications and pre-requisites please refer to the online 
 documentation for Matter available at docs.silabs.com. Follow the instructions for the desired Matter over Wi-Fi application.
@@ -56,18 +56,18 @@ To build this project, follow the build steps detailed in:
 You can replicate the build command for your specific application.
 E.g. (For a Linux/Mac system)
 ```
-python3 slc/sl_build.py MyNewApp/platform-app-917.slcw brd4338a
+python3 slc/sl_build.py MyNewApp/template-app-siwx.slcw brd4338a
 ```
 
 # Expected Behaviour
 
 Once the application is built and flashed onto the device, you should see the Matter QR code displayed and if you're using a BLE sniffer like the EFRConnect app you should be able to see the device being advertised and ready to be commissioned into a Matter network.
 
-The platform app provides basic Matter functionality including commissioning over BLE, WiFi network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers over WiFi network for configuration and monitoring purposes.
+The Template app provides basic Matter functionality including commissioning over BLE, WiFi network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers over WiFi network for configuration and monitoring purposes.
 
 # Supported Clusters
 
-This platform app supports the following Matter clusters:
+This Template app supports the following Matter clusters:
 
 ## Root Node (Endpoint 0)
 - **Base** - Basic device information and capabilities
@@ -89,10 +89,10 @@ This platform app supports the following Matter clusters:
 
 # Customizing 
 
-This platform app can be customized to fit your specific needs:
+This Template app can be customized to fit your specific needs:
 
 ## Adding Matter Clusters
-You can extend this platform app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
+You can extend this template app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
 
 ## Configuration Options
 Various Matter configuration options can be modified through the component configuration files to adjust behavior such as:

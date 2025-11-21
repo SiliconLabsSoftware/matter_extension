@@ -1,10 +1,10 @@
-# Matter Platform Example
+# Matter Template Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs MG24/MG26 and Rainier.
+A minimal Matter Template example supporting essential clusters on Silicon Labs Series-2 and Serie-3.
 
 <hr>
 
-- [Matter Platform Example](#matter-platform-example)
+- [Matter Template Example](#matter-template-example)
 - [Introduction](#introduction)
 - [Building](#building)
   - [Prerequisite](#prerequisite)
@@ -21,7 +21,7 @@ A minimal Matter platform example supporting essential clusters on Silicon Labs 
 
 # Introduction
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs MG24/MG26 devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation. This platform app serves as a foundation for building more complex Matter applications.
+This sample app demonstrates a minimal Matter Template implementation on Silicon Labs Series-2 and Series-3 devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation. This Template app serves as a foundation for building more complex Matter applications.
 
 # Building
 
@@ -44,18 +44,18 @@ To build this project, follow the build steps detailed in:
 You can replicate the build command for your specific application.
 E.g. (For a Linux/Mac system)
 ```
-python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c
+python3 slc/sl_build.py MyNewApp/template-app-series-2.slcw brd4187c
 ```
 
 # Expected Behaviour
 
 Once the application is built and flashed onto the device, you should see the Matter QR code displayed and if you're using a BLE sniffer like the EFRConnect app you should be able to see the device being advertised and ready to be commissioned into a Matter network.
 
-The platform app provides basic Matter functionality including commissioning, network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers for configuration and monitoring purposes.
+The Template app provides basic Matter functionality including commissioning, network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers for configuration and monitoring purposes.
 
 # Supported Clusters
 
-This platform app supports the following Matter clusters:
+This Template app supports the following Matter clusters:
 
 ## Root Node (Endpoint 0)
 - **Base** - Basic device information and capabilities
@@ -77,10 +77,10 @@ This platform app supports the following Matter clusters:
 
 # Customizing 
 
-This platform app can be customized to fit your specific needs:
+This Template app can be customized to fit your specific needs:
 
 ## Adding Matter Clusters
-You can extend this platform app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
+You can extend this template app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
 
 ## Configuration Options
 Various Matter configuration options can be modified through the component configuration files to adjust behavior such as:
