@@ -21,6 +21,12 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
             }
         ],
+        "lighting-app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
+            }
+        ],
         "platform-app": [
             {
                 "boards": ["brd4187c"],
