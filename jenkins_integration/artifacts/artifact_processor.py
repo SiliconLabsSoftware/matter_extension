@@ -487,7 +487,7 @@ def _determine_app_info(app_name_folder, board_id, sqa):
 
     # Default zigbee-matter-light app which is concurrent
     if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
-        app_type = "concurrent"
+        app_type = "-concurrent"
     if app_name_folder.split("solution")[1] is not None:
         app_name_suffix = app_name_folder.split("solution")[1]
         for suffix_ci in suffix_list:
