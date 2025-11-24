@@ -1,0 +1,11 @@
+category: Matter|Examples
+package: matter
+description: >
+  Provides example component for a Template application. This component should be 
+  included in all Template applications to help resolve SLC dependencies. Only applicable to Template applications.
+id: matter_template_app
+quality: production
+provides:
+  - name: matter_template_app
+ui_hints:
+  visibility: never
