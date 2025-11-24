@@ -349,18 +349,10 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                         }
                     }
                     sh """
-                        cd ./reports
-                        ls -l
-
-                        {
-                            # NUL-delimit 'pytest-report.html'
-                            printf '%s\\0' 'pytest-report.html'
-                            # Add matches, stripping leading ./ and NUL-delimiting
-                            find . -maxdepth 1 -type f -name 'test_tc*.txt' -printf '%P\\0' || true
-                        } | tar --null -czf "test-results-${appName}-${board}.tar.gz" -T -
-
+                        ls -l reports
+                        tar -czf "reports/test-results-${appName}-${board}.tar.gz" reports
                         echo "Archive contents:"
-                        tar -tzf "test-results-${appName}-${board}.tar.gz"
+                        tar -tzf "reports/test-results-${appName}-${board}.tar.gz"
                     """
 
 
