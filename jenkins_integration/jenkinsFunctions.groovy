@@ -349,21 +349,19 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                         }
                     }
                     sh """
-                        cd ./reports
+                      cd ./reports
 
-                        echo "Searching for test_tc*.txt..."
-                        test_files=$(find . -maxdepth 1 -type f -name 'test_tc*.txt')
-                        echo "Found files:"
-                        echo "${test_files:-none}"
+                      files="pytest-report.html"
+                      for f in test_tc*.txt; do
+                        [ -f "\$f" ] && files="\$files \$f"
+                      done
 
-                        files="pytest-report.html"
-                        if [ -n "${test_files}" ]; then
-                        files="${files} ${test_files}"
-                        fi
+                      tar -czf "test-results-${appName}-${board}.tar.gz" \$files
 
-                        tar -czf "test-results-${appName}-${board}.tar.gz" ${files}
-                        tar -tzf "test-results-${appName}-${board}.tar.gz"
+                      echo "Archive contents:"
+                      tar -tzf "test-results-${appName}-${board}.tar.gz"
                     """
+
 
                     archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.tar.gz"
                     junit: 'reports/junit_report.xml'
