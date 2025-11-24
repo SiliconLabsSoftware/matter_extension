@@ -473,21 +473,19 @@ def _determine_app_info(app_name_folder, board_id, sqa):
     Returns:
         dict: Application information containing app_name and app_type
     """
+    print(f"Processing artifact with folder name: {app_name_folder}")
     app_type = None # Used to append file name (UBAI)
-    app_name = None # Used to append app name (UBAI)
-    cmp_apps = ["zigbee-matter-light", "thermostat"]
     # This will be applied to the file name when uploading to UBAI
     suffix_list = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "lto", "trustzone", "copy-sources"]
     # This will be applied to the app name when uploading to UBAI
     suffix_list_sqa = ["low-power", "low-power-sync-false", "low-power-ota", "lto", "ota-2", "ota-3", "m-ota",
                        "m-ota-enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both"]
-    if not sqa:
-        if "series-" in app_name_folder:
-            app_name = f"{board_id}-OpenThread"
-        else:
-            app_name = f"{board_id}-WiFi"
+    if "series-" in app_name_folder:
+        app_name = f"{board_id}-OpenThread"
+    else:
+        app_name = f"{board_id}-WiFi"
 
-    # Default zigbee-matter-light app which is concurrent.
+    # Default zigbee-matter-light app which is concurrent
     if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
         app_type = "concurrent"
     if app_name_folder.split("solution")[1] is not None:
@@ -500,6 +498,7 @@ def _determine_app_info(app_name_folder, board_id, sqa):
                 if suffix_sqa in app_name_suffix:
                     app_name += f"-{suffix_sqa}"
                     break
+    print(f"Finished processing. App Type: {app_name_folder}")
     return {
             'app_name': app_name,
             'app_type': app_type
@@ -522,7 +521,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
             if app_info['app_type'] is not None:
                 name_part, ext = file_name.rsplit('.', 1)
-                new_file_name = f"{name_part}-{app_info['app_type']}.{ext}"
+                new_file_name = f"{name_part}{app_info['app_type']}.{ext}"
             else:
                 new_file_name = file_name
             new_file_path = os.path.join(artifact_folder, new_file_name)
