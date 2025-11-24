@@ -473,40 +473,33 @@ def _determine_app_info(app_name_folder, board_id, sqa):
     Returns:
         dict: Application information containing app_name and app_type
     """
-    if "series-" in app_name_folder:
-        app_name = f"{board_id}-OpenThread"
-    else:
-        app_name = f"{board_id}-WiFi"
-    app_type = None
+    app_type = None # Used to append file name (UBAI)
+    app_name = None # Used to append app name (UBAI)
+    cmp_apps = ["zigbee-matter-light", "thermostat"]
+    # This will be applied to the file name when uploading to UBAI
+    suffix_list = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "lto", "trustzone", "copy-sources"]
+    # This will be applied to the app name when uploading to UBAI
+    suffix_list_sqa = ["low-power", "low-power-sync-false", "low-power-ota", "lto", "ota-2", "ota-3", "m-ota",
+                       "m-ota-enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both"]
+    if not sqa:
+        if "series-" in app_name_folder:
+            app_name = f"{board_id}-OpenThread"
+        else:
+            app_name = f"{board_id}-WiFi"
+
     # Default zigbee-matter-light app which is concurrent.
     if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
         app_type = "concurrent"
     if app_name_folder.split("solution")[1] is not None:
-        folder_app_name = app_name_folder.split("solution")[0].split("-series")[0]
         app_name_suffix = app_name_folder.split("solution")[1]
-        cmp_apps = ["zigbee-matter-light", "thermostat"]
-        if folder_app_name in cmp_apps and "sequential" in app_name_suffix:
-            app_type = "sequential"
-            app_name_suffix = app_name_suffix.split("sequential")[1]
-        elif folder_app_name in cmp_apps and "cmp-concurrent" in app_name_suffix:
-            app_type = "concurrent"
-            app_name_suffix = app_name_suffix.split("cmp-concurrent")[1]
-        elif folder_app_name in cmp_apps and "concurrent-listening" in app_name_suffix:
-            app_type = "concurrent-listening"
-        elif "lto" in app_name_suffix:
-            app_type = "lto"
-            app_name_suffix = app_name_suffix.split("lto")[1]
-        elif "icd" in app_name_suffix:
-            app_type = "icd"
-            app_name_suffix = app_name_suffix.split("icd")[1]
-        elif "brd4357a" in app_name_suffix:
-            app_type = "brd4357a"
-            app_name_suffix = app_name_suffix.split("brd4357a")[1]
-        elif "trustzone" in app_name_suffix:
-            app_type = "trustzone"
-            app_name_suffix = app_name_suffix.split("trustzone")[1]
+        for suffix_ci in suffix_list:
+            if suffix_ci in app_name_suffix:
+                app_type += f"-{suffix_ci}"
         if sqa:
-            app_name = f"{app_name}{app_name_suffix}"
+            for suffix_sqa in suffix_list_sqa:
+                if suffix_sqa in app_name_suffix:
+                    app_name += f"-{suffix_sqa}"
+                    break
     return {
             'app_name': app_name,
             'app_type': app_type

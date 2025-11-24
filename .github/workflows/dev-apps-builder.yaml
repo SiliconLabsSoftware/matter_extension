@@ -229,5 +229,5 @@ jobs:
     build-sqa-apps:
       name: Build SQA apps
       needs: wait-for-test-results
-      if: ${{ startsWith(github.ref_name, 'release_') }}
+      if: ${{ startsWith(github.ref_name, 'simplify_') }}
       uses: ./.github/workflows/sqa-apps-builder.yaml

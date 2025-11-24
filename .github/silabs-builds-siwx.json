@@ -97,7 +97,7 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix low-power-sync-reports-false",
+                "arguments": ["--output_suffix low-power-sync-false",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
