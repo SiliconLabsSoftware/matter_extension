@@ -1,0 +1,16 @@
+id: matter_peripherals
+label: Peripherals Component
+description: Peripherals support for Matter Platform
+package: matter
+category: "Matter|Platform"
+quality: production
+
+requires:
+  - name: matter_buttons
+  - name: matter_leds
+  - name: matter_shell
+  - name: matter_log_uart
+  - name: matter_default_lcd_config
+  - name: matter_shell
+provides:
+  - name: matter_peripherals

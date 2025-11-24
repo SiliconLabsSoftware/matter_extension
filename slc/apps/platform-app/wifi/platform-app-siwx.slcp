@@ -14,7 +14,7 @@ sdk_extension:
     vendor: silabs
 
 component:
-  - id: matter_leds
+  - id: matter_peripherals
   - id: matter
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
@@ -48,7 +48,7 @@ component:
   - id: matter_wifi_network_diagnostics
   - id: matter_time_format_localization
   - id: matter_user_label
-  - id: matter_default_lcd_config
+  - id: matter_platform
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
@@ -76,17 +76,6 @@ component:
   - id: wiseconnect_common
   - id: sl_si91x_soc_soft_reset
   - id: ble
-  - id: sl_si91x_button_917
-    instance: [btn0, btn1]
-  - id: sl_si91x_led_917
-    instance: [led0]
-    condition: [si917_dev_board]
-  - id: sl_si91x_led_917
-    instance: [led0, led1]
-    condition: [si917_prod_board]
-  - id: sl_si91x_led_917
-    instance: [led0, led1]
-    condition: [device_is_917_module_dev_kit]
   - instance: [timer0]
     id: ulp_timers_instance
 
