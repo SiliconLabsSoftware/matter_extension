@@ -77,13 +77,13 @@ def run_code_size_analysis() {
                     local brd
                     case "$map_file_path" in
                         *brd4187c*)
-                            brd="brd4187c"
+                            brd="BRD4187C"
                             ;;
                         *brd4407a*)
-                            brd="brd4407a"
+                            brd="BRD4407A"
                             ;;
                         *brd4338a*)
-                            brd="brd4338a"
+                            brd="BRD4338A"
                             ;;
                         *)
                             echo "ERROR: Unsupported board in path: $map_file_path"
@@ -103,7 +103,7 @@ def run_code_size_analysis() {
                     echo "Processing: $map_file_path"
                     echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
                     
-                    if [ "$brd" = "brd4338a" ]; then
+                    if [ "$brd" = "BRD4338A" ]; then
                         if [[ "$app" == *"-app" ]]; then
                             app_stripped=\$(echo "$app" | sed 's/-app\$//')
                             app="SiWx917-${app_stripped}"
@@ -121,13 +121,13 @@ def run_code_size_analysis() {
                         return 1
                     fi
                     
-                    if [ "$brd" = "brd4187c" ]; then
+                    if [ "$brd" = "BRD4187C" ]; then
                         family="MG24"
                         target_part="efr32mg24b210f1536im48"
-                    elif [ "$brd" = "brd4407a" ]; then
+                    elif [ "$brd" = "BRD4407A" ]; then
                         family="MG301"  
                         target_part="simg301m114lih"
-                    elif [ "$brd" = "brd4338a" ]; then
+                    elif [ "$brd" = "BRD4338A" ]; then
                         family="Si917"
                         target_part="siwg917m111mgtba"
                     fi

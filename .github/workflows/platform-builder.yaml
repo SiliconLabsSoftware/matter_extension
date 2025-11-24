@@ -64,6 +64,10 @@ on:
                 required: false
                 type: boolean
                 default: true
+            trustzone-support:
+                required: false
+                type: boolean
+                default: false
 
 jobs:
     mg24-build-job:
@@ -85,6 +89,16 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-internal
+
+    mg24-trustzone-build-job:
+        if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24-trustzone.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/${{ inputs.example-app }}-series-2.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24
 
     mgm24-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}
