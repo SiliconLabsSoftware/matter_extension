@@ -1,0 +1,16 @@
+category: Matter|Examples
+package: matter
+description: >
+  Provides example component for a Platform application.
+id: matter_platform
+quality: production
+metadata:
+  sbom:
+    license: Zl
+provides:
+  - name: matter_platform
+requires:
+  - name: matter_leds
+  - name: matter_default_lcd_config
+  - name: matter_shell
+  - name: matter_buttons
