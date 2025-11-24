@@ -348,7 +348,14 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             }
                         }
                     }
-                    sh "tar -czf ./reports/test-results-${appName}-${board}.tar.gz -C ./reports pytest-report.html test_tc*.txt || true"
+                    sh """
+                        cd ./reports
+                        files="pytest-report.html"
+                        for f in test_tc*.txt; do
+                            [ -f "\$f" ] && files="\${files} \${f}"
+                        done
+                        tar -czf test-results-${appName}-${board}.tar.gz \${files} 2>/dev/null || true
+                    """
 
                     archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.tar.gz"
                     junit: 'reports/junit_report.xml'
