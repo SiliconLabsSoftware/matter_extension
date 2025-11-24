@@ -152,6 +152,24 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             wifi-soc-support: false
+ 
+    build-oven-app:
+        name: Build Oven App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "oven-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-rangehood-app:
+        name: Build Rangehood App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "rangehood-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
 
     build-platform-app:
         name: Build Platform App
@@ -188,6 +206,8 @@ jobs:
             - build-platform-app
             - build-zigbee-matter-light-app
             - build-closure-app
+            - build-oven-app
+            - build-rangehood-app
         if: success()
 
         steps:
