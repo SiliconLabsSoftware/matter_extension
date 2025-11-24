@@ -474,7 +474,7 @@ def _determine_app_info(app_name_folder, board_id, sqa):
         dict: Application information containing app_name and app_type
     """
     print(f"Processing artifact with folder name: {app_name_folder}")
-    app_type = None # Used to append file name (UBAI)
+    app_type = "" # Used to append file name (UBAI)
     # This will be applied to the file name when uploading to UBAI
     suffix_list = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "lto", "trustzone", "copy-sources"]
     # This will be applied to the app name when uploading to UBAI
@@ -519,7 +519,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            if app_info['app_type'] is not None:
+            if app_info['app_type'] != "":
                 name_part, ext = file_name.rsplit('.', 1)
                 new_file_name = f"{name_part}{app_info['app_type']}.{ext}"
             else:
