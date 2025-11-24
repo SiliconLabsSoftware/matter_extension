@@ -24,7 +24,6 @@ component:
   - id: bootloader_gbl_compression_lz4
   - id: psa_crypto_config
   - id: matter_syscall_stubs
-    from: matter
 
 configuration:
   - name: SLOT0_ENABLE

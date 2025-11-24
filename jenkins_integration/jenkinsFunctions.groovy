@@ -1,10 +1,10 @@
-def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
+def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --sqa ${sqa} --commit_sha ${commit_sha} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
@@ -12,6 +12,198 @@ def upload_artifacts(sqa=false, commit_sha="null", run_number="null") {
         }
     }
 }
+
+def run_code_size_analysis() {
+    echo "Starting code size analysis for branch: ${env.BRANCH_NAME}"
+        
+    sh 'python3 -m venv code_size_analysis_venv'
+    sh '. code_size_analysis_venv/bin/activate && python3 -m pip install --upgrade pip'
+    sh '. code_size_analysis_venv/bin/activate && pip3 install code_size_analyzer_client-python>=1.0.1'
+    
+    echo "Build number: ${env.BUILD_NUMBER}"
+    echo "Branch name: ${env.BRANCH_NAME}"
+    
+    withEnv([
+        "BRANCH_NAME=${env.BRANCH_NAME}",
+        "BUILD_NUMBER=${env.BUILD_NUMBER}"
+    ]) {            
+            sh '''
+                extract_app_from_path() {
+                    local path=$1
+                    local app_name
+                    
+                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*-solution(-lto)?" | head -1)
+                    
+                    if [ -n "$solution_dir" ]; then
+                        local base_name=\$(echo "\$solution_dir" | sed -E 's/-solution(-lto)?\$//')
+                        
+                        case "\$base_name" in
+                            *zigbee-matter-light*)
+                                app_name="zigbee-matter-light"
+                                ;;
+                            *)
+                                app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
+                                ;;
+                        esac
+                    else
+                        echo "ERROR: Could not find solution directory in path: \$path" >&2
+                        return 1
+                    fi
+                    
+                    echo "\$app_name"
+                }
+                
+                determine_protocol() {
+                    local path=$1
+                    if [[ "$path" == *"siwx"* ]]; then
+                        echo "wifi"
+                    else
+                        echo "thread"
+                    fi
+                }
+                
+                determine_build_options() {
+                    local path=$1
+                    if [[ "$path" == *"-solution-lto/"* ]]; then
+                        echo "-lto"
+                    else
+                        echo ""
+                    fi
+                }
+                
+                perform_code_analysis() {
+                    local map_file_path=$1
+                    
+                    local brd
+                    case "$map_file_path" in
+                        *brd4187c*)
+                            brd="brd4187c"
+                            ;;
+                        *brd4407a*)
+                            brd="brd4407a"
+                            ;;
+                        *brd4338a*)
+                            brd="brd4338a"
+                            ;;
+                        *)
+                            echo "ERROR: Unsupported board in path: $map_file_path"
+                            return 1
+                            ;;
+                    esac
+                    
+                    local app=\$(extract_app_from_path "\$map_file_path")
+                    if [ $? -ne 0 ] || [ -z "$app" ]; then
+                        echo "ERROR: Failed to extract app name from $map_file_path"
+                        return 1
+                    fi
+                    
+                    local protocol=\$(determine_protocol "\$map_file_path")
+                    local options=\$(determine_build_options "\$map_file_path")
+                    
+                    echo "Processing: $map_file_path"
+                    echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
+                    
+                    if [ "$brd" = "brd4338a" ]; then
+                        if [[ "$app" == *"-app" ]]; then
+                            app_stripped=\$(echo "$app" | sed 's/-app\$//')
+                            app="SiWx917-${app_stripped}"
+                        else
+                            app="SiWx917-${app}"
+                        fi
+                    fi
+                    
+                    if [ "$protocol" = "thread" ]; then
+                        example_type="OpenThread"
+                    elif [ "$protocol" = "wifi" ]; then
+                        example_type="WiFi"
+                    else
+                        echo "ERROR: Unknown protocol: $protocol"
+                        return 1
+                    fi
+                    
+                    if [ "$brd" = "brd4187c" ]; then
+                        family="MG24"
+                        target_part="efr32mg24b210f1536im48"
+                    elif [ "$brd" = "brd4407a" ]; then
+                        family="MG301"  
+                        target_part="simg301m114lih"
+                    elif [ "$brd" = "brd4338a" ]; then
+                        family="Si917"
+                        target_part="siwg917m111mgtba"
+                    fi
+                    
+                    application_name="slc-${app}-release-${family}"
+                    output_file="${app}-${example_type}-${family}.json"
+                    
+                    if [ "$options" = "-lto" ]; then
+                        : # no-op
+                    else
+                        application_name="${application_name}-nolto"
+                        output_file="${output_file%.json}-nolto.json"
+                    fi
+                    
+                    echo "  Running analysis:"
+                    echo "    Application name: $application_name"
+                    echo "    Output file: $output_file"
+                    
+                    . code_size_analysis_venv/bin/activate
+                    unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+                    if code_size_analyzer_cli \\
+                        --map_file "$map_file_path" \\
+                        --stack_name matter \\
+                        --target_part "$target_part" \\
+                        --compiler gcc \\
+                        --target_board "$brd" \\
+                        --app_name "$application_name" \\
+                        --service_url https://code-size-analyzer.silabs.net \\
+                        --branch_name "$BRANCH_NAME" \\
+                        --build_number "b$BUILD_NUMBER" \\
+                        --output_file "$output_file" \\
+                        --store_results True \\
+                        --verify_ssl False \\
+                        --uc_component_branch_name "silabs_slc/$BRANCH_NAME"; then
+                        echo "  Analysis completed successfully"
+                    else
+                        echo "  Analysis failed"
+                    fi
+                }
+                
+                echo "Cleaning up leftover JSON files"
+                rm -f *.json
+                
+                echo "Available map files:"
+                map_files_found=\$(find . -name "*.map" | sort)
+                if [ -z "$map_files_found" ]; then
+                    echo "ERROR: No map files found"
+                    exit 1
+                fi
+                echo "$map_files_found"
+                echo ""
+                
+                target_apps="lighting-app|lock-app|zigbee-matter-light"
+                echo "Filtering for target apps: $target_apps"
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)" | grep -v -E "(-ncp-|-wf200-|-sequential)")
+                
+                if [ -z "$filtered_map_files" ]; then
+                    echo "WARNING: No map files found for target apps ($target_apps)"
+                    echo "Available apps in map files:"
+                    echo "$map_files_found" | sed -E 's|.*/([^/]*-solution[^/]*)/.*|\1|' | sort -u
+                    exit 0
+                fi
+                
+                echo "Target app map files to process:"
+                echo "$filtered_map_files"
+                echo ""
+                
+                echo "Processing map files for target apps only..."
+                echo "$filtered_map_files" | while read map_file; do
+                    perform_code_analysis "$map_file"
+                done
+            '''
+        }
+        
+        echo "Code size analysis completed"
+    }
 
 def parse_upload_artifacts_output(output) {
         def sha_matcher = output =~ /Commit SHA - (\w+)/
@@ -59,7 +251,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate, appName, matterType, board, wifi_module, branchName, formattedBuildNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, buildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -112,12 +304,11 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "SDK_URL=N/A",        // ?
                             "STUDIO_URL=N/A",     // ?
                             "BRANCH_NAME=$branchName", // ?
-                            "SDK_BUILD_NUM=\"${formattedBuildNumber}\"",
+                            "SDK_BUILD_NUM=${buildNumber}",
                             "TESTBED_NAME=${deviceGroup}",
                             "GROUP_ID=${deviceGroupId}",
-                            "HARNESS_TEMPLATE=${harnessTemplate}",
                             "BUILD_URL=$BUILD_URL",
-                            "JENKIN_RUN_NUM=\"${formattedBuildNumber}\"",
+                            "JENKIN_RUN_NUM=${buildNumber}",
                             "JENKINS_JOB_NAME=$JOB_NAME",
                             "JENKINS_SERVER_NAME=$JENKINS_URL",
                             "JENKINS_TEST_RESULTS_URL=$JOB_URL$BUILD_NUMBER/testReport",
@@ -135,7 +326,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                             "UTF_COMMANDER_PATH=${commanderPath}",
                             "TCM_SIMPLICITYCOMMANDER=${commanderPath}",
                             "SECMGR_COMMANDER_PATH=${commanderPath}",
-                            "CSA_MATTER_VERSION=1.4",
+                            "CSA_MATTER_VERSION=1.5",
                             "PATH+COMMANDER_PATH=${commanderDir}"
                         ])
                         {
@@ -145,7 +336,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, harnessTemplate,
                                 echo ${TESTBED_NAME}
                                 ${commanderPath} --version
                                 ./workspace_setup.sh
-                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness ${HARNESS_TEMPLATE}.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/test_matter_ci.py" > ${test_log_file} 2>&1 || true
+                                executor/launch_utf_tests.sh --publish_test_results true --hwmux_token ${HW_MUX_TOKEN} --hwmux_group_id ${GROUP_ID} --harness matter_harness_template.yaml --render_harness_template --executor_type local --pytest_command "pytest --tb=native -m ${matterType} tests/ci/test_matter_ci.py" > ${test_log_file} 2>&1 || true
                             """, returnStdout: true).trim()
                             def output = readFile(test_log_file).trim()
                             echo "Test log file output:\n ${output}"
@@ -179,7 +370,7 @@ def parse_test_results_failures(output) {
     def failedCount = 0
     echo "Parse test results"
     output.toString().eachLine { line ->
-        def matcher = line =~ /(FAILED|ERROR)\s+tests\/test_matter(?:_(?:wifi|thread))?_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
+        def matcher = line =~ /(FAILED|ERROR)\s+tests\/ci\/test_matter_ci\.py::(test_tc[\w\d_]+)\s+-\s+(.*)/
         if (matcher.find()) {
             def testCase = "${matcher[0][2]} - ${matcher[0][3]}"
             unstable("Failed test: ${testCase}")
@@ -194,43 +385,41 @@ def parse_test_results_failures(output) {
     return [failedTests: failedTests, failedCount: failedCount]
 }
 
-// TODO Verify if the pipelines are correct
-def trigger_sqa_pipelines(pipeline_type, formatted_build_number)
+def trigger_sqa_pipelines(pipeline_type)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
-        def regression_list_main = ['timed-regression-slc', 'timed-regression-ota', 'timed-regression-cmp', 'timed-regression-performance']
-        def regression_list = ['regression-slc', 'regression-weekly-slc', 'regression-ota', 'regression-cmp', 'regression-endurance', 'regression-metrics']
+        def smoke_list = ['smoke-thread', 'smoke-wifi', 'smoke-cmp']
+        def regression_list = ['feature-thread', 'feature-wifi', 'regression-thread', 'regression-wifi', 'regression-cmp',
+                               'regression-ota-thread', 'regression-ota-wifi', 'regression-ota-cmp', 'regression-metrics',
+                               'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
+                               'ext-smoke-thread', 'ext-smoke-wifi', 'ext-smoke-cmp',
+                               'endurance-thread', 'endurance-wifi', 'endurance-cmp']
         def errorOccurred = false
         try{
             sshagent(['svc_gsdk-ssh']) {
-                if(pipeline_type == "smoke") {
+                if (!fileExists('sqa-pipelines')) {
                     sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                    sh 'pwd && ls -al'
-                    dir('sqa-pipelines') {
-                        sqaFunctions.commitToMatterSqaPipelines("slc", "smoke", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                    }
-                } else {
-                    if(env.BRANCH_NAME.startsWith("release")){
-                        regression_list.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                }
+                if(pipeline_type == "smoke") {
+                        smoke_list.each { smoke_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${smoke_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
-                    } else {
-                        regression_list_main.each { regression_type ->
-                            dir('sqa-pipelines') {
-                                try{
-                                    sqaFunctions.commitToMatterSqaPipelines("slc", "regression", "${env.BRANCH_NAME}", "${formatted_build_number}")
-                                } catch (e) {
-                                    unstable("Error when triggering ${regression_type}: ${e.message}")
-                                    errorOccurred = true
-                                }
+                    }
+                } else {
+                    regression_list.each { regression_type ->
+                        dir('sqa-pipelines') {
+                            try{
+                                sqaFunctions.commitToMatterSqaPipelines(regression_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                            } catch (e) {
+                                unstable("Error when triggering ${regression_type}: ${e.message}")
+                                errorOccurred = true
                             }
                         }
                     }

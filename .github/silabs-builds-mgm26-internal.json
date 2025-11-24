@@ -2,8 +2,12 @@
     "standard": {
         "default": [
             {
-                "boards": [],
+                "boards": ["brd4351a_a02"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
@@ -14,19 +18,38 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
+                "boards": ["brd4351a_a02"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee-matter-light":  [
             {
                 "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
-                "boards": ["brd4350a", "brd4351a", "brd4350a_a02","brd4351a_a02"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "boards": ["brd4350a_a02"],
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ]
-    } 
+    },
+    "custom-sqa": {
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": ["--output_suffix sequential-ota-2", "--with matter_zigbee_sequential",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ]
+    }   
 }

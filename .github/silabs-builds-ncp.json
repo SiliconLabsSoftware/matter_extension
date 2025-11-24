@@ -18,8 +18,17 @@
                 "arguments": [""]
             },
             {
-                "boards": ["brd4186c", "brd4187c"],
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            }
+        ]
+    },
+    "custom-sqa": {
+        "lock-app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
     }

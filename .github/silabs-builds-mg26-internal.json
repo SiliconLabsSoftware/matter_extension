@@ -2,8 +2,12 @@
     "standard": {
         "default": [
             {
-                "boards": [],
+                "boards": ["brd2709a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
@@ -22,12 +26,31 @@
         "zigbee-matter-light":  [
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
+            }
+        ],
+        "platform-app": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
             }
         ]
-    } 
+    },
+    "custom-sqa": {
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix cmp-concurrent-ota-2", "--with matter_zigbee_concurrent",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ]
+    }
 }
