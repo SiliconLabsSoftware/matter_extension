@@ -98,7 +98,7 @@ jobs:
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
-            platform: mg24
+            platform: mg24-trustzone
 
     mgm24-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}
