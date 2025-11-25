@@ -122,7 +122,6 @@ jobs:
       with:
         example-app: "closure-app"
         build-type: "custom-sqa"
-        mg24-support: false
         mg24-internal-support: false
         mgm24-support: false
         mgm24-internal-support: false

@@ -473,6 +473,7 @@ def _determine_app_info(app_name_folder, board_id, sqa):
     Returns:
         dict: Application information containing app_name and app_type
     """
+    board_id = board_id.split(",")[0] # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     if "series-" in app_name_folder:
         app_name = f"{board_id}-OpenThread"
     else:
