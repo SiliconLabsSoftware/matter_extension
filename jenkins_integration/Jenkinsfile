@@ -78,9 +78,10 @@ pipeline
                     sh 'git submodule update --init --checkout third_party/simplicity_sdk'
                     sh 'git submodule update --init --checkout third_party/wifi_sdk'
                     sisdk_build_number = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
-                    wiseconnect_build_number = sh(script: 'cat third_party/wifi_sdk/.build-number', returnStdout: true).trim()
+                    // Enable wifi numbers once https://github.com/SiliconLabsSoftware/matter_extension/pull/256 is merged
+                    //wiseconnect_build_number = sh(script: 'cat third_party/wifi_sdk/.build-number', returnStdout: true).trim()
                     buildDescription("SISDK build number: ${sisdk_build_number}")
-                    buildDescription("WiFi Extension build number: ${wiseconnect_build_number}")
+                    //buildDescription("WiFi Extension build number: ${wiseconnect_build_number}")
                 }
             }
         }
