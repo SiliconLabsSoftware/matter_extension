@@ -37,16 +37,14 @@ on:
                 required: false
                 type: boolean
                 default: true
-            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
             mgm24-support:
                 required: false
                 type: boolean
-                default: false
-            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
+                default: true
             mgm24-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mg26-support:
                 required: false
                 type: boolean
@@ -55,11 +53,10 @@ on:
                 required: false
                 type: boolean
                 default: true
-            ## Enable after https://jira.silabs.com/browse/RAIL_LIB-14527 is resolved
             mgm26-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             sixg301-support:
                 required: false
                 type: boolean
@@ -98,7 +95,7 @@ jobs:
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
-            platform: mg24
+            platform: mg24-trustzone
 
     mgm24-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}

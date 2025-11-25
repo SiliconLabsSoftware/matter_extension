@@ -467,6 +467,7 @@ def _determine_app_info(app_name_folder, board_id):
     Returns:
         dict: Application information containing app_name and app_type
     """
+    board_id = board_id.split(",")[0] # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     print(f"Processing artifact with folder name: {app_name_folder}")
     app_type = "" # Used to append file name (UBAI)
     # This will be applied to the file name when uploading to UBAI
@@ -511,6 +512,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
+    board_id = board_id.split(",")[0]  # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
