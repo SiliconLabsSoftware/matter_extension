@@ -32,7 +32,6 @@ requires:
 include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp
   file_list:
-  - path: sl_board_configuration.h
   - path: sl_si91x_ncp_utility.h
 - path: third_party/matter_sdk/src/platform/silabs/wifi/ncp
   file_list:
