@@ -17,7 +17,6 @@ config_file:
 
 provides:
 - name: siwx917_ncp
-- name: efx_ncp_custom_host_mcu
 
 recommends:
   - id: uartdrv_eusart
@@ -52,9 +51,7 @@ include:
   - path: WifiInterfaceImpl.h
 
 source:
-
 - path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterface.cpp
-- path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp/efx32_ncp_host.c
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/ncp/sl_si91x_ncp_utility.c
 - path: third_party/matter_sdk/src/platform/silabs/SiWx/ble/BLEManagerImpl.cpp
