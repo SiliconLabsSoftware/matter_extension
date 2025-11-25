@@ -28,6 +28,7 @@ include:
     - path: SoftwareDiagnostics.h
     - path: WiFiNetworkDiagnostics.h
     - path: TimeFormatLocalization.h
+    - path: TimeSynchronization.h
     - path: AccessControl.h
     - path: OperationalCredentials.h
     - path: UserLabel.h
