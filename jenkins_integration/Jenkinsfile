@@ -90,8 +90,10 @@ pipeline
                                 workflow_id = result.workflow_id
                                 bypass_send_results_gh = result.bypass_send_results
                                 pr_number = result.pr_number
+                                sisdk_build_numer = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
                                 echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
                                 buildDescription("GitHub Workflow Run Number: ${run_number}")
+                                buildDescription("SISDK build number: ${sisdk_build_numer}")
                             }
                         }
                     }
