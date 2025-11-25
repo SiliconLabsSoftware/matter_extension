@@ -18,7 +18,6 @@ component:
     condition: [device_series_3]
   - id: common_token_manager
     condition: [device_series_3]
-  - id: matter_peripherals
 
   - id: matter
   - id: matter_platform_mg

@@ -24,7 +24,11 @@
         "platform-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals_icd","--with_app matter_peripherals,matter_icd_core"] 
             }
         ],
         "thermostat": [
