@@ -1,10 +1,10 @@
-# Matter Platform Example
+# Matter Platform Template Example
 
 A minimal Matter platform example supporting essential clusters on Silicon Labs MG24/MG26 and Rainier.
 
 <hr>
 
-- [Matter Platform Example](#matter-platform-example)
+- [Matter Platform Template Example](#matter-template-example)
 - [Introduction](#introduction)
 - [Building](#building)
   - [Prerequisite](#prerequisite)

@@ -1,10 +1,10 @@
-# Matter Platform Example
+# Matter Platform Template Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
+A minimal Matter platform template example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
 
 <hr>
 
-- [Matter Platform Example](#matter-platform-example)
+- [Matter Platform Template Example](#matter-platform-template-example)
 - [Introduction](#introduction)
   - [Region code Setting (917 WiFi projects)](#region-code-setting-917-wifi-projects)
 - [Building](#building)
