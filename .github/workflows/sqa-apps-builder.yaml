@@ -14,6 +14,7 @@ jobs:
             mg24-internal-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
+            mgm26-internal-support: false
 
     build-lighting-app:
         name: Build Lighting App
@@ -24,6 +25,7 @@ jobs:
             mg24-internal-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
+            mgm26-internal-support: false
 
     build-window-app:
         name: Build Window App
