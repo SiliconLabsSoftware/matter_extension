@@ -28,7 +28,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals_icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"]  
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"]  
             }
         ],
         "thermostat": [
@@ -78,15 +78,15 @@
         "platform-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": [""]
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals", "--without_app matter_log_rtt"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt"] 
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ],
         "thermostat": [

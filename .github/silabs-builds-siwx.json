@@ -13,7 +13,7 @@
         "platform-app": [
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix  peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"] 
             }
         ]
     },
@@ -43,11 +43,15 @@
         "platform-app": [
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix  peripherals","--with_app matter_peripherals", "--without_app matter_log_rtt"] 
+            },
+            {
+                "boards": ["brd4338a", "brd4343a", "brd4342a"],
+                "arguments": ["--output_suffix  peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"] 
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ]
     },
@@ -143,7 +147,7 @@
         "platform-app": [
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
