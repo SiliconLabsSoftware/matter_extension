@@ -468,7 +468,7 @@
     ]
   },
   {
-    "clusterCode": "activated carbon filter monitoring-server",
+    "clusterCode": "water tank level monitoring-server",
     "value": [
       "%extension-matter%matter_resource_monitoring"
     ]

@@ -35,6 +35,7 @@ metadata:
     license: "Apache 2.0"
 source:
   - path: third_party/matter_sdk/src/platform/CommissionableDataProvider.cpp
+  - path: third_party/matter_sdk/src/platform/DefaultTimerDelegate.cpp
   - path: third_party/matter_sdk/src/platform/DeviceControlServer.cpp
   - path: third_party/matter_sdk/src/platform/DeviceInfoProvider.cpp
   - path: third_party/matter_sdk/src/platform/DeviceInstanceInfoProvider.cpp

@@ -33,7 +33,6 @@ include:
     -   path: OperationalSessionSetup.h
     -   path: ConcreteEventPath.h
     -   path: AttributePathExpandIterator.h
-    -   path: TimerDelegates.h
     -   path: ConcreteClusterPath.h
     -   path: PendingResponseTrackerImpl.h
     -   path: SubscriptionResumptionSessionEstablisher.h

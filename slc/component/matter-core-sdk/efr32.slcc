@@ -21,7 +21,6 @@ include:
     -   path: DeviceInfoProvider.h
     -   path: ConnectivityManager.h
     -   path: GeneralUtils.h
-    -   path: AttributeList.h
     -   path: DiagnosticDataProvider.h
     -   path: PlatformManager.h
     -   path: KeyValueStoreManager.h
@@ -33,6 +32,7 @@ include:
     -   path: NetworkCommissioning.h
     -   path: CHIPDeviceConfig.h
     -   path: DeviceControlServer.h
+    -   path: DefaultTimerDelegate.h
     -   path: DeviceInstanceInfoProvider.h
     -   path: CHIPDeviceLayer.h
     -   path: ConfigurationManager.h
@@ -98,7 +98,7 @@ include:
   - path: third_party/matter_sdk/src/lwip/silabs
     file_list:
       - path: lwipopts-wf200.h
-      - path: lwipopts-rs911x.h
+      - path: lwipopts-siwx.h
       - path: lwippools.h
       - path: lwipopts.h
   - path: third_party/matter_sdk/examples/platform/silabs
