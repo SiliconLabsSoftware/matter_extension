@@ -70,7 +70,7 @@ component:
   - id: matter_log_uart
   - id: matter_lwip
 
-  - id: wifi_resources\
+  - id: wifi_resources
   - id: wifi
   - id: basic_network_config_manager
   - id: sl_si91x_basic_buffers
