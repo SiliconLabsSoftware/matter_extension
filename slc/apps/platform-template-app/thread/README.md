@@ -4,7 +4,7 @@ A minimal Matter platform example supporting essential clusters on Silicon Labs 
 
 <hr>
 
-- [Matter Platform Template Example](#matter-template-example)
+- [Matter Platform Template Example](#matter-platform-template-example)
 - [Introduction](#introduction)
 - [Building](#building)
   - [Prerequisite](#prerequisite)

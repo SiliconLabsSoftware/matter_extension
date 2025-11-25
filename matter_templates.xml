@@ -1619,7 +1619,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template-app.thread.platform-template-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-template-app/wifi/platform-template-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/thread/platform-template-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/platform-template-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
