@@ -1,0 +1,29 @@
+id: matter_peripherals_917soc
+label: Peripherals Component
+description: Peripherals support for Matter Platform
+package: matter
+category: "Matter|Platform"
+quality: production
+
+requires:
+  - name: matter_leds
+  - name: matter_shell
+  - name: matter_log_uart
+  - name: matter_default_lcd_config
+  - name: matter_shell
+recommends:
+  - id: sl_si91x_button_917
+    instance: [btn0, btn1]
+  - id: sl_si91x_led_917
+    instance: [led0]
+    condition: [si917_dev_board]
+  - id: sl_si91x_led_917
+    instance: [led0, led1]
+    condition: [si917_prod_board]
+  - id: sl_si91x_led_917
+    instance: [led0, led1]
+    condition: [device_is_917_module_dev_kit]
+provides:
+  - name: matter_peripherals_917soc
+conflicts:
+  - name: matter_log_rtt
