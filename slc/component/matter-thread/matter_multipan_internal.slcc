@@ -4,6 +4,9 @@ description: Enables Multi-PAN support for Matter over Thread devices with inter
 package: matter
 category: Matter-Thread
 quality: evaluation
+metadata:
+  sbom:
+    license: Zlib
 requires:
   - name: matter_multipan
 provides:
