@@ -2,7 +2,7 @@
     "standard": {
         "default": [
             {
-                "boards": ["brd4407a", "brd1019a"],
+                "boards": ["brd4407a", "brd1019a,SIMG301M113WIH"],
                 "arguments": [""]
             },
             {
