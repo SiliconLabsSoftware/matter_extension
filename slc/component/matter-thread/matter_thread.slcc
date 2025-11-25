@@ -33,6 +33,8 @@ define:
   - name: OPENTHREAD_CONFIG_DNS_CLIENT_OVER_TCP_ENABLE
     value: 0
     condition: [ot_cert_libs]
+  - name: OPENTHREAD_CONFIG_MAC_STAY_AWAKE_BETWEEN_FRAGMENTS
+    value: 0
 
 ui_hints:
   visibility: never
