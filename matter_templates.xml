@@ -1567,9 +1567,9 @@
                description="This project builds a Matter Platform app that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.thread.platform-app.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/thread/platform-app.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/thread/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.thread.platform-template-app.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/thread/platform-template-app.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4120a brd4121a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd2601b brd2608a brd2703a brd4350a brd4351a brd2709a brd2704a brd1019a brd2719a brd4407a brd4408a brd4319a:0.0.0.A00 com.silabs.board.none "/>
     <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*simg301.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1580,13 +1580,13 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
-  <descriptors name="MatterPlatformOverWiFi" label="Matter - SoC Platform over Wi-Fi"
+  <descriptors name="MatterPlatformTemplateOverWiFi" label="Matter - SoC Platform over Wi-Fi"
                description="This project builds a Matter Platform app for Wi-Fi SiWx917 (commonflash) that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.wifi.platform-app-siwx.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/wifi/platform-app-siwx.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/wifi/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.wifi.platform-template-app-siwx.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/wifi/platform-template-app-siwx.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/wifi/README.md"/>
     <properties key="boardCompatibility" value="brd4338a brd4342a brd4343a brd2605a brd2708a brd2911a com.silabs.board.none"/>
     <properties key="partCompatibility" value=" .*si917.* .*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1597,13 +1597,13 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
-  <descriptors name="MatterPlatformOverThreadSolution" label="Matter - SoC Platform over Thread with external Bootloader"
+  <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform over Thread with external Bootloader"
                description="This project builds a Matter Platform and Matter External Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.thread.platform-app-series-2.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/thread/platform-app-series-2.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/thread/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.thread.platform-template-app-series-2.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/thread/platform-template-app-series-2.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4120a brd4121a brd4186c brd4187c brd4316a brd4317a brd4318a brd2601b brd2608a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1612,15 +1612,15 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.platform-app.thread.platform-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.platform-template-app.thread.platform-template-app.slcp"/>
   </descriptors>
-  <descriptors name="MatterPlatformOverThreadSolution" label="Matter - SoC Platform over Thread with internal Bootloader"
+  <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform over Thread with internal Bootloader"
                description="This project builds a Matter Platform and Matter Internal Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.thread.platform-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/wifi/platform-app-siwx.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/thread/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.thread.platform-template-app-series-2-internal.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/wifi/platform-template-app-siwx.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1629,15 +1629,15 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.platform-app.thread.platform-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.platform-template-app.thread.platform-template-app.slcp"/>
   </descriptors>
-  <descriptors name="MatterPlatformOverThreadSolution" label="Matter - SoC Platform over Thread with internal Bootloader"
+  <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform over Thread with internal Bootloader"
                description="This project builds a Matter Platform and Matter Internal Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.thread.platform-app-series-3.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/thread/platform-app-series-3.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/thread/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.thread.platform-template-app-series-3.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/thread/platform-template-app-series-3.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd1019a brd2719a brd4407a brd4408a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*simg301.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1646,15 +1646,15 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.platform-app.thread.platform-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.platform-template-app.thread.platform-template-app.slcp"/>
   </descriptors>
-  <descriptors name="MatterPlatformOverWiFiSolution" label="Matter - SoC Platform over Wi-Fi"
+  <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform over Wi-Fi"
                description="This project builds a Matter Platform that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.platform-app.wifi.platform-app-siwx.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/platform-app/wifi/platform-app-siwx.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/platform-app/wifi/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.platform-template-app.wifi.platform-template-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/platform-template-app/wifi/platform-template-app-siwx.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/platform-template-app/wifi/README.md"/>
     <properties key="boardCompatibility" value="brd4338a brd4342a brd4343a brd2605a brd2708a brd2911a com.silabs.board.none"/>
     <properties key="partCompatibility" value=" .*si917.* .*siwg917.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1663,6 +1663,6 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.platform-app.wifi.platform-app-siwx.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.platform-template-app.wifi.platform-template-app-siwx.slcp"/>
   </descriptors> 
   </model:MDescriptors>

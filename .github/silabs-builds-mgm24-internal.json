@@ -23,7 +23,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform-app": [
+        "platform-template-app": [
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals", "--without_app matter_log_rtt"] 

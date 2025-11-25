@@ -1,4 +1,4 @@
-label: platform-app-siwx
+label: platform-template-app-siwx
 quality: production
 package: matter
 description: Matter solution containing for Platform App over WiFi

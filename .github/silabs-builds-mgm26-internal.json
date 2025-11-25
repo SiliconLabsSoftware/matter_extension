@@ -32,7 +32,7 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-app": [
+        "platform-template-app": [
             {
                 "boards": ["brd4351a_a02"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals", "--without_app matter_log_rtt"] 
