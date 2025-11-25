@@ -23,6 +23,7 @@ include:
     - path: GeneralCommissioning.h
     - path: GeneralDiagnostics.h
     - path: GroupKeyManagement.h
+    - path: IcdManagement.h
     - path: LocalizationConfiguration.h
     - path: SoftwareDiagnostics.h
     - path: WiFiNetworkDiagnostics.h
