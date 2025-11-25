@@ -1,0 +1,77 @@
+name: Update Submodule Tags
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+    
+jobs:
+  update-gitmodules:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token for the workflow
+        id: generate_token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key:
+            ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+        
+      - name: Mask the generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+      
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.head_ref }}
+          submodules: true
+          token: ${{ steps.generate_token.outputs.token }}
+          
+      - name: Update .gitmodules tag
+        run: |
+          # Update simplicity_sdk tag
+          cd third_party/simplicity_sdk
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+          SIMPLICITY_TAG=$(git tag --points-at $CURRENT_COMMIT | head -n 1)
+          if [ -z "$SIMPLICITY_TAG" ]; then
+            SIMPLICITY_TAG=$(git describe --tags --exact-match $CURRENT_COMMIT 2>/dev/null || echo "")
+          fi
+          cd ../..
+          if [ -n "$SIMPLICITY_TAG" ]; then
+            echo "Updating simplicity_sdk to tag: $SIMPLICITY_TAG"
+            git config --file=.gitmodules submodule.third_party/simplicity_sdk.branch "$SIMPLICITY_TAG"
+          else
+            echo "No tag found for simplicity_sdk at commit $CURRENT_COMMIT"
+          fi
+          
+          # Update wifi_sdk tag
+          cd third_party/wifi_sdk
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+          WIFI_TAG=$(git tag --points-at $CURRENT_COMMIT | head -n 1)
+          if [ -z "$WIFI_TAG" ]; then
+            WIFI_TAG=$(git describe --tags --exact-match $CURRENT_COMMIT 2>/dev/null || echo "")
+          fi
+          cd ../..
+          if [ -n "$WIFI_TAG" ]; then
+            echo "Updating wifi_sdk to tag: $WIFI_TAG"
+            git config --file=.gitmodules submodule.third_party/wifi_sdk.branch "$WIFI_TAG"
+          else
+            echo "No tag found for wifi_sdk at commit $CURRENT_COMMIT"
+          fi
+
+          
+      - name: Commit changes
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          git config user.name "silabssw-matter-ci-bot[bot]"
+          git config user.email "silabssw-matter-ci-bot[bot]@users.noreply.github.com"
+          git add .gitmodules
+          if ! git diff --staged --quiet; then
+            git commit -m "Update submodule tags in .gitmodules"
+            git push
+          else
+            echo "No changes to commit"
+          fi
