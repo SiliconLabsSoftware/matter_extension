@@ -1,4 +1,4 @@
-label: platform-template-app-series-3
+label: platform-template-series-3
 quality: production
 package: matter
 description: Solution containing both a bootloader and a Matter over Thread Platform App Example on Series 3.
