@@ -473,8 +473,8 @@ def _determine_app_info(app_name_folder, board_id):
     # This will be applied to the file name when uploading to UBAI
     suffix_list_file_name_github = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "trustzone", "copy-sources"]
     # This will be applied to the app name when uploading to UBAI
-    suffix_list_app_name_github = ["low-power", "low-power-sync-false", "low-power-ota", "lto", "ota-2", "ota-3", "m-ota",
-                                   "m-ota-enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both",
+    suffix_list_app_name_github = ["low-power", "sync-false", "ota", "lto", "ota-2", "ota-3", "m-ota",
+                                   "enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both",
                                    "high-bw-phy"]
     if "series-" in app_name_folder:
         app_name = f"{board_id}-OpenThread"
