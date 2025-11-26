@@ -1564,7 +1564,7 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThread" label="Matter - SoC Platform Template over Thread"
-               description="This project builds a Matter Platform app that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.thread.platform-template.slcp"/>
@@ -1581,7 +1581,7 @@
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverWiFi" label="Matter - SoC Platform Template over Wi-Fi"
-               description="This project builds a Matter Platform app for Wi-Fi SiWx917 (commonflash) that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template for Wi-Fi SiWx917 (commonflash) that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.wifi.platform-template-siwx.slcp"/>
@@ -1598,7 +1598,7 @@
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Thread with external Bootloader"
-               description="This project builds a Matter Platform and Matter External Bootloader that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template and Matter External Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.thread.platform-template-series-2.slcw"/>
@@ -1615,7 +1615,7 @@
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Thread with internal Bootloader"
-               description="This project builds a Matter Platform and Matter Internal Bootloader that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio and a Matter Internal Bootloader">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.thread.platform-template-series-2-internal.slcw"/>
@@ -1632,7 +1632,7 @@
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Thread with internal Bootloader"
-               description="This project builds a Matter Platform and Matter Internal Bootloader that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio and a Matter Internal Bootloader">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.thread.platform-template-series-3.slcw"/>
@@ -1649,7 +1649,7 @@
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Wi-Fi"
-               description="This project builds a Matter Platform that can be developed inside Simplicity Studio">
+               description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.platform-template.wifi.platform-template-siwx.slcw"/>
