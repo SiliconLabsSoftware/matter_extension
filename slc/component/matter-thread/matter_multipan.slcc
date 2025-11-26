@@ -12,7 +12,6 @@ requires:
   - name: matter_thread_cli
   - name: ot_multi_instance_cli
   - name: ot_multi_instance_cert_libs
-  - name: ot_mbedtls
   - name: matter_crypto
 provides:
   - name: matter_multipan
