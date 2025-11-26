@@ -173,12 +173,12 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
-    build-platform-app:
-        name: Build Platform App
+    build-platform-template:
+        name: Build Platform Template
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "platform-app"
+            example-app: "platform-template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-sqa-tools:
@@ -206,7 +206,7 @@ jobs:
             - build-onoff-plug-app
             - build-refrigerator-app
             - build-performance-test-app
-            - build-platform-app
+            - build-platform-template
             # Enable after https://jira.silabs.com/browse/MULTIPROT-1789 is resolved
             #- build-zigbee-matter-light-app
             - build-closure-app

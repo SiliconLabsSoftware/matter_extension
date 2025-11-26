@@ -1,8 +1,8 @@
-label: platform-app-siwx
+label: platform-template-siwx
 quality: production
 package: matter
 description: Matter solution containing for Platform App over WiFi
 project:
-  - path: ./platform-app-siwx.slcp
+  - path: ./platform-template-siwx.slcp
     id: application
-    output: platform-app-siwx
+    output: platform-template-siwx
