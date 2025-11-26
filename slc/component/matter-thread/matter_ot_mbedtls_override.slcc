@@ -9,7 +9,6 @@ metadata:
     license: Zlib
 provides:
   - name: ot_mbedtls
-    unless: [matter_multipan]
   - name: matter_ot_mbedtls_override
 
 ui_hints:
