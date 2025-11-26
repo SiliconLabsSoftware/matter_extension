@@ -21,10 +21,14 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]  
             }
         ],
         "thermostat": [
@@ -49,6 +53,10 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
             }
         ],
         "lock-app": [
@@ -71,18 +79,18 @@
                 "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": [""]
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_icd_core,matter_peripherals"] 
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ],
         "thermostat": [
@@ -214,7 +222,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2",

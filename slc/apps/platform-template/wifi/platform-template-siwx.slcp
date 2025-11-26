@@ -1,7 +1,7 @@
-project_name: platform-app-siwx
+project_name: platform-template-siwx
 label: Matter Platform
 description: >
-  Matter Platform App
+  Matter Platform Template
 quality: production
 package: matter
 
@@ -14,7 +14,6 @@ sdk_extension:
     vendor: silabs
 
 component:
-  - id: matter_leds
   - id: matter
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
@@ -48,11 +47,10 @@ component:
   - id: matter_wifi_network_diagnostics
   - id: matter_time_format_localization
   - id: matter_user_label
-  - id: matter_default_lcd_config
+  - id: matter_platform_template
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
-  - id: matter_log_uart
   - id: matter_lwip
     # ICD configurations
   - id: matter_test_event_trigger
@@ -76,17 +74,6 @@ component:
   - id: wiseconnect_common
   - id: sl_si91x_soc_soft_reset
   - id: ble
-  - id: sl_si91x_button_917
-    instance: [btn0, btn1]
-  - id: sl_si91x_led_917
-    instance: [led0]
-    condition: [si917_dev_board]
-  - id: sl_si91x_led_917
-    instance: [led0, led1]
-    condition: [si917_prod_board]
-  - id: sl_si91x_led_917
-    instance: [led0, led1]
-    condition: [device_is_917_module_dev_kit]
   - instance: [timer0]
     id: ulp_timers_instance
 

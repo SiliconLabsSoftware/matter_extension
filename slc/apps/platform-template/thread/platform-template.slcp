@@ -1,7 +1,7 @@
-project_name: platform-app
+project_name: platform-template
 label: Matter Platform
 description: >
-  Matter Platform App
+  Matter Platform Template
 quality: production
 package: matter
 
@@ -18,8 +18,7 @@ component:
     condition: [device_series_3]
   - id: common_token_manager
     condition: [device_series_3]
-  - id: matter_buttons
-  - id: matter_leds
+    
 
   - id: matter
   - id: matter_platform_mg
@@ -27,10 +26,9 @@ component:
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
-  - id: matter_shell
   - id: matter_gatt_static
   - id: matter_provision_default
-  - id: matter_log_uart
+  - id: matter_platform_template
 
   - id: app_common
   - id: matter_access_control
@@ -53,7 +51,6 @@ component:
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
   - id: matter_user_label
-  - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt

@@ -82,14 +82,18 @@
                 "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd2719a"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
             },
             {
                 "boards": ["brd2719a"],
-                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+            },
+            {
+                "boards": ["brd2719a"],
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ]
     },
@@ -134,15 +138,15 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                "arguments": ["--output_suffix ota-3",
+                "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ]

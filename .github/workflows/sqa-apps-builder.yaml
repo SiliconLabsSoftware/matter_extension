@@ -129,13 +129,12 @@ jobs:
         mgm24-internal-support: false
         mg26-internal-support: false
         mgm26-internal-support: false
-        wifi-soc-support: false
 
-    build-platform-app:
+    build-platform-template:
       name: Build Platform App
       uses: ./.github/workflows/platform-builder.yaml
       with:
-        example-app: "platform-app"
+        example-app: "platform-template"
         build-type: "custom-sqa"
         mg24-support: false
         mg24-internal-support: false
@@ -143,7 +142,6 @@ jobs:
         mgm24-internal-support: false
         mg26-internal-support: false
         mgm26-internal-support: false
-        wifi-soc-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts
@@ -158,7 +156,7 @@ jobs:
             - build-multi-sensor-app
             - build-zigbee-matter-light
             - build-closure-app
-            - build-platform-app
+            - build-platform-template
         if: always()
 
         steps:

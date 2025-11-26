@@ -1,12 +1,11 @@
-# Matter Platform Example
+# Matter Platform Template Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
+A minimal Matter platform example supporting essential clusters on Silicon Labs MG24/MG26 and Rainier.
 
 <hr>
 
-- [Matter Platform Example](#matter-platform-example)
+- [Matter Platform Template Example](#matter-platform-template-example)
 - [Introduction](#introduction)
-  - [Region code Setting (917 WiFi projects)](#region-code-setting-917-wifi-projects)
 - [Building](#building)
   - [Prerequisite](#prerequisite)
   - [Building command](#building-command)
@@ -22,18 +21,7 @@ A minimal Matter platform example supporting essential clusters on Silicon Labs 
 
 # Introduction
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over a WiFi network. This platform app serves as a foundation for building more complex Matter applications.
-
-For more information on running Matter applications and pre-requisites please refer to the online 
-documentation for Matter available at docs.silabs.com. Follow the instructions for the desired Matter over Wi-Fi application.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/latest/matter-wifi)
-
-## Region code Setting (917 WiFi projects)
-
-In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
-The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
+This sample app demonstrates a minimal Matter platform implementation on Silicon Labs MG24/MG26 devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation. This platform app serves as a foundation for building more complex Matter applications.
 
 # Building
 
@@ -56,14 +44,14 @@ To build this project, follow the build steps detailed in:
 You can replicate the build command for your specific application.
 E.g. (For a Linux/Mac system)
 ```
-python3 slc/sl_build.py MyNewApp/platform-app-917.slcw brd4338a
+python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c
 ```
 
 # Expected Behaviour
 
 Once the application is built and flashed onto the device, you should see the Matter QR code displayed and if you're using a BLE sniffer like the EFRConnect app you should be able to see the device being advertised and ready to be commissioned into a Matter network.
 
-The platform app provides basic Matter functionality including commissioning over BLE, WiFi network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers over WiFi network for configuration and monitoring purposes.
+The platform app provides basic Matter functionality including commissioning, network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers for configuration and monitoring purposes.
 
 # Supported Clusters
 
@@ -81,7 +69,7 @@ This platform app supports the following Matter clusters:
 - **Network Commissioning** - Network credential management
 - **Node Operational Credentials** - Device certificate management
 - **Secure Channel** - Secure communication channel
-- **WiFi Network Diagnostic** - WiFi network diagnostic information
+- **Thread Network Diagnostic** - Thread network diagnostic information
 - **Time Format Localization** - Time format configuration
 
 ## Endpoint 1

@@ -33,14 +33,18 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-app": [
+        "platform-template": [
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix icd","--with_app matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix icd-copy-sources","--with_app matter_icd_core", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ]
     },
