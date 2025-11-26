@@ -28,7 +28,7 @@ component:
   - id: matter_crypto
   - id: matter_gatt_static
   - id: matter_provision_default
-  - id: matter_platform
+  - id: matter_platform_template
 
   - id: app_common
   - id: matter_access_control
