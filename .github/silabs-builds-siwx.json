@@ -64,13 +64,13 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix multi-ota",
+                "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix multi-ota-enc",
+                "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             },
@@ -101,7 +101,7 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix low-power-sync-reports-false",
+                "arguments": ["--output_suffix low-power-sync-false",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
