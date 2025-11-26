@@ -1,7 +1,7 @@
-project_name: platform-template-app-siwx
+project_name: platform-template-siwx
 label: Matter Platform
 description: >
-  Matter Platform App
+  Matter Platform Template
 quality: production
 package: matter
 
@@ -51,7 +51,6 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
-  - id: matter_log_uart
   - id: matter_lwip
     # ICD configurations
   - id: matter_test_event_trigger

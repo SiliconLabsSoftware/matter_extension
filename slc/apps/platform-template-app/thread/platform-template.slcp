@@ -1,7 +1,7 @@
-project_name: platform-template-app
+project_name: platform-template
 label: Matter Platform
 description: >
-  Matter Platform App
+  Matter Platform Template
 quality: production
 package: matter
 
@@ -28,7 +28,6 @@ component:
   - id: matter_crypto
   - id: matter_gatt_static
   - id: matter_provision_default
-  - id: matter_log_rtt
   - id: matter_platform
 
   - id: app_common

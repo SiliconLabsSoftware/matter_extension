@@ -131,11 +131,11 @@ jobs:
         mgm26-internal-support: false
         wifi-soc-support: false
 
-    build-platform-template-app:
+    build-platform-template:
       name: Build Platform App
       uses: ./.github/workflows/platform-builder.yaml
       with:
-        example-app: "platform-template-app"
+        example-app: "platform-template"
         build-type: "custom-sqa"
         mg24-support: false
         mg24-internal-support: false
@@ -158,7 +158,7 @@ jobs:
             - build-multi-sensor-app
             - build-zigbee-matter-light
             - build-closure-app
-            - build-platform-template-app
+            - build-platform-template
         if: always()
 
         steps:

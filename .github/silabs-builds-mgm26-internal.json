@@ -32,14 +32,14 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-template-app": [
+        "platform-template": [
             {
                 "boards": ["brd4351a_a02"],
-                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals", "--without_app matter_log_rtt"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
             },
             {
                 "boards": ["brd4351a_a02"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
             },
             {
                 "boards": ["brd4351a_a02"],

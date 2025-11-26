@@ -11,10 +11,10 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform-template-app": [
+        "platform-template": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
             }
         ],
         "thermostat": [
@@ -46,14 +46,14 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-template-app": [
+        "platform-template": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals", "--with_app matter_peripherals", "--without_app matter_log_rtt"]
+                "arguments": ["--output_suffix peripherals", "--with_app matter_peripherals"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
             },
             {
                 "boards": ["brd4116a"],
@@ -165,7 +165,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-template-app": [
+        "platform-template": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt",
