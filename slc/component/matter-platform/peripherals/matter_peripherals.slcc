@@ -1,6 +1,6 @@
 id: matter_peripherals
 label: Peripherals Component
-description: Peripherals support for Matter Platform
+description: Peripheral support for Matter Platform certification testing with platform-template app EFR
 package: matter
 category: "Matter|Platform"
 quality: production
