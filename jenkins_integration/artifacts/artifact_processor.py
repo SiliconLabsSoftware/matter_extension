@@ -496,7 +496,9 @@ def _determine_app_info(app_name_folder, board_id):
         for suffix_app_name in suffix_list_app_name_github:
             if suffix_app_name in folder_app_name_suffix and suffix_app_name not in app_name:
                 app_name += f"-{suffix_app_name}"
-    print(f"Finished processing. App Type: {app_name_folder}")
+    print(f"App Type: {app_type}")
+    print(f"App Name: {app_name}")
+    print(f"Finished processing. App Folder: {app_name_folder}")
     return {
             'app_name': app_name,
             'app_type': app_type
@@ -526,7 +528,7 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
             new_file_path = os.path.join(artifact_folder, new_file_name)
             os.rename(file_path, new_file_path)
             print(f"Renamed file {file_name} to {new_file_name}.")
-            if "copy-sources" not in file_name:
+            if "copy-sources" not in new_file_name:
                 upload_to_ubai(new_file_path, app_info['app_name'], board_id, branch_name, build_number)
 
 def _extract_sample_app_name(file_name):
