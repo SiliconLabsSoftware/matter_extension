@@ -129,7 +129,6 @@ jobs:
         mgm24-internal-support: false
         mg26-internal-support: false
         mgm26-internal-support: false
-        wifi-soc-support: false
 
     build-platform-app:
       name: Build Platform App
@@ -143,7 +142,6 @@ jobs:
         mgm24-internal-support: false
         mg26-internal-support: false
         mgm26-internal-support: false
-        wifi-soc-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts
