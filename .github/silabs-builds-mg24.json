@@ -21,12 +21,6 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
             }
         ],
-        "lighting-app": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
-            }
-        ],
         "platform-app": [
             {
                 "boards": ["brd4187c"],
@@ -55,6 +49,10 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
             }
         ],
         "lock-app": [
