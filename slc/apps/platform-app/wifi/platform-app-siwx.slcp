@@ -53,7 +53,7 @@ component:
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
   - id: matter_log_uart
-  - id: matter_lwip_modified
+  - id: matter_lwip
     # ICD configurations
   - id: matter_test_event_trigger
     condition: [matter_icd_core]
