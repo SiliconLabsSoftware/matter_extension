@@ -105,6 +105,7 @@ requires:
   - name: matter_libtransportlayer
   - name: configuration_over_swo
   - name: matter_ot_mbedtls_override
+    unless: [matter_multipan]
   - name: matter_server_cluster
   - name: matter_syscall_stubs
   - name: matter_nlassert
@@ -131,4 +132,5 @@ requires:
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override
+    unless: [matter_multipan]
   - id: matter_provision_default
