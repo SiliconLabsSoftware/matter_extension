@@ -473,7 +473,7 @@ def _determine_app_info(app_name_folder, board_id):
     # This will be applied to the file name when uploading to UBAI
     suffix_list_file_name_github = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "trustzone", "copy-sources"]
     # This will be applied to the app name when uploading to UBAI
-    suffix_list_app_name_github = ["low-power", "sync-false", "ota", "lto", "ota-2", "ota-3", "m-ota",
+    suffix_list_app_name_github = ["low-power", "sync-false", "lto", "ota-2", "ota-3", "m-ota", "ota",
                                    "enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both",
                                    "high-bw-phy"]
     if "series-" in app_name_folder:
@@ -484,15 +484,17 @@ def _determine_app_info(app_name_folder, board_id):
     if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
         app_type = "-concurrent"
     if app_name_folder.split("solution")[1] is not None:
-        app_name_suffix = app_name_folder.split("solution")[1]
+        folder_app_name_suffix = app_name_folder.split("solution")[1]
         for suffix_file_name in suffix_list_file_name_github:
-            if suffix_file_name in app_name_suffix:
+            if suffix_file_name in folder_app_name_suffix:
                 if suffix_file_name == "cmp-concurrent" and "-concurrent" not in app_type:
                     app_type += f"-concurrent"
                 else:
                     app_type += f"-{suffix_file_name}"
+        if "platform-template" in app_name_folder and "peripherals" not in app_name_folder:
+            app_type += f"-barebones"
         for suffix_app_name in suffix_list_app_name_github:
-            if suffix_app_name in app_name_suffix:
+            if suffix_app_name in folder_app_name_suffix and suffix_app_name not in app_name:
                 app_name += f"-{suffix_app_name}"
     print(f"Finished processing. App Type: {app_name_folder}")
     return {

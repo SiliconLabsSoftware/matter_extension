@@ -64,13 +64,13 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix multi-ota",
+                "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix multi-ota-enc",
+                "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             },
