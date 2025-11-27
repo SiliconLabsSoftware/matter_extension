@@ -466,7 +466,12 @@ def determine_ubai_app_name(app_name_folder):
         str: UBAI app name metadata.
     """
     print(f"Processing artifact with folder name: {app_name_folder}")
-    suffix = app_name_folder.split("solution")[1]
+    split_result = app_name_folder.split("solution")
+    if len(split_result) > 1:
+        suffix = split_result[1]
+    else:
+        # If ever solution is missing, mark it.
+        suffix = "solution-false"
     if suffix == "":
         if "zigbee-matter-light" in app_name_folder:
             # Match thermostat cmp app
