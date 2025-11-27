@@ -472,7 +472,7 @@ def determine_ubai_app_name(app_name_folder):
             # Match thermostat cmp app
             ubai_app_name = "cmp-concurrent"
         else:
-            ubai_app_name = "default"
+            ubai_app_name = ""
     else:
         if suffix.startswith('-'):
             ubai_app_name = suffix.lstrip('-')
