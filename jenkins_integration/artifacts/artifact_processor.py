@@ -450,68 +450,50 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
-    app_info = _determine_app_info(app_name_folder, board_id)
-    print(f"Sample App Name: {app_info['app_name']}")
+    ubai_app_name = determine_ubai_app_name(app_name_folder)
     artifact_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_folder) and os.path.isdir(artifact_folder):
-        _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, build_number)
+        _upload_board_artifact_files(artifact_folder, ubai_app_name, board_id, branch_name, build_number)
 
 
-def _determine_app_info(app_name_folder, board_id):
+def determine_ubai_app_name(app_name_folder):
     """
-    Determine application information based on folder name.
+    Determine UBAI app name, used by SQA.
 
     Args:
         app_name_folder (str): Application folder name
-        board_id (str): Board identifier
     Returns:
-        dict: Application information containing app_name and app_type
+        str: UBAI app name metadata.
     """
-    board_id = board_id.split(",")[0] # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     print(f"Processing artifact with folder name: {app_name_folder}")
-    app_type = "" # Used to append file name (UBAI)
-    # This will be applied to the file name when uploading to UBAI
-    suffix_list_file_name_github = ["brd4357a", "sequential", "cmp-concurrent", "concurrent-listening", "icd", "trustzone", "copy-sources"]
-    # This will be applied to the app name when uploading to UBAI
-    suffix_list_app_name_github = ["low-power", "sync-false", "lto", "ota-2", "ota-3", "m-ota", "ota",
-                                   "enc", "clock-config-clk-sleep-timer", "clock-config-clk-lf-fsm", "clock-config-clk-both",
-                                   "high-bw-phy"]
-    if "series-" in app_name_folder:
-        app_name = f"{board_id}-OpenThread"
+    split_result = app_name_folder.split("solution")
+    if len(split_result) > 1:
+        suffix = split_result[1]
     else:
-        app_name = f"{board_id}-WiFi"
-    # Default zigbee-matter-light app which is concurrent
-    if "zigbee-matter-light" in app_name_folder and "sequential" not in app_name_folder:
-        app_type = "-concurrent"
-    if app_name_folder.split("solution")[1] is not None:
-        folder_app_name_suffix = app_name_folder.split("solution")[1]
-        for suffix_file_name in suffix_list_file_name_github:
-            if suffix_file_name in folder_app_name_suffix:
-                if suffix_file_name == "cmp-concurrent" and "-concurrent" not in app_type:
-                    app_type += f"-concurrent"
-                else:
-                    app_type += f"-{suffix_file_name}"
-        if "platform-template" in app_name_folder and "peripherals" not in app_name_folder:
-            app_type += f"-barebones"
-        for suffix_app_name in suffix_list_app_name_github:
-            if suffix_app_name in folder_app_name_suffix and suffix_app_name not in app_name:
-                app_name += f"-{suffix_app_name}"
-    print(f"App Type: {app_type}")
-    print(f"App Name: {app_name}")
-    print(f"Finished processing. App Folder: {app_name_folder}")
-    return {
-            'app_name': app_name,
-            'app_type': app_type
-        }
+        # If ever solution is missing, mark it.
+        suffix = "solution-false"
+    if suffix == "":
+        if "zigbee-matter-light" in app_name_folder:
+            # Match thermostat cmp app
+            ubai_app_name = "cmp-concurrent"
+        else:
+            ubai_app_name = ""
+    else:
+        if suffix.startswith('-'):
+            ubai_app_name = suffix.lstrip('-')
+        else:
+            ubai_app_name = suffix
+    print(f"UBAI app name after processing: {ubai_app_name}")
+    return ubai_app_name
 
 
-def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_name, build_number):
+def _upload_board_artifact_files(artifact_folder, ubai_app_name, board_id, branch_name, build_number):
     """
     Upload board artifact files to UBAI.
 
     Args:
         artifact_folder (str): Path to the artifact folder
-        app_info (dict): Application information
+        ubai_app_name (str): UBAI app name to be used when uploading artifact.
         board_id (str): Board identifier
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
@@ -520,16 +502,9 @@ def _upload_board_artifact_files(artifact_folder, app_info, board_id, branch_nam
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
-            if app_info['app_type'] != "":
-                name_part, ext = file_name.rsplit('.', 1)
-                new_file_name = f"{name_part}{app_info['app_type']}.{ext}"
-            else:
-                new_file_name = file_name
-            new_file_path = os.path.join(artifact_folder, new_file_name)
-            os.rename(file_path, new_file_path)
-            print(f"Renamed file {file_name} to {new_file_name}.")
-            if "copy-sources" not in new_file_name:
-                upload_to_ubai(new_file_path, app_info['app_name'], board_id, branch_name, build_number)
+            # Do not upload copy-sources binary
+            if "copy-sources" not in ubai_app_name:
+                upload_to_ubai(file_path, ubai_app_name, board_id, branch_name, build_number)
 
 def _extract_sample_app_name(file_name):
     """
