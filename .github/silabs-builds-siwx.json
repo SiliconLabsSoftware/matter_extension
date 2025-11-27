@@ -149,6 +149,11 @@
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals_917soc", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals_917soc,matter_icd_core", "--without_app matter_log_rtt",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
     } 
