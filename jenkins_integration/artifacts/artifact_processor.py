@@ -466,11 +466,12 @@ def determine_ubai_app_name(app_name_folder):
         str: UBAI app name metadata.
     """
     print(f"Processing artifact with folder name: {app_name_folder}")
-    if app_name_folder.split("solution")[1] is not None:
-        ubai_app_name = app_name_folder.split("solution")[1]
+    split_result = app_name_folder.split("solution")
+    if len(split_result) > 1:
+        ubai_app_name = split_result[1]
     else:
         if "zigbee-matter-light" in app_name_folder:
-            # Match thermostat app
+            # Match thermostat cmp app
             ubai_app_name = "cmp-concurrent"
         else:
             ubai_app_name = "default"
