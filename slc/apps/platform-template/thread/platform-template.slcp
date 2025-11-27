@@ -60,6 +60,17 @@ component:
   - id: matter_icd_checkin_sender
     condition: [matter_icd_core]
 
+  - id: simple_rgb_pwm_led
+    instance:
+      - rgb_led0
+    condition:
+      - brd2601b
+  - id: simple_rgb_pwm_led
+    instance:
+      - rgb_led0
+    condition:
+      - brd2608a
+
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
   # Select UART/EUART drivers based on device series

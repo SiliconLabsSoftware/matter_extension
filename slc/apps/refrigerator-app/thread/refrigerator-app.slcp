@@ -62,6 +62,16 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
+  - id: simple_rgb_pwm_led
+    instance:
+      - rgb_led0
+    condition:
+      - brd2601b
+  - id: simple_rgb_pwm_led
+    instance:
+      - rgb_led0
+    condition:
+      - brd2608a
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
