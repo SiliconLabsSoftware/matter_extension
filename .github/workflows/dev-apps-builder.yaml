@@ -219,15 +219,15 @@ jobs:
                   delete-merged: true
                   pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
-    wait-for-test-results:
-        name: Wait for Test Results
-        needs: merge-apps
-        uses: ./.github/workflows/sqa-sanity-tests.yaml
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+#    wait-for-test-results:
+#        name: Wait for Test Results
+#        needs: merge-apps
+#        uses: ./.github/workflows/sqa-sanity-tests.yaml
+#        secrets:
+#            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
     build-sqa-apps:
       name: Build SQA apps
-      needs: wait-for-test-results
-      if: ${{ startsWith(github.ref_name, 'release_') }}
+      needs: merge-apps
+      if: ${{ startsWith(github.ref_name, 'update') }}
       uses: ./.github/workflows/sqa-apps-builder.yaml
