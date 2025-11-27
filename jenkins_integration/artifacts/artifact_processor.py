@@ -473,12 +473,12 @@ def determine_ubai_app_name(app_name_folder):
             ubai_app_name = "cmp-concurrent"
         else:
             ubai_app_name = "default"
-        if ubai_app_name.startswith('-'):
-            ubai_app_name = ubai_app_name.lstrip('-')
     else:
         if suffix.startswith('-'):
             ubai_app_name = suffix.lstrip('-')
-    print(f"UBAI app name: {ubai_app_name}")
+        else:
+            ubai_app_name = suffix
+    print(f"UBAI app name after processing: {ubai_app_name}")
     return ubai_app_name
 
 
