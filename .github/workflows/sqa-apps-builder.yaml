@@ -11,6 +11,7 @@ jobs:
             example-app: "lock-app"
             build-type: "custom-sqa"
             ncp-917-support: true
+            ncp-wf200-support: true
             mg24-internal-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
@@ -83,11 +84,8 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            mg26-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
-            wifi-soc-support: false
-            sixg301-support: false
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -136,7 +134,6 @@ jobs:
       with:
         example-app: "platform-template"
         build-type: "custom-sqa"
-        mg24-support: false
         mg24-internal-support: false
         mgm24-support: false
         mgm24-internal-support: false
