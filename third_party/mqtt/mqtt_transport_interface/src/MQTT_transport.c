@@ -24,6 +24,10 @@
 #include "lwip/dns.h"
 #include "altcp.h"
 #include "altcp_tcp.h"
+#if TRANSPORT_ALTCP && TRANSPORT_ALTCP_TLS
+#include "altcp_tls.h"
+#include "mbedtls/ssl.h"
+#endif
 
 struct MQTT_Transport_t {
   u8_t conn_state;
@@ -39,6 +43,8 @@ struct MQTT_Transport_t {
   SemaphoreHandle_t sync_sem;
   /* Temp */
   EventGroupHandle_t events;
+  /* Hostname for TLS certificate verification */
+  char *hostname;
 };
 
 enum {
@@ -122,6 +128,19 @@ err_t MQTT_Transport_Connect(MQTT_Transport_t *transP,
   }
   transP->sync_sem = xSemaphoreCreateCounting(1, 0);
   transP->ipaddr   = &ipaddr;
+  /* Store hostname for TLS certificate verification */
+  if (transP->hostname != NULL) {
+    vPortFree(transP->hostname);
+  }
+  if (host != NULL) {
+    size_t hostname_len = strlen(host) + 1;
+    transP->hostname = (char *)pvPortMalloc(hostname_len);
+    if (transP->hostname != NULL) {
+      memcpy(transP->hostname, host, hostname_len);
+    }
+  } else {
+    transP->hostname = NULL;
+  }
   if ((dns_ret = dns_gethostbyname(host, &ipaddr, dns_callback, transP)) != ERR_OK) {
     if (dns_ret == ERR_INPROGRESS) {
       SILABS_LOG("in progress");
@@ -387,6 +406,19 @@ static err_t connection_new(MQTT_Transport_t *client, const ip_addr_t *ipaddr, u
   if (client->tls_config) {
     SILABS_LOG("executing tls new");
     client->conn = altcp_tls_new(client->tls_config, IP_GET_TYPE(ipaddr));
+    if (client->conn != NULL && client->hostname != NULL) {
+      /* Set hostname for TLS certificate verification */
+      mbedtls_ssl_context *ssl = (mbedtls_ssl_context *)altcp_tls_context(client->conn);
+      if (ssl != NULL) {
+        int ret = mbedtls_ssl_set_hostname(ssl, client->hostname);
+        if (ret != 0) {
+          TRANSPORT_DEBUGF(("mbedtls_ssl_set_hostname failed: %d\n", ret));
+          goto transport_fail;
+        } else {
+          TRANSPORT_DEBUGF(("Set TLS hostname: %s\n", client->hostname));
+        }
+      }
+    }
   } else
 #endif
   {
