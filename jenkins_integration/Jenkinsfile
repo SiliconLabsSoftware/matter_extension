@@ -141,7 +141,7 @@ pipeline
                     parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-                                'jenkins-hyd-agent','utf-matter-wifi-917soc-4338a-hyd-rf', '3242',
+                                'nomad-hyd-agent','utf-matter-wifi-917soc-4338a-hyd-rf', '3242',
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
