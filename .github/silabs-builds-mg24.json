@@ -225,12 +225,12 @@
         "platform-template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-3",
+                "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ],
