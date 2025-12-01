@@ -14,13 +14,9 @@ requires:
   - name: simple_led_recommended_instance
     condition:
       - device_family_efr32mg24
-    unless:
-      - brd2601b
   - name: simple_led_recommended_instance
     condition:
       - device_family_efr32mg24
-    unless:
-      - brd2608a
   - name: simple_led_recommended_instance
     condition:
       - device_family_efr32mg26
