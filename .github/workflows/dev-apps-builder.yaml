@@ -71,16 +71,16 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
-
-    build-thermostat-app:
-        name: Build Thermostat App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "thermostat"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
-            ncp-wf200-support: true
+    ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+    #build-thermostat-app:
+    #    name: Build Thermostat App
+    #    needs: set-build-type
+    #    uses: ./.github/workflows/platform-builder.yaml
+    #    with:
+    #        example-app: "thermostat"
+    #        build-type: ${{ needs.set-build-type.outputs.build-type }}
+    #        ncp-917-support: true
+    #        ncp-wf200-support: true
             
     build-window-app:
         name: Build Window App
@@ -141,18 +141,19 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
 
-    build-zigbee-matter-light-app:
-        name: Build Zigbee Matter Light App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "zigbee-matter-light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-keyword: ""
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            wifi-soc-support: false
+    ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+    #build-zigbee-matter-light-app:
+    #    name: Build Zigbee Matter Light App
+    #    needs: set-build-type
+    #    uses: ./.github/workflows/platform-builder.yaml
+    #    with:
+    #        example-app: "zigbee-matter-light"
+    #        build-type: ${{ needs.set-build-type.outputs.build-type }}
+    #        thread-keyword: ""
+    #        mg24-internal-support: false
+    #        mgm24-support: false
+    #        mgm24-internal-support: false
+    #        wifi-soc-support: false
  
     build-oven-app:
         name: Build Oven App
@@ -197,7 +198,8 @@ jobs:
             - build-air-quality-sensor-app
             - build-light-switch-app
             - build-lock-app
-            - build-thermostat-app
+            ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+            # - build-thermostat-app
             - build-window-app
             - build-fan-control-app
             - build-multi-sensor-app
@@ -205,7 +207,8 @@ jobs:
             - build-refrigerator-app
             - build-performance-test-app
             - build-platform-template
-            - build-zigbee-matter-light-app
+            ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+            # - build-zigbee-matter-light-app
             - build-closure-app
             - build-oven-app
             - build-rangehood-app
