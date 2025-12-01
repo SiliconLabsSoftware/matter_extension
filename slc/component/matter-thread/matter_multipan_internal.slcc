@@ -12,9 +12,9 @@ requires:
 provides:
   - name: matter_multipan_internal
 source:
-  - path: silabs_utils/init_matter_multipan.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/multi-pan/init_matter_multipan.cpp
 include:
-  - path: silabs_utils
+  - path: third_party/matter_sdk/examples/platform/silabs/multi-pan
     file_list:
       - path: init_matter_multipan.h
 template_contribution:

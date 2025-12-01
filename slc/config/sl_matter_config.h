@@ -68,6 +68,13 @@
 #define SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS 2000
 #endif
 
+// <q SL_OPENTHREAD_MULTI_PAN_ENABLE> Enable Multi-PAN support for Matter over Thread
+// <i> When enabled, allows secondary OpenThread instance for Multi-PAN operation.
+// <i> Default: 0
+#ifndef SL_OPENTHREAD_MULTI_PAN_ENABLE
+#define SL_OPENTHREAD_MULTI_PAN_ENABLE 0
+#endif
+
 // <<< end of configuration section >>>
 
 #endif // SL_MATTER_CONFIG_H
