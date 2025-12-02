@@ -56,7 +56,8 @@ jobs:
               with:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
-                      out/*/*/*/artifact/**
+                      out/*/*/artifact/**
+                      ${{ (inputs.build-type == 'custom-sqa' && inputs.platform == 'sixg301') && 'out/*/*/*/artifact/**' || '' }}
                       out/brd4187c/**/build/debug/*.map
                       out/brd4407a/**/build/debug/*.map  
                       out/brd4338a/**/build/debug/*.map
