@@ -84,7 +84,7 @@
         ],
         "platform-template": [
             {
-                "boards": ["brd2719a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
             },
             {
