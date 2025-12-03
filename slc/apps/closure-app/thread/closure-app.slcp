@@ -60,16 +60,6 @@ component:
   - id: matter_test_event_trigger
   - id: matter_icd_management
   - id: matter_wifi_network_diagnostics
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2601b
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2608a
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART

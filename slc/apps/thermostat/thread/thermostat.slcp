@@ -60,17 +60,6 @@ component:
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
 
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2601b
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2608a
-
   # Matter Zigbee Components
   - instance: [example]
     id: cli
