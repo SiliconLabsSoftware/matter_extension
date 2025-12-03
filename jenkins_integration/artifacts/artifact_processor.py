@@ -463,6 +463,9 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
             elif "template" in app_name_folder: # Handles platform-template
                 parts = app_name_folder.split("template")
                 app_name = parts[0] + "template"
+            elif "zigbee-matter-light" in app_name_folder:
+                parts = app_name_folder.split("light")
+                app_name = parts[0] + "light"
             else:  # Handles remaining apps that do not have app, for example thermostat
                 parts = app_name_folder.split("-")
                 app_name = parts[0]
