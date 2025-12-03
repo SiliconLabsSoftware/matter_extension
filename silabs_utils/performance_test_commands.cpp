@@ -37,9 +37,6 @@ using Shell::shell_command_t;
 using Shell::streamer_get;
 using Shell::streamer_printf;
 
-using namespace chip;
-using namespace chip::app;
-
 #include "controller/InvokeInteraction.h"
 
 #ifndef MAX

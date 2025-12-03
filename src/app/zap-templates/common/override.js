@@ -100,4 +100,4 @@ function atomicType(arg)
   }
 }
 
-exports.atomicType = atomicType
+exports.atomicType = atomicType;
