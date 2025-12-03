@@ -84,15 +84,15 @@
         ],
         "platform-template": [
             {
-                "boards": ["brd2719a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
             },
             {
-                "boards": ["brd2719a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
             },
             {
-                "boards": ["brd2719a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ]
