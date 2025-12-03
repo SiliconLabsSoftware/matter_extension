@@ -16,9 +16,6 @@ requires:
       - device_family_efr32mg24
   - name: simple_led_recommended_instance
     condition:
-      - device_family_efr32mg24
-  - name: simple_led_recommended_instance
-    condition:
       - device_family_efr32mg26
   - name: simple_led_recommended_instance
     condition:

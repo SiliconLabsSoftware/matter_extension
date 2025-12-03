@@ -67,16 +67,6 @@ component:
   - id: iostream_stdio
     condition: [matter_zigbee_multiprotocol_common]
 
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2601b
-  - id: simple_rgb_pwm_led
-    instance:
-      - rgb_led0
-    condition:
-      - brd2608a
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
   # Select UART/EUART drivers based on device series
