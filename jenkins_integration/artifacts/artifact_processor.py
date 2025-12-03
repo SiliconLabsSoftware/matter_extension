@@ -450,10 +450,25 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
+    board_id = board_id.split(",")[0] # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     ubai_app_name = determine_ubai_app_name(app_name_folder)
-    artifact_folder = os.path.join(app_name_path, 'artifact')
-    if os.path.exists(artifact_folder) and os.path.isdir(artifact_folder):
-        _upload_board_artifact_files(artifact_folder, ubai_app_name, board_id, branch_name, build_number)
+    artifact_solution_folder = os.path.join(app_name_path, 'artifact')
+    if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
+        _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
+        series_3_board_list = ["brd1019a", "brd4407a", "brd4408a", "brd2719a"]
+        if board_id in series_3_board_list:
+            if "app" in app_name_path:  # Handles apps that have app, for example lighting-app
+                parts = app_name_path.split("app")
+                app_name = parts[0] + "app"
+            elif "template" in app_name_path: # Handles platform-template
+                parts = app_name_path.split("template")
+                app_name = parts[0] + "template"
+            else:  # Handles remaining apps that do not have app, for example thermostat
+                parts = app_name_path.split("-")
+                app_name = parts[0]
+            artifact_app_only_folder = os.path.join(app_name_path, f'{app_name}/artifact')
+            if os.path.exists(artifact_app_only_folder) and os.path.isdir(artifact_app_only_folder):
+                _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
 
 
 def determine_ubai_app_name(app_name_folder):
@@ -498,7 +513,6 @@ def _upload_board_artifact_files(artifact_folder, ubai_app_name, board_id, branc
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
-    board_id = board_id.split(",")[0]  # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
     for file_name in os.listdir(artifact_folder):
         file_path = os.path.join(artifact_folder, file_name)
         if os.path.isfile(file_path) and file_name.endswith(('.s37', '.rps')):
