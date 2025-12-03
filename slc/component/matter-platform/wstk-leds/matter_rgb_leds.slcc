@@ -11,6 +11,9 @@ provides:
   - name: matter_rgb_leds
 requires:
   - name: simple_rgb_pwm_led
+    condition: [brd2601b]
+  - name: simple_rgb_pwm_led
+    condition: [brd2608a]
 recommends:
   - id: simple_rgb_pwm_led
     vendor: silabs
