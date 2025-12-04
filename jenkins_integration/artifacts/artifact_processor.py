@@ -455,8 +455,8 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
     artifact_solution_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
         _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
-        series_3_board_list = ["brd1019a", "brd4407a", "brd4408a", "brd2719a"]
-        if board_id.lower() in series_3_board_list:
+        # For OTA, we need the application without bootloader uploaded to UBAI as well.
+        if "ota" in ubai_app_name:
             if "app" in app_name_folder:  # Handles apps that have app, for example lighting-app
                 parts = app_name_folder.split("app")
                 app_name = parts[0] + "app"
