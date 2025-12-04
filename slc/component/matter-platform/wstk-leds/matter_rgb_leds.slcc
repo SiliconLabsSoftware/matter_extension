@@ -11,19 +11,12 @@ provides:
   - name: matter_rgb_leds
 requires:
   - name: simple_rgb_pwm_led
-    condition: [brd2601b]
-  - name: simple_rgb_pwm_led
-    condition: [brd2608a]
+    condition: [hardware_board_has_rgb]
 recommends:
   - id: simple_rgb_pwm_led
     vendor: silabs
     instance: [rgb_led0]
-    condition: [brd2601b]
-  - id: simple_rgb_pwm_led
-    vendor: silabs
-    instance: [rgb_led0]
-    condition: [brd2608a]
-include:
+    condition: [hardware_board_has_rgb]
   - path: third_party/matter_sdk/examples/platform/silabs/rgb_led
     file_list:
     - path: RGBLEDWidget.h
