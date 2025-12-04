@@ -29,6 +29,11 @@ runs:
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
     
+    - name: Update SLT
+      shell: bash
+      run: |
+        slt update --self
+    
     - name: Install slc-cli
       shell: bash
       run: |
