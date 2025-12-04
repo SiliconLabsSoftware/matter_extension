@@ -57,6 +57,7 @@ jobs:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
                       out/*/*/artifact/**
+                      ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       out/brd4187c/**/build/debug/*.map
                       out/brd4407a/**/build/debug/*.map  
                       out/brd4338a/**/build/debug/*.map
