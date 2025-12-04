@@ -19,7 +19,7 @@ runs:
     
     - name: Setup SLT
       id: setup-action
-      uses: SiliconLabsSoftware/action-setup-slt@main
+      uses: SiliconLabsSoftware/action-setup-slt@v1
     
     - name: Set Environment Variables
       shell: bash
