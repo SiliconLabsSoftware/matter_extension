@@ -231,6 +231,6 @@ jobs:
 
     build-sqa-apps:
       name: Build SQA apps
-      needs: merge-apps
+      needs: wait-for-test-results
       if: ${{ startsWith(github.ref_name, 'release_') }}
       uses: ./.github/workflows/sqa-apps-builder.yaml
