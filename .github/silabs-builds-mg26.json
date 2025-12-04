@@ -75,7 +75,7 @@
         "lighting-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
@@ -87,19 +87,21 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor",
+                              "-pids application"]
             },
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor",
+                              "-pids application"]
             }
         ],
         "lock-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
@@ -111,44 +113,46 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor",
+                              "-pids application"]
             },
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor",
+                              "-pids application"]
             }
         ],
         "light-switch-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "zigbee-matter-light": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
                               "--with matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent-ota-2",
+                "arguments": ["--output_suffix cmp-concurrent-ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
                               "--with matter_zigbee_concurrent"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-3",
+                "arguments": ["--output_suffix ota-3", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
                               "--with matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent-ota-3",
+                "arguments": ["--output_suffix cmp-concurrent-ota-3", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
                               "--with matter_zigbee_concurrent"]
             },
@@ -161,19 +165,19 @@
         "closure-app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform-template": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt",
+                "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd-ota-3", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt",
+                "arguments": ["--output_suffix peripherals-icd-ota-3", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ]

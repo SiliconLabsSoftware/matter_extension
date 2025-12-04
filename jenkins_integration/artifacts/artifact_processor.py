@@ -455,8 +455,9 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
     artifact_solution_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
         _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
-        # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
-        if "ota" in ubai_app_name and "siwx" not in app_name_path:
+    # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
+    if "ota" in ubai_app_name and "siwx" not in app_name_path:
+        try:
             if "-series" in app_name_path: # Thread
                 app_name = app_name_path.split("-series")[0]
             else: # WIFI NCP
@@ -464,7 +465,8 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
             artifact_app_only_folder = os.path.join(app_name_path, f'{app_name}/artifact')
             if os.path.exists(artifact_app_only_folder) and os.path.isdir(artifact_app_only_folder):
                 _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
-
+        except Exception as e:
+            print(f"Error during binary upload: {e}")
 
 def determine_ubai_app_name(app_name_folder):
     """

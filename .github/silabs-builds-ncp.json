@@ -27,7 +27,7 @@
         "lock-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]

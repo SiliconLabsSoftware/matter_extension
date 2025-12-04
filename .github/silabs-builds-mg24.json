@@ -124,11 +124,12 @@
                 "arguments": ["--output_suffix low-power-ota",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
+                              "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
@@ -140,19 +141,23 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor",
+                              "-pids application"
+                ]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor",
+                              "-pids application"
+                ]
             }
         ],
         "lighting-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
@@ -164,13 +169,15 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor",
+                              "-pids application"]
             },
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
-                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor",
+                              "-pids application"]
             }
         ],
         "light-switch-app": [
@@ -192,11 +199,12 @@
                 "arguments": ["--output_suffix low-power-ota",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
+                              "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
@@ -219,25 +227,26 @@
                 "arguments": ["--output_suffix low-power-ota",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
+                              "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform-template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals",
+                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals",
+                "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ],
         "closure-app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix ota-2",
+                "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]

@@ -51,7 +51,7 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd4351a_a02"],
-                "arguments": ["--output_suffix sequential-ota-2", "--with matter_zigbee_sequential",
+                "arguments": ["--output_suffix sequential-ota-2", "--with matter_zigbee_sequential", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
