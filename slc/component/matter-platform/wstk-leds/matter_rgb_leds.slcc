@@ -17,6 +17,7 @@ recommends:
     vendor: silabs
     instance: [rgb_led0]
     condition: [hardware_board_has_rgb]
+include:
   - path: third_party/matter_sdk/examples/platform/silabs/rgb_led
     file_list:
     - path: RGBLEDWidget.h
