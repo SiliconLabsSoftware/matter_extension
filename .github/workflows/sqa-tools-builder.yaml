@@ -75,10 +75,33 @@ jobs:
       - name: Zip OTA scripts
         shell: bash
         run: |
+          set -euo pipefail
           ota_file="ota-scripts.zip"
           cd third_party/matter_sdk/
-          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+          
+          # Validate that all required files and directories exist
+          required_paths=(
+            "scripts/tools/silabs"
+            "src/app/ota_image_tool.py"
+            "src/controller/python/matter/tlv/"
+          )
+          
+          for path in "${required_paths[@]}"; do
+            if [[ ! -e "${path}" ]]; then
+              echo "[ERROR] Required path does not exist: ${path}" >&2
+              exit 1
+            fi
+          done
+          
+          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/matter/tlv/" -x "*.md" "provision/samples/light/3"
+          
+          if ! unzip -l "${ota_file}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
+            echo "[ERROR] Archive ${ota_file} appears empty; failing." >&2
+            exit 1
+          fi
+          
           mv "${ota_file}" ../../sqa-tools/
+          echo "Archive size: $(du -h ../../sqa-tools/${ota_file} | cut -f1)"
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
 
       - name: Upload artifacts
