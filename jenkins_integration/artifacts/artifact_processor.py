@@ -455,20 +455,12 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
     artifact_solution_folder = os.path.join(app_name_path, 'artifact')
     if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
         _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
-        # For OTA, we need the application without bootloader uploaded to UBAI as well.
-        if "ota" in ubai_app_name:
-            if "app" in app_name_folder:  # Handles apps that have app, for example lighting-app
-                parts = app_name_folder.split("app")
-                app_name = parts[0] + "app"
-            elif "template" in app_name_folder: # Handles platform-template
-                parts = app_name_folder.split("template")
-                app_name = parts[0] + "template"
-            elif "zigbee-matter-light" in app_name_folder:
-                parts = app_name_folder.split("light")
-                app_name = parts[0] + "light"
-            else:  # Handles remaining apps that do not have app, for example thermostat
-                parts = app_name_folder.split("-")
-                app_name = parts[0]
+        # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
+        if "ota" in ubai_app_name and "siwx" not in app_name_path:
+            if "-series" in app_name_path: # Thread
+                app_name = app_name_path.split("-series")[0]
+            else: # WIFI NCP
+                app_name = app_name_path.split("-solution")[0]
             artifact_app_only_folder = os.path.join(app_name_path, f'{app_name}/artifact')
             if os.path.exists(artifact_app_only_folder) and os.path.isdir(artifact_app_only_folder):
                 _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
