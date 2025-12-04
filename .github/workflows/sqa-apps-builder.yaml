@@ -101,20 +101,20 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
-
-    build-zigbee-matter-light:
-        name: Build Zigbee Matter Light
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "zigbee-matter-light"
-            build-type: "custom-sqa"
-            mg24-support: false
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-            wifi-soc-support: false
+## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+#    build-zigbee-matter-light:
+#        name: Build Zigbee Matter Light
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "zigbee-matter-light"
+#            build-type: "custom-sqa"
+#            mg24-support: false
+#            mg24-internal-support: false
+#            mgm24-support: false
+#            mgm24-internal-support: false
+#            mg26-internal-support: false
+#            mgm26-internal-support: false
+#            wifi-soc-support: false
 
     build-closure-app:
       name: Build Closure App
@@ -151,7 +151,8 @@ jobs:
             - build-thermostat
             - build-light-switch-app
             - build-multi-sensor-app
-            - build-zigbee-matter-light
+            ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
+            # - build-zigbee-matter-light
             - build-closure-app
             - build-platform-template
         if: always()
