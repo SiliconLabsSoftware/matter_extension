@@ -77,7 +77,7 @@ jobs:
         run: |
           ota_file="ota-scripts.zip"
           cd third_party/matter_sdk/
-          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv/" -x "*.md" "provision/samples/light/3"
+          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/matter/tlv/" -x "*.md" "provision/samples/light/3"
           mv "${ota_file}" ../../sqa-tools/
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
 
