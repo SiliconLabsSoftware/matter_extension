@@ -71,16 +71,16 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
             ncp-wf200-support: true
-    ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
-    #build-thermostat-app:
-    #    name: Build Thermostat App
-    #    needs: set-build-type
-    #    uses: ./.github/workflows/platform-builder.yaml
-    #    with:
-    #        example-app: "thermostat"
-    #        build-type: ${{ needs.set-build-type.outputs.build-type }}
-    #        ncp-917-support: true
-    #        ncp-wf200-support: true
+
+    build-thermostat-app:
+       name: Build Thermostat App
+       needs: set-build-type
+       uses: ./.github/workflows/platform-builder.yaml
+       with:
+           example-app: "thermostat"
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
+           ncp-917-support: true
+           ncp-wf200-support: true
             
     build-window-app:
         name: Build Window App
