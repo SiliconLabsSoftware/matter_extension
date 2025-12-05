@@ -149,7 +149,7 @@ jobs:
             - build-lock-app
             - build-lighting-app
             - build-window-app
-            - build-dishwasher-app
+            # - build-dishwasher-app
             - build-thermostat
             - build-light-switch-app
             - build-multi-sensor-app
