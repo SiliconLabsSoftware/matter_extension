@@ -112,11 +112,9 @@ jobs:
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            # mg26-support: false ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
             mg26-internal-support: false
             mgm26-internal-support: false
             wifi-soc-support: false
-            # sixg301-support: false ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
 
     build-closure-app:
       name: Build Closure App
@@ -153,8 +151,7 @@ jobs:
             - build-thermostat
             - build-light-switch-app
             - build-multi-sensor-app
-            ## Disabled unitl https://jira.silabs.com/browse/MULTIPROT-1799 is fixed
-            # - build-zigbee-matter-light
+            - build-zigbee-matter-light
             - build-closure-app
             - build-platform-template
         if: always()
