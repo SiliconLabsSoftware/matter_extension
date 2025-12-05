@@ -62,14 +62,6 @@
             {
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
-            },
-            {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix concurrent-listening","--with_app rainier_concurrent_listening"] 
-            },
-            {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix concurrent-listening-copy-sources","--with_app rainier_concurrent_listening", "--copy-sources"] 
             }
         ],
         "thermostat": [
