@@ -30,9 +30,18 @@ from pathlib import Path
 
 class createApp:
     def __init__(self, skip_gen=False):
-        self.EXAMPLE_USAGE = "python slc/sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [--skip-gen]"
-        self.SoC_boards = ["brd4338a", "brd4342a", "brd4343a", "brd2605a", "brd2708a", "brd2911a"]
+        self.EXAMPLE_USAGE = "python slc/sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [options]"
         self.skip_gen = skip_gen
+        self.output_suffix = None
+        self.with_app_components = None
+        self.without_app_components = None
+        self.with_bootloader_components = None
+        self.without_bootloader_components = None
+        self.configuration = None
+        self.pids_arg = None
+        self.generate_bootloader = True
+        self.generate_application = True
+        self.generate_tz_secure = False
         self.get_environment()
 
     def print_usage_and_exit(self):
@@ -190,8 +199,6 @@ class createApp:
         self.silabs_board = sys.argv[3].lower()
         self.use_solutions = False
 
-        # Check if app is siwx917 wifi app
-        self.wifi917 = True if "917" in self.reference_project_file else False
         if not os.path.exists(self.reference_project_file):
             logging.error(f"ReferenceProject File does not exist: {self.reference_project_file}")
             sys.exit(1)
@@ -203,11 +210,6 @@ class createApp:
         if not self.silabs_board:
             logging.error("Missing SilabsBoard argument")
             self.print_usage_and_exit()
-        
-        if self.silabs_board in self.SoC_boards:
-            if not os.path.isdir(self.wiseconnect_root):
-                logging.error(f"The Wifi Extension required to build the {self.reference_project_file} does not exist at location:{self.wiseconnect_root}")
-                sys.exit(1)
         
         if self.reference_project_file.endswith(".slcw"):
             self.use_solutions = True
@@ -226,7 +228,7 @@ class createApp:
             env_path = os.path.join(os.getcwd(), "slc", "tools", ".env")
             load_dotenv(env_path, override=True)
             os.environ["PATH"] = os.getenv("TOOLS_PATH") + os.environ["PATH"]
-            self.java_path = os.getenv("JAVA17_HOME")
+            self.java_path = os.getenv("JAVA_HOME")
             self.silabs_chip_root = os.getenv("silabs_chip_root")
             self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
             self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
@@ -238,62 +240,134 @@ class createApp:
             sys.exit(1)
 
         self.slc_path = "slc"
-        if sys.platform == "win32":
-            try:
-                self.slc_path = os.path.join(os.getenv("SLC"), "slc.bat")
-            except Exception:
-                logging.error("SLC undefined. Set SLC from the sl_env_vars.bat")
-
-    def trust_location(self, trust_locations):
-        for locations in trust_locations:
-            sdk_or_ext = locations[0]
-            location = locations[1]
-
-        # Verify the location of sdk and extensions
-            if not os.path.isdir(location):
-                logging.error(f"The {sdk_or_ext} does not exist at location:{location}")
-                sys.exit(1)
-
-            # Trust the sdk and extensions
-            logging.info(f"Trusting {sdk_or_ext} at location: {location}")
-            try:
-                if sdk_or_ext=="SDK":
-                    subprocess.run([self.slc_path, "configuration", "--sdk", location])
-                    subprocess.run([self.slc_path, "signature", "trust", "--sdk", location])
-                else:  # sdk_ext="Extension":
-                    subprocess.run([self.slc_path, "signature", "trust", "--extension-path", location])
-            except Exception as e:
-                logging.error(f"Error while trusting the location {location}: {e}")
-                sys.exit(1)
-
-    def slc_trust(self):
-        # Get user permission to trust simplicity_sdk and extensions with use arm gcc
-        # Use arm-gcc toolchain with slc
         subprocess.run([self.slc_path, "configuration","-gcc", self.arm_toolchain_path])
 
-        trust_locations = [["SDK",self.sisdk_root],["Extension", self.silabs_chip_root],
-                                                    ["Extension",self.wiseconnect_root]]
-        self.trust_location(trust_locations)
-
-
     def generate(self):
+        # Apply output suffix if provided
+        if self.output_suffix:
+            self.new_app_name = f"{self.new_app_name}-{self.output_suffix}"
+            logging.info(f"Applied output suffix. New output directory: {self.new_app_name}")
+        
         if self.skip_gen:
             logging.info("Skipping project generation as --skip-gen was specified.")
             self.extract_and_save_paths()
             return
+        
         # Use appropriate build flag for sample-app/solutions
         project_flag = "-p" if self.reference_project_file.endswith('.slcp') else "-w"
-        # Check for SoC boards
-        config_args=";wiseconnect3_sdk"  if self.silabs_board in self.SoC_boards else ""
+        
+        # Build --with argument
+        with_components = []
+        if self.use_solutions:
+            if self.with_app_components:
+                with_components.append(f"{self.silabs_board},{self.with_app_components}")
+                logging.info(f"Adding application components: {self.with_app_components}")
+            else:
+                with_components.append(self.silabs_board)
+        else:
+            with_components.append(self.silabs_board)
+        
+        # Build --without argument
+        without_components = []
+        if self.use_solutions and self.without_app_components:
+            without_components.append(self.without_app_components)
+            logging.info(f"Excluding application components: {self.without_app_components}")
+        
+        # Build configuration arguments
+        config_args = ""
+        if self.configuration:
+            config_args = f" {self.configuration}"
+            logging.info(f"Using configuration: {self.configuration}")
+        
         # Run slc generate to create copy of sample app at the 'new_app_name' location
         try:
-            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,project_flag, self.reference_project_file, "--with", self.silabs_board+config_args, "--new-project", "--force", "--generator-timeout=180", "-o", "makefile"]
-            subprocess.run(cmd, check=True)
+            # For solutions with -pids, generate specific parts
+            if self.use_solutions and self.pids_arg:
+                self._generate_solution_with_pids(project_flag, config_args)
+            else:
+                # Standard generation for .slcp or full solution
+                cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,
+                       project_flag, self.reference_project_file]
+                
+                # Add --with arguments
+                for with_comp in with_components:
+                    cmd.extend(["--with", with_comp + config_args])
+                
+                # Add --without arguments
+                for without_comp in without_components:
+                    cmd.extend(["--without", without_comp])
+                
+                cmd.extend(["--new-project", "--force", "--generator-timeout=180", "-o", "makefile"])
+                
+                # Add SDK package paths
+                sdk_package_paths = ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", 
+                                   self.silabs_chip_root, "--sdk-package-path", self.wiseconnect_root]
+                cmd.extend(sdk_package_paths)
+                
+                logging.info(f"Running command: {' '.join(cmd)}")
+                subprocess.run(cmd, check=True)
+            
             # After generation, extract and save src/include paths
             self.extract_and_save_paths()
-        except subprocess.CalledProcessError:
-            logging.error("Error running 'slc generate'")
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Error running 'slc generate': {e}")
             sys.exit(1)
+    
+    def _generate_solution_with_pids(self, project_flag, config_args):
+        """Generate solution parts based on -pids argument"""
+        # Build component arguments
+        with_app_arg = f"{self.silabs_board},{self.with_app_components}" if self.with_app_components else self.silabs_board
+        with_bootloader_arg = f"{self.silabs_board},{self.with_bootloader_components}" if self.with_bootloader_components else self.silabs_board
+        
+        sdk_package_paths = ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", 
+                           self.silabs_chip_root, "--sdk-package-path", self.wiseconnect_root]
+        
+        if self.generate_bootloader and not self.generate_tz_secure:
+            logging.info("Generating bootloader...")
+            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,
+                   project_flag, self.reference_project_file, "--with", with_bootloader_arg]
+            
+            if self.without_bootloader_components:
+                cmd.extend(["--without", self.without_bootloader_components])
+            
+            cmd.extend(["-pids", "bootloader"] + sdk_package_paths + 
+                      ["--new-project", "--force", "--generator-timeout=180", "-o", "makefile"])
+            
+            if config_args:
+                cmd.append(config_args.strip())
+            
+            logging.info(f"Running command: {' '.join(cmd)}")
+            subprocess.run(cmd, check=True)
+        
+        if self.generate_tz_secure:
+            logging.info("Generating trustzone-secure...")
+            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,
+                   project_flag, self.reference_project_file, "--with", with_app_arg,
+                   "-pids", "trustzone-secure"] + sdk_package_paths + \
+                  ["--new-project", "--force", "--generator-timeout=180", "-o", "makefile"]
+            
+            if config_args:
+                cmd.append(config_args.strip())
+            
+            logging.info(f"Running command: {' '.join(cmd)}")
+            subprocess.run(cmd, check=True)
+        
+        if self.generate_application:
+            logging.info("Generating application...")
+            cmd = [self.slc_path, "--java-location", self.java_path, "generate", "-d", self.new_app_name,
+                   project_flag, self.reference_project_file, "--with", with_app_arg]
+            
+            if self.without_app_components:
+                cmd.extend(["--without", self.without_app_components])
+            
+            cmd.extend(["-pids", "application"] + sdk_package_paths + 
+                      ["--new-project", "--force", "--generator-timeout=180", "-o", "makefile"])
+            
+            if config_args:
+                cmd.append(config_args.strip())
+            
+            logging.info(f"Running command: {' '.join(cmd)}")
+            subprocess.run(cmd, check=True)
 
     # Helper to extract src/include paths from a .slcp file
     def extract_from_slcp(self, app_slcp_full_path):
@@ -445,12 +519,28 @@ class createApp:
             
 
 def main():
-    parser = argparse.ArgumentParser(description="Create a new Matter app from a reference project file.")
+    parser = argparse.ArgumentParser(
+        description="Create a new Matter app from a reference project file.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  python3 sl_create_new_app.py MyApp slc/apps/lighting-app/thread/lighting-app.slcp brd4187c
+  python3 sl_create_new_app.py MyApp slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --skip_gen
+  python3 sl_create_new_app.py MyApp slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c --with_app component1,component2
+  python3 sl_create_new_app.py MyApp slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids application
+        """)
     parser.add_argument("-n", "--new_app_name", dest="new_app_name", required=False, help="Name of the new app directory to create")
     parser.add_argument("-p", "--reference_project_file", dest="reference_project_file", required=False, help="Path to the reference .slcp or .slcw project file")
     parser.add_argument("-b", "--silabs_board", dest="silabs_board", required=False, help="Silabs board name")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose (debug) logging")
     parser.add_argument("-s", "--skip_gen", action="store_true", help="Skip project generation step")
+    parser.add_argument("--output_suffix", dest="output_suffix", help="Suffix to append to output directory name")
+    parser.add_argument("--with_app", dest="with_app_components", help="Additional components for application build (solutions only, comma-separated)")
+    parser.add_argument("--without_app", dest="without_app_components", help="Components to exclude from application build (solutions only, comma-separated)")
+    parser.add_argument("--with_bootloader", dest="with_bootloader_components", help="Additional components for bootloader build (solutions only, comma-separated)")
+    parser.add_argument("--without_bootloader", dest="without_bootloader_components", help="Components to exclude from bootloader build (solutions only, comma-separated)")
+    parser.add_argument("--configuration", dest="configuration", help="Configuration options (e.g., KEY1:value1,KEY2:value2)")
+    parser.add_argument("-pids", dest="pids_arg", choices=["bootloader", "application", "trustzone"], help="Generate only specific parts of a solution: 'bootloader', 'application', or 'trustzone' (solutions only)")
     # Accept positional arguments for backward compatibility
     parser.add_argument("args", nargs="*", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -473,6 +563,25 @@ def main():
     sys.argv = [sys.argv[0], args.new_app_name, args.reference_project_file, args.silabs_board]
 
     app = createApp(skip_gen=args.skip_gen)
+    app.output_suffix = args.output_suffix
+    app.with_app_components = args.with_app_components
+    app.without_app_components = args.without_app_components
+    app.with_bootloader_components = args.with_bootloader_components
+    app.without_bootloader_components = args.without_bootloader_components
+    app.configuration = args.configuration
+    app.pids_arg = args.pids_arg
+    
+    # Handle -pids argument logic
+    if app.pids_arg:
+        if app.pids_arg == "bootloader":
+            app.generate_application = False
+        elif app.pids_arg == "application":
+            app.generate_bootloader = False
+        elif app.pids_arg == "trustzone":
+            app.generate_application = True
+            app.generate_bootloader = True
+            app.generate_tz_secure = True
+    
     app.validate_arguments()
     app.generate()
 
