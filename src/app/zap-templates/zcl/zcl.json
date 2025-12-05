@@ -2,7 +2,7 @@
     "description": "Matter SDK ZCL data",
     "category": "matter",
     "version": 1,
-    "requiredFeatureLevel": 109,
+    "requiredFeatureLevel": 102,
     "xmlRoot": [
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/.",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"
@@ -372,6 +372,7 @@
             "FeatureMap"
         ],
         "ICD Management": [
+            "ClusterRevision",
             "IdleModeDuration",
             "ActiveModeDuration",
             "ActiveModeThreshold",
@@ -564,7 +565,8 @@
             "LocalTime",
             "Granularity",
             "TimeZoneListMaxSize",
-            "DSTOffsetListMaxSize"
+            "DSTOffsetListMaxSize",
+            "ClusterRevision"
         ],
         "Temperature Control": [
             "SupportedTemperatureLevels"
