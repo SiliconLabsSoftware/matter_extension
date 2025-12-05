@@ -19,7 +19,7 @@ runs:
     
     - name: Setup SLT
       id: setup-action
-      uses: SiliconLabsSoftware/action-setup-slt@main
+      uses: SiliconLabsSoftware/action-setup-slt@v1
     
     - name: Set Environment Variables
       shell: bash
@@ -28,6 +28,11 @@ runs:
         echo "SLT_PATH=${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_ENV
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
+    
+    - name: Update SLT
+      shell: bash
+      run: |
+        slt update --self
     
     - name: Install slc-cli
       shell: bash
