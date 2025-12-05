@@ -372,7 +372,6 @@
             "FeatureMap"
         ],
         "ICD Management": [
-            "ClusterRevision",
             "IdleModeDuration",
             "ActiveModeDuration",
             "ActiveModeThreshold",
@@ -565,8 +564,7 @@
             "LocalTime",
             "Granularity",
             "TimeZoneListMaxSize",
-            "DSTOffsetListMaxSize",
-            "ClusterRevision"
+            "DSTOffsetListMaxSize"
         ],
         "Temperature Control": [
             "SupportedTemperatureLevels"
