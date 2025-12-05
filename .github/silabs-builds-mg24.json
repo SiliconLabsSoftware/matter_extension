@@ -167,6 +167,11 @@
             },
             {
                 "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_custom_processor",
