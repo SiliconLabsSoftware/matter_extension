@@ -43,21 +43,21 @@ jobs:
             wifi-soc-support: false
             sixg301-support: false
 
-    build-dishwasher-app:
-        name: Build Dishwasher App
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "dishwasher-app"
-            build-type: "custom-sqa"
-            mg24-support: false
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-            wifi-soc-support: false
-            sixg301-support: false
+  #  build-dishwasher-app:
+  #      name: Build Dishwasher App
+  #      uses: ./.github/workflows/platform-builder.yaml
+  #      with:
+  #          example-app: "dishwasher-app"
+  #          build-type: "custom-sqa"
+  #          mg24-support: false
+  #          mg24-internal-support: false
+  #          mgm24-support: false
+  #          mgm24-internal-support: false
+  #          mg26-support: false
+  #          mg26-internal-support: false
+  #          mgm26-internal-support: false
+  #          wifi-soc-support: false
+  #          sixg301-support: false
 
     build-thermostat:
         name: Build Thermostat
