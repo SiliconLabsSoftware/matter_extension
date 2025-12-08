@@ -12,6 +12,3 @@ provides:
 -   name: matter_ble_side_channel
 requires:
 -   name: matter_gatt_dynamic
-
-ui_hints:
-    visibility: never
