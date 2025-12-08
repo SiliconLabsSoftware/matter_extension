@@ -150,7 +150,7 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                "arguments": ["--output_suffix cmp-sequential-low-power",
+                "arguments": ["--output_suffix sequential-low-power",
                               "--with matter_platform_low_power","--with matter_zigbee_sequential",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
