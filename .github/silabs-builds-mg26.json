@@ -134,7 +134,7 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-2", "-pids application",
+                "arguments": ["--output_suffix sequential-ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
                               "--with matter_zigbee_sequential"]
             },
@@ -146,7 +146,7 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix ota-3", "-pids application",
+                "arguments": ["--output_suffix sequential-ota-3", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
                               "--with matter_zigbee_sequential"]
             },
@@ -160,6 +160,18 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
                               "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix cmp-concurrent-low-power",
+                              "--with matter_platform_low_power","--with matter_zigbee_concurrent",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix sequential-low-power",
+                              "--with matter_platform_low_power","--with matter_zigbee_sequential",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
         "closure-app": [
