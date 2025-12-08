@@ -2,6 +2,7 @@
     "name": "CHIP Application templates",
     "version": "chip-v1",
     "category": "matter",
+    "generateStaticTemplates": "false",
     "options": {
         "generator": {
             "appendDirectory": "zap-generated",
