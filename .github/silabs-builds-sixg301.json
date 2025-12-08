@@ -138,10 +138,22 @@
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               },
               {
-                  "boards": ["brd1019a,SIMG301M113WIH", "brd2719a","brd4407a"],
+                  "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                   "arguments": ["--output_suffix cmp-concurrent-ota-2","--with matter_zigbee_concurrent", "-pids application",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-              }
+              },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-low-power",
+                              "--with matter_platform_low_power","--with matter_zigbee_concurrent",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-sequential-low-power",
+                              "--with matter_platform_low_power","--with matter_zigbee_sequential",
+                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            }
           ],
         "closure-app": [
             {
