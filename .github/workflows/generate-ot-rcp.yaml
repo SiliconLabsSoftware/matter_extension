@@ -2,6 +2,7 @@ name: Generate OT-RCP Binaries
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   build-rcp:
