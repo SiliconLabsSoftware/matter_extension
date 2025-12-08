@@ -2,12 +2,13 @@
     "name": "CHIP Application templates",
     "version": "chip-v1",
     "category": "matter",
-    "generateStaticTemplates": "false",
+    "requiredFeatureLevel": 109,
+
     "options": {
         "generator": {
             "appendDirectory": "zap-generated",
             "disableUcComponentOnZclClusterUpdate": "true",
-            "requiredFeatureLevel": 109
+            "generateStaticTemplates": "false"
         }
     },
     "helpers": [
