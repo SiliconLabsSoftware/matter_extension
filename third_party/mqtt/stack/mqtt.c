@@ -65,7 +65,7 @@ extern void mem_free(void *mem);
 mqtt_connection_status_t mqtt_parse_incoming(mqtt_client_t *client);
 void mqtt_output_send(struct mqtt_ringbuf_t *rb, mqtt_transport_intf_t *trans);
 
-#ifdef MQTT_DEBUG
+#if MQTT_DEBUG
 #include "silabs_utils.h"
 void silabsLog(const char *aFormat, ...);
 #define MQTT_DEBUGF(x) silabsLog x;
@@ -110,6 +110,7 @@ enum mqtt_connect_flag {
 
 static void mqtt_cyclic_timer(void *arg);
 
+#if MQTT_DEBUG
 static const char *const mqtt_message_type_str[15] = {
   "UNDEFINED", "CONNECT", "CONNACK",     "PUBLISH",  "PUBACK",  "PUBREC",   "PUBREL",    "PUBCOMP",
   "SUBSCRIBE", "SUBACK",  "UNSUBSCRIBE", "UNSUBACK", "PINGREQ", "PINGRESP", "DISCONNECT"
@@ -128,6 +129,7 @@ static const char *mqtt_msg_type_to_str(uint8_t msg_type)
   }
   return mqtt_message_type_str[msg_type];
 }
+#endif
 
 /**
  * Generate MQTT packet identifier
@@ -571,6 +573,8 @@ void mqtt_cyclic_timer(void *arg)
         if (mqtt_output_check_space(&client->output, 0) != 0) {
           mqtt_output_append_fixed_header(&client->output, MQTT_MSG_TYPE_PINGREQ, 0, 0, 0, 0);
           client->cyclic_tick = 0;
+          /* Send the PINGREQ immediately - this ensures keep-alive works even when idle */
+          mqtt_output_send(&client->output, client->conn);
         }
       } else {
         client->cyclic_tick++;

@@ -116,6 +116,7 @@ err_t MQTT_Transport_SSLConfigure(MQTT_Transport_t *transP,
 
 err_t MQTT_Transport_Connect(MQTT_Transport_t *transP,
                              const char *host,
+                             size_t hostLen,
                              u16_t port,
                              matter_aws_connect_cb matter_aws_conn_cb)
 {
@@ -126,20 +127,27 @@ err_t MQTT_Transport_Connect(MQTT_Transport_t *transP,
     SILABS_LOG("MQTT transport connect failed");
     return ERR_ARG;
   }
+  /* Validate hostname length to prevent excessive allocation */
+  if (hostLen > MQTT_TRANSPORT_MAX_HOSTNAME_LEN) {
+    SILABS_LOG("MQTT transport connect failed: hostname too long");
+    return ERR_ARG;
+  }
   transP->sync_sem = xSemaphoreCreateCounting(1, 0);
   transP->ipaddr   = &ipaddr;
   /* Store hostname for TLS certificate verification */
   if (transP->hostname != NULL) {
     vPortFree(transP->hostname);
-  }
-  if (host != NULL) {
-    size_t hostname_len = strlen(host) + 1;
-    transP->hostname = (char *)pvPortMalloc(hostname_len);
-    if (transP->hostname != NULL) {
-      memcpy(transP->hostname, host, hostname_len);
-    }
-  } else {
     transP->hostname = NULL;
+  }
+  /* Allocate and copy hostname with explicit length (no reliance on null-termination) */
+  size_t alloc_len = hostLen + 1;  /* +1 for null terminator */
+  transP->hostname = (char *)pvPortMalloc(alloc_len);
+  if (transP->hostname != NULL) {
+    memcpy(transP->hostname, host, hostLen);
+    transP->hostname[hostLen] = '\0';  /* Explicitly null-terminate */
+  } else {
+    SILABS_LOG("MQTT transport connect failed: hostname allocation failed");
+    return ERR_MEM;
   }
   if ((dns_ret = dns_gethostbyname(host, &ipaddr, dns_callback, transP)) != ERR_OK) {
     if (dns_ret == ERR_INPROGRESS) {

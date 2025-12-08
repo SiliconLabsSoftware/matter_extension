@@ -35,6 +35,12 @@
 #define SIGNAL_TRANSINTF_TX_ACK     0x02
 #define SIGNAL_TRANSINTF_CONN_CLOSE 0x04
 
+/**
+ * @brief Maximum hostname length per RFC 1035.
+ * A fully qualified domain name (FQDN) is limited to 253 characters.
+ */
+#define MQTT_TRANSPORT_MAX_HOSTNAME_LEN 253
+
 typedef void (*matter_aws_connect_cb)(err_t);
 typedef struct MQTT_Transport_t MQTT_Transport_t;
 void transport_process_mbedtls_rx(MQTT_Transport_t *client);
@@ -52,6 +58,7 @@ err_t MQTT_Transport_SSLConfigure(MQTT_Transport_t *transP,
                                   size_t cert_len);
 err_t MQTT_Transport_Connect(MQTT_Transport_t *client,
                              const char *host,
+                             size_t hostLen,
                              u16_t port,
                              matter_aws_connect_cb matterAws_con_cb);
 
