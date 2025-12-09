@@ -771,7 +771,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.light-switch-app.thread.light-switch-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/light-switch-app/wifi/light-switch-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/light-switch-app/thread/light-switch-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/light-switch-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
@@ -1314,7 +1314,7 @@
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app-series-2-internal.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/air-quality-sensor-app/wifi/air-quality-sensor-app-siwx.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/air-quality-sensor-app/thread/air-quality-sensor-app-series-2-internal.slcw"/>
     <properties key="readmeFiles" value="slc/apps/air-quality-sensor-app/thread/README.md"/>
     <properties key="boardCompatibility" value="brd4337a brd2703a brd2704a brd4319a:0.0.0.A00 brd4350a brd4351a brd2709a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*mgm24.* .*efr32mg24.* .*efr32mg26.* .*mgm26.* "/>
