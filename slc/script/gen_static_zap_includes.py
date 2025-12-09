@@ -2,7 +2,7 @@
 
 # This script generates the matter_static_generated_zap_content.slcc file
 # from the zzz_generated/app-common/clusters directory
-# USAGE: python3 slc/script/gen_static_zap_content.py
+# USAGE: python3 slc/script/gen_static_zap_includes.py
 
 import os
 import pathlib
