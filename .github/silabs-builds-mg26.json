@@ -161,13 +161,13 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix cmp-concurrent-low-power",
                               "--with_app matter_platform_low_power","--with_app matter_zigbee_concurrent",
-                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix sequential-low-power",
                               "--with_app matter_platform_low_power","--with_app matter_zigbee_sequential",
-                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4116a"],
