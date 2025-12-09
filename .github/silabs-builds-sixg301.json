@@ -13,11 +13,11 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential","--with matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with matter_zigbee_sequential", "--copy-sources"]
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             }
         ],
         "thermostat": [
@@ -41,13 +41,13 @@
         "lighting-app": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "lock-app": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "zigbee-matter-light":  [
@@ -61,7 +61,7 @@
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with matter_no_debug,toolchain_gcc_lto", "--without matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "thermostat": [
@@ -134,25 +134,25 @@
         "zigbee-matter-light":  [
               {
                   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                  "arguments": ["--output_suffix sequential-ota-2","--with matter_zigbee_sequential", "-pids application",
+                  "arguments": ["--output_suffix sequential-ota-2","--with_app matter_zigbee_sequential", "-pids application",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               },
               {
                   "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                  "arguments": ["--output_suffix cmp-concurrent-ota-2","--with matter_zigbee_concurrent", "-pids application",
+                  "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
               },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-low-power",
-                              "--with matter_platform_low_power","--with matter_zigbee_concurrent",
-                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--with_app matter_platform_low_power","--with_app matter_zigbee_concurrent",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix sequential-low-power",
-                              "--with matter_platform_low_power","--with matter_zigbee_sequential",
-                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--with_app matter_platform_low_power","--with_app matter_zigbee_sequential",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
