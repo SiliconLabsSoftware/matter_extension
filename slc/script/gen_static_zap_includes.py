@@ -73,14 +73,14 @@ for cluster_subdir in cluster_subdirs:
     # Sort files alphabetically
     files_in_cluster.sort()
     
-    # Add the path entry for this cluster
-    filedata.append(f"  - path: {cluster_path}")
+    # Add the path entry for this cluster (without /clusters/<cluster_name>)
+    filedata.append("  - path: third_party/matter_sdk/zzz_generated/app-common")
     filedata.append("    unless: [matter_zap_custom_generation]")
     filedata.append("    file_list:")
     
-    # Add each file in the file_list
+    # Add each file in the file_list with clusters/<cluster_name>/ prefix
     for file_name in files_in_cluster:
-        filedata.append(f"      - path: {file_name}")
+        filedata.append(f"      - path: clusters/{cluster_subdir}/{file_name}")
 
 # Write the generated content to the output file
 with open(output_slcc_path, 'w') as f:
