@@ -88,7 +88,8 @@ def main():
             if board_upper not in boards:
                 print(f"Warning: {board} is not in the supported boards list")
                 print(f"Supported boards: {', '.join(boards)}")
-            target_boards.append(board_upper)
+            else:
+                target_boards.append(board_upper)
         
         if not target_boards:
             print("No valid boards specified. Exiting.")
