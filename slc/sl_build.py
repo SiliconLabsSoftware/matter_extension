@@ -81,15 +81,14 @@ def main():
         sys.exit(1)
 
     slc_path = App.slc_path
-    java_path = App.java_path
-    SoC_boards = App.SoC_boards
-    config_args = ";wiseconnect3_sdk" if silabs_board in SoC_boards else ""
 
     logging.info("Generating project files with SLC...")
-    result = subprocess.run([
-        slc_path, "--java-location", java_path, "generate", "-d", output_dir, project_flag,
-        reference_project_file, "--with", silabs_board + config_args, "--force", "--generator-timeout=180", "-o", "makefile"
-    ])
+    cmd = [slc_path, "generate"]
+    cmd += ["-d", output_dir,project_flag, reference_project_file]
+    cmd += ["--sdk-package-path", App.sisdk_root, "--sdk-package-path", App.wiseconnect_root, "--sdk-package-path", App.silabs_chip_root ]
+    cmd += ["--with", silabs_board, "--generator-timeout=180", "-o", "makefile"]
+    logging.info(f"Running command: {' '.join(cmd)}")
+    result = subprocess.run(cmd, check=True)
     if result.returncode != 0:
         logging.error("SLC project generation failed.")
         sys.exit(result.returncode)
