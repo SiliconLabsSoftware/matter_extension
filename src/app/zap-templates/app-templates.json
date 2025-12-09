@@ -2,8 +2,6 @@
     "name": "CHIP Application templates",
     "version": "chip-v1",
     "category": "matter",
-    "requiredFeatureLevel": 109,
-
     "options": {
         "generator": {
             "appendDirectory": "zap-generated",
