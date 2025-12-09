@@ -99,7 +99,6 @@ jobs:
             mg26-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
-            wifi-soc-support: false
             sixg301-support: false
 
     build-zigbee-matter-light:
