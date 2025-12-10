@@ -193,6 +193,40 @@ class CreateApp:
                 logging.error(f"Failed to parse .slcw file for application .slcp: {e}")
                 sys.exit(1)
 
+    @staticmethod
+    def validate_tools():
+        """Validate that all required build tools are available on the system.
+        
+        This validates all tools installed by sl_setup_env.py:
+        - slc (Silicon Labs Configurator CLI)
+        - arm-none-eabi-gcc (ARM GCC Toolchain)
+        - ninja (Ninja build system)
+        - commander (Simplicity Commander)
+        - java (Java Runtime Environment)
+        
+        Raises:
+            SystemExit: If any required tool is not found
+        """
+        tools = [
+            ("slc", "slc not detected on host. Please run slc/sl_setup_env.py to install slc."),
+            ("arm-none-eabi-gcc", "arm-none-eabi-gcc not detected on host. Please run slc/sl_setup_env.py to install arm gcc toolchain."),
+            ("ninja", "ninja not detected on host. Please run slc/sl_setup_env.py to install ninja."),
+            ("commander", "commander not detected on host. Please run slc/sl_setup_env.py to install Simplicity Commander."),
+            ("java", "java not detected on host. Please run slc/sl_setup_env.py to install java21.")
+        ]
+        
+        missing_tools = []
+        for tool, error_msg in tools:
+            if not shutil.which(tool):
+                logging.error(error_msg)
+                missing_tools.append(tool)
+        
+        if missing_tools:
+            logging.error(f"Missing tools: {', '.join(missing_tools)}")
+            sys.exit(1)
+        
+        logging.info(f"Required tools found: {', '.join([tool for tool, _ in tools])}")
+
     def validate_board_argument(self, board):
         """Validate board argument format.
 
@@ -278,6 +312,9 @@ class CreateApp:
         Raises:
             SystemExit: If generation fails
         """
+        # Validate required tools are available
+        self.validate_tools()
+        
         if self.skip_gen:
             logging.info("Skipping project generation as --skip-gen was specified.")
             self.extract_and_save_paths()

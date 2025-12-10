@@ -27,20 +27,6 @@ import shutil
 
 from sl_create_new_app import CreateApp
 
-def validate_tools():
-    """Validate required build tools are available on system."""
-    tools = [
-        ("slc", "slc not detected on host. Please run slc/sl_setup_env.py to install slc."),
-        ("arm-none-eabi-gcc", "arm-none-eabi-gcc not detected on host. Please run slc/sl_setup_env.py to install arm gcc toolchain.")
-    ]
-    
-    for tool, error_msg in tools:
-        if not shutil.which(tool):
-            logging.error(error_msg)
-            sys.exit(1)
-    
-    logging.info("Required tools found: slc, arm-none-eabi-gcc")
-
 
 def parse_project_file(reference_project_file):
     """Parse project file and determine build parameters.
@@ -164,7 +150,7 @@ def main():
         sys.exit(1)
 
     # Validate required tools are available
-    validate_tools()
+    CreateApp.validate_tools()
 
     # Parse project file configuration
     project_flag, silabs_app, output_dir, makefile_path = parse_project_file(reference_project_file)

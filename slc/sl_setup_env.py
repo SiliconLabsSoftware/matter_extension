@@ -37,6 +37,7 @@ import argparse
 import logging
 import os
 import sys
+import dload
 import stat
 import subprocess
 import shutil
@@ -223,8 +224,11 @@ class MatterEnvSetup:
 
         if self.platform == "darwin":
             java_path = os.path.join(self.paths.get('java21'), "jre", "Contents", "Home")
+            commander_path = os.path.join(self.paths.get('commander'), "Contents", "MacOS")
         else:
             java_path = os.path.join(self.paths.get('java21'), "jre")
+            commander_path = self.paths.get('commander')
+        
 
         try:
             with open(env_path, "w") as outfile:
@@ -233,7 +237,7 @@ class MatterEnvSetup:
                 outfile.write(f"JAVA_HOME={self.paths.get('java21')}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
-                    f"TOOLS_PATH={arm_gcc_bin}:{self.paths.get('slc-cli')}:{os.path.join(java_path, 'bin')}:{self.paths.get('commander')}:\n")
+                    f"TOOLS_PATH={arm_gcc_bin}:{self.paths.get('slc-cli')}:{os.path.join(java_path, 'bin')}:{commander_path}:\n")
                 outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
                 outfile.write(f"NINJA_EXE_PATH={self.paths.get('ninja')}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
