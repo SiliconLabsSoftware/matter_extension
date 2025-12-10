@@ -114,7 +114,10 @@ class MatterEnvSetup:
             logging.error(f"ERROR: Platform {platform} is not supported")
             sys.exit(1)
         self.slt_cli_url = f"https://www.silabs.com/documents/public/software/slt-cli-1.0.1-{self.__platform}-x64.zip"
-        self.slt_cli_path = os.path.join(self.tools_folder_path, "slt")
+        if platform == "win32":
+            self.slt_cli_path = os.path.join(self.tools_folder_path, "slt.exe")
+        else:
+            self.slt_cli_path = os.path.join(self.tools_folder_path, "slt")
         self.sisdk_root = os.path.join(self.silabs_chip_root, "third_party", "simplicity_sdk")
         self.wiseconnect_root = os.path.join(self.silabs_chip_root, "third_party", "wifi_sdk")
         self.zap_path = os.path.join(self.silabs_chip_root, "slc", "tools", "zap")
@@ -129,7 +132,8 @@ class MatterEnvSetup:
                 with ZipFile(slt_zip_path, 'r') as zObject:
                     zObject.extractall(path=self.tools_folder_path)
                 os.remove(slt_zip_path)
-                os.chmod(self.slt_cli_path, stat.S_IEXEC)
+                if self.platform != "win32":
+                    os.chmod(self.slt_cli_path, stat.S_IEXEC)
             except Exception as e:
                 logging.error(f"Failed to download/extract slt-cli: {e}")
                 sys.exit(1)
@@ -225,9 +229,11 @@ class MatterEnvSetup:
         if self.platform == "darwin":
             java_path = os.path.join(self.paths.get('java21'), "jre", "Contents", "Home")
             commander_path = os.path.join(self.paths.get('commander'), "Contents", "MacOS")
+            path_separator = ":"
         else:
             java_path = os.path.join(self.paths.get('java21'), "jre")
             commander_path = self.paths.get('commander')
+            path_separator = ";" if self.platform == "win32" else ":"
         
 
         try:
@@ -237,11 +243,19 @@ class MatterEnvSetup:
                 outfile.write(f"JAVA_HOME={self.paths.get('java21')}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
-                    f"TOOLS_PATH={arm_gcc_bin}:{self.paths.get('slc-cli')}:{os.path.join(java_path, 'bin')}:{commander_path}:\n")
+                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{self.paths.get('ninja')}{path_separator}\n")
                 outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
                 outfile.write(f"NINJA_EXE_PATH={self.paths.get('ninja')}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
+                if self.platform == "win32":
+                    outfile.write(f"SLC_EXECUTABLE=slc.bat\n")
+                    outfile.write(f"NINJA_EXECUTABLE=ninja.exe\n") 
+                    outfile.write(f"COMMANDER_EXECUTABLE=commander.exe\n")
+                else:
+                    outfile.write(f"SLC_EXECUTABLE=slc\n")
+                    outfile.write(f"NINJA_EXECUTABLE=ninja\n")
+                    outfile.write(f"COMMANDER_EXECUTABLE=commander\n")
             logging.info(f"Environment file written to {env_path}")
         except IOError as e:
             logging.error(f"Failed to write environment file: {e}")
