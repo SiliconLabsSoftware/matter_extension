@@ -172,38 +172,6 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
-    build-oven-app-917soc-wifi:
-        name: Build Oven App for 917SoC WiFi
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "oven-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
-            mg24-support: false
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-
-    build-rangehood-app-917soc-wifi:
-        name: Build Rangehood App for 917SoC WiFi
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "rangehood-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
-            mg24-support: false
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-
     build-platform-template:
         name: Build Platform Template
         needs: set-build-type
@@ -241,8 +209,6 @@ jobs:
             - build-closure-app
             - build-oven-app
             - build-rangehood-app
-            - build-oven-app-917soc-wifi
-            - build-rangehood-app-917soc-wifi
         if: success()
 
         steps:
