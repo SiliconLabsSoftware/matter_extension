@@ -9,6 +9,9 @@ quality: production
 metadata:
   sbom:
     license: Zlib
+config_file:
+  - path: third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/gatt_configuration.btconf
+    directory: btconf
 provides:
 -   name: matter_ble_dmp_test
 requires:
