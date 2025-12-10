@@ -286,8 +286,6 @@ class CreateApp:
         project_flag = "-p" if self.reference_project_file.endswith('.slcp') else "-w"
         # Run slc generate to create copy of sample app at the 'new_app_name' location
         try:
-            # Check slc version
-            subprocess.run([self.slc_path, "--version"], check=True, capture_output=True)
             cmd = [self.slc_path, "generate"]
             cmd += ["-d", self.new_app_name, project_flag, self.reference_project_file]
             cmd += ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", self.wiseconnect_root, "--sdk-package-path", self.silabs_chip_root]
