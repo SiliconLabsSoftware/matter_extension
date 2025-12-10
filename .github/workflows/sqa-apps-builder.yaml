@@ -140,6 +140,38 @@ jobs:
         mg26-internal-support: false
         mgm26-internal-support: false
 
+    build-oven-app-917soc-wifi:
+      name: Build Oven App for 917SoC WiFi
+      uses: ./.github/workflows/platform-builder.yaml
+      with:
+        example-app: "oven-app"
+        build-type: "custom-sqa"
+        thread-support: false
+        mg24-support: false
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-support: false
+        mg26-internal-support: false
+        mgm26-internal-support: false
+        sixg301-support: false
+
+    build-rangehood-app-917soc-wifi:
+      name: Build Rangehood App for 917SoC WiFi
+      uses: ./.github/workflows/platform-builder.yaml
+      with:
+        example-app: "rangehood-app"
+        build-type: "custom-sqa"
+        thread-support: false
+        mg24-support: false
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-support: false
+        mg26-internal-support: false
+        mgm26-internal-support: false
+        sixg301-support: false
+
     merge-apps:
         name: Merge SQA App Artifacts
         runs-on: ubuntu-latest
@@ -154,6 +186,8 @@ jobs:
             - build-zigbee-matter-light
             - build-closure-app
             - build-platform-template
+            - build-oven-app-917soc-wifi
+            - build-rangehood-app-917soc-wifi
         if: always()
 
         steps:
