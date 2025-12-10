@@ -46,8 +46,6 @@ pip3 install -r requirements.txt
 
 The `sl_setup_env.py` script creates an `.env` file containing all relevant virtual environment paths used by the `sl_create_new_app.py` and `sl_build.py` scripts. This file is for internal use by the scripts and does not need to be edited directly.
 
-It will also create `environment_variables_vscode.txt`. This file can be referenced to add environment variables for VS Code-based builds.
-
 For Mac and Linux:
 ```sh
 python3 slc/sl_setup_env.py
@@ -58,7 +56,7 @@ For Windows:
 ```sh
 python slc\sl_setup_env.py
 ```
-The sl_setup_env.py script syncs and checks out the submodules and creates symbolic links for matter_extension. Windows users may need to enable long paths in the system and run the terminal with admin privileges to create the symbolic links.
+The sl_setup_env.py script syncs and checks out the submodules for matter_extension. Windows users may need to enable long paths in the system and run the terminal with admin privileges.
 
 Users may enable long paths for git by running:
 ```
@@ -67,7 +65,7 @@ git config --system core.longpaths true  
 
 ### Creating an Application Project
 
-Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app.slcp example or from the `lighting-app-series-2.slcw` [solution](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-solutions) application project file:
+Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the `lighting-app.slcp` example or from the `lighting-app-series-2.slcw` [solution](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-solutions) application project file:
 
 Sample-App Example: 
 For Mac and Linux:
@@ -226,7 +224,7 @@ Checkout the target tag/branch to which you need to upgrade the project.
 1. Run the slc/sl_project_upgrade.py script to upgrade the project to the target Matter extension version.
 1. For example, to upgrade a project to Matter extension v2.8.0:
    
-`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app-thread.slcp 2.8.0`
+`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app.slcp 2.8.0`
 
 
 ## Getting Started with Simplicity Studio Development 
