@@ -67,19 +67,19 @@ git config --system core.longpaths true  
 
 ### Creating an Application Project
 
-Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app-thread.slcp example or from the `lighting-app-thread-bootloader.slcw` [solution](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-solutions) application project file:
+Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app.slcp example or from the `lighting-app-series-2.slcw` [solution](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-solutions) application project file:
 
 Sample-App Example: 
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_create_new_app.py MyNewApp slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
+python3 slc/sl_create_new_app.py MyNewApp slc/apps/lighting-app/thread/lighting-app.slcp brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_create_new_app.py MyNewApp slc\sample-app\lighting-app\efr32\lighting-app-thread.slcp brd4187c
+python slc\sl_create_new_app.py MyNewApp slc\apps\lighting-app\thread\lighting-app.slcp brd4187c
 ```
 
 Solutions Examples:
@@ -87,13 +87,13 @@ Solutions Examples:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_create_new_app.py MyNewApp slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
+python3 slc/sl_create_new_app.py MyNewApp slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_create_new_app.py MyNewApp slc\solutions\lighting-app\series-2\lighting-app-thread-bootloader.slcw brd4187c
+python slc\sl_create_new_app.py MyNewApp slc\apps\lighting-app\thread\lighting-app-series-2.slcw brd4187c
 ```
 
 ### Building an Application Project
@@ -104,13 +104,13 @@ Sample-App Example:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
+python3 slc/sl_build.py MyNewApp/lighting-app.slcp brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_build.py MyNewApp\lighting-app-thread.slcp brd4187c
+python slc\sl_build.py MyNewApp\lighting-app.slcp brd4187c
 ```
 
 Solutions Examples:
