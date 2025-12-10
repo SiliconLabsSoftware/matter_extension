@@ -183,7 +183,7 @@ class CreateApp:
                     logging.error("No application project with .slcp path found in .slcw file.")
                     sys.exit(1)
 
-                self.app_slcp_full_path = os.path.join("slc", self.trim_to_str(app_slcp_path, "apps/"))
+                self.app_slcp_full_path = os.path.join(os.path.dirname(self.reference_project_file), app_slcp_path)
                 if not os.path.exists(self.app_slcp_full_path):
                     logging.error(f"Application .slcp file does not exist: {self.app_slcp_full_path}")
                     sys.exit(1)
