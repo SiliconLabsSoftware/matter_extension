@@ -46,7 +46,7 @@ from datetime import datetime
 from zipfile import ZipFile
 from pathlib import Path
 from script.get_zap_version import get_zap_version
-import dload
+
 
 
 if sys.version_info < (3, 9):
