@@ -5,7 +5,7 @@ description: >
   Adds GATT Configuration required for Matter to commission over ble and adds the DMP Light
   service to the GATT database.
 category: Stack|Bluetooth
-quality: production
+quality: internal
 metadata:
   sbom:
     license: Zlib
