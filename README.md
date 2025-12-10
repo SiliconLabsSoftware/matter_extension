@@ -118,13 +118,13 @@ Solutions Examples:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_build.py MyNewApp/lighting-app-thread-bootloader.slcw brd4187c
+python3 slc/sl_build.py MyNewApp/lighting-app-series-2.slcw brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_build.py MyNewApp\lighting-app-thread-bootloader.slcw brd4187c
+python slc\sl_build.py MyNewApp\lighting-app-series-2.slcw brd4187c
 ```
 
 Alternatively, one can use SLC-CLI commands directly to generate the project and then use `make` to build it.
