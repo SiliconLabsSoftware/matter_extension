@@ -155,7 +155,7 @@ class CreateApp:
             }
         }
         output_file_json = os.path.join(self.sample_app_out_path, '.bak', 'source_and_include_paths.json')
-        os.makedirs(os.path.dirname(output_file_json), exist_ok=True)
+        os.makedirs(self.sample_app_out_path, exist_ok=True)
         try:
             with open(output_file_json, 'w') as out_json:
                 json.dump(output_data, out_json, indent=2)
