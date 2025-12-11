@@ -1530,6 +1530,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThread" label="Matter - SoC Platform Template over Thread"
                description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio">
