@@ -233,7 +233,15 @@ class MatterEnvSetup:
         else:
             java_path = os.path.join(self.paths.get('java21'), "jre")
             commander_path = self.paths.get('commander')
-        
+
+        if self.platform == "win32":
+            slc_executable = "slc.bat"
+            ninja_executable = "ninja.exe"
+            commander_executable = "commander.exe"
+        else:
+            slc_executable = "slc"
+            ninja_executable = "ninja"
+            commander_executable = "commander"
 
         try:
             with open(env_path, "w") as outfile:
@@ -247,14 +255,9 @@ class MatterEnvSetup:
                 outfile.write(f"NINJA_EXE_PATH={self.paths.get('ninja')}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
-                if self.platform == "win32":
-                    outfile.write(f"SLC_EXECUTABLE=slc.bat\n")
-                    outfile.write(f"NINJA_EXECUTABLE=ninja.exe\n") 
-                    outfile.write(f"COMMANDER_EXECUTABLE=commander.exe\n")
-                else:
-                    outfile.write(f"SLC_EXECUTABLE=slc\n")
-                    outfile.write(f"NINJA_EXECUTABLE=ninja\n")
-                    outfile.write(f"COMMANDER_EXECUTABLE=commander\n")
+                outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
+                outfile.write(f"NINJA_EXECUTABLE={ninja_executable}\n")
+                outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
             logging.info(f"Environment file written to {env_path}")
         except IOError as e:
             logging.error(f"Failed to write environment file: {e}")
