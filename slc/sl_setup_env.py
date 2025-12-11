@@ -225,15 +225,14 @@ class MatterEnvSetup:
                 sys.exit(1)
 
         arm_gcc_bin = os.path.join(self.paths.get('gcc-arm-none-eabi'), "bin")
+        path_separator = ";" if self.platform == "win32" else ":"
 
         if self.platform == "darwin":
             java_path = os.path.join(self.paths.get('java21'), "jre", "Contents", "Home")
             commander_path = os.path.join(self.paths.get('commander'), "Contents", "MacOS")
-            path_separator = ":"
         else:
             java_path = os.path.join(self.paths.get('java21'), "jre")
             commander_path = self.paths.get('commander')
-            path_separator = ";" if self.platform == "win32" else ":"
         
 
         try:
