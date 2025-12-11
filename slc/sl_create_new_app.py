@@ -4,7 +4,6 @@
 """
  * @file sl_create_new_app.py
  * @brief Create a new Matter application from a reference project file.
-
  * This script generates a new Matter application directory using a reference .slcp or .slcw project file
  * and a Silicon Labs board name. It sets up environment variables
  * and ensures all required trust and configuration steps are performed for the new app.

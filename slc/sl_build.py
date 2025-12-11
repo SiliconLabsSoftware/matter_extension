@@ -57,12 +57,12 @@ def parse_project_file(reference_project_file):
     
     project_path = None
     build_type = None
-    if os.path.exists(os.path.join(output_dir, makefile_path)):
-        build_type = "makefile"
-        project_path = makefile_path
-    elif os.path.exists(os.path.join(output_dir, cmake_folder_path)):
+    if os.path.exists(os.path.join(output_dir, cmake_folder_path)):
         build_type = "cmake"
         project_path = os.path.join(output_dir, cmake_folder_path)
+    elif os.path.exists(os.path.join(output_dir, makefile_path)):
+        build_type = "makefile"
+        project_path = makefile_path
     
     return project_flag, silabs_app, output_dir, project_path, build_type
 
