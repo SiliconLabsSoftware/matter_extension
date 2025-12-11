@@ -133,7 +133,7 @@ class MatterEnvSetup:
                     zObject.extractall(path=self.tools_folder_path)
                 os.remove(slt_zip_path)
                 if self.platform != "win32":
-                    os.chmod(self.slt_cli_path, stat.S_IEXEC)
+                    self._make_executable(self.slt_cli_path)
             except Exception as e:
                 logging.error(f"Failed to download/extract slt-cli: {e}")
                 sys.exit(1)
@@ -247,16 +247,15 @@ class MatterEnvSetup:
             with open(env_path, "w") as outfile:
                 outfile.write(f"STUDIO_ADAPTER_PACK_PATH={self.zap_path}\n")
                 outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi')}\n")
-                outfile.write(f"JAVA_HOME={self.paths.get('java21')}\n")
+                outfile.write(f"JAVA_HOME={java_path}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
-                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{self.paths.get('ninja')}{path_separator}\n")
+                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{ninja_executable}{path_separator}\n")
                 outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
-                outfile.write(f"NINJA_EXE_PATH={self.paths.get('ninja')}\n")
+                outfile.write(f"NINJA_EXE_PATH={ninja_executable}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
-                outfile.write(f"NINJA_EXECUTABLE={ninja_executable}\n")
                 outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
                 outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
             logging.info(f"Environment file written to {env_path}")
@@ -304,6 +303,8 @@ class MatterEnvSetup:
                 os.chmod(path, st.st_mode | stat.S_IEXEC)
             except OSError as e:
                 logging.warning(f"Could not make {path} executable: {e}")
+        else:
+            logging.warning(f"Path {path} does not exist to make executable.")
     
     def setup_tools(self):
         """Install and configure all required development tools."""
@@ -311,6 +312,9 @@ class MatterEnvSetup:
         self.paths = {}
         for tool in tools_list:
             self.paths[tool] = self.install_tools(tool)
+        if self.platform == "darwin":
+            self._make_executable(os.path.join(self.paths.get('ninja'), "ninja"))
+            self._make_executable(os.path.join(self.paths.get('java21'), "jre", "Contents", "Home", "bin", "java"))
         self.download_and_extract_zap()
         self.check_and_update_zap_version()
 
