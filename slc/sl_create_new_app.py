@@ -4,17 +4,22 @@
 """
  * @file sl_create_new_app.py
  * @brief Create a new Matter application from a reference project file.
- *
+
  * This script generates a new Matter application directory using a reference .slcp or .slcw project file
  * and a Silicon Labs board name. It sets up environment variables
  * and ensures all required trust and configuration steps are performed for the new app.
- *
- * Usage:
- *   python3 sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [--verbose]
- *
- * Example:
- *   python3 sl_create_new_app.py MyApp slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --verbose
- *
+
+ * Recommended usage (flags):
+ *   python3 sl_create_new_app.py \
+ *       --new_app_name <NewAppName> \
+ *       --reference_project_file <PathToReferenceProjectFile(.slcp or .slcw)> \
+ *       --silabs_board <SilabsBoard> \
+ *       [--build_type <makefile|cmake|vscode>] [--verbose]
+
+ * Note: Positional arguments for new_app_name, reference_project_file and silabs_board
+ * are deprecated and will be removed in a future release. Use the flag-based
+ * form shown above instead.
+
  """
 
 import argparse
@@ -33,14 +38,21 @@ from dotenv import load_dotenv
 class CreateApp:
     """Class for creating new Matter applications from reference projects."""
 
-    def __init__(self, skip_gen=False):
+    def __init__(self, build_type="cmake"):
         """Initialize CreateApp instance.
 
         Args:
-            skip_gen: Skip project generation step if True
+            build_type: Build system type to generate (makefile, cmake, vscode)
         """
-        self.EXAMPLE_USAGE = "python slc/sl_create_new_app.py <NewAppName> <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard> [--skip-gen]"
-        self.skip_gen = skip_gen
+        self.EXAMPLE_USAGE = (
+            "python slc/sl_create_new_app.py "
+            "--new_app_name <NewAppName> "
+            "--reference_project_file <PathToReferenceProjectFile(.slcp or .slcw)> "
+            "--silabs_board <SilabsBoard> "
+            "[--build_type <makefile|cmake|vscode>]"
+        )
+        # Supported build types: makefile, cmake, vscode
+        self.build_type = build_type
         self.get_environment()
 
     def print_usage_and_exit(self):
@@ -304,6 +316,7 @@ class CreateApp:
             self.sisdk_root = os.getenv("SISDK_ROOT")
             self.wiseconnect_root = os.getenv("WISECONNECT_ROOT")
             self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
+
         except (TypeError, AttributeError) as e:
             logging.error(f"Could not load the .env file: {e}. Run sl_setup_env.py to generate .env file")
             sys.exit(1)
@@ -318,19 +331,21 @@ class CreateApp:
         """
         # Validate required tools are available
         self.validate_tools()
-        
-        if self.skip_gen:
-            logging.info("Skipping project generation as --skip-gen was specified.")
-            self.extract_and_save_paths()
-            return
         # Use appropriate build flag for sample-app/solutions
         project_flag = "-p" if self.reference_project_file.endswith('.slcp') else "-w"
+        # Map build_type to slc output option
+        output_map = {
+            "cmake": "cmake",
+            "makefile": "makefile",
+            "vscode": "vscode",
+        }
+        output_type = output_map.get(self.build_type, "cmake")
         # Run slc generate to create copy of sample app at the 'new_app_name' location
         try:
             cmd = [self.slc_path, "generate"]
             cmd += ["-d", self.new_app_name, project_flag, self.reference_project_file]
             cmd += ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", self.wiseconnect_root, "--sdk-package-path", self.silabs_chip_root]
-            cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", "cmake"]
+            cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", output_type]
             logging.info(f"Running command: {' '.join(cmd)}")
             subprocess.run(cmd, check=True)
             # After generation, extract and save src/include paths
@@ -345,7 +360,9 @@ def main():
     parser.add_argument("-p", "--reference_project_file", dest="reference_project_file", required=False, help="Path to the reference .slcp or .slcw project file")
     parser.add_argument("-b", "--silabs_board", dest="silabs_board", required=False, help="Silabs board name")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose (debug) logging")
-    parser.add_argument("-s", "--skip_gen", action="store_true", help="Skip project generation step")
+    parser.add_argument("-t", "--build_type", dest="build_type", choices=["makefile", "cmake", "vscode"], default="cmake", help="Build system type to generate (makefile, cmake, vscode)")
+    
+    ## Deprecated
     # Accept positional arguments for backward compatibility
     parser.add_argument("args", nargs="*", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -354,6 +371,11 @@ def main():
     # Priority: optional flags > positional
     if not args.new_app_name or not args.reference_project_file or not args.silabs_board:
         if len(args.args) >= 3:
+            logging.warning(
+                "Positional arguments for new_app_name, reference_project_file and silabs_board "
+                "are deprecated and will be removed in a future release. "
+                "Please use -n/--new_app_name, -p/--reference_project_file and -b/--silabs_board instead."
+            )
             args.new_app_name = args.args[0]
             args.reference_project_file = args.args[1]
             args.silabs_board = args.args[2]
@@ -367,7 +389,7 @@ def main():
     # Patch sys.argv for legacy code
     sys.argv = [sys.argv[0], args.new_app_name, args.reference_project_file, args.silabs_board]
 
-    app = CreateApp(skip_gen=args.skip_gen)
+    app = CreateApp(build_type=args.build_type)
     app.validate_arguments()
     app.generate()
 
