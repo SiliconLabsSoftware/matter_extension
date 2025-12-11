@@ -207,11 +207,15 @@ class CreateApp:
         Raises:
             SystemExit: If any required tool is not found
         """
+        slc_exe = os.getenv("SLC_EXECUTABLE", "slc")
+        ninja_exe = os.getenv("NINJA_EXECUTABLE", "ninja") 
+        commander_exe = os.getenv("COMMANDER_EXECUTABLE", "commander")
+        
         tools = [
-            ("slc", "slc not detected on host. Please run slc/sl_setup_env.py to install slc."),
+            (slc_exe, "slc not detected on host. Please run slc/sl_setup_env.py to install slc."),
             ("arm-none-eabi-gcc", "arm-none-eabi-gcc not detected on host. Please run slc/sl_setup_env.py to install arm gcc toolchain."),
-            ("ninja", "ninja not detected on host. Please run slc/sl_setup_env.py to install ninja."),
-            ("commander", "commander not detected on host. Please run slc/sl_setup_env.py to install Simplicity Commander."),
+            (ninja_exe, "ninja not detected on host. Please run slc/sl_setup_env.py to install ninja."),
+            (commander_exe, "commander not detected on host. Please run slc/sl_setup_env.py to install Simplicity Commander."),
             ("java", "java not detected on host. Please run slc/sl_setup_env.py to install java21.")
         ]
         
@@ -304,7 +308,7 @@ class CreateApp:
             logging.error(f"Could not load the .env file: {e}. Run sl_setup_env.py to generate .env file")
             sys.exit(1)
 
-        self.slc_path = "slc"
+        self.slc_path = os.getenv("SLC_EXECUTABLE", "slc")
 
     def generate(self):
         """Generate a new Matter app from reference project.
