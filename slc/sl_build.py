@@ -39,20 +39,31 @@ def parse_project_file(reference_project_file):
         silabs_app = os.path.basename(reference_project_file)[:-5]
         output_dir = os.path.dirname(reference_project_file)
         makefile_path = f"{silabs_app}.Makefile"
+        cmake_folder_path = f"{silabs_app}_cmake"
     elif reference_project_file.endswith('.slcw'):
         project_flag = "-w"
         silabs_app = os.path.basename(reference_project_file)[:-5]
         output_dir = os.path.dirname(reference_project_file)
         makefile_path = f"{silabs_app}.solution.Makefile"
+        cmake_folder_path = f"{silabs_app}_cmake"
     else:
         logging.error("Project file must be a .slcp or .slcw file")
         logging.info("Example usage: python slc/sl_build.py <PathToReferenceProjectFile(.slcp or .slcw)> <SilabsBoard>")
         sys.exit(1)
     
-    return project_flag, silabs_app, output_dir, makefile_path
+    project_path = None
+    build_type = None
+    if os.path.exists(makefile_path):
+        build_type = "makefile"
+        project_path = makefile_path
+    elif os.path.exists(cmake_folder_path):
+        build_type = "cmake"
+        project_path = cmake_folder_path
+    
+    return project_flag, silabs_app, output_dir, project_path, build_type
 
 
-def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_file, silabs_board):
+def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_file, silabs_board, build_type):
     """Run SLC generate command to create project files.
     
     Args:
@@ -64,11 +75,12 @@ def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_
         silabs_board: Silicon Labs board name
     """
     logging.info("Generating project files with SLC...")
+    print("buidld type:", build_type)
     cmd = [slc_path, "generate"]
     cmd += ["-d", output_dir, project_flag, reference_project_file]
     cmd += ["--sdk-package-path", app.sisdk_root, "--sdk-package-path", app.wiseconnect_root, 
             "--sdk-package-path", app.silabs_chip_root]
-    cmd += ["--with", silabs_board, "--generator-timeout=180", "-o", "makefile"]
+    cmd += ["--with", silabs_board, "--generator-timeout=180", "-o", build_type]
     
     logging.info(f"Running command: {' '.join(cmd)}")
     try:
@@ -79,7 +91,7 @@ def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_
         sys.exit(2)
 
 
-def run_make_build(output_dir, makefile_path, jobs=None):
+def run_make_build(output_dir, project_path, build_type, jobs=None,):
     """Run make build command.
     
     Args:
@@ -87,8 +99,14 @@ def run_make_build(output_dir, makefile_path, jobs=None):
         makefile_path: Name of the Makefile
         jobs: Number of parallel jobs (None for default)
     """
-    logging.info("Building project with make...")
-    cmd = ["make", "all", "-C", output_dir, "-f", makefile_path]
+    if build_type == "makefile":
+        logging.info("Building project with make...")
+        cmd = ["make", "all", "-C", output_dir, "-f", project_path]
+    elif build_type == "cmake":
+        logging.info("Building project with cmake...")
+        os.chdir(project_path)
+        cmd = ["cmake", "--workflow", "--preset", "project"]
+        os.chdir(app.silabs_chip_root)
     
     if jobs:
         cmd.append(f"-j{jobs}")
@@ -153,16 +171,16 @@ def main():
     CreateApp.validate_tools()
 
     # Parse project file configuration
-    project_flag, silabs_app, output_dir, makefile_path = parse_project_file(reference_project_file)
+    project_flag, silabs_app, output_dir, project_path, build_type = parse_project_file(reference_project_file)
 
     # Get SLC path from app
     slc_path = app.slc_path
 
     # Generate project files with SLC
-    run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_file, silabs_board)
+    run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_file, silabs_board, build_type)
 
     # Build project with make
-    run_make_build(output_dir, makefile_path, jobs)
+    run_make_build(output_dir, project_path, build_type, jobs)
 
     logging.info("Build process completed successfully")
 

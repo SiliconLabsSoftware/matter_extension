@@ -330,7 +330,7 @@ class CreateApp:
             cmd = [self.slc_path, "generate"]
             cmd += ["-d", self.new_app_name, project_flag, self.reference_project_file]
             cmd += ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", self.wiseconnect_root, "--sdk-package-path", self.silabs_chip_root]
-            cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", "makefile"]
+            cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", "cmake"]
             logging.info(f"Running command: {' '.join(cmd)}")
             subprocess.run(cmd, check=True)
             # After generation, extract and save src/include paths
