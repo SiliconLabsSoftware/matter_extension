@@ -258,6 +258,7 @@ class MatterEnvSetup:
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
                 outfile.write(f"NINJA_EXECUTABLE={ninja_executable}\n")
                 outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
+                outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
             logging.info(f"Environment file written to {env_path}")
         except IOError as e:
             logging.error(f"Failed to write environment file: {e}")
