@@ -230,7 +230,7 @@ config_file:
     directory: common
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
     directory: btconf
-    unless: [matter_ble_dmp_test, matter_gatt_static]
+    unless: [matter_ble_dmp_test, matter_gatt_static, matter_ble_side_channel]
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/gatt_configuration.btconf
     directory: btconf
     condition: [matter_ble_dmp_test]

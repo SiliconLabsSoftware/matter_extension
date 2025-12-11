@@ -12,3 +12,6 @@ provides:
 -   name: matter_ble_side_channel
 requires:
 -   name: matter_gatt_dynamic
+config_file:
+  - directory: btconf
+    path: third_party/matter_sdk/examples/platform/silabs/gatt_configuration.btconf
