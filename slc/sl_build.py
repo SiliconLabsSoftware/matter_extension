@@ -94,7 +94,7 @@ def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_
         sys.exit(2)
 
 
-def run_make_build(app, output_dir, project_path, build_type, jobs=None):
+def run_build(app, output_dir, project_path, build_type, jobs=None):
     """Run build command using the detected build system.
 
     Args:
@@ -201,7 +201,7 @@ def main():
         run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_file, silabs_board, build_type)
 
     # Build project with detected build system
-    run_make_build(app, output_dir, project_path, build_type, jobs)
+    run_build(app, output_dir, project_path, build_type, jobs)
 
     logging.info("Build process completed successfully")
 
