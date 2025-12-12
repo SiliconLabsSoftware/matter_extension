@@ -10,7 +10,7 @@ on:
 
 jobs:
   bump-sdk-submodules:
-    runs-on: silabs-internal
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
