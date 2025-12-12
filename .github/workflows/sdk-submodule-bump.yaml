@@ -16,6 +16,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: false
+          ref: release_2.8-1.5
+          persist-credentials: false
       
       - name: Mark repository as safe for Git
         shell: bash
