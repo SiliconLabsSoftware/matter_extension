@@ -27,12 +27,17 @@ jobs:
         run: |
           SISDK_BUILD_NUMBER=${{ inputs.sisdk-build-number }}
           echo "Bumping simplicity_sdk to build number: $SISDK_BUILD_NUMBER"
-          git submodule set-branch --branch "v2025.12-build.$SISDK_BUILD_NUMBER" third_party/simplicity_sdk
-          git submodule set-branch --branch "v2025.12-build.$SISDK_BUILD_NUMBER" third_party/wifi_sdk
 
           git submodule update --init third_party/simplicity_sdk
           git submodule update --init third_party/wifi_sdk
-          
+          cd third_party/simplicity_sdk
+          git fetch origin
+          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          cd ../wifi_sdk
+          git fetch origin
+          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          cd ../..
+
           echo "Updating .gitmodules tags..."
           # Update the tags in .gitmodules
           sed -i "s|^\(\s*tag = \)v2025\.12-build\.[0-9]*$|\1v2025.12-build.$SISDK_BUILD_NUMBER|g" .gitmodules
