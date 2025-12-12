@@ -59,7 +59,8 @@ jobs:
                       out/*/*/artifact/**
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       out/brd4187c/**/build/debug/*.map
-                      out/brd4407a/**/build/debug/*.map  
+                      out/brd4407a/**/build/debug/*.map
+                      out/brd4408a/**/build/debug/*.out
                       out/brd4338a/**/build/debug/*.map
                       !out/**/*-bootloader/build/debug/*.map
                       !out/**/*-copy-sources/*/build/debug/*.map

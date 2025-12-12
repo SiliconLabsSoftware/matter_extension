@@ -2,7 +2,7 @@
     "standard": {
         "default": [
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd4407a", "brd4408a"],
                 "arguments": [""]
             },
             {
@@ -12,7 +12,7 @@
         ],
         "zigbee-matter-light": [
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
             },
             {
@@ -22,7 +22,7 @@
         ],
         "thermostat": [
             {
-                "boards": ["brd4407a"],
+                "boards": ["brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
