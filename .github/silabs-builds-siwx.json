@@ -34,13 +34,6 @@
                 "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             }
         ],
-        // TODO: Enable lock-app LTO build once the fix for RSCDEV-37098 is verified.
-        // "lock-app": [
-        //     {
-        //         "boards": ["brd4338a"],
-        //         "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
-        //     }
-        // ],
         "platform-template": [
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],
@@ -112,12 +105,6 @@
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
             },
-            // TODO: Enable lock-app LTO build once the fix for RSCDEV-37098 is verified.
-            // {
-            //     "boards": ["brd4338a", "brd4342a", "brd4343a"],
-            //     "arguments": ["--output_suffix lto",
-            //                   "--with_app wiseconnect_toolchain_gcc_lto"]
-            // },
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix clock-config-clk-sleep-timer",
@@ -136,12 +123,6 @@
                               "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL,LF_FSM_CLOCK_SELECTION:RC_KHZ_CLK_SEL",
                               "--with_app sl_si91x_sleep_timer_clock_selection, sl_si91x_lf_fsm_clock_selection"]
             }
-            // TODO: Enable lock-app LTO build once the fix for RSCDEV-37098 is verified.
-            // {
-            //     "boards": ["brd4338a", "brd4343a"],
-            //     "arguments": ["--output_suffix lto-ota-2", "--with_app wiseconnect_toolchain_gcc_lto",
-            //                   "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            // }
         ],
         "light-switch-app": [
             {
