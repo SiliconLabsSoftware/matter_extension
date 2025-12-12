@@ -10,7 +10,7 @@ on:
 
 jobs:
   bump-sdk-submodules:
-    runs-on: ubuntu-latest
+    runs-on: silabs-internal
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -29,16 +29,20 @@ jobs:
           echo "Bumping simplicity_sdk to build number: $SISDK_BUILD_NUMBER"
           git submodule set-branch --branch "v2025.12-build.$SISDK_BUILD_NUMBER" third_party/simplicity_sdk
           git submodule set-branch --branch "v2025.12-build.$SISDK_BUILD_NUMBER" third_party/wifi_sdk
+
+          git submodule update --init third_party/simplicity_sdk
+          git submodule update --init third_party/wifi_sdk
           
           echo "Updating .gitmodules tags..."
           # Update the tags in .gitmodules
-          git submodule set-url third_party/simplicity_sdk v2025.12-build.$SISDK_BUILD_NUMBER
-          git submodule set-url third_party/wifi_sdk v2025.12-build.$SISDK_BUILD_NUMBER
+          sed -i "s|^\(\s*tag = \)v2025\.12-build\.[0-9]*$|\1v2025.12-build.$SISDK_BUILD_NUMBER|g" .gitmodules
           
           # Display the updated .gitmodules content
           echo "Updated .gitmodules:"
           cat .gitmodules
-      
+
+          git add third_party/simplicity_sdk third_party/wifi_sdk .gitmodules
+              
       - name: Generate token for the workflow
         id: generate_token
         uses: actions/create-github-app-token@v2
