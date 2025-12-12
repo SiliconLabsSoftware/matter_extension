@@ -1,0 +1,83 @@
+name: SDK Submodule Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      sisdk-build-number:
+        description: 'SDK (sisdk-prerelease and wiseconnect-prerelease) Build Number to bump to (e.g., 1355)'
+        required: true
+        type: string
+
+jobs:
+  bump-sdk-submodules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          submodules: false
+          ref: release_2.8-1.5
+          persist-credentials: false
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+      
+      - name: Bump SDK submodules
+        shell: bash
+        run: |
+          set -euo pipefail
+          
+          SISDK_BUILD_NUMBER="${{ inputs.sisdk-build-number }}"
+          
+          # Input validation - ensure build number contains only digits
+          if [[ ! "$SISDK_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "Error: Build number must contain only digits. Received: $SISDK_BUILD_NUMBER"
+            exit 1
+          fi
+          
+          echo "Bumping simplicity_sdk to build number: $SISDK_BUILD_NUMBER"
+
+          git submodule update --init third_party/simplicity_sdk
+          git submodule update --init third_party/wifi_sdk
+          cd third_party/simplicity_sdk
+          git fetch origin
+          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          cd ../wifi_sdk
+          git fetch origin
+          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          cd ../..
+
+          echo "Updating .gitmodules tags..."
+          # Update the tags in .gitmodules
+          sed -i "s|^\(\s*tag = \)v2025\.12-build\.[0-9]*$|\1v2025.12-build.$SISDK_BUILD_NUMBER|g" .gitmodules
+          
+          # Display the updated .gitmodules content
+          echo "Updated .gitmodules:"
+          cat .gitmodules
+
+          git add third_party/simplicity_sdk third_party/wifi_sdk .gitmodules
+              
+      - name: Generate token for the workflow
+        id: generate_token
+        uses: actions/create-github-app-token@v2
+        with:
+            app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+            private-key:
+                ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Mask the generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+            branch: automation/update_sdk_submodules
+            base: release_2.8-1.5
+            title: "Update SDK submodules on release_2.8-1.5"
+            body: |
+                This PR updates the simplicity_sdk and wifi_sdk submodules to the ${{ inputs.sisdk-build-number }} on the release_2.8-1.5 branch.
+
+                **User Needs to Trigger Jenkins CI**
+            token: ${{ steps.generate_token.outputs.token }}
