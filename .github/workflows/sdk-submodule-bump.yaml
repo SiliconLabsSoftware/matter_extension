@@ -67,4 +67,6 @@ jobs:
             title: "Update SDK submodules on release_2.8-1.5"
             body: |
                 This PR updates the simplicity_sdk and wifi_sdk submodules to the ${{ inputs.sisdk-build-number }} on the release_2.8-1.5 branch.
+
+                **User Needs to Trigger Jenkins CI**
             token: ${{ steps.generate_token.outputs.token }}
