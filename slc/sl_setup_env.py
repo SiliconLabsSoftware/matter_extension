@@ -238,10 +238,14 @@ class MatterEnvSetup:
             slc_executable = "slc.bat"
             ninja_executable = "ninja.exe"
             commander_executable = "commander.exe"
+            ninja_path = os.path.join(self.paths.get('ninja'), ninja_executable)
         else:
             slc_executable = "slc"
             ninja_executable = "ninja"
             commander_executable = "commander"
+            ninja_path = ninja_executable
+
+        cmake_bin = os.path.join(self.paths.get('cmake'), "bin")
 
         try:
             with open(env_path, "w") as outfile:
@@ -250,9 +254,9 @@ class MatterEnvSetup:
                 outfile.write(f"JAVA_HOME={java_path}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
-                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{ninja_executable}{path_separator}\n")
+                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{self.paths.get('ninja')}{path_separator}{cmake_bin}{path_separator}\n")
                 outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
-                outfile.write(f"NINJA_EXE_PATH={ninja_executable}\n")
+                outfile.write(f"NINJA_PATH={ninja_path}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
@@ -308,7 +312,7 @@ class MatterEnvSetup:
     
     def setup_tools(self):
         """Install and configure all required development tools."""
-        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi", "commander", "ninja"]
+        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi", "commander", "ninja", "cmake"]
         self.paths = {}
         for tool in tools_list:
             self.paths[tool] = self.install_tools(tool)
