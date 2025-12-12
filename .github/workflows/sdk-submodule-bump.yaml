@@ -27,7 +27,16 @@ jobs:
       - name: Bump SDK submodules
         shell: bash
         run: |
-          SISDK_BUILD_NUMBER=${{ inputs.sisdk-build-number }}
+          set -euo pipefail
+          
+          SISDK_BUILD_NUMBER="${{ inputs.sisdk-build-number }}"
+          
+          # Input validation - ensure build number contains only digits
+          if [[ ! "$SISDK_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "Error: Build number must contain only digits. Received: $SISDK_BUILD_NUMBER"
+            exit 1
+          fi
+          
           echo "Bumping simplicity_sdk to build number: $SISDK_BUILD_NUMBER"
 
           git submodule update --init third_party/simplicity_sdk
