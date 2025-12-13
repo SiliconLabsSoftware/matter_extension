@@ -62,6 +62,7 @@ jobs:
                       out/brd4116a/**/build/debug/*.out
                       out/brd4407a/**/build/debug/*.map
                       out/brd4407a/**/build/debug/*.out
+                      out/brd1019a/**/build/debug/*.out
                       out/brd4408a/**/build/debug/*.out
                       out/brd4338a/**/build/debug/*.map
                       !out/**/*-bootloader/build/debug/*.map
