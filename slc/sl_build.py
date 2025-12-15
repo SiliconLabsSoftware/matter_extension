@@ -64,6 +64,10 @@ def parse_project_file(reference_project_file):
         build_type = "makefile"
         project_path = makefile_path
     
+    if project_path is None or build_type is None:
+        logging.error("No supported build system found: neither CMake folder nor Makefile exists in the project directory.")
+        logging.info("Please ensure the project has been generated and contains either a CMake folder or a Makefile.")
+        sys.exit(1)
     return project_flag, silabs_app, output_dir, project_path, build_type
 
 
@@ -125,7 +129,7 @@ def run_build(app, output_dir, project_path, build_type, jobs=None):
             subprocess.run(cmd, check=True)
             logging.info("Build completed successfully")
         except subprocess.CalledProcessError as e:
-            logging.error(f"Make build failed with exit code {e.returncode}")
+            logging.error(f"CMake build failed with exit code {e.returncode}")
             sys.exit(2)
         os.chdir(app.silabs_chip_root)
 
