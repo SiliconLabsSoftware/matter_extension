@@ -58,152 +58,7 @@ class CreateApp:
         """Print usage information and exit with error code."""
         logging.info(f"Example usage: {self.EXAMPLE_USAGE}")
         sys.exit(1)
-
-    def extract_from_slcp(self, app_slcp_full_path):
-        """Extract source, include paths and project name from a .slcp file."""
-        src_paths = []
-        include_paths = []
-        project_name = None
-        try:
-            with open(app_slcp_full_path, 'r') as f:
-                doc = yaml.safe_load(f)
-            # Parse project_name
-            if 'project_name' in doc:
-                project_name = doc['project_name']
-            # Extract 'source' paths
-            if 'source' in doc:
-                for entry in doc['source']:
-                    if isinstance(entry, dict) and 'path' in entry:
-                        src_paths.append(entry['path'])
-            # Extract 'include' file_list paths, prepending the parent include path
-            if 'include' in doc:
-                for entry in doc['include']:
-                    if isinstance(entry, dict):
-                        include_base = entry.get('path', '')
-                        if 'file_list' in entry and isinstance(entry['file_list'], list):
-                            for file_entry in entry['file_list']:
-                                if isinstance(file_entry, dict) and 'path' in file_entry:
-                                    file_path = file_entry['path']
-                                    if include_base and not file_path.startswith(include_base):
-                                        file_path = os.path.join(include_base, file_path)
-                                    include_paths.append(file_path)
-            return src_paths, include_paths, project_name
-        except (IOError, yaml.YAMLError) as e:
-            logging.error(f"Failed to extract from slcp: {e}")
-            return [], [], None
-
-    def trim_to_str(self, path, substr):
-        """Keep only the paths starting from a specific substring."""
-        idx = path.find(substr)
-        return path[idx:] if idx != -1 else path
-
-    def extract_and_save_paths(self):
-        """Extract paths from .slcp and save to JSON file."""
-        self.app_slcp_full_path = self.get_project_name_from_slcp()
-        matter_sdk_src, matter_sdk_inc, project_name = self.extract_from_slcp(self.app_slcp_full_path)
-
-        if self.use_solutions:
-            self.sample_app_out_path = os.path.join(self.new_app_name, project_name)
-        else:
-            self.sample_app_out_path = self.new_app_name
-
-        # Copy the folder self.sample_app_out_path/src to .bak/original/src/
-        try:
-            src_dir = os.path.join(self.sample_app_out_path, 'src')
-            dest_dir = os.path.join(self.sample_app_out_path, '.bak', 'original', 'src')
-            if os.path.exists(src_dir):
-                shutil.copytree(src_dir, dest_dir, dirs_exist_ok=True)
-                logging.info(f"Copied {src_dir} to {dest_dir}")
-            else:
-                logging.warning(f"Source directory {src_dir} does not exist, skipping copy.")
-        except OSError as e:
-            logging.error(f"Failed to copy src directory: {e}")
-            sys.exit(1)
-
-        # Copy the folder self.sample_app_out_path/include to .bak/original/include/
-        try:
-            include_dir = os.path.join(self.sample_app_out_path, 'include')
-            dest_include_dir = os.path.join(self.sample_app_out_path, '.bak', 'original', 'include')
-            if os.path.exists(include_dir):
-                shutil.copytree(include_dir, dest_include_dir, dirs_exist_ok=True)
-                logging.info(f"Copied {include_dir} to {dest_include_dir}")
-            else:
-                logging.warning(f"Include directory {include_dir} does not exist, skipping copy.")
-        except OSError as e:
-            logging.error(f"Failed to copy include directory: {e}")
-            sys.exit(1)
-
-        trimmed_src_paths = [self.trim_to_str(p, 'third_party') for p in matter_sdk_src]
-        trimmed_inc_paths = [self.trim_to_str(p, 'third_party') for p in matter_sdk_inc]
-        customer_src = [os.path.join(self.sample_app_out_path, 'src', os.path.basename(p)) for p in trimmed_src_paths]
-        customer_inc = [os.path.join(self.sample_app_out_path, 'include', os.path.basename(p)) for p in trimmed_inc_paths]
-        upgrade_src_dir = os.path.join(self.sample_app_out_path, '.bak', 'original', 'src')
-        upgrade_inc_dir = os.path.join(self.sample_app_out_path, '.bak', 'original', 'include')
-        upgrade_src = []
-        upgrade_inc = []
-        if os.path.exists(upgrade_src_dir):
-            for fname in os.listdir(upgrade_src_dir):
-                fpath = os.path.join(upgrade_src_dir, fname)
-                if os.path.isfile(fpath):
-                    upgrade_src.append(fpath)
-        if os.path.exists(upgrade_inc_dir):
-            for fname in os.listdir(upgrade_inc_dir):
-                fpath = os.path.join(upgrade_inc_dir, fname)
-                if os.path.isfile(fpath):
-                    upgrade_inc.append(fpath)
-        output_data = {
-            'matter_sdk_paths': {
-                'source': trimmed_src_paths,
-                'include': trimmed_inc_paths
-            },
-            'customer_paths': {
-                'source': customer_src,
-                'include': customer_inc
-            },
-            'backups_paths': {
-                'source': upgrade_src,
-                'include': upgrade_inc
-            }
-        }
-        output_file_json = os.path.join(self.sample_app_out_path, '.bak', 'source_and_include_paths.json')
-        os.makedirs(self.sample_app_out_path, exist_ok=True)
-        try:
-            with open(output_file_json, 'w') as out_json:
-                json.dump(output_data, out_json, indent=2)
-            logging.info(f"Saved source and include paths to {output_file_json}")
-        except IOError as e:
-            logging.error(f"Failed to write paths file: {e}")
-            sys.exit(1)
         
-    def get_project_name_from_slcp(self):
-        """Extract project name from .slcp or .slcw file."""
-        # If .slcp, extract directly; if .slcw, find application .slcp and extract from that
-        if not self.use_solutions:
-            return self.reference_project_file
-        else:
-            try:
-                with open(self.reference_project_file, 'r') as f:
-                    doc = yaml.safe_load(f)
-                app_slcp_path = None
-                if 'project' in doc and isinstance(doc['project'], list):
-                    for proj in doc['project']:
-                        if isinstance(proj, dict) and proj.get('id') == 'application' and 'path' in proj:
-                            app_slcp_path = proj['path']
-                            break
-                if app_slcp_path is None:
-                    logging.error("No application project with .slcp path found in .slcw file.")
-                    sys.exit(1)
-
-                self.app_slcp_full_path = os.path.join(os.path.dirname(self.reference_project_file), app_slcp_path)
-                if not os.path.exists(self.app_slcp_full_path):
-                    logging.error(f"Application .slcp file does not exist: {self.app_slcp_full_path}")
-                    sys.exit(1)
-
-                return self.app_slcp_full_path
-            except (IOError, yaml.YAMLError) as e:
-                logging.error(f"Failed to parse .slcw file for application .slcp: {e}")
-                sys.exit(1)
-
     @staticmethod
     def validate_tools():
         """Validate that all required build tools are available on the system.
@@ -289,15 +144,6 @@ class CreateApp:
         if not self.validate_board_argument(self.silabs_board):
             sys.exit(1)
 
-        # Checkout third_party_hw_drivers_extension submodule for air-quality-sensor-app-sparkfun-thread app and trust the extension
-        if "sparkfun" in self.reference_project_file:
-            third_party_hw_drivers_extension_path = os.path.join(os.getcwd(), "third_party", "third_party_hw_drivers_extension")
-            try:
-                subprocess.run(["git", "submodule", "update", "--init", "--checkout", third_party_hw_drivers_extension_path], check=True)
-            except subprocess.CalledProcessError as e:
-                logging.error(f"Failed to checkout submodule: {e}")
-                sys.exit(1)
-
     def get_environment(self):
         """Load environment variables from .env file.
 
@@ -347,8 +193,6 @@ class CreateApp:
             cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", output_type]
             logging.info(f"Running command: {' '.join(cmd)}")
             subprocess.run(cmd, check=True)
-            # After generation, extract and save src/include paths
-            self.extract_and_save_paths()
         except subprocess.CalledProcessError as e:
             logging.error(f"Error running 'slc generate': {e}")
             sys.exit(1)
