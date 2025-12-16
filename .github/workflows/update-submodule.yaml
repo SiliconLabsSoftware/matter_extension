@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         submodules: [matter_sdk, simplicity_sdk, wifi_sdk]
-        target-branch: [main, release_2.8-1.5, feature/MATTER-5624]
+        target-branch: [release_2.8-1.5, feature/MATTER-5624]
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
