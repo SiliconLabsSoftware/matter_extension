@@ -157,7 +157,7 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-ble",
-                              "--with_app matter_ble_dmp_test,matter_zigbee_concurrent"]
+                              "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             }
         ],
         "closure-app": [
