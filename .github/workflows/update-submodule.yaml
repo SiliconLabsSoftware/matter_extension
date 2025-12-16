@@ -1,6 +1,9 @@
 name: Test Submodule Update Action
 
 on:
+  push:
+    branches:
+      - feature/MATTER-5624
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
