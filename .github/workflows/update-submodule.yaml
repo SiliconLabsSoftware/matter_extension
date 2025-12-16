@@ -1,0 +1,23 @@
+name: Test Submodule Update Action
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  test-update:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        submodules: [matter_sdk, simplicity_sdk, wifi_sdk]
+        target-branch: [main, release_2.8-1.5, feature/MATTER-5624]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Run composite action
+        uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
+        with:
+          submodules: ${{ matrix.submodules }}
+          target-branch: ${{ matrix.target-branch }}
