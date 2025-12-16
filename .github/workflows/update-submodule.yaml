@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        submodules: [matter_sdk, simplicity_sdk, wifi_sdk]
+        submodules: [simplicity_sdk, wifi_sdk] # TODO: add matter_sdk back (temp removal for less slack notification)
         target-branch: [release_2.8-1.5, feature/MATTER-5624]
     steps:
       - name: Checkout repo
