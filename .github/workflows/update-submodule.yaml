@@ -20,11 +20,11 @@ jobs:
         with:
           ref: ${{ matrix.target_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Update matter_sdk submodule
         if: github.ref_name == matrix.target_branch
         uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
         with:
           target_branch: ${{ matrix.target_branch }}
-          app-id: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
