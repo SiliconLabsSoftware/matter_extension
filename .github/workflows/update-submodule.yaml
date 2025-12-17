@@ -22,7 +22,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update matter_sdk submodule
-        if: github.ref_name == matrix.target_branch
         uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
         with:
           target_branch: ${{ matrix.target_branch }}
