@@ -14,9 +14,9 @@ jobs:
     strategy:
       matrix: 
         target_branch: [main, release_2.8-1.5, feature/MATTER-5624]
-    if: github.ref_name == matrix.target_branch
     steps:
       - name: Update matter_sdk submodule
+        if: github.ref_name == matrix.target_branch
         uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
         with:
           target_branch: ${{ matrix.target_branch }}
