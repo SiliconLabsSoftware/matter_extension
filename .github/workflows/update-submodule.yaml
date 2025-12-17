@@ -9,20 +9,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-update:
+  update-matter_sdk:
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        submodules: [simplicity_sdk, wifi_sdk] # TODO: add matter_sdk back (temp removal for less slack notification)
-        target-branch: [release_2.8-1.5, feature/MATTER-5624]
+      matrix: 
+        target_branch: [main, release_2.8-1.5, feature/MATTER-5624]
+    if: github.ref_name == matrix.target_branch
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Run composite action
+      - name: Update matter_sdk submodule
         uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
         with:
-          submodules: ${{ matrix.submodules }}
-          target-branch: ${{ matrix.target-branch }}
-          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          target_branch: ${{ matrix.target_branch }}
+          app-id: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
