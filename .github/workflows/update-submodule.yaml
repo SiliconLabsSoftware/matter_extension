@@ -15,6 +15,12 @@ jobs:
       matrix: 
         target_branch: [main, release_2.8-1.5, feature/MATTER-5624]
     steps:
+      - name: Checkout target branche
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ matrix.target_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
       - name: Update matter_sdk submodule
         if: github.ref_name == matrix.target_branch
         uses: SiliconLabsSoftware/matter_build_action/action@feature/MATTER-5624
