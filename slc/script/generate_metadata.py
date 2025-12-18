@@ -57,7 +57,7 @@ def recurse_dir(file_or_dir):
             os.remove(file_or_dir)
         elif '.asset' in file_or_dir:
             return
-        elif '.s37' in file_or_dir or '.rps' in file_or_dir:
+        elif (file_or_dir.endswith('-full.s37') or file_or_dir.endswith('.rps')):
             brd = None
             for leaf in file_or_dir.split('/'):
                 if 'brd' in leaf.lower():

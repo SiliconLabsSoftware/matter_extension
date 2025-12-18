@@ -580,16 +580,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application over Thread for BRD4407A</description>
 	</demo>
-	<demo name="brd4407a.demo.zigbee_matter_light_app_thread" label="Matter - SoC Zigbee Matter Light Concurrent over Thread">
-		<property key="demos.blurb" value="Matter - SoC Zigbee Matter Light Concurrent app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4407a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4407a/zigbee-matter-light-series-3-solution-concurrent-listening/artifact/zigbee-matter-light-series-3-full.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/zigbee-matter-light/thread/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Zigbee Matter Light Concurrent Application over Thread for BRD4407A</description>
-	</demo>
 	<demo name="brd4407a.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
 		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -890,16 +880,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lighting Application over Thread for BRD4187C</description>
 	</demo>
-	<demo name="brd4187c.demo.lighting_app_thread" label="Matter - SoC Lighting over Thread">
-		<property key="demos.blurb" value="Matter - SoC Lighting app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4187c/lighting-app-series-2-solution-trustzone/artifact/lighting-app-series-2-app-only.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/lighting-app/thread/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lighting Application over Thread for BRD4187C</description>
-	</demo>
 	<demo name="brd4187c.demo.thermostat_app_thread" label="Matter - SoC Thermostat Concurrent over Thread">
 		<property key="demos.blurb" value="Matter - SoC Thermostat Concurrent app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -1109,16 +1089,6 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Lighting Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
-	</demo>
-	<demo name="brd4338a.demo.lock_app_siwx917" label="Matter - SoC Lock over Wi-Fi">
-		<property key="demos.blurb" value="Matter - SiWx917 SoC Lock app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4338a"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/brd4338a/lock-app-siwx-solution-lto/artifact/lock-app-siwx.rps"/>
-		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
-		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lock Application for BRD4338A with SiWx917 Wi-Fi SoC</description>
 	</demo>
 	<demo name="brd4338a.demo.multi_sensor_app_siwx917" label="Matter - SoC Multi Sensor over Wi-Fi">
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Multi Sensor app"/>
