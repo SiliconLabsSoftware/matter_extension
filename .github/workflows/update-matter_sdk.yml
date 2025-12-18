@@ -1,12 +1,6 @@
 name: Update matter_sdk Submodule
 
-permissions:
-  contents: read
-
 on:
-  push:
-    branches:
-      - feature/MATTER-5624
   schedule:
     - cron: '0 5 * * *' # Daily at midnight
   workflow_dispatch:
@@ -23,7 +17,7 @@ jobs:
       matrix: 
         target_branch: >-
           ${{
-            (github.event_name == 'schedule' || github.event_name == 'push')
+            github.event_name == 'schedule'
               && fromJson('["main","release_2.8-1.5"]')
               || fromJson(format('["{0}"]', inputs.target_branch))
           }}
