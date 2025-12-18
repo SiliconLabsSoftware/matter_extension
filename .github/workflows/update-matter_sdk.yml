@@ -20,7 +20,7 @@ jobs:
       matrix: 
         target_branch: >-
           ${{
-            github.event_name == 'schedule'
+            (github.event_name == 'schedule' || github.event_name == 'push')
               && fromJson('["main","release_2.8-1.5"]')
               || fromJson(format('["{0}"]', inputs.target_branch))
           }}
