@@ -57,7 +57,8 @@ def recurse_dir(file_or_dir):
             os.remove(file_or_dir)
         elif '.asset' in file_or_dir:
             return
-        elif '.s37' in file_or_dir or '.rps' in file_or_dir:
+        exclude_patterns = ['-lto', 'trustzone', 'peripherals']
+        if (file_or_dir.endswith('-full.s37') or file_or_dir.endswith('.rps')) and not any(p in file_or_dir for p in exclude_patterns):
             brd = None
             for leaf in file_or_dir.split('/'):
                 if 'brd' in leaf.lower():
