@@ -10,6 +10,8 @@ sdk_extension:
     version: "2.6.1"
 
 component:
+  - id: matter_ble_side_channel
+    from: matter
   - id: device_init
   - id: sl_main
   - id: clock_manager
@@ -131,6 +133,10 @@ config_file:
     file_id: provision_config
 
 include:
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/efr32/
+    file_list:
+      - path: BLEChannelImpl.h
+    directory: include
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/include
     file_list:
       - path: AppConfig.h
@@ -149,7 +155,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/ZclCallbacks.cpp
     directory: src
-
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/efr32/BLEChannelImpl.cpp
+    directory: src
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
