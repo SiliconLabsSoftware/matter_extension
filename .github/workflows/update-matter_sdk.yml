@@ -1,5 +1,8 @@
 name: Update matter_sdk Submodule
 
+permissions:
+  contents: read
+
 on:
   schedule:
     - cron: '0 5 * * *' # Daily at midnight
