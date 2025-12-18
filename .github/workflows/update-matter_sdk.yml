@@ -1,9 +1,6 @@
 name: Update matter_sdk Submodule
 
 on:
-  push: # Temp push trigger for testing
-    branches:
-      - feature/MATTER-5624
   schedule:
     - cron: '0 5 * * *' # Daily at midnight
   workflow_dispatch:
