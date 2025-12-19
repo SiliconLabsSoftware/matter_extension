@@ -18,8 +18,6 @@ requires:
   - name: rail_util_dma
     condition: [device_series_2]
   # Rail PHY selection needed with rail mux for series3
-  - name: sl_rail_util_ieee802154_rx_duty_cycling
-    condition: [ device_generic_family_sixx301 ]
   - name: sl_rail_util_ieee802154_phy_select
     condition: [ device_generic_family_sixx301 ]
 provides:
