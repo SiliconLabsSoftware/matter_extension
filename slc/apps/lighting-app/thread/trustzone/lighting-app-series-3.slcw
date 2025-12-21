@@ -1,6 +1,7 @@
 label: lighting-app-series-3
 description: >
-    Workspace to build the TrustZone-enabled application and accompanying bootloader.
+  Workspace to build the TrustZone-enabled application and accompanying
+  bootloader.
 quality: production
 package: matter
 project:
@@ -14,4 +15,4 @@ project:
     id: bootloader
     output: matter-bootloader
 post_build:
-    profile: tz_application
+  profile: tz_application

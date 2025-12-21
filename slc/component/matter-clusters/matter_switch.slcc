@@ -1,22 +1,23 @@
 category: Clusters|General
 description: >
-  Implementation of the Switch Server Cluster.
-  The user has to enable the Switch Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Switch Server Cluster. The user has to enable the
+    Switch Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_switch
 package: matter
 label: Switch Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_switch
+    - name: matter_switch
 source:
-  - path: third_party/matter_sdk/src/app/clusters/switch-server/switch-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/switch-server/switch-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/switch-server
-    file_list:
-      - path: switch-server.h
+    - path: third_party/matter_sdk/src/app/clusters/switch-server
+      file_list:
+          - path: switch-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_switch
+    - name: component_catalog
+      value: matter_switch

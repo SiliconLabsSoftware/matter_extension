@@ -1,23 +1,24 @@
 category: Clusters|Appliances
 description: >
-  Implementation of the Dishwasher Alarm Server Cluster.
-  The user has to enable the Dishwasher Alarm Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Dishwasher Alarm Server Cluster. The user has to
+    enable the Dishwasher Alarm Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_dishwasher_alarm
 package: matter
 label: Dishwasher Alarm Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_dishwasher_alarm
+    - name: matter_dishwasher_alarm
 source:
-  - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/dishwasher-alarm-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server/dishwasher-alarm-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server
-    file_list:
-      - path: dishwasher-alarm-delegate.h
-      - path: dishwasher-alarm-server.h
+    - path: third_party/matter_sdk/src/app/clusters/dishwasher-alarm-server
+      file_list:
+          - path: dishwasher-alarm-delegate.h
+          - path: dishwasher-alarm-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_dishwasher_alarm
+    - name: component_catalog
+      value: matter_dishwasher_alarm

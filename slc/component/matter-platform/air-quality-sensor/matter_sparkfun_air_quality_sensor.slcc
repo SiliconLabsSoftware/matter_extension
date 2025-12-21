@@ -1,25 +1,25 @@
 id: matter_sparkfun_air_quality_sensor
 label: SGP40 Sparkfun Air Quality Sensor Support
 description: |
-  Provides support for the SGP40 Sparkfun Air Quality Sensor in Matter applications. 
-  This component requires v4.1.1 of the https://github.com/SiliconLabs/third_party_hw_drivers_extension extension. 
-  Ensure the extension is installed and enabled in your Simplicity Studio project. 
-  For OpenThread users: Add a 'qwiic' instance to the 'I2CSPM' component. 
-  For Wi-Fi users: Add a 'i2c2' instance to the 'I2C' component.
+    Provides support for the SGP40 Sparkfun Air Quality Sensor in Matter applications.
+    This component requires v4.1.1 of the https://github.com/SiliconLabs/third_party_hw_drivers_extension extension.
+    Ensure the extension is installed and enabled in your Simplicity Studio project.
+    For OpenThread users: Add a 'qwiic' instance to the 'I2CSPM' component.
+    For Wi-Fi users: Add a 'i2c2' instance to the 'I2C' component.
 
 package: matter
 category: Platform|Sensors
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 provides:
-  - name: matter_sparkfun_air_quality_sensor
+    - name: matter_sparkfun_air_quality_sensor
 
 define:
-  - name: USE_SPARKFUN_AIR_QUALITY_SENSOR
-    value: 1
+    - name: USE_SPARKFUN_AIR_QUALITY_SENSOR
+      value: 1
 
 requires:
-  - name: matter_air_quality_sensor
-  - name: sparkfun_air_quality_sgp40_qwiic
+    - name: matter_air_quality_sensor
+    - name: sparkfun_air_quality_sgp40_qwiic

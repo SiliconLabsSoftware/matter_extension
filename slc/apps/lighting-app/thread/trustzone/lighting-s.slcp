@@ -1,7 +1,8 @@
 project_name: lighting-app-s
 label: Example TrustZone Secure Key Library
 description: >
-  This is a trustzone enabled application used to manage security operations from trustzone aware OpenThread applications.
+  This is a trustzone enabled application used to manage security operations
+  from trustzone aware OpenThread applications.
 quality: production
 package: matter
 

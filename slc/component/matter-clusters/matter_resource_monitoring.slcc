@@ -1,25 +1,26 @@
 category: Clusters|Measurement
 description: >
-  Implementation of the Activated Carbon Filter Monitoring Server Cluster.
-  The user has to enable the Activated Carbon Filter Monitoring Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Activated Carbon Filter Monitoring Server Cluster. The
+    user has to enable the Activated Carbon Filter Monitoring Server Cluster in
+    the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_resource_monitoring
 package: matter
 label: Activated Carbon Filter Monitoring Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_resource_monitoring
+    - name: matter_resource_monitoring
 source:
-  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-cluster-objects.cpp
-  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-cluster-objects.cpp
+    - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server
-    file_list:
-      - path: replacement-product-list-manager.h
-      - path: resource-monitoring-cluster-objects.h
-      - path: resource-monitoring-server.h
+    - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server
+      file_list:
+          - path: replacement-product-list-manager.h
+          - path: resource-monitoring-cluster-objects.h
+          - path: resource-monitoring-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_resource_monitoring
+    - name: component_catalog
+      value: matter_resource_monitoring

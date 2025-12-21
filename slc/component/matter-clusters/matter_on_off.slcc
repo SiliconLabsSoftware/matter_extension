@@ -1,22 +1,23 @@
 category: Clusters|General
 description: >
-  Implementation of the On/Off Server Cluster.
-  The user has to enable the On/Off Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the On/Off Server Cluster. The user has to enable the
+    On/Off Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_on_off
 package: matter
 label: On/Off Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_on_off
+    - name: matter_on_off
 source:
-  - path: third_party/matter_sdk/src/app/clusters/on-off-server/on-off-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/on-off-server/on-off-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/on-off-server
-    file_list:
-      - path: on-off-server.h
+    - path: third_party/matter_sdk/src/app/clusters/on-off-server
+      file_list:
+          - path: on-off-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_on_off
+    - name: component_catalog
+      value: matter_on_off

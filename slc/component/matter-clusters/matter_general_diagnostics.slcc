@@ -1,26 +1,27 @@
 category: Clusters|General
 description: >
-  Implementation of the General Diagnostics Server Cluster.
-  The user has to enable the General Diagnostics Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the General Diagnostics Server Cluster. The user has to
+    enable the General Diagnostics Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_general_diagnostics
 package: matter
 label: General Diagnostics Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_general_diagnostics
+    - name: matter_general_diagnostics
 source:
-  - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/general-diagnostics-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/GenericFaultTestEventTriggerHandler.cpp
+    - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/general-diagnostics-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server/GenericFaultTestEventTriggerHandler.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server
-    file_list:
-      - path: CodegenIntegration.h
-      - path: general-diagnostics-cluster.h
-      - path: GenericFaultTestEventTriggerHandler.h
+    - path: third_party/matter_sdk/src/app/clusters/general-diagnostics-server
+      file_list:
+          - path: CodegenIntegration.h
+          - path: general-diagnostics-cluster.h
+          - path: GenericFaultTestEventTriggerHandler.h
 template_contribution:
-  - name: component_catalog
-    value: matter_general_diagnostics
+    - name: component_catalog
+      value: matter_general_diagnostics

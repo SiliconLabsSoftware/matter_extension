@@ -1,25 +1,26 @@
 category: Clusters|General
 description: >
-  Implementation of the Operational State Server Cluster.
-  The user has to enable the Operational State Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Operational State Server Cluster. The user has to
+    enable the Operational State Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_operational_state
 package: matter
 label: Operational State Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 requires:
-  - name: matter_cluster_building_blocks
+    - name: matter_cluster_building_blocks
 provides:
-  - name: matter_operational_state
+    - name: matter_operational_state
 source:
-  - path: third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/operational-state-server
-    file_list:
-      - path: operational-state-cluster-objects.h
-      - path: operational-state-server.h
+    - path: third_party/matter_sdk/src/app/clusters/operational-state-server
+      file_list:
+          - path: operational-state-cluster-objects.h
+          - path: operational-state-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_operational_state
+    - name: component_catalog
+      value: matter_operational_state

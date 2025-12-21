@@ -1,29 +1,30 @@
 category: Clusters|General
 description: >
-  Implementation of the Binding Cluster.
-  The user has to enable the Binding Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Binding Cluster. The user has to enable the Binding
+    Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this
+    functionality.
 id: matter_bindings
 package: matter
 label: Binding Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_bindings
+    - name: matter_bindings
 source:
-  - path: third_party/matter_sdk/src/app/clusters/bindings/binding-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/bindings/binding-table.cpp
-  - path: third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
-  - path: third_party/matter_sdk/src/app/clusters/bindings/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/bindings/PendingNotificationMap.cpp
+    - path: third_party/matter_sdk/src/app/clusters/bindings/binding-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/bindings/binding-table.cpp
+    - path: third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
+    - path: third_party/matter_sdk/src/app/clusters/bindings/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/bindings/PendingNotificationMap.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/bindings
-    file_list:
-      - path: binding-cluster.h
-      - path: binding-table.h
-      - path: BindingManager.h
-      - path: PendingNotificationMap.h
+    - path: third_party/matter_sdk/src/app/clusters/bindings
+      file_list:
+          - path: binding-cluster.h
+          - path: binding-table.h
+          - path: BindingManager.h
+          - path: PendingNotificationMap.h
 template_contribution:
-  - name: component_catalog
-    value: matter_bindings
+    - name: component_catalog
+      value: matter_bindings

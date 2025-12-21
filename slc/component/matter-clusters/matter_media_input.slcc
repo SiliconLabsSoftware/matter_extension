@@ -1,23 +1,24 @@
 category: Clusters|Media
 description: >
-  Implementation of the Media Input Server Cluster.
-  The user has to enable the Media Input Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Media Input Server Cluster. The user has to enable the
+    Media Input Server Cluster in the ZCL Advanced Platform (ZAP) tool in order
+    to enable this functionality.
 id: matter_media_input
 package: matter
 label: Media Input Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_media_input
+    - name: matter_media_input
 source:
-  - path: third_party/matter_sdk/src/app/clusters/media-input-server/media-input-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/media-input-server/media-input-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/media-input-server
-    file_list:
-      - path: media-input-delegate.h
-      - path: media-input-server.h
+    - path: third_party/matter_sdk/src/app/clusters/media-input-server
+      file_list:
+          - path: media-input-delegate.h
+          - path: media-input-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_media_input
+    - name: component_catalog
+      value: matter_media_input

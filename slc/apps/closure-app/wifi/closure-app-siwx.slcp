@@ -76,7 +76,7 @@ component:
   - id: sl_si91x_soc_soft_reset
   - id: ble
   - id: sl_si91x_button_917
-    instance: [btn0,btn1]
+    instance: [btn0, btn1]
   - id: sl_si91x_led_917
     instance: [led0]
     condition: [si917_dev_board]
@@ -104,15 +104,15 @@ config_file:
 include:
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/include
     file_list:
-    - path: AppConfig.h
-    - path: CHIPProjectConfig.h
-    - path: AppTask.h
-    - path: AppEvent.h
-    - path: ClosureManager.h
+      - path: AppConfig.h
+      - path: CHIPProjectConfig.h
+      - path: AppTask.h
+      - path: AppEvent.h
+      - path: ClosureManager.h
   - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/include
     file_list:
-    - path: ClosureControlEndpoint.h
-    - path: ClosureDimensionEndpoint.h
+      - path: ClosureControlEndpoint.h
+      - path: ClosureDimensionEndpoint.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/AppTask.cpp
@@ -120,7 +120,7 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/DataModelCallbacks.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/ClosureManager.cpp
-    directory: src    
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureControlEndpoint.cpp

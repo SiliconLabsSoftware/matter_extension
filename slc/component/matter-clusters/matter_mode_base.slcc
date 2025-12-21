@@ -1,24 +1,25 @@
 category: Clusters|General
 description: >
-  Implementation of the Mode Base Server Cluster.
-  The user has to enable the Mode Base Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Mode Base Server Cluster. The user has to enable the
+    Mode Base Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_mode_base
 package: matter
 label: Mode Base Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_mode_base
+    - name: matter_mode_base
 source:
-  - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-cluster-objects.cpp
-  - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-cluster-objects.cpp
+    - path: third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/mode-base-server
-    file_list:
-      - path: mode-base-cluster-objects.h
-      - path: mode-base-server.h
+    - path: third_party/matter_sdk/src/app/clusters/mode-base-server
+      file_list:
+          - path: mode-base-cluster-objects.h
+          - path: mode-base-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_mode_base
+    - name: component_catalog
+      value: matter_mode_base

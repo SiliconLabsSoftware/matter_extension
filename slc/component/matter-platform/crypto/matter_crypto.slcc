@@ -33,7 +33,6 @@ requires:
     condition: [matter_provision]
     unless: [matter_aws]
 
-
   # OT CoAP Cert libs
   - name: mbedtls_tls
     condition: [ot_coap_cert_libs]

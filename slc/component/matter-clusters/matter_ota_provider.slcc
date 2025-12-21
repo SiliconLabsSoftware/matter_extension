@@ -1,27 +1,28 @@
 category: Clusters|CHIP
 description: >
-  Implementation of the OTA Software Update Provider Cluster.
-  The user has to enable the OTA Software Update Provider Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the OTA Software Update Provider Cluster. The user has to
+    enable the OTA Software Update Provider Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_ota_provider
 package: matter
 label: OTA Software Update Provider Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_ota_provider
+    - name: matter_ota_provider
 source:
-  - path: third_party/matter_sdk/src/app/clusters/ota-provider/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/ota-provider/ota-provider-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/ota-provider/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/ota-provider/ota-provider-cluster.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/ota-provider
-    file_list:
-      - path: CodegenIntegration.h
-      - path: DefaultOTAProviderUserConsent.h
-      - path: ota-provider-cluster.h
-      - path: ota-provider-delegate.h
-      - path: OTAProviderUserConsentDelegate.h
+    - path: third_party/matter_sdk/src/app/clusters/ota-provider
+      file_list:
+          - path: CodegenIntegration.h
+          - path: DefaultOTAProviderUserConsent.h
+          - path: ota-provider-cluster.h
+          - path: ota-provider-delegate.h
+          - path: OTAProviderUserConsentDelegate.h
 template_contribution:
-  - name: component_catalog
-    value: matter_ota_provider
+    - name: component_catalog
+      value: matter_ota_provider

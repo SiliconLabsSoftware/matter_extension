@@ -1,30 +1,31 @@
 category: Clusters|General
 description: >
-  Implementation of the Time Synchronization Server Cluster.
-  The user has to enable the Time Synchronization Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Time Synchronization Server Cluster. The user has to
+    enable the Time Synchronization Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_time_synchronization
 package: matter
 label: Time Synchronization Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_time_synchronization
+    - name: matter_time_synchronization
 source:
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
+    - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
+    - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
-    file_list:
-      - path: DefaultTimeSyncDelegate.h
-      - path: time-synchronization-cluster.h
-      - path: time-synchronization-delegate.h
-      - path: TimeSyncDataProvider.h
+    - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
+      file_list:
+          - path: DefaultTimeSyncDelegate.h
+          - path: time-synchronization-cluster.h
+          - path: time-synchronization-delegate.h
+          - path: TimeSyncDataProvider.h
 template_contribution:
-  - name: component_catalog
-    value: matter_time_synchronization
+    - name: component_catalog
+      value: matter_time_synchronization
 define:
-  - name: TIME_SYNC_ENABLE_TSC_FEATURE
-    value: 1
+    - name: TIME_SYNC_ENABLE_TSC_FEATURE
+      value: 1

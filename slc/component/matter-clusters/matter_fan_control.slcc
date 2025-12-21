@@ -1,23 +1,24 @@
 category: Clusters|HVAC
 description: >
-  Implementation of the Fan Control Server Cluster.
-  The user has to enable the Fan Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Fan Control Server Cluster. The user has to enable the
+    Fan Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in order
+    to enable this functionality.
 id: matter_fan_control
 package: matter
 label: Fan Control Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_fan_control
+    - name: matter_fan_control
 source:
-  - path: third_party/matter_sdk/src/app/clusters/fan-control-server/fan-control-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/fan-control-server/fan-control-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/fan-control-server
-    file_list:
-      - path: fan-control-delegate.h
-      - path: fan-control-server.h
+    - path: third_party/matter_sdk/src/app/clusters/fan-control-server
+      file_list:
+          - path: fan-control-delegate.h
+          - path: fan-control-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_fan_control
+    - name: component_catalog
+      value: matter_fan_control

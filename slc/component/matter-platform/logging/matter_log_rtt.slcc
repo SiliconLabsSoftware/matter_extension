@@ -5,12 +5,12 @@ package: matter
 category: Platform|Utils
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 provides:
-  - name: matter_log_rtt
+    - name: matter_log_rtt
 define:
-  - name: SILABS_LOG_OUT_UART
-    value: 0
+    - name: SILABS_LOG_OUT_UART
+      value: 0
 conflicts:
-  - name: matter_log_uart
+    - name: matter_log_uart

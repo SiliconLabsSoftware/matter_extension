@@ -5,24 +5,24 @@ description: RGB LED Support for Matter applications
 category: Platform
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 provides:
-  - name: matter_rgb_leds
+    - name: matter_rgb_leds
 requires:
-  - name: simple_rgb_pwm_led
-    condition: [hardware_board_has_rgb]
+    - name: simple_rgb_pwm_led
+      condition: [hardware_board_has_rgb]
 recommends:
-  - id: simple_rgb_pwm_led
-    vendor: silabs
-    instance: [rgb_led0]
-    condition: [hardware_board_has_rgb]
+    - id: simple_rgb_pwm_led
+      vendor: silabs
+      instance: [rgb_led0]
+      condition: [hardware_board_has_rgb]
 include:
-  - path: third_party/matter_sdk/examples/platform/silabs/rgb_led
-    file_list:
-    - path: RGBLEDWidget.h
+    - path: third_party/matter_sdk/examples/platform/silabs/rgb_led
+      file_list:
+          - path: RGBLEDWidget.h
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/rgb_led/RGBLEDWidget.cpp
+    - path: third_party/matter_sdk/examples/platform/silabs/rgb_led/RGBLEDWidget.cpp
 define:
-  - name: SL_MATTER_RGB_LED_ENABLED
-    value: "1"
+    - name: SL_MATTER_RGB_LED_ENABLED
+      value: "1"

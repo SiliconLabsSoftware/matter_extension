@@ -19,7 +19,7 @@ requires:
     condition: [device_series_2]
   # Rail PHY selection needed with rail mux for series3
   - name: sl_rail_util_ieee802154_phy_select
-    condition: [ device_generic_family_sixx301 ]
+    condition: [device_generic_family_sixx301]
 provides:
   - name: matter_zigbee_multiprotocol_common
 recommends:

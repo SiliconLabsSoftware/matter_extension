@@ -5,18 +5,17 @@ package: matter
 category: Platform|Utils
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 provides:
-  - name: matter_stack_monitoring
+    - name: matter_stack_monitoring
 include:
-  - path: third_party/matter_sdk/examples/platform/silabs/
-    file_list:
-      - path: MemMonitoring.h
+    - path: third_party/matter_sdk/examples/platform/silabs/
+      file_list:
+          - path: MemMonitoring.h
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/MemMonitoring.cpp
+    - path: third_party/matter_sdk/examples/platform/silabs/MemMonitoring.cpp
 requires:
-  - name: cmsis_rtos2_headers
+    - name: cmsis_rtos2_headers
 define:
-  - name: HEAP_MONITORING
-
+    - name: HEAP_MONITORING

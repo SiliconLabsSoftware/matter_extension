@@ -1,23 +1,24 @@
 category: Clusters|Media
 description: >
-  Implementation of the Content Launcher Server Cluster.
-  The user has to enable the Content Launcher Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Content Launcher Server Cluster. The user has to
+    enable the Content Launcher Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_content_launch
 package: matter
 label: Content Launcher Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_content_launch
+    - name: matter_content_launch
 source:
-  - path: third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/content-launch-server/content-launch-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/content-launch-server
-    file_list:
-      - path: content-launch-delegate.h
-      - path: content-launch-server.h
+    - path: third_party/matter_sdk/src/app/clusters/content-launch-server
+      file_list:
+          - path: content-launch-delegate.h
+          - path: content-launch-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_content_launch
+    - name: component_catalog
+      value: matter_content_launch

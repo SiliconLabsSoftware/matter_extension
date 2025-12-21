@@ -67,8 +67,8 @@ component:
   - id: segger_rtt
   #  - id: i2cspm
   #    instance: [sensor]
-  
-  - id: wifi_resources  
+
+  - id: wifi_resources
   - id: sl_si91x_common_flash_nvm3
   - id: sl_si91x_wireless
   - id: wifi

@@ -1,25 +1,26 @@
 category: Clusters|General
 description: >
-  Implementation of the Access Control Server Cluster.
-  The user has to enable the Access Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Access Control Server Cluster. The user has to enable
+    the Access Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in
+    order to enable this functionality.
 id: matter_access_control
 package: matter
 label: Access Control Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_access_control
+    - name: matter_access_control
 source:
-  - path: third_party/matter_sdk/src/app/clusters/access-control-server/access-control-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.cpp
-  - path: third_party/matter_sdk/src/app/clusters/access-control-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/access-control-server/access-control-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.cpp
+    - path: third_party/matter_sdk/src/app/clusters/access-control-server/CodegenIntegration.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/access-control-server
-    file_list:
-      - path: access-control-cluster.h
-      - path: ArlEncoder.h
+    - path: third_party/matter_sdk/src/app/clusters/access-control-server
+      file_list:
+          - path: access-control-cluster.h
+          - path: ArlEncoder.h
 template_contribution:
-  - name: component_catalog
-    value: matter_access_control
+    - name: component_catalog
+      value: matter_access_control

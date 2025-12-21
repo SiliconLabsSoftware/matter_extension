@@ -6,20 +6,20 @@ description: "Matter-specific version of the platform's Segger RTT component"
 category: Platform|Utils
 quality: production
 metadata:
-  sbom:
-    license: Segger
+    sbom:
+        license: Segger
 root_path: slc/component/sdk-content/simplicity-sdk
 config_file:
-  - path: "util/third_party/segger/systemview/Config/SEGGER_RTT_Conf.h"
+    - path: "util/third_party/segger/systemview/Config/SEGGER_RTT_Conf.h"
 source:
-  - path: "util/third_party/segger/systemview/SEGGER/SEGGER_RTT.c"
+    - path: "util/third_party/segger/systemview/SEGGER/SEGGER_RTT.c"
 include:
-  - path: "util/third_party/segger/systemview/SEGGER"
-    file_list:
-      - path: "SEGGER.h"
-      - path: "SEGGER_RTT.h"
+    - path: "util/third_party/segger/systemview/SEGGER"
+      file_list:
+          - path: "SEGGER.h"
+          - path: "SEGGER_RTT.h"
 provides:
-  - name: "segger_rtt"
+    - name: "segger_rtt"
 define:
-  - name: "RTT_USE_ASM"
-    value: "0"
+    - name: "RTT_USE_ASM"
+      value: "0"

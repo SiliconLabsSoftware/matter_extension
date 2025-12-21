@@ -18,7 +18,6 @@ component:
     condition: [device_series_3]
   - id: common_token_manager
     condition: [device_series_3]
-    
 
   - id: matter
   - id: matter_platform_mg
@@ -160,7 +159,6 @@ configuration:
   - name: CHIP_CONFIG_ENABLE_ICD_DSLS
     value: 1
     condition: [matter_icd_core]
-
 
   - name: SL_IDLE_MODE_DURATION_S
     value: "600"

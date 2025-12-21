@@ -2,11 +2,11 @@ id: mbedtls_entropy_default_aws
 package: matter
 label: Default Entropy Source for Matter + AWS
 description: >-
-  This component can be used in order to make sure that a suitable component for
-  an entropy source is included in the project specifically for matter+AWS component.
-  This is done to avoid tight coupling of mbedtls + PSA. Depending on the device's
-  capabilities, this can be either a hardware (TRNG, Radio or ADC) source, or a
-  device-unique seed in non-volatile storage.
+  This component can be used in order to make sure that a suitable component
+  for an entropy source is included in the project specifically for matter+AWS
+  component. This is done to avoid tight coupling of mbedtls + PSA. Depending
+  on the device's capabilities, this can be either a hardware (TRNG, Radio or
+  ADC) source, or a device-unique seed in non-volatile storage.
 category: Platform|Security|Mbed TLS|Randomness
 quality: production
 component_root_path: platform/security
@@ -35,4 +35,6 @@ metadata:
       version: v3.6.2
       supplier: Trusted Firmware
       url: https://github.com/Mbed-TLS/mbedtls.git
-      comment: Mbed TLS is a C library implementing the PSA Cryptography API, cryptographic primitives, X.509 certificate manipulation and the SSL/TLS and DTLS protocols
+      comment: Mbed TLS is a C library implementing the PSA Cryptography API,
+        cryptographic primitives, X.509 certificate manipulation and the
+        SSL/TLS and DTLS protocols

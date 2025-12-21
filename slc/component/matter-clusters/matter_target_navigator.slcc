@@ -1,23 +1,24 @@
 category: Clusters|Media
 description: >
-  Implementation of the Target Navigator Server Cluster.
-  The user has to enable the Target Navigator Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Target Navigator Server Cluster. The user has to
+    enable the Target Navigator Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_target_navigator
 package: matter
 label: Target Navigator Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_target_navigator
+    - name: matter_target_navigator
 source:
-  - path: third_party/matter_sdk/src/app/clusters/target-navigator-server/target-navigator-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/target-navigator-server/target-navigator-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/target-navigator-server
-    file_list:
-      - path: target-navigator-delegate.h
-      - path: target-navigator-server.h
+    - path: third_party/matter_sdk/src/app/clusters/target-navigator-server
+      file_list:
+          - path: target-navigator-delegate.h
+          - path: target-navigator-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_target_navigator
+    - name: component_catalog
+      value: matter_target_navigator

@@ -1,28 +1,29 @@
 category: Clusters|General
 description: >
-  Implementation of the Identify Server Cluster.
-  The user has to enable the Identify Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Identify Server Cluster. The user has to enable the
+    Identify Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_identify
 package: matter
 label: Identify Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_identify
+    - name: matter_identify
 source:
-  - path: third_party/matter_sdk/src/app/clusters/identify-server/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/identify-server/IdentifyCluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/identify-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/identify-server/IdentifyCluster.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/identify-server
-    file_list:
-      - path: CodegenIntegration.h
-      - path: identify-server.h
-      - path: IdentifyCluster.h
-  - path: third_party/matter_sdk/src/lib/support
-    file_list:
-      - path: TimerDelegate.h
+    - path: third_party/matter_sdk/src/app/clusters/identify-server
+      file_list:
+          - path: CodegenIntegration.h
+          - path: identify-server.h
+          - path: IdentifyCluster.h
+    - path: third_party/matter_sdk/src/lib/support
+      file_list:
+          - path: TimerDelegate.h
 template_contribution:
-  - name: component_catalog
-    value: matter_identify
+    - name: component_catalog
+      value: matter_identify

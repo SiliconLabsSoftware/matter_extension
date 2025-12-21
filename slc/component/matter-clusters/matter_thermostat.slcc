@@ -1,31 +1,32 @@
 category: Clusters|HVAC
 description: >
-  Implementation of the Thermostat Server Cluster.
-  The user has to enable the Thermostat Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Thermostat Server Cluster. The user has to enable the
+    Thermostat Server Cluster in the ZCL Advanced Platform (ZAP) tool in order
+    to enable this functionality.
 id: matter_thermostat
 package: matter
 label: Thermostat Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_thermostat
+    - name: matter_thermostat
 source:
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-atomic.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-presets.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-suggestions.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-atomic.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-presets.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-suggestions.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server
-    file_list:
-      - path: PresetStructWithOwnedMembers.h
-      - path: thermostat-delegate.h
-      - path: thermostat-server-presets.h
-      - path: thermostat-server.h
-      - path: ThermostatSuggestionStructWithOwnedMembers.h
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-server
+      file_list:
+          - path: PresetStructWithOwnedMembers.h
+          - path: thermostat-delegate.h
+          - path: thermostat-server-presets.h
+          - path: thermostat-server.h
+          - path: ThermostatSuggestionStructWithOwnedMembers.h
 template_contribution:
-  - name: component_catalog
-    value: matter_thermostat
+    - name: component_catalog
+      value: matter_thermostat

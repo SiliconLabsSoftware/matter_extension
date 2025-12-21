@@ -1,10 +1,11 @@
 id: mbedtls_pki_aws
 package: matter
-label: Public-Key Abstraction Layer for Matter + AWS 
+label: Public-Key Abstraction Layer for Matter + AWS
 description: >-
   This component provides support for the Public Key (PK) abstraction layer in
-  Mbed TLS specifically for Matter+AWS component.This Component avoids tight 
-  coupling of mbedtls and PSA. This layer provides indirect support for public-key 
+  Mbed TLS specifically for Matter+AWS component.This Component avoids tight
+  coupling of mbedtls and PSA. This layer provides indirect support for
+  public-key
   encryption/decryption as well signature generation/verification.
 category: Platform|Security|Mbed TLS|Upper Layer
 quality: production
@@ -37,4 +38,6 @@ metadata:
       version: v3.6.2
       supplier: Trusted Firmware
       url: https://github.com/Mbed-TLS/mbedtls.git
-      comment: Mbed TLS is a C library implementing the PSA Cryptography API, cryptographic primitives, X.509 certificate manipulation and the SSL/TLS and DTLS protocols
+      comment: Mbed TLS is a C library implementing the PSA Cryptography API,
+        cryptographic primitives, X.509 certificate manipulation and the
+        SSL/TLS and DTLS protocols

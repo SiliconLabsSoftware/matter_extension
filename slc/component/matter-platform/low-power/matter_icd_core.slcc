@@ -2,8 +2,8 @@ id: matter_icd_core
 package: matter
 label: ICD Server Configuration
 description: >
-  Support for configuration of ICD power management on all Silabs Matter devices.
-  This component enables the core ICD functionality.
+  Support for configuration of ICD power management on all Silabs Matter
+  devices. This component enables the core ICD functionality.
 category: Platform|Low-power
 quality: production
 metadata:

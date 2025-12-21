@@ -5,41 +5,41 @@ package: matter
 category: Platform|UART
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 
 requires:
-  - name: uartdrv_eusart
-    condition:
-      - matter_platform_mg
-  - name: si91x_debug
-    condition:
-      - matter_platform_si91x
+    - name: uartdrv_eusart
+      condition:
+          - matter_platform_mg
+    - name: si91x_debug
+      condition:
+          - matter_platform_si91x
 
 provides:
-  - name: matter_uart
-  - name: ot_uart_implementation
+    - name: matter_uart
+    - name: ot_uart_implementation
 
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp
+    - path: third_party/matter_sdk/examples/platform/silabs/uart.cpp
 
 include:
-  - path: third_party/matter_sdk/examples/platform/silabs
-    file_list:
-      - path: uart.h
+    - path: third_party/matter_sdk/examples/platform/silabs
+      file_list:
+          - path: uart.h
 
 define:
-  - name: CONFIG_ENABLE_EUART
-    condition:
-      - matter_platform_mg
-  - name: EFR32MG24
-    condition:
-      - device_family_efr32mg24
-      - matter_platform_mg
-  - name: MGM24
-    condition:
-      - device_family_mgm24
-      - matter_platform_mg
-  - name: SLI_SI91X_MCU_INTR_BASED_RX_ON_UART
-    value: 1
-    condition: [matter_platform_siwx917]
+    - name: CONFIG_ENABLE_EUART
+      condition:
+          - matter_platform_mg
+    - name: EFR32MG24
+      condition:
+          - device_family_efr32mg24
+          - matter_platform_mg
+    - name: MGM24
+      condition:
+          - device_family_mgm24
+          - matter_platform_mg
+    - name: SLI_SI91X_MCU_INTR_BASED_RX_ON_UART
+      value: 1
+      condition: [matter_platform_siwx917]

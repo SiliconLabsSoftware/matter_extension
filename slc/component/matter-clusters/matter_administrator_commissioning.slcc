@@ -1,25 +1,26 @@
 category: Clusters|General
 description: >
-  Implementation of the Administrator Commissioning Server Cluster.
-  The user has to enable the Administrator Commissioning Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Administrator Commissioning Server Cluster. The user
+    has to enable the Administrator Commissioning Server Cluster in the ZCL
+    Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_administrator_commissioning
 package: matter
 label: Administrator Commissioning Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_administrator_commissioning
+    - name: matter_administrator_commissioning
 source:
-  - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/AdministratorCommissioningCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/AdministratorCommissioningLogic.cpp
-  - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/AdministratorCommissioningCluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/AdministratorCommissioningLogic.cpp
+    - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server/CodegenIntegration.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server
-    file_list:
-      - path: AdministratorCommissioningCluster.h
-      - path: AdministratorCommissioningLogic.h
+    - path: third_party/matter_sdk/src/app/clusters/administrator-commissioning-server
+      file_list:
+          - path: AdministratorCommissioningCluster.h
+          - path: AdministratorCommissioningLogic.h
 template_contribution:
-  - name: component_catalog
-    value: matter_administrator_commissioning
+    - name: component_catalog
+      value: matter_administrator_commissioning

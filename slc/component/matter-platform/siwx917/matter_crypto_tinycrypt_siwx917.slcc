@@ -1,75 +1,75 @@
 id: matter_crypto_tinycrypt_siwx917
 label: Matter MbedTLS Integration
 description: >
-  mbedtls and Tinycrypt for SiWx917 SoC
+    mbedtls and Tinycrypt for SiWx917 SoC
 package: matter
 category: "Matter-WiFi|Platform|Tinycrypt"
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 
 provides:
-  - name: matter_crypto_tinycrypt_siwx917
+    - name: matter_crypto_tinycrypt_siwx917
 
 requires:
-  # mbedTLS components
-  - name: mbedtls_config
-  - name: mbedtls_source
-  - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
+    # mbedTLS components
+    - name: mbedtls_config
+    - name: mbedtls_source
+    - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
 
-  - name: mbedtls_aes
-  - name: mbedtls_asn1
-  - name: mbedtls_base64
-  - name: mbedtls_ccm
-  - name: mbedtls_cipher
-  - name: mbedtls_ecdh
-  - name: mbedtls_ecdsa
-  - name: mbedtls_ecc
-  - name: mbedtls_error
-  - name: mbedtls_hash
-  - name: mbedtls_hkdf
-  - name: mbedtls_jpake
-  - name: mbedtls_mpi
-  - name: mbedtls_oid
-  - name: mbedtls_pem
-  - name: mbedtls_pkcs5
-  - name: mbedtls_pki
-  - name: mbedtls_random
-  - name: mbedtls_sha256
-  - name: mbedtls_sha512
-  - name: mbedtls_version
-  - name: mbedtls_x509
+    - name: mbedtls_aes
+    - name: mbedtls_asn1
+    - name: mbedtls_base64
+    - name: mbedtls_ccm
+    - name: mbedtls_cipher
+    - name: mbedtls_ecdh
+    - name: mbedtls_ecdsa
+    - name: mbedtls_ecc
+    - name: mbedtls_error
+    - name: mbedtls_hash
+    - name: mbedtls_hkdf
+    - name: mbedtls_jpake
+    - name: mbedtls_mpi
+    - name: mbedtls_oid
+    - name: mbedtls_pem
+    - name: mbedtls_pkcs5
+    - name: mbedtls_pki
+    - name: mbedtls_random
+    - name: mbedtls_sha256
+    - name: mbedtls_sha512
+    - name: mbedtls_version
+    - name: mbedtls_x509
 
-  # Wiseconnect SDK 3.xx.xx components
-  - name: sl_si91x_trng
+    # Wiseconnect SDK 3.xx.xx components
+    - name: sl_si91x_trng
 
 conflicts:
-  - name: matter_crypto_psa_siwx917
+    - name: matter_crypto_psa_siwx917
 
 source:
-  # tinycrypt source
-  - path: third_party/matter_sdk/src/platform/silabs/SiWx/CHIPCryptoPALTinyCrypt.cpp
-  - path: third_party/matter_support/tinycrypt/src/ecc.c
-  - path: third_party/matter_support/tinycrypt/src/ecc_dh.c
-  - path: third_party/matter_support/tinycrypt/src/ecc_dsa.c
-  - path: third_party/matter_support/tinycrypt/src/tinycrypt_util.c
+    # tinycrypt source
+    - path: third_party/matter_sdk/src/platform/silabs/SiWx/CHIPCryptoPALTinyCrypt.cpp
+    - path: third_party/matter_support/tinycrypt/src/ecc.c
+    - path: third_party/matter_support/tinycrypt/src/ecc_dh.c
+    - path: third_party/matter_support/tinycrypt/src/ecc_dsa.c
+    - path: third_party/matter_support/tinycrypt/src/tinycrypt_util.c
 
 include:
-  - path: third_party/matter_sdk/src/platform/silabs/SiWx
-    file_list:
-      - path: siwx917-chip-mbedtls-config.h
-  - path: third_party/matter_support/tinycrypt/inc
-    file_list:
-      - path: tinycrypt/ecc.h
-      - path: tinycrypt/ecc_dh.h
-      - path: tinycrypt/ecc_dsa.h
-      - path: tinycrypt/tinycrypt_util.h
+    - path: third_party/matter_sdk/src/platform/silabs/SiWx
+      file_list:
+          - path: siwx917-chip-mbedtls-config.h
+    - path: third_party/matter_support/tinycrypt/inc
+      file_list:
+          - path: tinycrypt/ecc.h
+          - path: tinycrypt/ecc_dh.h
+          - path: tinycrypt/ecc_dsa.h
+          - path: tinycrypt/tinycrypt_util.h
 define:
-  - name: SL_MBEDTLS_USE_TINYCRYPT
-    value: 1
-  # Using user config as a workaround to avoid reworking siwx917-chip-mbedtls-config.h.
-  # siwx917-chip-mbedtls-config.h contains defines necessary for CSA that cannot be moved easily for now.
-  # Using mbedtls_config forces the MBEDTLS_CONFIG_FILE defines to the generated header.
-  - name: MBEDTLS_USER_CONFIG_FILE
-    value: <siwx917-chip-mbedtls-config.h>
+    - name: SL_MBEDTLS_USE_TINYCRYPT
+      value: 1
+    # Using user config as a workaround to avoid reworking siwx917-chip-mbedtls-config.h.
+    # siwx917-chip-mbedtls-config.h contains defines necessary for CSA that cannot be moved easily for now.
+    # Using mbedtls_config forces the MBEDTLS_CONFIG_FILE defines to the generated header.
+    - name: MBEDTLS_USER_CONFIG_FILE
+      value: <siwx917-chip-mbedtls-config.h>

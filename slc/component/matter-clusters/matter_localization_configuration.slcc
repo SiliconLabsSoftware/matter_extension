@@ -1,23 +1,24 @@
 category: Clusters|General
 description: >
-  Implementation of the Localization Configuration Server Cluster.
-  The user has to enable the Localization Configuration Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Localization Configuration Server Cluster. The user
+    has to enable the Localization Configuration Server Cluster in the ZCL
+    Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_localization_configuration
 package: matter
 label: Localization Configuration Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_localization_configuration
+    - name: matter_localization_configuration
 source:
-  - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server/localization-configuration-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server/localization-configuration-cluster.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server
-    file_list:
-      - path: localization-configuration-cluster.h
+    - path: third_party/matter_sdk/src/app/clusters/localization-configuration-server
+      file_list:
+          - path: localization-configuration-cluster.h
 template_contribution:
-  - name: component_catalog
-    value: matter_localization_configuration
+    - name: component_catalog
+      value: matter_localization_configuration

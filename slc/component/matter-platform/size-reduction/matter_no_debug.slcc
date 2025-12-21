@@ -1,6 +1,7 @@
 id: matter_no_debug
 label: Matter No Debug
-description: Introduces defines and configuration settings for no logs/debug capabilities. Reduces image size.
+description: Introduces defines and configuration settings for no logs/debug
+  capabilities. Reduces image size.
 package: matter
 category: Platform|Size Reduction
 quality: production

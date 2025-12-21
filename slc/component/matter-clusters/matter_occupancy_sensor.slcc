@@ -1,23 +1,24 @@
 category: Clusters|Measurement
 description: >
-  Implementation of the Occupancy Sensing Server Cluster.
-  The user has to enable the Occupancy Sensing Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Occupancy Sensing Server Cluster. The user has to
+    enable the Occupancy Sensing Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_occupancy_sensor
 package: matter
 label: Occupancy Sensing Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_occupancy_sensor
+    - name: matter_occupancy_sensor
 source:
-  - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server/occupancy-sensor-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server/occupancy-sensor-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server
-    file_list:
-      - path: occupancy-hal.h
-      - path: occupancy-sensor-server.h
+    - path: third_party/matter_sdk/src/app/clusters/occupancy-sensor-server
+      file_list:
+          - path: occupancy-hal.h
+          - path: occupancy-sensor-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_occupancy_sensor
+    - name: component_catalog
+      value: matter_occupancy_sensor

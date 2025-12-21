@@ -75,7 +75,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 include:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
     file_list:

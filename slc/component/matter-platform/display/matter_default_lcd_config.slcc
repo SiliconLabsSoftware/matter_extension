@@ -16,7 +16,7 @@ requires:
     condition:
       - hardware_board_supports_wstk_lcd
 
-# There is no generic LCD support component provided with 917 boards. Keep a condition for each board that supports it for now
+  # There is no generic LCD support component provided with 917 boards. Keep a condition for each board that supports it for now
   - name: matter_lcd_917SOC
     condition:
       - brd4338a
@@ -27,7 +27,7 @@ requires:
     condition:
       - brd4343a
 
-# Keep this requirement under matter_lcd_917SOC's
+  # Keep this requirement under matter_lcd_917SOC's
   - name: matter_qr_code
     condition:
       - matter_lcd_917SOC

@@ -1,11 +1,13 @@
 category: Matter|Examples
 package: matter
 description: >
-  Provides example component for a Dishwasher application. This component should be 
-  included in all Dishwasher applications to help resolve SLC dependencies. Only applicable to Dishwasher applications.
+    Provides example component for a Dishwasher application. This component
+    should be
+    included in all Dishwasher applications to help resolve SLC dependencies.
+    Only applicable to Dishwasher applications.
 id: matter_dishwasher
 quality: production
 provides:
-  - name: matter_dishwasher
+    - name: matter_dishwasher
 ui_hints:
-  visibility: never
+    visibility: never

@@ -1,6 +1,7 @@
 id: matter_peripherals_917soc
 label: Peripherals Component
-description: Peripheral support for Matter Platform certification testing with platform-template app on 917 SOC boards
+description: Peripheral support for Matter Platform certification testing with
+  platform-template app on 917 SOC boards
 package: matter
 category: "Matter|Platform"
 quality: production

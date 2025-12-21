@@ -60,7 +60,7 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
- # - id: matter_shell
+  # - id: matter_shell
   - id: matter_log_rtt
 
   - id: matter_default_lcd_config

@@ -1,7 +1,9 @@
 label: window-app-series-2
 quality: production
 package: matter
-description: Solution containing both a bootloader and a Matter over Thread Window App Example
+description:
+  Solution containing both a bootloader and a Matter over Thread Window App
+  Example
 project:
   - path: ./window-app.slcp
     id: application

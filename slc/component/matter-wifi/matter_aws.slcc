@@ -33,7 +33,7 @@ config_file:
 define:
   - name: SL_MATTER_ENABLE_AWS
     value: "1"
-# TODO: Rename USE_AWS to reflect proper namespace/context.
+  # TODO: Rename USE_AWS to reflect proper namespace/context.
   - name: USE_AWS
     value: "1"
   - name: SL_MATTER_AWS_NVM_EMBED_CERT
@@ -87,5 +87,5 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/mqtt/stack/mqtt.c
 
 toolchain_settings:
-- option: gcc_compiler_option
-  value: -Wno-unused-variable
+  - option: gcc_compiler_option
+    value: -Wno-unused-variable

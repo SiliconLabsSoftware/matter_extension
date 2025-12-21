@@ -1,23 +1,24 @@
 category: Clusters|General
 description: >
-  Implementation of the Descriptor Cluster.
-  The user has to enable the Descriptor Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Descriptor Cluster. The user has to enable the
+    Descriptor Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_descriptor
 package: matter
 label: Descriptor Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_descriptor
+    - name: matter_descriptor
 source:
-  - path: third_party/matter_sdk/src/app/clusters/descriptor/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.cpp
+    - path: third_party/matter_sdk/src/app/clusters/descriptor/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/descriptor/descriptor-cluster.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/descriptor
-    file_list:
-      - path: descriptor-cluster.h
+    - path: third_party/matter_sdk/src/app/clusters/descriptor
+      file_list:
+          - path: descriptor-cluster.h
 template_contribution:
-  - name: component_catalog
-    value: matter_descriptor
+    - name: component_catalog
+      value: matter_descriptor

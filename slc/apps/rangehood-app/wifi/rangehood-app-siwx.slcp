@@ -50,7 +50,7 @@ component:
   - id: segger_rtt
   - id: matter_on_off
   - id: matter_fan_control
-  
+
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: toolchain_gcc_common
@@ -59,7 +59,7 @@ component:
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_lwip
-    
+
   - id: matter_rangehood
 
   - id: wifi_resources
@@ -115,8 +115,8 @@ include:
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/rangehood-app/rangehood-app-common/include
     file_list:
-    - path: ExtractorHoodEndpoint.h
-    - path: LightEndpoint.h
+      - path: ExtractorHoodEndpoint.h
+      - path: LightEndpoint.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/rangehood-app/silabs/src/AppTask.cpp

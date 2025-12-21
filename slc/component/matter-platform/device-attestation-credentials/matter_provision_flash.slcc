@@ -1,6 +1,9 @@
 id: matter_provision_flash
 label: Flash Attestation Certificate provisioning configuration
-description: Flash Configuration of the Attestation Certificate provisioning. Set ENABLE_EXAMPLE_CREDENTIALS in this component's configuration to select certificate provisioning options.
+description:
+  Flash Configuration of the Attestation Certificate provisioning. Set
+  ENABLE_EXAMPLE_CREDENTIALS in this component's configuration to select
+  certificate provisioning options.
 package: matter
 category: Platform|Security
 quality: production

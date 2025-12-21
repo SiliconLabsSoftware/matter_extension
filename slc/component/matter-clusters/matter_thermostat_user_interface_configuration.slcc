@@ -1,18 +1,20 @@
 category: Clusters|HVAC
 description: >
-  Implementation of the Thermostat User Interface Configuration Server Cluster.
-  The user has to enable the Thermostat User Interface Configuration Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Thermostat User Interface Configuration Server
+    Cluster. The user has to enable the Thermostat User Interface Configuration
+    Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable
+    this functionality.
 id: matter_thermostat_user_interface_configuration
 package: matter
 label: Thermostat User Interface Configuration Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_thermostat_user_interface_configuration
+    - name: matter_thermostat_user_interface_configuration
 source:
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/thermostat-user-interface-configuration-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/thermostat-user-interface-configuration-server.cpp
 template_contribution:
-  - name: component_catalog
-    value: matter_thermostat_user_interface_configuration
+    - name: component_catalog
+      value: matter_thermostat_user_interface_configuration

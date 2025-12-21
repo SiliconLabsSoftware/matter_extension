@@ -1,22 +1,23 @@
 category: Clusters|General
 description: >
-  Implementation of the Groups Server Cluster.
-  The user has to enable the Groups Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Groups Server Cluster. The user has to enable the
+    Groups Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to
+    enable this functionality.
 id: matter_groups
 package: matter
 label: Groups Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_groups
+    - name: matter_groups
 source:
-  - path: third_party/matter_sdk/src/app/clusters/groups-server/groups-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/groups-server/groups-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/groups-server
-    file_list:
-      - path: groups-server.h
+    - path: third_party/matter_sdk/src/app/clusters/groups-server
+      file_list:
+          - path: groups-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_groups
+    - name: component_catalog
+      value: matter_groups

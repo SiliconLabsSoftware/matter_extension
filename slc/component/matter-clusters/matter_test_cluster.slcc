@@ -1,18 +1,19 @@
 category: Clusters|CHIP
 description: >
-  Implementation of the Unit Testing Server Cluster.
-  The user has to enable the Unit Testing Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Unit Testing Server Cluster. The user has to enable
+    the Unit Testing Server Cluster in the ZCL Advanced Platform (ZAP) tool in
+    order to enable this functionality.
 id: matter_test_cluster
 package: matter
 label: Unit Testing Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_test_cluster
+    - name: matter_test_cluster
 source:
-  - path: third_party/matter_sdk/src/app/clusters/test-cluster-server/test-cluster-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/test-cluster-server/test-cluster-server.cpp
 template_contribution:
-  - name: component_catalog
-    value: matter_test_cluster
+    - name: component_catalog
+      value: matter_test_cluster

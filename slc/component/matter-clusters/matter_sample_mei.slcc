@@ -1,22 +1,23 @@
 category: Clusters|General
 description: >
-  Implementation of the Sample MEI Server Cluster.
-  The user has to enable the Sample MEI Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Sample MEI Server Cluster. The user has to enable the
+    Sample MEI Server Cluster in the ZCL Advanced Platform (ZAP) tool in order
+    to enable this functionality.
 id: matter_sample_mei
 package: matter
 label: Sample MEI Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_sample_mei
+    - name: matter_sample_mei
 source:
-  - path: third_party/matter_sdk/src/app/clusters/sample-mei-server/sample-mei-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/sample-mei-server/sample-mei-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/sample-mei-server
-    file_list:
-      - path: sample-mei-server.h
+    - path: third_party/matter_sdk/src/app/clusters/sample-mei-server
+      file_list:
+          - path: sample-mei-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_sample_mei
+    - name: component_catalog
+      value: matter_sample_mei

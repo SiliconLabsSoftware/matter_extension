@@ -1,22 +1,23 @@
 category: Clusters|General
 description: >
-  Implementation of the Mode Select Server Cluster.
-  The user has to enable the Mode Select Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Mode Select Server Cluster. The user has to enable the
+    Mode Select Server Cluster in the ZCL Advanced Platform (ZAP) tool in order
+    to enable this functionality.
 id: matter_mode_select
 package: matter
 label: Mode Select Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_mode_select
+    - name: matter_mode_select
 source:
-  - path: third_party/matter_sdk/src/app/clusters/mode-select-server/mode-select-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/mode-select-server/mode-select-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/mode-select-server
-    file_list:
-      - path: supported-modes-manager.h
+    - path: third_party/matter_sdk/src/app/clusters/mode-select-server
+      file_list:
+          - path: supported-modes-manager.h
 template_contribution:
-  - name: component_catalog
-    value: matter_mode_select
+    - name: component_catalog
+      value: matter_mode_select

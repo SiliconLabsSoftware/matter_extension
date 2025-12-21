@@ -1,7 +1,9 @@
 label: light-switch-app-series-2-internal
 quality: production
 package: matter
-description: Solution containing both a bootloader and a Matter over Thread Light Switch App Example
+description:
+  Solution containing both a bootloader and a Matter over Thread Light Switch
+  App Example
 project:
   - path: ./light-switch-app.slcp
     id: application

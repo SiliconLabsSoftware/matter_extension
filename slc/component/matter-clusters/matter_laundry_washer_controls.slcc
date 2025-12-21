@@ -1,23 +1,24 @@
 category: Clusters|General
 description: >
-  Implementation of the Laundry Washer Mode Server Cluster.
-  The user has to enable the Laundry Washer Mode Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Laundry Washer Mode Server Cluster. The user has to
+    enable the Laundry Washer Mode Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_laundry_washer_controls
 package: matter
 label: Laundry Washer Mode Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_laundry_washer_controls
+    - name: matter_laundry_washer_controls
 source:
-  - path: third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/laundry-washer-controls-server.cpp
+    - path: third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/laundry-washer-controls-server.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server
-    file_list:
-      - path: laundry-washer-controls-delegate.h
-      - path: laundry-washer-controls-server.h
+    - path: third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server
+      file_list:
+          - path: laundry-washer-controls-delegate.h
+          - path: laundry-washer-controls-server.h
 template_contribution:
-  - name: component_catalog
-    value: matter_laundry_washer_controls
+    - name: component_catalog
+      value: matter_laundry_washer_controls

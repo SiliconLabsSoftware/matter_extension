@@ -119,10 +119,10 @@ include:
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/include
     file_list:
-    - path: CookEndpoints.h
-    - path: CookTopEndpoint.h
-    - path: CookSurfaceEndpoint.h
-    - path: OvenEndpoint.h
+      - path: CookEndpoints.h
+      - path: CookTopEndpoint.h
+      - path: CookSurfaceEndpoint.h
+      - path: OvenEndpoint.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/AppTask.cpp

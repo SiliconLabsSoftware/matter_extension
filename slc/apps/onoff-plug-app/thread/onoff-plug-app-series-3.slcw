@@ -1,7 +1,9 @@
 label: onoff-plug-app-series-3
 quality: production
 package: matter
-description: Solution containing both a bootloader and a Matter over Thread OnOff Plug App Example on Series 3.
+description:
+  Solution containing both a bootloader and a Matter over Thread OnOff Plug
+  App Example on Series 3.
 project:
   - path: ./onoff-plug-app.slcp
     id: application

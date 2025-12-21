@@ -119,7 +119,7 @@ define:
     value: "4092"
   - name: SI917_SOC
     value: 1
-  
+
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
     value: "0"
@@ -137,7 +137,6 @@ configuration:
   - name: CHIP_CONFIG_ENABLE_ICD_DSLS
     value: 1
     condition: [matter_icd_core]
-
 
   - name: SL_IDLE_MODE_DURATION_S
     value: "600"
@@ -162,7 +161,7 @@ configuration:
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
     condition: [matter_icd_core]
-    
+
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"

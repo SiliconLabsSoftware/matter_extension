@@ -1,7 +1,9 @@
 label: thermostat-wf200
 quality: production
 package: matter
-description: Matter solution containing both a Matter bootloader and Thermostat over WiFi Example
+description:
+  Matter solution containing both a Matter bootloader and Thermostat over WiFi
+  Example
 project:
   - path: ./thermostat-wf200.slcp
     id: application

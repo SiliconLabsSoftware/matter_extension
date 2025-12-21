@@ -2,28 +2,28 @@ category: Matter|Core
 description: server_cluster
 id: server_cluster
 include:
--   path: third_party/matter_sdk/src/app/server-cluster
-    file_list:
-    -   path: AttributeListBuilder.h
-    -   path: DefaultServerCluster.h
-    -   path: ServerClusterContext.h
-    -   path: ServerClusterInterface.h
-    -   path: ServerClusterInterfaceRegistry.h
-    -   path: SingleEndpointServerClusterRegistry.h
-    -   path: OptionalAttributeSet.h
+    - path: third_party/matter_sdk/src/app/server-cluster
+      file_list:
+          - path: AttributeListBuilder.h
+          - path: DefaultServerCluster.h
+          - path: ServerClusterContext.h
+          - path: ServerClusterInterface.h
+          - path: ServerClusterInterfaceRegistry.h
+          - path: SingleEndpointServerClusterRegistry.h
+          - path: OptionalAttributeSet.h
 label: server_cluster
 package: matter
 provides:
--   name: matter_server_cluster
+    - name: matter_server_cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 source:
--   path: third_party/matter_sdk/src/app/server-cluster/AttributeListBuilder.cpp
--   path: third_party/matter_sdk/src/app/server-cluster/DefaultServerCluster.cpp
--   path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterface.cpp
--   path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterfaceRegistry.cpp
--   path: third_party/matter_sdk/src/app/server-cluster/SingleEndpointServerClusterRegistry.cpp
+    - path: third_party/matter_sdk/src/app/server-cluster/AttributeListBuilder.cpp
+    - path: third_party/matter_sdk/src/app/server-cluster/DefaultServerCluster.cpp
+    - path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterface.cpp
+    - path: third_party/matter_sdk/src/app/server-cluster/ServerClusterInterfaceRegistry.cpp
+    - path: third_party/matter_sdk/src/app/server-cluster/SingleEndpointServerClusterRegistry.cpp
 ui_hints:
     visibility: never

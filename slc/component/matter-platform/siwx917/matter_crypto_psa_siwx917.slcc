@@ -1,94 +1,94 @@
 id: matter_crypto_psa_siwx917
 label: Matter MbedTLS and PSA Integration
 description: >
-  mbedTLS and PSA for SiWx917 SoC
+    mbedTLS and PSA for SiWx917 SoC
 package: matter
 category: "Matter-WiFi|Platform|PSA"
 quality: production
 metadata:
-  sbom:
-    license: Zlib
+    sbom:
+        license: Zlib
 
 provides:
-  - name: matter_crypto_psa_siwx917
+    - name: matter_crypto_psa_siwx917
 
 conflicts:
-  - name: matter_crypto_tinycrypt_siwx917
+    - name: matter_crypto_tinycrypt_siwx917
 
 requires:
-  # PSA crypto components
-  - name: psa_its
-  - name: psa_crypto_ccm
-  - name: psa_crypto_ecc
-  - name: psa_crypto_ecdh
-  - name: psa_crypto_ecdsa
-  - name: psa_crypto_hkdf
-  - name: psa_crypto_sha256
+    # PSA crypto components
+    - name: psa_its
+    - name: psa_crypto_ccm
+    - name: psa_crypto_ecc
+    - name: psa_crypto_ecdh
+    - name: psa_crypto_ecdsa
+    - name: psa_crypto_hkdf
+    - name: psa_crypto_sha256
 
-  # Mbedtls components
-  - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
-  - name: mbedtls_base64
-  - name: mbedtls_cmac
-  - name: mbedtls_ccm
-  - name: mbedtls_ecc
-  - name: mbedtls_x509
-  - name: mbedtls_version
-  - name: mbedtls_pkcs5
+    # Mbedtls components
+    - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
+    - name: mbedtls_base64
+    - name: mbedtls_cmac
+    - name: mbedtls_ccm
+    - name: mbedtls_ecc
+    - name: mbedtls_x509
+    - name: mbedtls_version
+    - name: mbedtls_pkcs5
 
-  # Wiseconnect SDK 3.xx.xx components
-  - name: psa_driver
-  - name: psa_crypto
-  - name: psa_crypto_ecc_secp192r1
-  - name: psa_crypto_ecc_secp224r1
-  - name: psa_crypto_ecc_secp256r1
-  - name: psa_crypto_ecc_secp384r1
-  - name: psa_crypto_ecc_secp521r1
-  - name: psa_crypto_common
-  - name: psa_crypto_source
-  - name: psa_crypto_trng
-  - name: sl_si91x_psa_crypto
-  - name: sl_si91x_psa_trng
-  - name: sl_si91x_trng
-  - name: sl_si91x_psa_aead
-  - name: sl_si91x_psa_ecdh
-  - name: sl_si91x_ecdh
-  - name: sl_si91x_psa_hmac
-  - name: sl_si91x_psa_mac
-  - name: sl_si91x_psa_aes
-  - name: sl_si91x_psa_wrap
-  - name: sl_si91x_psa_ecdsa
-  - name: sl_si91x_psa_sha
-  - name: sl_si91x_crypto_multithread
+    # Wiseconnect SDK 3.xx.xx components
+    - name: psa_driver
+    - name: psa_crypto
+    - name: psa_crypto_ecc_secp192r1
+    - name: psa_crypto_ecc_secp224r1
+    - name: psa_crypto_ecc_secp256r1
+    - name: psa_crypto_ecc_secp384r1
+    - name: psa_crypto_ecc_secp521r1
+    - name: psa_crypto_common
+    - name: psa_crypto_source
+    - name: psa_crypto_trng
+    - name: sl_si91x_psa_crypto
+    - name: sl_si91x_psa_trng
+    - name: sl_si91x_trng
+    - name: sl_si91x_psa_aead
+    - name: sl_si91x_psa_ecdh
+    - name: sl_si91x_ecdh
+    - name: sl_si91x_psa_hmac
+    - name: sl_si91x_psa_mac
+    - name: sl_si91x_psa_aes
+    - name: sl_si91x_psa_wrap
+    - name: sl_si91x_psa_ecdsa
+    - name: sl_si91x_psa_sha
+    - name: sl_si91x_crypto_multithread
 
 source:
-  - path: third_party/matter_sdk/src/crypto/CHIPCryptoPAL.h
-  - path: third_party/matter_sdk/src/crypto/CHIPCryptoPAL.cpp
-  - path: third_party/matter_sdk/src/crypto/CHIPCryptoPALPSA.h
-  - path: third_party/matter_sdk/src/crypto/PersistentStorageOperationalKeystore.h
-  - path: third_party/matter_sdk/src/crypto/PersistentStorageOperationalKeystore.cpp
-  - path: third_party/matter_sdk/src/crypto/RandUtils.h
-  - path: third_party/matter_sdk/src/crypto/RandUtils.cpp
-  - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.h
-  - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.cpp
-  - path: third_party/matter_sdk/src/crypto/PSASessionKeystore.h
-  - path: third_party/matter_sdk/src/crypto/PSASessionKeystore.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
+    - path: third_party/matter_sdk/src/crypto/CHIPCryptoPAL.h
+    - path: third_party/matter_sdk/src/crypto/CHIPCryptoPAL.cpp
+    - path: third_party/matter_sdk/src/crypto/CHIPCryptoPALPSA.h
+    - path: third_party/matter_sdk/src/crypto/PersistentStorageOperationalKeystore.h
+    - path: third_party/matter_sdk/src/crypto/PersistentStorageOperationalKeystore.cpp
+    - path: third_party/matter_sdk/src/crypto/RandUtils.h
+    - path: third_party/matter_sdk/src/crypto/RandUtils.cpp
+    - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.h
+    - path: third_party/matter_sdk/src/crypto/PSAOperationalKeystore.cpp
+    - path: third_party/matter_sdk/src/crypto/PSASessionKeystore.h
+    - path: third_party/matter_sdk/src/crypto/PSASessionKeystore.cpp
+    - path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
 
 include:
-  - path: third_party/matter_sdk/src/crypto
-    file_list:
-      - path: CHIPCryptoPAL.h
-      - path: OperationalKeystore.h
-      - path: SessionKeystore.h
-  - path: third_party/matter_sdk/src/platform/silabs/SiWx
-    file_list:
-      - path: siwx917-chip-mbedtls-config.h
-      - path: siwx917-chip-psa-config.h
+    - path: third_party/matter_sdk/src/crypto
+      file_list:
+          - path: CHIPCryptoPAL.h
+          - path: OperationalKeystore.h
+          - path: SessionKeystore.h
+    - path: third_party/matter_sdk/src/platform/silabs/SiWx
+      file_list:
+          - path: siwx917-chip-mbedtls-config.h
+          - path: siwx917-chip-psa-config.h
 
 define:
-  - name: MBEDTLS_CONFIG_FILE
-    value: \"siwx917-chip-mbedtls-config.h\"
-  - name: MBEDTLS_PSA_CRYPTO_CONFIG_FILE
-    value: \"siwx917-psa-crypto-config.h\"
-  - name: SLI_SI91X_TRNG_DUPLICATE_CHECK
-    value: 0
+    - name: MBEDTLS_CONFIG_FILE
+      value: \"siwx917-chip-mbedtls-config.h\"
+    - name: MBEDTLS_PSA_CRYPTO_CONFIG_FILE
+      value: \"siwx917-psa-crypto-config.h\"
+    - name: SLI_SI91X_TRNG_DUPLICATE_CHECK
+      value: 0

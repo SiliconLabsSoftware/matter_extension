@@ -69,7 +69,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/dishwasher-app/silabs/data_model/dishwasher-thread-app.zap
     directory: common

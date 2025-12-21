@@ -1,8 +1,10 @@
 category: Matter|Examples
 package: matter
 description: >
-  Provides example component for a Fan control application. This component should be 
-  included in all Fan control applications to help resolve SLC dependencies. Only applicable to Fan control applications.
+  Provides example component for a Fan control application. This component
+  should be
+  included in all Fan control applications to help resolve SLC dependencies.
+  Only applicable to Fan control applications.
 id: matter_fan_control_app
 quality: production
 provides:

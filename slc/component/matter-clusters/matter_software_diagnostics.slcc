@@ -1,27 +1,28 @@
 category: Clusters|General
 description: >
-  Implementation of the Software Diagnostics Server Cluster.
-  The user has to enable the Software Diagnostics Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+    Implementation of the Software Diagnostics Server Cluster. The user has to
+    enable the Software Diagnostics Server Cluster in the ZCL Advanced Platform
+    (ZAP) tool in order to enable this functionality.
 id: matter_software_diagnostics
 package: matter
 label: Software Diagnostics Server Cluster
 quality: production
 metadata:
-  sbom:
-    license: "Apache 2.0"
+    sbom:
+        license: "Apache 2.0"
 provides:
-  - name: matter_software_diagnostics
+    - name: matter_software_diagnostics
 source:
-  - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/CodegenIntegration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/software-diagnostics-logic.cpp
-  - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/software-fault-listener.cpp
+    - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/CodegenIntegration.cpp
+    - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/software-diagnostics-logic.cpp
+    - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server/software-fault-listener.cpp
 include:
-  - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server
-    file_list:
-      - path: software-diagnostics-cluster.h
-      - path: software-diagnostics-logic.h
-      - path: software-fault-listener.h
-      - path: SoftwareDiagnosticsTestEventTriggerHandler.h
+    - path: third_party/matter_sdk/src/app/clusters/software-diagnostics-server
+      file_list:
+          - path: software-diagnostics-cluster.h
+          - path: software-diagnostics-logic.h
+          - path: software-fault-listener.h
+          - path: SoftwareDiagnosticsTestEventTriggerHandler.h
 template_contribution:
-  - name: component_catalog
-    value: matter_software_diagnostics
+    - name: component_catalog
+      value: matter_software_diagnostics

@@ -76,7 +76,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/sl_cmp_config.h
     condition: [matter_zigbee_multiprotocol_common]
@@ -172,8 +172,8 @@ configuration:
   - name: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
     value: 1088
     condition: [matter_zigbee_multiprotocol_common, device_series_2]
-    
-# CMP configs for Zigbee Matter
+
+  # CMP configs for Zigbee Matter
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
     value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
     condition: [matter_zigbee_multiprotocol_common]
@@ -207,7 +207,7 @@ configuration:
   - name: SL_LEGACY_HAL_DISABLE_WATCHDOG
     value: 1
     condition: [matter_zigbee_multiprotocol_common]
-# series 3 requires more stack in zb stacks
+  # series 3 requires more stack in zb stacks
   - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
     value: 1500
     condition: [device_series_3, matter_zigbee_multiprotocol_common]
