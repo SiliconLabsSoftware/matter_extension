@@ -37,7 +37,24 @@ runs:
     - name: Install slc-cli
       shell: bash
       run: |
-        slt install slc-cli
+        MAX_ATTEMPTS=3
+        RETRY_DELAY=30
+        
+        for attempt in $(seq 1 $MAX_ATTEMPTS); do
+          echo "Attempt $attempt of $MAX_ATTEMPTS..."
+          if slt install slc-cli; then
+            echo "Successfully installed slc-cli"
+            exit 0
+          fi
+          
+          if [ $attempt -lt $MAX_ATTEMPTS ]; then
+            echo "Failed. Retrying in ${RETRY_DELAY}s..."
+            sleep $RETRY_DELAY
+          fi
+        done
+        
+        echo "Failed to install slc-cli after $MAX_ATTEMPTS attempts"
+        exit 1
     
     - name: Set Environment Variables
       shell: bash
