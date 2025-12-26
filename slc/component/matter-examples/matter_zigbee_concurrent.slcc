@@ -15,5 +15,7 @@ requires:
 define:
   - name: SL_MATTER_ZIGBEE_CMP
     value: "1"
+  - name: SL_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_DEFAULT_ENABLED
+    value: "1"
 conflicts:
   - name: matter_zigbee_sequential
