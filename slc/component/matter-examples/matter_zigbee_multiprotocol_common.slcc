@@ -30,7 +30,10 @@ include:
       - path: MultiProtocolDataModelHelper.h
       - path: sl-matter-attribute-storage.h
       - path: ZigbeeCallbacks.h
-
+define:
+  - name: SL_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_DEFAULT_ENABLED
+    value: "1"
+    condition: [device_series_2]
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/cmp/MultiProtocolDataModelHelper.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/cmp/ZigbeeCallbacks.cpp
