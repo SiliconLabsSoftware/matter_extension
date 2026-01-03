@@ -86,6 +86,11 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
+                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "arguments": ["--output_suffix lto",
+                              "--with_app wiseconnect_toolchain_gcc_lto"]
+            },
+            {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
                               "--with_app matter_platform_low_power",
