@@ -2,7 +2,8 @@ category: Matter Zigbee CMP Application
 label: Matter Zigbee common
 package: matter
 description: >
-  Provides zigbee to matter data model link for CMP applications.
+  Provides the common data model and integration logic used by Matter–Zigbee multiprotocol (CMP) applications.
+  This component links Zigbee clusters and callbacks to the Matter data model, enabling coordinated behavior and state synchronization between the two stacks.
 id: matter_zigbee_multiprotocol_common
 quality: production
 metadata:
