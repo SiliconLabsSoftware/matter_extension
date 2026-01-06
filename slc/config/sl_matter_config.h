@@ -58,6 +58,12 @@
 #define SL_MATTER_CLI_ARG_PARSER 1
 #endif
 
+// <q SL_MATTER_DEBUG_WATCHDOG_ENABLE> Enable a Watchdog with debug features
+// <i> Default: 0
+#ifndef SL_MATTER_DEBUG_WATCHDOG_ENABLE
+#define SL_MATTER_DEBUG_WATCHDOG_ENABLE 0
+#endif
+
 // <o CHIP_DEVICE_CONFIG_MAX_DISCOVERED_IP_ADDRESSES> Define the default number of ip addresses to discover
 // <i> Default: 5
 // <i> Maximum number of IP addresses that can be discovered during device commissioning
