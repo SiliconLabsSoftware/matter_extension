@@ -7,6 +7,7 @@ on:
 jobs:
   check_testing_header:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'silabs-matter-ci-bot[bot]' }}
     steps:
       - name: Check for "**Testing Done:**" section in PR
         id: check-testing
