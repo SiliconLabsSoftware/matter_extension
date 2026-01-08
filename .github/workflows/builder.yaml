@@ -59,9 +59,9 @@ jobs:
                       out/*/*/artifact/**
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
-                      out/brd4187c/**/build/debug/*.map
-                      out/brd4407a/**/build/debug/*.map  
-                      out/brd4338a/**/build/debug/*.map
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4407a/**/build/debug/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
                       !out/**/*-bootloader/build/debug/*.map
                       !out/**/*-copy-sources/*/build/debug/*.map
                       !out/*/*-copy-sources/artifact/**
