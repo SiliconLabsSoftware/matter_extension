@@ -172,7 +172,7 @@ def run_code_size_analysis() {
                 rm -f *.json
                 
                 echo "Available map files:"
-                map_files_found=\$(find . -name "*.map" | sort)
+                map_files_found=\$(find . -name "*.map" | grep -v "sqa-artifacts" | sort)
                 if [ -z "$map_files_found" ]; then
                     echo "ERROR: No map files found"
                     exit 1
