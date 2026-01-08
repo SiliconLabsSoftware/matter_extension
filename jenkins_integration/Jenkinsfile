@@ -111,7 +111,7 @@ pipeline
         }
         stage('Code Size Analysis') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "code_size_fix" }
             }
             steps {
                 script {
