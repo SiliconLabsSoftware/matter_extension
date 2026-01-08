@@ -17,7 +17,32 @@ jobs:
         branch: [release_2.8-1.5] 
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ matrix.branch }}
+          fetch-depth: 0
+
+      - name: Check for recent changes
+        id: check_changes
+        env:
+          BRANCH: ${{ matrix.branch }}
+        run: |
+          commit_count=$(git rev-list --count --since="24 hours ago" HEAD 2>/dev/null || echo "0")
+          
+          echo "Commits in last 24 hours: $commit_count"
+          echo "has_changes=$([ "$commit_count" -gt 0 ] && echo "true" || echo "false")" >> $GITHUB_OUTPUT
+          
+          if [ "$commit_count" -gt 0 ]; then
+            echo "Found $commit_count commit(s) in the last 24 hours. Will trigger build."
+            echo "Recent commits:"
+            git log --since="24 hours ago" --oneline | head -10
+          else
+            echo "No commits found in the last 24 hours. Skipping build trigger."
+          fi
+          
       - name: Trigger Dev Apps Build on ${{ matrix.branch }}
+        if: steps.check_changes.outputs.has_changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ matrix.branch }}
