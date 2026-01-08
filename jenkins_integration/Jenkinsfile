@@ -76,8 +76,6 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
-                    echo "Cleaning up artifact directories from previous builds"
-                    sh 'rm -rf dev-artifacts-* sqa-artifacts'       
                     sh 'git submodule update --init --checkout third_party/simplicity_sdk'
                     sh 'git submodule update --init --checkout third_party/wifi_sdk'
                     sisdk_build_number = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
@@ -111,7 +109,7 @@ pipeline
         }
         stage('Code Size Analysis') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "code_size_fix" }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
