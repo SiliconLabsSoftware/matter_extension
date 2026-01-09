@@ -43,7 +43,7 @@ if matterExtensionVersion is None:
     print("Please verify matter.slce file exists and contains a version line.")
     sys.exit(1)
 
-asset_prefix = "asset://extension.matter_"+matterExtensionVersion+"/"
+asset_prefix = "asset://extension.matter_"+matterExtensionVersion+"/"+"demos/"
 
 if not os.path.exists(out_folder_dir):
     print("ERROR: Binaries output folder can't be found!")
