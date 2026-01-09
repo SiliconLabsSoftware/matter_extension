@@ -287,7 +287,7 @@ def _upload_individual_artifacts(extracted_folder, branch_name, build_number):
 
 def _create_filtered_artifact(artifact_file, artifact_name):
     """
-    Create a filtered version of the artifact containing only .s37 and .asset files.
+    Create a filtered version of the artifact containing only .s37, .asset, and .rps files.
     The filtered artifact has the structure: extension.matter<version>/demos/<contents>
     
     Args:
@@ -316,13 +316,13 @@ def _create_filtered_artifact(artifact_file, artifact_name):
         base_folder = f"extension.matter.{version}/demos"
         
         print(f"Creating filtered artifact {filtered_artifact_name} with structure {base_folder}/")
-        print(f"Including only .s37 and .asset files")
+        print(f"Including only .s37, .asset, and .rps files")
         
         with zipfile.ZipFile(artifact_file, 'r') as source_zip:
             with zipfile.ZipFile(filtered_artifact_file, 'w', zipfile.ZIP_DEFLATED) as filtered_zip:
                 for item in source_zip.infolist():
-                    # Check if file ends with .s37 or .asset
-                    if item.filename.endswith('.s37') or item.filename.endswith('.asset'):
+                    # Check if file ends with .s37, .asset, or .rps
+                    if item.filename.endswith('.s37') or item.filename.endswith('.asset') or item.filename.endswith('.rps'):
                         # Read the file data
                         data = source_zip.read(item.filename)
                         # Create new path: extension.matter.<version>/demos/<original_path>
@@ -343,7 +343,7 @@ def _create_filtered_artifact(artifact_file, artifact_name):
 def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_number, sqa=False):
     """
     Upload the merged artifact to UBAI and Artifactory.
-    Also creates and uploads a filtered version (containing only .s37 and .asset files) to Artifactory only.
+    Also creates and uploads a filtered version (containing only .s37, .asset, and .rps files) to Artifactory only.
     
     Args:
         artifact_file (str): Path to the artifact file
