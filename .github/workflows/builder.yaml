@@ -43,7 +43,7 @@ jobs:
                   build-type: ${{ inputs.build-type }}
 
             - name: Create asset files
-            #   if: startsWith(github.ref_name, 'release_')
+              if: startsWith(github.ref_name, 'release_')
               run: |
                   find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do
                       echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
