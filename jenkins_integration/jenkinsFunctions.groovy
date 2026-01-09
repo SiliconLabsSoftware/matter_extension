@@ -86,8 +86,8 @@ def run_code_size_analysis() {
                             brd="BRD4338A"
                             ;;
                         *)
-                            echo "ERROR: Unsupported board in path: $map_file_path"
-                            return 1
+                            echo "Skipping the codesize Analysis for board in path: $map_file_path"
+                            return 0
                             ;;
                     esac
                     
