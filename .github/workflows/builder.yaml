@@ -57,10 +57,12 @@ jobs:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
                       out/*/*/artifact/**
-                      out/**/build/debug/*.out
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
+                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.out' || '' }}
+                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
                       !out/**/*-bootloader/build/debug/*.map
                       !out/**/*-bootloader/build/debug/*.out
                       !out/**/*-copy-sources/**
