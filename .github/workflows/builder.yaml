@@ -28,7 +28,7 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v5
               with:
-                  submodules: "true" 
+                  submodules: "true"
             - name: Install tools
               uses: ./.github/actions/install-tools
             - name: Build ${{ inputs.example-app }}
@@ -57,13 +57,12 @@ jobs:
                   name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
                   path: |
                       out/*/*/artifact/**
+                      out/**/build/debug/*.out
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4407a/**/build/debug/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
                       !out/**/*-bootloader/build/debug/*.map
-                      !out/**/*-copy-sources/*/build/debug/*.map
-                      !out/*/*-copy-sources/artifact/**
+                      !out/**/*-bootloader/build/debug/*.out
+                      !out/**/*-copy-sources/**
                   if-no-files-found: warn
                   overwrite: true
