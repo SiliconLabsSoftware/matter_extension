@@ -180,6 +180,7 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
   - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp
   - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/SilabsPlatform.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/ChipDie.cpp
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"
