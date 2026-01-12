@@ -133,12 +133,12 @@
         ],
         "zigbee-matter-light":  [
               {
-                  "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                  "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
                   "arguments": ["--output_suffix sequential-ota-2","--with_app matter_zigbee_sequential", "-pids application",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
               },
               {
-                  "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
+                  "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
                   "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
                                 "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
               },
