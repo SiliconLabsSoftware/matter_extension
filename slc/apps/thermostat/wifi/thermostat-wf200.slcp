@@ -125,7 +125,7 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
-  - name: GSDK_WF200_BUILD
+  - name: SISDK_WF200_BUILD
     value: "1"
   - name: NDEBUG
     value: "1"
