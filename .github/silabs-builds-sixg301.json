@@ -156,6 +156,18 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-boot-metrics",
+                              "--with_app matter_zigbee_concurrent",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix sequential-boot-metrics",
+                              "--with_app matter_zigbee_sequential",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-ble",
                               "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             }
