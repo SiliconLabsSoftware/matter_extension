@@ -7,7 +7,7 @@ on:
 jobs:
   build-rcp:
     runs-on: ubuntu-latest
-    container: ${{ (github.ref == 'refs/heads/main') && 'ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2' || '' }}
+    container: ${{ ((github.ref == 'refs/heads/main') || (github.ref == 'refs/heads/task/workflow_ot_rcp')) && 'ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2' || '' }}
     
     steps:
       
