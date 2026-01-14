@@ -11,6 +11,7 @@ metadata:
 
 provides:
   - name: matter_crypto_tinycrypt_siwx917
+  - name: matter_crypto_siwx917
 
 requires:
   # mbedTLS components
