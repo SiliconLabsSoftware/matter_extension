@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+# Project general coding standards
+
+- Never use emojis.
+- Keep the code clean and readable.
+- Keep comments short and concise.
+- Avoid redundant comments and pieces of code.
+- Avoid filler in conversation, stick to the essential.
+- If the user asks for something ambiguous, ask for clarification before proceeding.
+- Avoid beeing overly assertive in your responses, don't claim facts unless verifiable and verified.
+- If uncertain about an outcome, be transparent in your response and provide way to verify if possible.

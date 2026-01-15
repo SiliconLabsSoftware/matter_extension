@@ -1,0 +1,148 @@
+---
+description: Enforces C++ style guidelines for the project.
+globs: *.cpp,*.h,*.ipp,*.hpp
+alwaysApply: false
+---
+# Project C++ Coding Standards
+
+Stick to these rules to keep the code consistent, readable, and optimized for
+embedded platforms (Silabs Series 2/3, SiWx917).
+
+## Naming Conventions
+
+- Use PascalCase for classes, structs, enums, and methods
+- Use `kConstantName` format for constants (lowercase k prefix, then PascalCase)
+- Use camelCase for local variables and function parameters
+- Use ALL_CAPS_WITH_UNDERSCORES for macros and preprocessor defines
+- Prefix member variables with `m` (e.g., `mMemberVariable`)
+- Prefix static variables with `s` (e.g., `sStaticInstance`)
+
+## Comments and Documentation
+
+- Use Doxygen-style comments for public APIs:
+  ```cpp
+  /**
+   * @brief Short description of the function
+   *
+   * @note Additional notes or important information
+   *
+   * @param paramName Description of parameter
+   *
+   * @retval value Description of return value
+   * @retval otherValue Description of alternative return
+   */
+  ```
+- Write comments that explain **why**, not just **what**
+- Keep inline comments short and on the same line or directly above code
+- Document ownership semantics and lifetime expectations for pointer parameters
+- Use `// TODO:` for tracking incomplete work
+
+## Error Handling
+
+- Use appropriate error types based on context:
+  - `CHIP_ERROR` / `ChipError` - general SDK and platform code
+  - `DataModel::ActionReturnStatus` - cluster code sending status responses
+  - `AppError` - application-level code
+- Prefer verification macros over `if` conditions:
+  - `VerifyOrReturnError(condition, error)` - return error code on failure
+  - `VerifyOrReturnValue(condition, value)` - return specific value on failure
+  - `VerifyOrReturn(condition)` - early return (void functions)
+  - `VerifyOrDie(condition)` - assert and crash on failure
+  - `ReturnErrorOnFailure(expr)` - propagate error from expression
+  - `ReturnOnFailure(expr)` - propagate failure (void context)
+- Avoid `goto` statements; do not use `VerifyOrExit` pattern
+- Use `chip::Optional<T>` when already used in local code, otherwise prefer
+  `std::optional<T>`
+
+## Pointers, References and Lifetime
+
+- Prefer references over pointers when the value cannot be null
+- Always check for `nullptr` when dealing with pointers
+- Document ownership semantics clearly:
+  - Who owns the memory (caller vs callee)
+  - Expected lifetime of pointed-to objects
+  - Whether ownership is transferred
+- Avoid raw owning pointers; use RAII wrappers or smart pointers when available
+- Avoid unsafe casts that threaten type safety:
+  - No `reinterpret_cast` unless absolutely necessary and documented
+  - Prefer `static_cast` for safe, well-defined conversions
+  - Use `const_cast` sparingly and only when interfacing with legacy APIs
+
+## Design Patterns
+
+- Use RAII (Resource Acquisition Is Initialization) for resource management:
+  - Acquire resources in constructors, release in destructors
+  - Ensures cleanup even when exceptions or early returns occur
+- Prefer composition over inheritance
+- Use factory functions when construction may fail
+- Keep classes focused on single responsibility
+
+## Type Inference and Attributes
+
+- Use `auto` when the type is obvious from context or for complex iterator types
+- Use `[[maybe_unused]]` for variables created specifically for logging/debugging
+- Use `RETURN_SAFELY_IGNORED(expr)` when intentionally ignoring a function's
+  return value
+
+## Code Size Optimization
+
+- Avoid STL containers and algorithms that bloat binary size:
+  - No `std::sort`, `std::set`, `std::map`, `std::unordered_map`
+  - No `<stdio.h>` or `<iostream>`
+- Prefer `Span` types over raw arrays:
+  - `ByteSpan`, `MutableByteSpan` for byte buffers
+  - `CharSpan`, `MutableCharSpan` for string data
+  - Spans carry their size, reducing error-prone length parameters
+- Use fixed-size buffers with explicit bounds checking
+
+## Control Flow
+
+- Prefer range-based for loops when iterating containers:
+  ```cpp
+  for (auto & item : container) { ... }
+  ```
+- Use `constexpr` for compile-time constants
+- Prefer early returns over deeply nested conditions
+
+## Logging
+
+- Use Matter logging macros (these are task-safe):
+  - `ChipLogError(category, fmt, ...)` - error conditions
+  - `ChipLogProgress(category, fmt, ...)` - significant milestones
+  - `ChipLogDetail(category, fmt, ...)` - verbose debugging info
+- Only bypass ChipLog in contexts where the logging task is unavailable (e.g.,
+  crash handlers, early boot)
+
+## Platform and OS
+
+- Use CMSIS-OS abstractions when available (see
+  `src/include/platform/internal/GenericPlatformManagerImpl_CMSISOS.ipp`)
+- Fall back to FreeRTOS APIs when CMSIS-OS wrappers don't exist (see
+  `src/system/SystemLayerImplFreeRTOS.cpp`)
+- Target platform is Silabs; rely on Silabs APIs from:
+  - Matter SDK (`third_party/matter_sdk/`)
+  - Simplicity SDK (`third_party/simplicity_sdk/`)
+  - WiFi SDK for SiWx917 (`third_party/wifi_sdk/`)
+
+## Build Systems
+
+- Support both GN and SLC build systems
+- Use appropriate preprocessor guards for platform-specific code:
+  - `SLI_SI91X_MCU_INTERFACE` for SiWx917
+  - Platform-specific defines for EFR32 Series 2/3
+
+## Development Guides
+
+The SDK source code contains guides for development best practices in
+`docs/guides`, `docs/testing` and other `docs` locations. Use these as a
+reference for finding common patterns and potential issues in new code. In
+particular:
+
+- [docs/guides/writing_clusters](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/writing_clusters.md)
+  describes how cluster handling is to be implemented
+- [docs/guides/migrating_ember_cluster_to_code_driven.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/guides/migrating_ember_cluster_to_code_driven.md)
+  describes how ember clusters can be migrated to code driven
+- [docs/testing/unit_testing.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/unit_testing.md)
+  describes how to implement unit testing
+- [docs/testing/integration_tests.md](https://github.com/project-chip/connectedhomeip/blob/master/docs/testing/integration_tests.md)
+  describes how to implement integration tests
