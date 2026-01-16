@@ -11,7 +11,7 @@ on:
         required: true
         
       update_readme:
-        description: "Update readme"
+        description: "Update README links"
         required: false
         default: true
 
@@ -19,20 +19,21 @@ jobs:
   version-update:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Update version
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
 
-      - name: Update version
+      - name: Run version update
         run: |
           python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
 
     
-      - name: Generate token for the workflow
+      # Use a GitHub App token so the PR triggers downstream checks.
+      - name: Generate GitHub App token
         id: generate_token
         uses: actions/create-github-app-token@v2
         with:
@@ -40,7 +41,7 @@ jobs:
             private-key:
                 ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
-      - name: Mask the generated token
+      - name: Mask generated token
         run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
 
       - name: Create pull request
@@ -52,12 +53,12 @@ jobs:
             This PR updates the Matter Extension and SDK versions based on the workflow inputs.
             Ran the following command to update the version:
             ```
-            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=True
+            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
             ```
 
             - Matter Extension version: `${{ inputs.extension_version }}`
             - SDK version: `${{ inputs.sdk_version }}`
-            - Readme: Updated
+            - Readme: `${{ inputs.update_readme }}`
 
             **User Needs to Trigger Jenkins CI**
           branch: "automation/version_update"
