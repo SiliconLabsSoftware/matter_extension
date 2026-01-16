@@ -1,0 +1,40 @@
+name: Version Update
+
+on:
+  workflow_dispatch:
+    inputs:
+      extension_version:
+        description: "Extension version"
+        required: true
+      sdk_version:
+        description: "SDK version"
+        required: true
+  push:
+    branches:
+      - main
+      - task/workflow_version_update
+
+jobs:
+  version-update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Update version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Update version
+        run: |
+          python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=True
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
+          title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
+          body: "Automated version update."
+          branch: "version-update/${{ github.run_id }}"
+          base: "${{ github.ref_name }}"
