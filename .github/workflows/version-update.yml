@@ -6,9 +6,11 @@ on:
       extension_version:
         description: "Extension version"
         required: true
+        default: "0.0.0-test"
       sdk_version:
         description: "SDK version"
         required: true
+        default: "0.0.0-test"
   push:
     branches:
       - main
@@ -17,6 +19,9 @@ on:
 jobs:
   version-update:
     runs-on: ubuntu-latest
+    env:
+      EXTENSION_VERSION: ${{ github.event.inputs.extension_version || '0.0.0-test' }}
+      SDK_VERSION: ${{ github.event.inputs.sdk_version || '0.0.0-test' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -28,13 +33,13 @@ jobs:
 
       - name: Update version
         run: |
-          python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=True
+          python3 slc/script/update_version.py ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }} readme=True
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
-          title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
+          commit-message: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
+          title: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
           body: "Automated version update."
           branch: "version-update/${{ github.run_id }}"
           base: "${{ github.ref_name }}"
