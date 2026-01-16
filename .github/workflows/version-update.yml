@@ -8,8 +8,7 @@ on:
         required: true
       sdk_version:
         description: "SDK version (e.g 2025.12.0)"
-        required: true
-        
+        required: true  
       update_readme:
         description: "Update README links"
         required: false
@@ -31,7 +30,6 @@ jobs:
         run: |
           python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
 
-    
       # Use a GitHub App token so the PR triggers downstream checks.
       - name: Generate GitHub App token
         id: generate_token
