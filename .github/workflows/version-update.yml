@@ -35,11 +35,24 @@ jobs:
         run: |
           python3 slc/script/update_version.py ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }} readme=True
 
+    
+      - name: Generate token for the workflow
+        id: generate_token
+        uses: actions/create-github-app-token@v2
+        with:
+            app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+            private-key:
+                ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Mask the generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
           commit-message: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
           title: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
           body: "Automated version update."
-          branch: "version-update/${{ github.run_id }}"
+          branch: "automation/version_update"
           base: "${{ github.ref_name }}"
+          token: ${{ steps.generate_token.outputs.token }}
