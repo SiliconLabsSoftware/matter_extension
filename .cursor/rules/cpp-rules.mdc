@@ -87,7 +87,7 @@ embedded platforms (Silabs Series 2/3, SiWx917).
 ## Code Size Optimization
 
 - Avoid STL containers and algorithms that bloat binary size:
-  - No `std::sort`, `std::set`, `std::map`, `std::unordered_map`
+  - No `std::sort`, `std::set`, `std::map`, `std::unordered_map`, `std::vector`
   - No `<stdio.h>` or `<iostream>`
 - Prefer `Span` types over raw arrays:
   - `ByteSpan`, `MutableByteSpan` for byte buffers
