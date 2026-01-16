@@ -52,7 +52,13 @@ jobs:
         with:
           commit-message: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
           title: "Update version to ${{ env.EXTENSION_VERSION }} ${{ env.SDK_VERSION }}"
-          body: "Automated version update."
+          body: |
+            This PR updates the extension and SDK versions based on the workflow inputs.
+
+            - Extension version: `${{ env.EXTENSION_VERSION }}`
+            - SDK version: `${{ env.SDK_VERSION }}`
+
+            **User Needs to Trigger Jenkins CI**
           branch: "automation/version_update"
           base: "${{ github.ref_name }}"
           token: ${{ steps.generate_token.outputs.token }}
