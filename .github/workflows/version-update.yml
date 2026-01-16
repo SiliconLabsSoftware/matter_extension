@@ -12,7 +12,7 @@ on:
   push:
     branches:
       - main
-      - task/workflow_version_update
+      - update/version_update
 
 jobs:
   version-update:
