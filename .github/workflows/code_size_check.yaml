@@ -1,0 +1,75 @@
+name: Build Dev apps
+
+on:
+  push:
+    branches:
+      - 'MATTER-5753_add_Code_Size_CI_check'
+# TODO uncomment me
+    # pull_request:
+    #     branches:
+    #         - main
+    #         - "release_*"
+
+    workflow_dispatch:
+        inputs:
+            build-type:
+                description: "The build type to use"
+                required: true
+                type: choice
+                options:
+                    - standard
+                    - full
+
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    code-size-check:
+        name: Code Size Check
+        runs-on: ubuntu-latest
+        container:
+            image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+              with:
+                  submodules: "false" # Do not initialize submodules automatically
+
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                  git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+            - name: Initialize required submodules
+              shell: bash
+              run: |
+                  git submodule update --init \
+                      third_party/aws_ota_sdk \
+                      third_party/matter_sdk \
+                      third_party/matter_support \
+                      third_party/mbedtls \
+                      third_party/mqtt \
+                      third_party/nlassert \
+                      third_party/nlio \
+                      third_party/QR-Code-generator
+                  # Skip unnecessary submodules like simplicity_sdk and wifi_sdk
+
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+
+            - name: Build code-canary app
+              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              with:
+                  json-file-path: ".github/silabs-code-size.json"
+                  path-to-example-app: "./slc/apps/code-canary/code-canary.slcp"
+                  example-app: code-canary
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: "standard"
+            - name: Display code size results
+              shell: bash
+              run: |
+                  echo "Code size build completed. Displaying results:"
+                  find out/code-size -name "*.out" -exec sh -c 'echo "File: {}"; arm-none-eabi-size {}' \;
