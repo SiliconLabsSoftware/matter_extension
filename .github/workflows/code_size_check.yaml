@@ -1,0 +1,59 @@
+name: Code Size Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    # branches:
+    #   - main
+    #   - "release_*"
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    code-size-check:
+        name: Code Size Check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+              with:
+                  submodules: "true" # Do not initialize submodules automatically
+
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+            - name: Checkout PR target branch
+              uses: actions/checkout@v5
+              with:
+                  ref: ${{ github.event.pull_request.base.sha }}
+                  path: baseline
+                  submodules: "true"  
+            - name: Build code-canary app
+              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              with:
+                  json-file-path: ".github/silabs-code-size.json"
+                  path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  example-app: code-canary
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: "standard"
+            - name: Move results
+              run: |
+                  mv ./out ./current      
+            - name: Build code-canary app on PR target
+              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              with:
+                  json-file-path: ".github/silabs-code-size.json"
+                  path-to-example-app: "./baseline/slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  example-app: code-canary
+                  build-script: "./baseline/slc/build.sh"
+                  output-directory: " "
+                  build-type: "standard"
+            - name: Generate Code Size Results and Compare
+              shell: bash
+              run: |
+                  ./slc/script/code_size_result.sh ./current/ current.csv
+                  ./slc/script/code_size_result.sh ./out/ target.csv
+                  cat ./current.csv
+                  cat ./target.csv
+                  python3 ./slc/script/code_size_diff_check.py ./current.csv ./target.csv
