@@ -1,0 +1,62 @@
+name: Code Size Check
+
+on:
+  push:
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    code-size-check:
+        name: Code Size Check
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+              with:
+                  submodules: "true" # Do not initialize submodules automatically
+
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+
+            # TODO checkout PR target and build canary app on it.
+
+            - name: Build code-canary app
+              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              with:
+                  json-file-path: ".github/silabs-code-size.json"
+                  path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  example-app: code-canary
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: "standard"
+            - name: Generate Code Size Result with current changes
+              shell: bash
+              run: |
+                  ./slc/scripts/code_size_result.sh ./out current.csv
+            - name: Checkout PR target branch
+              uses: actions/checkout@v5
+              with:
+                  ref: ${{ github.event.pull_request.base.ref }}
+                  submodules: "true"
+            - name: Build code-canary app on PR target
+              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              with:
+                  json-file-path: ".github/silabs-code-size.json"
+                  path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  example-app: code-canary
+                  build-script: "./slc/build.sh"
+                  output-directory: " "
+                  build-type: "standard"
+            - name: Generate Code Size Result with PR target
+              shell: bash
+              run: |
+                  ./slc/scripts/code_size_result.sh ./out target.csv
+            - name: Perform checks and display results
+              shell: bash
+              run: |
+                  python3 ./slc/scripts/code_size_diff_check.py current.csv target.csv
