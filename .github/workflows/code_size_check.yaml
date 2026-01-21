@@ -3,9 +3,10 @@ name: Code Size Check
 on:
   push:
     pull_request:
-        branches:
-            - main
-            - "release_*"
+      types: [opened, synchronize, reopened]
+        # branches:
+        #     - main
+        #     - "release_*"
 concurrency:
     group: dev-build-examples-${{ github.ref }}
     cancel-in-progress: true
