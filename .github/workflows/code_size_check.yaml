@@ -60,7 +60,15 @@ jobs:
               shell: bash
               run: |
                   ./slc/script/code_size_result.sh ./out target.csv
+            - name: Compare Code Size Results
+              shell: bash
+              run: |
+                  cat ./target.csv
+            - name: Compare Code Size Results
+              shell: bash
+              run: |
+                  ls -la ./ 
             - name: Perform checks and display results
               shell: bash
               run: |
-                  python3 ./slc/script/code_size_diff_check.py current.csv target.csv
+                  python3 ./slc/script/code_size_diff_check.py ./current.csv ./target.csv

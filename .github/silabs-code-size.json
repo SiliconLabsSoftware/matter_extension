@@ -6,12 +6,6 @@
                 "arguments": ["--output_suffix code_size",
                               "'--with matter_platform_low_power;matter'",
                               "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
-            },
-            {
-                "boards": ["brd4407a"],
-                 "arguments": ["--output_suffix code_size",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
             }
         ]
     }
