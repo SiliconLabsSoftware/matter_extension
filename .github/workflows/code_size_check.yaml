@@ -38,7 +38,7 @@ jobs:
             - name: Generate Code Size Result with current changes
               shell: bash
               run: |
-                  ./slc/scripts/code_size_result.sh ./out current.csv
+                  ./slc/script/code_size_result.sh ./out current.csv
             - name: Checkout PR target branch
               uses: actions/checkout@v5
               with:
@@ -53,11 +53,14 @@ jobs:
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
+            - name: Go back to PR branch
+              run: |
+                 git checkout ${{ github.head_ref }}
             - name: Generate Code Size Result with PR target
               shell: bash
               run: |
-                  ./slc/scripts/code_size_result.sh ./out target.csv
+                  ./slc/script/code_size_result.sh ./out target.csv
             - name: Perform checks and display results
               shell: bash
               run: |
-                  python3 ./slc/scripts/code_size_diff_check.py current.csv target.csv
+                  python3 ./slc/script/code_size_diff_check.py current.csv target.csv
