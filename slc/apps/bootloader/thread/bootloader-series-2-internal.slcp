@@ -1,4 +1,4 @@
-project_name: matter-bootloader-storage-internal-single
+project_name: bootloader-series-2-internal
 package: matter
 quality: production
 label: Bootloader - SoC Internal Storage (single image on 512kB device)
@@ -94,8 +94,8 @@ post_build:
   profile: bootloader_series_2
 
 readme:
-  - path: ./readme.md
+  - path: ./bootloader-storage-internal-single-series-2-readme.md
 ui_hints:
   highlight:
-    - path: readme.md
+    - path: bootloader-storage-internal-single-series-2-readme.md
       focus: false

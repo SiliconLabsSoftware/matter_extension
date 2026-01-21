@@ -1,4 +1,4 @@
-project_name: matter-bootloader-storage-external-single
+project_name: bootloader-series-2
 package: matter
 quality: production
 label: Bootloader - SoC SPI Flash Storage (single image with slot size of 1024k)
@@ -39,8 +39,8 @@ post_build:
   profile: bootloader_series_2
 
 readme:
-  - path: ./readme.md
+  - path: ./bootloader-storage-external-single-series-2-readme.md
 ui_hints:
   highlight:
-    - path: readme.md
+    - path: bootloader-storage-external-single-series-2-readme.md
       focus: false

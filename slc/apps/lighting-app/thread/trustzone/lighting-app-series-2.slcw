@@ -10,7 +10,7 @@ project:
   - path: ./lighting-ns.slcp
     id: application
     output: lighting-app-nonsecure
-  - path: ../../../bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp
+  - path: ../../../bootloader/thread/bootloader-series-2.slcp
     id: bootloader
     output: matter-bootloader
 post_build:

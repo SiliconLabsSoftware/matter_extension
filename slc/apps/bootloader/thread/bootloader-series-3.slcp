@@ -1,4 +1,4 @@
-project_name: matter-bootloader-storage-single-4096k
+project_name: bootloader-series-3
 package: matter
 quality: production
 label: Bootloader - SoC Storage (single OTA image)
@@ -62,10 +62,10 @@ configuration:
     value: 0x01378000
     condition: [simg301m104xil_8mb]
 readme:
-  - path: ./readme.md
+  - path: ./bootloader-storage-single-4096k-series-3-readme.md
 ui_hints:
   highlight:
-    - path: readme.md
+    - path: bootloader-storage-single-4096k-series-3-readme.md
       focus: false
 post_build:
   profile: bootloader_series_2

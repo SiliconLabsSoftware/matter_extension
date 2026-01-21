@@ -87,6 +87,12 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
+        ],
+        "bootloader": [
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
+                "arguments": ["--output_suffix btl_lockbit_override","--with btl_lockbit_override"]
+            }
         ]
     },
     "custom-sqa": {

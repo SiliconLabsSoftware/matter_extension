@@ -440,7 +440,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLightOverThreadTrustzoneSolution" label="Matter - SoC Lighting over Thread with external Bootloader and TrustZone"
                description="This project builds a Matter Light and Matter External Bootloader and TrustZone that can be developed inside Simplicity Studio">
@@ -457,7 +457,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter|TrustZone"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.lighting-app.thread.trustzone.lighting-s.slcp slc.apps.lighting-app.thread.trustzone.lighting-ns.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.lighting-app.thread.trustzone.lighting-s.slcp slc.apps.lighting-app.thread.trustzone.lighting-ns.slcp"/>
   </descriptors>
   <descriptors name="MatterLightSwitchOverThreadSolution" label="Matter - SoC Light Switch over Thread with external Bootloader"
                description="This project builds a Matter Light Switch and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -474,7 +474,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
   </descriptors> 
   <descriptors name="MatterRefrigeratorOverWiFiSolution" label="Matter - SoC Refrigerator over Wi-Fi"
               description="This project builds a Matter Refrigerator app for Wi-Fi SiWx917 that can be developed inside Simplicity Studio">
@@ -545,7 +545,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
   </descriptors>
   <descriptors name="MatterRefrigeratorOverThreadSolution" label="Matter - SoC Refrigerator over Thread with internal Bootloader"
               description="This project builds a Matter Refrigerator and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -562,7 +562,7 @@
   <properties key="quality" value="PRODUCTION"/>
   <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
   <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-  <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
+  <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
 </descriptors>
     <descriptors name="MatterRefrigeratorOverThreadSolution" label="Matter - SoC Refrigerator over Thread with internal Bootloader"
                description="This project builds a Matter Refrigerator and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -579,7 +579,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.refrigerator-app.thread.refrigerator-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverThreadSolution" label="Matter - SoC Lock over Thread with external Bootloader"
                description="This project builds a Matter Lock and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -596,7 +596,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
   </descriptors>
   <descriptors name="MatterFanControlOverThreadSolution" label="Matter - Fan Control over Thread with external Bootloader"
                description="This project builds a Matter Fan Control App and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -613,7 +613,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverWifiSolution" label="Matter - NCP Lock over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Lock app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
@@ -630,7 +630,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.lock-app.wifi.lock-app-917-ncp.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.lock-app.wifi.lock-app-917-ncp.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverWifiSolution" label="Matter - NCP Lock over Wi-Fi with external Bootloader"
                description="This project builds a Matter Lock app for Wi-Fi WF200 and Matter External Bootloader that can be developed inside Simplicity Studio.">
@@ -647,7 +647,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.lock-app.wifi.lock-app-wf200.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.lock-app.wifi.lock-app-wf200.slcp"/>
   </descriptors>
   <descriptors name="MatterOnOffPlugOverThreadSolution" label="Matter - SoC Onoff Plug over Thread with external Bootloader"
                description="This project builds a Matter Onoff Plug and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -664,7 +664,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
   </descriptors>
   <descriptors name="MatterSensorOverThreadSolution" label="Matter - SoC Multi Sensor over Thread with external Bootloader"
                description="This project builds a Matter Sensor and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -681,7 +681,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
   </descriptors>
   <descriptors name="MatterThermostatOverThreadSolution" label="Matter - SoC Thermostat over Thread with external Bootloader"
                description="This project builds a Matter Thermostat and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -698,7 +698,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
   </descriptors>
   <descriptors name="MatterThermostatOverWifiSolution" label="Matter - NCP Thermostat over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Thermostat app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
@@ -715,7 +715,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.thermostat.wifi.thermostat-917-ncp.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.thermostat.wifi.thermostat-917-ncp.slcp"/>
   </descriptors>
   <descriptors name="MatterFanControlOverWifiSolution" label="Matter - NCP Fan Control over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Fan Control App app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
@@ -732,7 +732,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.fan-control-app.wifi.fan-control-app-917-ncp.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.fan-control-app.wifi.fan-control-app-917-ncp.slcp"/>
   </descriptors>
   <descriptors name="MatterThermostatOverWifiSolution" label="Matter - NCP Thermostat over Wi-Fi with external Bootloader"
                description="This project builds a Matter Thermostat app for Wi-Fi WF200 and Matter External Bootloader that can be developed inside Simplicity Studio.">
@@ -749,7 +749,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.thermostat.wifi.thermostat-wf200.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.thermostat.wifi.thermostat-wf200.slcp"/>
   </descriptors>
   <descriptors name="MatterWindowCoverOverThreadSolution" label="Matter - SoC Window Covering over Thread with external Bootloader"
                description="This project builds a Matter Window and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -766,7 +766,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.window-app.thread.window-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.window-app.thread.window-app.slcp"/>
   </descriptors>
   <descriptors name="MatterWindowCoverOverWifiSolution" label="Matter - NCP Window Covering over Wi-Fi with internal Bootloader"
                description="This project builds a Matter Window app for Wi-Fi SiWx917 NCP and Matter Internal Bootloader that can be developed inside Simplicity Studio.">
@@ -783,7 +783,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.window-app.wifi.window-app-917-ncp.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.window-app.wifi.window-app-917-ncp.slcp"/>
   </descriptors>
   <descriptors name="MatterSensorOverWiFi" label="Matter - SoC Multi Sensor over  Wi-Fi"
                description="This project builds a Matter Sensor app for Wi-Fi SiWx917 that can be developed inside Simplicity Studio">
@@ -851,7 +851,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLightSwitchOverThreadSolution" label="Matter - SoC Light Switch over Thread with internal Bootloader"
                description="This project builds a Matter Light Switch and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -868,7 +868,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.light-switch-app.thread.light-switch-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLightOverThreadSolution" label="Matter - SoC Lighting over Thread with internal Bootloader"
                description="This project builds a Matter Lighting and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -885,7 +885,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
   </descriptors>
   <descriptors name="MatterFanControlOverThreadSolution" label="Matter - Fan Control over Thread with internal Bootloader"
                description="This project builds a Matter Fan Control App and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -902,7 +902,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
   </descriptors>
   <descriptors name="MatterFanControlOverThreadSolution" label="Matter - Fan Control over Thread with internal Bootloader"
                description="This project builds a Matter Fan Control App and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -919,7 +919,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.fan-control-app.thread.fan-control-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverThreadSolution" label="Matter - SoC Lock over Thread with internal Bootloader"
                description="This project builds a Matter Lock and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -936,7 +936,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
   </descriptors>
   <descriptors name="MatterLockOverThreadSolution" label="Matter - SoC Lock over Thread with internal Bootloader"
                description="This project builds a Matter Lock and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -953,7 +953,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.lock-app.thread.lock-app.slcp"/>
   </descriptors>
   <descriptors name="MatterOnOffPlugOverThreadSolution" label="Matter - SoC Onoff Plug over Thread with internal Bootloader"
                description="This project builds a Matter Onoff Plug and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -970,7 +970,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
   </descriptors>
     <descriptors name="MatterOnOffPlugOverThreadSolution" label="Matter - SoC Onoff Plug over Thread with internal Bootloader"
                description="This project builds a Matter Onoff Plug and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -987,7 +987,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.onoff-plug-app.thread.onoff-plug-app.slcp"/>
   </descriptors>
   <descriptors name="MatterSensorOverThreadSolution" label="Matter - SoC Multi Sensor over Thread with internal Bootloader"
                description="This project builds a Matter Sensor and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1004,7 +1004,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
   </descriptors>
     <descriptors name="MatterSensorOverThreadSolution" label="Matter - SoC Multi Sensor over Thread with internal Bootloader"
                description="This project builds a Matter Sensor and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1021,7 +1021,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.multi-sensor-app.thread.multi-sensor-app.slcp"/>
   </descriptors>
   <descriptors name="MatterThermostatOverThreadSolution" label="Matter - SoC Thermostat over Thread with internal Bootloader"
                description="This project builds a Matter Thermostat and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1038,7 +1038,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
   </descriptors>
     <descriptors name="MatterThermostatOverThreadSolution" label="Matter - SoC Thermostat over Thread with internal Bootloader"
                description="This project builds a Matter Thermostat and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1055,7 +1055,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.thermostat.thread.thermostat.slcp"/>
   </descriptors>
   <descriptors name="MatterWindowCoverOverThreadSolution" label="Matter - SoC Window Covering over Thread with internal Bootloader"
                description="This project builds a Matter Window and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1072,7 +1072,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.window-app.thread.window-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.window-app.thread.window-app.slcp"/>
   </descriptors>
   <descriptors name="MatterWindowCoverOverThreadSolution" label="Matter - SoC Window Covering over Thread with internal Bootloader"
                description="This project builds a Matter Window and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1089,15 +1089,15 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.window-app.thread.window-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.window-app.thread.window-app.slcp"/>
   </descriptors>
   <descriptors name="Matter-Bootloader" label="Matter - Default external 1024k Flash Storage Series 2"
                description="This project builds a Matter Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/bootloaders/bootloader-storage-external-single-series-2/bootloader-storage-external-single-series-2.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/bootloaders/bootloader-storage-external-single-series-2/readme.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.bootloader.thread.bootloader-series-2.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/bootloader/thread/bootloader-series-2.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/bootloader/thread/bootloader-storage-external-single-series-2-readme.md"/>
     <properties key="boardCompatibility" value="brd4116a brd4117a brd4118a brd4186c brd4187c brd4316a brd4317a brd4318a brd2608a"/>
     <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1112,9 +1112,9 @@
                description="This project builds a Matter Bootloader that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/bootloaders/bootloader-storage-internal-single-series-2/readme.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/bootloader/thread/bootloader-series-2-internal.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/bootloader/thread/bootloader-storage-internal-single-series-2-readme.md"/>
     <properties key="boardCompatibility" value="brd4337a brd4319a:0.0.0.A00 brd2704a brd2703a brd4350a brd4351a brd2709a"/>
     <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*efr32mg26.* .*mgm24.* .*mgm26.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1377,7 +1377,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
   </descriptors>
   <descriptors name="MatterAirQualitySensorOverThreadSolution" label="Matter - SoC Air Quality Sensor with internal Bootloader Solution"
                description="This project builds a Matter Air Quality Sensor Over Thread app that can be developed inside Simplicity Studio.">
@@ -1394,7 +1394,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
   </descriptors>
     <descriptors name="MatterAirQualitySensorOverThreadSolution" label="Matter - SoC Air Quality Sensor with internal Bootloader Solution"
                description="This project builds a Matter Air Quality Sensor Over Thread app that can be developed inside Simplicity Studio.">
@@ -1411,7 +1411,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.air-quality-sensor-app.thread.air-quality-sensor-app.slcp"/>
   </descriptors>
     <descriptors name="ZigbeeMatterLightSolution" label="Matter and Zigbee - SoC Light with internal Bootloader"
                description="This project builds a Matter Lighting app combined with a Zigbee Light that can be developed inside Simplicity Studio">
@@ -1428,7 +1428,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter Technology|Zigbee"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.zigbee-matter-light.thread.zigbee-matter-light.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.zigbee-matter-light.thread.zigbee-matter-light.slcp"/>
   </descriptors>
   <descriptors name="ZigbeeMatterLightSolution" label="Matter and Zigbee - SoC Light with internal Bootloader"
                description="This project builds a Matter Lighting app combined with a Zigbee Light that can be developed inside Simplicity Studio">
@@ -1445,7 +1445,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter Technology|Zigbee"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.zigbee-matter-light.thread.zigbee-matter-light.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.zigbee-matter-light.thread.zigbee-matter-light.slcp"/>
   </descriptors>   
   <descriptors name="MatterLightOverThreadSolution" label="Matter - SoC Lighting over Thread with internal Bootloader"
                description="This project builds a Matter Light and Matter Bootloader that can be developed inside Simplicity Studio">
@@ -1462,7 +1462,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.lighting-app.thread.lighting-app.slcp"/>
   </descriptors>
   <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with internal Bootloader"
            description="This project builds a Matter Closure Control and Matter Internal Bootloader that can be developed inside Simplicity Studio">
@@ -1479,7 +1479,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
   </descriptors>
   <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with external Bootloader"
            description="This project builds a Matter Closure Control and Matter External Bootloader that can be developed inside Simplicity Studio">
@@ -1496,7 +1496,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
   </descriptors>
   <descriptors name="MatterClosureControlOverThreadSolution" label="Matter - Closure Control over Thread with internal Bootloader"
            description="This project builds a Matter Closure Control and Matter Bootloader that can be developed inside Simplicity Studio">
@@ -1513,15 +1513,15 @@
     <properties key="quality" value="ALPHA"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.closure-app.thread.closure-app.slcp"/>
   </descriptors>
   <descriptors name="Matter-Bootloader" label="Matter - Default internal 4096k Flash Storage"
                description="This project builds a Matter Bootloader for series 3 that can be developed inside Simplicity Studio">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/readme.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.bootloader.thread.bootloader-series-3.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/bootloader/thread/bootloader-series-3.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/bootloader/thread/bootloader-storage-single-4096k-series-3-readme.md"/>
     <properties key="boardCompatibility" value="brd1019a brd2719a brd4407a brd4408a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*simg301.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1581,7 +1581,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-external-single-series-2.bootloader-storage-external-single-series-2.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Thread with internal Bootloader"
                description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio and a Matter Internal Bootloader">
@@ -1598,7 +1598,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-internal-single-series-2.bootloader-storage-internal-single-series-2.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-2-internal.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Thread with internal Bootloader"
                description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio and a Matter Internal Bootloader">
@@ -1615,7 +1615,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader-storage-single-4096k-series-3.bootloader-storage-single-4096k-series-3.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloader.thread.bootloader-series-3.slcp slc.apps.platform-template.thread.platform-template.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter - SoC Platform Template over Wi-Fi"
                description="This project builds a Matter Platform Template that can be developed inside Simplicity Studio">
