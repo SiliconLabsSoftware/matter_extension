@@ -27,7 +27,6 @@ requires:
   - name: mbedtls_ecdh
   - name: mbedtls_ecdsa
   - name: mbedtls_ecc
-  - name: mbedtls_error
   - name: mbedtls_hash
   - name: mbedtls_hkdf
   - name: mbedtls_jpake
