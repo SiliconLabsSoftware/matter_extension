@@ -6,7 +6,7 @@ project:
   - path: ./lock-app-917-ncp.slcp
     id: application
     output: lock-app-917-ncp
-  - path: ../../bootloader/thread/bootloader-series-2-internal.slcp
+  - path: ../../bootloader/thread/bootloader-storage-internal-single-series-2.slcp
     id: bootloader
     output: matter-bootloader
 post_build:

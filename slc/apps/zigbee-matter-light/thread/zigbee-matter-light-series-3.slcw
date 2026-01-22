@@ -6,7 +6,7 @@ project:
   - path: ./zigbee-matter-light.slcp
     id: application
     output: zigbee-matter-light
-  - path: ../../bootloader/thread/bootloader-series-3.slcp
+  - path: ../../bootloader/thread/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader
 post_build:

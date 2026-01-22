@@ -1,4 +1,4 @@
-project_name: bootloader-series-3
+project_name: bootloader-storage-single-4096k-series-3
 package: matter
 quality: production
 label: Bootloader - SoC Storage (single OTA image)

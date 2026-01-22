@@ -1,4 +1,4 @@
-project_name: bootloader-series-2-internal
+project_name: bootloader-storage-internal-single-series-2
 package: matter
 quality: production
 label: Bootloader - SoC Internal Storage (single image on 512kB device)
