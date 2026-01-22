@@ -228,7 +228,7 @@ jobs:
             - build-closure-app
             - build-oven-app
             - build-rangehood-app
-            - build-bootloader-series-3
+            - build-bootloader
         if: success()
 
         steps:
