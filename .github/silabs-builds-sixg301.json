@@ -90,7 +90,7 @@
         ],
         "bootloader": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
             }
         ]
