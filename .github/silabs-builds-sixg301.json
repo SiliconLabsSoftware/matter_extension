@@ -25,6 +25,12 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
+        ],
+        "bootloader": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
+            }
         ]
     },
     "full": {
