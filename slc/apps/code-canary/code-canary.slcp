@@ -37,7 +37,6 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_ethernet_network_diagnostics
   - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
@@ -52,7 +51,6 @@ component:
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
   - id: matter_user_label
-  - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
@@ -66,6 +64,8 @@ component:
   - id: matter_test_event_trigger
   - id: matter_icd_management
   - id: matter_icd_checkin_sender
+  # Code Size Optimization
+  - id: matter_no_debug
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART

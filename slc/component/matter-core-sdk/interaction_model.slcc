@@ -54,12 +54,10 @@ include:
     -   path: InteractionModelHelper.h
     -   path: InteractionModelEngine.h
     -   path: EventLoggingTypes.h
-    -   path: ReadClient.h
     -   path: CommandResponseSender.h
     -   path: StatusResponse.h
     -   path: ReadPrepareParams.h
     -   path: WriteClient.h
-    -   path: BufferedReadCallback.h
     -   path: EventPathParams.h
     -   path: CommandResponseHelper.h
     -   path: CommandHandlerInterface.h
@@ -71,7 +69,6 @@ include:
     -   path: AttributeAccessInterface.h
     -   path: SafeAttributePersistenceProvider.h
     -   path: EventHeader.h
-    -   path: ClusterStateCache.h
     -   path: CASEClientPool.h
     -   path: SpecificationDefinedRevisions.h
     -   path: OperationalSessionSetupPool.h
@@ -101,7 +98,6 @@ source:
 -   path: third_party/matter_sdk/src/app/InteractionModelEngine.cpp
 -   path: third_party/matter_sdk/src/app/OperationalSessionSetup.cpp
 -   path: third_party/matter_sdk/src/app/PendingResponseTrackerImpl.cpp
--   path: third_party/matter_sdk/src/app/ReadClient.cpp
 -   path: third_party/matter_sdk/src/app/SimpleSubscriptionResumptionStorage.cpp
 -   path: third_party/matter_sdk/src/app/StatusResponse.cpp
 -   path: third_party/matter_sdk/src/app/SubscriptionResumptionSessionEstablisher.cpp
