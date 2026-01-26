@@ -26,7 +26,7 @@ requires:
   - name: psa_crypto_hkdf
   - name: psa_crypto_sha256
 
-  # Mbedtls components
+  # mbedTLS components
   - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
   - name: mbedtls_base64
   - name: mbedtls_cmac
@@ -36,7 +36,7 @@ requires:
   - name: mbedtls_version
   - name: mbedtls_pkcs5
 
-  # Wiseconnect SDK 3.xx.xx components
+  # wiseconnect SDK components
   - name: psa_driver
   - name: psa_crypto
   - name: psa_crypto_ecc_secp192r1
