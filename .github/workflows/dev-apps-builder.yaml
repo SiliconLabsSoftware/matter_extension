@@ -180,24 +180,6 @@ jobs:
             example-app: "platform-template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-bootloader:
-        name: Build Bootloader
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "bootloader"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
-            ncp-917-support: false
-            ncp-wf200-support: false
-            mg24-support: false
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-
     build-sqa-tools:
         name: Build SQA Tools
         needs: set-build-type
@@ -227,7 +209,6 @@ jobs:
             - build-closure-app
             - build-oven-app
             - build-rangehood-app
-            - build-bootloader
         if: success()
 
         steps:

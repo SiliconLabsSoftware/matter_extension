@@ -25,12 +25,6 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
-        ],
-        "bootloader": [
-            {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
-            }
         ]
     },
     "full": {
@@ -92,12 +86,6 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
-            }
-        ],
-        "bootloader": [
-            {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
             }
         ]
     },

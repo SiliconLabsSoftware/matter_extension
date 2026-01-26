@@ -6,7 +6,7 @@ project:
   - path: ./dishwasher-app.slcp
     id: application
     output: dishwasher-app
-  - path: ../../bootloader/thread/bootloader-storage-internal-single-series-2.slcp
+  - path: ../../bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
     id: bootloader
     output: matter-bootloader
 post_build:

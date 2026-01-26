@@ -6,7 +6,7 @@ project:
   - path: ./refrigerator-app.slcp
     id: application
     output: refrigerator-app
-  - path: ../../bootloader/thread/bootloader-storage-single-4096k-series-3.slcp
+  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
     id: bootloader
     output: matter-bootloader
 post_build:
