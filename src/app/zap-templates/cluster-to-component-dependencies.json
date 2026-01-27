@@ -534,12 +534,6 @@
     ]
   },
   {
-    "clusterCode": "testing-server",
-    "value": [
-      "%extension-matter%matter_testing"
-    ]
-  },
-  {
     "clusterCode": "thermostat-server",
     "value": [
       "%extension-matter%matter_thermostat"

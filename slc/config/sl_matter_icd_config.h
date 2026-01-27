@@ -10,6 +10,11 @@
 // <i> Default: 600
 #define SL_IDLE_MODE_DURATION_S 600
 
+// <o SL_SHORT_IDLE_MODE_DURATION_S>  Short Idle Mode Duration (sec)
+// <i> 10 minute Short Idle Mode Duration
+// <i> Default: Idle Mode Duration
+#define SL_SHORT_IDLE_MODE_DURATION_S SL_IDLE_MODE_DURATION_S
+
 // <o SL_ACTIVE_MODE_DURATION_MS>  Active Mode Duration (ms)
 // <i> 1 second Active Mode Duration
 // <i> Default: 1000

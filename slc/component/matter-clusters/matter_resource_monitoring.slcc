@@ -12,14 +12,18 @@ metadata:
 provides:
   - name: matter_resource_monitoring
 source:
+  - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/resource-monitoring-cluster-objects.cpp
   - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server/ResourceMonitoringCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/resource-monitoring-server
     file_list:
+      - path: CodegenIntegration.h
       - path: replacement-product-list-manager.h
       - path: resource-monitoring-cluster-objects.h
       - path: resource-monitoring-server.h
+      - path: ResourceMonitoringCluster.h
+      - path: ResourceMonitoringDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_resource_monitoring

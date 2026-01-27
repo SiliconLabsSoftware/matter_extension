@@ -12,11 +12,14 @@ metadata:
 provides:
   - name: matter_power_topology
 source:
+  - path: third_party/matter_sdk/src/app/clusters/power-topology-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/power-topology-server/PowerTopologyCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/power-topology-server
     file_list:
+      - path: CodegenIntegration.h
       - path: power-topology-server.h
+      - path: PowerTopologyCluster.h
       - path: PowerTopologyDelegate.h
 template_contribution:
   - name: component_catalog

@@ -25,6 +25,7 @@ include:
     - path: GroupKeyManagement.h
     - path: IcdManagement.h
     - path: LocalizationConfiguration.h
+    - path: ScenesManagement.h
     - path: SoftwareDiagnostics.h
     - path: WiFiNetworkDiagnostics.h
     - path: TimeFormatLocalization.h
@@ -32,6 +33,8 @@ include:
     - path: AccessControl.h
     - path: OperationalCredentials.h
     - path: UserLabel.h
+    - path: UnitLocalization.h
+    - path: OccupancySensing.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h
