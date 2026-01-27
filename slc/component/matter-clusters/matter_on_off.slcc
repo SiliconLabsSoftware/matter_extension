@@ -17,8 +17,6 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/on-off-server/codegen/mode-select-integration.cpp
   - path: third_party/matter_sdk/src/app/clusters/on-off-server/codegen/on-off-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/on-off-server/codegen/scenes-integration.cpp
-  - path: third_party/matter_sdk/src/app/clusters/on-off-server/OnOffCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/on-off-server/OnOffLightingCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/on-off-server
     file_list:
