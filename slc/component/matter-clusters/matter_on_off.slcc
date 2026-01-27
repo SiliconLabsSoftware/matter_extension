@@ -32,9 +32,8 @@ include:
       - path: OnOffDelegate.h
       - path: OnOffEffectDelegate.h
       - path: OnOffLightingCluster.h
-  - path: third_party/matter_sdk/src/app/clusters/scenes-server
-    file_list:
-      - path: SceneTable.h
+requires:
+  - name: matter_scenes
 template_contribution:
   - name: component_catalog
     value: matter_on_off
