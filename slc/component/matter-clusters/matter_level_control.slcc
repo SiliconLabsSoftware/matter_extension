@@ -19,6 +19,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/level-control
     file_list:
       - path: codegen/level-control.h
+      - path: level-control.h
 template_contribution:
   - name: component_catalog
     value: matter_level_control

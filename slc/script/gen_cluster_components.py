@@ -28,28 +28,43 @@ for subdir in subdirs:
     clustername = ""
     clientOrServer = ""
 
-    for file in os.listdir(os.path.join(cluster_dir_path, subdir)):
+    subdir_path = os.path.join(cluster_dir_path, subdir)
+    
+    # Process files in the main subdirectory
+    for file in os.listdir(subdir_path):
         # Check if the file is a header file
         if file.endswith(".h") or file.endswith(".hpp") or file.endswith(".ipp"):
             headers.append(file)
         # Check if the file is a source file
         elif file.endswith(".c") or file.endswith(".cpp"):
-            sources.append(os.path.join(cluster_dir_path, subdir, file))
-        
-        # Replace hyphens with underscores in the subdirectory name to form the cluster component name
-        clustercomponentname = subdir.replace("-", "_")
-        clustername = clustercomponentname
-        
-        # Determine if the cluster is a server or client
-        if "server" in clustercomponentname:
-            clientOrServer = " Server"
-            clustername = clustercomponentname.replace("_server", "")
-        if "client" in clustername:
-            clientOrServer = " Client"
-            clustername = clustercomponentname.replace("_client", "")
-        
-        # Set the include path for the cluster
-        include = os.path.join(cluster_dir_path, subdir)
+            sources.append(os.path.join(subdir_path, file))
+    
+    # Process files in the codegen folder if it exists
+    codegen_path = os.path.join(subdir_path, "codegen")
+    if os.path.isdir(codegen_path):
+        for codegen_file in os.listdir(codegen_path):
+            # Check if the file is a header file
+            if codegen_file.endswith(".h") or codegen_file.endswith(".hpp") or codegen_file.endswith(".ipp"):
+                # Use relative path for headers to maintain directory structure
+                headers.append(os.path.join("codegen", codegen_file))
+            # Check if the file is a source file
+            elif codegen_file.endswith(".c") or codegen_file.endswith(".cpp"):
+                sources.append(os.path.join(codegen_path, codegen_file))
+    
+    # Replace hyphens with underscores in the subdirectory name to form the cluster component name
+    clustercomponentname = subdir.replace("-", "_")
+    clustername = clustercomponentname
+    
+    # Determine if the cluster is a server or client
+    if "server" in clustercomponentname:
+        clientOrServer = " Server"
+        clustername = clustercomponentname.replace("_server", "")
+    if "client" in clustername:
+        clientOrServer = " Client"
+        clustername = clustercomponentname.replace("_client", "")
+    
+    # Set the include path for the cluster
+    include = subdir_path
 
     # If a cluster component name is found and there are source or header files
     if clustercomponentname != "":
