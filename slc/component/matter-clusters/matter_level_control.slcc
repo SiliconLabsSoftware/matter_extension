@@ -14,11 +14,11 @@ requires:
 provides:
   - name: matter_level_control
 source:
-  - path: third_party/matter_sdk/src/app/clusters/level-control/level-control.cpp
+  - path: third_party/matter_sdk/src/app/clusters/level-control/codegen/level-control.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/level-control
     file_list:
-      - path: level-control.h
+      - path: codegen/level-control.h
 template_contribution:
   - name: component_catalog
     value: matter_level_control

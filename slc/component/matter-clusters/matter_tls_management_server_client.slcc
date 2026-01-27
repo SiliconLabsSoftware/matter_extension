@@ -12,11 +12,13 @@ metadata:
 provides:
   - name: matter_tls_management_server_client
 source:
-  - path: third_party/matter_sdk/src/app/clusters/tls-client-management-server/tls-client-management-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/tls-client-management-server/CodegenIntegration.cpp
+  - path: third_party/matter_sdk/src/app/clusters/tls-client-management-server/TLSClientManagementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/tls-client-management-server
     file_list:
-      - path: tls-client-management-server.h
+      - path: CodegenIntegration.h
+      - path: TLSClientManagementCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_tls_management_server_client

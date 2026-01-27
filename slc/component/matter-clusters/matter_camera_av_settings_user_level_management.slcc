@@ -12,11 +12,11 @@ metadata:
 provides:
   - name: matter_camera_av_settings_user_level_management
 source:
-  - path: third_party/matter_sdk/src/app/clusters/camera-av-settings-user-level-management-server/camera-av-settings-user-level-management-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/camera-av-settings-user-level-management-server/CameraAvSettingsUserLevelManagementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/camera-av-settings-user-level-management-server
     file_list:
-      - path: camera-av-settings-user-level-management-server.h
+      - path: CameraAvSettingsUserLevelManagementCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_camera_av_settings_user_level_management

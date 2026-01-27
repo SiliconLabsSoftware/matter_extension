@@ -15,6 +15,7 @@
         "account-login-cluster.xml",
         "administrator-commissioning-cluster.xml",
         "air-quality-cluster.xml",
+        "ambient-context-sensing-cluster.xml",
         "application-basic-cluster.xml",
         "application-launcher-cluster.xml",
         "audio-output-cluster.xml",
@@ -187,6 +188,9 @@
             "WindowStatus",
             "AdminFabricIndex",
             "AdminVendorId"
+        ],
+        "Ambient Context Sensing": [
+            "HoldTimeLimits"
         ],
         "Basic Information": [
             "FeatureMap",
@@ -362,7 +366,7 @@
             "UpTime",
             "TotalOperationalHours",
             "BootReason",
-            "FeatureMap",
+            "DeviceLoadStatus",
             "ClusterRevision"
         ],
         "Group Key Management": [
@@ -421,7 +425,6 @@
             "PIROccupiedToUnoccupiedDelay",
             "UltrasonicOccupiedToUnoccupiedDelay",
             "PhysicalContactOccupiedToUnoccupiedDelay",
-            "FeatureMap",
             "ClusterRevision"
         ],
         "Operational Credentials": [
@@ -429,6 +432,9 @@
             "CommissionedFabrics",
             "CurrentFabricIndex",
             "FeatureMap",
+            "ClusterRevision"
+        ],
+        "Scenes Management": [
             "ClusterRevision"
         ],
         "Software Diagnostics": [
@@ -641,7 +647,8 @@
             "InPlaceIndicator",
             "LastChangedTime",
             "ReplacementProductList",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "HEPA Filter Monitoring": [
             "Condition",
@@ -650,7 +657,8 @@
             "InPlaceIndicator",
             "LastChangedTime",
             "ReplacementProductList",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Carbon Monoxide Concentration Measurement": [
             "MeasuredValue",
@@ -843,7 +851,12 @@
             "RemainingDuration"
         ],
         "Boolean State Configuration": [
-            "CurrentSensitivityLevel"
+            "AlarmsActive",
+            "AlarmsEnabled",
+            "AlarmsSuppressed",
+            "ClusterRevision",
+            "CurrentSensitivityLevel",
+            "SensorFault"
         ],
         "Water Heater Management": [
             "HeaterTypes",
@@ -926,6 +939,7 @@
             "FeatureMap"
         ],
         "Unit Localization": [
+            "ClusterRevision",
             "TemperatureUnit"
         ],
         "Localization Configuration": [
