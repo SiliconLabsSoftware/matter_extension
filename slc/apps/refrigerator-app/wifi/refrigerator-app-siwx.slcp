@@ -90,8 +90,9 @@ component:
     from: matter
   - id: matter_power_source
     from: matter
-  - id: matter_shell
-    from: matter
+  # disabling shell it is fixed in CSA
+  #- id: matter_shell
+  #  from: matter
   - id: matter_default_lcd_config
     from: matter
   - id: matter_log_uart

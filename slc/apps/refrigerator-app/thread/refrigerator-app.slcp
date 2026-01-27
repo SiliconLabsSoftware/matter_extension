@@ -34,8 +34,9 @@ component:
   - id: rail_util_pti
   - id: matter_crypto
     from: matter
-  - id: matter_shell
-    from: matter
+  # disabling shell it is fixed in CSA
+  #- id: matter_shell
+  #  from: matter
   - id: matter_gatt_static
     from: matter
   - id: matter_provision_default
