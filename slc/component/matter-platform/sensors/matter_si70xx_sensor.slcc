@@ -25,3 +25,6 @@ define:
 
 requires:
   - name: si70xx_driver
+    condition: [matter_thread]
+  - name: sl_si70xx
+    condition: [matter_wifi]
