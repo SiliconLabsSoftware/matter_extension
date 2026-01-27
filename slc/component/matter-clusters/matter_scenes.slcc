@@ -18,7 +18,6 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/ExtensionFieldSetsImpl.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneHandlerImpl.cpp
-  - path: third_party/matter_sdk/src/app/clusters/scenes-server/scenes-server.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/ScenesManagementCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/SceneTableImpl.cpp
 include:
