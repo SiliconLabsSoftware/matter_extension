@@ -49,6 +49,8 @@ include:
     -   path: CommandHandler.h
     -   path: SimpleSubscriptionResumptionStorage.h
     -   path: DeviceProxy.h
+    -   path: SubscriptionStats.h
+    -   path: DeviceLoadStatusProvider.h
     -   path: ChunkedWriteCallback.h
     -   path: TimedHandler.h
     -   path: TestEventTriggerDelegate.h

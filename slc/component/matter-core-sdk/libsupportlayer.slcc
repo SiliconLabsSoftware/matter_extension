@@ -93,6 +93,8 @@ include:
     -   path: ReadOnlyBuffer.h
     -   path: ReferenceCountedPtr.h
     -   path: TimerDelegate.h
+    -   path: attribute-storage-null-handling.h
+    -   path: odd-sized-integers.h
   - path: third_party/matter_sdk/src/lib/support/verhoeff
     file_list:
     -   path: Verhoeff.h

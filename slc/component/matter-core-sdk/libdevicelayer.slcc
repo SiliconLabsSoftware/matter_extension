@@ -25,6 +25,7 @@ include:
     file_list:
       - path: DeviceSafeQueue.h
       - path: GLibTypeDeleter.h
+      - path: PlatformError.h
 label: libdevicelayer
 package: matter
 provides:
