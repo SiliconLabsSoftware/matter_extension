@@ -193,7 +193,7 @@ jobs:
 
         steps:
             - name: Merge artifacts
-              uses: actions/upload-artifact/merge@v5
+              uses: actions/upload-artifact/merge@v6
               with:
                   name: "sqa-artifacts"
                   delete-merged: true
