@@ -186,12 +186,3 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: sixg301
-
-    series-3-bootloader-build-job:
-        uses: ./.github/workflows/builder.yaml
-        with:
-            json-file-path: './.github/silabs-builds-series-3-bootloader.json'
-            path-to-example-app: slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-series-3.slcw
-            example-app: bootloader
-            build-type: ${{ inputs.build-type }}
-            platform: series-3-bootloader
