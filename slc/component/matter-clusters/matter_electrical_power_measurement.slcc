@@ -12,10 +12,12 @@ metadata:
 provides:
   - name: matter_electrical_power_measurement
 source:
+  - path: third_party/matter_sdk/src/app/clusters/electrical-power-measurement-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/electrical-power-measurement-server/ElectricalPowerMeasurementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/electrical-power-measurement-server
     file_list:
+      - path: CodegenIntegration.h
       - path: electrical-power-measurement-server.h
       - path: ElectricalPowerMeasurementCluster.h
       - path: ElectricalPowerMeasurementDelegate.h

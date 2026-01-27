@@ -12,15 +12,17 @@ metadata:
 provides:
   - name: matter_boolean_state_configuration
 source:
-  - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/boolean-state-configuration-cluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/boolean-state-configuration-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/BooleanStateConfigurationCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/BooleanStateConfigurationTestEventTriggerHandler.cpp
+  - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/CodegenIntegration.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server
     file_list:
       - path: boolean-state-configuration-delegate.h
       - path: boolean-state-configuration-server.h
+      - path: BooleanStateConfigurationCluster.h
       - path: BooleanStateConfigurationTestEventTriggerHandler.h
+      - path: CodegenIntegration.h
 template_contribution:
   - name: component_catalog
     value: matter_boolean_state_configuration

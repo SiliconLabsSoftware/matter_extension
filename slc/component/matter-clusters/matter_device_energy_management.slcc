@@ -12,11 +12,15 @@ metadata:
 provides:
   - name: matter_device_energy_management
 source:
+  - path: third_party/matter_sdk/src/app/clusters/device-energy-management-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/device-energy-management-server/DeviceEnergyManagementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/device-energy-management-server
     file_list:
+      - path: CodegenIntegration.h
       - path: device-energy-management-server.h
+      - path: DeviceEnergyManagementCluster.h
+      - path: DeviceEnergyManagementDelegate.h
       - path: DeviceEnergyManagementTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog

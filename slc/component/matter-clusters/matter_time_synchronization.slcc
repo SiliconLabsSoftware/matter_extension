@@ -14,17 +14,17 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/DefaultTimeSyncDelegate.cpp
-  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/time-synchronization-cluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSyncDataProvider.cpp
+  - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/TimeSynchronizationCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
     file_list:
       - path: CodegenIntegration.h
       - path: DefaultTimeSyncDelegate.h
-      - path: time-synchronization-cluster.h
       - path: time-synchronization-delegate.h
       - path: time-synchronization-server.h
       - path: TimeSyncDataProvider.h
+      - path: TimeSynchronizationCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_time_synchronization
