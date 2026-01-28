@@ -180,6 +180,17 @@ jobs:
             example-app: "platform-template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build-series-3-bootloader:
+        name: Build Series 3 Bootloader
+        needs: set-build-type
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-series-3-bootloader.json'
+            path-to-example-app: slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-series-3.slcw
+            example-app: bootloader
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            platform: series-3-bootloader
+
     build-sqa-tools:
         name: Build SQA Tools
         needs: set-build-type
@@ -209,6 +220,7 @@ jobs:
             - build-closure-app
             - build-oven-app
             - build-rangehood-app
+            - build-series-3-bootloader
         if: success()
 
         steps:
