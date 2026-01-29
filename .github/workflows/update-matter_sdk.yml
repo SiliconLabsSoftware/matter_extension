@@ -7,11 +7,6 @@ on:
   schedule:
     - cron: '0 5 * * *' # Daily at midnight
   workflow_dispatch:
-    inputs:
-      target_branch:
-        description: 'Target branch to update'
-        required: false
-        default: 'main'
 
 jobs:
   update-matter_sdk:
@@ -22,7 +17,7 @@ jobs:
           ${{
             github.event_name == 'schedule'
               && fromJson('["main","release_2.8-1.5"]')
-              || fromJson(format('["{0}"]', inputs.target_branch))
+              || fromJson(format('["{0}"]', github.ref_name))
           }}
     steps:
       - name: Checkout target branch
