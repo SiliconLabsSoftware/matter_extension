@@ -19,6 +19,8 @@ component:
   - id: common_token_manager
     condition: [device_series_3]
 
+
+
   - id: matter
   - id: matter_platform_mg
   - id: matter_ble
@@ -28,28 +30,36 @@ component:
   - id: matter_crypto
   - id: matter_gatt_static
   - id: matter_provision_default
-
   - id: app_common
+
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
-  - id: matter_identify
   - id: matter_group_key_mgmt
-  - id: matter_localization_configuration
+  - id: matter_identify
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
-  - id: matter_thread_network_diagnostics
-  - id: matter_time_format_localization
-  # Override configuration for JTAG use
-  - id: matter_configuration_over_swo
-  - id: matter_segger_rtt
+
   - id: matter_si70xx_sensor
     condition: [hardware_board_has_si70xx]
   - id: matter_multi_sensor_app
+
+
+
+  # Optinnal feature
+  - id: rail_util_pti
+  - id: matter_shell
+  - id: matter_segger_rtt
+  - id: matter_configuration_over_swo
+  #- id: matter_buttons
+  #- id: matter_leds
+  - id: matter_log_uart
+  - id: matter_default_lcd_config
+
 
   # ICD configurations
   - id: matter_icd_core
@@ -57,10 +67,10 @@ component:
   - id: matter_test_event_trigger
   - id: matter_icd_management
   - id: matter_icd_checkin_sender
-  # Code Size Optimization
-  - id: matter_no_debug
-  #- id: toolchain_gcc_lto
 
+  # Code Size Optimization
+  #- id: matter_no_debug
+  #- id: toolchain_gcc_lto
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
   # Select UART/EUART drivers based on device series
