@@ -11,7 +11,6 @@ updates:
       interval: "daily"
       time: "08:00"
     allow:
-      - dependency-name: "third_party/matter_sdk"
       - dependency-name: "third_party/matter_support"
     target-branch: "main"
 
@@ -21,6 +20,5 @@ updates:
       interval: "daily"
       time: "08:00"
     allow:
-      - dependency-name: "third_party/matter_sdk"
       - dependency-name: "third_party/matter_support"
     target-branch: "release_2.8-1.5"
