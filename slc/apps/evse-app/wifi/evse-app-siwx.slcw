@@ -1,0 +1,8 @@
+label: evse-app-siwx
+quality: production
+package: matter
+description: Solution containing both a bootloader and a Matter over over WiFI EVSE App Example
+project:
+  - path: ./evse-app-siwx.slcp
+    id: application
+    output: evse-app-siwx

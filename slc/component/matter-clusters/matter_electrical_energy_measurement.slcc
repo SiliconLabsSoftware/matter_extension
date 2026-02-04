@@ -14,6 +14,7 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/CodegenIntegration.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server
     file_list:
@@ -21,6 +22,7 @@ include:
       - path: electrical-energy-measurement-server.h
       - path: ElectricalEnergyMeasurementCluster.h
       - path: EnergyReportingTestEventTriggerHandler.h
+      - path: CodegenIntegration.h
 template_contribution:
   - name: component_catalog
     value: matter_electrical_energy_measurement
