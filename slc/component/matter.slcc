@@ -45,6 +45,8 @@ toolchain_settings:
     value: -fno-common
   - option: gcc_compiler_option
     value: -Wno-unused-parameter
+  - option: gcc_compiler_option
+    value: -mslow-flash-data
 
 provides:
   - name: matter
