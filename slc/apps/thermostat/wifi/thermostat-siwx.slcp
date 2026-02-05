@@ -57,7 +57,6 @@ component:
   - id: matter_unit_localization
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
-  - id: toolchain_gcc_common
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_lwip
@@ -97,6 +96,11 @@ component:
     condition: [device_is_917_module_dev_kit]
   - instance: [timer0]
     id: ulp_timers_instance
+
+  - id: data_segment_in_psram
+  - id: text_segment_in_psram
+  - id: psram_core
+  - id: psram_aps6404l_sqh
 
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE

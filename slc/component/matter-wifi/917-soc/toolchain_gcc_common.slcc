@@ -10,6 +10,7 @@ metadata:
 root_path: slc/component
 provides:
   - name: toolchain_gcc_common
+  - name: wiseconnect_toolchain_gcc_override
 requires:
   - name: toolchain_variant
   - name: toolchain_variant_arm
@@ -40,5 +41,3 @@ toolchain_settings:
   - option: linkerfile
     value: autogen/linkerfile_common.ld
     unless: [psram_core]
-ui_hints:
-  visibility: never
