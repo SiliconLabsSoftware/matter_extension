@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_fan_control_series_3
+label: Matter - SoC Fan Control over Thread with internal Bootloader
+quality: production
+package: matter
+description: Matter Fan Control Application over Thread
+project:
+  - path: ./matter_thread_soc_fan_control.slcp
+    id: application
+    output: fan-control-app
+  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

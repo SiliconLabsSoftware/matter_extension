@@ -1,0 +1,9 @@
+workspace_name: matter_wifi_soc_fan_control
+label: Matter - SoC Fan Control over Wi-Fi
+quality: production
+package: matter
+description: Matter Fan Control Application over Wi-Fi
+project:
+  - path: ./matter_wifi_soc_fan_control.slcp
+    id: application
+    output: fan-control-app-siwx

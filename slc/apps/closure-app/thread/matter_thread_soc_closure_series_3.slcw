@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_closure_series_3
+label: Matter - SoC Closure over Thread with internal Bootloader
+quality: production
+package: matter
+description: Matter Closure Application over Thread
+project:
+  - path: ./matter_thread_soc_closure.slcp
+    id: application
+    output: closure-app
+  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

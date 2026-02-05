@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_thermostat_series_2
+label: Matter - SoC Thermostat over Thread with external Bootloader
+quality: production
+package: matter
+description: Matter Thermostat Application over Thread
+project:
+  - path: ./matter_thread_soc_thermostat.slcp
+    id: application
+    output: thermostat
+  - path: ../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

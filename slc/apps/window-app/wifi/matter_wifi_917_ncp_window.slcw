@@ -1,0 +1,14 @@
+workspace_name: matter_wifi_917_ncp_window
+label: Matter - NCP Window Covering over Wi-Fi with internal Bootloader
+quality: production
+package: matter
+description: Matter 917-NCP Window Covering Application over Wi-Fi
+project:
+  - path: ./matter_wifi_917_ncp_window.slcp
+    id: application
+    output: window-app-917-ncp
+  - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

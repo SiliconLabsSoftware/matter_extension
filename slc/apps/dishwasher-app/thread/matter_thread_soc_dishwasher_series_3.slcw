@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_dishwasher_series_3
+label: Matter - SoC Dishwasher over Thread with internal Bootloader
+quality: internal
+package: matter
+description: Solution containing both a bootloader and a Matter over Thread Dishwasher App Example on Series 3.
+project:
+  - path: ./matter_thread_soc_dishwasher.slcp
+    id: application
+    output: dishwasher-app
+  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

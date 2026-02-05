@@ -1,0 +1,9 @@
+workspace_name: matter_wifi_soc_closure
+label: Matter - SoC Closure over Wi-Fi
+quality: production
+package: matter
+description: Matter Closure Application over Wi-Fi
+project:
+  - path: ./matter_wifi_soc_closure.slcp
+    id: application
+    output: closure-app-siwx

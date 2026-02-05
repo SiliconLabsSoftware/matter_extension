@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_platform_template_series_2
+label: Matter - SoC Platform Template over Thread with external Bootloader
+quality: production
+package: matter
+description: Matter Platform Template over Thread
+project:
+  - path: ./matter_thread_soc_platform_template.slcp
+    id: application
+    output: platform-template
+  - path: ../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

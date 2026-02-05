@@ -1,0 +1,9 @@
+workspace_name: matter_wifi_soc_oven
+label: Matter - SoC Oven over Wi-Fi
+quality: production
+package: matter
+description: Matter Oven Application over Wi-Fi
+project:
+  - path: ./matter_wifi_soc_oven.slcp
+    id: application
+    output: oven-app-siwx

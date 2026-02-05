@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_onoff_plug_series_2_internal
+label: Matter - SoC Onoff Plug over Thread with internal Bootloader
+quality: production
+package: matter
+description: Matter Onoff Plug Application over Thread
+project:
+  - path: ./matter_thread_soc_onoff_plug.slcp
+    id: application
+    output: onoff-plug-app
+  - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

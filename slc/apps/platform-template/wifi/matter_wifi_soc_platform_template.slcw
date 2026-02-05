@@ -1,0 +1,9 @@
+workspace_name: matter_wifi_soc_platform_template
+label: Matter - SoC Platform Template over Wi-Fi
+quality: production
+package: matter
+description: Matter Platform Template over Wi-Fi
+project:
+  - path: ./matter_wifi_soc_platform_template.slcp
+    id: application
+    output: platform-template-siwx
