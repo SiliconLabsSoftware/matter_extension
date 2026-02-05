@@ -37,6 +37,12 @@ if __name__ == '__main__':
     FULL_VERSION = False
     UPDATE_README=False
 
+    # Validate extension version: X.Y.Z or X.Y.Z-A.B(.C)
+    extension_regex = r"^\d+\.\d+\.\d+(-\d+\.\d+(\.\d+)?)?$"
+    if not re.match(extension_regex, EXTENSION_NEW_VERSION):
+        print("Error: Incorrect usage for extension version. Need X.Y.Z or X.Y.Z-A.B(.C) format")
+        sys.exit()
+
     # Check if there an Auxillary version number is supplied 
     if len(re.split('-',EXTENSION_NEW_VERSION)) == 2:
         if (re.compile(AUX_REGEX_FORMAT)).match((re.split('-',EXTENSION_NEW_VERSION))[1]):
@@ -44,17 +50,20 @@ if __name__ == '__main__':
             FULL_VERSION_REGEX = "(\d+)\.(\d+)\.(\d+)-(\d+)\.(\d+)(\.(\d+))?"
             FULL_VERSION = True
             EXTENSION_NEW_VERSION=(re.split('-',EXTENSION_NEW_VERSION))[0]
+        else:
+            print("Error: Incorrect usage for extension version. Auxiliary part must be A.B(.C)")
+            sys.exit()
 
     ROOT = pathlib.Path(sys.argv[0]).parent.parent.parent.absolute()
 
     #Check if GSDK version is in (\d+)\.(\d+)\.(\d+) format
-    if len(GDSK_NEW_VERSION.split("."))!=3:
-        print("Error: Incorrect usage for GSDK version. Need (\d+)\.(\d+)\.(\d+) format")
+    if len(GDSK_NEW_VERSION.split("."))!=3 or not re.match(r"^\d+\.\d+\.\d+$", GDSK_NEW_VERSION):
+        print("Error: Incorrect usage for GSDK version. Need X.Y.Z format")
         sys.exit()
 
     #Check if updated to README.md files is required.
     readme_args = README.split("=")
-    if(len(readme_args)!=2 or readme_args[0]!="readme"):
+    if(len(readme_args)!=2 or readme_args[0]!="readme" or readme_args[1].upper() not in ["TRUE", "FALSE"]):
         print("Error: Incorrect usage for readme. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 readme=True/False")
         sys.exit()
     else:
@@ -99,12 +108,13 @@ if __name__ == '__main__':
         replace_text(str(ROOT)+"/matter.slsdk",FULL_VERSION_REGEX,EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
     replace_text(str(ROOT)+"/matter.slsdk","version="+VERSION_REGEX_FORMAT,"version="+EXTENSION_NEW_VERSION)
 
-    # Update .md files in slc/ directory
+    # Update .md files in slc/ directory and root README.md
     #
     # REGEX FORMAT:
     # https://docs.silabs.com/matter/1.0.4
     if(UPDATE_README):
         readme_files = [os.path.abspath(f) for f in pathlib.Path(ROOT).glob("slc/**/*.md")]
+        readme_files.append(os.path.join(str(ROOT), "README.md"))
         for file in readme_files:
 
             replace_text(file,"https://docs.silabs.com/matter/"+VERSION_REGEX_FORMAT,"https://docs.silabs.com/matter/"+EXTENSION_NEW_VERSION)
