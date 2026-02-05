@@ -56,12 +56,11 @@ if __name__ == '__main__':
 
     ROOT = pathlib.Path(sys.argv[0]).parent.parent.parent.absolute()
 
-    #Check if SiSDK version is in (\d+)\.(\d+)\.(\d+) format
-    if len(SISDK_NEW_VERSION.split("."))!=3:
-        print("Error: Incorrect usage for SiSDK version. Need (\d+)\.(\d+)\.(\d+) format")
-        sys.exit()
+    #Check if SISDK_NEW_VERSION version is in (\d+)\.(\d+)\.(\d+) format
+    if len(SISDK_NEW_VERSION.split("."))!=3 or not re.match(r"^\d+\.\d+\.\d+$", SISDK_NEW_VERSION):
+        print("Error: Incorrect usage for SISDK version. Need X.Y.Z format")
 
-    #Check if updated to README.md files is required.
+    #Check if  updated to README.md files is required.
     readme_args = README.split("=")
     if(len(readme_args)!=2 or readme_args[0]!="readme" or readme_args[1].upper() not in ["TRUE", "FALSE"]):
         print("Error: Incorrect usage for readme. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 readme=True/False")
