@@ -95,6 +95,7 @@ include:
     -   path: TimerDelegate.h
     -   path: attribute-storage-null-handling.h
     -   path: odd-sized-integers.h
+    -   path: FixedBuffer.h
   - path: third_party/matter_sdk/src/lib/support/verhoeff
     file_list:
     -   path: Verhoeff.h
