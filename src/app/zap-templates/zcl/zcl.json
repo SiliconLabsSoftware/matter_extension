@@ -848,7 +848,15 @@
             "ClusterRevision"
         ],
         "Valve Configuration and Control": [
-            "RemainingDuration"
+            "OpenDuration",
+            "AutoCloseTime",
+            "RemainingDuration",
+            "CurrentState",
+            "TargetState",
+            "CurrentLevel",
+            "TargetLevel",
+            "ValveFault",
+            "ClusterRevision"
         ],
         "Boolean State Configuration": [
             "AlarmsActive",
@@ -925,7 +933,15 @@
             "FeatureMap"
         ],
         "Camera AV Settings User Level Management": [
-            "MPTZPosition"
+            "FeatureMap",
+            "MPTZPosition",
+            "MaxPresets",
+            "ZoomMax",
+            "TiltMin",
+            "TiltMax",
+            "PanMin",
+            "PanMax",
+            "MovementState"
         ],
         "Fixed Label": [
             "LabelList",

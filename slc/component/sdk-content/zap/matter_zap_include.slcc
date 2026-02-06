@@ -35,6 +35,7 @@ include:
     - path: UserLabel.h
     - path: UnitLocalization.h
     - path: OccupancySensing.h
+    - path: ThreadNetworkDiagnostics.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h
