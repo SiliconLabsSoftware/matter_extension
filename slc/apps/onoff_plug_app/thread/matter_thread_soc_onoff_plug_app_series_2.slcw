@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_onoff_plug_series_2
+workspace_name: matter_thread_soc_onoff_plug_app_series_2
 label: Matter - SoC Onoff Plug over Thread with external Bootloader
 quality: production
 package: matter

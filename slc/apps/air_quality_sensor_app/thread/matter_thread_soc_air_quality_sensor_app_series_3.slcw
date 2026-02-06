@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_air_quality_sensor_series_3
+workspace_name: matter_thread_soc_air_quality_sensor_app_series_3
 label: Matter - SoC Air Quality Sensor over Thread with internal Bootloader
 quality: production
 package: matter

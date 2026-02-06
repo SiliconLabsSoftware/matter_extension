@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_multi_sensor
+workspace_name: matter_wifi_soc_multi_sensor_app
 label: Matter - SoC Multi Sensor over Wi-Fi
 quality: production
 package: matter

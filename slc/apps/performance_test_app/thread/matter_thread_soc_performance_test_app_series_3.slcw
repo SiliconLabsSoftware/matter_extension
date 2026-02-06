@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_performance_test_series_3
+workspace_name: matter_thread_soc_performance_test_app_series_3
 label: Matter - SoC Performance Test over Thread with internal Bootloader
 quality: internal
 package: matter

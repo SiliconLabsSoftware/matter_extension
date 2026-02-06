@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_light_switch_series_3
+workspace_name: matter_thread_soc_light_switch_app_series_3
 label: Matter - SoC Light Switch over Thread with internal Bootloader
 quality: production
 package: matter

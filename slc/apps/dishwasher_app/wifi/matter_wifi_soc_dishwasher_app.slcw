@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_dishwasher
+workspace_name: matter_wifi_soc_dishwasher_app
 label: Matter - SoC Dishwasher over Wi-Fi
 quality: internal
 package: matter

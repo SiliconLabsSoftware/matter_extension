@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_refrigerator_series_2_internal
+workspace_name: matter_thread_soc_refrigerator_app_series_2_internal
 label: Matter - SoC Refrigerator over Thread with internal Bootloader
 quality: production
 package: matter

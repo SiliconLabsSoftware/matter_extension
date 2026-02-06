@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_onoff_plug
+workspace_name: matter_wifi_soc_onoff_plug_app
 label: Matter - SoC Onoff Plug over Wi-Fi
 quality: production
 package: matter

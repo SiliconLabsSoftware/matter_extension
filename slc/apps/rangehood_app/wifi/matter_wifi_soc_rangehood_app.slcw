@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_rangehood
+workspace_name: matter_wifi_soc_rangehood_app
 label: Matter - SoC Rangehood over Wi-Fi
 quality: production
 package: matter

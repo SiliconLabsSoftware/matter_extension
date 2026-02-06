@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_closure
+workspace_name: matter_wifi_soc_closure_app
 label: Matter - SoC Closure over Wi-Fi
 quality: production
 package: matter

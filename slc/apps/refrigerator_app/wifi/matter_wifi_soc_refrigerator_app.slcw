@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_refrigerator
+workspace_name: matter_wifi_soc_refrigerator_app
 label: Matter - SoC Refrigerator over Wi-Fi
 quality: production
 package: matter

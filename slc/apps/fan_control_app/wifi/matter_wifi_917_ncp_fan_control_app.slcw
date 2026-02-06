@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_917_ncp_fan_control
+workspace_name: matter_wifi_917_ncp_fan_control_app
 label: Matter - NCP Fan Control over Wi-Fi with internal Bootloader
 quality: production
 package: matter

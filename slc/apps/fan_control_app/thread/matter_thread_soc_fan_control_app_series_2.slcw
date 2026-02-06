@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_fan_control_series_2
+workspace_name: matter_thread_soc_fan_control_app_series_2
 label: Matter - SoC Fan Control over Thread with external Bootloader
 quality: production
 package: matter

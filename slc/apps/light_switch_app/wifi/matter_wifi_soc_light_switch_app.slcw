@@ -1,4 +1,4 @@
-workspace_name: matter_wifi_soc_light_switch
+workspace_name: matter_wifi_soc_light_switch_app
 label: Matter - SoC Light Switch over Wi-Fi
 quality: production
 package: matter

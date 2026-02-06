@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_dishwasher_series_2
+workspace_name: matter_thread_soc_dishwasher_app_series_2
 label: Matter - SoC Dishwasher over Thread with external Bootloader
 quality: internal
 package: matter
