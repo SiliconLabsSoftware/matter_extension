@@ -23,7 +23,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee_light":  [
             {
                 "boards": ["brd2709a"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
@@ -33,7 +33,7 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd2709a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
@@ -49,7 +49,7 @@
         ]
     },
     "custom-sqa": {
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd2709a"],
                 "arguments": ["--output_suffix cmp-concurrent-ota-2", "--with_app matter_zigbee_concurrent",

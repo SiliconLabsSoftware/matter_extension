@@ -1,0 +1,14 @@
+workspace_name: matter_thread_soc_zigbee_light_series_2_internal
+label: Matter Zigbee - SoC Light over Thread with internal Bootloader
+quality: production
+package: matter
+description: Zigbee Matter Light Application over Thread
+project:
+  - path: ./matter_thread_soc_zigbee_light.slcp
+    id: application
+    output: zigbee-matter-light
+  - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
+    id: bootloader
+    output: matter-bootloader
+post_build:
+  path: ../../../postbuild/ws_default_application_bootloader.slpb

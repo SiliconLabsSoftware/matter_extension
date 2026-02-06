@@ -11,7 +11,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
@@ -36,7 +36,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee_light":  [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
@@ -46,7 +46,7 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix peripherals", "--with_app matter_peripherals"]
@@ -72,7 +72,7 @@
         ]
     },
     "custom-sqa": {
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
@@ -96,7 +96,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
-        "lock-app": [
+        "lock_app": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
@@ -120,14 +120,14 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
-        "light-switch-app": [
+        "light_switch_app": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix sequential-ota-2", "-pids application",
@@ -175,14 +175,14 @@
                               "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             }
         ],
-        "closure-app": [
+        "closure_app": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "-pids application",
