@@ -52,10 +52,10 @@ def get_zap_version():
     for package in zap_json.get("packages", []):
         # Iterate through the tags in each package
         for tag in package.get("tags", []):
-            # Check if the tag starts with "version:2@"
-            if tag.startswith("version:2@"):
-                # Remove the prefix "version:2@" from the tag to get the version
-                zap_version = tag.removeprefix("version:2@")
+            # Check if the tag starts with "version:" (e.g. "version:v2025.10.23-nightly.2")
+            if tag.startswith("version:"):
+                # Remove the prefix "version:" from the tag to get the version
+                zap_version = tag.removeprefix("version:")
                 logging.info(f"Found ZAP version tag: {zap_version}")
                 # Find the last occurrence of "." in the version string
                 suffix_index = zap_version.rfind(".")
