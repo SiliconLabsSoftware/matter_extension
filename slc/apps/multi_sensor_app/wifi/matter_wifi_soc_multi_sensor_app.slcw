@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Multi Sensor Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_multi_sensor.slcp
+  - path: ./matter_wifi_soc_multi_sensor_app.slcp
     id: application
     output: multi-sensor-app-siwx

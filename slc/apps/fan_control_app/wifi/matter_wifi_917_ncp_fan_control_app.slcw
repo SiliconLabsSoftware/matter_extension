@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter 917-NCP Fan Control Application over Wi-Fi
 project:
-  - path: ./matter_wifi_917_ncp_fan_control.slcp
+  - path: ./matter_wifi_917_ncp_fan_control_app.slcp
     id: application
     output: fan-control-app-917-ncp
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp

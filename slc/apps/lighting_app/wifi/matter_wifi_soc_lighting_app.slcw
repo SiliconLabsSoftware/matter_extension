@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Lighting Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_light.slcp
+  - path: ./matter_wifi_soc_lighting_app.slcp
     id: application
     output: lighting-app-siwx

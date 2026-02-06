@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Fan Control Application over Thread
 project:
-  - path: ./matter_thread_soc_fan_control.slcp
+  - path: ./matter_thread_soc_fan_control_app.slcp
     id: application
     output: fan-control-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

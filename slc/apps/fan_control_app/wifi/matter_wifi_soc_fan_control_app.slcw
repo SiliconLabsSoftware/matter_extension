@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Fan Control Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_fan_control.slcp
+  - path: ./matter_wifi_soc_fan_control_app.slcp
     id: application
     output: fan-control-app-siwx

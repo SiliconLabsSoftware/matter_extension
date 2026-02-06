@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Oven Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_oven.slcp
+  - path: ./matter_wifi_soc_oven_app.slcp
     id: application
     output: oven-app-siwx

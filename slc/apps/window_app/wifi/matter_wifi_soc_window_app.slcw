@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Window Covering Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_window.slcp
+  - path: ./matter_wifi_soc_window_app.slcp
     id: application
     output: window-app-siwx

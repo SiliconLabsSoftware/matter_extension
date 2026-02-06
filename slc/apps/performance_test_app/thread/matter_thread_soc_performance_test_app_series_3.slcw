@@ -4,7 +4,7 @@ quality: internal
 package: matter
 description: Solution containing both a bootloader and a Matter over Thread Performance Test App Example on Series 3.
 project:
-  - path: ./matter_thread_soc_performance_test.slcp
+  - path: ./matter_thread_soc_performance_test_app.slcp
     id: application
     output: performance-test-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

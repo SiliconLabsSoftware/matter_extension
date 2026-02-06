@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Onoff Plug Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_onoff_plug.slcp
+  - path: ./matter_wifi_soc_onoff_plug_app.slcp
     id: application
     output: onoff-plug-app-siwx

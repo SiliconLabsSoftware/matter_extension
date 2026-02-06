@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Refrigerator Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_refrigerator.slcp
+  - path: ./matter_wifi_soc_refrigerator_app.slcp
     id: application
     output: refrigerator-app-siwx

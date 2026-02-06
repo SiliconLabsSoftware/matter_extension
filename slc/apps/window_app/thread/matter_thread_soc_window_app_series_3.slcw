@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Window Covering Application over Thread
 project:
-  - path: ./matter_thread_soc_window.slcp
+  - path: ./matter_thread_soc_window_app.slcp
     id: application
     output: window-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

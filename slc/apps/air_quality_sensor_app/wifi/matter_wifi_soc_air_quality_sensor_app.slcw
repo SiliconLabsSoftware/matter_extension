@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Air Quality Sensor Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_air_quality_sensor.slcp
+  - path: ./matter_wifi_soc_air_quality_sensor_app.slcp
     id: application
     output: air-quality-sensor-app-siwx

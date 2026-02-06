@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Refrigerator Application over Thread
 project:
-  - path: ./matter_thread_soc_refrigerator.slcp
+  - path: ./matter_thread_soc_refrigerator_app.slcp
     id: application
     output: refrigerator-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Light Switch Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_light_switch.slcp
+  - path: ./matter_wifi_soc_light_switch_app.slcp
     id: application
     output: light-switch-app-siwx

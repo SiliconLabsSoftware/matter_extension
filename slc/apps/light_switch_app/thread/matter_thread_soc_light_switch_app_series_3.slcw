@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Light Switch Application over Thread
 project:
-  - path: ./matter_thread_soc_light_switch.slcp
+  - path: ./matter_thread_soc_light_switch_app.slcp
     id: application
     output: light-switch-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

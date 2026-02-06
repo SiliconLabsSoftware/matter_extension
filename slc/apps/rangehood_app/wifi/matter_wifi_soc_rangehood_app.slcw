@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Rangehood Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_rangehood.slcp
+  - path: ./matter_wifi_soc_rangehood_app.slcp
     id: application
     output: rangehood-app-siwx

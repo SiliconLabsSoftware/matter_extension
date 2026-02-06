@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Multi Sensor Application over Thread
 project:
-  - path: ./matter_thread_soc_multi_sensor.slcp
+  - path: ./matter_thread_soc_multi_sensor_app.slcp
     id: application
     output: multi-sensor-app
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp

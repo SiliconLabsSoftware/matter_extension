@@ -5,10 +5,10 @@ description: This project builds a Matter Light and Matter External Bootloader a
 quality: production
 package: matter
 project:
-  - path: ./matter_thread_soc_light_s.slcp
+  - path: ./matter_thread_soc_lighting_app_s.slcp
     id: trustzone-secure
     output: lighting-app-secure
-  - path: ./matter_thread_soc_light_ns.slcp
+  - path: ./matter_thread_soc_lighting_app_ns.slcp
     id: application
     output: lighting-app-nonsecure
   - path: ../../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp

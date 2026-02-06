@@ -4,7 +4,7 @@ quality: production
 package: matter
 description: Matter Air Quality Sensor Application over Thread
 project:
-  - path: ./matter_thread_soc_air_quality_sensor.slcp
+  - path: ./matter_thread_soc_air_quality_sensor_app.slcp
     id: application
     output: air-quality-sensor-app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp

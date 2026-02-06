@@ -4,6 +4,6 @@ quality: production
 package: matter
 description: Matter Closure Application over Wi-Fi
 project:
-  - path: ./matter_wifi_soc_closure.slcp
+  - path: ./matter_wifi_soc_closure_app.slcp
     id: application
     output: closure-app-siwx
