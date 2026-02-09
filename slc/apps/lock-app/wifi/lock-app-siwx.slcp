@@ -98,9 +98,8 @@ component:
     from: matter
   - id: toolchain_gcc_common
     from: matter
-  # disabling shell it is fixed in CSA
-  #- id: matter_shell
-  #  from: matter
+  - id: matter_shell
+    from: matter
   - id: matter_default_lcd_config
     from: matter
   - id: matter_icd_core

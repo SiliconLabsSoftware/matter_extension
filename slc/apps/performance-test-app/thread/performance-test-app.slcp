@@ -193,8 +193,9 @@ configuration:
   # Disable logging as it affects performance
   - name: SL_MATTER_LOG_LEVEL
     value: "SL_MATTER_LOG_NONE"
+  # defining this 1 to enable the fix the build
   - name: SILABS_LOG_ENABLED
-    value: "0"
+    value: "1"
   - name: HARD_FAULT_LOG_ENABLE
     value: "0"
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT

@@ -12,11 +12,14 @@ metadata:
 provides:
   - name: matter_energy_evse
 source:
-  - path: third_party/matter_sdk/src/app/clusters/energy-evse-server/energy-evse-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/energy-evse-server/EnergyEvseCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/energy-evse-server
     file_list:
+      - path: Constants.h
       - path: energy-evse-server.h
+      - path: EnergyEvseCluster.h
+      - path: EnergyEvseDelegate.h
       - path: EnergyEvseTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog

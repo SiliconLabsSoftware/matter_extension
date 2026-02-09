@@ -101,9 +101,8 @@ component:
   - id: matter_segger_rtt
     from: matter
 
-  # disabling shell it is fixed in CSA
-  #- id: matter_shell
-  #  from: matter
+  - id: matter_shell
+    from: matter
   - id: matter_icd_core
     from: matter
   - id: matter_test_event_trigger

@@ -17,7 +17,7 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorDriver.cpp
   - path: third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorStorage.cpp
   - path: third_party/matter_sdk/src/app/clusters/ota-requestor/ExtendedOTARequestorDriver.cpp
-  - path: third_party/matter_sdk/src/app/clusters/ota-requestor/ota-requestor-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/ota-requestor/OTATestEventTriggerHandler.cpp
 include:
   - path: third_party/matter_sdk/src/controller
