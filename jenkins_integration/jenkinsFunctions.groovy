@@ -37,9 +37,16 @@ def run_code_size_analysis() {
                     if [ -n "$solution_dir" ]; then
                         local base_name=\$(echo "\$solution_dir" | sed -E 's/-solution(-lto)?\$//')
                         
+                        # Extract app name from file name
                         case "\$base_name" in
-                            *zigbee-matter-light*)
+                            *zigbee_light*)
                                 app_name="zigbee-matter-light"
+                                ;;
+                            *lighting_app*)
+                                app_name="lighting-app"
+                                ;;
+                            *lock_app*)
+                                app_name="lock-app"
                                 ;;
                             *)
                                 app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
@@ -55,7 +62,7 @@ def run_code_size_analysis() {
                 
                 determine_protocol() {
                     local path=$1
-                    if [[ "$path" == *"siwx"* ]]; then
+                    if [[ "$path" == *"wifi_soc"* ]]; then
                         echo "wifi"
                     else
                         echo "thread"
@@ -180,12 +187,23 @@ def run_code_size_analysis() {
                 echo "$map_files_found"
                 echo ""
                 
-                target_apps="lighting-app|lock-app|zigbee-matter-light"
-                echo "Filtering for target apps: $target_apps"
-                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)" | grep -v -E "(-ncp-|-wf200-|-sequential)")
+                # Define boards and apps to analyze                
+                declare -a CODE_SIZE_PATTERNS=(
+                    "brd4187c.*/matter_thread_soc_lighting_app_series_2_internal-solution(-lto)?/.*\.map\$"
+                    "brd4187c.*/matter_thread_soc_lock_app_series_2_internal-solution(-lto)?/.*\.map\$"
+                    "brd4187c.*/matter_thread_soc_zigbee_light_series_2_internal-solution(-lto)?/.*\.map\$"
+                    "brd4407a.*/matter_thread_soc_lighting_app_series_3-solution(-lto)?/.*\.map\$"
+                    "brd4407a.*/matter_thread_soc_lock_app_series_3-solution(-lto)?/.*\.map\$"
+                    "brd4407a.*/matter_thread_soc_zigbee_light_series_3-solution(-lto)?/.*\.map\$"
+                    "brd4338a.*/matter_wifi_soc_lighting_app-solution(-lto)?/.*\.map\$"
+                    "brd4338a.*/matter_wifi_soc_lock_app-solution(-lto)?/.*\.map\$"
+                )
+                
+                PATTERN=\$(IFS='|'; echo "\${CODE_SIZE_PATTERNS[*]}")
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "\$PATTERN")
                 
                 if [ -z "$filtered_map_files" ]; then
-                    echo "WARNING: No map files found for target apps ($target_apps)"
+                    echo "WARNING: No map files found matching target build patterns"
                     echo "Available apps in map files:"
                     echo "$map_files_found" | sed -E 's|.*/([^/]*-solution[^/]*)/.*|\1|' | sort -u
                     exit 0

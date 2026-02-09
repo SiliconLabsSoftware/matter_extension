@@ -550,7 +550,7 @@ def determine_ubai_app_name(app_name_folder):
         # If ever solution is missing, mark it.
         suffix = "solution-false"
     if suffix == "":
-        if "zigbee-matter-light" in app_name_folder:
+        if "zigbee_light" in app_name_folder:
             # Match thermostat cmp app
             ubai_app_name = "cmp-concurrent"
         else:
