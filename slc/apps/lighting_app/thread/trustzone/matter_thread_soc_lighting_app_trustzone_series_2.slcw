@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_lighting_app_series_2
+workspace_name: matter_thread_soc_lighting_app_trustzone_series_2
 label: Matter - SoC Lighting over Thread with external Bootloader and TrustZone
 description: This project builds a Matter Light and Matter External Bootloader and TrustZone that can be developed inside Simplicity Studio
     Workspace to build the TrustZone-enabled application and accompanying bootloader.

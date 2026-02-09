@@ -1,4 +1,4 @@
-workspace_name: matter_thread_soc_lighting_app_series_3
+workspace_name: matter_thread_soc_lighting_app_trustzone_series_3
 label: Matter - SoC Lighting over Thread with internal Bootloader and TrustZone
 description: >
     Workspace to build the TrustZone-enabled application and accompanying bootloader.
