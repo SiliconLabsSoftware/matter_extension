@@ -184,7 +184,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
-            path-to-example-app: slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-series-3.slcw
+            path-to-example-app: slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcw
             example-app: bootloader
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             platform: series-3-bootloader
