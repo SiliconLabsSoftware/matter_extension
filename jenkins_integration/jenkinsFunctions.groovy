@@ -189,14 +189,14 @@ def run_code_size_analysis() {
                 
                 # Define boards and apps to analyze                
                 declare -a CODE_SIZE_PATTERNS=(
-                    "brd4187c.*/matter_thread_soc_lighting_app_series_2_internal-solution(-lto)?/.*\.map\$"
-                    "brd4187c.*/matter_thread_soc_lock_app_series_2_internal-solution(-lto)?/.*\.map\$"
-                    "brd4187c.*/matter_thread_soc_zigbee_light_series_2_internal-solution(-lto)?/.*\.map\$"
-                    "brd4407a.*/matter_thread_soc_lighting_app_series_3-solution(-lto)?/.*\.map\$"
-                    "brd4407a.*/matter_thread_soc_lock_app_series_3-solution(-lto)?/.*\.map\$"
-                    "brd4407a.*/matter_thread_soc_zigbee_light_series_3-solution(-lto)?/.*\.map\$"
-                    "brd4338a.*/matter_wifi_soc_lighting_app-solution(-lto)?/.*\.map\$"
-                    "brd4338a.*/matter_wifi_soc_lock_app-solution(-lto)?/.*\.map\$"
+                    "brd4187c.*/matter_thread_soc_lighting_app_series_2_internal-solution(-lto)?/.*\\.map\\$"
+                    "brd4187c.*/matter_thread_soc_lock_app_series_2_internal-solution(-lto)?/.*\\.map\\$"
+                    "brd4187c.*/matter_thread_soc_zigbee_light_series_2_internal-solution(-lto)?/.*\\.map\\$"
+                    "brd4407a.*/matter_thread_soc_lighting_app_series_3-solution(-lto)?/.*\\.map\\$"
+                    "brd4407a.*/matter_thread_soc_lock_app_series_3-solution(-lto)?/.*\\.map\\$"
+                    "brd4407a.*/matter_thread_soc_zigbee_light_series_3-solution(-lto)?/.*\\.map\\$"
+                    "brd4338a.*/matter_wifi_soc_lighting_app-solution(-lto)?/.*\\.map\\$"
+                    "brd4338a.*/matter_wifi_soc_lock_app-solution(-lto)?/.*\\.map\\$"
                 )
                 
                 PATTERN=\$(IFS='|'; echo "\${CODE_SIZE_PATTERNS[*]}")
