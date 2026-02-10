@@ -44,7 +44,6 @@ component:
   - id: matter_group_key_mgmt
   - id: matter_groups
   - id: matter_identify
-  - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_on_off
   - id: matter_operational_credentials
@@ -53,7 +52,6 @@ component:
   - id: matter_power_source
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
-  - id: matter_time_format_localization
   - id: matter_user_label
   - id: matter_fan_control
   - id: matter_default_lcd_config
