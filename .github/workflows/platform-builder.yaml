@@ -72,7 +72,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
