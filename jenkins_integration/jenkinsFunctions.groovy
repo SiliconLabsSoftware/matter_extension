@@ -187,30 +187,30 @@ def run_code_size_analysis() {
                 echo "$map_files_found"
                 echo ""
                 
-                CODE_SIZE_BUILDS=(
-                    "brd4187c/matter_thread_soc_lighting_app_series_2_solution"
-                    "brd4187c/matter_thread_soc_lock_app_series_2_solution"
-                    "brd4187c/matter_thread_soc_zigbee_light_series_2_solution"
-                    "brd4407a/matter_thread_soc_lighting_app_series_3_solution"
-                    "brd4407a/matter_thread_soc_lock_app_series_3_solution"
-                    "brd4407a/matter_thread_soc_zigbee_light_series_3_solution"
-                    "brd4338a/matter_wifi_soc_lighting_app_solution"
-                    "brd4338a/matter_wifi_soc_lock_app_solution"
-                )
+                CODE_SIZE_BUILDS='
+                    brd4187c/matter_thread_soc_lighting_app_series_2_solution   
+                    brd4187c/matter_thread_soc_lock_app_series_2_solution   
+                    brd4187c/matter_thread_soc_zigbee_light_series_2_solution   
+                    brd4407a/matter_thread_soc_lighting_app_series_3_solution   
+                    brd4407a/matter_thread_soc_lock_app_series_3_solution   
+                    brd4407a/matter_thread_soc_zigbee_light_series_3_solution   
+                    brd4338a/matter_wifi_soc_lighting_app_solution   
+                    brd4338a/matter_wifi_soc_lock_app_solution   
+                '
                 
-                declare -a CODE_SIZE_PATTERNS=()
-                for build in "\${CODE_SIZE_BUILDS[@]}"; do
-                    CODE_SIZE_PATTERNS+=("\${build}/.*\\.map\\$|\${build}_lto/.*\\.map\\$")
+                PATTERN=""
+                for build in $CODE_SIZE_BUILDS; do
+                [ -n "$PATTERN" ] && PATTERN="${PATTERN}|"
+                PATTERN="${PATTERN}${build}/.*\\.map\\$|${build}_lto/.*\\.map\\$"
                 done
-                
-                PATTERN=\$(IFS='|'; echo "\${CODE_SIZE_PATTERNS[*]}")
-                filtered_map_files=\$(echo "\$map_files_found" | grep -E "\$PATTERN")
-                
+
+                filtered_map_files=$(echo "$map_files_found" | grep -E "$PATTERN")
+
                 if [ -z "$filtered_map_files" ]; then
-                    echo "WARNING: No map files found matching target build patterns"
-                    echo "Available apps in map files:"
-                    echo "$map_files_found" | sed -E 's|.*/([^/]*_solution[^/]*)/.*|\1|' | sort -u
-                    exit 0
+                echo "WARNING: No map files found matching target build patterns"
+                echo "Available apps in map files:"
+                echo "$map_files_found" | sed -E 's|.*/([^/]*_solution[^/]*)/.*|\1|' | sort -u
+                exit 0
                 fi
                 
                 echo "Target app map files to process:"
