@@ -520,13 +520,13 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
         if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
             _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
         # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
-        if ("ota" in ubai_app_name or "series-3" in app_name_path) and "wifi_soc" not in app_name_path:
-            if app_name_folder.startswith("bootloader-"):
+        if ("ota" in ubai_app_name or "series_3" in app_name_path) and "wifi_soc" not in app_name_path:
+            if "matter_bootloader" in app_name_folder:
                 app_name_base = "matter-bootloader"
-            elif "-series" in app_name_folder: # Thread
-                app_name_base = app_name_folder.split("-series")[0]
+            elif "_series" in app_name_folder: # Thread
+                app_name_base = app_name_folder.split("_series")[0]
             else: # WIFI NCP
-                app_name_base = app_name_folder.split("-solution")[0]
+                app_name_base = app_name_folder.split("_solution")[0]
             artifact_app_only_folder = os.path.join(app_name_path, app_name_base, 'artifact')
             if os.path.exists(artifact_app_only_folder) and os.path.isdir(artifact_app_only_folder):
                 _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
@@ -556,8 +556,8 @@ def determine_ubai_app_name(app_name_folder):
         else:
             ubai_app_name = ""
     else:
-        if suffix.startswith('-'):
-            ubai_app_name = suffix.lstrip('-')
+        if suffix.startswith('_'):
+            ubai_app_name = suffix.lstrip('_')
         else:
             ubai_app_name = suffix
     print(f"UBAI app name after processing: {ubai_app_name}")
@@ -592,7 +592,7 @@ def _extract_sample_app_name(file_name):
     Returns:
         str: Extracted sample app name
     """
-    if "series-" in file_name:
-        return file_name.split("-series")[0]
+    if "series_" in file_name:
+        return file_name.split("_series")[0]
     else:
         return file_name 

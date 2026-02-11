@@ -32,10 +32,10 @@ def run_code_size_analysis() {
                     local path=$1
                     local app_name
                     
-                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*-solution(-lto)?" | head -1)
+                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*_solution(_lto)?" | head -1)
                     
                     if [ -n "$solution_dir" ]; then
-                        local base_name=\$(echo "\$solution_dir" | sed -E 's/-solution(-lto)?\$//')
+                        local base_name=\$(echo "\$solution_dir" | sed -E 's/_solution(_lto)?\$//')
                         
                         # Extract app name from file name
                         case "\$base_name" in
@@ -71,7 +71,7 @@ def run_code_size_analysis() {
                 
                 determine_build_options() {
                     local path=$1
-                    if [[ "$path" == *"-solution-lto/"* ]]; then
+                    if [[ "$path" == *"_solution_lto/"* ]]; then
                         echo "-lto"
                     else
                         echo ""
@@ -187,17 +187,21 @@ def run_code_size_analysis() {
                 echo "$map_files_found"
                 echo ""
                 
-                # Define boards and apps to analyze                
-                declare -a CODE_SIZE_PATTERNS=(
-                    'brd4187c.*/matter_thread_soc_lighting_app_series_2_internal-solution(-lto)?/.*\\.map$'
-                    'brd4187c.*/matter_thread_soc_lock_app_series_2_internal-solution(-lto)?/.*\\.map$'
-                    'brd4187c.*/matter_thread_soc_zigbee_light_series_2_internal-solution(-lto)?/.*\\.map$'
-                    'brd4407a.*/matter_thread_soc_lighting_app_series_3-solution(-lto)?/.*\\.map$'
-                    'brd4407a.*/matter_thread_soc_lock_app_series_3-solution(-lto)?/.*\\.map$'
-                    'brd4407a.*/matter_thread_soc_zigbee_light_series_3-solution(-lto)?/.*\\.map$'
-                    'brd4338a.*/matter_wifi_soc_lighting_app-solution(-lto)?/.*\\.map$'
-                    'brd4338a.*/matter_wifi_soc_lock_app-solution(-lto)?/.*\\.map$'
+                CODE_SIZE_BUILDS=(
+                    "brd4187c/matter_thread_soc_lighting_app_series_2_solution"
+                    "brd4187c/matter_thread_soc_lock_app_series_2_solution"
+                    "brd4187c/matter_thread_soc_zigbee_light_series_2_solution"
+                    "brd4407a/matter_thread_soc_lighting_app_series_3_solution"
+                    "brd4407a/matter_thread_soc_lock_app_series_3_solution"
+                    "brd4407a/matter_thread_soc_zigbee_light_series_3_solution"
+                    "brd4338a/matter_wifi_soc_lighting_app_solution"
+                    "brd4338a/matter_wifi_soc_lock_app_solution"
                 )
+                
+                declare -a CODE_SIZE_PATTERNS=()
+                for build in "\${CODE_SIZE_BUILDS[@]}"; do
+                    CODE_SIZE_PATTERNS+=("\${build}/.*\\.map\\$|\${build}_lto/.*\\.map\\$")
+                done
                 
                 PATTERN=\$(IFS='|'; echo "\${CODE_SIZE_PATTERNS[*]}")
                 filtered_map_files=\$(echo "\$map_files_found" | grep -E "\$PATTERN")
@@ -205,7 +209,7 @@ def run_code_size_analysis() {
                 if [ -z "$filtered_map_files" ]; then
                     echo "WARNING: No map files found matching target build patterns"
                     echo "Available apps in map files:"
-                    echo "$map_files_found" | sed -E 's|.*/([^/]*-solution[^/]*)/.*|\1|' | sort -u
+                    echo "$map_files_found" | sed -E 's|.*/([^/]*_solution[^/]*)/.*|\1|' | sort -u
                     exit 0
                 fi
                 

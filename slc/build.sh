@@ -6,56 +6,56 @@
 #   ./slc/build.sh <slcp/slcw path> <board>
 #
 #   Example .slcp usage:
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c
-#       output in: out/brd4187c/lighting-app-solution/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/
 #
 #   Example --configuration option usage:
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   --skip_gen option : Allows to skip the slc gen step and only run the make command to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
 #                       This option only works if the project has previously been generated
 #   Example
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --skip_gen
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --skip_gen
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
 #   Example
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --with_app '<component1>,<component2>'
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --with_app '<component1>,<component2>'
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   --without_app option : Allows to exclude specific components from the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --without_app '<component1>,<component2>'
-#       output in: out/brd4187c/lighting-app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --without_app '<component1>,<component2>'
+#       output in: out/brd4187c/matter_thread_soc_lighting_app/
 #
 #   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/thermostat-917-ncp.slcw brd4187c --with_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/thermostat-917-ncp-solution/
+#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat.slcw brd4187c --with_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_solution/
 #
 #   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/thermostat-917-ncp.slcw brd4187c --without_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/thermostat-917-ncp-solution/
+#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat.slcw brd4187c --without_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_solution/
 #
 #   -pids option : Allows to build only specific parts of a solution (.slcw) project. If provided for .slcp file, silently ignored.
 #   Valid arguments: 'bootloader' or 'application'
 #   Example bootloader-only build:
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids bootloader
-#       output in: out/brd4187c/lighting-app-series-2-solution/ (builds only bootloader)
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c -pids bootloader
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/ (builds only bootloader)
 #   Example application-only build:
-#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids application
-#       output in: out/brd4187c/lighting-app-series-2-solution/ (builds only application)
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c -pids application
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/ (builds only application)
 #
 
 # Helper functions to build component arguments
@@ -158,7 +158,7 @@ if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
 	SILABS_APP=$(basename "$SILABS_APP_PATH" .slcw)
 	MAKE_FILE=$SILABS_APP.solution.Makefile
 	PROJECT_FLAG="-w"
-	OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP-solution"
+	OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP_solution"
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
 	SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)
@@ -199,7 +199,7 @@ while [ $# -gt 0 ]; do
 		shift
 		;;
 	--output_suffix)
-		OUTPUT_DIR="${OUTPUT_DIR}-$2"
+		OUTPUT_DIR="${OUTPUT_DIR}_$2"
 		shift
 		shift
 		;;
