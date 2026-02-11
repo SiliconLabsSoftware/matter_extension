@@ -24,10 +24,8 @@ class LogParser:
     def get_message_category(self, message: str) -> str:
         """
         Determine the category of a log message.
-        
         Args:
             message: The log message to categorize.
-            
         Returns:
             Category string: 'error', 'warn', 'silabs', 'detail', or 'info'.
         """
@@ -48,10 +46,8 @@ class LogParser:
     def get_message_module(self, message: str) -> Optional[str]:
         """
         Determine the module of a log message.
-        
         Args:
             message: The log message to check.
-            
         Returns:
             Module string or None if no specific module is identified.
         """
@@ -78,10 +74,8 @@ class LogParser:
     def is_truncated_log(self, message: str) -> bool:
         """
         Check if a log message is truncated.
-        
         Args:
             message: The log message to check.
-            
         Returns:
             True if the message ends with '.....', False otherwise.
         """
@@ -90,10 +84,8 @@ class LogParser:
     def extract_missed_logs_count(self, message: str) -> Optional[int]:
         """
         Extract missed logs count from a message.
-        
         Args:
             message: The message to parse.
-            
         Returns:
             The number of missed logs, or None if pattern not found.
         """
@@ -109,7 +101,6 @@ class MessageBuffer:
     def __init__(self, parser: LogParser) -> None:
         """
         Initialize the message buffer.
-        
         Args:
             parser: LogParser instance for message categorization.
         """
@@ -123,10 +114,8 @@ class MessageBuffer:
     def process_data(self, data: bytes) -> Tuple[list, list, int, int, int]:
         """
         Process incoming serial data and extract messages.
-        
         Args:
             data: Raw bytes from serial port.
-            
         Returns:
             Tuple containing:
                 - List of (log_message, category, module) tuples

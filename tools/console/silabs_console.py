@@ -25,7 +25,6 @@ class SilabsMatterConsole:
     def __init__(self, port: str, baudrate: int) -> None:
         """
         Initialize the Matter console application.
-        
         Args:
             port: Serial port name.
             baudrate: Serial baudrate.
@@ -51,7 +50,6 @@ class SilabsMatterConsole:
     def open_serial(self) -> bool:
         """
         Open the serial port connection with flow control enabled.
-        
         Returns:
             True if successful, False otherwise.
         """
