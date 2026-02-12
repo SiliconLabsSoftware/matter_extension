@@ -3,7 +3,7 @@ label: Matter Zigbee - SoC Light over Thread
 package: matter
 category: Matter Application
 quality: production
-description: This project builds a Matter Lighting app combined with a Zigbee Light that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread
 
 component:
   - id: toolchain_gcc
@@ -254,7 +254,7 @@ include:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

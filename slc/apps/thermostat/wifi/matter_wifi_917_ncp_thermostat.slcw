@@ -2,13 +2,13 @@ workspace_name: matter_wifi_917_ncp_thermostat
 label: Matter - NCP Thermostat over Wi-Fi with internal Bootloader
 quality: production
 package: matter
-description: Matter 917-NCP Thermostat Application over Wi-Fi
+description: Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi thermostat app with internal bootloader
 project:
   - path: ./matter_wifi_917_ncp_thermostat.slcp
     id: application
-    output: thermostat-917-ncp
+    output: thermostat_917_ncp
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

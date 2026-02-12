@@ -2,7 +2,7 @@ project_name: matter_bootloader_internal_series_2
 package: matter
 quality: production
 label: Matter - SoC Bootloader Internal Storage Series 2
-description: This sample configuration of the simplicity bootloader configures the bootloader to use the internal flash to store firmware update images. The storage configuration is set up to store a single firmware update image at a time, in a single storage slot. The storage slot is configured to start at address 0x84000 of the internal flash, and have a size of 492 kB. This can be configured on the "Storage" tab. This bootloader is compatible with Matter sample examples running on a Series 2 device.
+description: Demonstrates a bootloader configuration using internal storage for Matter firmware updates on Series 2 devices
 category: Matter Application
 sdk_extension:
   - id: matter
@@ -93,7 +93,7 @@ configuration:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

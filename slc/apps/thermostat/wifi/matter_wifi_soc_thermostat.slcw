@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_thermostat
 label: Matter - SoC Thermostat over Wi-Fi
 quality: production
 package: matter
-description: Matter Thermostat Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app
 project:
   - path: ./matter_wifi_soc_thermostat.slcp
     id: application
-    output: thermostat-siwx
+    output: thermostat_siwx

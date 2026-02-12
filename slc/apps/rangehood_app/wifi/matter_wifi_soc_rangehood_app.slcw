@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_rangehood_app
 label: Matter - SoC Rangehood over Wi-Fi
 quality: production
 package: matter
-description: Matter Rangehood Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi rangehood app
 project:
   - path: ./matter_wifi_soc_rangehood_app.slcp
     id: application
-    output: rangehood-app-siwx
+    output: rangehood_app_siwx

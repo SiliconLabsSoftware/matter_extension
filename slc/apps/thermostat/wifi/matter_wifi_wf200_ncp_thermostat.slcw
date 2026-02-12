@@ -2,13 +2,13 @@ workspace_name: matter_wifi_wf200_ncp_thermostat
 label: Matter - NCP Thermostat over Wi-Fi with external Bootloader
 quality: production
 package: matter
-description: Matter WF200 Thermostat Application over Wi-Fi
+description: Demonstrates a sample implementation of a WF200 NCP Matter over Wi-Fi thermostat app with internal bootloader
 project:
   - path: ./matter_wifi_wf200_ncp_thermostat.slcp
     id: application
-    output: thermostat-wf200
+    output: thermostat_wf200
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

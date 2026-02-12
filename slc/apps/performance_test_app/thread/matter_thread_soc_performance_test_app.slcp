@@ -1,6 +1,6 @@
-project_name: matter_thread_soc_performance_test
+project_name: matter_thread_soc_performance_test_app
 label: Matter - SoC Performance Test over Thread
-description: This project builds a Matter Performance Test app that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Thread performance test app
 category: Matter Application
 quality: internal
 package: matter
@@ -181,7 +181,7 @@ config_file:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

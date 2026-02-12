@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_closure_app
 label: Matter - SoC Closure over Wi-Fi
 quality: production
 package: matter
-description: Matter Closure Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi window shade app
 project:
   - path: ./matter_wifi_soc_closure_app.slcp
     id: application
-    output: closure-app-siwx
+    output: closure_app_siwx

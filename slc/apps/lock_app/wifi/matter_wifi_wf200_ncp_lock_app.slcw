@@ -2,13 +2,13 @@ workspace_name: matter_wifi_wf200_ncp_lock_app
 label: Matter - NCP Lock over Wi-Fi with external Bootloader
 quality: production
 package: matter
-description: Matter WF200 Lock Application over Wi-Fi
+description: Demonstrates a sample implementation of a WF200 NCP Matter over Wi-Fi door lock app with internal bootloader
 project:
   - path: ./matter_wifi_wf200_ncp_lock_app.slcp
     id: application
-    output: lock-app-wf200
+    output: lock_app_wf200
   - path: ../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

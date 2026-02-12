@@ -2,13 +2,13 @@ workspace_name: matter_thread_soc_lighting_app_series_3
 label: Matter - SoC Lighting over Thread with internal Bootloader
 quality: production
 package: matter
-description: Matter Lighting Application over Thread
+description: Demonstrates a sample implementation of a Matter over Thread lighting app with internal bootloader
 project:
   - path: ./matter_thread_soc_lighting_app.slcp
     id: application
-    output: lighting-app
+    output: lighting_app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

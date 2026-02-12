@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_air_quality_sensor_app
 label: Matter - SoC Air Quality Sensor over Wi-Fi
 quality: production
 package: matter
-description: Matter Air Quality Sensor Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi air quality sensor app
 project:
   - path: ./matter_wifi_soc_air_quality_sensor_app.slcp
     id: application
-    output: air-quality-sensor-app-siwx
+    output: air_quality_sensor_app_siwx

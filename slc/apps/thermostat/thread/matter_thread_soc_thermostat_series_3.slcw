@@ -2,13 +2,13 @@ workspace_name: matter_thread_soc_thermostat_series_3
 label: Matter - SoC Thermostat over Thread with internal Bootloader
 quality: production
 package: matter
-description: Matter Thermostat Application over Thread
+description: Demonstrates a sample implementation of a Matter over Thread thermostat app with internal bootloader
 project:
   - path: ./matter_thread_soc_thermostat.slcp
     id: application
     output: thermostat
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

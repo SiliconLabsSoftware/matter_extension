@@ -2,13 +2,13 @@ workspace_name: matter_thread_soc_performance_test_app_series_3
 label: Matter - SoC Performance Test over Thread with internal Bootloader
 quality: internal
 package: matter
-description: Solution containing both a bootloader and a Matter over Thread Performance Test App Example on Series 3.
+description: Demonstrates a sample implementation of a Matter over Thread performance test app with internal bootloader
 project:
   - path: ./matter_thread_soc_performance_test_app.slcp
     id: application
-    output: performance-test-app
+    output: performance_test_app
   - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb

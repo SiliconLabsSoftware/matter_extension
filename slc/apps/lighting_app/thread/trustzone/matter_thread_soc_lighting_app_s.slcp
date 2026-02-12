@@ -1,6 +1,6 @@
-project_name: matter_thread_soc_light_s
+project_name: matter_thread_soc_lighting_app_s
 label: Matter - SoC Lighting TrustZone Secure
-description: This project builds a Matter TrustZone Secure Light and can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Thread lighting app with TrustZone support
 category: Matter Application
 quality: production
 package: matter
@@ -64,12 +64,15 @@ export:
     - path: artifact/trustzone_secure_library.o
 
 filter:
-  - name: "Wireless Technology"
-    value: ["Thread"]
-  - name: "Device Type"
-    value: ["SoC"]
-  - name: "Project Difficulty"
-    value: ["Advanced"]
+  - name: Type
+    value:
+      - SoC
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
 
 tag:
   - companion:nonsecure_app # Needs a companion app and cannot be built alone

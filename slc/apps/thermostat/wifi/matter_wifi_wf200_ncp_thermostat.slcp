@@ -1,6 +1,6 @@
 project_name: matter_wifi_wf200_ncp_thermostat
 label: Matter - NCP Thermostat over Wi-Fi
-description: This project builds a Matter Thermostat for Wi-Fi WF200 that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a WF200 NCP Matter over Wi-Fi thermostat app
 category: Matter Application
 quality: production
 package: matter
@@ -153,7 +153,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - NCP
   - name: Difficulty
     value:
       - Advanced

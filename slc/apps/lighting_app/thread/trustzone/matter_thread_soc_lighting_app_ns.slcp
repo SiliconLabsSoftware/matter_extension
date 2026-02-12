@@ -1,6 +1,6 @@
-project_name: matter_thread_soc_light_ns
+project_name: matter_thread_soc_lighting_app_ns
 label: Matter - SoC Lighting TrustZone Non-Secure
-description: This project builds a Matter TrustZone Non-Secure Light and can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Thread lighting app with TrustZone support
 category: Matter Application
 quality: production
 package: matter
@@ -176,7 +176,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

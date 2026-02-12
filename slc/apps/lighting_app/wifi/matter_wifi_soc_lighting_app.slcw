@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_lighting_app
 label: Matter - SoC Lighting over Wi-Fi
 quality: production
 package: matter
-description: Matter Lighting Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi lighting app
 project:
   - path: ./matter_wifi_soc_lighting_app.slcp
     id: application
-    output: lighting-app-siwx
+    output: lighting_app_siwx

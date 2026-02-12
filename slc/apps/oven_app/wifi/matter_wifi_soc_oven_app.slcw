@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_oven_app
 label: Matter - SoC Oven over Wi-Fi
 quality: production
 package: matter
-description: Matter Oven Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi oven app
 project:
   - path: ./matter_wifi_soc_oven_app.slcp
     id: application
-    output: oven-app-siwx
+    output: oven_app_siwx

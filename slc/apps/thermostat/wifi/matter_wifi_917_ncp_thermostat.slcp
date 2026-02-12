@@ -1,6 +1,6 @@
 project_name: matter_wifi_917_ncp_thermostat
 label: Matter - NCP Thermostat over Wi-Fi
-description: This project builds a Matter Thermostat for Wi-Fi 917NCP that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi thermostat app
 category: Matter Application
 quality: production
 package: matter
@@ -167,7 +167,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - NCP
   - name: Difficulty
     value:
       - Advanced

@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_multi_sensor_app
 label: Matter - SoC Multi Sensor over Wi-Fi
 quality: production
 package: matter
-description: Matter Multi Sensor Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi multi-sensor app
 project:
   - path: ./matter_wifi_soc_multi_sensor_app.slcp
     id: application
-    output: multi-sensor-app-siwx
+    output: multi_sensor_app_siwx

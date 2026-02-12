@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_dishwasher_app
 label: Matter - SoC Dishwasher over Wi-Fi
 quality: internal
 package: matter
-description: Solution for a Matter over WiFI Dishwasher App Example
+description: Demonstrates a sample implementation of a Matter over Wi-Fi dishwasher app
 project:
   - path: ./matter_wifi_soc_dishwasher_app.slcp
     id: application
-    output: dishwasher-app-siwx
+    output: dishwasher_app_siwx

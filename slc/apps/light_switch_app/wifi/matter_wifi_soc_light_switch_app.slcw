@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_light_switch_app
 label: Matter - SoC Light Switch over Wi-Fi
 quality: production
 package: matter
-description: Matter Light Switch Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi light switch app
 project:
   - path: ./matter_wifi_soc_light_switch_app.slcp
     id: application
-    output: light-switch-app-siwx
+    output: light_switch_app_siwx

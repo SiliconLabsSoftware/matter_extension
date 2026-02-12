@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_refrigerator_app
 label: Matter - SoC Refrigerator over Wi-Fi
 quality: production
 package: matter
-description: Matter Refrigerator Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi refrigerator app
 project:
   - path: ./matter_wifi_soc_refrigerator_app.slcp
     id: application
-    output: refrigerator-app-siwx
+    output: refrigerator_app_siwx

@@ -2,8 +2,8 @@ workspace_name: matter_wifi_soc_onoff_plug_app
 label: Matter - SoC Onoff Plug over Wi-Fi
 quality: production
 package: matter
-description: Matter Onoff Plug Application over Wi-Fi
+description: Demonstrates a sample implementation of a Matter over Wi-Fi on/off plug app
 project:
   - path: ./matter_wifi_soc_onoff_plug_app.slcp
     id: application
-    output: onoff-plug-app-siwx
+    output: onoff_plug_app_siwx

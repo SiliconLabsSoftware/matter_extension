@@ -1,6 +1,6 @@
 project_name: matter_thread_host_openthread_border_router_doc
 label: Matter - Host OpenThread Border Router
-description: This is an Empty Project that is intended to guide the user to our main documentation for the OpenThread Border Router
+description: Guides users to main documentation for setting up the OpenThread Border Router
 category: Matter Application
 quality: production
 package: matter
@@ -9,7 +9,7 @@ vendor: silabs
 filter:
   - name: Type
     value:
-      - Host Project
+      - Host
   - name: Difficulty
     value:
       - Advanced

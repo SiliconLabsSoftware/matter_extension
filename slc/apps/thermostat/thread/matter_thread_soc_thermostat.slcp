@@ -1,6 +1,6 @@
 project_name: matter_thread_soc_thermostat
 label: Matter - SoC Thermostat over Thread
-description: This project builds a Matter Thermostat that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Thread thermostat app
 category: Matter Application
 quality: production
 package: matter
@@ -235,7 +235,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

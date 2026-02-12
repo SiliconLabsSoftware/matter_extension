@@ -1,6 +1,6 @@
-project_name: matter_wifi_soc_air_quality_sensor
+project_name: matter_wifi_soc_air_quality_sensor_app
 label: Matter - SoC Air Quality Sensor over Wi-Fi
-description: This project builds a Matter Air Quality Sensor app Over  for Wi-Fi SiWx917(CommonFlash) that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Wi-Fi air quality sensor app
 category: Matter Application
 quality: production
 package: matter
@@ -164,7 +164,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

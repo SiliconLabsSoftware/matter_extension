@@ -1,6 +1,6 @@
-project_name: matter_wifi_soc_onoff_plug
+project_name: matter_wifi_soc_onoff_plug_app
 label: Matter - SoC Onoff Plug over Wi-Fi
-description: This project builds a Matter Onoff Plug app for Wi-Fi SiWx917(CommonFlash) that can be developed inside Simplicity Studio
+description: Demonstrates a sample implementation of a Matter over Wi-Fi on/off plug app
 category: Matter Application
 quality: production
 package: matter
@@ -158,7 +158,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC Project
+      - SoC
   - name: Difficulty
     value:
       - Advanced

@@ -2,13 +2,13 @@ workspace_name: matter_thread_soc_light_switch_app_series_2_internal
 label: Matter - SoC Light Switch over Thread with internal Bootloader
 quality: production
 package: matter
-description: Matter Light Switch Application over Thread
+description: Demonstrates a sample implementation of a Matter over Thread light switch app with internal bootloader
 project:
   - path: ./matter_thread_soc_light_switch_app.slcp
     id: application
-    output: light-switch-app
+    output: light_switch_app
   - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
     id: bootloader
-    output: matter-bootloader
+    output: matter_bootloader
 post_build:
   path: ../../../postbuild/ws_default_application_bootloader.slpb
