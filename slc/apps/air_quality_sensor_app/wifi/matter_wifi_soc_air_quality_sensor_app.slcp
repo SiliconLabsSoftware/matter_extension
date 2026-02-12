@@ -172,13 +172,6 @@ filter:
     value:
       - Matter
 
-tag:
-  - prebuilt_demo
-  - hardware:component:led:2+
-  - hwfilter:board:si91x_b0_board
-  - hwfilter:device:device_si91x
-  - hidden
-
 readme:
   - path: ./README.md
 ui_hints:
@@ -186,6 +179,9 @@ ui_hints:
     - path: README.md
       focus: false
 
+tag:
+  - hardware:component:led:2+
+  
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb
 

@@ -1,7 +1,7 @@
 project_name: matter_thread_host_openthread_border_router_doc
 label: Matter - Host OpenThread Border Router
 description: Guides users to main documentation for setting up the OpenThread Border Router
-category: Matter Application
+category: Matter Documentation
 quality: production
 package: matter
 vendor: silabs
@@ -16,12 +16,6 @@ filter:
   - name: Wireless Technology
     value:
       - Matter
-
-tag:
-  - hardware:rf:band:2400
-  - hwfilter:device:device_series_2
-  - hwfilter:device:device_supports_thread
-  - hidden
 
 readme:
   - path: ./README.md

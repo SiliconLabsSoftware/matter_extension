@@ -100,12 +100,6 @@ filter:
     value:
       - Matter
 
-tag:
-  - prebuilt_demo
-  - hwfilter:!board:hardware_board_has_spiflash
-  - hwfilter:device:device_series_2
-  - hidden
-
 post_build:
   profile: bootloader_series_2
 

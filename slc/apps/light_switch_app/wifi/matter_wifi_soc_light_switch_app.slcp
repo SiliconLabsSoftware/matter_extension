@@ -200,23 +200,18 @@ filter:
     value:
       - Matter
 
-tag:
-  - prebuilt_demo
-  - hidden
-  - hardware:component:led:2+
-  - hwfilter:board:si91x_b0_board
-  - hwfilter:device:device_si91x
-
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
+      
+tag:
+  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb
 
 other_file:
-  - path: ../../../image/qr_code_img.png
   - path: ../../../image/qr_code_img.png

@@ -54,6 +54,9 @@ template_contribution:
   - name: memory_ram_size
     value: 0x6000
 
+tag:
+  - companion:nonsecure_app # Needs a companion app and cannot be built alone
+
 import:
   # Import the config files from the TZ Non-Secure application
   - id: application
@@ -72,15 +75,6 @@ filter:
   - name: Wireless Technology
     value:
       - Matter
-
-tag:
-  - companion:nonsecure_app # Needs a companion app and cannot be built alone
-  - hardware:rf:band:2400
-  - hardware:component:button:2+
-  - hardware:component:led:2+
-  - hwfilter:device:device_supports_bluetooth
-  - hwfilter:device:device_supports_thread
-  - hidden
 
 post_build:
   profile: tz_secure_application
