@@ -2,7 +2,7 @@
 
 """
 This script updates the setWakeRequirement function in sleep.c to use
-SL_POWER_MANAGER_EM2 instead of SL_POWER_MANAGER_EM1 to make sure the device runs on EM1DIV16 mode.
+either SL_POWER_MANAGER_EM2 or SL_POWER_MANAGER_EM1 based on the provided argument.
 
 The target file is:
 third_party/simplicity_sdk/../openthread/platform-abstraction/efr32/sleep.c
@@ -11,16 +11,17 @@ third_party/simplicity_sdk/../openthread/platform-abstraction/efr32/sleep.c
 import os
 import sys
 import re
+import argparse
 from pathlib import Path
 
 
-def update_sleep_c_file(file_path):
+def update_sleep_c_file(file_path, target_mode):
     """
-    Update the setWakeRequirement function to use SL_POWER_MANAGER_EM2
-    instead of SL_POWER_MANAGER_EM1.
+    Update the setWakeRequirement function to use the target power manager mode.
     
     Args:
         file_path: Path to the sleep.c file
+        target_mode: Either 'EM1' or 'EM2' - the target power manager mode
     """
     if not os.path.exists(file_path):
         print(f"Error: File not found: {file_path}")
@@ -29,20 +30,21 @@ def update_sleep_c_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
     
-    # Pattern to match the setWakeRequirement function and replace EM1 with EM2
-    # We want to match: (*em_operation)(SL_POWER_MANAGER_EM1);
-    # and replace with: (*em_operation)(SL_POWER_MANAGER_EM2);
-    # This should only occur within the setWakeRequirement function
-    
-    # More specific pattern that matches the exact line in setWakeRequirement function
-    pattern = r'(\s+\(\*em_operation\)\()SL_POWER_MANAGER_EM1(\);)'
-    replacement = r'\1SL_POWER_MANAGER_EM2\2'
+    # Determine source and target based on target_mode
+    if target_mode == 'EM2':
+        source_mode = 'EM1'
+        pattern = r'(\s+\(\*em_operation\)\()SL_POWER_MANAGER_EM1(\);)'
+        replacement = r'\1SL_POWER_MANAGER_EM2\2'
+    else:  # target_mode == 'EM1'
+        source_mode = 'EM2'
+        pattern = r'(\s+\(\*em_operation\)\()SL_POWER_MANAGER_EM2(\);)'
+        replacement = r'\1SL_POWER_MANAGER_EM1\2'
     
     new_content, count = re.subn(pattern, replacement, content)
     
     if count == 0:
         print(f"Warning: No replacement made in {file_path}")
-        print("The pattern SL_POWER_MANAGER_EM1 was not found in the expected location.")
+        print(f"The pattern SL_POWER_MANAGER_{source_mode} was not found in the expected location.")
         return False
     
     if count > 1:
@@ -51,7 +53,7 @@ def update_sleep_c_file(file_path):
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(new_content)
     
-    print(f"Successfully updated {file_path}: Replaced SL_POWER_MANAGER_EM1 with SL_POWER_MANAGER_EM2")
+    print(f"Successfully updated {file_path}: Replaced SL_POWER_MANAGER_{source_mode} with SL_POWER_MANAGER_{target_mode}")
     return True
 
 
@@ -103,7 +105,7 @@ def find_sleep_c_file(workspace_root):
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    if 'setWakeRequirement' in content and 'SL_POWER_MANAGER_EM1' in content:
+                    if 'setWakeRequirement' in content and ('SL_POWER_MANAGER_EM1' in content or 'SL_POWER_MANAGER_EM2' in content):
                         target_file = file_path
                         print(f"Found sleep.c with setWakeRequirement at: {file_path}")
                         break
@@ -116,6 +118,21 @@ def find_sleep_c_file(workspace_root):
 
 def main():
     """Main entry point for the script."""
+    parser = argparse.ArgumentParser(
+        description='Update sleep.c to use either SL_POWER_MANAGER_EM1 or SL_POWER_MANAGER_EM2',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog='Examples:\n'
+               '  %(prog)s EM2  # Replace EM1 with EM2\n'
+               '  %(prog)s EM1  # Replace EM2 with EM1'
+    )
+    parser.add_argument(
+        'mode',
+        choices=['EM1', 'EM2'],
+        help='Target power manager mode (EM1 or EM2)'
+    )
+    
+    args = parser.parse_args()
+    
     # Get the workspace root (assuming script is in slc/script/)
     script_dir = Path(__file__).parent
     workspace_root = script_dir.parent.parent
@@ -129,7 +146,7 @@ def main():
         sys.exit(1)
     
     print(f"Found sleep.c file at: {sleep_c_path}")
-    success = update_sleep_c_file(sleep_c_path)
+    success = update_sleep_c_file(sleep_c_path, args.mode)
     
     if not success:
         sys.exit(1)
