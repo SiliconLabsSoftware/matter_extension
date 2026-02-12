@@ -6,7 +6,6 @@ quality: production
 package: matter
 
 component:
-  - id: toolchain_gcc
   - id: tz_secure_key_library_s
 
 requires:

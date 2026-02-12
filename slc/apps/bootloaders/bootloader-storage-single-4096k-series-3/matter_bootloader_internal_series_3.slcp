@@ -10,7 +10,6 @@ sdk_extension:
     vendor: silabs
 
 component:
-  - id: toolchain_gcc
   - id: btl_core
   - id: btl_crc
   - id: btl_internal_storage

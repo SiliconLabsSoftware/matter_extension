@@ -6,7 +6,6 @@ quality: production
 description: Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread
 
 component:
-  - id: toolchain_gcc
   - id: device_init
   - id: clock_manager
   - id: rail_mux

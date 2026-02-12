@@ -14,7 +14,6 @@ provides:
   - name: window_app
 
 component:
-  - id: toolchain_gcc
   - id: device_init
   - id: sl_main
   - id: clock_manager
