@@ -178,7 +178,7 @@ jobs:
             example-app: "platform_template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-series-3-bootloader:
+    build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: set-build-type
         uses: ./.github/workflows/builder.yaml
@@ -218,7 +218,7 @@ jobs:
             - build_closure_app
             - build_oven_app
             - build_rangehood_app
-            - build-series-3-bootloader
+            - build_series_3_bootloader
         if: success()
 
         steps:
