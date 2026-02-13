@@ -3,13 +3,13 @@
 """
 This script updates the setWakeRequirement function in sleep.c to use
 either SL_POWER_MANAGER_EM2 or SL_POWER_MANAGER_EM1 based on the provided argument,
-and updates LFRCO precision in board clock configs (brd4116a_brd4001a, brd4116a_brd4110a)
+and updates LFRCO precision in board clock configs (brd4116a_brd4001a, brd4116a_brd4002a)
 to match (EM2 -> cmuPrecisionHigh, EM1 -> cmuPrecisionDefault).
 
 Target files:
 - third_party/simplicity_sdk/.../openthread/platform-abstraction/efr32/sleep.c
 - third_party/simplicity_sdk/boards/hardware/board/config/brd4116a_brd4001a/sl_clock_manager_oscillator_config.h
-- third_party/simplicity_sdk/boards/hardware/board/config/brd4116a_brd4110a/sl_clock_manager_oscillator_config.h
+- third_party/simplicity_sdk/boards/hardware/board/config/brd4116a_brd4002a/sl_clock_manager_oscillator_config.h
 """
 
 import os
@@ -121,7 +121,7 @@ def find_sleep_c_file(workspace_root):
 
 
 # Board config dirs to update for LFRCO precision (relative to simplicity_sdk/boards/hardware/board/config/)
-LFRCO_PRECISION_BOARD_CONFIGS = ("brd4116a_brd4001a", "brd4116a_brd4110a")
+LFRCO_PRECISION_BOARD_CONFIGS = ("brd4116a_brd4001a", "brd4116a_brd4002a")
 
 
 def find_clock_manager_oscillator_configs(workspace_root):
