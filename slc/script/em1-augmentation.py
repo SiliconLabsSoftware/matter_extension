@@ -2,10 +2,14 @@
 
 """
 This script updates the setWakeRequirement function in sleep.c to use
-either SL_POWER_MANAGER_EM2 or SL_POWER_MANAGER_EM1 based on the provided argument.
+either SL_POWER_MANAGER_EM2 or SL_POWER_MANAGER_EM1 based on the provided argument,
+and updates LFRCO precision in board clock configs (brd4116a_brd4001a, brd4116a_brd4110a)
+to match (EM2 -> cmuPrecisionHigh, EM1 -> cmuPrecisionDefault).
 
-The target file is:
-third_party/simplicity_sdk/../openthread/platform-abstraction/efr32/sleep.c
+Target files:
+- third_party/simplicity_sdk/.../openthread/platform-abstraction/efr32/sleep.c
+- third_party/simplicity_sdk/boards/hardware/board/config/brd4116a_brd4001a/sl_clock_manager_oscillator_config.h
+- third_party/simplicity_sdk/boards/hardware/board/config/brd4116a_brd4110a/sl_clock_manager_oscillator_config.h
 """
 
 import os
@@ -116,6 +120,48 @@ def find_sleep_c_file(workspace_root):
     return target_file
 
 
+# Board config dirs to update for LFRCO precision (relative to simplicity_sdk/boards/hardware/board/config/)
+LFRCO_PRECISION_BOARD_CONFIGS = ("brd4116a_brd4001a", "brd4116a_brd4110a")
+
+
+def find_clock_manager_oscillator_configs(workspace_root):
+    """
+    Find sl_clock_manager_oscillator_config.h under board config dirs for brd4116a.
+
+    Returns:
+        List of Paths to existing config files.
+    """
+    base = workspace_root / "third_party" / "simplicity_sdk" / "boards" / "hardware" / "board" / "config"
+    if not base.exists():
+        return []
+    paths = []
+    for name in LFRCO_PRECISION_BOARD_CONFIGS:
+        p = base / name / "sl_clock_manager_oscillator_config.h"
+        if p.exists():
+            paths.append(p)
+    return paths
+
+
+def update_lfrco_precision(file_path, target_precision):
+    """
+    Set SL_CLOCK_MANAGER_LFRCO_PRECISION to target_precision (cmuPrecisionDefault or cmuPrecisionHigh).
+    Replaces whichever value is currently in the #define inside the #ifndef block.
+    """
+    if not file_path.exists():
+        return False
+    with open(file_path, "r", encoding="utf-8") as f:
+        content = f.read()
+    # Match the #define line with either precision value
+    pattern = r"(#define\s+SL_CLOCK_MANAGER_LFRCO_PRECISION\s+)cmuPrecision(?:Default|High)(\s*\n)"
+    replacement = rf"\1{target_precision}\2"
+    new_content, count = re.subn(pattern, replacement, content)
+    if count == 0:
+        return False
+    with open(file_path, "w", encoding="utf-8") as f:
+        f.write(new_content)
+    return True
+
+
 def main():
     """Main entry point for the script."""
     parser = argparse.ArgumentParser(
@@ -147,9 +193,17 @@ def main():
     
     print(f"Found sleep.c file at: {sleep_c_path}")
     success = update_sleep_c_file(sleep_c_path, args.mode)
-    
     if not success:
         sys.exit(1)
+
+    # Update LFRCO precision in board clock configs: EM2 -> High, EM1 -> Default
+    target_precision = "cmuPrecisionHigh" if args.mode == "EM2" else "cmuPrecisionDefault"
+    clock_configs = find_clock_manager_oscillator_configs(workspace_root)
+    for cfg_path in clock_configs:
+        if update_lfrco_precision(cfg_path, target_precision):
+            print(f"Updated LFRCO precision to {target_precision} in {cfg_path}")
+        else:
+            print(f"Warning: No LFRCO precision replacement in {cfg_path}")
 
 
 if __name__ == '__main__':
