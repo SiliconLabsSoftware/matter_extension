@@ -18,6 +18,12 @@
             {
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
+                              "--with_app matter_platform_low_power","--with_app matter_zigbee_concurrent",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
         "thermostat": [
