@@ -4,10 +4,6 @@
             {
                 "boards": ["brd2709a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd2709a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },

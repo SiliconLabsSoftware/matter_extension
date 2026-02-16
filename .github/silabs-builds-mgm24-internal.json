@@ -5,10 +5,6 @@
             {
                 "boards": ["brd4337a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4337a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },

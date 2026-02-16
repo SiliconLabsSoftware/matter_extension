@@ -4,14 +4,6 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357a", "--with_app siwx917_ncp_brd4357a"]
             }
         ]
     },

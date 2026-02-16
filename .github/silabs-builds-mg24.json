@@ -1,40 +1,10 @@
 
 {
     "standard": {
-        "default": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": [""]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            }
-        ],
         "zigbee-matter-light": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
-            }
-        ],
-        "platform-template": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]  
-            }
-        ],
-        "thermostat": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
