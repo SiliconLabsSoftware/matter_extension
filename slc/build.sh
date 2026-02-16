@@ -268,7 +268,7 @@ while [ $# -gt 0 ]; do
 	esac
 done
 
-if [ "$OUTPUT_DIR" == "cmp-concurrent-high-bw-phy-em1" ]; then
+if [[ "$OUTPUT_DIR" == *"cmp-concurrent-high-bw-phy-em1" ]]; then
 	python3 slc/script/em1-augmentation.py EM2 ## to change the sleep.c file from EM1 to EM2
 fi
 
@@ -394,6 +394,6 @@ else
 	fi
 fi
 
-if [ "$OUTPUT_DIR" == "cmp-concurrent-high-bw-phy-em1" ]; then
+if [[ "$OUTPUT_DIR" == *"cmp-concurrent-high-bw-phy-em1" ]]; then
 	python3 slc/script/em1-augmentation.py EM1 ## to revert the changes made to the sleep.c file from EM2 to EM1
 fi
