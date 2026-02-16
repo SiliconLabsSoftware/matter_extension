@@ -142,18 +142,18 @@ def find_clock_manager_oscillator_configs(workspace_root):
     return paths
 
 
-def update_lfrco_precision(file_path, target_precision):
+def update_lfrco_precision(file_path, target_value):
     """
-    Set SL_CLOCK_MANAGER_LFRCO_PRECISION to target_precision (cmuPrecisionDefault or cmuPrecisionHigh).
-    Replaces whichever value is currently in the #define inside the #ifndef block.
+    Set SL_CLOCK_MANAGER_LFRCO_PRECISION to target_value (0 or 1).
+    Replaces the numeric value in the #define (0 -> 1 or 1 -> 0).
     """
     if not file_path.exists():
         return False
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
-    # Match the #define line with either precision value
-    pattern = r"(#define\s+SL_CLOCK_MANAGER_LFRCO_PRECISION\s+)cmuPrecision(?:Default|High)(\s*\n)"
-    replacement = rf"\1{target_precision}\2"
+    # Match the #define line with numeric 0 or 1 and replace with target_value
+    pattern = r"(#define\s+SL_CLOCK_MANAGER_LFRCO_PRECISION\s+)[01](\s*\n)"
+    replacement = rf"\1{target_value}\2"
     new_content, count = re.subn(pattern, replacement, content)
     if count == 0:
         return False
@@ -196,14 +196,15 @@ def main():
     if not success:
         sys.exit(1)
 
-    # Update LFRCO precision in board clock configs: EM2 -> High, EM1 -> Default
-    target_precision = "cmuPrecisionHigh" if args.mode == "EM2" else "cmuPrecisionDefault"
+    # Update LFRCO precision in board clock configs: EM2 -> 1, EM1 -> 0
+    target_value = 1 if args.mode == "EM2" else 0
     clock_configs = find_clock_manager_oscillator_configs(workspace_root)
     for cfg_path in clock_configs:
-        if update_lfrco_precision(cfg_path, target_precision):
-            print(f"Updated LFRCO precision to {target_precision} in {cfg_path}")
+        if update_lfrco_precision(cfg_path, target_value):
+            print(f"Updated LFRCO precision to {target_value} in {cfg_path}")
         else:
-            print(f"Warning: No LFRCO precision replacement in {cfg_path}")
+            print(f"Error: No LFRCO precision replacement in {cfg_path}")
+            sys.exit(1)
 
 
 if __name__ == '__main__':
