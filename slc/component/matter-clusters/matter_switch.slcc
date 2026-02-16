@@ -12,11 +12,14 @@ metadata:
 provides:
   - name: matter_switch
 source:
-  - path: third_party/matter_sdk/src/app/clusters/switch-server/switch-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/switch-server/CodegenIntegration.cpp
+  - path: third_party/matter_sdk/src/app/clusters/switch-server/SwitchCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/switch-server
     file_list:
+      - path: CodegenIntegration.h
       - path: switch-server.h
+      - path: SwitchCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_switch

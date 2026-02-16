@@ -393,6 +393,11 @@
             "IdentifyTime",
             "IdentifyType"
         ],
+        "Illuminance Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
+        ],
         "Joint Fabric Datastore": [
             "Status"
         ],
@@ -444,6 +449,10 @@
             "CurrentHeapUsed",
             "FeatureMap",
             "ThreadMetrics"
+        ],
+        "Switch": [
+            "ClusterRevision",
+            "CurrentPosition"
         ],
         "Unit Testing": [
             "struct_attr",

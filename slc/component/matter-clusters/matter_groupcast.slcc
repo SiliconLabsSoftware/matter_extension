@@ -19,6 +19,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/groupcast
     file_list:
       - path: GroupcastCluster.h
+      - path: GroupcastContext.h
       - path: GroupcastLogic.h
 template_contribution:
   - name: component_catalog
