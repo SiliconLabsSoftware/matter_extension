@@ -28,6 +28,7 @@ include:
     - path: LocalizationConfiguration.h
     - path: ScenesManagement.h
     - path: SoftwareDiagnostics.h
+    - path: Switch.h
     - path: WiFiNetworkDiagnostics.h
     - path: TimeFormatLocalization.h
     - path: TimeSynchronization.h

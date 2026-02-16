@@ -22,6 +22,7 @@ include:
     -   path: SynchronizedReportSchedulerImpl.h
     -   path: reporting.h
     -   path: ReportScheduler.h
+    -   path: Generations.h
   - path: third_party/matter_sdk/src/app
     file_list:
     -   path: util/attribute-table.h
