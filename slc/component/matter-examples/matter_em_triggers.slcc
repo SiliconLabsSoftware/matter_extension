@@ -18,8 +18,8 @@ include:
       - path: FakeReadings.h
 
 source:
-  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/src/FakeReadings.cpp
-  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/src/EnergyReportingEventTriggers.cpp
-  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/src/DEMTestEventTriggers.cpp
+  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/FakeReadings.cpp
+  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/EnergyReportingEventTriggers.cpp
+  - path: third_party/matter_sdk/examples/energy-management/energy-management-triggers/DEMTestEventTriggers.cpp
 ui_hints:
   visibility: never

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+PATH="$(pwd)/slc/tools/slc_cli:$PATH"
 # This script generates and builds the SLC project for the given Matter application and board.
 #
 #   Usage:
@@ -318,7 +318,7 @@ if [ "$skip_gen" = false ]; then
 
 			# Generate bootloader
 			echo "Generating bootloader..."
-			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=3500
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=3500
 			if [ $? -ne 0 ]; then
 				echo "FAILED TO Generate bootloader for: $SILABS_APP_PATH"
 				exit 1
@@ -331,7 +331,7 @@ if [ "$skip_gen" = false ]; then
 			APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 			echo "Generating application..."
-			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT --daemon -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
+			run_slc_generate_with_retry generate --tt -s $GSDK_ROOT -d $OUTPUT_DIR $PROJECT_FLAG $SILABS_APP_PATH $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=3500
 			if [ $? -ne 0 ]; then
 				echo "FAILED TO Generate application for: $SILABS_APP_PATH"
 				exit 1

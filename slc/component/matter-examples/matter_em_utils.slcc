@@ -10,7 +10,7 @@ metadata:
 requires:
   - name: matter_evse
 provides:
-  - name: matter_em_triggers
+  - name: matter_em_utils
 include:
   - path: third_party/matter_sdk/examples/energy-management/utils/include
     file_list:
