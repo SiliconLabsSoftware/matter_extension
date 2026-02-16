@@ -20,6 +20,7 @@ include:
       - path: CodegenIntegration.h
       - path: identify-server.h
       - path: IdentifyCluster.h
+      - path: IdentifyIntegrationDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_identify

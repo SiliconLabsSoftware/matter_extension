@@ -22,11 +22,13 @@ include:
     - path: FixedLabel.h
     - path: GeneralCommissioning.h
     - path: GeneralDiagnostics.h
+    - path: Groups.h
     - path: GroupKeyManagement.h
     - path: IcdManagement.h
     - path: LocalizationConfiguration.h
     - path: ScenesManagement.h
     - path: SoftwareDiagnostics.h
+    - path: Switch.h
     - path: WiFiNetworkDiagnostics.h
     - path: TimeFormatLocalization.h
     - path: TimeSynchronization.h

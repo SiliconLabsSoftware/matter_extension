@@ -300,6 +300,12 @@
     ]
   },
   {
+    "clusterCode": "illuminance measurement-server",
+    "value": [
+      "%extension-matter%matter_illuminance_measurement"
+    ]
+  },
+  {
     "clusterCode": "joint fabric administrator-server",
     "value": [
       "%extension-matter%matter_joint_fabric_administrator"
