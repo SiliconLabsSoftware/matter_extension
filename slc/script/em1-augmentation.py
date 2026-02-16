@@ -151,9 +151,10 @@ def update_lfrco_precision(file_path, target_value):
         return False
     with open(file_path, "r", encoding="utf-8") as f:
         content = f.read()
-    # Match the #define line with numeric 0 or 1 and replace with target_value
+    # Match the #define line with numeric 0 or 1 and replace with target_value.
+    # Use \g<1> and \g<2> so target_value (e.g. 1) is not parsed as part of a group ref.
     pattern = r"(#define\s+SL_CLOCK_MANAGER_LFRCO_PRECISION\s+)[01](\s*\n)"
-    replacement = rf"\1{target_value}\2"
+    replacement = r"\g<1>" + str(target_value) + r"\g<2>"
     new_content, count = re.subn(pattern, replacement, content)
     if count == 0:
         return False
