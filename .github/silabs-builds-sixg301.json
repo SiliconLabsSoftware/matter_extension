@@ -1,11 +1,35 @@
 {
     "standard": {
+        "default": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            }
+        ],
         "zigbee-matter-light": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
+            },
             {
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
                               "--with_app matter_platform_low_power","--with_app matter_zigbee_concurrent",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
+            }
+        ],
+        "thermostat": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },

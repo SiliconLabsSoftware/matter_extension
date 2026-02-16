@@ -5,6 +5,16 @@
             {
                 "boards": ["brd4316a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd4316a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            }
+        ],
+        "platform-template": [
+            {
+                "boards": ["brd4316a"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
             }
         ]
     },
