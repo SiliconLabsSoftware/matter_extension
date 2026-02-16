@@ -18,6 +18,8 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/groups-server
     file_list:
       - path: GroupsCluster.h
+requires:
+  - name: matter_scenes
 template_contribution:
   - name: component_catalog
     value: matter_groups
