@@ -64,8 +64,8 @@ jobs:
                       ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
-                      !out/**/*-bootloader/build/debug/*.map
-                      !out/**/*-bootloader/build/debug/*.out
-                      !out/**/*-copy-sources/**
+                      !out/**/*_bootloader/build/debug/*.map
+                      !out/**/*_bootloader/build/debug/*.out
+                      !out/**/*_copy-sources/**
                   if-no-files-found: warn
                   overwrite: true
