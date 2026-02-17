@@ -10,6 +10,8 @@ Target files:
 - third_party/simplicity_sdk/.../openthread/platform-abstraction/efr32/sleep.c
 - third_party/simplicity_sdk/boards/hardware/board/config/brd4407a_brd4001a/sl_clock_manager_oscillator_config.h
 - third_party/simplicity_sdk/boards/hardware/board/config/brd4407a_brd4002a/sl_clock_manager_oscillator_config.h
+- third_party/simplicity_sdk/boards/hardware/board/config/brd1019a_brd4001a/sl_clock_manager_oscillator_config.h
+- third_party/simplicity_sdk/boards/hardware/board/config/brd1019a_brd4002a/sl_clock_manager_oscillator_config.h
 """
 
 import os
@@ -121,12 +123,17 @@ def find_sleep_c_file(workspace_root):
 
 
 # Board config dirs to update for LFRCO precision (relative to simplicity_sdk/boards/hardware/board/config/)
-LFRCO_PRECISION_BOARD_CONFIGS = ("brd4407a_brd4001a", "brd4407a_brd4002a")
+LFRCO_PRECISION_BOARD_CONFIGS = (
+    "brd4407a_brd4001a",
+    "brd4407a_brd4002a",
+    "brd1019a_brd4001a",
+    "brd1019a_brd4002a",
+)
 
 
 def find_clock_manager_oscillator_configs(workspace_root):
     """
-    Find sl_clock_manager_oscillator_config.h under board config dirs for brd4407a.
+    Find sl_clock_manager_oscillator_config.h under board config dirs (brd4407a, brd1019a).
 
     Returns:
         List of Paths to existing config files.
