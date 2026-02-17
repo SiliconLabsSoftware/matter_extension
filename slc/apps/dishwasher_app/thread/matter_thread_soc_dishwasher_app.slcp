@@ -2,7 +2,7 @@ project_name: matter_thread_soc_dishwasher_app
 label: Matter - SoC Dishwasher over Thread
 description: Demonstrates a sample implementation of a Matter over Thread dishwasher app
 category: Matter Application
-quality: internal
+quality: production
 package: matter
 
 sdk_extension:

@@ -2,7 +2,7 @@ project_name: matter_wifi_soc_dishwasher_app
 label: Matter - SoC Dishwasher over Wi-Fi
 description: Demonstrates a sample implementation of a Matter over Wi-Fi dishwasher app
 category: Matter Application
-quality: internal
+quality: production
 package: matter
 
 sdk_extension:

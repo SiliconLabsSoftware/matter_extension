@@ -1,6 +1,6 @@
 workspace_name: matter_thread_soc_dishwasher_app_series_2_internal
 label: Matter - SoC Dishwasher over Thread with internal Bootloader
-quality: internal
+quality: production
 package: matter
 description: Demonstrates a sample implementation of a Matter over Thread dishwasher app with internal bootloader
 project:
