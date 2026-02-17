@@ -1,7 +1,7 @@
-project_name: rangehood-app
-label: Matter Rangehood
-description: >
-  Matter Rangehood App
+project_name: matter_thread_soc_rangehood_app
+label: Matter - SoC Rangehood over Thread
+description: Demonstrates a sample implementation of a Matter over Thread rangehood app
+category: Matter Application
 quality: production
 package: matter
 
@@ -157,6 +157,17 @@ configuration:
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17
+
+filter:
+  - name: Type
+    value:
+      - SoC
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
 
 readme:
   - path: ./README.md
