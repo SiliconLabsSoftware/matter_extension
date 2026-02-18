@@ -22,7 +22,7 @@
             {
                 "boards": ["brd4407a", "brd1019a,SIMG301M113WIH"],
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
-                              "--with_app matter_zigbee_concurrent,zigbee_high_datarate_phy,sl_rail_util_ieee802154_rx_duty_cycling",
+                              "--with_app matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
             }
         ],
