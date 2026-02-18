@@ -522,7 +522,7 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
         # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
         if ("ota" in ubai_app_name or "series_3" in app_name_path) and "wifi_soc" not in app_name_path:
             if "matter_bootloader" in app_name_folder:
-                app_name_base = "matter-bootloader"
+                app_name_base = "matter_bootloader"
             elif "_series" in app_name_folder: # Thread
                 app_name_base = app_name_folder.split("_series")[0]
             else: # WIFI NCP
