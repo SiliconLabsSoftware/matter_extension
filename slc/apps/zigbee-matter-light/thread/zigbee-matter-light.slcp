@@ -98,7 +98,8 @@ component:
   - { id: matter_provision_default }
   - { id: matter_log_uart }
   - { id: matter_zigbee_multiprotocol_common }
-  - { id: matter_ble_side_channel }
+  # TODO FIXME LP 
+  - { id: matter_internal_ble_side_channel }
   - { id: matter_unit_localization }
 
   #Matter components wrapper from simplicity_sdk
