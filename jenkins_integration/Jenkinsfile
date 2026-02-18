@@ -100,6 +100,9 @@ pipeline
         }
         stage('Execute CI Tests')
         {
+            when {
+                expression { env.BRANCH_NAME != "main" }
+            }
             steps {
                 script {
                     def parallelNodes = [:]
@@ -204,7 +207,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
