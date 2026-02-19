@@ -52,7 +52,7 @@
         "zigbee-matter-light": [
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix cmp-concurrent-ota-2", "--with_app matter_zigbee_concurrent",
+                "arguments": ["--output_suffix cmp-concurrent-ota-2", "-pids application", "--with_app matter_zigbee_concurrent",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
