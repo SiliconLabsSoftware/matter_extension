@@ -1,6 +1,6 @@
 # Matter over Wi-Fi Lighting Example
 
-The SiWx917 SoC lighting app provides a baseline implementation of a light control device built using Matter and Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
+The Matter over WiFi SoC lighting app provides a baseline implementation of a light control device built using Matter and Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
 ## Table of Contents
 
