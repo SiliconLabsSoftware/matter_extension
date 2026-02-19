@@ -139,7 +139,7 @@ commander flash out/brd4187c/lighting-app-solution/artifact/lighting-app-combine
 
 - [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
 - [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
-- [CHIPTool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support
 
