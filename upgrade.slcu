@@ -356,3 +356,12 @@ upgrade:
         description: >
            !!! WARNING !!! Automatic upgrades to Matter 2.8.0 are not recommended. Instead create a new project and manually port your changes. 
         status: user_verification
+
+  - sdk:
+      id: matter
+      version: "2.8.1"
+    component:
+      - trigger: matter
+        description: >
+           !!! WARNING !!! Automatic upgrades to Matter 2.8.1 are not recommended. Instead create a new project and manually port your changes. 
+        status: user_verification
