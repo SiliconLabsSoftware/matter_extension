@@ -43,7 +43,7 @@ def parse_project_file(reference_project_file):
         silabs_app = os.path.basename(reference_project_file)[:-5]
         output_dir = os.path.dirname(reference_project_file)
         makefile_path = f"{silabs_app}.Makefile"
-        cmake_folder_path = f"{silabs_app}_cmake"
+        cmake_folder_path = "cmake_gcc"
     elif reference_project_file.endswith('.slcw'):
         project_flag = "-w"
         silabs_app = os.path.basename(reference_project_file)[:-5]
