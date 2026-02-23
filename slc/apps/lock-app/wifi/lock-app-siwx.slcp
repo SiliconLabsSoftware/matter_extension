@@ -97,6 +97,9 @@ component:
     condition: [device_is_917_module_dev_kit]
   - instance: [timer0]
     id: ulp_timers_instance
+  
+  - id: matter_icd_checkin_sender
+  - id: matter_check_in_message
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
@@ -146,11 +149,11 @@ configuration:
     value: "0"
   # Default ICD configurations
   - name: SL_IDLE_MODE_DURATION_S
-    value: "600"
+    value: "60"
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
-    value: "0"
+    value: "5000"
   - name: SL_TRANSPORT_IDLE_INTERVAL
     value: "3000"
 
@@ -158,6 +161,12 @@ configuration:
     value: "1"
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
+  - name: CHIP_CONFIG_ENABLE_ICD_LIT
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_CIP
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_UAT
+    value: 1
 
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE

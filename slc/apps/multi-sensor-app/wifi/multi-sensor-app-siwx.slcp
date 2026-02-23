@@ -93,6 +93,10 @@ component:
   - instance: [timer0]
     id: ulp_timers_instance
 
+  
+  - id: matter_icd_checkin_sender
+  - id: matter_check_in_message
+
 config_file:
   - path: ../config/sl_matter_sensor_config.h
     file_id: matter_sensor_config
@@ -144,11 +148,11 @@ configuration:
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
   - name: SL_IDLE_MODE_DURATION_S
-    value: "600"
+    value: "60"
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
-    value: "0"
+    value: "5000"
   - name: SL_TRANSPORT_IDLE_INTERVAL
     value: "3000"
   # Wakeup configurations
@@ -158,6 +162,12 @@ configuration:
   - name: ENABLE_NPSS_GPIO_2
     value: "1"
     condition: [matter_icd_core]
+  - name: CHIP_CONFIG_ENABLE_ICD_LIT
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_CIP
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_UAT
+    value: 1
 
 toolchain_settings:
   - option: cxx_standard
