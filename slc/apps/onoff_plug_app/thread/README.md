@@ -1,109 +1,132 @@
-# Matter EFR32 OnOff Plug Example
+# Matter over Thread OnOff Plug Example
 
-The EFR32 OnOff Plug example provides a baseline demonstration of an OnOff Plug control
-device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled
-by a Matter controller over an OpenThread network.
+The Matter over Thread OnOff Plug example is a baseline demonstration of an OnOff Plug built with Simplicity SDK. It can be controlled by a Matter controller over an OpenThread network.
 
-The EFR32 device can be commissioned over Bluetooth Low Energy (BLE) where the device
-and the Matter controller will exchange security information with the Rendez-vous
-procedure. If using Thread, Thread Network credentials are then provided to the
-EFR32 device which will then join the Thread network.
+## Table of Contents
 
-If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the
-needed commissioning information for the BLE connection and starting the
-Rendez-vous procedure.
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-The OnOff Plug example is intended to serve both as a means to explore the
-workings of Matter and as a template for creating real products based on the
-Silicon Labs platform.
+## Purpose/Scope
 
-For more general information on running Matter applications and prerequisites see online 
-documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
-[Demo instructions for Thread](https://docs.silabs.com/matter/2.8.0/matter-thread)
+This example demonstrates a sample implementation of a Matter over Thread OnOff Plug
+app running on a Silicon Labs EFR32 SoC.
 
-## OnOff Plug Example User Interface
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
+controller and device exchange security credentials in the Rendez-vous procedure.
 
-**LCD** 
+If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR code containing
+the commissioning information for the BLE connection and Rendez-vous procedure.
 
-The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+This example serves as both a functional demonstration of Matter over Thread and a
+starting point for building production products on the Silicon Labs platform.
 
-![QR Code](qr_code_img.png)
+## Prerequisites/Setup Requirements
 
-A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+### HW Requirements
 
-**The URL can also be printed by issuing the following matter shell command:**
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-```shell
-matterCli> onboardingcodes ble qrcodeurl
-```
+### SW Requirements
 
-Log output example:
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
-```shell
-[SVR] Copy/paste the below URL in a browser to see the QR Code:
-[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
-```
+## Steps to Run Demo
 
-Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+### Program a Bootloader
 
-**LED 0** 
+If building a solution, the bootloader is included and flashed as part of the combined
+artifact.
 
-Shows the overall state of the device and its connectivity. The following states are possible:
+If building the sample application on its own, a bootloader must be flashed separately
+before the application. Pre-built bootloader binaries for all supported devices are
+available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
 
--   _Short Flash On (50 ms on/950 ms off)_: The device is in the unprovisioned (unpaired) state and is waiting for a commissioning application to connect.
+### Configuration and Setup
 
--   _Rapid Even Flashing (100 ms on/100 ms off)_: The device is in the unprovisioned state and a commissioning application is connected through Bluetooth LE.
+This sample app works out of the box with no additional configuration required. To customize the device, see the
+[Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
--   _Short Flash Off (950 ms on/50 ms off)_: The device is fully
-provisioned, but does not yet have full Thread network or service
-connectivity.
+### Steps for Execution
 
--   _Solid On_: The device is fully provisioned and has full Thread
- network and service connectivity.
+1. Build and flash the bootloader and application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
 
-**LED 1** 
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img).
+   ```shell
+   chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+   ```
 
-Simulates the OnOff Plug. The following states are possible:
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device; provisioning may change it.
 
--   _Solid On_: Plug is on
--   _Off_: Plug is off
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-    
-**Push Button 0**
+4. Control the plug:
+   ```shell
+   chip-tool onoff on 1 1
+   chip-tool onoff off 1 1
+   ```
 
--   _Press and Release_: Start or restart BLE advertisement in fast mode. It will advertise in this mode
-for 30 seconds. The device will then switch to a slower interval advertisement.
-After 15 minutes, the advertisement stops. In addition, this button should also print the QR Code URL to the RTT logs.
+**Button and LED reference:**
 
--   _Pressed and hold for 6 s_: Initiates the factory reset of the device.
- Releasing the button within the 6-second window cancels the factory reset
- procedure. **LEDs** blink in unison when the factory reset procedure is
- initiated.
+| Control | Action            | Result                                                          |
+|---------|-------------------|-----------------------------------------------------------------|
+| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs |
+| BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)            |
+| BTN1    | Press and release | Toggle plug on/off                                              |
+| LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
+| LED 0   | Rapid even flash  | BLE connected, commissioning in progress                        |
+| LED 0   | Short flash off   | Provisioned, no full Thread connectivity                        |
+| LED 0   | Solid on          | Fully provisioned with Thread connectivity                      |
+| LED 1   | Solid on          | Plug is on                                                      |
+| LED 1   | Off               | Plug is off                                                     |
 
-**Push Button 1** 
+## Troubleshooting
 
-- Toggles the Plug state On/Off
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
+- Confirm the bootloader is flashed to the device.
 
-## Enabling LCD and LEDs in a Project
+**Commissioning fails**
+- Ensure the Thread Border Router is running and reachable.
+- Verify the `operationalDataset` hex string matches your Thread network.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
-If an LCD is supported by the board but not enabled in a project it can be enabled in Studio by installing the _Matter Display_ component under _Silicon Labs Matter_
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_
+  component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code
+  on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter >
+  Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and
+  `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then
+  install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
 
-To enable the QR Code install the _Matter QR Code Display_ component under _Silicon Labs Matter_. (All the dependencies including LCD are installed automatically. There is no need to explicitly install the _Matter Display_ component in this case.)
+## Resources
 
-If LEDs are supported by the board but not enabled in a project they can be enabled as follows:
--   Install instances (led0 and led1) of the _Simple LED_ component under _Platform->Driver->LED->Simple LED_
--   Install the WSTK LED Support component under _Silicon Labs Matter->Matter->Platform->WSTK LED Support_
+- [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-## Provision and Control
+## Report Bugs & Get Support
 
-You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)     
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
-
-
-Here is an example with the chip-tool:
-
-```shell
-chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
-
-chip-tool onoff on 1 1
-```
+You are always encouraged and welcome to report any issues you found to us via
+[Silicon Labs Community](https://community.silabs.com).

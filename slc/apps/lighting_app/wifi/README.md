@@ -1,6 +1,6 @@
 # Matter over Wi-Fi Lighting Example
 
-The Matter over WiFi SoC lighting app provides a baseline implementation of a light control device built using Matter and Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
+The Matter over Wi-Fi lighting example is a baseline demonstration of a light device built with Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
 ## Table of Contents
 
@@ -29,11 +29,11 @@ starting point for building production lighting products on the Silicon Labs pla
 
 ### HW Requirements
 
-For a full list of hardware requirements, see the [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
 ### SW Requirements
 
-For a full list of software requirements, see the [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
 ## Steps to Run Demo
 

@@ -1,161 +1,157 @@
-# Matter EFR32 Window Covering Example
+# Matter over Thread Window Covering Example
 
-The EFR32 window-covering example provides a baseline demonstration of a Window
-Covering device, built using Matter and the Silicon Labs simplicity SDK. It can be
-controlled by a Matter controller over an Openthread network.
+The Matter over Thread window covering example is a baseline demonstration of a window covering built with Simplicity SDK. It can be controlled by a Matter controller over an OpenThread network.
 
-The EFR32 device can be commissioned over Bluetooth Low Energy where the device
-and the Matter controller will exchange security information with the Rendez-vous
-procedure. In the case of Thread, the Thread Network credentials are provided to
-the EFR32 device which will then join the Thread network.
+## Table of Contents
 
-If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
-needed commissioning information for the BLE connection and starting the
-Rendez-vous procedure. Once the device is commissioned, the displays shows a
-representation of the window covering state.
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-The window-covering example is intended to serve both as a means to explore the
-workings of Matter as well as a template for creating real products based on the
-Silicon Labs platform.
+## Purpose/Scope
 
-For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Thread demo instructions depending on the example you are running.
-[Demo instructions for Thread](https://docs.silabs.com/matter/2.8.0/matter-thread)
+This example demonstrates a sample implementation of a Matter over Thread window covering
+app running on a Silicon Labs EFR32 SoC.
 
-## Window Covering Application User Interface
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
+controller and device exchange security credentials in the Rendez-vous procedure.
 
-**LCD** 
+If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR code containing
+the commissioning information for the BLE connection and Rendez-vous procedure. Once
+commissioned, the display shows a representation of the window covering state.
 
-The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+This example serves as both a functional demonstration of Matter over Thread and a
+starting point for building production products on the Silicon Labs platform.
 
-![QR Code](qr_code_img.png)
+## Prerequisites/Setup Requirements
 
-A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+### HW Requirements
 
-**The URL can also be printed by issuing the following matter shell command:**
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-```shell
-matterCli> onboardingcodes ble qrcodeurl
-```
+### SW Requirements
 
-Log output example:
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
-```shell
-[SVR] Copy/paste the below URL in a browser to see the QR Code:
-[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
-```
+## Steps to Run Demo
 
-Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+### Program a Bootloader
 
-**LED 0** 
+If building a solution, the bootloader is included and flashed as part of the combined
+artifact.
 
-LED 0 shows the overall state of the device and its connectivity. The following states are possible:
+If building the sample application on its own, a bootloader must be flashed separately
+before the application. Pre-built bootloader binaries for all supported devices are
+available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
 
--   _Short Flash On (50 ms on/950 ms off)_ ; The device is in the
-            unprovisioned (unpaired) state and is waiting for a commissioning
-            application to connect.
+### Configuration and Setup
 
--   _Rapid Even Flashing_ ; (100 ms on/100 ms off)_ &mdash; The device is in the
-            unprovisioned state and a commissioning application is connected through
-            Bluetooth LE.
+This sample app works out of the box with no additional configuration required. To customize the device, see the
+[Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
--   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
-            provisioned, but does not yet have full Thread network or service
-            connectivity.
+Once the device is provisioned, it will join the Thread network once established; look for the RTT log. You can verify that the device is on the Thread network with the command `router table` using a serial terminal (screen / minicom etc.) on the board running the window-app example. You can also get the address list with the command `ipaddr` in the serial terminal.
 
--   _Solid On_ ; The device is fully provisioned and has full Thread
-            network and service connectivity.
-
-**LED 1** 
-
-Shows the state of the window covering
-
--   _Solid On_ ; The window cover if fully open
--   _Off_ ; The window cover if fully closed
--   _Blinking slowly_ ; The window cover is half-open, either by tilt, or lift
--   _Blinking quickly_ ; The window cover is being automatically open or closed
-
-**Push Button 0** 
-
-Increase either tilt or lift, and factory reset
-
--   Pressed and release: The lift/tilt increases by 10%
-
--   Pressed and hold for 6 s: Initiates the factory reset of the device.
-            Releasing the button within the 6-second window cancels the factory reset
-            procedure. **LEDs** blink in unison when the factory reset procedure is
-            initiated.
-
-**Push Button 1** 
-
-Decreases either tilt or lift, or switch the cover type
-
--   Pressed and release: The lift/tilt decreases by 10%
-
--   Press and hold for 3 s: Cycle between window covering type (Rollershade, Drapery, Tilt Blind - Lift and Tilt).
-
-**Push Button0 and Button1** 
-
-Switch between lift and tilt
-
-- Pressing and release both buttons at the same time: switches between lift and tilt modes. Most window covering types support either lift only, or tilt only, but type 0x08 support both (default)
-
-- Pressing and hold both buttons at the same time: Cycles between window covering 1, and window covering 2.
-
-*   Once the device is provisioned, it will join the Thread network is
-    established, look for the RTT log
-
+Example RTT log output:
 ```shell
 [DL] Device Role: CHILD
 [DL] Partition Id:0x6A7491B7
 [DL] \_OnPlatformEvent default: event->Type = 32778
-[DL] OpenThread State Changed (Flags: 0x00000001)
+[DL] OpenThread State Changed (Flags: 0x00000001)
 [DL] Thread Unicast Addresses:
-[DL]    2001:DB8::E1A2:87F1:7D5D:FECA/64 valid preferred
-[DL]    FDDE:AD00:BEEF::FF:FE00:2402/64 valid preferred rloc
-[DL]    FDDE:AD00:BEEF:0:383F:5E81:A05A:B168/64 valid preferred
-[DL]    FE80::D8F2:592E:C109:CF00/64 valid preferred
+[DL]    2001:DB8::E1A2:87F1:7D5D:FECA/64 valid preferred
+[DL]    FDDE:AD00:BEEF::FF:FE00:2402/64 valid preferred rloc
+[DL]    FDDE:AD00:BEEF:0:383F:5E81:A05A:B168/64 valid preferred
+[DL]    FE80::D8F2:592E:C109:CF00/64 valid preferred
 [DL] LwIP Thread interface addresses updated
 [DL] FE80::D8F2:592E:C109:CF00 IPv6 link-local address, preferred)
 [DL] FDDE:AD00:BEEF:0:383F:5E81:A05A:B168 Thread mesh-local address, preferred)
 [DL] 2001:DB8::E1A2:87F1:7D5D:FECA IPv6 global unicast address, preferred)
 ```
 
-(you can verify that the device is on the thread network with the command
-    `router table` using a serial terminal (screen / minicom etc.) on the board
-    running the window-app example. You can also get the address list with the
-    command ipaddr again in the serial terminal )
+### Steps for Execution
 
-## Enabling LCD and LEDs in a Project
+1. Build and flash the bootloader and application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
 
-If an LCD is supported by the board but not enabled in a project it can be enabled in Studio by installing the _Display_ component under _Silicon Labs Matter->Matter->Platform->Display_
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img).
+   ```shell
+   chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+   ```
 
-To enable the QR Code install the _QR Code_ component under _Silicon Labs Matter->Matter->Platform->QR Code_. (All the dependencies including LCD are installed automatically, there is no need to explicitly install the _Display_ component in this case.)
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device; provisioning may change it.
 
-If LEDs are supported by the board but not enabled in a project they can be enabled as follows:
--   Install instances (led0 and led1) of the _Simple LED_ component under _Platform->Driver->LED->Simple LED_
--   Install the WSTK LED Support component under _Silicon Labs Matter->Matter->Platform->WSTK LED Support_
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-## Provision and Control
+4. Control the window covering:
+   ```shell
+   chip-tool windowcovering go-to-tilt-percentage 50 0 1 1
+   ```
+   To see supported window covering cluster commands: `chip-tool windowcovering`
 
-You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+**Button and LED reference:**
 
+| Control   | Action                    | Result                                                          |
+|-----------|----------------------------|-----------------------------------------------------------------|
+| BTN0      | Press and release          | Increase lift/tilt by 10%                                      |
+| BTN0      | Hold 6 s                   | Initiate factory reset (release within 6 s to cancel)           |
+| BTN1      | Press and release          | Decrease lift/tilt by 10%                                      |
+| BTN1      | Hold 3 s                   | Cycle window covering type (Rollershade, Drapery, Tilt Blind)  |
+| BTN0+BTN1 | Press and release together | Switch between lift and tilt modes                             |
+| BTN0+BTN1 | Hold together              | Cycle between window covering 1 and 2                          |
+| LED 0     | Short flash on             | Unprovisioned, waiting for commissioning                        |
+| LED 0     | Rapid even flash           | BLE connected, commissioning in progress                        |
+| LED 0     | Short flash off            | Provisioned, no full Thread connectivity                        |
+| LED 0     | Solid on                   | Fully provisioned with Thread connectivity                      |
+| LED 1     | Solid on                   | Window cover fully open                                         |
+| LED 1     | Off                        | Window cover fully closed                                       |
+| LED 1     | Blinking slowly             | Window cover half-open (tilt or lift)                           |
+| LED 1     | Blinking quickly           | Window cover being automatically opened or closed               |
 
-    
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md) 
+## Troubleshooting
 
-For instance, to set the window covering lift by percentage:
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
+- Confirm the bootloader is flashed to the device.
 
-```shell
-chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+**Commissioning fails**
+- Ensure the Thread Border Router is running and reachable.
+- Verify the `operationalDataset` hex string matches your Thread network.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
-chip-tool onoff on 1 1
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_
+  component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code
+  on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter >
+  Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and
+  `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then
+  install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
 
-chip-tool windowcovering go-to-tilt-percentage 50 0 1 1
-```
+## Resources
 
-To see the supported window covering cluster commands, use:
+- [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-```shell
-chip-tool windowcovering
-```
+## Report Bugs & Get Support
+
+You are always encouraged and welcome to report any issues you found to us via
+[Silicon Labs Community](https://community.silabs.com).

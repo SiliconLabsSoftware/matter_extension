@@ -1,107 +1,124 @@
-# Matter SiWx917 SoC Air Quality Sensor Example
+# Matter over Wi-Fi Air Quality Sensor Example
 
-The SiWx917 SoC Air Quality Sensor example provides a baseline demonstration of a Air Quality Sensor
-device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled
-by a Matter controller over Wifi network.
+The Matter over Wi-Fi air quality sensor example is a baseline demonstration of an air quality sensor built with Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
-The SiWx917 device can be commissioned over Bluetooth Low Energy where the device
-and the Matter controller will exchange security information with the Rendez-vous
-procedure.
+## Table of Contents
 
-If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
-needed commissioning information for the BLE connection and starting the
-Rendez-vous procedure.
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-The air quality sensor example is intended to serve both as a means to explore the
-workings of Matter as well as a template for creating real products based on the
-Silicon Labs platform.
+## Purpose/Scope
 
-For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+This example demonstrates a sample implementation of a Matter over Wi-Fi air quality sensor
+app running on a Silicon Labs SiWx917 SoC.
 
-## Region code Setting (917 WiFi projects)
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
+controller and device exchange security credentials in the Rendez-vous procedure.
+Wi-Fi credentials (SSID and PSK) are then provided so the device joins your Wi-Fi network and can be controlled by any Matter-compliant controller.
 
-In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
-The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
+If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR code containing
+the commissioning information for the BLE connection and Rendez-vous procedure.
 
-## Air Quality Sensor Example User Interface
+This example serves as both a functional demonstration of Matter over Wi-Fi and a
+starting point for building production products on the Silicon Labs platform.
 
-**LCD** 
+## Prerequisites/Setup Requirements
 
-The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+### HW Requirements
 
-![QR Code](qr_code_img.png)
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+### SW Requirements
 
-**The URL can also be printed by issuing the following matter shell command:**
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
-```shell
-matterCli> onboardingcodes ble qrcodeurl
-```
+## Steps to Run Demo
 
-Log output example:
+### Configuration and Setup
 
-```shell
-[SVR] Copy/paste the below URL in a browser to see the QR Code:
-[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
-```
+This sample app works out of the box with no additional configuration required. To customize the device, see the
+[Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
 
-**LED 0** 
+### Steps for Execution
 
-Shows the overall state of the device and its connectivity. The following states are possible:
+1. Build and flash the application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
 
--   _Short Flash On (50 ms on/950 ms off)_ ; The device is in the unprovisioned (unpaired) state and is waiting for a commissioning application to connect.
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img).
+   ```shell
+   chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840
+   ```
 
--   _Rapid Even Flashing_ ; (100 ms on/100 ms off)_ &mdash; The device is in the unprovisioned state and a commissioning application is connected through Bluetooth LE.
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device; provisioning may change it.
 
--   _Short Flash Off_ ; (950ms on/50ms off)_ &mdash; The device is fully
-provisioned, but does not yet have full service
-connectivity.
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
--   _Solid On_ ; The device is fully provisioned and has full service connectivity.
+4. Control the device:
+   ```shell
+   chip-tool onoff on 1 1
+   chip-tool onoff off 1 1
+   ```
 
-**LED 1** 
+**Button and LED reference:**
 
-Simulates the Light The following states are possible:
+| Control | Action            | Result                                                          |
+|---------|-------------------|-----------------------------------------------------------------|
+| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs |
+| BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
+| BTN1    | Press and release | Toggle light state on/off                                       |
+| LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
+| LED 0   | Rapid even flash  | BLE connected, commissioning in progress                        |
+| LED 0   | Short flash off   | Provisioned, no full service connectivity                       |
+| LED 0   | Solid on          | Fully provisioned with service connectivity                     |
+| LED 1   | Solid on         | Light is on                                                     |
+| LED 1   | Off              | Light is off                                                    |
 
--   _Solid On_ ; Light is on
--   _Off_ ; Light is off
+## Troubleshooting
 
-    
-**Push Button 0**
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
 
--   _Press and Release_ : Start, or restart, BLE advertisement in fast mode. It will advertise in this mode
-for 30 seconds. The device will then switch to a slower interval advertisement.
-After 15 minutes, the advertisement stops. In addition, this button should also print the QR Code URL to the RTT logs.
+**Commissioning fails**
+- Ensure the Wi-Fi SSID and PSK are correct and the network is reachable.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
--   _Pressed and hold for 6 s_ : Initiates the factory reset of the device.
- Releasing the button within the 6-second window cancels the factory reset
- procedure. **LEDs** blink in unison when the factory reset procedure is
- initiated.
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_
+  component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code
+  on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter >
+  Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and
+  `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then
+  install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
 
-**Push Button 1** 
+## Resources
 
-- Toggles the light state On/Off
+- [Silicon Labs Matter Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-## Provision and Control
+## Report Bugs & Get Support
 
-You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img) 
-
-
-    
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
-
-
-Here is an example with the CHIPTool:
-
-```shell
-chip-tool pairing ble-wifi <Node-ID> $SSID $PSK 20202021 3840
-
-chip-tool onoff on <Node-ID> 1
-```
+You are always encouraged and welcome to report any issues you found to us via
+[Silicon Labs Community](https://community.silabs.com).

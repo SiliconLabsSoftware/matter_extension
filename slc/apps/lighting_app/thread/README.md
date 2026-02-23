@@ -1,6 +1,6 @@
 # Matter over Thread Lighting Example
 
-The Matter over Thread lighting app provides a baseline implementation of a light control device built using Matter and Simplicity SDK. It can be controlled by a Matter controller over an Openthread network.
+The Matter over Thread lighting example is a baseline demonstration of a light device built with Simplicity SDK. It can be controlled by a Matter controller over an OpenThread network.
 
 ## Table of Contents
 

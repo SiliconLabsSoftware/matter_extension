@@ -1,102 +1,78 @@
-# Matter Platform Template Example
+# Matter over Wi-Fi Platform Template Example
 
-A minimal Matter platform template example supporting essential clusters on Silicon Labs SiWx917 SoC devices.
+A minimal Matter over Wi-Fi platform example with essential clusters on Silicon Labs SiWx917 SoC. Foundation for building Matter applications.
 
-<hr>
+## Table of Contents
 
-- [Matter Platform Template Example](#matter-platform-template-example)
-- [Introduction](#introduction)
-  - [Region code Setting (917 WiFi projects)](#region-code-setting-917-wifi-projects)
-- [Building](#building)
-  - [Prerequisite](#prerequisite)
-  - [Building command](#building-command)
-- [Expected Behaviour](#expected-behaviour)
-- [Supported Clusters](#supported-clusters)
-  - [Root Node (Endpoint 0)](#root-node-endpoint-0)
-  - [Endpoint 1](#endpoint-1)
-- [Customizing](#customizing)
-  - [Adding Matter Clusters](#adding-matter-clusters)
-  - [Configuration Options](#configuration-options)
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-<hr>
+## Purpose/Scope
 
-# Introduction
+This example demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over Wi-Fi. This platform app serves as a foundation for building more complex Matter applications.
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs SiWx917 SoC devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over a WiFi network. This platform app serves as a foundation for building more complex Matter applications.
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter controller and device exchange security credentials in the Rendez-vous procedure. Wi-Fi credentials (SSID and PSK) are then provided so the device joins your Wi-Fi network and can be controlled by any Matter-compliant controller.
 
-For more information on running Matter applications and pre-requisites please refer to the online 
-documentation for Matter available at docs.silabs.com. Follow the instructions for the desired Matter over Wi-Fi application.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/latest/matter-wifi)
+**Supported clusters:** Root Node (Endpoint 0): Base, Access Control, Access Control Enforcement, Administrator Commissioning, General Diagnostics, General Commissioning, Group Communication, Localization Configuration, Network Commissioning, Node Operational Credentials, Secure Channel, WiFi Network Diagnostic, Time Format Localization. Endpoint 1: Groups.
 
-## Region code Setting (917 WiFi projects)
+**Customizing:** You can add Matter clusters by modifying the ZAP configuration and regenerating the data model. Configuration options (network commissioning, device identification, diagnostic intervals, security) can be adjusted via component configuration files. Build steps are documented in the project root README (e.g. `python3 slc/sl_build.py MyNewApp/platform-app-917.slcw brd4338a`).
 
-In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
-The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
+## Prerequisites/Setup Requirements
 
-# Building
+### HW Requirements
 
-## Prerequisite
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-The following prerequisites need to be installed on the host machine:
+### SW Requirements
 
-- ARM GCC 12.2
-- ZAP (version 2024.05.07 or greater)
-- SLC-CLI
-- Various environment variables set such as:
-    - ARM_GCC_DIR
-    - TOOLDIR
-    - STUDIO_ADAPTER_PACK_PATH
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation. Host build prerequisites include ARM GCC 12.2, ZAP (2024.05.07 or greater), SLC-CLI, and environment variables (ARM_GCC_DIR, TOOLDIR, STUDIO_ADAPTER_PACK_PATH).
 
-## Building command
-To build this project, follow the build steps detailed in:
-{matter_extension_root}/README.md.
+## Steps to Run Demo
 
-You can replicate the build command for your specific application.
-E.g. (For a Linux/Mac system)
-```
-python3 slc/sl_build.py MyNewApp/platform-app-917.slcw brd4338a
-```
+### Configuration and Setup
 
-# Expected Behaviour
+This sample app works out of the box with no additional configuration required. To customize the device, see the [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-Once the application is built and flashed onto the device, you should see the Matter QR code displayed and if you're using a BLE sniffer like the EFRConnect app you should be able to see the device being advertised and ready to be commissioned into a Matter network.
+**Building:** Build steps are in the project root README. Example (Linux/Mac): `python3 slc/sl_build.py MyNewApp/platform-app-917.slcw brd4338a`.
 
-The platform app provides basic Matter functionality including commissioning over BLE, WiFi network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers over WiFi network for configuration and monitoring purposes.
+**Expected behaviour:** After build and flash, the device advertises over BLE and shows the Matter QR code if the display is enabled. Once commissioned, the device can be managed through Matter controllers over Wi-Fi for configuration and monitoring.
 
-# Supported Clusters
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
 
-This platform app supports the following Matter clusters:
+### Steps for Execution
 
-## Root Node (Endpoint 0)
-- **Base** - Basic device information and capabilities
-- **Access Control** - Access control list management
-- **Access Control Enforcement** - Access control enforcement
-- **Administrator Commissioning** - Device commissioning management
-- **General Diagnostics** - Device diagnostic information
-- **General Commissioning** - General commissioning procedures
-- **Group Communication** - Group messaging support
-- **Localization Configuration** - Device localization settings
-- **Network Commissioning** - Network credential management
-- **Node Operational Credentials** - Device certificate management
-- **Secure Channel** - Secure communication channel
-- **WiFi Network Diagnostic** - WiFi network diagnostic information
-- **Time Format Localization** - Time format configuration
+1. Build and flash the application to your board (see project root README for build commands).
+2. On startup, the device advertises over BLE and shows the Matter QR code if the display is enabled.
+3. Commission the device using chip-tool, Simplicity Connect, or another Matter controller (e.g. `chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840`).
+4. After commissioning, the device can be managed through Matter controllers over Wi-Fi for configuration and monitoring.
 
-## Endpoint 1
-- **Groups Cluster** - Group management functionality
+**Button and LED reference:**
 
-# Customizing 
+This app does not define application-specific buttons or LEDs. If WSTK LED Support is installed, LED 0 may indicate commissioning/connectivity state.
 
-This platform app can be customized to fit your specific needs:
+## Troubleshooting
 
-## Adding Matter Clusters
-You can extend this platform app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
+**Device does not advertise over BLE**
+- Restart the device and ensure the application is flashed correctly.
 
-## Configuration Options
-Various Matter configuration options can be modified through the component configuration files to adjust behavior such as:
-- Network commissioning parameters
-- Device identification information
-- Diagnostic reporting intervals
-- Security settings
+**Commissioning fails**
+- Ensure the Wi-Fi SSID and PSK are correct and the network is reachable.
+- Verify the region code is set appropriately for your locale.
+
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_ component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter > Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
+
+## Resources
+
+- [Silicon Labs Matter Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+
+## Report Bugs & Get Support
+
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).

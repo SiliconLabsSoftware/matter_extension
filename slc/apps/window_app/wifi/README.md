@@ -1,116 +1,121 @@
-# Matter SiWx917 SoC Window Covering Example
+# Matter over Wi-Fi Window Covering Example
 
-The SiWx917 SoC window-covering example provides a baseline demonstration of a Window
-Covering device, built using Matter and the Silicon Labs simplicity SDK. It can be
-controlled by a Matter controller over Wifi network.
+The Matter over Wi-Fi window covering example is a baseline demonstration of a window covering built with Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
-The SiWx917 SoC device can be commissioned over Bluetooth Low Energy where the device
-and the Matter controller will exchange security information with the Rendez-vous
-procedure.
+## Table of Contents
 
-If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the
-needed commissioning information for the BLE connection and starting the
-Rendez-vous procedure. Once the device is commissioned, the displays shows a
-representation of the window covering state.
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-The window-covering example is intended to serve both as a means to explore the
-workings of Matter as well as a template for creating real products based on the
-Silicon Labs platform.
+## Purpose/Scope
 
-For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Wi-Fi demo instructions depending on the example you are running.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+This example demonstrates a sample implementation of a Matter over Wi-Fi window covering
+app running on a Silicon Labs SiWx917 SoC.
 
-## Region code Setting (917 WiFi projects)
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
+controller and device exchange security credentials in the Rendez-vous procedure.
+Wi-Fi credentials (SSID and PSK) are then provided so the device joins your Wi-Fi network and can be controlled by any Matter-compliant controller.
 
-In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
-The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
+If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR code containing
+the commissioning information for the BLE connection and Rendez-vous procedure. Once
+commissioned, the display shows a representation of the window covering state.
 
-## Window Covering Application User Interface
+This example serves as both a functional demonstration of Matter over Wi-Fi and a
+starting point for building production products on the Silicon Labs platform.
 
-**LCD** 
+**Note:** The Window app is ICD enabled. On the WPK, **LEDs** and **Push Button 1** are non-functional because they are not connected to UULP pins.
 
-**LCD** 
+## Prerequisites/Setup Requirements
 
-The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+### HW Requirements
 
-![QR Code](qr_code_img.png)
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+### SW Requirements
 
-**The URL can also be printed by issuing the following matter shell command:**
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
-```shell
-matterCli> onboardingcodes ble qrcodeurl
-```
+## Steps to Run Demo
 
-Log output example:
+### Configuration and Setup
 
-```shell
-[SVR] Copy/paste the below URL in a browser to see the QR Code:
-[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
-```
+This sample app works out of the box with no additional configuration required. To customize the device, see the
+[Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
 
-**Push Button 0** 
+### Steps for Execution
 
-Increase either tilt or lift, and factory reset
+1. Build and flash the application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
 
--   Pressed and release: The lift/tilt increases by 10%
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img).
+   ```shell
+   chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840
+   ```
 
--   Pressed and hold for 6 s: Initiates the factory reset of the device.
-            Releasing the button within the 6-second window cancels the factory reset
-            procedure.
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device; provisioning may change it.
 
-Note: The Window app is ICD enabled, and as a result, the **LEDs** and **Push Button 1** are non-functional because they are not connected to any UULP pins on the WPK.
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-*   Once the device is provisioned, it will join the wifi network is
-    established, look for the RTT log
+4. Control the window covering:
+   ```shell
+   chip-tool windowcovering up-or-open 1 1
+   chip-tool windowcovering down-or-close 1 1
+   ```
+   To see supported window covering cluster commands: `chip-tool windowcovering`
 
-```shell
-[DL] Device Role: CHILD
-[DL] Partition Id:0x6A7491B7
-[DL] \_OnPlatformEvent default: event->Type = 32778
-[DL] Wifi State Changed (Flags: 0x00000001)
-[DL] Wifi Unicast Addresses:
-[DL]    2001:DB8::E1A2:87F1:7D5D:FECA/64 valid preferred
-[DL]    FDDE:AD00:BEEF::FF:FE00:2402/64 valid preferred rloc
-[DL]    FDDE:AD00:BEEF:0:383F:5E81:A05A:B168/64 valid preferred
-[DL]    FE80::D8F2:592E:C109:CF00/64 valid preferred
-[DL] LwIP Wifi face addresses updated
-[DL] FE80::D8F2:592E:C109:CF00 IPv6 link-local address, preferred)
-[DL] FDDE:AD00:BEEF:0:383F:5E81:A05A:B168 Wifi mesh-local address, preferred)
-[DL] 2001:DB8::E1A2:87F1:7D5D:FECA IPv6 global unicast address, preferred)
-```
+**Button and LED reference:**
 
-(you can verify that the device is on the wifi network with the command
-    `router table` using a serial terminal (screen / minicom etc.) on the board
-    running the window-app example. You can also get the address list with the
-    command ipaddr again in the serial terminal )
+| Control | Action            | Result                                                          |
+|---------|-------------------|-----------------------------------------------------------------|
+| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs; increase lift/tilt by 10% |
+| BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
 
-## Provision and Control
+## Troubleshooting
 
-You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
 
+**Commissioning fails**
+- Ensure the Wi-Fi SSID and PSK are correct and the network is reachable.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
-    
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md) 
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_
+  component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code
+  on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter >
+  Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and
+  `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then
+  install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
 
-For instance, to set the window covering:
+## Resources
 
-```shell
-chip-tool pairing ble-wifi <Node-ID> $SSID $PSK 20202021 3840
+- [Silicon Labs Matter Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-./chip-tool windowcovering up-or-open <Node-ID> 1
+## Report Bugs & Get Support
 
-./chip-tool windowcovering down-or-close <Node-ID> 1
-```
-
-To see the supported window covering cluster commands, use:
-
-```shell
-chip-tool windowcovering
-```
+You are always encouraged and welcome to report any issues you found to us via
+[Silicon Labs Community](https://community.silabs.com).

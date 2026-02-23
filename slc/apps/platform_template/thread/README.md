@@ -1,90 +1,82 @@
-# Matter Platform Template Example
+# Matter over Thread Platform Template Example
 
-A minimal Matter platform example supporting essential clusters on Silicon Labs MG24/MG26 and Rainier.
+A minimal Matter over Thread platform example with essential clusters on Silicon Labs MG24/MG26 and Rainier. Foundation for building Matter applications.
 
-<hr>
+## Table of Contents
 
-- [Matter Platform Template Example](#matter-platform-template-example)
-- [Introduction](#introduction)
-- [Building](#building)
-  - [Prerequisite](#prerequisite)
-  - [Building command](#building-command)
-- [Expected Behaviour](#expected-behaviour)
-- [Supported Clusters](#supported-clusters)
-  - [Root Node (Endpoint 0)](#root-node-endpoint-0)
-  - [Endpoint 1](#endpoint-1)
-- [Customizing](#customizing)
-  - [Adding Matter Clusters](#adding-matter-clusters)
-  - [Configuration Options](#configuration-options)
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-<hr>
+## Purpose/Scope
 
-# Introduction
+This example demonstrates a minimal Matter platform implementation on Silicon Labs EFR32 (MG24/MG26) devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation over Thread. This platform app serves as a foundation for building more complex Matter applications.
 
-This sample app demonstrates a minimal Matter platform implementation on Silicon Labs MG24/MG26 devices. It provides the essential Matter clusters required for commissioning, network management, and basic device operation. This platform app serves as a foundation for building more complex Matter applications.
+The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter controller and device exchange security credentials in the Rendez-vous procedure.
 
-# Building
+**Supported clusters:** Root Node (Endpoint 0): Base, Access Control, Access Control Enforcement, Administrator Commissioning, General Diagnostics, General Commissioning, Group Communication, Localization Configuration, Network Commissioning, Node Operational Credentials, Secure Channel, Thread Network Diagnostic, Time Format Localization. Endpoint 1: Groups.
 
-## Prerequisite
+**Customizing:** You can add Matter clusters by modifying the ZAP configuration and regenerating the data model. Configuration options (network commissioning, device identification, diagnostic intervals, security) can be adjusted via component configuration files. Build steps are documented in the project root README (e.g. `python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c`).
 
-The following prerequisites need to be installed on the host machine:
+## Prerequisites/Setup Requirements
 
-- ARM GCC 12.2
-- ZAP (version 2024.05.07 or greater)
-- SLC-CLI
-- Various environment variables set such as:
-    - ARM_GCC_DIR
-    - TOOLDIR
-    - STUDIO_ADAPTER_PACK_PATH
+### HW Requirements
 
-## Building command
-To build this project, follow the build steps detailed in:
-{matter_extension_root}/README.md.
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-You can replicate the build command for your specific application.
-E.g. (For a Linux/Mac system)
-```
-python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c
-```
+### SW Requirements
 
-# Expected Behaviour
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation. Host build prerequisites include ARM GCC 12.2, ZAP (2024.05.07 or greater), SLC-CLI, and environment variables (ARM_GCC_DIR, TOOLDIR, STUDIO_ADAPTER_PACK_PATH).
 
-Once the application is built and flashed onto the device, you should see the Matter QR code displayed and if you're using a BLE sniffer like the EFRConnect app you should be able to see the device being advertised and ready to be commissioned into a Matter network.
+## Steps to Run Demo
 
-The platform app provides basic Matter functionality including commissioning, network management, and diagnostic capabilities. After commissioning, the device can be managed through Matter controllers for configuration and monitoring purposes.
+### Program a Bootloader
 
-# Supported Clusters
+If building a solution, the bootloader is included and flashed as part of the combined artifact.
 
-This platform app supports the following Matter clusters:
+If building the sample application on its own, a bootloader must be flashed separately before the application. Pre-built bootloader binaries for all supported devices are available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
 
-## Root Node (Endpoint 0)
-- **Base** - Basic device information and capabilities
-- **Access Control** - Access control list management
-- **Access Control Enforcement** - Access control enforcement
-- **Administrator Commissioning** - Device commissioning management
-- **General Diagnostics** - Device diagnostic information
-- **General Commissioning** - General commissioning procedures
-- **Group Communication** - Group messaging support
-- **Localization Configuration** - Device localization settings
-- **Network Commissioning** - Network credential management
-- **Node Operational Credentials** - Device certificate management
-- **Secure Channel** - Secure communication channel
-- **Thread Network Diagnostic** - Thread network diagnostic information
-- **Time Format Localization** - Time format configuration
+### Configuration and Setup
 
-## Endpoint 1
-- **Groups Cluster** - Group management functionality
+This sample app works out of the box with no additional configuration required. To customize the device, see the [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-# Customizing 
+**Building:** Build steps are in the project root README. Example (Linux/Mac): `python3 slc/sl_build.py MyNewApp/platform-app.slcw brd4187c`.
 
-This platform app can be customized to fit your specific needs:
+**Expected behaviour:** After build and flash, the device advertises over BLE and shows the Matter QR code if the display is enabled. Once commissioned, the device can be managed through Matter controllers for configuration and monitoring.
 
-## Adding Matter Clusters
-You can extend this platform app by adding additional Matter clusters and endpoints as needed for your application. Simply modify the ZAP configuration file to include the desired clusters and regenerate the data model.
+### Steps for Execution
 
-## Configuration Options
-Various Matter configuration options can be modified through the component configuration files to adjust behavior such as:
-- Network commissioning parameters
-- Device identification information
-- Diagnostic reporting intervals
-- Security settings
+1. Build and flash the bootloader and application to your board (see project root README for build commands).
+2. On startup, the device advertises over BLE and shows the Matter QR code if the display is enabled.
+3. Commission the device using chip-tool, Simplicity Connect, or another Matter controller (e.g. `chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840`).
+4. After commissioning, the device can be managed through Matter controllers for configuration and monitoring.
+
+**Button and LED reference:**
+
+This app does not define application-specific buttons or LEDs. If WSTK LED Support is installed, LED 0 may indicate commissioning/connectivity state.
+
+## Troubleshooting
+
+**Device does not advertise over BLE**
+- Confirm the bootloader is flashed to the device.
+
+**Commissioning fails**
+- Ensure the Thread Border Router is running and reachable.
+- Verify the `operationalDataset` hex string matches your Thread network.
+
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_ component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter > Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
+
+## Resources
+
+- [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+
+## Report Bugs & Get Support
+
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).
