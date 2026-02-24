@@ -20,6 +20,10 @@ concurrency:
     group: dev-build-examples-${{ github.ref }}
     cancel-in-progress: true
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
     set-build-type:
         runs-on: ubuntu-latest
