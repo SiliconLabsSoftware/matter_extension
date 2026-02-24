@@ -1,154 +1,148 @@
-# CHIP EFR32 Lock Example
+# Matter over Wi-Fi Lock Example
 
-The EFR32 lock example provides a baseline demonstration of a door lock control
-device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled by
-a Matter controller over Wifi network.
-    
-The EFR32 device can be commissioned over Bluetooth Low Energy where the device
-and the Matter controller will exchange security information with the Rendez-vous
-procedure.
-    
-The LCD on the Silabs WSTK shows a QR Code containing the needed commissioning
-information for the BLE connection and starting the Rendez-vous procedure.
-    
-The lock example is intended to serve both as a means to explore the
-workings of Matter as well as a template for creating real products based on the
-Silicon Labs platform.
+The Matter over Wi-Fi lock example is a baseline demonstration of a door lock built with Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
-For more general information on running matter applications and pre-requisites please look at online 
-documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+## Table of Contents
 
-## Region code Setting (917 WiFi projects)
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
 
-In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125).
-The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71)
+## Purpose/Scope
 
-## Lock Application User Interface
+This example provides a baseline demonstration of a door lock control device, built using Matter and the Silicon Labs Simplicity SDK. It can be controlled by a Matter controller over a Wi-Fi network.
 
-**LCD** 
+The device can be commissioned over Bluetooth Low Energy; the device and the Matter controller exchange security information in the Rendez-vous procedure.
 
-The LCD on Silabs WSTK shows a QR Code. This QR Code is be scanned by the CHIP Tool app For the Rendez-vous procedure over BLE.
+The LCD on the Silicon Labs WSTK shows a QR code containing the commissioning information for the BLE connection and Rendez-vous procedure.
 
-![QR Code](qr_code_img.png)
+This example is intended to serve both as a means to explore Matter and as a template for creating real products based on the Silicon Labs platform.
 
-A URL can be found in the **RTT logs upon startup OR by pressing BTN0**
+For general information on running Matter applications and prerequisites, see the [Matter Wi-Fi documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi) on docs.silabs.com.
 
-**The URL can also be printed by issuing the following matter shell command:**
+## Prerequisites/Setup Requirements
 
-```shell
-matterCli> onboardingcodes ble qrcodeurl
-```
+### HW Requirements
 
-Log output example:
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
 
-```shell
-[SVR] Copy/paste the below URL in a browser to see the QR Code:
-[SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
-```
+### SW Requirements
 
-Note: This QR Code is only valid for an unprovisioned device. Provisioning may change the QR Code.
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
-**LED 0** 
+## Steps to Run Demo
 
--   **ICD Configuration (Default)** - LED is only active under two circumstances:
+### Configuration and Setup
 
-    1. Factory reset sequence - LED will blink when initiated upon press and hold of
-    Button 0 after 3 seconds
-    2. An Identify command was received
+This sample app works out of the box with no additional configuration required. To customize the device, see the [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
--   **Non-ICD Configuration** - shows the overall state of the device and its connectivity. The
-    following states are possible:
+**Region code (SiWx917 Wi-Fi):** In Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
 
-    - *Short Flash On* (50 ms on/950 ms off): The device is in the
-    unprovisioned (unpaired) state and is waiting for a commissioning
-    application to connect.
+### Steps for Execution
 
-    - *Rapid Even Flashing* (100 ms on/100 ms off): The device is in the
-    unprovisioned state and a commissioning application is connected through
-    Bluetooth LE.
+1. Build and flash the application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
 
-    - *Short Flash Off* (950ms on/50ms off): The device is fully
-    provisioned, but does not yet have full network or service
-    connectivity.
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img).
+   ```shell
+   chip-tool pairing ble-wifi <Node-ID> $SSID $PSK 20202021 3840
+   ```
 
-    - *Solid On*: The device is fully provisioned and has full service connectivity.
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device; provisioning may change it.
 
-**LED 1** 
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-Simulates the Lock The following states are possible:
+4. Control the lock. Example chip-tool commands:
 
--   _Solid On_ ; Bolt is unlocked
--   _Blinking_ ; Bolt is moving to the desired state
--   _Off_ ; Bolt is locked
+   Set a user:
+   ```shell
+   ./out/chip-tool doorlock set-user OperationType UserIndex UserName UserUniqueId UserStatus UserType CredentialRule node-id/group-id
+   ./out/chip-tool doorlock set-user 0 1 "mike" 5 1 0 0 <Node-ID> 1 --timedInteractionTimeoutMs 1000
+   ```
 
-**Push Button 0**
+   Set a credential:
+   ```shell
+   ./out/chip-tool doorlock set-credential OperationType Credential CredentialData UserIndex UserStatus UserType node-id/group-id
+   ./out/chip-tool doorlock set-credential 0 '{ "credentialType": 1, "credentialIndex": 1 }' "123456" 1 null null <Node-ID> 1 --timedInteractionTimeoutMs 1000
+   ```
 
--   _Press and Release_ : Start, or restart, BLE advertisement in fast mode. It will advertise in this mode
-for 30 seconds. The device will then switch to a slower interval advertisement.
-After 15 minutes, the advertisement stops. In addition, this button should also print the QR Code URL to the RTT logs.
+   Change a credential:
+   ```shell
+   ./out/chip-tool doorlock set-credential 2 '{ "credentialType": 1, "credentialIndex": 1 }' "123457" 1 null null <Node-ID> 1 --timedInteractionTimeoutMs 1000
+   ```
 
--   _Pressed and hold for 6 s_ : Initiates the factory reset of the device. Releasing the button within the 6-second window cancels the factory reset procedure. **LEDs** blink in unison when the factory reset procedure is initiated.
+   Get a user:
+   ```shell
+   ./out/chip-tool doorlock get-user UserIndex node-id/group-id
+   ./out/chip-tool doorlock get-user 1 <Node-ID> 1
+   ```
 
-**Push Button 1** 
+   Unlock door:
+   ```shell
+   ./out/chip-tool doorlock unlock-door node-id/group-id
+   ./out/chip-tool doorlock unlock-door <Node-ID> 1 --timedInteractionTimeoutMs 1000
+   ```
 
-- Toggles the bolt state On/Off
+   Lock door:
+   ```shell
+   ./out/chip-tool doorlock lock-door node-id/group-id
+   ./out/chip-tool doorlock lock-door <Node-ID> 1 --timedInteractionTimeoutMs 1000
+   ```
 
-## Provision and Control
+**Button and LED reference:**
 
-You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+| Control | Action            | Result                                                          |
+|---------|-------------------|-----------------------------------------------------------------|
+| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs |
+| BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)          |
+| BTN1    | Press and release | Toggle bolt on/off                                              |
+| LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
+| LED 0   | Rapid even flash  | BLE connected, commissioning in progress                        |
+| LED 0   | Short flash off   | Provisioned, no full Wi-Fi connectivity                         |
+| LED 0   | Solid on          | Fully provisioned with Wi-Fi connectivity                        |
+| LED 1   | Solid on          | Bolt unlocked                                                   |
+| LED 1   | Blinking          | Bolt moving to desired state                                    |
+| LED 1   | Off               | Bolt locked                                                     |
 
+**Note:** LED 0 (ICD default): only active during factory reset or Identify command.
 
-    
-More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
+## Troubleshooting
 
-Here is some CHIPTool examples:
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
 
-Pairing with chip-tool:
-```shell
-chip-tool pairing ble-wifi <Node-ID> $SSID $PSK 20202021 3840
-```
+**Commissioning fails**
+- Ensure the Wi-Fi SSID and PSK are correct and the network is reachable.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
-Set a user:
-```shell
-./out/chip-tool doorlock set-user OperationType UserIndex UserName UserUniqueId UserStatus UserType CredentialRule node-id/group-id
+**LCD or LEDs not working**
+- **LCD:** If the board supports an LCD but it is not enabled, install the _Display_ component under _Silicon Labs Matter > Matter > Platform > Display_. For the QR code on the LCD, install the _QR Code_ component under _Silicon Labs Matter > Matter > Platform > QR Code_ (Display is installed automatically).
+- **LEDs:** If the board supports LEDs but they are not enabled, install `led0` and `led1` instances of _Simple LED_ under _Platform > Driver > LED > Simple LED_, then install _WSTK LED Support_ under _Silicon Labs Matter > Matter > Platform > WSTK LED Support_.
 
-./out/chip-tool doorlock set-user 0 1 "mike" 5 1 0 0 <Node-ID> 1 --timedInteractionTimeoutMs 1000
-```
+## Resources
 
-Set a credential:
-```shell
-./out/chip-tool doorlock set-credential OperationType Credential CredentialData UserIndex UserStatus UserType node-id/group-id
+- [Silicon Labs Matter Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
-./out/chip-tool doorlock set-credential 0 '{ "credentialType": 1, "credentialIndex": 1 }' "123456" 1 null null <Node-ID> 1 --timedInteractionTimeoutMs 1000
-```
+## Report Bugs & Get Support
 
-Changing a credential:
-```shell
-./out/chip-tool doorlock set-credential OperationType Credential CredentialData UserIndex UserStatus UserType node-id/group-id
-
-./out/chip-tool doorlock set-credential 2 '{ "credentialType": 1, "credentialIndex": 1 }' "123457" 1 null null <Node-ID> 1 --timedInteractionTimeoutMs 1000
-```
-
-Get a user:
-```shell
-./out/chip-tool doorlock get-user UserIndex node-id/group-id
-
-./out/chip-tool doorlock get-user 1 <Node-ID> 1
-```
-
-Unlock door:
-```shell
-./out/chip-tool doorlock unlock-door node-id/group-id
-
-./out/chip-tool doorlock unlock-door <Node-ID> 1 --timedInteractionTimeoutMs 1000
-```
-
-Lock door:
-```shell
-./out/chip-tool doorlock lock-door node-id/group-id
-
-./out/chip-tool doorlock lock-door <Node-ID> 1 --timedInteractionTimeoutMs 1000
-```
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).
