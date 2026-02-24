@@ -183,6 +183,7 @@ jobs:
             - build-lighting-app
             - build-window-app
             - build-dishwasher-app
+            - build-evse-app
             - build-thermostat
             - build-light-switch-app
             - build-multi-sensor-app

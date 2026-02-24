@@ -130,6 +130,16 @@ jobs:
             example-app: "refrigerator-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build-evse-app:
+        name: Build EVSE App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "evse-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            wifi-soc-support: true
+
     build-performance-test-app:
         name: Build Performance Test App
         needs: set-build-type
@@ -183,6 +193,7 @@ jobs:
             - build-multi-sensor-app
             - build-onoff-plug-app
             - build-refrigerator-app
+            - build-evse-app
             - build-performance-test-app
             - build-platform-app
             - build-zigbee-matter-light-app
