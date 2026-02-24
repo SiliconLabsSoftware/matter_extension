@@ -1,6 +1,19 @@
 # Internal Storage Bootloader (Single Image on 512 KB Device)
 
-This sample configuration of the simplicity bootloader configures the bootloader to use the internal main flash to store firmware update images. The storage configuration is set up to store a single firmware update image at a time, in a single storage slot. The storage slot is configured to start at address 0x44000 (or 0x8044000 for device with 0x8000000 flash base), and have a size of 192 kB. This can be configured on the *"Bootloader Storage Slot Setup"*.This is the default bootloader configuration to use with Matter projects.
+Internal storage bootloader for 512 KB devices. Single image slot at 0x44000 (192 kB). Default for Matter projects. See UG489 for configuration and storage layout.
+
+## Table of Contents
+
+- [Purpose and Scope](#purpose-and-scope)
+- [Prerequisites](#prerequisites)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
+## Purpose and Scope
+
+This sample configuration of the simplicity bootloader configures the bootloader to use the internal main flash to store firmware update images. The storage configuration is set up to store a single firmware update image at a time, in a single storage slot. The storage slot is configured to start at address 0x44000 (or 0x8044000 for device with 0x8000000 flash base), and have a size of 192 kB. This can be configured on the *"Bootloader Storage Slot Setup"*. This is the default bootloader configuration to use with Matter projects.
 
 When changing the storage layout of the bootloader, ensure that there is no overlap between the memory space the bootloader expects to use and the memory space the application or NVM system expects to use.
 
@@ -8,4 +21,27 @@ When changing the storage layout of the bootloader, ensure that there is no over
 
 For information about multiple storage slot support, see the "Internal Storage Bootloader (multiple images)" sample configuration.
 
-See *UG489: simplicity Bootloader User's Guide* to learn more about how to configure the bootloader, configure storage layout, enable security features, etc.
+## Prerequisites
+
+- **Hardware:** See [Matter hardware requirements](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/hardware-requirements).
+- **Software:** See [Matter software requirements](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/software-requirements).
+
+## Steps to Run Demo
+
+1. Build the bootloader project for your target board, or use a pre-built binary.
+2. Flash the bootloader to the device before flashing the application. Pre-built bootloader binaries for supported devices are available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
+
+## Troubleshooting
+
+- **Storage overlap:** Ensure the bootloader storage slot does not overlap with application or NVM memory. Adjust *Bootloader Storage Slot Setup* to match the layout expected by your application.
+- For configuration and security options, see *UG489: Simplicity Bootloader User's Guide*.
+
+## Resources
+
+- [Gecko Bootloader User's Guide (UG489)](https://www.silabs.com/documents/public/user-guides/ug489-gecko-bootloader-user-guide-gsdk-4.pdf)
+- [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries)
+- [Matter Prerequisites](https://docs.silabs.com/matter/2.8.0/matter-prerequisites)
+
+## Report Bugs & Get Support
+
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).
