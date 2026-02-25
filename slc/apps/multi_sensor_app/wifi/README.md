@@ -118,8 +118,8 @@ This sample app works out of the box with no additional configuration required. 
 
 ## Resources
 
-- [Silicon Labs Matter Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
-- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [Silicon Labs Matter over Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
 - [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support

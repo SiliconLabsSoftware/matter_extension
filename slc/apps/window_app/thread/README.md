@@ -147,8 +147,8 @@ Example RTT log output:
 
 ## Resources
 
-- [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
-- [Matter Hub Raspberry Pi Image Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+- [Silicon Labs Matter over Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
 - [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support

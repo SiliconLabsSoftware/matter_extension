@@ -40,9 +40,9 @@ For issues with downloading, flashing, or running the OpenThread Border Router i
 
 ## Resources
 
-- [OpenThread Border Router Documentation (Raspberry Pi image)](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
-- [Silicon Labs Matter Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
-- [Matter Prerequisites](https://docs.silabs.com/matter/2.8.0/matter-prerequisites)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
+- [Silicon Labs Matter over Thread Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread)
+- [OTBR Repo (flashed as part of Matter Hub image)](https://github.com/SiliconLabs/ot-br-posix)
 
 ## Report Bugs & Get Support
 
