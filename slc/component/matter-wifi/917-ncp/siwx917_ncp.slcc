@@ -2,7 +2,7 @@ id: siwx917_ncp
 package: matter
 label: SiWx917 NCP Extension
 description: >
-  Adds support for the HAL ,BLE and WiFi Driver layer for SiWx917 NCP devices
+  Adds support for the HAL, BLE and WiFi Driver layer for SiWx917 NCP devices
 category: Matter-WiFi|Platform|Drivers
 quality: production
 metadata:
@@ -68,6 +68,9 @@ source:
   condition: [matter_ble]
 
 define:
+- name: SLI_SI91X_ENABLE_BLE
+  value: "1"
+  unless: [matter_ble]
 - name: SL_MATTER_SIWX_WIFI_ENABLE
 - name: EXP_BOARD
   value: 1
