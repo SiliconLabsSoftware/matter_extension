@@ -38,7 +38,7 @@ For a full list of software requirements, see [Matter Software Requirements](htt
 
 ## Resources
 
-- [Gecko Bootloader User's Guide (UG489)](https://www.silabs.com/documents/public/user-guides/ug489-gecko-bootloader-user-guide-gsdk-4.pdf)
+- [UG489: Simlicity Bootloader User's Guide](https://www.silabs.com/documents/public/user-guides/ug489-gecko-bootloader-user-guide-gsdk-4.pdf)
 - [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries)
 - [Matter Prerequisites](https://docs.silabs.com/matter/2.8.0/matter-prerequisites)
 
