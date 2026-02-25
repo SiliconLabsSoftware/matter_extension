@@ -16,7 +16,6 @@ include:
       - path: EnergyEvseManager.h
       - path: EnergyEvseTargetsStore.h
       - path: EnergyEvseDelegateImpl.h
-      - path: EnergyEvseEventTriggers.h
       - path: EnergyEvseMain.h
       - path: EVSEManufacturerImpl.h
       - path: EVSECallbacks.h
