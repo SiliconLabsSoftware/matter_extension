@@ -144,5 +144,4 @@ To change a credential, use OperationType 2 in set-credential (e.g. new credenti
 
 ## Report Bugs & Get Support
 
-You are always encouraged and welcome to report any issues you found to us via
-[Silicon Labs Community](https://community.silabs.com).
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).

@@ -19,7 +19,7 @@ app running on a Silicon Labs EFR32 SoC.
 The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
 controller will exchange security information with the Rendez-vous procedure.
 
-If the LCD is enabled, the LCD on the Silabs WSTK shows a QR Code containing the needed 
+If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the needed 
 commissioning information for the BLE connection and starting the Rendez-vous procedure.
 
 This example serves as both a functional demonstration of Matter over Thread and a
@@ -143,5 +143,4 @@ commander flash out/brd4187c/lighting-app-solution/artifact/lighting-app-combine
 
 ## Report Bugs & Get Support
 
-You are always encouraged and welcome to report any issues you found to us via
-[Silicon Labs Community](https://community.silabs.com).
+You are always encouraged and welcome to report any issues you found to us via [Silicon Labs Community](https://community.silabs.com).
