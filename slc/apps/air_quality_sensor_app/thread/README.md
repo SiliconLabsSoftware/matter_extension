@@ -32,7 +32,7 @@ For a full list of hardware requirements, see [Matter Hardware Requirements](htt
 
 ### SW Requirements
 
-For a full list of software requirements, see the [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
 
 ## Steps to Run Demo
 

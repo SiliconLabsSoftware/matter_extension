@@ -17,7 +17,7 @@ This example demonstrates a sample implementation of a Matter over Thread lighti
 app running on a Silicon Labs EFR32 SoC.
 
 The device is commissioned over Bluetooth Low Energy (BLE), during which the Matter
-controller will exchange security information with the Rendez-vous procedure.
+controller and device exchange security credentials in the Rendez-vous procedure.
 
 If the LCD is enabled, the LCD on the Silicon Labs WSTK shows a QR Code containing the needed 
 commissioning information for the BLE connection and starting the Rendez-vous procedure.
