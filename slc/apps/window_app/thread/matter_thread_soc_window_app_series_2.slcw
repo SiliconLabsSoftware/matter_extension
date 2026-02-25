@@ -7,7 +7,7 @@ project:
   - path: ./matter_thread_soc_window_app.slcp
     id: application
     output: window_app
-  - path: ../../bootloaders/bootloader-storage-external-single-series-2/matter_bootloader_external_series_2.slcp
+  - path: ../../bootloaders/bootloader_storage_external_single_series_2/matter_bootloader_external_series_2.slcp
     id: bootloader
     output: matter_bootloader
 post_build:

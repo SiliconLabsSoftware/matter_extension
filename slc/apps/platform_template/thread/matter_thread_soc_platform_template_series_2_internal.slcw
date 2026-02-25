@@ -7,7 +7,7 @@ project:
   - path: ./matter_thread_soc_platform_template.slcp
     id: application
     output: platform_template
-  - path: ../../bootloaders/bootloader-storage-internal-single-series-2/matter_bootloader_internal_series_2.slcp
+  - path: ../../bootloaders/bootloader_storage_internal_single_series_2/matter_bootloader_internal_series_2.slcp
     id: bootloader
     output: matter_bootloader
 post_build:

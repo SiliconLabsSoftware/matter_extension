@@ -7,7 +7,7 @@ project:
   - path: ./matter_thread_soc_lighting_app.slcp
     id: application
     output: lighting_app
-  - path: ../../bootloaders/bootloader-storage-single-4096k-series-3/matter_bootloader_internal_series_3.slcp
+  - path: ../../bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcp
     id: bootloader
     output: matter_bootloader
 post_build:
