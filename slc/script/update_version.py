@@ -129,3 +129,10 @@ if __name__ == '__main__':
     if FULL_VERSION:
         replace_text(str(ROOT)+"/matter_docs.xml","https://github.com/SiliconLabs/matter_extension/releases/tag/v"+VERSION_REGEX_FORMAT+"","https://github.com/SiliconLabs/matter_extension/releases/tag/v"+EXTENSION_NEW_VERSION)
         replace_text(str(ROOT)+"/matter_docs.xml","Silicon Labs Matter v"+FULL_VERSION_REGEX+"","Silicon Labs Matter v"+EXTENSION_NEW_VERSION+"-"+AUX_VERSION+"")
+
+    # Update Jenkinsfile with CSA spec version
+    #
+    # REGEX FORMAT:
+    # def CSA_MATTER_VERSION = "1.5"
+    if FULL_VERSION:
+        replace_text(str(ROOT)+"/jenkins_integration/Jenkinsfile","def CSA_MATTER_VERSION = \"[^\"]*\"","def CSA_MATTER_VERSION = \""+AUX_VERSION+"\"")
