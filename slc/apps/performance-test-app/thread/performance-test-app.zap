@@ -14,7 +14,11 @@
     {
       "key": "manufacturerCodes",
       "value": "0x1002"
-    }
+    },
+    {
+      "key": "generateStaticTemplates",
+      "value": "true"
+    }      
   ],
   "package": [
     {
