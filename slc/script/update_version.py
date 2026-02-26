@@ -2,10 +2,11 @@
 
 # This script updates Matter extension version in our various files.
 # Example usage:
-# ./slc/script/update_version.py 2.2.0-1.2 4.4.0 readme=True/False
+# ./slc/script/update_version.py 2.2.0-1.2 4.4.0 4.0.0 readme=True/False
 # param 1: New version for sdk_extension
 # param 2: New version for simplicity_sdk
-# param 3: Choose to update/not update the readme files with "param 1"
+# param 3: New version for wiseconnect (Wi-Fi SDK)
+# param 4: Choose to update/not update the readme files with "param 1"
 
 import os
 import sys
@@ -25,13 +26,14 @@ def replace_text(filename, regex_to_search, replacement_text, warning_if_unchang
         wfile.write(replaced_text)
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print("Error: Incorrect usage. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 readme=True/False")
+    if len(sys.argv) != 5:
+        print("Error: Incorrect usage. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 4.0.0 readme=True/False")
         sys.exit()
 
     EXTENSION_NEW_VERSION = sys.argv[1]
     SISDK_NEW_VERSION = sys.argv[2]
-    README = sys.argv[3]
+    WISECONNECT_NEW_VERSION = sys.argv[3]
+    README = sys.argv[4]
     VERSION_REGEX_FORMAT="(\d+)\.(\d+)\.(\d+)"
     AUX_REGEX_FORMAT = "(\d+)\.(\d+)(\.(\d+))?"
     FULL_VERSION = False
@@ -60,16 +62,22 @@ if __name__ == '__main__':
     if len(SISDK_NEW_VERSION.split("."))!=3 or not re.match(r"^\d+\.\d+\.\d+$", SISDK_NEW_VERSION):
         print("Error: Incorrect usage for SISDK version. Need X.Y.Z format")
 
+    #Check if WISECONNECT_NEW_VERSION is in X.Y.Z format
+    if len(WISECONNECT_NEW_VERSION.split(".")) != 3 or not re.match(r"^\d+\.\d+\.\d+$", WISECONNECT_NEW_VERSION):
+        print("Error: Incorrect usage for wiseconnect version. Need X.Y.Z format")
+        sys.exit()
+
     #Check if  updated to README.md files is required.
     readme_args = README.split("=")
     if(len(readme_args)!=2 or readme_args[0]!="readme" or readme_args[1].upper() not in ["TRUE", "FALSE"]):
-        print("Error: Incorrect usage for readme. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 readme=True/False")
+        print("Error: Incorrect usage for readme. Example: ./slc/script/update_version.py 2.2.0-1.2 4.4.0 4.0.0 readme=True/False")
         sys.exit()
     else:
         UPDATE_README=True if readme_args[1].upper()=="TRUE" else False
 
     print("Updating the sdk_extension version to "+EXTENSION_NEW_VERSION)
     print("Updating the simplicity_sdk version to "+SISDK_NEW_VERSION)
+    print("Updating the wiseconnect version to "+WISECONNECT_NEW_VERSION)
     readme_str= "Updating" if UPDATE_README else "Not Updating"
     print(readme_str+" the README.md files")
 
@@ -82,6 +90,7 @@ if __name__ == '__main__':
     slcp_files = [os.path.abspath(f) for f in pathlib.Path(ROOT).glob("slc/**/*.slcp")]
     for file in slcp_files:
         replace_text(file,"sdk_extension:\n *- id: matter\n *version: \""+VERSION_REGEX_FORMAT+"\"", "sdk_extension:\n  - id: matter\n    version: \""+EXTENSION_NEW_VERSION+"\"")
+        replace_text(file,"- id: wiseconnect3_sdk\n *version: \""+VERSION_REGEX_FORMAT+"\"", "- id: wiseconnect3_sdk\n    version: \""+WISECONNECT_NEW_VERSION+"\"", warning_if_unchanged=False)
 
     # Update matter.slce
     #
@@ -97,6 +106,11 @@ if __name__ == '__main__':
     #   id: simplicity_sdk
     #   version: 4.3.0
     replace_text(str(ROOT)+"/matter.slce","  *id: simplicity_sdk\n  *version: "+VERSION_REGEX_FORMAT,"  id: simplicity_sdk\n  version: "+SISDK_NEW_VERSION)
+
+    # Update wiseconnect.slsdk
+    wiseconnect_slsdk = os.path.join(str(ROOT), "third_party", "wifi_sdk", "wiseconnect.slsdk")
+    replace_text(wiseconnect_slsdk, "version="+VERSION_REGEX_FORMAT, "version="+WISECONNECT_NEW_VERSION)
+    replace_text(wiseconnect_slsdk, "prop.subLabel=Wi-Fi\\\\ SDK\\\\ "+VERSION_REGEX_FORMAT, "prop.subLabel=Wi-Fi\\\\ SDK\\\\ "+WISECONNECT_NEW_VERSION)
 
     # Update matter.slsdk
     #

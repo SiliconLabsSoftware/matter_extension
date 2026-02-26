@@ -8,7 +8,10 @@ on:
         required: true
       sdk_version:
         description: "SDK version (e.g 2025.12.0)"
-        required: true  
+        required: true
+      wiseconnect_version:
+        description: "Wiseconnect / Wi-Fi SDK version (e.g 4.0.0)"
+        required: true
       update_readme:
         description: "Update README links"
         required: false
@@ -31,7 +34,7 @@ jobs:
 
       - name: Run version update
         run: |
-          python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
+          python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }} readme=${{ inputs.update_readme }}
 
       # Use a GitHub App token so the PR triggers downstream checks.
       - name: Generate GitHub App token
@@ -48,17 +51,18 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
-          title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
+          commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }}"
+          title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }}"
           body: |
             This PR updates the Matter Extension and SDK versions based on the workflow inputs.
             Ran the following command to update the version:
             ```
-            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
+            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }} readme=${{ inputs.update_readme }}
             ```
 
             - Matter Extension version: `${{ inputs.extension_version }}`
             - SDK version: `${{ inputs.sdk_version }}`
+            - Wiseconnect version: `${{ inputs.wiseconnect_version }}`
             - Readme: `${{ inputs.update_readme }}`
 
             **User Needs to Trigger Jenkins CI**
