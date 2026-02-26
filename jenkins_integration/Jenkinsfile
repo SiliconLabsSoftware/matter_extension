@@ -4,7 +4,7 @@
 def pipelineProperties = []
 
 // Configure pollSCM triggers
-if(env.BRANCH_NAME == 'release_2.8-1.5'){
+if(env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release_2.8-1.5'){
     // Trigger daily at 9pm EST (3 hrs after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('0 1 * * *')])
 }
@@ -100,6 +100,9 @@ pipeline
         }
         stage('Execute CI Tests')
         {
+            when {
+                expression { env.BRANCH_NAME != "main" }
+            }
             steps {
                 script {
                     def parallelNodes = [:]
@@ -204,7 +207,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
