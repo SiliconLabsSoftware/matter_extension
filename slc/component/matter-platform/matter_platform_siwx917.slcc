@@ -37,7 +37,6 @@ requires:
 
 provides:
   - name: matter_platform_siwx917
-  - name: wiseconnect_toolchain_gcc_override
   - name: matter_si91x_common_flash_nvm3_enabled
 
 include:
