@@ -22,6 +22,13 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
+                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
+            }
         ]
     },
     "full": {
