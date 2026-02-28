@@ -348,10 +348,21 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             }
                         }
                     }
-                    sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
-                    archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
+                    sh """
+                        ls -l reports
+                        tar -czf "reports/test-results-${appName}-${board}.tar.gz" reports
+                        echo "Archive contents:"
+                        tar -tzf "reports/test-results-${appName}-${board}.tar.gz"
+                    """
+
+
+                    archiveArtifacts artifacts: "reports/test-results-${appName}-${board}.tar.gz"
                     junit: 'reports/junit_report.xml'
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+                    if(branchName.startsWith("PR-")){
+                        echo "See test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter%20Extension%20GitHub/view/change-requests/job/${BRANCH_NAME}/${BUILD_NUMBER}/"
+                    } else {
+                        echo "See test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter%20Extension%20GitHub/job/${BRANCH_NAME}/${BUILD_NUMBER}/"
+                    }
                 }
             }
         }
