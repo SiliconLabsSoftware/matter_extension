@@ -96,9 +96,9 @@ jobs:
         continue-on-error: true
         run: |
           set -e
-          IMAGE=$(find out -type f -name "*.s37" 2>/dev/null | head -1)
+          IMAGE=$(find out -type f -name "*.rps" 2>/dev/null | head -1)
           if [ -z "$IMAGE" ]; then
-            echo "No .s37 image found under out/, skipping OTA flash size check"
+            echo "No .rps image found under out/, skipping OTA flash size check"
             exit 0
           fi
           if ! command -v commander >/dev/null 2>&1; then
