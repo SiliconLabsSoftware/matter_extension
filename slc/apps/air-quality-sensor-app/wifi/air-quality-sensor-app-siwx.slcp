@@ -69,6 +69,8 @@ component:
     from: matter
   - id: matter_software_diagnostics
     from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_thread_network_diagnostics
     from: matter
   # Override configuration for JTAG use
