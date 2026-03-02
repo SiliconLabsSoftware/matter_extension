@@ -25,10 +25,6 @@ on:
                 required: false
                 type: boolean
                 default: false
-            ncp-wf200-support:
-                required: false
-                type: boolean
-                default: false
             mg24-support:
                 required: false
                 type: boolean
@@ -71,7 +67,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mg24-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg24.json'
+            json-file-path: "./.github/silabs-builds-mg24.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -81,7 +77,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg24-internal.json'
+            json-file-path: "./.github/silabs-builds-mg24-internal.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2-internal.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -91,7 +87,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg24-trustzone.json'
+            json-file-path: "./.github/silabs-builds-mg24-trustzone.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -101,7 +97,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mgm24.json'
+            json-file-path: "./.github/silabs-builds-mgm24.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -111,7 +107,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mgm24-internal.json'
+            json-file-path: "./.github/silabs-builds-mgm24-internal.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2-internal.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -121,7 +117,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mg26-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg26.json'
+            json-file-path: "./.github/silabs-builds-mg26.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -131,7 +127,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mg26-internal.json'
+            json-file-path: "./.github/silabs-builds-mg26-internal.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2-internal.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -141,7 +137,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-mgm26-internal.json'
+            json-file-path: "./.github/silabs-builds-mgm26-internal.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-2-internal.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -151,27 +147,17 @@ jobs:
         if: ${{ inputs.ncp-917-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-917-ncp.json'
+            json-file-path: "./.github/silabs-builds-917-ncp.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-917-ncp.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
 
-    ncp-wf200-build-job:
-        if: ${{ inputs.ncp-wf200-support }}
-        uses: ./.github/workflows/builder.yaml
-        with:
-            json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-wf200.slcw
-            example-app: ${{ inputs.example-app }}
-            build-type: ${{ inputs.build-type }}
-            platform: ncp-wf200
-
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-siwx.json'
+            json-file-path: "./.github/silabs-builds-siwx.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/${{ inputs.example-app }}-siwx.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
@@ -181,7 +167,7 @@ jobs:
         if: ${{ inputs.thread-support && inputs.sixg301-support }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-sixg301.json'
+            json-file-path: "./.github/silabs-builds-sixg301.json"
             path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/${{ inputs.example-app }}-series-3.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}

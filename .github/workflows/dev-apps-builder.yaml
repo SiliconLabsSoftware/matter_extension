@@ -70,18 +70,18 @@ jobs:
             example-app: "lock-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
+            ncp-wf200-support: false
 
     build-thermostat-app:
-       name: Build Thermostat App
-       needs: set-build-type
-       uses: ./.github/workflows/platform-builder.yaml
-       with:
-           example-app: "thermostat"
-           build-type: ${{ needs.set-build-type.outputs.build-type }}
-           ncp-917-support: true
-           ncp-wf200-support: true
-            
+        name: Build Thermostat App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "thermostat"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+            ncp-wf200-support: false
+
     build-window-app:
         name: Build Window App
         needs: set-build-type
@@ -142,18 +142,18 @@ jobs:
             wifi-soc-support: false
 
     build-zigbee-matter-light-app:
-       name: Build Zigbee Matter Light App
-       needs: set-build-type
-       uses: ./.github/workflows/platform-builder.yaml
-       with:
-           example-app: "zigbee-matter-light"
-           build-type: ${{ needs.set-build-type.outputs.build-type }}
-           thread-keyword: ""
-           mg24-internal-support: false
-           mgm24-support: false
-           mgm24-internal-support: false
-           wifi-soc-support: false
- 
+        name: Build Zigbee Matter Light App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee-matter-light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-keyword: ""
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            wifi-soc-support: false
+
     build-oven-app:
         name: Build Oven App
         needs: set-build-type
@@ -227,7 +227,7 @@ jobs:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
     build-sqa-apps:
-      name: Build SQA apps
-      needs: wait-for-test-results
-      if: ${{ startsWith(github.ref_name, 'release_') }}
-      uses: ./.github/workflows/sqa-apps-builder.yaml
+        name: Build SQA apps
+        needs: wait-for-test-results
+        if: ${{ startsWith(github.ref_name, 'release_') }}
+        uses: ./.github/workflows/sqa-apps-builder.yaml
