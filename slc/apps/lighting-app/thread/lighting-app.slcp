@@ -44,9 +44,7 @@ component:
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
   - id: matter_groups
-    from: matter
   - id: matter_groupcast
-    from: matter
   - id: matter_identify
   - id: matter_level_control
   - id: matter_localization_configuration
