@@ -89,6 +89,8 @@ component:
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_default_lcd_config
     from: matter
 

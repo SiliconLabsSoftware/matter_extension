@@ -82,6 +82,8 @@ component:
     from: matter
   - id: matter_thread_network_diagnostics
     from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_time_format_localization
     from: matter
   - id: matter_user_label
