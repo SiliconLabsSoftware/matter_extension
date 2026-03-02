@@ -105,27 +105,25 @@ jobs:
             echo "commander not found, skipping OTA flash size check"
             exit 0
           fi
-          cd /tmp
-          commander gbl create temporary.gbl --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-          file_size_running=$(stat -c "%s" temporary.gbl)
-          rounded_size_running=$(( 8192 * (file_size_running + 8191) / 8192 ))
-          commander gbl create --compress lzma temporary.gbl --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-          file_size_ota=$(stat -c "%s" temporary.gbl)
-          rounded_size_ota=$(( 8192 * (file_size_ota + 8191) / 8192 ))
-          available_flash=1499136
-          sum=$(( rounded_size_running + rounded_size_ota ))
+          image_size=$(commander util rpsinfo "$IMAGE" 2>/dev/null | grep "Image size" | sed -n 's/.*(\([0-9]*\)).*/\1/p')
+          if [ -z "$image_size" ]; then
+            echo "Failed to parse image size from rpsinfo"
+            exit 1
+          fi
+          rounded_size=$(( 8192 * (image_size + 8191) / 8192 ))
+          available_flash=4194304
+          sum=$(( 2 * rounded_size ))
           remaining=$(( available_flash - sum ))
           echo ""
-          echo "  Platform: 917 SiWx"
+          echo "  Platform: 917 SiWx (external flash 4MB; running and OTA image size equal)"
           echo "  Image: $IMAGE"
-          echo "  Running image flash consumption:                      $rounded_size_running bytes"
-          echo "  OTA update image (LZMA-compressed) flash consumption: $rounded_size_ota bytes"
+          echo "  Image size (running = OTA):                           $rounded_size bytes"
+          echo "  Total (running + OTA) flash consumption:             $sum bytes"
           echo "  Total Remaining:                                      $remaining bytes"
           echo ""
           if [ "$sum" -gt "$available_flash" ]; then
-            echo "OTA Update image will NOT fit in the ${available_flash} bytes of available flash space"
+            echo "OTA Update image will NOT fit in the ${available_flash} bytes of external flash space"
             exit 1
           else
-            echo "OTA Update image will fit in the ${available_flash} bytes of available flash space"
+            echo "OTA Update image will fit in the ${available_flash} bytes of external flash space"
           fi
-          rm -f temporary.gbl
