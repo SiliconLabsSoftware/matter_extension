@@ -137,6 +137,26 @@ include:
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
+      - path: clusters/AmbientContextSensing/AttributeIds.h
+      - path: clusters/AmbientContextSensing/Attributes.h
+      - path: clusters/AmbientContextSensing/Attributes.ipp
+      - path: clusters/AmbientContextSensing/ClusterId.h
+      - path: clusters/AmbientContextSensing/CommandIds.h
+      - path: clusters/AmbientContextSensing/Commands.h
+      - path: clusters/AmbientContextSensing/Commands.ipp
+      - path: clusters/AmbientContextSensing/Enums.h
+      - path: clusters/AmbientContextSensing/EnumsCheck.h
+      - path: clusters/AmbientContextSensing/EventIds.h
+      - path: clusters/AmbientContextSensing/Events.h
+      - path: clusters/AmbientContextSensing/Events.ipp
+      - path: clusters/AmbientContextSensing/Ids.h
+      - path: clusters/AmbientContextSensing/Metadata.h
+      - path: clusters/AmbientContextSensing/MetadataProvider.h
+      - path: clusters/AmbientContextSensing/Structs.h
+      - path: clusters/AmbientContextSensing/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
       - path: clusters/ApplicationBasic/AttributeIds.h
       - path: clusters/ApplicationBasic/Attributes.h
       - path: clusters/ApplicationBasic/Attributes.ipp
