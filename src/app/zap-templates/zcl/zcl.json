@@ -190,7 +190,8 @@
             "AdminVendorId"
         ],
         "Ambient Context Sensing": [
-            "HoldTimeLimits"
+            "HoldTimeLimits",
+            "ObjectCountConfig"
         ],
         "Basic Information": [
             "FeatureMap",
@@ -466,6 +467,11 @@
             "LabelList",
             "ClusterRevision",
             "FeatureMap"
+        ],
+        "Temperature Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
         ],
         "Thread Border Router Management": [
             "BorderRouterName",

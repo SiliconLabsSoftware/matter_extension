@@ -13,6 +13,7 @@ provides:
   - name: matter_actions
 source:
   - path: third_party/matter_sdk/src/app/clusters/actions-server/actions-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/actions-server/ActionsCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/actions-server
     file_list:
