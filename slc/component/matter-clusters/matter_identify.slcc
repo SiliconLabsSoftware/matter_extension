@@ -21,6 +21,9 @@ include:
       - path: identify-server.h
       - path: IdentifyCluster.h
       - path: IdentifyIntegrationDelegate.h
+  - path: third_party/matter_sdk/src/lib/support
+    file_list:
+      - path: TimerDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_identify

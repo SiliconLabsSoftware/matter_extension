@@ -1,0 +1,18 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix trustzone", "-pids trustzone"]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix trustzone", "-pids trustzone"]
+            }
+        ]
+    }
+}

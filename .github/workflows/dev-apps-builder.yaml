@@ -44,6 +44,7 @@ jobs:
         with:
             example-app: "lighting-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            trustzone-support: true
 
     build-air-quality-sensor-app:
         name: Build Air Quality Sensor App
@@ -60,6 +61,7 @@ jobs:
         with:
             example-app: "light-switch-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     build-lock-app:
         name: Build Lock App
         needs: set-build-type
@@ -68,7 +70,6 @@ jobs:
             example-app: "lock-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
 
     build-thermostat-app:
         name: Build Thermostat App
@@ -78,7 +79,6 @@ jobs:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
 
     build-window-app:
         name: Build Window App
@@ -96,7 +96,7 @@ jobs:
         with:
             example-app: "fan-control-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
+            ncp-917-support: true
 
     build-closure-app:
         name: Build Closure App
@@ -152,12 +152,30 @@ jobs:
             mgm24-internal-support: false
             wifi-soc-support: false
 
-    build-platform-app:
-        name: Build Platform App
+    build-oven-app:
+        name: Build Oven App
         needs: set-build-type
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "platform-app"
+            example-app: "oven-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-rangehood-app:
+        name: Build Rangehood App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "rangehood-app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            thread-support: false
+
+    build-platform-template:
+        name: Build Platform Template
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "platform-template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build-sqa-tools:
@@ -184,9 +202,11 @@ jobs:
             - build-onoff-plug-app
             - build-refrigerator-app
             - build-performance-test-app
-            - build-platform-app
+            - build-platform-template
             - build-zigbee-matter-light-app
             - build-closure-app
+            - build-oven-app
+            - build-rangehood-app
         if: success()
 
         steps:
@@ -203,3 +223,9 @@ jobs:
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+    build-sqa-apps:
+        name: Build SQA apps
+        needs: wait-for-test-results
+        if: ${{ startsWith(github.ref_name, 'release_') }}
+        uses: ./.github/workflows/sqa-apps-builder.yaml
