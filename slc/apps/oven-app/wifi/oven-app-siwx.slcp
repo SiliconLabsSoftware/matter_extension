@@ -121,8 +121,6 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/include
     file_list:
     - path: CookEndpoints.h
-    - path: CookTopEndpoint.h
-    - path: CookSurfaceEndpoint.h
     - path: OvenEndpoint.h
 
 source:
@@ -139,10 +137,6 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/AppSupportedTemperatureLevelsDelegate.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookEndpoints.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookSurfaceEndpoint.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookTopEndpoint.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/OvenEndpoint.cpp
     directory: src
