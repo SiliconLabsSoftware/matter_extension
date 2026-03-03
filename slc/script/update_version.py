@@ -107,11 +107,6 @@ if __name__ == '__main__':
     #   version: 4.3.0
     replace_text(str(ROOT)+"/matter.slce","  *id: simplicity_sdk\n  *version: "+VERSION_REGEX_FORMAT,"  id: simplicity_sdk\n  version: "+SISDK_NEW_VERSION)
 
-    # Update wiseconnect.slsdk
-    wiseconnect_slsdk = os.path.join(str(ROOT), "third_party", "wifi_sdk", "wiseconnect.slsdk")
-    replace_text(wiseconnect_slsdk, "version="+VERSION_REGEX_FORMAT, "version="+WISECONNECT_NEW_VERSION)
-    replace_text(wiseconnect_slsdk, "prop.subLabel=Wi-Fi\\\\ SDK\\\\ "+VERSION_REGEX_FORMAT, "prop.subLabel=Wi-Fi\\\\ SDK\\\\ "+WISECONNECT_NEW_VERSION)
-
     # Update matter.slsdk
     #
     # REGEX FORMAT:
