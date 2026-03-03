@@ -51,6 +51,7 @@ component:
   - id: segger_rtt
   - id: matter_on_off
   - id: matter_temperature_control
+  - id: matter_temperature_measurement
   - id: matter_oven
   - id: matter_mode_base
   - id: matter_bindings
