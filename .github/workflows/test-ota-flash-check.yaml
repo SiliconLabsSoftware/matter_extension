@@ -30,7 +30,7 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: ota
+          build-type: standard
 
       - name: Check OTA image flash size
         continue-on-error: true
@@ -90,7 +90,7 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: ota
+          build-type: standard
 
       - name: Check OTA image flash size
         continue-on-error: true
@@ -150,7 +150,7 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: ota
+          build-type: standard
 
       - name: Check OTA image flash size
         continue-on-error: true
