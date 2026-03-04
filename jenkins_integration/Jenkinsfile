@@ -121,9 +121,6 @@ pipeline
         }
         stage('Execute CI Tests')
         {
-            when {
-                expression { env.BRANCH_NAME != "main" }
-            }
             steps {
                 script {
                     def parallelNodes = [:]
