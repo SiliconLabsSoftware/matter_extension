@@ -1,7 +1,7 @@
 name: Build SQA apps
 
 on:
-  workflow_call:
+    workflow_call:
 
 jobs:
     build_lock_app:
