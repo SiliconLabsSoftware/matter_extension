@@ -106,7 +106,8 @@ configuration:
     value: "0"
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap    directory: common
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
+    directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision
