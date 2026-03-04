@@ -11,7 +11,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
@@ -21,7 +21,7 @@
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
@@ -49,7 +49,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
@@ -59,13 +59,13 @@
                 "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
             }
         ],
-        "lock-app": [
+        "lock_app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee_light":  [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
@@ -79,7 +79,7 @@
                 "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
@@ -105,7 +105,7 @@
         ]
     },
     "custom-sqa": {
-        "lock-app" :[
+        "lock_app" :[
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
@@ -150,7 +150,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
@@ -179,7 +179,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
-        "light-switch-app": [
+        "light_switch_app": [
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
@@ -207,7 +207,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "multi-sensor-app": [
+        "multi_sensor_app": [
             {
                 "boards": ["brd4186c"],
                 "arguments": ["--output_suffix low-power",
@@ -230,7 +230,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "-pids application",
@@ -242,7 +242,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             }
         ],
-        "closure-app": [
+        "closure_app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
