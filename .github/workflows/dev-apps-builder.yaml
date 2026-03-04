@@ -70,7 +70,6 @@ jobs:
             example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
 
     build_thermostat:
        name: Build Thermostat App
@@ -80,8 +79,7 @@ jobs:
            example-app: "thermostat"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
            ncp-917-support: true
-           ncp-wf200-support: true
-            
+
     build_window_app:
         name: Build Window App
         needs: set-build-type

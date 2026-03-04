@@ -25,10 +25,6 @@ on:
                 required: false
                 type: boolean
                 default: false
-            ncp-wf200-support:
-                required: false
-                type: boolean
-                default: false
             mg24-support:
                 required: false
                 type: boolean
@@ -156,16 +152,6 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
-
-    ncp-wf200-build-job:
-        if: ${{ inputs.ncp-wf200-support }}
-        uses: ./.github/workflows/builder.yaml
-        with:
-            json-file-path: './.github/silabs-builds-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_wf200_ncp_${{ inputs.example-app }}.slcw
-            example-app: ${{ inputs.example-app }}
-            build-type: ${{ inputs.build-type }}
-            platform: ncp-wf200
 
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}
