@@ -4,7 +4,7 @@
 def pipelineProperties = []
 
 // Configure pollSCM triggers
-if(env.BRANCH_NAME == 'release_2.8-1.5'){
+if(env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release_2.8-1.5'){
     // Trigger daily at 11pm EST (2 hrs after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('0 4 * * *')])
 }
@@ -211,7 +211,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -226,7 +226,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
