@@ -55,6 +55,9 @@ component:
   - id: matter_power_source
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
+    from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_default_lcd_config
 
   # Override configuration for JTAG use

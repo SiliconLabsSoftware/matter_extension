@@ -62,6 +62,9 @@ component:
   - id: matter_thermostat_user_interface_configuration
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
+    from: matter
+  - id: matter_time_synchronization
+    from: matter
   - id: matter_user_label
   - id: matter_unit_localization
   - id: matter_wifi_network_diagnostics
@@ -85,8 +88,7 @@ component:
 #  - name: matter_default_lcd_config
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-wifi-app.zap
-    directory: common
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap    directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision

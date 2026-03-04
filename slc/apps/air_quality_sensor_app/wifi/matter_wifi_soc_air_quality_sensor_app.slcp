@@ -44,6 +44,9 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_software_diagnostics
+    from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_thread_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo

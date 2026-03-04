@@ -52,6 +52,9 @@ component:
   - id: matter_ota_requestor
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
+    from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_time_format_localization
   - id: matter_user_label
   - id: matter_wifi_network_diagnostics

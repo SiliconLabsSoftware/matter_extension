@@ -146,7 +146,7 @@ jobs:
             - build_lighting_app
             - build_window_app
             # - build_dishwasher_app
-            - build_thermostat
+            - build_thermostat_app
             - build_light_switch_app
             - build_multi_sensor_app
             - build_zigbee_light

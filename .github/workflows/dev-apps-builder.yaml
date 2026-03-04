@@ -71,14 +71,14 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
 
-    build_thermostat:
-       name: Build Thermostat App
-       needs: set-build-type
-       uses: ./.github/workflows/platform-builder.yaml
-       with:
-           example-app: "thermostat"
-           build-type: ${{ needs.set-build-type.outputs.build-type }}
-           ncp-917-support: true
+    build_thermostat_app:
+        name: Build Thermostat App
+        needs: set-build-type
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "thermostat"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
 
     build_window_app:
         name: Build Window App
@@ -204,7 +204,7 @@ jobs:
             - build_air_quality_sensor_app
             - build_light_switch_app
             - build_lock_app
-            - build_thermostat
+            - build_thermostat_app
             - build_window_app
             - build_fan_control_app
             - build_multi_sensor_app

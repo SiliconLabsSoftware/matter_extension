@@ -44,6 +44,9 @@ component:
   - id: matter_power_source_configuration
   - id: matter_power_source
   - id: matter_software_diagnostics
+    from: matter
+  - id: matter_temperature_measurement
+    from: matter
   - id: matter_time_format_localization
   - id: matter_user_label
   - id: matter_wifi_network_diagnostics

@@ -206,7 +206,7 @@ ui_hints:
   highlight:
     - path: README.md
       focus: false
-      
+
 tag:
   - hardware:component:led:2+
 
