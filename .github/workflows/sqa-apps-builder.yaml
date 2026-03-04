@@ -58,8 +58,8 @@ jobs:
   #          wifi-soc-support: false
   #          sixg301-support: false
 
-    build_thermostat:
-        name: Build Thermostat
+    build_thermostat_app:
+        name: Build Thermostat App
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
