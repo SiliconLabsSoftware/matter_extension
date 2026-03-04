@@ -43,7 +43,6 @@ component_path:
   - path: slc/component/matter-thread/ftd
   - path: slc/component/matter-thread/mtd
   - path: slc/component/matter-wifi
-  - path: slc/component/matter-wifi/wf200
   - path: slc/component/matter-wifi/917-soc
   - path: slc/component/matter-wifi/917-ncp
   - path: slc/component/sdk-content/zap

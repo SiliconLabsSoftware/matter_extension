@@ -18,6 +18,8 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/actions-server
     file_list:
       - path: actions-server.h
+      - path: ActionsDelegate.h
+      - path: ActionsStructs.h
 template_contribution:
   - name: component_catalog
     value: matter_actions

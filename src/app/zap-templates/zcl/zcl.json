@@ -227,6 +227,7 @@
             "StateValue"
         ],
         "Bridged Device Basic Information": [
+            "DeviceLocation",
             "ProductAppearance"
         ],
         "Binding": [

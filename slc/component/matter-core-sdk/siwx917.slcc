@@ -99,7 +99,6 @@ include:
   - path: CompatClusterObjects.h
 - path: third_party/matter_sdk/src/lwip/silabs
   file_list:
-  - path: lwipopts-wf200.h
   - path: lwipopts-siwx.h
   - path: lwippools.h
   - path: lwipopts.h

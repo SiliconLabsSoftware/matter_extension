@@ -940,26 +940,6 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application for BRD4187C to be used with Wi-Fi 917-NCP</description>
 	</demo>
-	<demo name="brd4187c.demo.thermostat_app_wf200" label="Matter - NCP Thermostat over Wi-Fi">
-		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/demos/brd4187c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
-		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Thermostat Application for BRD4187C to be used with Wi-Fi WF200</description>
-	</demo>
-	<demo name="brd4187c.demo.lock_app_wf200" label="Matter - NCP Lock over Wi-Fi">
-		<property key="demos.blurb" value="Matter - NCP Lock app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4187c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/demos/brd4187c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
-		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lock Application for BRD4187C to be used with Wi-Fi WF200</description>
-	</demo>
 	<demo name="brd4338a.demo.fan_control_app_siwx917" label="Matter - SoC Fan Control over Wi-Fi">
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3769,26 +3749,6 @@
 		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Window Covering Application for BRD4186C to be used with Wi-Fi 917-NCP</description>
-	</demo>
-	<demo name="brd4186c.demo.thermostat_app_wf200" label="Matter - NCP Thermostat over Wi-Fi">
-		<property key="demos.blurb" value="Matter - NCP Thermostat app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/demos/brd4186c/thermostat-wf200-solution/artifact/thermostat-wf200-full.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
-		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Thermostat Application for BRD4186C to be used with Wi-Fi WF200</description>
-	</demo>
-	<demo name="brd4186c.demo.lock_app_wf200" label="Matter - NCP Lock over Wi-Fi">
-		<property key="demos.blurb" value="Matter - NCP Lock app"/>
-		<property key="core.partCompatibility" value=".*"/>
-		<property key="core.boardCompatibility" value="brd4186c"/>
-		<property key="demos.imageFile" value="asset://extension.matter_2.8.0/demos/brd4186c/lock-app-wf200-solution/artifact/lock-app-wf200-full.s37"/>
-		<property key="core.readmeFiles" value="slc/apps/lock-app/wifi/README.md"/>
-		<property key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-		<property key="core.quality" value="PRODUCTION"/>
-		<description>This is a Matter Lock Application for BRD4186C to be used with Wi-Fi WF200</description>
 	</demo>
 	<demo name="brd2911a.demo.fan_control_app_siwx917" label="Matter - SoC Fan Control over Wi-Fi">
 		<property key="demos.blurb" value="Matter - SiWx917 SoC Fan Control app"/>
