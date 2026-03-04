@@ -251,8 +251,6 @@ components:
   - siwx917_ncp
   - siwx917_ncp_brd4357a
   - toolchain_gcc_common
-  - wf200_ncp
-  - matter_drivers_series_2_wifi_wf200
   - matter_si70xx_sensor
   - matter_memory_monitoring
   - matter_crypto
@@ -636,10 +634,6 @@ components:
   - siwx917_ncp
   - siwx917_ncp_brd4357a
   - toolchain_gcc_common
-  - wf200_ncp
-  - matter_drivers_series_2_wifi_wf200
-  - wf200_ncp
-  - matter_drivers_series_2_wifi_wf200
   - toolchain_gcc_common
   - siwx917_ncp
   - siwx917_ncp_brd4357a
@@ -717,25 +711,25 @@ extra_files:
   - packages/_shared/base_recipe.py
   - third_party/aws_ota_sdk/LICENSE
   - third_party/aws_ota_sdk/README.md
-  - third_party/mqtt/stack/mqtt.c
-  - third_party/mqtt/stack/mqtt_opts.h
-  - third_party/mqtt/stack/mqtt.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_tcp.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_tls.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_opts.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_opt.h
-  - third_party/mqtt/mqtt_transport_interface/include/tcpbase.h
-  - third_party/mqtt/mqtt_transport_interface/include/MQTT_transport.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_mem.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_priv.h
-  - third_party/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_structs.h
-  - third_party/mqtt/mqtt_transport_interface/src/MQTT_transport.c
-  - third_party/mqtt/mqtt_transport_interface/src/altcp_tls_mbedtls_mem.c
-  - third_party/mqtt/mqtt_transport_interface/src/altcp_alloc.c
-  - third_party/mqtt/mqtt_transport_interface/src/altcp_tcp.c
-  - third_party/mqtt/mqtt_transport_interface/src/altcp_tls_mbedtls.c
-  - third_party/mqtt/mqtt_transport_interface/src/altcp.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/stack/mqtt.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/stack/mqtt_opts.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/stack/mqtt.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_tcp.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_tls.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_opts.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_opt.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/tcpbase.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/MQTT_transport.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_mem.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_priv.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/include/altcp_tls_mbedtls_structs.h
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/MQTT_transport.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/altcp_tls_mbedtls_mem.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/altcp_alloc.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/altcp_tcp.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/altcp_tls_mbedtls.c
+  - third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/src/altcp.c
   - third_party/aws_ota_sdk/demos/ota/ota_demo_core_mqtt/ota_demo_core_mqtt.c
   - third_party/aws_ota_sdk/demos/ota/ota_demo_core_mqtt/demo_config.h
   - third_party/aws_ota_sdk/demos/ota/ota_demo_core_mqtt/ota.c
@@ -885,7 +879,6 @@ extra_files:
   - slc/component/matter-examples/matter_dishwasher.slcc
   - slc/component/matter-examples/matter_zigbee_concurrent.slcc
   - slc/component/matter-examples/matter_multi_sensor_app.slcc
-  - slc/component/matter-examples/rainier_concurrent_listening.slcc
   - slc/component/matter-examples/matter_lock.slcc
   - slc/component/matter-examples/matter_lighting.slcc
   - slc/component/matter-examples/matter_thermostat_app.slcc
@@ -1028,8 +1021,6 @@ extra_files:
   - slc/component/matter-wifi/917-soc/linkerfile_psram_SoC.ld.jinja
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
-  - slc/component/matter-wifi/wf200/wf200_ncp.slcc
-  - slc/component/matter-wifi/wf200/matter_drivers_series_2_wifi_wf200.slcc
   - slc/component/matter-platform/sensors/matter_si70xx_sensor.slcc
   - slc/component/matter-platform/memory-monitoring/matter_memory_monitoring.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
@@ -1080,26 +1071,7 @@ extra_files:
   - slc/component/sdk-content/zap/matter_zap_include.slcc
   - slc/component/sdk-content/simplicity-sdk/rainier-ccl/rail_config.c
   - slc/component/sdk-content/simplicity-sdk/rainier-ccl/rail_config.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx_configuration_defaults.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx_constants.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx_host_api.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx.c
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/sl_wfx_version.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/secure_link/sl_wfx_secure_link.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/secure_link/sl_wfx_secure_link.c
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_wf200_C0.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_api.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_cmd_api.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_registers.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_general_error_api.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/firmware/sl_wfx_general_api.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/config/sl_wfx_configuration.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/bus/sl_wfx_bus.c
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/bus/sl_wfx_bus.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/bus/sl_wfx_bus_spi.c
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/pds/brd8023a/sl_wfx_pds.h
-  - slc/component/sdk-content/simplicity-sdk/platform/radio/wifi/wfx_fmac_driver/pds/brd8022a/sl_wfx_pds.h
+
   - slc/component/sdk-content/simplicity-sdk/util/third_party/segger/systemview/Config/SEGGER_RTT_Conf.h
   - slc/component/sdk-content/simplicity-sdk/util/third_party/segger/systemview/SEGGER/SEGGER_RTT.c
   - slc/component/sdk-content/simplicity-sdk/util/third_party/segger/systemview/SEGGER/sl_rtt_buffer_index.h
@@ -1156,7 +1128,6 @@ extra_files:
   - slc/solutions/thermostat/siwx917/thermostat-917-soc.slcw
   - slc/solutions/thermostat/series-3/pkg.slt
   - slc/solutions/thermostat/series-3/thermostat-thread-bootloader.slcw
-  - slc/solutions/thermostat/series-2/thermostat-wf200-bootloader.slcw
   - slc/solutions/thermostat/series-2/thermostat-thread-internal-bootloader.slcw
   - slc/solutions/thermostat/series-2/pkg.slt
   - slc/solutions/thermostat/series-2/thermostat-917-ncp-bootloader.slcw
@@ -1168,7 +1139,6 @@ extra_files:
   - slc/solutions/lock-app/series-3/pkg.slt
   - slc/solutions/lock-app/series-3/lock-app-thread-bootloader.slcw
   - slc/solutions/lock-app/series-2/lock-app-917-ncp-bootloader.slcw
-  - slc/solutions/lock-app/series-2/lock-app-wf200-bootloader.slcw
   - slc/solutions/lock-app/series-2/pkg.slt
   - slc/solutions/lock-app/series-2/lock-app-thread-internal-bootloader.slcw
   - slc/solutions/lock-app/series-2/lock-app-thread-bootloader.slcw
@@ -1283,7 +1253,6 @@ extra_files:
   - slc/sample-app/thermostat/siwx917/README_WiFi.md
   - slc/sample-app/thermostat/siwx917/pkg.slt
   - slc/sample-app/thermostat/siwx917/thermostat-917-soc.slcp
-  - slc/sample-app/thermostat/efr32/thermostat-wf200.slcp
   - slc/sample-app/thermostat/efr32/thermostat-thread.slcp
   - slc/sample-app/thermostat/efr32/README_WiFi.md
   - slc/sample-app/thermostat/efr32/README.md
@@ -1299,7 +1268,6 @@ extra_files:
   - slc/sample-app/lock-app/efr32/README_WiFi.md
   - slc/sample-app/lock-app/efr32/README.md
   - slc/sample-app/lock-app/efr32/pkg.slt
-  - slc/sample-app/lock-app/efr32/lock-app-wf200.slcp
   - slc/sample-app/lock-app/efr32/lock-app-thread.slcp
   - slc/sample-app/closure-app/siwx917/closure-app-917-soc.slcp
   - slc/sample-app/closure-app/siwx917/README_WiFi.md

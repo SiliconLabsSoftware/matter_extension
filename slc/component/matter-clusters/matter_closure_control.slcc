@@ -9,13 +9,11 @@ quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
-requires:
-  - name: matter_cluster_building_blocks
 provides:
   - name: matter_closure_control
 source:
-  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/closure-control-cluster-logic.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/closure-control-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/ClosureControlCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/ClosureControlClusterLogic.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-control-server
     file_list:
@@ -24,6 +22,11 @@ include:
       - path: closure-control-cluster-matter-context.h
       - path: closure-control-cluster-objects.h
       - path: closure-control-server.h
+      - path: ClosureControlCluster.h
+      - path: ClosureControlClusterDelegate.h
+      - path: ClosureControlClusterLogic.h
+      - path: ClosureControlClusterMatterContext.h
+      - path: ClosureControlClusterObjects.h
 template_contribution:
   - name: component_catalog
     value: matter_closure_control

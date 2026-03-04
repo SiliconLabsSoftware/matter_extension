@@ -29,7 +29,11 @@ for subdir in subdirs:
     clientOrServer = ""
 
     subdir_path = os.path.join(cluster_dir_path, subdir)
-    
+
+    # Skip non-directory entries (e.g. BUILD.gn)
+    if not os.path.isdir(subdir_path):
+        continue
+
     # Process files in the main subdirectory
     for file in os.listdir(subdir_path):
         # Check if the file is a header file

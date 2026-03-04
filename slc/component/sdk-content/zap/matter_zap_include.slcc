@@ -17,11 +17,12 @@ include:
     - path: AdministratorCommissioning.h
     - path: BasicInformation.h
     - path: Binding.h
-    - path: Descriptor.h
+    # Descriptor.h is now generated dynamically via ZAP template - see src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt
     - path: EthernetNetworkDiagnostics.h
     - path: FixedLabel.h
     - path: GeneralCommissioning.h
     - path: GeneralDiagnostics.h
+    - path: Groupcast.h
     - path: Groups.h
     - path: GroupKeyManagement.h
     - path: IcdManagement.h
@@ -37,6 +38,7 @@ include:
     - path: UserLabel.h
     - path: UnitLocalization.h
     - path: OccupancySensing.h
+    - path: TemperatureMeasurement.h
     - path: ThreadNetworkDiagnostics.h
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:

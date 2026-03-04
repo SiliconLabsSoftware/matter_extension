@@ -1,0 +1,74 @@
+---
+applyTo: "**/*.py"
+---
+# Project general coding standards
+
+Stick to these rules to keep the code consistent, readable, and in line with
+traditional Python-style conventions.
+
+## Naming Conventions
+
+- Use snake_case for variables, functions, and methods
+- Use ALL_CAPS_WITH_UNDERSCORES for constants
+- Use PascalCase for class names
+- Use single leading underscore (`_name`) for internal/private attributes and
+  methods
+- Use double leading underscore (`__name`) only for name mangling when
+  necessary
+- Avoid global variables when possible; use module-level constants instead
+
+## Error Handling
+
+- Use exceptions for error handling, not return codes or error flags
+- Prefer specific exception types (ValueError, TypeError, KeyError) over
+  generic Exception
+- Create custom exception classes when appropriate for domain-specific errors
+- Use try/except blocks with specific exception types, not bare except clauses
+- Always clean up resources using context managers (`with` statements) or
+  try/finally
+- Use `raise ... from ...` to preserve exception chains when re-raising
+- Document exceptions that functions may raise in docstrings
+- Validate inputs early and raise exceptions with clear error messages
+
+## Code Structure
+
+- Follow PEP 8 style guide for code organization
+- Organize imports: standard library, third-party, local imports (separated by
+  blank lines)
+- Use `if __name__ == "__main__":` guards for executable scripts
+- Keep functions focused and single-purpose (follow single responsibility
+  principle)
+- Limit function length; break complex functions into smaller, well-named
+  functions
+- Use classes when you need to maintain state; prefer functions for stateless
+  operations
+- Group related functionality into modules and packages
+- Use `__init__.py` files appropriately for package initialization
+- Avoid circular imports by restructuring code or using late imports
+- Limit the number of files, always validate if the functionality already
+  exists in a different file before creating a new one
+
+## Comments and Documentation
+
+- Write meaningful comments that explain **why**, not just **what**
+- Use `#` for inline comments, placed on the same line or above the code
+- Use triple-quoted strings (`"""` or `'''`) for docstrings
+- Follow PEP 257 for docstring conventions
+- Document all public functions, classes, and modules with docstrings
+- Include parameter types, return types, and exceptions in docstrings
+- Use type hints in function signatures for better documentation and IDE
+  support
+- Mark TODOs clearly with `# TODO: description` and track them
+- Use `# type: ignore` comments sparingly and document why when necessary
+
+## Code Formatting
+
+- Maintain proper indentation (use 4 spaces for each level of indentation,
+  never tabs)
+- Use autopep8 or black to format the code consistently
+- Limit line length to 79-99 characters (follow project standard)
+- Space out code for readability — avoid dense or compact blocks
+- Use blank lines to separate logical sections (functions, classes, imports)
+- Enforce type hints in all methods, classes, functions, and variable
+  declarations
+- Use trailing commas in multi-line collections for cleaner diffs

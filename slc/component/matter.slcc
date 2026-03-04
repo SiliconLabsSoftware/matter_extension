@@ -28,8 +28,6 @@ config_file:
     directory: platform/silabs/tracing
 toolchain_settings:
   - option: gcc_compiler_option
-    value: -Wno-deprecated-declarations
-  - option: gcc_compiler_option
     value: -Wno-maybe-uninitialized
   - option: gcc_compiler_option
     value: -Wno-missing-field-initializers
@@ -63,6 +61,7 @@ include:
       - path: ICDMonitoringTable.h
 requires:
   - name: cpp_support
+  - name: matter_static_generated_zap_content
 
   # Matter over Thread and Matter over Wifi uses these separate components per networking protocol
 
