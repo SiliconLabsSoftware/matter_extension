@@ -182,7 +182,7 @@ def run_code_size_analysis() {
                 
                 target_apps="lighting-app|lock-app|zigbee-matter-light"
                 echo "Filtering for target apps: $target_apps"
-                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)" | grep -v -E "(-ncp-|-wf200-|-sequential)")
+                filtered_map_files=\$(echo "\$map_files_found" | grep -E "($target_apps)" | grep -v -E "(-ncp-|-sequential)")
                 
                 if [ -z "$filtered_map_files" ]; then
                     echo "WARNING: No map files found for target apps ($target_apps)"
