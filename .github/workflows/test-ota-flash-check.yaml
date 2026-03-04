@@ -1,4 +1,4 @@
-name: Test OTA Flash Check (Lighting App)
+name: Check OTA Flash Space (Lighting App)
 
 on:
   push:
@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-lighting-app-mg24:
-    name: Build Lighting App (MG24)
+    name: Lighting App (MG24) – build and OTA flash check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,7 +30,7 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: standard
+          build-type: ota
 
       - name: Check OTA image flash size
         continue-on-error: true
@@ -70,8 +70,68 @@ jobs:
           fi
           rm -f temporary.gbl
 
+  build-lighting-app-mg26:
+    name: Lighting App (MG26) – build and OTA flash check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: "true"
+
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
+      - name: Build lighting-app (MG26)
+        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        with:
+          json-file-path: ./.github/silabs-builds-mg26.json
+          path-to-example-app: slc/apps/lighting-app/thread/lighting-app-series-2.slcw
+          example-app: lighting-app
+          build-script: "./slc/build.sh"
+          output-directory: " "
+          build-type: ota
+
+      - name: Check OTA image flash size
+        continue-on-error: true
+        run: |
+          set -e
+          IMAGE=$(find out -type f -name "*.s37" 2>/dev/null | head -1)
+          if [ -z "$IMAGE" ]; then
+            echo "No .s37 image found under out/, skipping OTA flash size check"
+            exit 0
+          fi
+          if ! command -v commander >/dev/null 2>&1; then
+            echo "commander not found, skipping OTA flash size check"
+            exit 0
+          fi
+          cd /tmp
+          commander gbl create temporary.gbl --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+          file_size_running=$(stat -c "%s" temporary.gbl)
+          rounded_size_running=$(( 8192 * (file_size_running + 8191) / 8192 ))
+          commander gbl create --compress lzma temporary.gbl --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+          file_size_ota=$(stat -c "%s" temporary.gbl)
+          rounded_size_ota=$(( 8192 * (file_size_ota + 8191) / 8192 ))
+          available_flash=3145728
+          sum=$(( rounded_size_running + rounded_size_ota ))
+          remaining=$(( available_flash - sum ))
+          echo ""
+          echo "  Platform: MG26"
+          echo "  Image: $IMAGE"
+          echo "  Running image flash consumption:                      $rounded_size_running bytes"
+          echo "  OTA update image (LZMA-compressed) flash consumption: $rounded_size_ota bytes"
+          echo "  Total Remaining:                                      $remaining bytes"
+          echo ""
+          if [ "$sum" -gt "$available_flash" ]; then
+            echo "OTA Update image will NOT fit in the ${available_flash} bytes of available flash space"
+            exit 1
+          else
+            echo "OTA Update image will fit in the ${available_flash} bytes of available flash space"
+          fi
+          rm -f temporary.gbl
+
   build-lighting-app-siwx:
-    name: Build Lighting App (917 SiWx)
+    name: Lighting App (917 SiWx) – build and OTA flash check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -90,7 +150,7 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: standard
+          build-type: ota
 
       - name: Check OTA image flash size
         continue-on-error: true
@@ -110,12 +170,12 @@ jobs:
             echo "Failed to parse image size from rpsinfo"
             exit 1
           fi
-          rounded_size=$(( 8192 * (image_size + 8191) / 8192 ))
+          rounded_size=$(( 256 * (image_size + 255) / 256 ))
           available_flash=4194304
           sum=$(( 2 * rounded_size ))
           remaining=$(( available_flash - sum ))
           echo ""
-          echo "  Platform: 917 SiWx (external flash 4MB; running and OTA image size equal)"
+          echo "  Platform: 917 SiWx (external flash 4MB; running and OTA image size equal; 256B page)"
           echo "  Image: $IMAGE"
           echo "  Image size (running = OTA):                           $rounded_size bytes"
           echo "  Total (running + OTA) flash consumption:             $sum bytes"
