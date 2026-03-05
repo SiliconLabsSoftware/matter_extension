@@ -18,6 +18,16 @@
             {
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
+                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-touchlink",
+                              "--with_app matter_zigbee_concurrent,zigbee_form_and_join,zigbee_zll_commissioning_client,zigbee_zll_utility_server"]
             }
         ],
         "thermostat": [

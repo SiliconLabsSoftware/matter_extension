@@ -22,6 +22,13 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
+        ],
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix cmp-concurrent-touchlink",
+                              "--with_app matter_zigbee_concurrent,zigbee_form_and_join,zigbee_zll_commissioning_client,zigbee_zll_utility_server"]
+            }
         ]
     },
     "full": {
