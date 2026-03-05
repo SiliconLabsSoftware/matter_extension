@@ -7,6 +7,21 @@ id: matter_lighting
 quality: production
 provides:
   - name: matter_lighting
+
+include:
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: AppTask.h
+      - path: AppTaskImpl.h
+      - path: CHIPProjectConfig.h
+      - path: LightTypes.h
+
+source:
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
+
 define:
   - name: IS_DEMO_LIGHT
     value: "1"
