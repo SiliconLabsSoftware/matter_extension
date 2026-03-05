@@ -26,8 +26,6 @@ requires:
   - name: sl_si91x_memory_manager
   - name: psram_core
     condition: [device_supports_psram, device_supports_external_flash]
-  - name: psram_aps6404l_sqh
-    condition: [device_supports_psram, device_supports_external_flash]
 
 provides:
   - name: matter_platform_siwx917

@@ -139,8 +139,6 @@ define:
     value: "4092"
   - name: SI917_SOC
     value: 1
-  - name: SL_NEUTRAL_LESS_SWITCH
-    value: 1
 
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
