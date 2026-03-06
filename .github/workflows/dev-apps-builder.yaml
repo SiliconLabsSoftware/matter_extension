@@ -1,6 +1,10 @@
 name: Build Dev apps
 
 on:
+    push:
+        branches:
+            # TODO: Remove this after testing
+            - "feature/CRTP_lighting"
     pull_request:
         branches:
             - main
@@ -29,13 +33,7 @@ jobs:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-                      echo "build-type=full" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  fi
+                  echo "build-type=standard" >> $GITHUB_OUTPUT
 
     build-lighting-app:
         name: Build Lighting App
