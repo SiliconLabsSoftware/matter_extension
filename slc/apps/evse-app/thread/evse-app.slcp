@@ -1,7 +1,7 @@
 project_name: evse-app
-label: Matter Evse App
+label: Matter EVSE App
 description: >
-  Matter Evse App
+  Matter EVSE (Electric Vehicle Supply Equipment) App
 quality: production
 package: matter
 

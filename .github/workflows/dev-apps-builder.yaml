@@ -137,7 +137,6 @@ jobs:
         with:
             example-app: "evse-app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
             wifi-soc-support: true
 
     build-performance-test-app:
