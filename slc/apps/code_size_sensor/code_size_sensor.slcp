@@ -1,7 +1,7 @@
-project_name: code-canary
-label: Matter code-canary
+project_name: code_size_sensor
+label: Matter code_size_sensor
 description: >
-  Matter code canary
+  Matter code size sensor. Minimal Sensor app use for code size analysis
 quality: production
 package: matter
 
