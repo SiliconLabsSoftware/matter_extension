@@ -11,6 +11,7 @@ sdk_extension:
     vendor: silabs
   - id: wiseconnect3_sdk
     version: "4.0.0"
+    vendor: silabs
 
 component:
   - id: matter_leds
