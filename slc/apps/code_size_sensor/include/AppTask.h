@@ -24,7 +24,6 @@
 
 #include "AppEvent.h"
 #include "BaseApplication.h"
-#include <app/clusters/occupancy-sensor-server/occupancy-sensor-server.h>
 #include <ble/BLEEndPoint.h>
 #include <lib/core/CHIPError.h>
 #include <memory>
@@ -129,5 +128,4 @@ private:
     static void ButtonHandler(AppEvent * aEvent);
 
     kSensorUIEnum mCurrentSensorUI;
-    std::unique_ptr<chip::app::Clusters::OccupancySensing::Instance> mOccupancyInstance;
 };

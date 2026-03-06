@@ -43,6 +43,7 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
+  - id: matter_temperature_measurement
 
   - id: matter_si70xx_sensor
     condition: [hardware_board_has_si70xx]

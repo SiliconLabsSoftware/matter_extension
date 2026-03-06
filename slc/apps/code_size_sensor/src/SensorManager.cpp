@@ -31,6 +31,7 @@
 #include <app-common/zap-generated/attributes/Accessors.h>
 #include <app-common/zap-generated/ids/Attributes.h>
 #include <app-common/zap-generated/ids/Clusters.h>
+#include <app/clusters/temperature-measurement-server/CodegenIntegration.h>
 #include <platform/silabs/platformAbstraction/SilabsPlatform.h>
 #include <sl_cmsis_os2_common.h>
 
@@ -138,7 +139,11 @@ void SensorActionTriggered(chip::System::Layer * aLayer, void * aAppState)
         mLastReportedTemperatureValue = temperature;
         reportState                   = MarkAttributeDirty::kIfChanged;
     }
-    TemperatureMeasurement::Attributes::MeasuredValue::Set(kTemperatureSensorEndpoint, temperature, reportState);
+    {
+        DataModel::Nullable<int16_t> tempVal;
+        tempVal.SetNonNull(temperature);
+        VerifyOrReturn(TemperatureMeasurement::SetMeasuredValue(kTemperatureSensorEndpoint, tempVal) == CHIP_NO_ERROR);
+    }
 
     // Check if humidity change requires a report - Checks if delta with last reported value is greater
     // than kAttributeChangeReportThreshold. If it is, the attribute is marked as dirty.
@@ -179,8 +184,13 @@ CHIP_ERROR Init()
 
 Status GetMeasuredTemperature(chip::app::DataModel::Nullable<int16_t> & value)
 {
-    Status status = TemperatureMeasurement::Attributes::MeasuredValue::Get(kTemperatureSensorEndpoint, value);
-    return status;
+    TemperatureMeasurementCluster * cluster = TemperatureMeasurement::FindClusterOnEndpoint(kTemperatureSensorEndpoint);
+    if (cluster == nullptr)
+    {
+        return Status::UnsupportedEndpoint;
+    }
+    value = cluster->GetMeasuredValue();
+    return Status::Success;
 }
 
 Status GetMaxMeasuredTemperature(chip::app::DataModel::Nullable<int16_t> & value)
