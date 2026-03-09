@@ -57,6 +57,10 @@ def main():
         print("Error: could not read", DEPS_FILE)
         return 1
     new_names = _names_from_deps(new_text)
+    
+    if not new_names and new_text:
+        print("Error: failed to parse", DEPS_FILE)
+        return 1
 
     removed_clusters = old_names - new_names
 

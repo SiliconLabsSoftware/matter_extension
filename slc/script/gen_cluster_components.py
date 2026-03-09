@@ -286,8 +286,9 @@ for clustercomponentname in sorted(cluster_data.keys()):
         filedata.append("config_file:")
         for cf in config_file_data:
             filedata.append("  - path: {}".format(cf["path"]))
-            if "file_id" in cf:
-                filedata.append("    file_id: {}".format(cf["file_id"]))
+            for key in sorted(cf.keys()):
+                if key != "path":
+                    filedata.append("    {}: {}".format(key, cf[key]))
 
     filedata.append("template_contribution:")
     filedata.append("  - name: component_catalog")
