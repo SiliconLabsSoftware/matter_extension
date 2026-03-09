@@ -9,6 +9,7 @@ provides:
   - name: matter_lighting
 
 include:
+  - path: third_party/matter_sdk/examples/lighting-app/silabs
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include
     file_list:
       - path: AppConfig.h
