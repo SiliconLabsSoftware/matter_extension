@@ -200,6 +200,8 @@ for clustercomponentname in sorted(cluster_data.keys()):
     includes = []
     source_data = []
     defines = []
+    requires_data = []
+    config_file_data = []
     try:
         with open(component_location, 'r') as file:
             content = yaml.safe_load(file)
@@ -207,6 +209,8 @@ for clustercomponentname in sorted(cluster_data.keys()):
         current_source_data = content.get('source', [])
         current_include_data = content.get('include', [])
         current_define_data = content.get('define', [])
+        requires_data = content.get('requires', []) or []
+        config_file_data = content.get('config_file', []) or []
 
         #merge with extracted source and include data and remove duplicates
         for path in current_source_data:
@@ -256,6 +260,11 @@ for clustercomponentname in sorted(cluster_data.keys()):
     filedata.append("provides:")
     provides = "  - name: {}".format(id_str)
     filedata.append(provides)
+    
+    if requires_data:
+        filedata.append("requires:")
+        for req in requires_data:
+            filedata.append("  - name: {}".format(req["name"]))
 
     if len(source_data) > 0:
         filedata.append("source:")
@@ -272,6 +281,13 @@ for clustercomponentname in sorted(cluster_data.keys()):
             for header in sorted(include["file_list"],key=str.casefold):
                 path = "      - path: {}".format(header)
                 filedata.append(path)
+
+    if config_file_data:
+        filedata.append("config_file:")
+        for cf in config_file_data:
+            filedata.append("  - path: {}".format(cf["path"]))
+            if "file_id" in cf:
+                filedata.append("    file_id: {}".format(cf["file_id"]))
 
     filedata.append("template_contribution:")
     filedata.append("  - name: component_catalog")

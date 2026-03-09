@@ -46,9 +46,78 @@ Exit codes (@retval):
 """
 import argparse
 import os
+import subprocess
 import sys
 from pathlib import Path
 from typing import Iterable, List, Optional
+
+def _is_excluded_path(path: str) -> bool:
+    """Return True for paths that should not appear in the extension package."""
+    parts = path.split("/")
+    # Exclude hidden directories
+    if any(part.startswith(".") for part in parts[:-1]):
+        return True
+    # Exclude git meta files
+    basename = parts[-1]
+    if basename in (".gitignore", ".gitmodules"):
+        return True
+    # Exclude __pycache__ and bytecode
+    if "__pycache__" in parts or basename.endswith(".pyc"):
+        return True
+    return False
+
+def _git_tracked_extension_paths() -> List[str]:
+    """Return sorted list of git tracked files, excluding submodule entries."""
+    submodules = set()
+    stage = subprocess.run(
+        ["git", "ls-files", "--stage"],
+        capture_output=True, text=True, check=True,
+    )
+    for line in stage.stdout.splitlines():
+        if line.startswith("160000"):
+            submodules.add(line.split("\t", 1)[1])
+
+    result = subprocess.run(
+        ["git", "ls-files"],
+        capture_output=True, text=True, check=True,
+    )
+    return sorted(
+        p for p in result.stdout.splitlines()
+        if p not in submodules and not _is_excluded_path(p)
+    )
+
+def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
+    """
+    Replace extension paths between 'extra_files:' and sdk_marker with git ls-files.
+    Paths already in the file that exist on disk but aren't returned by git ls-files are preserved.
+    """
+    git_paths_set = set(_git_tracked_extension_paths())
+    if not git_paths_set:
+        print("Error: git ls-files returned no extension paths", file=sys.stderr)
+        raise SystemExit(10)
+    try:
+        extra_idx = next(i for i, line in enumerate(text) if line.strip() == "extra_files:")
+    except StopIteration:
+        print("Error: 'extra_files:' not found", file=sys.stderr)
+        raise SystemExit(11)
+    try:
+        sdk_idx = next(i for i, line in enumerate(text) if line.strip() == sdk_marker)
+    except StopIteration:
+        print(f"Error: '{sdk_marker}' not found", file=sys.stderr)
+        raise SystemExit(6)
+
+    for line in text[extra_idx + 1 : sdk_idx]:
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            path = stripped[2:]
+            if path not in git_paths_set and not _is_excluded_path(path) and os.path.exists(path):
+                git_paths_set.add(path)
+
+    all_paths = sorted(git_paths_set)
+    new_ext_lines = [f"  - {p}" for p in all_paths]
+    updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
+    print(f"Updated {len(new_ext_lines)} extension paths")
+    return updated
 
 def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: Optional[str]) -> List[Path]:
     results: List[Path] = []
@@ -204,6 +273,11 @@ def main(argv: Iterable[str]) -> int:
             return 5
 
         marker = "# matter_sdk paths"
+
+        # Update extension paths
+        text = _update_extension_paths(text, marker)
+
+        # Update sdk paths
         try:
             idx = next(i for i, line in enumerate(text) if line.strip() == marker)
         except StopIteration:
@@ -235,7 +309,7 @@ def main(argv: Iterable[str]) -> int:
         except Exception as e:
             print(f"Error writing {target_file}: {e}", file=sys.stderr)
             return 7
-        print(f"Inserted {len(paths)} paths under marker in {target_file}")
+        print(f"Inserted {len(paths)} SDK paths under marker in {target_file}")
     else:
         if not args.output:
             print("Error: output file required when --slce-extra is not used", file=sys.stderr)
