@@ -108,7 +108,6 @@ include:
     -   path: silabs_utils.h
     -   path: MatterConfig.h
     -   path: CRTPHelpers.h
-    -   path: silabs_utils.h
     -   path: LEDWidget.h
     -   path: sl_systemview_config.h
     -   path: PigweedLogger.h
