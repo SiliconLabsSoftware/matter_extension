@@ -58,6 +58,10 @@ def main():
         return 1
     new_names = _names_from_deps(new_text)
 
+    if not new_names and old_names:
+        print("Error: Failed to parse cluster names from", DEPS_FILE)
+        return 1
+
     removed_clusters = old_names - new_names
 
     if not removed_clusters:

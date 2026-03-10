@@ -238,14 +238,15 @@ for clustercomponentname in sorted(cluster_data.keys()):
     filedata.append("metadata:")
     filedata.append("  sbom:")
     filedata.append('    license: "Apache 2.0"')
-    filedata.append("provides:")
-    provides = "  - name: {}".format(id_str)
-    filedata.append(provides)
     
     if requires_data:
         filedata.append("requires:")
         for req in requires_data:
             filedata.append("  - name: {}".format(req["name"]))
+    
+    filedata.append("provides:")
+    provides = "  - name: {}".format(id_str)
+    filedata.append(provides)
 
     if len(source_data) > 0:
         filedata.append("source:")
