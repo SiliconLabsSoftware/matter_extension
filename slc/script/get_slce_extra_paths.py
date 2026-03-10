@@ -86,25 +86,26 @@ def _git_tracked_extension_paths() -> List[str]:
         if p not in submodules and not _is_excluded_path(p)
     )
 
-def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
+def _update_extension_paths(text: List[str], sdk_marker: str):
     """
     Replace extension paths between 'extra_files:' and sdk_marker with git ls-files.
     Paths already in the file that exist on disk but aren't returned by git ls-files are preserved.
+    Returns (updated_text, error_code) where error_code is 0 on success or an error code on failure.
     """
     git_paths_set = set(_git_tracked_extension_paths())
     if not git_paths_set:
         print("Error: git ls-files returned no extension paths", file=sys.stderr)
-        raise SystemExit(10)
+        return None, 10
     try:
         extra_idx = next(i for i, line in enumerate(text) if line.strip() == "extra_files:")
     except StopIteration:
         print("Error: 'extra_files:' not found", file=sys.stderr)
-        raise SystemExit(11)
+        return None, 11
     try:
         sdk_idx = next(i for i, line in enumerate(text) if line.strip() == sdk_marker)
     except StopIteration:
         print(f"Error: '{sdk_marker}' not found", file=sys.stderr)
-        raise SystemExit(6)
+        return None, 6
 
     for line in text[extra_idx + 1 : sdk_idx]:
         stripped = line.strip()
@@ -117,7 +118,7 @@ def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
     new_ext_lines = [f"  - {p}" for p in all_paths]
     updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
     print(f"Updated {len(new_ext_lines)} extension paths")
-    return updated
+    return updated, 0
 
 def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: Optional[str]) -> List[Path]:
     results: List[Path] = []
@@ -275,14 +276,12 @@ def main(argv: Iterable[str]) -> int:
         marker = "# matter_sdk paths"
 
         # Update extension paths
-        text = _update_extension_paths(text, marker)
+        text, error_code = _update_extension_paths(text, marker)
+        if error_code != 0:
+            return error_code
 
         # Update sdk paths
-        try:
-            idx = next(i for i, line in enumerate(text) if line.strip() == marker)
-        except StopIteration:
-            print(f"Error: marker '{marker}' not found in {target_file}", file=sys.stderr)
-            return 6
+        idx = next(i for i, line in enumerate(text) if line.strip() == marker)
 
         # Find where to stop (next line that looks like a top-level key 'word:'), skipping any existing generated lines
         def is_top_level_key(l: str) -> bool:
