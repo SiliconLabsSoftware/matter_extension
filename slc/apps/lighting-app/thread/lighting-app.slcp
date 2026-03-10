@@ -83,9 +83,7 @@ config_file:
     file_id: provision_config
 
 include:
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
-    file_list:
-      - path: CustomAppTask.h
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include/CustomAppTask.h
     directory: include
 
 source:
