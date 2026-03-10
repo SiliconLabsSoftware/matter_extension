@@ -264,7 +264,9 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if requires_data:
         filedata.append("requires:")
         for req in requires_data:
-            filedata.append("  - name: {}".format(req["name"]))
+            req_yaml = yaml.dump([req], default_flow_style=False, sort_keys=False).strip()
+            for line in req_yaml.split("\n"):
+                filedata.append("  " + line)
 
     if len(source_data) > 0:
         filedata.append("source:")
@@ -285,9 +287,9 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if config_file_data:
         filedata.append("config_file:")
         for cf in config_file_data:
-            filedata.append("  - path: {}".format(cf["path"]))
-            if "file_id" in cf:
-                filedata.append("    file_id: {}".format(cf["file_id"]))
+            cf_yaml = yaml.dump([cf], default_flow_style=False, sort_keys=False).strip()
+            for line in cf_yaml.split("\n"):
+                filedata.append("  " + line)
 
     filedata.append("template_contribution:")
     filedata.append("  - name: component_catalog")
