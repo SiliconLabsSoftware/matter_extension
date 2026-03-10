@@ -5,7 +5,9 @@ on:
         branches:
             - main
             - "release_*"
-
+    schedule:
+        # Thursday at 6 PM EST. only main (default) branch
+        - cron: "0 23 * * 4"
     workflow_dispatch:
         inputs:
             build-type:
@@ -237,5 +239,5 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ startsWith(github.ref_name, 'release_') }}
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') }}
         uses: ./.github/workflows/sqa-apps-builder.yaml
