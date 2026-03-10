@@ -8,8 +8,8 @@ if(env.BRANCH_NAME == 'release_2.8-1.5'){
     // Trigger daily at 11pm EST (2 hrs after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('0 4 * * *')])
 } else if(env.BRANCH_NAME == 'main'){
-    // Trigger daily at 11pm EST (2 hrs after github trigger)
-    pipelineProperties << pipelineTriggers([pollSCM('0 4 * * *')])
+    // Trigger Thursday at 11pm EST (2 hrs after github trigger)
+    pipelineProperties << pipelineTriggers([pollSCM('0 4 * * 4')])
 } 
 
 properties(pipelineProperties)
