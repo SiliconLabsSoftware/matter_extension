@@ -140,7 +140,7 @@ jobs:
           ./scripts/checkout_submodules.py --platform linux
 
       - name: Run bootstrap action
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
 
       # Builds chip-tool
       - name: Build chip-tool
