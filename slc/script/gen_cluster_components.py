@@ -366,6 +366,12 @@ matter_extension_zcl_file_path = "src/app/zap-templates/zcl/zcl.json"
 with open(matter_sdk_zcl_file_path, 'r') as file:
     data = json.load(file)
 
+# TEMP: Retain feature level from matter_extension zcl.json
+# Can revisit once zap updated in CSA
+with open(matter_extension_zcl_file_path, 'r') as file:
+    ext_data = json.load(file)
+data["requiredFeatureLevel"] = ext_data["requiredFeatureLevel"]
+
 # Update paths in the list
 data['xmlRoot'] = [f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
 
