@@ -106,6 +106,10 @@ def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
         print(f"Error: '{sdk_marker}' not found", file=sys.stderr)
         raise SystemExit(6)
 
+    if extra_idx >= sdk_idx:
+        print(f"Error: '{sdk_marker}' must appear after 'extra_files:' in the file", file=sys.stderr)
+        raise SystemExit(12)
+
     for line in text[extra_idx + 1 : sdk_idx]:
         stripped = line.strip()
         if stripped.startswith("- "):
