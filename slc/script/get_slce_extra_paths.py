@@ -78,12 +78,12 @@ def _git_tracked_extension_paths() -> List[str]:
             submodules.add(line.split("\t", 1)[1])
 
     result = subprocess.run(
-        ["git", "ls-files"],
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard"],
         capture_output=True, text=True, check=True,
     )
     return sorted(
         p for p in result.stdout.splitlines()
-        if p not in submodules and not _is_excluded_path(p)
+        if p not in submodules and not _is_excluded_path(p) and os.path.exists(p)
     )
 
 def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
