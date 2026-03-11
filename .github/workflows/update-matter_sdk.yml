@@ -16,11 +16,14 @@ jobs:
     steps:
       - id: branches
         run: |
-          if [ "${{ github.event_name }}" == "schedule" ]; then
+          if [ "$EVENT_NAME" == "schedule" ]; then
             echo 'value=["main","release_2.8-1.5"]' >> $GITHUB_OUTPUT
           else
-            echo 'value=["${{ github.ref_name }}"]' >> $GITHUB_OUTPUT
+            echo "value=[\"$REF_NAME\"]" >> $GITHUB_OUTPUT
           fi
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
 
   update-matter_sdk:
     runs-on: ubuntu-latest
@@ -62,11 +65,12 @@ jobs:
       - name: Find matter_sdk submodule bump PR
         id: find_pr
         run: |
-          PR=$(gh pr list --repo ${{ github.repository }} --base "${{ matrix.target_branch }}" --state open --json number,headRefName,title --jq '.[] | select(.title | test("matter_sdk|third_party/matter_sdk|submodule"; "i")) | "\(.number) \(.headRefName)"' | head -1)
+          want="update-matter-sdk-$TARGET_BRANCH"
+          PR=$(gh pr list --repo "$REPO" --base "$TARGET_BRANCH" --state open --json number,headRefName | jq -r --arg h "$want" '.[] | select(.headRefName == $h or (.headRefName | endswith(":" + $h))) | "\(.number) \(.headRefName)"' | head -1)
           if [ -z "$PR" ]; then
             echo "pr_number=" >> $GITHUB_OUTPUT
             echo "head_ref=" >> $GITHUB_OUTPUT
-            echo "No open matter_sdk submodule bump PR found for base ${{ matrix.target_branch }}; skipping SLC scripts."
+            echo "No open matter_sdk submodule bump PR found for base $TARGET_BRANCH (expected head: $want); skipping SLC scripts."
             exit 0
           fi
           read -r pr_num head_ref <<< "$PR"
@@ -74,6 +78,8 @@ jobs:
           echo "head_ref=$head_ref" >> $GITHUB_OUTPUT
         env:
           GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          REPO: ${{ github.repository }}
+          TARGET_BRANCH: ${{ matrix.target_branch }}
 
       - name: Checkout PR branch
         if: steps.find_pr.outputs.pr_number != ''
