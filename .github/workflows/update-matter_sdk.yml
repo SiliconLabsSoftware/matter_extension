@@ -45,6 +45,7 @@ jobs:
   run-slc-scripts:
     runs-on: ubuntu-latest
     needs: [set_target_branches, update-matter_sdk]
+    if: '!cancelled()'
     strategy:
       matrix:
         target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
@@ -62,7 +63,7 @@ jobs:
       - name: Find matter_sdk submodule bump PR
         id: find_pr
         run: |
-          PR=$(gh pr list --repo ${{ github.repository }} --base "${{ matrix.target_branch }}" --state open --json number,headRefName,title --jq '.[] | select(.title | test("matter_sdk|third_party/matter_sdk|submodule"; "i")) | "\(.number) \(.headRefName)"' | head -1)
+          PR=$(gh pr list --repo ${{ github.repository }} --base "${{ matrix.target_branch }}" --state open --json number,headRefName,title --jq '.[] | select(.title | test("matter_sdk"; "i")) | "\(.number) \(.headRefName)"' | head -1)
           if [ -z "$PR" ]; then
             echo "pr_number=" >> $GITHUB_OUTPUT
             echo "head_ref=" >> $GITHUB_OUTPUT
