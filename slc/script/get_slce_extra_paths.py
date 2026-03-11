@@ -67,7 +67,7 @@ def _is_excluded_path(path: str) -> bool:
     return False
 
 def _git_tracked_extension_paths() -> List[str]:
-    """Return sorted list of git tracked files, excluding submodule entries."""
+    """Return sorted list of git tracked and new untracked files, excluding submodule entries."""
     submodules = set()
     stage = subprocess.run(
         ["git", "ls-files", "--stage"],
@@ -77,14 +77,24 @@ def _git_tracked_extension_paths() -> List[str]:
         if line.startswith("160000"):
             submodules.add(line.split("\t", 1)[1])
 
-    result = subprocess.run(
+    tracked = subprocess.run(
         ["git", "ls-files"],
         capture_output=True, text=True, check=True,
     )
-    return sorted(
-        p for p in result.stdout.splitlines()
-        if p not in submodules and not _is_excluded_path(p)
+    tracked_paths = set(
+        p for p in tracked.stdout.splitlines()
+        if p not in submodules and not _is_excluded_path(p) and os.path.exists(p)
     )
+
+    untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        capture_output=True, text=True, check=True,
+    )
+    for p in untracked.stdout.splitlines():
+        if p not in submodules and not _is_excluded_path(p) and os.path.exists(p):
+            tracked_paths.add(p)
+
+    return sorted(tracked_paths)
 
 def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
     """
