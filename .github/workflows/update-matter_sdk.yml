@@ -119,7 +119,7 @@ jobs:
           git config user.name "silabs-matter-ci-bot[bot]"
           git config user.email "silabs-matter-ci-bot[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "Run SLC component scripts after matter_sdk submodule update (MATTER-5537)"
+          git commit -m "Run component update scripts after matter_sdk submodule update"
           git push
         env:
           GH_TOKEN: ${{ steps.app_token.outputs.token }}
