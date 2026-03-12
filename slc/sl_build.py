@@ -8,7 +8,7 @@
  * and a Silicon Labs board name. It invokes SLC and the selected build system to produce the binaries.
 
  * Recommended usage (flags):
- *   python3 sl_build.py \
+ *   python3 slc/sl_build.py \
  *       --reference_project_file <PathToReferenceProjectFile(.slcp or .slcw)> \
  *       --silabs_board <SilabsBoard> \
  *       [--jobs <N>] \
