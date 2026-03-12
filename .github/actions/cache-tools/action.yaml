@@ -8,9 +8,6 @@ outputs:
 runs:
     using: "composite"
     steps:
-        - name: Checkout
-          uses: actions/checkout@v5
-
         - name: Install tools
           uses: ./.github/actions/install-tools
 

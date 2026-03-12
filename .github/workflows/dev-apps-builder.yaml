@@ -44,6 +44,8 @@ jobs:
         outputs:
             cache-key: ${{ steps.cache-tools.outputs.cache-key }}
         steps:
+            - name: Checkout
+              uses: actions/checkout@v5
             - uses: ./.github/actions/cache-tools
               id: cache-tools
 
