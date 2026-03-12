@@ -1,0 +1,32 @@
+name: Cache tools
+description: Checkout, install ZAP/SLT tools, and save cache. Outputs cache-key for reuse.
+
+outputs:
+    cache-key:
+        value: ${{ steps.set-cache-key.outputs.cache-key }}
+
+runs:
+    using: "composite"
+    steps:
+        - name: Checkout
+          uses: actions/checkout@v5
+
+        - name: Install tools
+          uses: ./.github/actions/install-tools
+
+        - name: Set cache key
+          id: set-cache-key
+          shell: bash
+          run: |
+              ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
+              HASH=$(echo -n "${ZAP_VERSION}" | sha256sum | awk '{print $1}')
+              echo "cache-key=zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${HASH}" >> $GITHUB_OUTPUT
+
+        - name: Save ZAP and SLT tools cache
+          uses: actions/cache/save@v4
+          with:
+              path: |
+                  /tmp/zap-linux-x64
+                  /home/runner/.silabs/slt
+                  /home/runner/.local/bin/slt
+              key: ${{ steps.set-cache-key.outputs.cache-key }}

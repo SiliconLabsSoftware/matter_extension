@@ -42,26 +42,10 @@ jobs:
     cache-tools:
         runs-on: ubuntu-latest
         outputs:
-            cache-key: ${{ steps.set-cache-key.outputs.cache-key }}
+            cache-key: ${{ steps.cache-tools.outputs.cache-key }}
         steps:
-            - name: Checkout
-              uses: actions/checkout@v5
-            - name: Install tools
-              uses: ./.github/actions/install-tools
-            - name: Set cache key
-              id: set-cache-key
-              run: |
-                  ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
-                  HASH=$(echo -n "${ZAP_VERSION}" | sha256sum | awk '{print $1}')
-                  echo "cache-key=zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${HASH}" >> $GITHUB_OUTPUT
-            - name: Save ZAP and SLT tools cache
-              uses: actions/cache/save@v4
-              with:
-                  path: |
-                      /tmp/zap-linux-x64
-                      /home/runner/.silabs/slt
-                      /home/runner/.local/bin/slt
-                  key: ${{ steps.set-cache-key.outputs.cache-key }}
+            - uses: ./.github/actions/cache-tools
+              id: cache-tools
 
     build-lighting-app:
         name: Build Lighting App
@@ -254,20 +238,6 @@ jobs:
                   delete-merged: true
                   pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
-    delete-cache:
-        name: Delete tools cache
-        needs: [merge-apps, cache-tools]
-        runs-on: ubuntu-latest
-        permissions:
-            actions: write
-        steps:
-            - name: Delete tools cache
-              run: |
-                curl -s -X DELETE \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                  "https://api.github.com/repos/${{ github.repository }}/actions/caches?key=${{ needs.cache-tools.outputs.cache-key }}"
-
     wait-for-test-results:
         name: Wait for Test Results
         needs: merge-apps
@@ -277,6 +247,8 @@ jobs:
 
     build-sqa-apps:
         name: Build SQA apps
-        needs: wait-for-test-results
+        needs: [wait-for-test-results, cache-tools]
         if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') }}
         uses: ./.github/workflows/sqa-apps-builder.yaml
+        with:
+            cache-key: ${{ needs.cache-tools.outputs.cache-key }}
