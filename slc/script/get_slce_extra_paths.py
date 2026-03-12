@@ -39,6 +39,8 @@ Exit codes (@retval):
     @retval 7 Failure writing updated matter.slce.extra.
     @retval 8 Missing --output when not using --slce-extra.
     @retval 9 Required always-include file missing.
+    @retval 10 No extension paths returned by git ls-files.
+    @retval 11 'extra_files:' key not found in matter.slce.extra.
 
 @note If no --roots are supplied a built‑in list of default SDK template directories is used.
 @note The marker text is currently hard-coded as "# matter_sdk paths"; adjust if the file format evolves.
