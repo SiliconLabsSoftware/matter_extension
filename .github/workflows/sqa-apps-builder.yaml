@@ -4,8 +4,35 @@ on:
     workflow_call:
 
 jobs:
+    cache-tools:
+        runs-on: ubuntu-latest
+        outputs:
+            cache-key: ${{ steps.set-cache-key.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5
+              with:
+                  submodules: "true"
+            - name: Install tools
+              uses: ./.github/actions/install-tools
+            - name: Set cache key
+              id: set-cache-key
+              run: |
+                  ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
+                  HASH=$(echo -n "${ZAP_VERSION}" | sha256sum | awk '{print $1}')
+                  echo "cache-key=zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${HASH}" >> $GITHUB_OUTPUT
+            - name: Save ZAP and SLT tools cache
+              uses: actions/cache/save@v4
+              with:
+                  path: |
+                      /tmp/zap-linux-x64
+                      /home/runner/.silabs/slt
+                      /home/runner/.local/bin/slt
+                  key: ${{ steps.set-cache-key.outputs.cache-key }}
+
     build-lock-app:
         name: Build Lock App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lock-app"
@@ -18,6 +45,7 @@ jobs:
 
     build-lighting-app:
         name: Build Lighting App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lighting-app"
@@ -29,6 +57,7 @@ jobs:
 
     build-window-app:
         name: Build Window App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "window-app"
@@ -44,6 +73,7 @@ jobs:
 
     #  build-dishwasher-app:
     #      name: Build Dishwasher App
+    #      needs: cache-tools
     #      uses: ./.github/workflows/platform-builder.yaml
     #      with:
     #          example-app: "dishwasher-app"
@@ -60,6 +90,7 @@ jobs:
 
     build-thermostat:
         name: Build Thermostat
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
@@ -76,6 +107,7 @@ jobs:
 
     build-light-switch-app:
         name: Build Light Switch App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "light-switch-app"
@@ -88,6 +120,7 @@ jobs:
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "multi-sensor-app"
@@ -102,6 +135,7 @@ jobs:
 
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "zigbee-matter-light"
@@ -116,6 +150,7 @@ jobs:
 
     build-closure-app:
         name: Build Closure App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "closure-app"
@@ -128,6 +163,7 @@ jobs:
 
     build-platform-template:
         name: Build Platform App
+        needs: cache-tools
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "platform-template"
@@ -142,6 +178,7 @@ jobs:
         name: Merge SQA App Artifacts
         runs-on: ubuntu-latest
         needs:
+            - cache-tools
             - build-lock-app
             - build-lighting-app
             - build-window-app
@@ -161,3 +198,17 @@ jobs:
                   name: "sqa-artifacts"
                   delete-merged: true
                   pattern: "*-custom-sqa"
+
+    delete-cache:
+        name: Delete tools cache
+        needs: [merge-apps, cache-tools]
+        runs-on: ubuntu-latest
+        permissions:
+            actions: write
+        steps:
+            - name: Delete tools cache
+              run: |
+                curl -s -X DELETE \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/repos/${{ github.repository }}/actions/caches?key=${{ needs.cache-tools.outputs.cache-key }}"
