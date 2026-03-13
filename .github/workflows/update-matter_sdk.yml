@@ -48,6 +48,7 @@ jobs:
   run-slc-scripts:
     runs-on: ubuntu-latest
     needs: [set_target_branches, update-matter_sdk]
+    if: '!cancelled()'
     strategy:
       matrix:
         target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
