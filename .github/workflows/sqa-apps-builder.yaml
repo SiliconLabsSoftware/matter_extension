@@ -2,6 +2,10 @@ name: Build SQA apps
 
 on:
     workflow_call:
+        inputs:
+            cache-key:
+                required: true
+                type: string
 
 jobs:
     build-lock-app:
@@ -161,3 +165,17 @@ jobs:
                   name: "sqa-artifacts"
                   delete-merged: true
                   pattern: "*-custom-sqa"
+
+    delete-cache:
+        name: Delete tools cache
+        needs: [merge-apps]
+        runs-on: ubuntu-latest
+        permissions:
+            actions: write
+        steps:
+            - name: Delete tools cache
+              run: |
+                curl -s -X DELETE \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/repos/${{ github.repository }}/actions/caches?key=${{ inputs.cache-key }}"
