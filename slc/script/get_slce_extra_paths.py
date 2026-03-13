@@ -64,6 +64,9 @@ def _is_excluded_path(path: str) -> bool:
     basename = parts[-1]
     if basename in (".gitignore", ".gitmodules"):
         return True
+    # Exclude other hidden files
+    if basename.startswith("."):
+        return True
     # Exclude __pycache__ and bytecode
     if "__pycache__" in parts or basename.endswith(".pyc"):
         return True
@@ -155,9 +158,7 @@ def _update_components_block(text: List[str], component_ids: Set[str]) -> List[s
         if stripped.startswith("- "):
             end += 1
             continue
-        if stripped and not stripped.startswith("#") and ":" in stripped.split()[0]:
-            break
-        end += 1
+        break
     new_lines = [f"  - {cid}" for cid in sorted(component_ids)]
     return text[: comp_idx + 1] + new_lines + text[end:]
 
