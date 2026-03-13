@@ -181,7 +181,7 @@ def _update_extension_paths(text: List[str], sdk_marker: str, referenced: Set[st
     extra_files_set = all_paths - referenced
     all_paths_sorted = sorted(extra_files_set)
     new_ext_lines = [f"  - {p}" for p in all_paths_sorted]
-    updated = text[: extra_idx + 1] + new_ext_lines + [""] + text[sdk_idx:]
+    updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
     print(f"Updated {len(new_ext_lines)} extra_files (all extension files minus component-referenced)")
     return updated
 
