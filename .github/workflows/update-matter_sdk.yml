@@ -9,16 +9,28 @@ on:
   workflow_dispatch:
 
 jobs:
+  set_target_branches:
+    runs-on: ubuntu-latest
+    outputs:
+      target_branches: ${{ steps.branches.outputs.value }}
+    steps:
+      - id: branches
+        run: |
+          if [ "$EVENT_NAME" == "schedule" ]; then
+            echo 'value=["main","release_2.8-1.5"]' >> $GITHUB_OUTPUT
+          else
+            echo "value=[\"$REF_NAME\"]" >> $GITHUB_OUTPUT
+          fi
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_NAME: ${{ github.ref_name }}
+
   update-matter_sdk:
     runs-on: ubuntu-latest
+    needs: set_target_branches
     strategy:
-      matrix: 
-        target_branch: >-
-          ${{
-            github.event_name == 'schedule'
-              && fromJson('["main","release_2.8-1.5"]')
-              || fromJson(format('["{0}"]', github.ref_name))
-          }}
+      matrix:
+        target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
     steps:
       - name: Checkout target branch
         uses: actions/checkout@v6
@@ -32,3 +44,88 @@ jobs:
           target_branch: ${{ matrix.target_branch }}
           app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+  run-slc-scripts:
+    runs-on: ubuntu-latest
+    needs: [set_target_branches, update-matter_sdk]
+    strategy:
+      matrix:
+        target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
+    permissions:
+      contents: write
+      pull-requests: read
+    steps:
+      - name: Generate GitHub App token
+        id: app_token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Find matter_sdk submodule bump PR
+        id: find_pr
+        run: |
+          want="update-matter-sdk-$TARGET_BRANCH"
+          PR=$(gh pr list --repo "$REPO" --base "$TARGET_BRANCH" --state open --json number,headRefName | jq -r --arg h "$want" '.[] | select(.headRefName == $h or (.headRefName | endswith(":" + $h))) | "\(.number) \(.headRefName)"' | head -1)
+          if [ -z "$PR" ]; then
+            echo "pr_number=" >> $GITHUB_OUTPUT
+            echo "head_ref=" >> $GITHUB_OUTPUT
+            echo "No open matter_sdk submodule bump PR found for base $TARGET_BRANCH (expected head: $want); skipping SLC scripts."
+            exit 0
+          fi
+          read -r pr_num head_ref <<< "$PR"
+          echo "pr_number=$pr_num" >> $GITHUB_OUTPUT
+          echo "head_ref=$head_ref" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+          REPO: ${{ github.repository }}
+          TARGET_BRANCH: ${{ matrix.target_branch }}
+
+      - name: Checkout PR branch
+        if: steps.find_pr.outputs.pr_number != ''
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.find_pr.outputs.head_ref }}
+          token: ${{ steps.app_token.outputs.token }}
+          fetch-depth: 0
+
+      - name: Init submodules
+        if: steps.find_pr.outputs.pr_number != ''
+        run: git submodule update --init third_party/matter_sdk
+
+      - name: Set up Python
+        if: steps.find_pr.outputs.pr_number != ''
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Install Python deps for SLC scripts
+        if: steps.find_pr.outputs.pr_number != ''
+        run: |
+          pip install pyyaml
+
+      - name: "Run SLC scripts (Confluence: Updating Matter Extension - SLC Components)"
+        if: steps.find_pr.outputs.pr_number != ''
+        run: |
+          python3 slc/script/gen_cluster_components.py
+          python3 slc/script/remove_obsolete_cluster_components.py
+          python3 slc/script/gen_static_zap_includes.py
+          python3 slc/script/get_slce_extra_paths.py
+
+      - name: Check for changes
+        if: steps.find_pr.outputs.pr_number != ''
+        id: changes
+        run: |
+          COUNT=$(git status --porcelain | wc -l | tr -d ' ')
+          echo "dirty=$([ "$COUNT" -gt 0 ] && echo true || echo false)" >> $GITHUB_OUTPUT
+
+      - name: Commit and push SLC updates
+        if: steps.find_pr.outputs.pr_number != '' && steps.changes.outputs.dirty == 'true'
+        run: |
+          git config user.name "silabs-matter-ci-bot[bot]"
+          git config user.email "silabs-matter-ci-bot[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Run component update scripts after matter_sdk submodule update"
+          git push
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
