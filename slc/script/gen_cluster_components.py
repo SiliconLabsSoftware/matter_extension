@@ -200,6 +200,8 @@ for clustercomponentname in sorted(cluster_data.keys()):
     includes = []
     source_data = []
     defines = []
+    requires_data = []
+    config_file_data = []
     try:
         with open(component_location, 'r') as file:
             content = yaml.safe_load(file)
@@ -207,6 +209,8 @@ for clustercomponentname in sorted(cluster_data.keys()):
         current_source_data = content.get('source', [])
         current_include_data = content.get('include', [])
         current_define_data = content.get('define', [])
+        requires_data = content.get('requires', []) or []
+        config_file_data = content.get('config_file', []) or []
 
         #merge with extracted source and include data and remove duplicates
         for path in current_source_data:
@@ -256,6 +260,13 @@ for clustercomponentname in sorted(cluster_data.keys()):
     filedata.append("provides:")
     provides = "  - name: {}".format(id_str)
     filedata.append(provides)
+    
+    if requires_data:
+        filedata.append("requires:")
+        for req in requires_data:
+            req_yaml = yaml.dump([req], default_flow_style=False, sort_keys=False).strip()
+            for line in req_yaml.split("\n"):
+                filedata.append("  " + line)
 
     if len(source_data) > 0:
         filedata.append("source:")
@@ -272,6 +283,13 @@ for clustercomponentname in sorted(cluster_data.keys()):
             for header in sorted(include["file_list"],key=str.casefold):
                 path = "      - path: {}".format(header)
                 filedata.append(path)
+
+    if config_file_data:
+        filedata.append("config_file:")
+        for cf in config_file_data:
+            cf_yaml = yaml.dump([cf], default_flow_style=False, sort_keys=False).strip()
+            for line in cf_yaml.split("\n"):
+                filedata.append("  " + line)
 
     filedata.append("template_contribution:")
     filedata.append("  - name: component_catalog")
@@ -347,6 +365,12 @@ matter_sdk_zcl_file_path = "third_party/matter_sdk/src/app/zap-templates/zcl/zcl
 matter_extension_zcl_file_path = "src/app/zap-templates/zcl/zcl.json"
 with open(matter_sdk_zcl_file_path, 'r') as file:
     data = json.load(file)
+
+# TEMP: Retain feature level from matter_extension zcl.json
+# Can revisit once zap updated in CSA
+with open(matter_extension_zcl_file_path, 'r') as file:
+    ext_data = json.load(file)
+data["requiredFeatureLevel"] = ext_data["requiredFeatureLevel"]
 
 # Update paths in the list
 data['xmlRoot'] = [f"./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/{path.replace('./','')}" for path in data['xmlRoot']]
