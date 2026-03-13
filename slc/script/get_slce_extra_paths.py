@@ -106,8 +106,24 @@ def _discover_component_ids(component_root: Path, repo_root: Path) -> Set[str]:
             continue
     return ids
 
+def _add_path_refs(refs: Set[str], item: dict) -> None:
+    """Add path and any file_list paths from a single component list item."""
+    if not isinstance(item, dict) or not item.get("path"):
+        return
+    base = str(item["path"]).strip().replace("\\", "/")
+    if not base or base.startswith("#"):
+        return
+    refs.add(base)
+    for fl in item.get("file_list") or []:
+        if isinstance(fl, dict) and fl.get("path"):
+            sub = str(fl["path"]).strip().replace("\\", "/")
+            if sub:
+                refs.add(base.rstrip("/") + "/" + sub.lstrip("/"))
+        elif isinstance(fl, str):
+            refs.add(base.rstrip("/") + "/" + fl.strip().lstrip("/"))
+
 def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[str]:
-    """Collect paths referenced by source and include in components under component_root."""
+    """Collect paths referenced in components under component_root."""
     refs: Set[str] = set()
     base = repo_root / component_root
     if not base.exists() or not base.is_dir():
@@ -119,25 +135,11 @@ def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[st
             continue
         if not isinstance(data, dict):
             continue
-        for item in data.get("source") or []:
-            if isinstance(item, dict) and item.get("path"):
-                path = str(item["path"]).strip().replace("\\", "/")
-                if path and not path.startswith("#"):
-                    refs.add(path)
-        for item in data.get("include") or []:
-            if not isinstance(item, dict) or not item.get("path"):
+        for value in data.values():
+            if not isinstance(value, list):
                 continue
-            inc_base = str(item["path"]).strip().replace("\\", "/")
-            if not inc_base or inc_base.startswith("#"):
-                continue
-            refs.add(inc_base)
-            for fl in item.get("file_list") or []:
-                if isinstance(fl, dict) and fl.get("path"):
-                    sub = str(fl["path"]).strip().replace("\\", "/")
-                    if sub:
-                        refs.add(inc_base.rstrip("/") + "/" + sub.lstrip("/"))
-                elif isinstance(fl, str):
-                    refs.add(inc_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
+            for item in value:
+                _add_path_refs(refs, item)
     return refs
 
 def _update_components_block(text: List[str], component_ids: Set[str]) -> List[str]:
@@ -181,7 +183,7 @@ def _update_extension_paths(text: List[str], sdk_marker: str, referenced: Set[st
     extra_files_set = all_paths - referenced
     all_paths_sorted = sorted(extra_files_set)
     new_ext_lines = [f"  - {p}" for p in all_paths_sorted]
-    updated = text[: extra_idx + 1] + new_ext_lines + [""] + text[sdk_idx:]
+    updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
     print(f"Updated {len(new_ext_lines)} extra_files (all extension files minus component-referenced)")
     return updated
 
