@@ -50,8 +50,9 @@ import argparse
 import os
 import subprocess
 import sys
+import yaml
 from pathlib import Path
-from typing import Iterable, List, Optional
+from typing import Iterable, List, Optional, Set
 
 def _is_excluded_path(path: str) -> bool:
     """Return True for paths that should not appear in the extension package."""
@@ -88,13 +89,82 @@ def _git_tracked_extension_paths() -> List[str]:
         if p not in submodules and not _is_excluded_path(p) and os.path.exists(p)
     )
 
-def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
+COMPONENT_ROOT = Path("slc/component")
+
+def _discover_component_ids(component_root: Path, repo_root: Path) -> Set[str]:
+    """Find all .slcc under component_root and collect their YAML id: values."""
+    base = repo_root / component_root
+    ids: Set[str] = set()
+    if not base.exists() or not base.is_dir():
+        return ids
+    for slcc in base.rglob("*.slcc"):
+        try:
+            data = yaml.safe_load(slcc.read_text(encoding="utf-8"))
+            if isinstance(data, dict) and data.get("id"):
+                ids.add(str(data["id"]).strip())
+        except (yaml.YAMLError, OSError):
+            continue
+    return ids
+
+def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[str]:
+    """Collect paths referenced by source and include in components under component_root."""
+    refs: Set[str] = set()
+    base = repo_root / component_root
+    if not base.exists() or not base.is_dir():
+        return refs
+    for slcc in base.rglob("*.slcc"):
+            try:
+                data = yaml.safe_load(slcc.read_text(encoding="utf-8"))
+            except (yaml.YAMLError, OSError):
+                continue
+            if not isinstance(data, dict):
+                continue
+            for item in data.get("source") or []:
+                if isinstance(item, dict) and item.get("path"):
+                    path = str(item["path"]).strip().replace("\\", "/")
+                    if path and not path.startswith("#"):
+                        refs.add(path)
+            for item in data.get("include") or []:
+                if not isinstance(item, dict) or not item.get("path"):
+                    continue
+                inc_base = str(item["path"]).strip().replace("\\", "/")
+                if not inc_base or inc_base.startswith("#"):
+                    continue
+                refs.add(inc_base)
+                for fl in item.get("file_list") or []:
+                    if isinstance(fl, dict) and fl.get("path"):
+                        sub = str(fl["path"]).strip().replace("\\", "/")
+                        if sub:
+                            refs.add(inc_base.rstrip("/") + "/" + sub.lstrip("/"))
+                    elif isinstance(fl, str):
+                        refs.add(inc_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
+    return refs
+
+def _update_components_block(text: List[str], component_ids: Set[str]) -> List[str]:
+    """Replace the components: list in text with sorted component_ids."""
+    try:
+        comp_idx = next(i for i, line in enumerate(text) if line.strip() == "components:")
+    except StopIteration:
+        return text
+    end = comp_idx + 1
+    while end < len(text):
+        line = text[end]
+        stripped = line.strip()
+        if stripped.startswith("- "):
+            end += 1
+            continue
+        if stripped and not stripped.startswith("#") and ":" in stripped.split()[0]:
+            break
+        end += 1
+    new_lines = [f"  - {cid}" for cid in sorted(component_ids)]
+    return text[: comp_idx + 1] + new_lines + text[end:]
+
+def _update_extension_paths(text: List[str], sdk_marker: str, referenced: Set[str]) -> List[str]:
     """
-    Replace extension paths between 'extra_files:' and sdk_marker with git ls-files.
-    Paths already in the file that exist on disk but aren't returned by git ls-files are preserved.
+    Set extra_files to all extension files minus paths referenced by components.
     """
-    git_paths_set = set(_git_tracked_extension_paths())
-    if not git_paths_set:
+    all_paths = set(_git_tracked_extension_paths())
+    if not all_paths:
         print("Error: git ls-files returned no extension paths", file=sys.stderr)
         raise SystemExit(10)
     try:
@@ -108,17 +178,11 @@ def _update_extension_paths(text: List[str], sdk_marker: str) -> List[str]:
         print(f"Error: '{sdk_marker}' not found", file=sys.stderr)
         raise SystemExit(6)
 
-    for line in text[extra_idx + 1 : sdk_idx]:
-        stripped = line.strip()
-        if stripped.startswith("- "):
-            path = stripped[2:]
-            if path not in git_paths_set and not _is_excluded_path(path) and os.path.exists(path):
-                git_paths_set.add(path)
-
-    all_paths = sorted(git_paths_set)
-    new_ext_lines = [f"  - {p}" for p in all_paths]
-    updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
-    print(f"Updated {len(new_ext_lines)} extension paths")
+    extra_files_set = all_paths - referenced
+    all_paths_sorted = sorted(extra_files_set)
+    new_ext_lines = [f"  - {p}" for p in all_paths_sorted]
+    updated = text[: extra_idx + 1] + new_ext_lines + [""] + text[sdk_idx:]
+    print(f"Updated {len(new_ext_lines)} extra_files (all extension files minus component-referenced)")
     return updated
 
 def collect_paths(root: Path, include_dirs: bool, absolute: bool, pattern: Optional[str]) -> List[Path]:
@@ -275,9 +339,17 @@ def main(argv: Iterable[str]) -> int:
             return 5
 
         marker = "# matter_sdk paths"
+        repo_root = Path.cwd().resolve()
 
-        # Update extension paths
-        text = _update_extension_paths(text, marker)
+        # Sync components block
+        component_ids = _discover_component_ids(COMPONENT_ROOT, repo_root)
+        if component_ids:
+            text = _update_components_block(text, component_ids)
+            print(f"Updated components block with {len(component_ids)} component ids")
+        referenced = _referenced_paths_from_slcc(COMPONENT_ROOT, repo_root)
+
+        # extra_files = all extension files minus referenced
+        text = _update_extension_paths(text, marker, referenced)
 
         # Update sdk paths
         try:
