@@ -113,31 +113,31 @@ def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[st
     if not base.exists() or not base.is_dir():
         return refs
     for slcc in base.rglob("*.slcc"):
-            try:
-                data = yaml.safe_load(slcc.read_text(encoding="utf-8"))
-            except (yaml.YAMLError, OSError):
+        try:
+            data = yaml.safe_load(slcc.read_text(encoding="utf-8"))
+        except (yaml.YAMLError, OSError):
+            continue
+        if not isinstance(data, dict):
+            continue
+        for item in data.get("source") or []:
+            if isinstance(item, dict) and item.get("path"):
+                path = str(item["path"]).strip().replace("\\", "/")
+                if path and not path.startswith("#"):
+                    refs.add(path)
+        for item in data.get("include") or []:
+            if not isinstance(item, dict) or not item.get("path"):
                 continue
-            if not isinstance(data, dict):
+            inc_base = str(item["path"]).strip().replace("\\", "/")
+            if not inc_base or inc_base.startswith("#"):
                 continue
-            for item in data.get("source") or []:
-                if isinstance(item, dict) and item.get("path"):
-                    path = str(item["path"]).strip().replace("\\", "/")
-                    if path and not path.startswith("#"):
-                        refs.add(path)
-            for item in data.get("include") or []:
-                if not isinstance(item, dict) or not item.get("path"):
-                    continue
-                inc_base = str(item["path"]).strip().replace("\\", "/")
-                if not inc_base or inc_base.startswith("#"):
-                    continue
-                refs.add(inc_base)
-                for fl in item.get("file_list") or []:
-                    if isinstance(fl, dict) and fl.get("path"):
-                        sub = str(fl["path"]).strip().replace("\\", "/")
-                        if sub:
-                            refs.add(inc_base.rstrip("/") + "/" + sub.lstrip("/"))
-                    elif isinstance(fl, str):
-                        refs.add(inc_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
+            refs.add(inc_base)
+            for fl in item.get("file_list") or []:
+                if isinstance(fl, dict) and fl.get("path"):
+                    sub = str(fl["path"]).strip().replace("\\", "/")
+                    if sub:
+                        refs.add(inc_base.rstrip("/") + "/" + sub.lstrip("/"))
+                elif isinstance(fl, str):
+                    refs.add(inc_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
     return refs
 
 def _update_components_block(text: List[str], component_ids: Set[str]) -> List[str]:
