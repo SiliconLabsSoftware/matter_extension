@@ -3,8 +3,7 @@ name: Build Dev apps
 on:
     pull_request:
         branches:
-            - main
-            - "release_*"
+            - "check/hdr_sqa"
 
     workflow_dispatch:
         inputs:
