@@ -41,6 +41,9 @@ jobs:
 
     cache-tools:
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            actions: write
         outputs:
             cache-key: ${{ steps.cache-tools.outputs.cache-key }}
         steps:
