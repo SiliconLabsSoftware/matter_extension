@@ -107,7 +107,7 @@ def _discover_component_ids(component_root: Path, repo_root: Path) -> Set[str]:
     return ids
 
 def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[str]:
-    """Collect paths referenced by source and include in components under component_root."""
+    """Collect paths referenced by source, include, and config_file in components under component_root."""
     refs: Set[str] = set()
     base = repo_root / component_root
     if not base.exists() or not base.is_dir():
@@ -138,6 +138,20 @@ def _referenced_paths_from_slcc(component_root: Path, repo_root: Path) -> Set[st
                         refs.add(inc_base.rstrip("/") + "/" + sub.lstrip("/"))
                 elif isinstance(fl, str):
                     refs.add(inc_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
+        for item in data.get("config_file") or []:
+            if not isinstance(item, dict) or not item.get("path"):
+                continue
+            cfg_base = str(item["path"]).strip().replace("\\", "/")
+            if not cfg_base or cfg_base.startswith("#"):
+                continue
+            refs.add(cfg_base)
+            for fl in item.get("file_list") or []:
+                if isinstance(fl, dict) and fl.get("path"):
+                    sub = str(fl["path"]).strip().replace("\\", "/")
+                    if sub:
+                        refs.add(cfg_base.rstrip("/") + "/" + sub.lstrip("/"))
+                elif isinstance(fl, str):
+                    refs.add(cfg_base.rstrip("/") + "/" + fl.strip().lstrip("/"))
     return refs
 
 def _update_components_block(text: List[str], component_ids: Set[str]) -> List[str]:
