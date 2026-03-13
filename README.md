@@ -26,7 +26,7 @@ _To see official release notes containing a list of features and known issues, g
 
 Your local repo is now ready for development. Follow the rest of this document for instructions on how to create and build a project.
 
-Additional setup required for contributing to this repo (not enabled yet): [Contributing](./docs/CONTRIBUTING.md)
+Additional setup required for contributing to this repo: [Contributing](./docs/CONTRIBUTING.md)
 
 Steps for directly cherry-picking CSA Matter repo commits into your environment: [Cherry-picking CSA Commits](docs/CHERRY_PICKING_CSA_COMMITS.md)
 
