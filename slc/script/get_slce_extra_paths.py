@@ -180,7 +180,16 @@ def _update_extension_paths(text: List[str], sdk_marker: str, referenced: Set[st
         print(f"Error: '{sdk_marker}' not found", file=sys.stderr)
         raise SystemExit(6)
 
-    extra_files_set = all_paths - referenced
+    expanded_refs = set()
+    for ref in referenced:
+        if ref in all_paths:
+            expanded_refs.add(ref)
+        else:
+            ref_prefix = ref.rstrip("/") + "/"
+            for path in all_paths:
+                if path.startswith(ref_prefix):
+                    expanded_refs.add(path)
+    extra_files_set = all_paths - expanded_refs
     all_paths_sorted = sorted(extra_files_set)
     new_ext_lines = [f"  - {p}" for p in all_paths_sorted]
     updated = text[: extra_idx + 1] + new_ext_lines + text[sdk_idx:]
