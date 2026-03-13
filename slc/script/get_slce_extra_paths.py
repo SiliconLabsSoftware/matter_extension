@@ -156,7 +156,8 @@ def _update_components_block(text: List[str], component_ids: Set[str]) -> List[s
             end += 1
             continue
         if stripped and not stripped.startswith("#") and ":" in stripped.split()[0]:
-            break
+            if not line.startswith((" ", "\t")):
+                break
         end += 1
     new_lines = [f"  - {cid}" for cid in sorted(component_ids)]
     return text[: comp_idx + 1] + new_lines + text[end:]
@@ -184,11 +185,10 @@ def _update_extension_paths(text: List[str], sdk_marker: str, referenced: Set[st
     for ref in referenced:
         if ref in all_paths:
             expanded_refs.add(ref)
-        else:
-            ref_prefix = ref.rstrip("/") + "/"
-            for path in all_paths:
-                if path.startswith(ref_prefix):
-                    expanded_refs.add(path)
+        ref_prefix = ref.rstrip("/") + "/"
+        for path in all_paths:
+            if path.startswith(ref_prefix):
+                expanded_refs.add(path)
     extra_files_set = all_paths - expanded_refs
     all_paths_sorted = sorted(extra_files_set)
     new_ext_lines = [f"  - {p}" for p in all_paths_sorted]
