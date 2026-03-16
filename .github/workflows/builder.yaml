@@ -32,7 +32,7 @@ jobs:
             - name: Install tools
               uses: ./.github/actions/install-tools
             - name: Build ${{ inputs.example-app }}
-              uses: SiliconLabsSoftware/matter_build_action@v2
+              uses: SiliconLabsSoftware/matter_build_action@update_node
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
