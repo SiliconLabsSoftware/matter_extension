@@ -258,5 +258,18 @@ jobs:
             contents: read
             actions: write
         uses: ./.github/workflows/sqa-apps-builder.yaml
-        with:
-            cache-key: ${{ needs.cache-tools.outputs.cache-key }}
+
+    delete-cache:
+        name: Delete tools cache
+        needs: [build-sqa-apps, cache-tools]
+        if: always()
+        runs-on: ubuntu-latest
+        permissions:
+            actions: write
+        steps:
+            - name: Delete tools cache
+              run: |
+                curl -s -X DELETE \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/repos/${{ github.repository }}/actions/caches?key=${{ needs.cache-tools.outputs.cache-key }}"
