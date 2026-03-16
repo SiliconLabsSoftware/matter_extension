@@ -1,8 +1,8 @@
 # Matter EFR32 EVSE Example
 
-The EFR32 EVSE (Electric Vehicle Supply Equipment) example provides a baseline demonstration of a Light control
+The EFR32 EVSE example provides a baseline demonstration of an EVSE (Electric Vehicle Supply Equipment)
 device, built using Matter and the Silicon Labs simplicity SDK. It can be controlled
-by a Matter controller over an Openthread network.
+by a Matter controller over a Thread network.
 
 The EFR32 device can be commissioned over Bluetooth Low Energy where the device
 and the Matter controller will exchange security information with the Rendez-vous
