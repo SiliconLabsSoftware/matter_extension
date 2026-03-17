@@ -29,8 +29,8 @@ jobs:
               uses: actions/checkout@v6
               with:
                   submodules: "true"
-            - name: Install tools
-              uses: ./.github/actions/install-tools
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
             - name: Build ${{ inputs.example-app }}
               uses: SiliconLabsSoftware/matter_build_action@v2
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
