@@ -6,7 +6,7 @@ on:
             - main
             - "release_*"
     schedule:
-        - cron: "0 2 * * 4" # Thursday at 9 PM EST
+        - cron: "0 2 * * 5" # Thursday at 9 PM EST
     workflow_dispatch:
         inputs:
             build-type:
