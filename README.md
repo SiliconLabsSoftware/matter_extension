@@ -140,10 +140,22 @@ Windows users will need to install `make` on their system. You can use your own 
 
 The generated application binaries can be found at MyNewApp/artifact/lighting-app-thread.s37.
 
-Simplicity Commander is used to flash binaries to the device. It is downloaded by the sl_setup.py script and can be found at slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander.
+Simplicity Commander is used to flash binaries to the device. After running `sl_setup.py`, find the Commander installation by running:
 
 ```sh
-slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander flash MyNewApp/artifact/lighting-app-thread.s37
+slc/tools/slt where commander
+```
+
+On macOS the output is typically `~/.silabs/slt/installs/archive/Commander.app`. Use it to flash:
+
+```sh
+~/.silabs/slt/installs/archive/Commander.app/Contents/MacOS/commander flash MyNewApp/artifact/lighting-app-thread.s37
+```
+
+On Linux the output is typically `~/.silabs/slt/installs/archive/commander`. Use it to flash:
+
+```sh
+~/.silabs/slt/installs/archive/commander/command flash MyNewApp/artifact/lighting-app-thread.s37
 ```
 
 **Note:** If using SiWx917 SoC, `.rps` file will need be flashed, instead of the `.s37` file.
