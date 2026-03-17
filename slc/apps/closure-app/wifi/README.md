@@ -25,7 +25,7 @@ documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions
 In Wifi configurations, the region code can be set in this
 [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/release_2.8-1.5/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp#L122).
 The available region codes can be found
-[here](https://github.com/SiliconLabs/wiseconnect/blob/master/components/protocol/wifi/inc/sl_wifi_constants.h#L699)
+[here](https://github.com/SiliconLabs/wiseconnect/blob/v4.0.0-ifc2fc/components/protocol/wifi/inc/sl_wifi_constants.h#L716)
 
 ## Sample Endpoint Configuration for Closure
 ![Closure Sample Endpoint](/slc/image/closure-sample-endpoint.png)
