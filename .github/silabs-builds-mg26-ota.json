@@ -1,0 +1,36 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            }
+        ],
+        "platform-template": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            }
+        ],
+        "light-switch-app": [
+            {
+                "boards": ["brd4116a"],
+                "arguments": [""]
+            }
+        ]
+    }
+}
