@@ -6,8 +6,7 @@ on:
             - main
             - "release_*"
     schedule:
-        # Thursday at 6 PM EST. only main (default) branch
-        - cron: "0 23 * * 4"
+        - cron: "0 2 * * 5" # Thursday at 9 PM EST
     workflow_dispatch:
         inputs:
             build-type:
