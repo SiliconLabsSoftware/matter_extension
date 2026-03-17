@@ -30,7 +30,7 @@ runs:
           if: steps.cache.outputs.cache-hit == 'true'
           shell: bash
           run: |
-              echo "CONAN_HOME=/home/runner/.silabs/slt/installs/conan" >> $GITHUB_ENV
+              echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
               echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
               echo "SLT_PATH=/home/runner/.local/bin/slt" >> $GITHUB_ENV
               echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
