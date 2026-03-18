@@ -9,13 +9,8 @@ provides:
   - name: matter_lighting
 
 template_file:
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppConfig.h
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppEvent.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTaskImpl.h
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/include/CHIPProjectConfig.h
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/include/LightTypes.h
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
   - path: third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
 
 define:
