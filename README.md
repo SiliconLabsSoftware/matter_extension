@@ -155,7 +155,7 @@ On macOS the output is typically `~/.silabs/slt/installs/archive/Commander.app`.
 On Linux the output is typically `~/.silabs/slt/installs/archive/commander`. Use it to flash:
 
 ```sh
-~/.silabs/slt/installs/archive/commander/command flash MyNewApp/artifact/lighting-app-thread.s37
+~/.silabs/slt/installs/archive/commander/commander flash MyNewApp/artifact/lighting-app-thread.s37
 ```
 
 **Note:** If using SiWx917 SoC, `.rps` file will need be flashed, instead of the `.s37` file.
