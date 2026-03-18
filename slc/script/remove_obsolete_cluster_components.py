@@ -3,7 +3,7 @@
 Remove obsolete cluster components from slc/component/matter-clusters/.
 Compares committed vs current cluster-to-component-dependencies.json
 to detect removed clusters and deletes their corresponding .slcc files.
-Run after gen_cluster_components.py.
+Invoked by gen_cluster_components.py
 """
 
 import json

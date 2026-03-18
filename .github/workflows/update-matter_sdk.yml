@@ -106,11 +106,7 @@ jobs:
 
       - name: "Run SLC scripts (Confluence: Updating Matter Extension - SLC Components)"
         if: steps.find_pr.outputs.pr_number != ''
-        run: |
-          python3 slc/script/gen_cluster_components.py
-          python3 slc/script/remove_obsolete_cluster_components.py
-          python3 slc/script/gen_static_zap_includes.py
-          python3 slc/script/get_slce_extra_paths.py
+        run: python3 slc/script/run_sdk_update_scripts.py
 
       - name: Check for changes
         if: steps.find_pr.outputs.pr_number != ''

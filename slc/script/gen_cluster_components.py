@@ -8,6 +8,8 @@ import os
 import pathlib
 import shutil
 import json
+import subprocess
+import sys
 import yaml
 
 root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
@@ -383,3 +385,9 @@ with open(matter_extension_zcl_file_path, 'w') as file:
     json.dump(data, file, indent=4)
 
 print("Updated zcl.json file successfully.")
+
+# Remove component files for clusters no longer in the SDK
+subprocess.run(
+    [sys.executable, os.path.join(os.path.dirname(__file__), "remove_obsolete_cluster_components.py")],
+    check=True,
+)
