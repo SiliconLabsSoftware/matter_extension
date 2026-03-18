@@ -13,20 +13,14 @@ provides:
   - name: matter_closure_control
 source:
   - path: third_party/matter_sdk/src/app/clusters/closure-control-server/ClosureControlCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/ClosureControlClusterLogic.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-control-server/CodegenIntegration.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-control-server
     file_list:
-      - path: closure-control-cluster-delegate.h
-      - path: closure-control-cluster-logic.h
-      - path: closure-control-cluster-matter-context.h
-      - path: closure-control-cluster-objects.h
-      - path: closure-control-server.h
       - path: ClosureControlCluster.h
       - path: ClosureControlClusterDelegate.h
-      - path: ClosureControlClusterLogic.h
-      - path: ClosureControlClusterMatterContext.h
       - path: ClosureControlClusterObjects.h
+      - path: CodegenIntegration.h
 template_contribution:
   - name: component_catalog
     value: matter_closure_control
