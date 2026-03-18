@@ -101,6 +101,7 @@ include:
     -   path: persistence/PascalString.h
     -   path: persistence/String.h
     -   path: persistence/AttributePersistence.h
+    -   path: persistence/AttributePersistenceMigration.h
 label: libchipdatamodel
 package: matter
 provides:
