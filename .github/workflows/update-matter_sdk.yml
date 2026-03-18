@@ -53,7 +53,7 @@ jobs:
         target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
     permissions:
       contents: write
-      pull-requests: read
+      pull-requests: write
     steps:
       - name: Generate GitHub App token
         id: app_token
@@ -127,5 +127,30 @@ jobs:
           git add -A
           git commit -m "Run component update scripts after matter_sdk submodule update"
           git push
+        env:
+          GH_TOKEN: ${{ steps.app_token.outputs.token }}
+
+      - name: Update PR description with manual steps
+        if: steps.find_pr.outputs.pr_number != ''
+        run: |
+          PR_NUM="${{ steps.find_pr.outputs.pr_number }}"
+          BODY=$(gh pr view "$PR_NUM" --json body -q .body)
+          BODY="${BODY:-}"
+          if [[ "$BODY" == *"## Manual examination steps"* ]]; then
+            echo "PR description already includes manual examination steps; skipping."
+            exit 0
+          fi
+          MANUAL_STEPS='
+          ## Manual examination steps
+
+          1. Use the above matter_sdk diff link to see what changed. Note which files were added or deleted and see if they were dealt with in the previous steps. If not, update components:
+             - Changes under `./src` may affect `slc/component/matter-core-sdk`.
+             - Platform changes under `./src/platform/silabs` and `./examples/platform/silabs` affect `slc/component/matter-platform`.
+             - Non-Silabs platform changes can be ignored.
+          2. Note if GN build flags or their usage changed, update component config defines if needed.
+          3. Analyze PR CI results.
+          4. Analyze build failures if any, and update component definitions to add/remove files affected by the SDK update until CI passes.'
+          { echo "$BODY"; echo "$MANUAL_STEPS"; } > pr_body.md
+          gh pr edit "$PR_NUM" --body-file pr_body.md
         env:
           GH_TOKEN: ${{ steps.app_token.outputs.token }}
