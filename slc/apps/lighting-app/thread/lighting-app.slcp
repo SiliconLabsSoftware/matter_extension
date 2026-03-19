@@ -89,6 +89,7 @@ include:
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
       - path: CommonAppTask.h    
+    directory: include
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/CommonAppTask.cpp
