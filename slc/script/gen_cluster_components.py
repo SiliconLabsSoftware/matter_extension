@@ -8,9 +8,9 @@ import os
 import pathlib
 import shutil
 import json
-import subprocess
-import sys
 import yaml
+
+from remove_obsolete_cluster_components import remove_obsolete_cluster_components
 
 root  = str(pathlib.Path(os.path.realpath(__file__)).parent.parent.parent)
 os.chdir(root)
@@ -238,6 +238,9 @@ for clustercomponentname in sorted(cluster_data.keys()):
         print("EXCEPTION for component ", e , component_location)
 
     source_data = list(set(source_data + cluster_data[clustercomponentname]["sources"]))
+
+    source_data = [p for p in source_data if os.path.isfile(p)]
+
     if len(cluster_data[clustercomponentname]["headers"]) > 0:
         include = {"path": cluster_data[clustercomponentname]["include"], "file_list": cluster_data[clustercomponentname]["headers"]}
         includes.append(include)
@@ -387,7 +390,6 @@ with open(matter_extension_zcl_file_path, 'w') as file:
 print("Updated zcl.json file successfully.")
 
 # Remove component files for clusters no longer in the SDK
-subprocess.run(
-    [sys.executable, os.path.join(os.path.dirname(__file__), "remove_obsolete_cluster_components.py")],
-    check=True,
-)
+rc = remove_obsolete_cluster_components()
+if rc != 0:
+    raise SystemExit(rc)
