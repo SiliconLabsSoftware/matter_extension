@@ -14,7 +14,6 @@ requires:
     condition: [hardware_board_has_rgb]
 recommends:
   - id: simple_rgb_pwm_led
-    vendor: silabs
     instance: [rgb_led0]
     condition: [hardware_board_has_rgb]
 include:

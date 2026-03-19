@@ -12,7 +12,6 @@ config_file:
     override:
       component: "wifi_resources"
       file_id: lwipopts
-      vendor: silabs
 
 requires:
   - name: sl_main

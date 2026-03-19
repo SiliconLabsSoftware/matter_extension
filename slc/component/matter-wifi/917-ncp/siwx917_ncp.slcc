@@ -13,14 +13,12 @@ config_file:
     override:
       component: "wifi_resources"
       file_id: lwipopts
-      vendor: silabs
 
 provides:
 - name: siwx917_ncp
 
 recommends:
   - id: uartdrv_eusart
-    vendor: silabs
     instance: [vcom]
 
 requires:

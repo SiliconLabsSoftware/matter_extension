@@ -43,9 +43,7 @@ provides:
 
 recommends:
   - id: zigbee_ipc
-    vendor: silabs
   - id: zigbee_pro_stack
-    vendor: silabs
         
 define:
   - name: OS_CFG_COMPAT_INIT
