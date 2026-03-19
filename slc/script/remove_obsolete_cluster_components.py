@@ -44,7 +44,7 @@ def _names_from_deps(text):
                 names.add(value[len(prefix):])
     return names
 
-def main():
+def remove_obsolete_cluster_components():
     if not COMPONENT_DIR.exists():
         print("Component dir not found:", COMPONENT_DIR)
         return 0
@@ -77,6 +77,9 @@ def main():
     if deleted:
         print("Removed obsolete cluster components:", ", ".join(deleted))
     return 0
+
+def main():
+    return remove_obsolete_cluster_components()
 
 if __name__ == "__main__":
     raise SystemExit(main())
