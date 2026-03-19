@@ -2,7 +2,7 @@ name: Trigger Dev Apps Build on Non-Default Branches
 
 on:
   schedule:
-    - cron: "0 2 * * *" # 9 pm EST daily
+    - cron: "5 0 * * *" # 8:05 pm EDT daily
 
 permissions:
   actions: write
