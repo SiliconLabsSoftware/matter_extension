@@ -11,7 +11,8 @@ jobs:
         # Only act on PR comments containing the slash command
         if: |
             github.event.issue.pull_request != null &&
-            contains(github.event.comment.body, '/run-sanity')
+            contains(github.event.comment.body, '/run-sanity') &&
+            github.event.comment.user.type != 'Bot'
         outputs:
             head-sha: ${{ steps.pr_details.outputs.head_sha }}
         steps:
