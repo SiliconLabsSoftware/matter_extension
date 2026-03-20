@@ -50,7 +50,7 @@ def _get_pr_latest_sha(pr_identifier):
     print(f"Head branch: {head_branch}")
     print(f"Commit SHA - {commit_sha}")
     print(f"PR Number: {pr_number}")
-    return head_branch
+    return commit_sha, head_branch
 
 
 def get_workflow_info(branch_name):
@@ -67,7 +67,7 @@ def get_workflow_info(branch_name):
         ValueError: If the workflow data is invalid or wrong job type is triggered
     """
     if branch_name.startswith("PR"):
-        head_branch = _get_pr_latest_sha(branch_name)
+        commit_sha, head_branch = _get_pr_latest_sha(branch_name)
         if head_branch:
             pr_url = f"{config.actions_runs_url_pr}&branch={head_branch}"
         else:
@@ -76,7 +76,7 @@ def get_workflow_info(branch_name):
         response = _make_github_api_request(pr_url)
         workflow_runs = response.json().get('workflow_runs', [])
         pr_number = branch_name.split('-')[1]
-        return _find_pr_workflow(workflow_runs, pr_number)
+        return _find_pr_workflow(workflow_runs, pr_number, commit_sha)
     else:
         print(f"Fetching workflow runs from actions/runs URL: {config.actions_runs_url}")
         response = _make_github_api_request(config.actions_runs_url)
@@ -189,13 +189,14 @@ def _find_branch_workflow(workflow_runs, branch_name):
     raise RuntimeError(f"No matching branch workflow {workflow_name} found for branch: {branch_name}.")
 
 
-def _find_pr_workflow(workflow_runs, pr_number):
+def _find_pr_workflow(workflow_runs, pr_number, commit_sha=None):
     """
     Find a PR workflow that matches the given criteria.
     
     Args:
         workflow_runs (list): List of workflow runs from GitHub API
         pr_number (str): PR number to match
+        commit_sha (str): Head commit SHA, used as fallback for fork PRs
 
     Returns:
         tuple: (run_number (int), workflow_id (int), commit_sha (str))
@@ -205,7 +206,7 @@ def _find_pr_workflow(workflow_runs, pr_number):
     """
     workflow_name = "Build Dev apps"
     for workflow in workflow_runs:
-        if _matches_pr_workflow(workflow, pr_number, workflow_name):
+        if _matches_pr_workflow(workflow, pr_number, workflow_name, commit_sha):
             return _extract_workflow_info(workflow)
     raise RuntimeError(f"No matching PR workflow {workflow_name} found for PR: {pr_number}.")
 
@@ -227,23 +228,33 @@ def _matches_branch_workflow(workflow, branch_name, workflow_name):
             workflow.get('name') == workflow_name)
 
 
-def _matches_pr_workflow(workflow, pr_number, workflow_name):
+def _matches_pr_workflow(workflow, pr_number, workflow_name, commit_sha=None):
     """
     Check if a workflow matches PR workflow criteria.
+    
+    For internal PRs, matches by PR number via the pull_requests field.
+    For fork PRs, GitHub returns an empty pull_requests array, so falls back
+    to matching by head_sha.
     
     Args:
         workflow (dict): Workflow data from GitHub API
         pr_number (str): PR number to match
         workflow_name (str): Workflow name to match
+        commit_sha (str): Head commit SHA, used as fallback when pull_requests is empty
         
     Returns:
         bool: True if workflow matches criteria
     """
     pull_requests = workflow.get('pull_requests', [])
-    return (pull_requests and 
-            pull_requests[0].get("number") == int(pr_number) and 
-            workflow.get('status') == 'in_progress' and
-            workflow.get('name') == workflow_name)
+    name_ok = workflow.get('name') == workflow_name
+    status_ok = workflow.get('status') == 'in_progress'
+    if pull_requests:
+        pr_ok = pull_requests[0].get("number") == int(pr_number)
+    elif commit_sha:
+        pr_ok = workflow.get('head_sha') == commit_sha
+    else:
+        pr_ok = False
+    return name_ok and status_ok and pr_ok
 
 
 def _validate_branch_workflow(workflow):
