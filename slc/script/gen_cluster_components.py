@@ -36,24 +36,19 @@ for subdir in subdirs:
     if not os.path.isdir(subdir_path):
         continue
 
-    # Process files in the main subdirectory
+    codegen_path = os.path.join(subdir_path, "codegen")
+    has_codegen = os.path.isdir(codegen_path)
+
+    # TEMP: for sources only codegen/ when it exists,else cluster root only.
     for file in os.listdir(subdir_path):
-        # Check if the file is a header file
         if file.endswith(".h") or file.endswith(".hpp") or file.endswith(".ipp"):
             headers.append(file)
-        # Check if the file is a source file
-        elif file.endswith(".c") or file.endswith(".cpp"):
+        elif not has_codegen and (file.endswith(".c") or file.endswith(".cpp")):
             sources.append(os.path.join(subdir_path, file))
-    
-    # Process files in the codegen folder if it exists
-    codegen_path = os.path.join(subdir_path, "codegen")
-    if os.path.isdir(codegen_path):
+    if has_codegen:
         for codegen_file in os.listdir(codegen_path):
-            # Check if the file is a header file
             if codegen_file.endswith(".h") or codegen_file.endswith(".hpp") or codegen_file.endswith(".ipp"):
-                # Use relative path for headers to maintain directory structure
                 headers.append(os.path.join("codegen", codegen_file))
-            # Check if the file is a source file
             elif codegen_file.endswith(".c") or codegen_file.endswith(".cpp"):
                 sources.append(os.path.join(codegen_path, codegen_file))
     
@@ -82,6 +77,7 @@ for subdir in subdirs:
             cluster_data[clustercomponentname]["include"] = include
             cluster_data[clustercomponentname]["sources"] = sources
             cluster_data[clustercomponentname]["clientOrServer"] = clientOrServer
+            cluster_data[clustercomponentname]["has_codegen"] = has_codegen
 
 # Get the categories of clusters through the chip data
 # Create list of clusternames
@@ -238,6 +234,16 @@ for clustercomponentname in sorted(cluster_data.keys()):
         print("EXCEPTION for component ", e , component_location)
 
     source_data = list(set(source_data + cluster_data[clustercomponentname]["sources"]))
+    if cluster_data[clustercomponentname].get("has_codegen"):
+        include_dir = cluster_data[clustercomponentname]["include"]
+        inc_prefix = os.path.normpath(include_dir) + os.sep
+        cg_prefix = os.path.normpath(os.path.join(include_dir, "codegen")) + os.sep
+
+        def _keep_codegen_src(p):
+            pn = os.path.normpath(p)
+            return (not pn.startswith(inc_prefix)) or pn.startswith(cg_prefix)
+
+        source_data = [p for p in source_data if _keep_codegen_src(p)]
 
     source_data = [p for p in source_data if os.path.isfile(p)]
 
@@ -265,7 +271,6 @@ for clustercomponentname in sorted(cluster_data.keys()):
     filedata.append("provides:")
     provides = "  - name: {}".format(id_str)
     filedata.append(provides)
-    
     if requires_data:
         filedata.append("requires:")
         for req in requires_data:
