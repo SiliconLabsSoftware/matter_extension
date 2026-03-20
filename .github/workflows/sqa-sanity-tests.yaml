@@ -2,6 +2,12 @@ name: Wait for Test Results
 
 on:
     workflow_call:
+        inputs:
+            head-sha:
+                description: "Override the head SHA for the check run. Uses event context SHA if not provided."
+                required: false
+                type: string
+                default: ''
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY:
                 required: true
@@ -27,9 +33,12 @@ jobs:
           with:
               github-token: ${{ steps.generate_app_token.outputs.token }}
               script: |
-                    const headSha = (context.eventName === 'pull_request')
-                      ? context.payload.pull_request.head.sha
-                      : context.sha;
+                    const inputSha = '${{ inputs.head-sha }}';
+                    const headSha = inputSha || (
+                        context.eventName === 'pull_request'
+                            ? context.payload.pull_request.head.sha
+                            : context.sha
+                    );
                     const { data } = await github.rest.checks.create({
                         owner: context.repo.owner,
                         repo: context.repo.repo,

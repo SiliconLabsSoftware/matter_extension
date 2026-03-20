@@ -1,0 +1,38 @@
+name: Fork PR Notification
+
+on:
+    pull_request_target:
+        types: [opened]
+
+jobs:
+    notify:
+        name: Post Fork PR Notification
+        runs-on: ubuntu-latest
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        steps:
+            - name: Generate GitHub App Token
+              id: generate_app_token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+                  private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+            - name: Mask the generated token
+              run: echo "::add-mask::${{ steps.generate_app_token.outputs.token }}"
+
+            - name: Post informational comment
+              uses: actions/github-script@v8
+              with:
+                  github-token: ${{ steps.generate_app_token.outputs.token }}
+                  script: |
+                      await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: context.payload.pull_request.number,
+                          body: [
+                              'Thank you for your contribution.',
+                              '',
+                              'A Silabs engineer will review this PR and approve the CI build workflows.',
+                              'Once the build completes successfully, they will trigger hardware sanity tests by commenting `/run-sanity` on this PR.',
+                          ].join('\n')
+                      });
