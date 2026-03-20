@@ -1,15 +1,15 @@
 name: Wait for Test Results
 
 on:
-    workflow_call:
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY:
-                required: true
+   workflow_run:
+    workflows: ['dev-apps-builder']
+    types: ['completed']
 
 jobs:
   wait-for-jenkins-status:
       name: Wait for Jenkins Status
       runs-on: ubuntu-latest
+      if: github.event.workflow_run.conclusion == 'success'
       steps:
         - name: Generate GitHub App Token
           id: generate_app_token
@@ -27,9 +27,11 @@ jobs:
           with:
               github-token: ${{ steps.generate_app_token.outputs.token }}
               script: |
-                    const headSha = (context.eventName === 'pull_request')
-                      ? context.payload.pull_request.head.sha
-                      : context.sha;
+                    const headSha = context.eventName === 'workflow_run'
+                        ? context.payload.workflow_run.head_sha
+                        : context.eventName === 'pull_request'
+                            ? context.payload.pull_request.head.sha
+                            : context.sha;
                     const { data } = await github.rest.checks.create({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
