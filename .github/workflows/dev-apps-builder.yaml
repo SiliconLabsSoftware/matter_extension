@@ -1,7 +1,7 @@
 name: Build Dev apps
 
 on:
-    pull_request:
+    push:
         branches:
             - "*"
     schedule:
