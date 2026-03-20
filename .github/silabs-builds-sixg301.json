@@ -21,21 +21,8 @@
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
-                              "--with_app matter_zigbee_concurrent,zigbee_high_datarate_phy,sl_rail_util_ieee802154_rx_duty_cycling",
-                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
-            },
-            {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
-                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
-                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
-            },
-            {
-                "boards": ["brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-hdr-dc",
-                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
+                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045,SL_RAIL_UTIL_IEEE802154_RX_DUTY_CYCLING_DEFAULT_ENABLED:0,SL_RAIL_UTIL_IEEE802154_RX_DUTY_CYCLING_RUNTIME_PHY_SELECT:1,SL_RAIL_UTIL_IEEE802154_RADIO_CONFIG_2P4_1MBPS_FEC_SUPPORTED:1,SL_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_DEFAULT_ENABLED:0,SL_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_RUNTIME_PHY_SELECT:1'",
                               "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling"]
             }
         ],
