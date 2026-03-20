@@ -202,8 +202,6 @@ The base API and implementation are generated into your project and live under `
 | `autogen/AppTaskImpl.h` | Declarations of every overridable `*Impl()` method. Copy the signatures you need from here into `CommonAppTask.h`. |
 | `autogen/AppTask.cpp` | Silicon Labs default implementation of AppTask. This is what runs for any `*Impl()` you do not override. Use as reference when customizing behavior. |
 
-Open `autogen/AppTaskImpl.h` in your generated project to see the full list of overridable `*Impl()` methods. This example uses the same pattern. After generating or building your app from this example, the `autogen/` path is relative to your project output.
-
 ## Provision and Control
 
 You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.0/matter-thread/raspi-img)
