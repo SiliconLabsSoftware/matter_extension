@@ -2,7 +2,7 @@ name: Wait for Test Results
 
 on:
    workflow_run:
-    workflows: ['dev-apps-builder']
+    workflows: ['Build Dev apps']
     types: ['completed']
 
 jobs:
