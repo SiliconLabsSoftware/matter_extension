@@ -31,12 +31,25 @@ jobs:
               with:
                   github-token: ${{ steps.generate_app_token.outputs.token }}
                   script: |
+                      async function postComment(body) {
+                          await github.rest.issues.createComment({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              issue_number: context.issue.number,
+                              body,
+                          });
+                      }
+
                       const { data: perm } = await github.rest.repos.getCollaboratorPermissionLevel({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
                           username: context.actor,
                       });
                       if (!['write', 'maintain', 'admin'].includes(perm.permission)) {
+                          await postComment(
+                              `\`/run-sanity\` failed: **${context.actor}** does not have write access to this repository. ` +
+                              'Only members with write or admin access can trigger sanity tests.'
+                          );
                           core.setFailed(`${context.actor} does not have write access to this repository.`);
                           return;
                       }
@@ -48,10 +61,15 @@ jobs:
                           pull_number: context.issue.number,
                       });
                       if (pr.state !== 'open') {
+                          await postComment('`/run-sanity` failed: sanity tests cannot be triggered on a closed PR.');
                           core.setFailed('This PR is not open.');
                           return;
                       }
                       if (pr.head.repo.full_name === `${context.repo.owner}/${context.repo.repo}`) {
+                          await postComment(
+                              '`/run-sanity` is only needed for fork PRs. ' +
+                              'Sanity tests run automatically for internal PRs via the build pipeline.'
+                          );
                           core.setFailed('This PR is not from a fork. Sanity tests run automatically for internal PRs.');
                           return;
                       }
@@ -72,6 +90,17 @@ jobs:
                       });
                       const successRun = data.workflow_runs.find(r => r.conclusion === 'success');
                       if (!successRun) {
+                          await github.rest.issues.createComment({
+                              owner: context.repo.owner,
+                              repo: context.repo.repo,
+                              issue_number: context.issue.number,
+                              body: [
+                                  '`/run-sanity` failed: no successful build found for this commit.',
+                                  '',
+                                  'The `dev-apps-builder` run must complete successfully before sanity tests can be triggered.',
+                                  'Once it does, comment `/run-sanity` again.',
+                              ].join('\n'),
+                          });
                           core.setFailed(
                               'No successful dev-apps-builder run found for this commit. ' +
                               'Wait for the build to complete, then comment /run-sanity again.'
