@@ -200,8 +200,9 @@ jobs:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
         if: |
+            always() && (
             github.event.workflow_run.head_branch == 'main' ||
-            startsWith(github.event.workflow_run.head_branch, 'release_')
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
         runs-on: ubuntu-latest
         permissions:
             actions: write
@@ -211,9 +212,9 @@ jobs:
               with:
                 github-token: ${{ secrets.GITHUB_TOKEN }}
                 script: |
-                    await github.rest.actions.deleteCacheById({
+                    await github.rest.actions.deleteActionsCacheByKey({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
-                        cache_id: '${{ needs.cache-tools.outputs.cache-key }}',
+                        key: '${{ needs.cache-tools.outputs.cache-key }}',
                     });
   
