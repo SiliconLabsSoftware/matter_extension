@@ -13,24 +13,6 @@
                 "boards": ["brd4187c"],
                 "arguments": [""]
             }
-        ],
-        "platform-template": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": [""]
-            }
-        ],
-        "lock-app": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": [""]
-            }
-        ],
-        "light-switch-app": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": [""]
-            }
         ]
     }
 }

@@ -48,7 +48,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Build lighting-app (MG24)
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg24-ota.json
           path-to-example-app: slc/apps/lighting-app/thread/lighting-app-series-2.slcw
@@ -59,7 +59,7 @@ jobs:
 
       - name: Build platform-template (MG24)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg24-ota.json
           path-to-example-app: slc/apps/platform-template/thread/platform-template-series-2.slcw
@@ -70,7 +70,7 @@ jobs:
 
       - name: Build lock-app (MG24)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg24-ota.json
           path-to-example-app: slc/apps/lock-app/thread/lock-app-series-2.slcw
@@ -81,7 +81,7 @@ jobs:
 
       - name: Build light-switch-app (MG24)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg24-ota.json
           path-to-example-app: slc/apps/light-switch-app/thread/light-switch-app-series-2.slcw
@@ -147,7 +147,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Build lighting-app (MG26)
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg26-ota.json
           path-to-example-app: slc/apps/lighting-app/thread/lighting-app-series-2.slcw
@@ -158,7 +158,7 @@ jobs:
 
       - name: Build platform-template (MG26)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg26-ota.json
           path-to-example-app: slc/apps/platform-template/thread/platform-template-series-2.slcw
@@ -169,7 +169,7 @@ jobs:
 
       - name: Build lock-app (MG26)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg26-ota.json
           path-to-example-app: slc/apps/lock-app/thread/lock-app-series-2.slcw
@@ -180,7 +180,7 @@ jobs:
 
       - name: Build light-switch-app (MG26)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-mg26-ota.json
           path-to-example-app: slc/apps/light-switch-app/thread/light-switch-app-series-2.slcw
@@ -246,7 +246,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Build lighting-app (917 SiWx)
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-siwx-ota.json
           path-to-example-app: slc/apps/lighting-app/wifi/lighting-app-siwx.slcw
@@ -257,7 +257,7 @@ jobs:
 
       - name: Build platform-template (917 SiWx)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-siwx-ota.json
           path-to-example-app: slc/apps/platform-template/wifi/platform-template-siwx.slcw
@@ -268,7 +268,7 @@ jobs:
 
       - name: Build lock-app (917 SiWx)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-siwx-ota.json
           path-to-example-app: slc/apps/lock-app/wifi/lock-app-siwx.slcw
@@ -279,7 +279,7 @@ jobs:
 
       - name: Build light-switch-app (917 SiWx)
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ./.github/silabs-builds-siwx-ota.json
           path-to-example-app: slc/apps/light-switch-app/wifi/light-switch-app-siwx.slcw

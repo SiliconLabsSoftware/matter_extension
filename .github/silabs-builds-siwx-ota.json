@@ -13,24 +13,6 @@
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": [""]
             }
-        ],
-        "platform-template": [
-            {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": [""]
-            }
-        ],
-        "lock-app": [
-            {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": [""]
-            }
-        ],
-        "light-switch-app": [
-            {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": [""]
-            }
         ]
     }
 }
