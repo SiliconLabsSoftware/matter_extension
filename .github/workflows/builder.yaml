@@ -18,6 +18,14 @@ on:
             platform:
                 required: true
                 type: string
+            head-sha:
+                required: false
+                type: string
+                default: ''
+            head-branch:
+                required: false
+                type: string
+                default: ''
 
 jobs:
     build:
@@ -29,6 +37,7 @@ jobs:
               uses: actions/checkout@v6
               with:
                   submodules: "true"
+                  ref: ${{ inputs.head-sha || github.sha }}
             - name: Cache tools
               uses: ./.github/actions/cache-tools
             - name: Build ${{ inputs.example-app }}
@@ -43,7 +52,7 @@ jobs:
                   build-type: ${{ inputs.build-type }}
 
             - name: Create asset files
-              if: startsWith(github.ref_name, 'release_')
+              if: startsWith(inputs.head-branch || github.ref_name, 'release_')
               run: |
                   find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do
                       echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
