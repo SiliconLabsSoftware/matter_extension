@@ -172,8 +172,9 @@ jobs:
         needs: [wait-for-jenkins-status]
         runs-on: ubuntu-latest
         if: |
-            github.event.workflow_run.head_branch == 'main' ||
-            startsWith(github.event.workflow_run.head_branch, 'release_')
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
         permissions:
             contents: read
             actions: write
@@ -191,8 +192,9 @@ jobs:
         name: Build SQA apps
         needs: [cache-tools]
         if: |
-            github.event.workflow_run.head_branch == 'main' ||
-            startsWith(github.event.workflow_run.head_branch, 'release_')
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
         permissions:
             contents: read
             actions: write
@@ -205,8 +207,9 @@ jobs:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
         if: |
-            always() && (
-            github.event.workflow_run.head_branch == 'main' ||
+            always() &&
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
             startsWith(github.event.workflow_run.head_branch, 'release_'))
         runs-on: ubuntu-latest
         permissions:
