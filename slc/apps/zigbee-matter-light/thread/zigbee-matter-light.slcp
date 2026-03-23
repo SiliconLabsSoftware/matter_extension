@@ -235,7 +235,7 @@ config_file:
     directory: provision
     file_id: provision_config
 source:
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/CommonAppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/CommonAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
@@ -247,11 +247,13 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: CommonAppTask.h
       - path: CHIPProjectConfig.h
       - path: ZigbeeCMPConfig.h
       - path: ZigbeeSequentialConfig.h
     directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: CommonAppTask.h
 post_build:
   profile: application
 
