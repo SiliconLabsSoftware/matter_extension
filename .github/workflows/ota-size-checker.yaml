@@ -96,6 +96,21 @@ jobs:
           set -e
           PAGE_SIZE=8192
           AVAILABLE_FLASH=1499136
+          echo "========================================"
+          echo "OTA flash check (MG24)"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
+          echo "Build type: ${{ needs.set-build-type.outputs.build-type }}"
+          echo "========================================"
+          {
+            echo "## OTA flash check (MG24)"
+            echo "- **Build type:** \`${{ needs.set-build-type.outputs.build-type }}\`"
+            echo "- **Event:** \`${{ github.event_name }}\`"
+            echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
+            echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
           if ! command -v commander >/dev/null 2>&1; then
             echo "commander not found, skipping OTA flash size check"
             exit 0
@@ -125,13 +140,40 @@ jobs:
             if [ "$sum" -gt "$AVAILABLE_FLASH" ]; then
               echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
               FAIL=1
+              shortfall=$(( sum - AVAILABLE_FLASH ))
+              echo "::error title=MG24 OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
+              {
+                echo "### MG24 OTA failure"
+                echo "| Field | Value |"
+                echo "| --- | --- |"
+                echo "| Board | \`$board\` |"
+                echo "| Image | \`$IMAGE\` |"
+                echo "| Running (rounded) | ${rounded_running} B |"
+                echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
+                echo "| Total (sum) | ${sum} B |"
+                echo "| Limit | ${AVAILABLE_FLASH} B |"
+                echo "| Shortfall | ${shortfall} B |"
+                echo ""
+              } >> "$GITHUB_STEP_SUMMARY"
             else
               echo "  PASS: OTA image fits"
             fi
           done
-          if [ "$FAIL" -eq 1 ]; then exit 1; fi
+          if [ "$FAIL" -eq 1 ]; then
+            echo ""
+            echo "========================================"
+            echo "OTA FLASH CHECK FAILED (MG24)"
+            echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
+            echo "See FAIL lines and annotations above for each image."
+            echo "========================================"
+            exit 1
+          fi
           echo ""
           echo "All MG24 OTA flash checks passed."
+          {
+            echo "### Result"
+            echo "All MG24 OTA flash checks **passed**."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   ota-check-mg26:
     name: OTA flash check (MG26)
@@ -195,6 +237,21 @@ jobs:
           set -e
           PAGE_SIZE=8192
           AVAILABLE_FLASH=3145728
+          echo "========================================"
+          echo "OTA flash check (MG26)"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
+          echo "Build type: ${{ needs.set-build-type.outputs.build-type }}"
+          echo "========================================"
+          {
+            echo "## OTA flash check (MG26)"
+            echo "- **Build type:** \`${{ needs.set-build-type.outputs.build-type }}\`"
+            echo "- **Event:** \`${{ github.event_name }}\`"
+            echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
+            echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
           if ! command -v commander >/dev/null 2>&1; then
             echo "commander not found, skipping OTA flash size check"
             exit 0
@@ -224,13 +281,40 @@ jobs:
             if [ "$sum" -gt "$AVAILABLE_FLASH" ]; then
               echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
               FAIL=1
+              shortfall=$(( sum - AVAILABLE_FLASH ))
+              echo "::error title=MG26 OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
+              {
+                echo "### MG26 OTA failure"
+                echo "| Field | Value |"
+                echo "| --- | --- |"
+                echo "| Board | \`$board\` |"
+                echo "| Image | \`$IMAGE\` |"
+                echo "| Running (rounded) | ${rounded_running} B |"
+                echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
+                echo "| Total (sum) | ${sum} B |"
+                echo "| Limit | ${AVAILABLE_FLASH} B |"
+                echo "| Shortfall | ${shortfall} B |"
+                echo ""
+              } >> "$GITHUB_STEP_SUMMARY"
             else
               echo "  PASS: OTA image fits"
             fi
           done
-          if [ "$FAIL" -eq 1 ]; then exit 1; fi
+          if [ "$FAIL" -eq 1 ]; then
+            echo ""
+            echo "========================================"
+            echo "OTA FLASH CHECK FAILED (MG26)"
+            echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
+            echo "See FAIL lines and annotations above for each image."
+            echo "========================================"
+            exit 1
+          fi
           echo ""
           echo "All MG26 OTA flash checks passed."
+          {
+            echo "### Result"
+            echo "All MG26 OTA flash checks **passed**."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   ota-check-siwx:
     name: OTA flash check (917 SiWx)
@@ -294,6 +378,21 @@ jobs:
           set -e
           PAGE_SIZE=256
           AVAILABLE_FLASH=4194304
+          echo "========================================"
+          echo "OTA flash check (917 SiWx)"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
+          echo "Build type: ${{ needs.set-build-type.outputs.build-type }}"
+          echo "========================================"
+          {
+            echo "## OTA flash check (917 SiWx)"
+            echo "- **Build type:** \`${{ needs.set-build-type.outputs.build-type }}\`"
+            echo "- **Event:** \`${{ github.event_name }}\`"
+            echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
+            echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
           if ! command -v commander >/dev/null 2>&1; then
             echo "commander not found, skipping OTA flash size check"
             exit 0
@@ -318,10 +417,36 @@ jobs:
             if [ "$sum" -gt "$AVAILABLE_FLASH" ]; then
               echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
               FAIL=1
+              shortfall=$(( sum - AVAILABLE_FLASH ))
+              echo "::error title=917 SiWx OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
+              {
+                echo "### 917 SiWx OTA failure"
+                echo "| Field | Value |"
+                echo "| --- | --- |"
+                echo "| Board | \`$board\` |"
+                echo "| Image | \`$IMAGE\` |"
+                echo "| Image size (rounded) | ${rounded} B |"
+                echo "| Running+OTA (2x) | ${sum} B |"
+                echo "| Limit | ${AVAILABLE_FLASH} B |"
+                echo "| Shortfall | ${shortfall} B |"
+                echo ""
+              } >> "$GITHUB_STEP_SUMMARY"
             else
               echo "  PASS: OTA image fits"
             fi
           done
-          if [ "$FAIL" -eq 1 ]; then exit 1; fi
+          if [ "$FAIL" -eq 1 ]; then
+            echo ""
+            echo "========================================"
+            echo "OTA FLASH CHECK FAILED (917 SiWx)"
+            echo "Flash limit (running + OTA, 4MB default): ${AVAILABLE_FLASH} B"
+            echo "See FAIL lines and annotations above for each image."
+            echo "========================================"
+            exit 1
+          fi
           echo ""
           echo "All 917 SiWx OTA flash checks passed."
+          {
+            echo "### Result"
+            echo "All 917 SiWx OTA flash checks **passed**."
+          } >> "$GITHUB_STEP_SUMMARY"
