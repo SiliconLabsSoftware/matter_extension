@@ -244,7 +244,7 @@ jobs:
 
     delete-cache:
         name: Delete tools cache
-        needs: [merge-apps]
+        needs: [merge-apps, cache-tools]
         if: always()
         runs-on: ubuntu-latest
         permissions:
