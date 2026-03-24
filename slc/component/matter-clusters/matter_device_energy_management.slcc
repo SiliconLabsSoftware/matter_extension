@@ -22,7 +22,6 @@ include:
       - path: DeviceEnergyManagementCluster.h
       - path: DeviceEnergyManagementDelegate.h
       - path: DeviceEnergyManagementTestEventTriggerHandler.h
-      - path: CodegenIntegration.h
 template_contribution:
   - name: component_catalog
     value: matter_device_energy_management

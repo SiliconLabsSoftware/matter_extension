@@ -14,9 +14,9 @@ requires:
 provides:
   - name: matter_closure_dimension
 source:
-  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-cluster-logic.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-matter-context.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterLogic.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server
     file_list:
@@ -25,6 +25,12 @@ include:
       - path: closure-dimension-delegate.h
       - path: closure-dimension-matter-context.h
       - path: closure-dimension-server.h
+      - path: ClosureDimensionCluster.h
+      - path: ClosureDimensionClusterDelegate.h
+      - path: ClosureDimensionClusterLogic.h
+      - path: ClosureDimensionClusterMatterContext.h
+      - path: CodegenIntegration.h
+      - path: GenericDimensionState.h
 template_contribution:
   - name: component_catalog
     value: matter_closure_dimension

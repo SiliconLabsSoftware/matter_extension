@@ -11,7 +11,7 @@ include:
     -   path: PersistentStorageAudit.h
     -   path: CHIPPlatformMemory.h
     -   path: SafeString.h
-    -   path: ScopedBuffer.h
+    -   path: ScopedMemoryBuffer.h
     -   path: IntrusiveList.h
     -   path: Pool.h
     -   path: CHIPMemString.h

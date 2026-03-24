@@ -18,6 +18,7 @@ include:
     -   path: SubjectDescriptor.h
     -   path: AccessControl.h
     -   path: AuthMode.h
+    -   path: AuxiliaryType.h
     -   path: Privilege.h
     -   path: RequestPath.h
     -   path: AccessConfig.h
