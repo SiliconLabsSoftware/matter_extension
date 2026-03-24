@@ -88,7 +88,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Build lighting-app
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
@@ -99,7 +99,7 @@ jobs:
 
       - name: Build platform-template
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.platform_template_path }}
@@ -110,7 +110,7 @@ jobs:
 
       - name: Build lock-app
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lock_path }}
@@ -121,7 +121,7 @@ jobs:
 
       - name: Build light-switch-app
         if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.light_switch_path }}
