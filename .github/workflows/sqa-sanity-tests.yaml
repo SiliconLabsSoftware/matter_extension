@@ -171,12 +171,12 @@ jobs:
         name: Cache tools
         needs: [wait-for-jenkins-status]
         runs-on: ubuntu-latest
-        # TODO: remove 'feature/split_workflows' condition after testing
+        # TODO: remove 'test_split_workflows' condition after testing
         if: |
             github.event.workflow_run.head_repository.full_name == github.repository &&
             (github.event.workflow_run.head_branch == 'main' ||
             startsWith(github.event.workflow_run.head_branch, 'release_') ||
-            github.event.workflow_run.head_branch == 'feature/split_workflows')
+            github.event.workflow_run.head_branch == 'test_split_workflows')
         permissions:
             contents: read
             actions: write
@@ -193,12 +193,12 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: [cache-tools]
-        # TODO: remove 'feature/split_workflows' condition after testing
+        # TODO: remove 'test_split_workflows' condition after testing
         if: |
             github.event.workflow_run.head_repository.full_name == github.repository &&
             (github.event.workflow_run.head_branch == 'main' ||
             startsWith(github.event.workflow_run.head_branch, 'release_') ||
-            github.event.workflow_run.head_branch == 'feature/split_workflows')
+            github.event.workflow_run.head_branch == 'test_split_workflows')
         permissions:
             contents: read
             actions: write
@@ -210,13 +210,13 @@ jobs:
     delete-cache:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
-        # TODO: remove 'feature/split_workflows' condition after testing
+        # TODO: remove 'test_split_workflows' condition after testing
         if: |
             always() &&
             github.event.workflow_run.head_repository.full_name == github.repository &&
             (github.event.workflow_run.head_branch == 'main' ||
             startsWith(github.event.workflow_run.head_branch, 'release_') ||
-            github.event.workflow_run.head_branch == 'feature/split_workflows')
+            github.event.workflow_run.head_branch == 'test_split_workflows')
         runs-on: ubuntu-latest
         permissions:
             actions: write
