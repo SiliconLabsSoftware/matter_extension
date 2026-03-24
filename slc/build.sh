@@ -190,8 +190,8 @@ PIDS_ARG=""
 GENERATE_BOOTLOADER=true
 GENERATE_APPLICATION=true
 GENERATE_TZ_SECURE=false
-#BUILD_SYSTEM="makefile"
-BUILD_SYSTEM="cmake"
+BUILD_SYSTEM="makefile"
+#BUILD_SYSTEM="cmake"
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--clean)
