@@ -92,6 +92,7 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs
     file_list:
       - path: CommonAppTask.h
+    directory: include
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/CommonAppTask.cpp
