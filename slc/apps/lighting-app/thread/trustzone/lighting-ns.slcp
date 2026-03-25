@@ -94,7 +94,7 @@ include:
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
     directory: include
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs
+  - path: ../../../../../third_party/matter_sdk/examples/platform/silabs
     file_list:
       - path: CommonAppTask.h
 
