@@ -190,14 +190,5 @@ toolchain_settings:
   - option: cxx_standard
     value: gnu++17
 
-readme:
-  - path: ./README.md
-ui_hints:
-  highlight:
-    - path: README.md
-      focus: false
 post_build:
   profile: application
-
-other_file:
-  - path: ../../../image/qr_code_img.png
