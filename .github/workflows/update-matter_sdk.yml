@@ -104,7 +104,7 @@ jobs:
         run: |
           pip install pyyaml
 
-      - name: "Run SLC scripts (Confluence: Updating Matter Extension - SLC Components)"
+      - name: "Run SLC scripts"
         if: steps.find_pr.outputs.pr_number != ''
         run: python3 slc/script/run_sdk_update_scripts.py
 
@@ -144,8 +144,9 @@ jobs:
              - Platform changes under `./src/platform/silabs` and `./examples/platform/silabs` affect `slc/component/matter-platform`.
              - Non-Silabs platform changes can be ignored.
           2. Note if GN build flags or their usage changed, update component config defines if needed.
-          3. Analyze PR CI results.
-          4. Analyze build failures if any, and update component definitions to add/remove files affected by the SDK update until CI passes.'
+          3. Manually trigger Jenkins CI  
+          4. Analyze PR CI results.
+          5. Analyze build failures if any, and update component definitions to add/remove files affected by the SDK update until CI passes.'
           { echo "$BODY"; echo "$MANUAL_STEPS"; } > pr_body.md
           gh pr edit "$PR_NUM" --body-file pr_body.md
         env:
