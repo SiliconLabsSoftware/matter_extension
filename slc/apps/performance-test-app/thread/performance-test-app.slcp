@@ -83,6 +83,7 @@ include:
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
       - path: AppTask.h
+      - path: AppTaskImpl.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs
     file_list:
