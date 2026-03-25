@@ -254,6 +254,7 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs
     file_list:
       - path: CommonAppTask.h
+    directory: include
 post_build:
   profile: application
 
