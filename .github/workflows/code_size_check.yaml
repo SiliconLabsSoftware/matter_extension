@@ -10,7 +10,7 @@ on:
       - main
       - "release_*"
 concurrency:
-    group: dev-build-examples-${{ github.ref }}
+    group: code-size-check-${{ github.ref }}
     cancel-in-progress: true
 
 jobs:
