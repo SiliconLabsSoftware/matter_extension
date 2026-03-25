@@ -1,17 +1,12 @@
 {
     "standard": {
-        "default": [
+        "window-app": [
             {
-                "boards": ["brd4187c"],
-                "arguments": [""]
-            }
-        ]
-    },
-    "full": {
-        "default": [
-            {
-                "boards": ["brd4187c"],
-                "arguments": [""]
+                "boards": ["brd4337a"],
+                "arguments": [
+                    "--output_suffix lto",
+                    "--with_app toolchain_gcc_lto"
+                ]
             }
         ]
     }

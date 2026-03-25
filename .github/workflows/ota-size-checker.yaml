@@ -4,39 +4,14 @@ on:
   schedule:
     - cron: "0 0 * * *" # Runs every day at 00:00 UTC
   workflow_dispatch:
-    inputs:
-      build-type:
-        description: "Build type"
-        required: true
-        type: choice
-        options:
-          - standard
-          - full
-        default: standard
 
 permissions:
   contents: read
   actions: write
 
 jobs:
-  set-build-type:
-    runs-on: ubuntu-latest
-    outputs:
-      build-type: ${{ steps.set.outputs.build-type }}
-    steps:
-      - id: set
-        run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "build-type=${{ github.event.inputs.build-type }}" >> "$GITHUB_OUTPUT"
-          elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-            echo "build-type=full" >> "$GITHUB_OUTPUT"
-          else
-            echo "build-type=standard" >> "$GITHUB_OUTPUT"
-          fi
-
   ota-check:
     name: OTA flash check (${{ matrix.display }})
-    needs: set-build-type
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,38 +20,27 @@ jobs:
           - id: mg24
             display: MG24
             page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 1499136 # bytes (~1.50 MB)
-            image_ext: .s37
+            available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
             exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg24-ota.json
-            lighting_path: slc/apps/lighting-app/thread/lighting-app-series-2.slcw
-            platform_template_path: slc/apps/platform-template/thread/platform-template-series-2.slcw
-            lock_path: slc/apps/lock-app/thread/lock-app-series-2.slcw
-            light_switch_path: slc/apps/light-switch-app/thread/light-switch-app-series-2.slcw
+            window_app_path: slc/apps/window-app/thread/window-app-series-2-internal.slcw
 
           - id: mg26
             display: MG26
             page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 2998272 # bytes (~3 MB)
-            image_ext: .s37
+            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
             exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg26-ota.json
-            lighting_path: slc/apps/lighting-app/thread/lighting-app-series-2.slcw
-            platform_template_path: slc/apps/platform-template/thread/platform-template-series-2.slcw
-            lock_path: slc/apps/lock-app/thread/lock-app-series-2.slcw
-            light_switch_path: slc/apps/light-switch-app/thread/light-switch-app-series-2.slcw
+            lighting_path: slc/apps/lighting-app/thread/lighting-app-series-2-internal.slcw
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
 
-          - id: siwx
-            display: SiWx 917
-            page_size: 256 # bytes (256 B flash page)
-            available_flash: 3997696 # bytes (~4 MB)
-            image_ext: .rps
-            exclude_path: ""
-            json_file: ./.github/silabs-builds-siwx-ota.json
-            lighting_path: slc/apps/lighting-app/wifi/lighting-app-siwx.slcw
-            platform_template_path: slc/apps/platform-template/wifi/platform-template-siwx.slcw
-            lock_path: slc/apps/lock-app/wifi/lock-app-siwx.slcw
-            light_switch_path: slc/apps/light-switch-app/wifi/light-switch-app-siwx.slcw
+          - id: mgm26
+            display: MGM26
+            page_size: 8192 # bytes (8 KiB flash page)
+            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
+            exclude_path: "*/matter-bootloader/*"
+            json_file: ./.github/silabs-builds-mgm26-ota.json
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
 
     steps:
       - name: Checkout
@@ -87,7 +51,19 @@ jobs:
       - name: Install tools
         uses: ./.github/actions/install-tools
 
-      - name: Build lighting-app
+      - name: Build window-app
+        if: matrix.id == 'mg24'
+        uses: SiliconLabsSoftware/matter_build_action@v2
+        with:
+          json-file-path: ${{ matrix.json_file }}
+          path-to-example-app: ${{ matrix.window_app_path }}
+          example-app: window-app
+          build-script: "./slc/build.sh"
+          output-directory: " "
+          build-type: standard
+
+      - name: Build lighting-app 
+        if: matrix.id == 'mg26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
@@ -95,40 +71,29 @@ jobs:
           example-app: lighting-app
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: ${{ needs.set-build-type.outputs.build-type }}
+          build-type: standard
 
-      - name: Build platform-template
-        if: needs.set-build-type.outputs.build-type == 'full'
+      - name: Build zigbee-matter-light
+        if: matrix.id == 'mg26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.platform_template_path }}
-          example-app: platform-template
+          path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
+          example-app: zigbee-matter-light
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: full
+          build-type: standard
 
-      - name: Build lock-app
-        if: needs.set-build-type.outputs.build-type == 'full'
+      - name: Build zigbee-matter-light (BRD4351A MGM26)
+        if: matrix.id == 'mgm26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.lock_path }}
-          example-app: lock-app
+          path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
+          example-app: zigbee-matter-light
           build-script: "./slc/build.sh"
           output-directory: " "
-          build-type: full
-
-      - name: Build light-switch-app
-        if: needs.set-build-type.outputs.build-type == 'full'
-        uses: SiliconLabsSoftware/matter_build_action@v2
-        with:
-          json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.light_switch_path }}
-          example-app: light-switch-app
-          build-script: "./slc/build.sh"
-          output-directory: " "
-          build-type: full
+          build-type: standard
 
       - name: Check OTA image flash size
         shell: bash
@@ -137,22 +102,18 @@ jobs:
 
           PAGE_SIZE=${{ matrix.page_size }}
           AVAILABLE_FLASH=${{ matrix.available_flash }}
-          IMAGE_EXT="${{ matrix.image_ext }}"
           EXCLUDE_PATH="${{ matrix.exclude_path }}"
           PLATFORM="${{ matrix.display }}"
-          BUILD_TYPE="${{ needs.set-build-type.outputs.build-type }}"
 
           echo "========================================"
           echo "OTA flash check (${PLATFORM})"
           echo "Workflow: ${{ github.workflow }}"
           echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
-          echo "Build type: ${BUILD_TYPE}"
           echo "========================================"
 
           {
             echo "## OTA flash check (${PLATFORM})"
-            echo "- **Build type:** \`${BUILD_TYPE}\`"
             echo "- **Event:** \`${{ github.event_name }}\`"
             echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
             echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
@@ -164,14 +125,10 @@ jobs:
             exit 0
           fi
 
-          if [[ -n "$EXCLUDE_PATH" ]]; then
-            IMAGES=$(find out -type f -name "*${IMAGE_EXT}" ! -path "$EXCLUDE_PATH" 2>/dev/null)
-          else
-            IMAGES=$(find out -type f -name "*${IMAGE_EXT}" 2>/dev/null)
-          fi
+          IMAGES=$(find out -type f -name "*.s37" ! -path "$EXCLUDE_PATH" 2>/dev/null)
 
           if [[ -z "$IMAGES" ]]; then
-            echo "No ${IMAGE_EXT} image found under out/, skipping OTA flash size check"
+            echo "No .s37 image found under out/, skipping OTA flash size check"
             exit 0
           fi
 
@@ -184,77 +141,44 @@ jobs:
             echo ""
             echo "  Board: $board  Image: $IMAGE"
 
-            if [[ "$IMAGE_EXT" == ".s37" ]]; then
-              app_name="${board}-$(basename "$IMAGE" .s37)"
-              pushd /tmp >/dev/null
+            app_name="${board}-$(basename "$IMAGE" .s37)"
+            pushd /tmp >/dev/null
 
-              commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-              file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
-              rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
+            commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
+            rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
 
-              commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-              file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
-              rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
+            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
+            rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
 
-              sum=$(( rounded_running + rounded_ota ))
-              remaining=$(( AVAILABLE_FLASH - sum ))
+            sum=$(( rounded_running + rounded_ota ))
+            remaining=$(( AVAILABLE_FLASH - sum ))
 
-              popd >/dev/null
+            popd >/dev/null
 
-              echo "  Running (rounded): $rounded_running B  OTA LZMA (rounded): $rounded_ota B  Remaining: $remaining B"
+            echo "  Running (rounded): $rounded_running B  OTA LZMA (rounded): $rounded_ota B  Remaining: $remaining B"
 
-              if [[ "$sum" -gt "$AVAILABLE_FLASH" ]]; then
-                echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
-                FAIL=1
-                shortfall=$(( sum - AVAILABLE_FLASH ))
-                echo "::error title=${PLATFORM} OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
-                {
-                  echo "### ${PLATFORM} OTA failure"
-                  echo "| Field | Value |"
-                  echo "| --- | --- |"
-                  echo "| Board | \`$board\` |"
-                  echo "| Image | \`$IMAGE\` |"
-                  echo "| Running (rounded) | ${rounded_running} B |"
-                  echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
-                  echo "| Total (sum) | ${sum} B |"
-                  echo "| Limit | ${AVAILABLE_FLASH} B |"
-                  echo "| Shortfall | ${shortfall} B |"
-                  echo ""
-                } >> "$GITHUB_STEP_SUMMARY"
-              else
-                echo "  PASS: OTA image fits"
-              fi
-
+            if [[ "$sum" -gt "$AVAILABLE_FLASH" ]]; then
+              echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
+              FAIL=1
+              shortfall=$(( sum - AVAILABLE_FLASH ))
+              echo "::error title=${PLATFORM} OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
+              {
+                echo "### ${PLATFORM} OTA failure"
+                echo "| Field | Value |"
+                echo "| --- | --- |"
+                echo "| Board | \`$board\` |"
+                echo "| Image | \`$IMAGE\` |"
+                echo "| Running (rounded) | ${rounded_running} B |"
+                echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
+                echo "| Total (sum) | ${sum} B |"
+                echo "| Limit | ${AVAILABLE_FLASH} B |"
+                echo "| Shortfall | ${shortfall} B |"
+                echo ""
+              } >> "$GITHUB_STEP_SUMMARY"
             else
-              image_size=$(commander util rpsinfo "$IMAGE" 2>/dev/null | grep "Image size" | sed -n 's/.*(\([0-9]*\)).*/\1/p')
-              [[ -z "$image_size" ]] && continue
-
-              rounded=$(( PAGE_SIZE * (image_size + PAGE_SIZE - 1) / PAGE_SIZE ))
-              sum=$(( 2 * rounded ))
-              remaining=$(( AVAILABLE_FLASH - sum ))
-
-              echo "  Image size (rounded): $rounded B  Running+OTA: $sum B  Remaining: $remaining B"
-
-              if [[ "$sum" -gt "$AVAILABLE_FLASH" ]]; then
-                echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
-                FAIL=1
-                shortfall=$(( sum - AVAILABLE_FLASH ))
-                echo "::error title=${PLATFORM} OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
-                {
-                  echo "### ${PLATFORM} OTA failure"
-                  echo "| Field | Value |"
-                  echo "| --- | --- |"
-                  echo "| Board | \`$board\` |"
-                  echo "| Image | \`$IMAGE\` |"
-                  echo "| Image size (rounded) | ${rounded} B |"
-                  echo "| Running+OTA (2x) | ${sum} B |"
-                  echo "| Limit | ${AVAILABLE_FLASH} B |"
-                  echo "| Shortfall | ${shortfall} B |"
-                  echo ""
-                } >> "$GITHUB_STEP_SUMMARY"
-              else
-                echo "  PASS: OTA image fits"
-              fi
+              echo "  PASS: OTA image fits"
             fi
           done
 
@@ -262,11 +186,7 @@ jobs:
             echo ""
             echo "========================================"
             echo "OTA FLASH CHECK FAILED (${PLATFORM})"
-            if [[ "$IMAGE_EXT" == ".s37" ]]; then
-              echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
-            else
-              echo "Flash limit (running + OTA, 4MB default): ${AVAILABLE_FLASH} B"
-            fi
+            echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
             echo "See FAIL lines and annotations above for each image."
             echo "========================================"
             exit 1
