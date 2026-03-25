@@ -74,18 +74,7 @@ jobs:
           build-type: standard
 
       - name: Build zigbee-matter-light
-        if: matrix.id == 'mg26'
-        uses: SiliconLabsSoftware/matter_build_action@v2
-        with:
-          json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
-          example-app: zigbee-matter-light
-          build-script: "./slc/build.sh"
-          output-directory: " "
-          build-type: standard
-
-      - name: Build zigbee-matter-light (BRD4351A MGM26)
-        if: matrix.id == 'mgm26'
+        if: matrix.id == 'mg26' || matrix.id == 'mgm26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
