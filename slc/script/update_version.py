@@ -34,8 +34,8 @@ if __name__ == '__main__':
     SISDK_NEW_VERSION = sys.argv[2]
     WISECONNECT_NEW_VERSION = sys.argv[3]
     README = sys.argv[4]
-    VERSION_REGEX_FORMAT="(\d+)\.(\d+)\.(\d+)"
-    AUX_REGEX_FORMAT = "(\d+)\.(\d+)(\.(\d+))?"
+    VERSION_REGEX_FORMAT=r"(\d+)\.(\d+)\.(\d+)"
+    AUX_REGEX_FORMAT = r"(\d+)\.(\d+)(\.(\d+))?"
     FULL_VERSION = False
     UPDATE_README=False
 
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     if len(re.split('-',EXTENSION_NEW_VERSION)) == 2:
         if (re.compile(AUX_REGEX_FORMAT)).match((re.split('-',EXTENSION_NEW_VERSION))[1]):
             AUX_VERSION = (re.split('-',EXTENSION_NEW_VERSION))[1]
-            FULL_VERSION_REGEX = "(\d+)\.(\d+)\.(\d+)-(\d+)\.(\d+)(\.(\d+))?"
+            FULL_VERSION_REGEX = r"(\d+)\.(\d+)\.(\d+)-(\d+)\.(\d+)(\.(\d+))?"
             FULL_VERSION = True
             EXTENSION_NEW_VERSION=(re.split('-',EXTENSION_NEW_VERSION))[0]
         else:
@@ -137,3 +137,9 @@ if __name__ == '__main__':
     if FULL_VERSION:
         replace_text(str(ROOT)+"/matter_docs.xml","https://github.com/SiliconLabs/matter_extension/releases/tag/v"+VERSION_REGEX_FORMAT+"","https://github.com/SiliconLabs/matter_extension/releases/tag/v"+EXTENSION_NEW_VERSION)
         replace_text(str(ROOT)+"/matter_docs.xml","Silicon Labs Matter v"+FULL_VERSION_REGEX+"","Silicon Labs Matter v"+EXTENSION_NEW_VERSION+"-"+AUX_VERSION+"")
+
+    # Update matter_demos.xml
+    #
+    # REGEX FORMAT:
+    # asset://extension.matter_1.0.4/demos/...
+    replace_text(str(ROOT)+"/matter_demos.xml","asset://extension\\.matter_"+VERSION_REGEX_FORMAT+"/","asset://extension.matter_"+EXTENSION_NEW_VERSION+"/")
