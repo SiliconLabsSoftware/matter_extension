@@ -55,17 +55,20 @@ jobs:
           title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }}"
           body: |
             This PR updates the Matter Extension and SDK versions based on the workflow inputs.
-            Ran the following command to update the version:
-            ```
+            Ran the following command to update versions:
+            ```bash
             python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }} readme=${{ inputs.update_readme }}
             ```
 
             - Matter Extension version: `${{ inputs.extension_version }}`
             - SDK version: `${{ inputs.sdk_version }}`
-            - Wiseconnect version: `${{ inputs.wiseconnect_version }}`
-            - Readme: `${{ inputs.update_readme }}`
+            - WiseConnect version: `${{ inputs.wiseconnect_version }}`
+            - README update: `${{ inputs.update_readme }}`
 
-            **User Needs to Trigger Jenkins CI**
+            **NOTE:** This PR updates files that match the regex patterns in `slc/script/update_version.py`.
+            Please review the workflow logs and file changes. If any expected file is not updated, add or adjust the corresponding regex in `update_version.py`.
+
+            **User needs to trigger Jenkins CI.**
           branch: "automation/version_update"
           base: "${{ github.ref_name }}"
           token: ${{ steps.generate_token.outputs.token }}
