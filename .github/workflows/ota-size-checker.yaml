@@ -1,0 +1,189 @@
+name: Check OTA Flash Space
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs every day at 00:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  ota-check:
+    name: OTA flash check (${{ matrix.display }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: mg24
+            display: MG24
+            page_size: 8192 # bytes (8 KiB flash page)
+            available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
+            exclude_path: "*/matter-bootloader/*"
+            json_file: ./.github/silabs-builds-mg24-ota.json
+            window_app_path: slc/apps/window-app/thread/window-app-series-2-internal.slcw
+
+          - id: mg26
+            display: MG26
+            page_size: 8192 # bytes (8 KiB flash page)
+            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
+            exclude_path: "*/matter-bootloader/*"
+            json_file: ./.github/silabs-builds-mg26-ota.json
+            lighting_path: slc/apps/lighting-app/thread/lighting-app-series-2-internal.slcw
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
+
+          - id: mgm26
+            display: MGM26
+            page_size: 8192 # bytes (8 KiB flash page)
+            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
+            exclude_path: "*/matter-bootloader/*"
+            json_file: ./.github/silabs-builds-mgm26-ota.json
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          submodules: "true"
+
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
+      - name: Build window-app
+        if: matrix.id == 'mg24'
+        uses: SiliconLabsSoftware/matter_build_action@v2
+        with:
+          json-file-path: ${{ matrix.json_file }}
+          path-to-example-app: ${{ matrix.window_app_path }}
+          example-app: window-app
+          build-script: "./slc/build.sh"
+          output-directory: " "
+          build-type: standard
+
+      - name: Build lighting-app 
+        if: matrix.id == 'mg26'
+        uses: SiliconLabsSoftware/matter_build_action@v2
+        with:
+          json-file-path: ${{ matrix.json_file }}
+          path-to-example-app: ${{ matrix.lighting_path }}
+          example-app: lighting-app
+          build-script: "./slc/build.sh"
+          output-directory: " "
+          build-type: standard
+
+      - name: Build zigbee-matter-light
+        if: matrix.id == 'mg26' || matrix.id == 'mgm26'
+        uses: SiliconLabsSoftware/matter_build_action@v2
+        with:
+          json-file-path: ${{ matrix.json_file }}
+          path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
+          example-app: zigbee-matter-light
+          build-script: "./slc/build.sh"
+          output-directory: " "
+          build-type: standard
+
+      - name: Check OTA image flash size
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PAGE_SIZE=${{ matrix.page_size }}
+          AVAILABLE_FLASH=${{ matrix.available_flash }}
+          EXCLUDE_PATH="${{ matrix.exclude_path }}"
+          PLATFORM="${{ matrix.display }}"
+
+          echo "========================================"
+          echo "OTA flash check (${PLATFORM})"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
+          echo "========================================"
+
+          {
+            echo "## OTA flash check (${PLATFORM})"
+            echo "- **Event:** \`${{ github.event_name }}\`"
+            echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
+            echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if ! command -v commander >/dev/null 2>&1; then
+            echo "commander not found, skipping OTA flash size check"
+            exit 0
+          fi
+
+          IMAGES=$(find out -type f -name "*.s37" ! -path "$EXCLUDE_PATH" 2>/dev/null)
+
+          if [[ -z "$IMAGES" ]]; then
+            echo "No .s37 image found under out/, skipping OTA flash size check"
+            exit 0
+          fi
+
+          FAIL=0
+
+          for IMAGE in $IMAGES; do
+            board=$(echo "$IMAGE" | cut -d'/' -f2)
+            [[ -z "$board" ]] && continue
+
+            echo ""
+            echo "  Board: $board  Image: $IMAGE"
+
+            app_name="${board}-$(basename "$IMAGE" .s37)"
+            pushd /tmp >/dev/null
+
+            commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
+            rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
+
+            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
+            rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
+
+            sum=$(( rounded_running + rounded_ota ))
+            remaining=$(( AVAILABLE_FLASH - sum ))
+
+            popd >/dev/null
+
+            echo "  Running (rounded): $rounded_running B  OTA LZMA (rounded): $rounded_ota B  Remaining: $remaining B"
+
+            if [[ "$sum" -gt "$AVAILABLE_FLASH" ]]; then
+              echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
+              FAIL=1
+              shortfall=$(( sum - AVAILABLE_FLASH ))
+              echo "::error title=${PLATFORM} OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
+              {
+                echo "### ${PLATFORM} OTA failure"
+                echo "| Field | Value |"
+                echo "| --- | --- |"
+                echo "| Board | \`$board\` |"
+                echo "| Image | \`$IMAGE\` |"
+                echo "| Running (rounded) | ${rounded_running} B |"
+                echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
+                echo "| Total (sum) | ${sum} B |"
+                echo "| Limit | ${AVAILABLE_FLASH} B |"
+                echo "| Shortfall | ${shortfall} B |"
+                echo ""
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "  PASS: OTA image fits"
+            fi
+          done
+
+          if [[ "$FAIL" -eq 1 ]]; then
+            echo ""
+            echo "========================================"
+            echo "OTA FLASH CHECK FAILED (${PLATFORM})"
+            echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
+            echo "See FAIL lines and annotations above for each image."
+            echo "========================================"
+            exit 1
+          fi
+
+          echo ""
+          echo "All ${PLATFORM} OTA flash checks passed."
+          {
+            echo "### Result"
+            echo "All ${PLATFORM} OTA flash checks **passed**."
+          } >> "$GITHUB_STEP_SUMMARY"
