@@ -94,11 +94,11 @@ If LEDs are supported by the board but not enabled in a project they can be enab
 -   Install instances (led0 and led1) of the _Simple LED_ component under _Platform->Driver->LED->Simple LED_
 -   Install the WSTK LED Support component under _Silicon Labs Matter->Matter->Platform->WSTK LED Support_
 
-## Implementing Custom App Behavior
+## Extending Base App Implementation
 
 ### CommonAppTask
 
-To implement custom app behavior you can override any Silicon Labs implemented API in the CommonAppTask file. This example provides `CommonAppTask.h` and `CommonAppTask.cpp` for that purpose. The base implementation and the full set of overridable `*Impl()` APIs are supplied by the build system under `autogen/`. Any `*Impl()` you do not override keeps the Silicon Labs default behavior.
+To implement custom app behavior you can override any Silicon Labs implemented API in the CommonAppTask file. This example provides `CommonAppTask.h` and `CommonAppTask.cpp` for that purpose. The base implementation and the full set of overridable `*Impl()` APIs are supplied by the build system in `AppTask.cpp` and `AppTaskImpl.h` under `autogen/`. Any `*Impl()` you do not override keeps the Silicon Labs default behavior.
 
 ### How to Override APIs
 
@@ -111,7 +111,7 @@ To implement custom app behavior you can override any Silicon Labs implemented A
 
 ### Required Override
 
-- **`CHIP_ERROR AppInitImpl()`** — App specific initialization. This is already present in the example.
+- **`CHIP_ERROR AppInitImpl()`** — Required to override default AppTask implementation. 
 
 ### Sample Implementation
 
