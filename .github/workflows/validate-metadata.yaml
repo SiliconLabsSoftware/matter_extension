@@ -36,19 +36,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v6
       with:
-        submodules: false 
-
-    - name: Initialize required submodules
-      shell: bash
-      run: |
-        git submodule update --init \
-          third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk \
-          third_party/matter_sdk \
-          third_party/matter_support \
-          third_party/mbedtls \
-          third_party/nlassert \
-          third_party/nlio \
-          third_party/QR-Code-generator
+        submodules: true 
       
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
@@ -81,7 +69,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
-          submodules: false 
+          submodules: true 
 
       - name: Mark repository safe for Git
         shell: bash
@@ -89,19 +77,6 @@ jobs:
 
       - name: Install tools
         uses: ./.github/actions/install-tools
-
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init \
-            third_party/simplicity_sdk \
-            third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk \
-            third_party/matter_sdk \
-            third_party/matter_support \
-            third_party/mbedtls \
-            third_party/nlassert \
-            third_party/nlio \
-            third_party/QR-Code-generator
 
       - name: Set sisdk path for slc
         shell: bash
