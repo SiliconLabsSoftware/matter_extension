@@ -42,7 +42,7 @@ jobs:
       shell: bash
       run: |
         git submodule update --init \
-          third_party/aws_ota_sdk \
+          third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk \
           third_party/matter_sdk \
           third_party/matter_support \
           third_party/mbedtls \
@@ -77,41 +77,49 @@ jobs:
   components:
     name: Validate Components
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
           submodules: false 
 
-      - name: Mark Repository as Safe for Git
+      - name: Mark repository safe for Git
         shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
       - name: Initialize required submodules
         shell: bash
         run: |
           git submodule update --init \
-            third_party/aws_ota_sdk \
+            third_party/simplicity_sdk \
+            third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk \
             third_party/matter_sdk \
             third_party/matter_support \
             third_party/mbedtls \
             third_party/nlassert \
             third_party/nlio \
             third_party/QR-Code-generator
+
+      - name: Set sisdk path for slc
+        shell: bash
+        run: |
+          echo "SISDK_ROOT=${GITHUB_WORKSPACE}/third_party/simplicity_sdk" >> "$GITHUB_ENV"
+          mkdir -p "${GITHUB_WORKSPACE}/third_party/simplicity_sdk/out"
       
       - name: Trust SDK 
         shell: bash
         run: |
           set -e 
           echo "Trusting SDK at ${SISDK_ROOT}"
-          slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
-          slc signature trust --sdk ${SISDK_ROOT}
+          slc configuration --sdk "${SISDK_ROOT}" -data "${SISDK_ROOT}/out/dmp_uc.data"
+          slc signature trust --sdk-package-path "${SISDK_ROOT}" --trust-totality
           
       - name: Validate Components
         shell: bash
-        continue-on-error: true # TO-DO: Set to false once work is completed to resolve validate components errors
+        continue-on-error: false
         run: |
           set -e
           python3 -u './slc/script/validate_components.py' slc/component slc
