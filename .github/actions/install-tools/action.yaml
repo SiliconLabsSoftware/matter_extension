@@ -20,7 +20,12 @@ runs:
     - name: Setup SLT
       id: setup-action
       uses: SiliconLabsSoftware/action-setup-slt@v1
-    
+
+    - name: Conan Remote List
+      shell: bash
+      run: |
+        conan remote list
+
     - name: Set Environment Variables
       shell: bash
       run: |
