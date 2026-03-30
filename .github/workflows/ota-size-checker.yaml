@@ -23,7 +23,7 @@ jobs:
             available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
             exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg24-ota.json
-            window_app_path: slc/apps/window-app/thread/window-app-series-2-internal.slcw
+            window_app_path: slc/apps/window-app/thread/window-app.slcp
 
           - id: mg26
             display: MG26
