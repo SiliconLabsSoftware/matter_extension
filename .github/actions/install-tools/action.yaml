@@ -79,7 +79,30 @@ runs:
     - name: install gcc-arm-none-eabi
       shell: bash
       run: |
-        slt install gcc-arm-none-eabi
-        ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
-        echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
-        echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+        set -euo pipefail
+        TOOLCHAIN_VER=12.2.rel1
+        case "$(uname -m)" in
+          x86_64) HOST_TAG=x86_64 ;;
+          aarch64) HOST_TAG=aarch64 ;;
+          *) echo "Unsupported host architecture: $(uname -m)"; exit 1 ;;
+        esac
+        ARCHIVE="arm-gnu-toolchain-${TOOLCHAIN_VER}-${HOST_TAG}-arm-none-eabi.tar.xz"
+        URL="https://developer.arm.com/-/media/Files/downloads/gnu/${TOOLCHAIN_VER}/binrel/${ARCHIVE}"
+        INSTALL_ROOT="${HOME}/.local"
+        EXTRACTED_NAME="arm-gnu-toolchain-${TOOLCHAIN_VER}-${HOST_TAG}-arm-none-eabi"
+        DEST_NAME="arm-gnu-toolchain-${TOOLCHAIN_VER}-arm-none-eabi"
+        ARM_GCC_DIR="${INSTALL_ROOT}/${DEST_NAME}"
+
+        mkdir -p "${INSTALL_ROOT}"
+        if [ -x "${ARM_GCC_DIR}/bin/arm-none-eabi-gcc" ]; then
+          echo "Toolchain already present at ${ARM_GCC_DIR}"
+        else
+          rm -rf "${ARM_GCC_DIR}"
+          curl -fsSL -o "/tmp/${ARCHIVE}" "${URL}"
+          tar -xJf "/tmp/${ARCHIVE}" -C "${INSTALL_ROOT}"
+          rm -f "/tmp/${ARCHIVE}"
+          mv "${INSTALL_ROOT}/${EXTRACTED_NAME}" "${ARM_GCC_DIR}"
+        fi
+
+        echo "ARM_GCC_DIR=${ARM_GCC_DIR}" >> $GITHUB_ENV
+        echo "${ARM_GCC_DIR}/bin" >> $GITHUB_PATH
