@@ -23,7 +23,6 @@ jobs:
             display: MG24
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
-            exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg24-ota.json
             window_app_path: slc/apps/window-app/thread/window-app.slcp
 
@@ -31,7 +30,6 @@ jobs:
             display: MG26
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
-            exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg26-ota.json
             lighting_path: slc/apps/lighting-app/thread/lighting-app.slcp
             zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
@@ -40,7 +38,6 @@ jobs:
             display: MGM26
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
-            exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mgm26-ota.json
             zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
 
