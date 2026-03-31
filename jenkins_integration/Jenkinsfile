@@ -21,6 +21,7 @@ def pr_number = ""
 def bypass_send_results_gh = ""
 def build_description = ""
 def commit_change_summary = ""
+def slack_channel = "matter-release-build-notifications-demo"
 
 def combineSlackSummary(String extra) {
     def c = commit_change_summary?.trim() ?: ''
@@ -74,7 +75,7 @@ def sendSlackNotification(String messageType, String status, String summary = ""
         message += "\n\n⚠️ *Action Required:* Please investigate and resolve the issue."
     }
     
-    slackSend(channel: 'matter-release-build-notifications',
+    slackSend(channel: 'test-slack-build-notification',
               color: notificationColor,
               message: message)
 }
@@ -100,7 +101,21 @@ pipeline
                 }
             }
         }
+        stage('Demo Slack Notification') {
+            when {
+                expression { env.BRANCH_NAME == "feature/slack-changes-summary" }
+            }
+            steps {
+                script {
+                    def demoSummary = combineSlackSummary("Demo notification from Jenkins Slack summary validation stage.")
+                    sendSlackNotification("Slack Summary Demo", "PASS", demoSummary, "good", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
+                }
+            }
+        }
         stage('Upload Artifacts') {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     retry(9) {
@@ -123,7 +138,7 @@ pipeline
         }
         stage('Code Size Analysis') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { false }
             }
             steps {
                 script {
@@ -135,6 +150,9 @@ pipeline
         }
         stage('Execute CI Tests')
         {
+            when {
+                expression { false }
+            }
             steps {
                 script {
                     def parallelNodes = [:]
@@ -215,7 +233,7 @@ pipeline
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { false }
             }
             steps {
                 script {
@@ -225,7 +243,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { false }
             }
             steps {
                 script {
@@ -240,7 +258,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { false }
             }
             steps {
                 script {
@@ -252,7 +270,7 @@ pipeline
     post {
         failure {
             script {
-                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_"))) {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "feature/slack-changes-summary")) {
                     sendSlackNotification("Pipeline Failure", "FAIL", combineSlackSummary("Pipeline execution failed. Please check the console output for details."), "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
                 }
             }
