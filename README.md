@@ -12,7 +12,7 @@ _To see official release notes containing a list of features and known issues, g
 
 ---
 
-## Setting up the Matter Extension repository
+## Setting up the Matter Extension repository 
 
 1. Fork the Silicon Labs Matter Extension GitHub repo by clicking "Fork" in the web UI at https://github.com/SiliconLabsSoftware/matter_extension.
 
