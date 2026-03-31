@@ -33,8 +33,8 @@ jobs:
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
             exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mg26-ota.json
-            lighting_path: slc/apps/lighting-app/thread/lighting-app-series-2-internal.slcw
-            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
+            lighting_path: slc/apps/lighting-app/thread/lighting-app.slcp
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
 
           - id: mgm26
             display: MGM26
@@ -42,7 +42,7 @@ jobs:
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
             exclude_path: "*/matter-bootloader/*"
             json_file: ./.github/silabs-builds-mgm26-ota.json
-            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light-series-2-internal.slcw
+            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
 
     steps:
       - name: Checkout
