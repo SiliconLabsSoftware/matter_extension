@@ -19,20 +19,20 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
               with:
-                  submodules: "true" # Do not initialize submodules automatically
+                  submodules: "true"
 
             - name: Install tools
               uses: ./.github/actions/install-tools
             - name: Checkout PR target branch
-              uses: actions/checkout@v5
+              uses: actions/checkout@v6
               with:
                   ref: ${{ github.event.pull_request.base.sha }}
                   path: baseline
                   submodules: "true"  
             - name: Build code-canary app
-              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
                   path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
@@ -44,7 +44,7 @@ jobs:
               run: |
                   mv ./out ./current      
             - name: Build code-canary app on PR target
-              uses: SiliconLabsSoftware/matter_build_action@v2.0.0
+              uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
                   path-to-example-app: "./baseline/slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
@@ -61,8 +61,3 @@ jobs:
                   cat ./target.csv
                   python3 ./slc/script/code_size_diff_check.py ./current.csv ./target.csv | tee code_size_report.txt
 
-            # TODO do we need a post on the PR or a CI failure is enough ?            
-            # - name: Post Code Size Results to PR
-            #   if: github.event_name == 'pull_request'
-            #   uses: actions/github-script@v7
-            #   with:
