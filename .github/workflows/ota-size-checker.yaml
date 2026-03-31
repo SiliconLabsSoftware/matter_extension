@@ -90,7 +90,6 @@ jobs:
 
           PAGE_SIZE=${{ matrix.page_size }}
           AVAILABLE_FLASH=${{ matrix.available_flash }}
-          EXCLUDE_PATH="${{ matrix.exclude_path }}"
           PLATFORM="${{ matrix.display }}"
 
           echo "========================================"
@@ -113,7 +112,7 @@ jobs:
             exit 0
           fi
 
-          IMAGES=$(find out -type f -name "*.s37" ! -path "$EXCLUDE_PATH" 2>/dev/null)
+          IMAGES=$(find out -type f -name "*.s37" 2>/dev/null)
 
           if [[ -z "$IMAGES" ]]; then
             echo "No .s37 image found under out/, skipping OTA flash size check"
