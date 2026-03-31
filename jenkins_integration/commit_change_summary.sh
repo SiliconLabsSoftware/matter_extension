@@ -11,10 +11,10 @@ if [ -n "$PREV" ]; then
   PREVS=$(git rev-parse --short "$PREV" 2>/dev/null || echo "$PREV" | cut -c1-7)
   MAIN=$(git log --oneline --no-merges "${PREV}..HEAD" 2>/dev/null | head -n "$MAX")
   [ -z "$MAIN" ] && MAIN="(no commits in range)"
-  printf "*Matter Extension (%s..%s):*\n%s\n\n" "$PREVS" "$HEADS" "$MAIN"
+  printf "*matter_extension (%s..%s):*\n%s\n\n" "$PREVS" "$HEADS" "$MAIN"
 else
   MAIN=$(git log -n 20 --oneline HEAD 2>/dev/null)
-  printf "*Matter Extension (no baseline; last 20 commits):*\n%s\n\n" "$MAIN"
+  printf "*matter_extension (no baseline; last 20 commits):*\n%s\n\n" "$MAIN"
 fi
 
 git submodule update --init --quiet third_party/matter_sdk 2>/dev/null || true
