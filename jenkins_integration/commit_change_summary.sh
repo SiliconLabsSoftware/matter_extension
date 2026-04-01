@@ -8,10 +8,7 @@ PREV="${PREV_BASELINE:-}"
 HEADS=$(git rev-parse --short HEAD 2>/dev/null || echo "?")
 PREV_FULL=
 
-if [ -z "$PREV" ]; then # first build on branch
-  MAIN=$(git log -n "$MAX" --oneline HEAD 2>/dev/null)
-  printf "*matter_extension:* no previous Jenkins baseline (first run); last %s commits:\n%s\n\n" "$MAX" "$MAIN"
-elif ! PREV_FULL=$(git rev-parse -q --verify "${PREV}^{commit}" 2>/dev/null); then # baseline SHA not in repo (e.g. force-push, shallow clone)
+if [ -z "$PREV" || ! PREV_FULL=$(git rev-parse -q --verify "${PREV}^{commit}" 2>/dev/null); then # baseline SHA not in repo (e.g. force-push, shallow clone)
   MAIN=$(git log -n "$MAX" --oneline HEAD 2>/dev/null)
   printf "*matter_extension:* no previous Jenkins baseline; last %s commits:\n%s\n\n" "$MAX" "$MAIN"
 else # valid baseline commit
