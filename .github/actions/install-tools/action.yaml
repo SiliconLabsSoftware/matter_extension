@@ -56,6 +56,11 @@ runs:
         echo "Failed to install slc-cli after $MAX_ATTEMPTS attempts"
         exit 1
     
+    - name: Install java21
+      shell: bash
+      run: |
+        slt install java21
+    
     - name: Set Environment Variables
       shell: bash
       run: |
