@@ -6,7 +6,7 @@ define:
     value: "1"
   - name: RADIO_CONFIG_DMP_SUPPORT
     value: "1"
-description: libchipdatamodel
+description: Provides the Matter application data model implementation for attribute access, command handling, events, and persistence.
 id: libchipdatamodel
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
@@ -101,6 +101,7 @@ include:
     -   path: persistence/PascalString.h
     -   path: persistence/String.h
     -   path: persistence/AttributePersistence.h
+    -   path: persistence/AttributePersistenceMigration.h
 label: libchipdatamodel
 package: matter
 provides:
@@ -125,6 +126,7 @@ source:
 -   path: third_party/matter_sdk/src/app/StorageDelegateWrapper.cpp
 -   path: third_party/matter_sdk/src/app/persistence/AttributePersistence.cpp
 -   path: third_party/matter_sdk/src/app/persistence/AttributePersistenceProviderInstance.cpp
+-   path: third_party/matter_sdk/src/app/persistence/AttributePersistenceMigration.cpp
 -   path: third_party/matter_sdk/src/app/persistence/DeferredAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/persistence/DefaultAttributePersistenceProvider.cpp
 -   path: third_party/matter_sdk/src/app/persistence/String.cpp

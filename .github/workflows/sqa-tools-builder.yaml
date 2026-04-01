@@ -75,14 +75,37 @@ jobs:
       - name: Zip OTA scripts
         shell: bash
         run: |
+          set -euo pipefail
           ota_file="ota-scripts.zip"
           cd third_party/matter_sdk/
-          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/chip/tlv" -x "*.md" "provision/samples/light/3"
+          
+          # Validate that all required files and directories exist
+          required_paths=(
+            "scripts/tools/silabs"
+            "src/app/ota_image_tool.py"
+            "src/controller/python/matter/tlv/"
+          )
+          
+          for path in "${required_paths[@]}"; do
+            if [[ ! -e "${path}" ]]; then
+              echo "[ERROR] Required path does not exist: ${path}" >&2
+              exit 1
+            fi
+          done
+          
+          zip -r "${ota_file}" "scripts/tools/silabs" "src/app/ota_image_tool.py" "src/controller/python/matter/tlv/" -x "*.md" "provision/samples/light/3"
+          
+          if ! unzip -l "${ota_file}" 2>/dev/null | awk 'END {exit (NR<=3)}'; then
+            echo "[ERROR] Archive ${ota_file} appears empty; failing." >&2
+            exit 1
+          fi
+          
           mv "${ota_file}" ../../sqa-tools/
+          echo "Archive size: $(du -h ../../sqa-tools/${ota_file} | cut -f1)"
           echo "OTA scripts zipped successfully: sqa-tools/${ota_file}"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sqa-tools-zip
           path: sqa-tools
@@ -90,15 +113,28 @@ jobs:
           overwrite: true
 
   build-sqa-tools:
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/project-chip/chip-build-crosscompile:81
+    runs-on: ubuntu-22.04-arm
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           submodules: false
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install base dependencies
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            software-properties-common \
+            libgirepository-1.0-1 libgirepository1.0-dev \
+            libglib2.0-dev libglib2.0-dev-bin \
+            libevent-dev
 
       - name: Mark repository as safe for Git
         shell: bash
@@ -117,7 +153,7 @@ jobs:
           ./scripts/checkout_submodules.py --platform linux
 
       - name: Run bootstrap action
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2.0.0
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
 
       # Builds chip-tool
       - name: Build chip-tool
@@ -150,7 +186,7 @@ jobs:
           cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sqa-tools-binaries
           path: sqa-tools
@@ -160,10 +196,22 @@ jobs:
     # copy wifi firmware
   copy-wifi-firmware:
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.0_WiFi_SDKv3.5.0
-
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/matter_extension/matter_extension
+      
+      - name: Initialize required submodules
+        shell: bash
+        run: |
+          git submodule update --init third_party/wifi_sdk
+
       - name: Create WiFi firmware directories
         shell: bash
         run: |
@@ -172,11 +220,11 @@ jobs:
       - name: Copy WiFi firmware files
         shell: bash
         run: |
-          cp ${WISECONNECT3_DIR}/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
+          cp third_party/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
           echo "WiFi firmware files copied successfully."
 
       - name: Upload WiFi firmware artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: sqa-tools-wifi-firmware
           path: sqa-tools
@@ -193,7 +241,7 @@ jobs:
 
     steps:
       - name: Merge sqa-tools Artifacts
-        uses: actions/upload-artifact/merge@v6
+        uses: actions/upload-artifact/merge@v7
         with:
           name: sqa-tools-${{ inputs.build-type }}
           delete-merged: true

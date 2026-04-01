@@ -36,13 +36,13 @@ component_path:
   - path: slc/component/matter-platform/config
   - path: slc/component/matter-platform/third_party
   - path: slc/component/matter-platform/air-quality-sensor
+  - path: slc/component/matter-platform/peripherals
   - path: slc/component/matter-clusters
   - path: slc/component/matter-sensors
   - path: slc/component/matter-thread
   - path: slc/component/matter-thread/ftd
   - path: slc/component/matter-thread/mtd
   - path: slc/component/matter-wifi
-  - path: slc/component/matter-wifi/wf200
   - path: slc/component/matter-wifi/917-soc
   - path: slc/component/matter-wifi/917-ncp
   - path: slc/component/sdk-content/zap

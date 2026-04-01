@@ -61,7 +61,7 @@ jobs:
               
       - name: Generate token for the workflow
         id: generate_token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
             app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
             private-key:

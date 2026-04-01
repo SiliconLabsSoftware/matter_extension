@@ -1,0 +1,13 @@
+{
+    "standard": {
+        "zigbee-matter-light": [
+            {
+                "boards": ["brd4351a_a02"],
+                "arguments": [
+                    "--output_suffix sequential",
+                    "--with_app matter_zigbee_sequential"
+                ]
+            }
+        ]
+    }
+}

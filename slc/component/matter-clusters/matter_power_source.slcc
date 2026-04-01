@@ -12,10 +12,11 @@ metadata:
 provides:
   - name: matter_power_source
 source:
-  - path: third_party/matter_sdk/src/app/clusters/power-source-server/power-source-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/power-source-server/CodegenIntegration.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/power-source-server
     file_list:
+      - path: CodegenIntegration.h
       - path: power-source-server.h
 template_contribution:
   - name: component_catalog

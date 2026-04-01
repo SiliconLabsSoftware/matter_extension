@@ -22,10 +22,10 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.x'
 
@@ -36,7 +36,7 @@ jobs:
       # Use a GitHub App token so the PR triggers downstream checks.
       - name: Generate GitHub App token
         id: generate_token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
             app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
             private-key:
@@ -46,7 +46,7 @@ jobs:
         run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
           title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"

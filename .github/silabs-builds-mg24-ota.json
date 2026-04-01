@@ -1,0 +1,13 @@
+{
+    "standard": {
+        "window-app": [
+            {
+                "boards": ["brd4337a"],
+                "arguments": [
+                    "--output_suffix lto",
+                    "--with_app toolchain_gcc_lto"
+                ]
+            }
+        ]
+    }
+}

@@ -534,6 +534,12 @@
     ]
   },
   {
+    "clusterCode": "temperature measurement-server",
+    "value": [
+      "%extension-matter%matter_temperature_measurement"
+    ]
+  },
+  {
     "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"

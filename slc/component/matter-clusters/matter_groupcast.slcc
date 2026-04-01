@@ -14,13 +14,11 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/groupcast/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/groupcast/GroupcastCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/groupcast/GroupcastLogic.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/groupcast
     file_list:
       - path: GroupcastCluster.h
       - path: GroupcastContext.h
-      - path: GroupcastLogic.h
 template_contribution:
   - name: component_catalog
     value: matter_groupcast

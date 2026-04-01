@@ -2,7 +2,7 @@
     "description": "Matter SDK ZCL data",
     "category": "matter",
     "version": 1,
-    "requiredFeatureLevel": 102,
+    "requiredFeatureLevel": 109,
     "xmlRoot": [
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/.",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"
@@ -190,7 +190,8 @@
             "AdminVendorId"
         ],
         "Ambient Context Sensing": [
-            "HoldTimeLimits"
+            "HoldTimeLimits",
+            "ObjectCountConfig"
         ],
         "Basic Information": [
             "FeatureMap",
@@ -218,6 +219,7 @@
             "ProductAppearance",
             "SpecificationVersion",
             "MaxPathsPerInvoke",
+            "DeviceLocation",
             "ConfigurationVersion"
         ],
         "Boolean State": [
@@ -226,6 +228,7 @@
             "StateValue"
         ],
         "Bridged Device Basic Information": [
+            "DeviceLocation",
             "ProductAppearance"
         ],
         "Binding": [
@@ -238,8 +241,11 @@
         ],
         "Closure Control": [
             "CountdownTime",
+            "MainState",
+            "CurrentErrorList",
             "OverallCurrentState",
             "OverallTargetState",
+            "LatchControlModes",
             "FeatureMap",
             "ClusterRevision"
         ],
@@ -467,6 +473,11 @@
             "ClusterRevision",
             "FeatureMap"
         ],
+        "Temperature Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
+        ],
         "Thread Border Router Management": [
             "BorderRouterName",
             "BorderAgentID",
@@ -584,7 +595,8 @@
             "ClusterRevision"
         ],
         "Temperature Control": [
-            "SupportedTemperatureLevels"
+            "SupportedTemperatureLevels",
+            "ClusterRevision"
         ],
         "Dishwasher Mode": [
             "SupportedModes",

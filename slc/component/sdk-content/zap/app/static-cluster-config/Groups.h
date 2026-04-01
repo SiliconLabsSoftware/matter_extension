@@ -1,7 +1,7 @@
 // DO NOT EDIT - Generated file
 //
 // Application configuration for Groups based on EMBER configuration
-// from inputs/large_all_clusters_app.matter
+// from inputs/large_lighting_app.matter
 #pragma once
 
 #include <app/util/cluster-config.h>
@@ -17,25 +17,6 @@ namespace Clusters {
 namespace Groups {
 namespace StaticApplicationConfig {
 namespace detail {
-inline constexpr AttributeId kEndpoint0EnabledAttributes[] = {
-    Attributes::ClusterRevision::Id,
-    Attributes::FeatureMap::Id,
-    Attributes::NameSupport::Id,
-};
-
-inline constexpr CommandId kEndpoint0EnabledCommands[] = {
-    Commands::AddGroup::Id,
-    Commands::AddGroupIfIdentifying::Id,
-    Commands::AddGroupResponse::Id,
-    Commands::GetGroupMembership::Id,
-    Commands::GetGroupMembershipResponse::Id,
-    Commands::RemoveAllGroups::Id,
-    Commands::RemoveGroup::Id,
-    Commands::RemoveGroupResponse::Id,
-    Commands::ViewGroup::Id,
-    Commands::ViewGroupResponse::Id,
-};
-
 inline constexpr AttributeId kEndpoint1EnabledAttributes[] = {
     Attributes::AcceptedCommandList::Id,
     Attributes::AttributeList::Id,
@@ -58,53 +39,17 @@ inline constexpr CommandId kEndpoint1EnabledCommands[] = {
     Commands::ViewGroupResponse::Id,
 };
 
-inline constexpr AttributeId kEndpoint2EnabledAttributes[] = {
-    Attributes::AcceptedCommandList::Id,
-    Attributes::AttributeList::Id,
-    Attributes::ClusterRevision::Id,
-    Attributes::FeatureMap::Id,
-    Attributes::GeneratedCommandList::Id,
-    Attributes::NameSupport::Id,
-};
-
-inline constexpr CommandId kEndpoint2EnabledCommands[] = {
-    Commands::AddGroup::Id,
-    Commands::AddGroupIfIdentifying::Id,
-    Commands::AddGroupResponse::Id,
-    Commands::GetGroupMembership::Id,
-    Commands::GetGroupMembershipResponse::Id,
-    Commands::RemoveAllGroups::Id,
-    Commands::RemoveGroup::Id,
-    Commands::RemoveGroupResponse::Id,
-    Commands::ViewGroup::Id,
-    Commands::ViewGroupResponse::Id,
-};
-
 } // namespace detail
 
 using FeatureBitmapType = Feature;
 
-inline constexpr std::array<Clusters::StaticApplicationConfig::ClusterConfiguration<FeatureBitmapType>, 3> kFixedClusterConfig = { {
-    {
-        .endpointNumber = 0,
-        .featureMap = BitFlags<FeatureBitmapType> {
-        },
-        .enabledAttributes = Span<const AttributeId>(detail::kEndpoint0EnabledAttributes),
-        .enabledCommands = Span<const CommandId>(detail::kEndpoint0EnabledCommands),
-    },
+inline constexpr std::array<Clusters::StaticApplicationConfig::ClusterConfiguration<FeatureBitmapType>, 1> kFixedClusterConfig = { {
     {
         .endpointNumber = 1,
         .featureMap = BitFlags<FeatureBitmapType> {
         },
         .enabledAttributes = Span<const AttributeId>(detail::kEndpoint1EnabledAttributes),
         .enabledCommands = Span<const CommandId>(detail::kEndpoint1EnabledCommands),
-    },
-    {
-        .endpointNumber = 2,
-        .featureMap = BitFlags<FeatureBitmapType> {
-        },
-        .enabledAttributes = Span<const AttributeId>(detail::kEndpoint2EnabledAttributes),
-        .enabledCommands = Span<const CommandId>(detail::kEndpoint2EnabledCommands),
     },
 } };
 
