@@ -61,7 +61,6 @@ jobs:
             - SDK version: `${{ inputs.sdk_version }}`
             - Readme: `${{ inputs.update_readme }}`
 
-            **User Needs to Trigger Jenkins CI**
           branch: "automation/version_update"
           base: "${{ github.ref_name }}"
           token: ${{ steps.generate_token.outputs.token }}
