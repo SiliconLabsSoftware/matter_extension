@@ -55,6 +55,7 @@ runs:
               fi
               echo "$COMMANDER_PATH" >> $GITHUB_PATH
               echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+              echo "$CMAKE_PATH/bin" >> $GITHUB_PATH
 
         - name: Install tools
           if: steps.cache.outputs.cache-hit != 'true'

@@ -76,6 +76,14 @@ runs:
         echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
         echo "$COMMANDER_PATH" >> $GITHUB_PATH
     
+    - name: Install cmake
+      shell: bash
+      run: |
+        slt install cmake
+        CMAKE_PATH=$(slt where cmake)
+        echo "CMAKE_PATH=$CMAKE_PATH" >> $GITHUB_ENV
+        echo "$CMAKE_PATH" >> $GITHUB_PATH
+    
     - name: install gcc-arm-none-eabi
       shell: bash
       run: |
