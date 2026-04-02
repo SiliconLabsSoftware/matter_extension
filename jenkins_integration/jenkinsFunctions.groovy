@@ -507,4 +507,24 @@ def actionWithRetry(Closure action)
 	    }
 	}
 }
+
+/**
+ * Slack-formatted summary of commits since last Jenkins run (parent repo + matter_sdk gitlink only).
+ * Baseline: GIT_PREVIOUS_SUCCESSFUL_COMMIT, then GIT_PREVIOUS_COMMIT if unset.
+ */
+def buildCommitChangeSummaryForSlack() {
+    def prev = (env.GIT_PREVIOUS_SUCCESSFUL_COMMIT ?: '').trim()
+    if (!prev) {
+        prev = (env.GIT_PREVIOUS_COMMIT ?: '').trim()
+    }
+    def summary = ''
+    withEnv(["PREV_BASELINE=${prev}"]) {
+        summary = sh(script: 'bash jenkins_integration/commit_change_summary.sh', returnStdout: true).trim()
+    }
+    if (summary.length() > 3500) {
+        summary = summary.substring(0, 3500) + '\n...(truncated)'
+    }
+    return summary
+}
+
 return this
