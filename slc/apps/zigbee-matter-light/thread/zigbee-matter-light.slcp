@@ -58,13 +58,11 @@ component:
   - id: zigbee_debug_print
   - id: zigbee_pro_stack
   #Bluetooth Components
-  - id: bluetooth_feature_gatt
   - id: bluetooth_feature_gatt_server
   - id: bluetooth_feature_legacy_advertiser
   - id: bluetooth_feature_connection
   - id: bluetooth_feature_connection_role_peripheral
   - id: bluetooth_feature_system
-  - id: bluetooth_feature_sm
   - id: bluetooth_stack
   #Matter Components
   - { id: matter_platform_mg }
