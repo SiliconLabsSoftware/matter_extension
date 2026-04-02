@@ -86,7 +86,7 @@ jobs:
 
           echo "Updating .gitmodules tags..."
           # Update the tags in .gitmodules
-          sed -i -E "s#^([[:space:]]*tag = )(v2025\.12|v2026\.6)-build\.[0-9]*\$#\1\2-build.${SISDK_BUILD_NUMBER}#g" .gitmodules
+          sed -i -E "s#^([[:space:]]*tag = )(v2025\.12|v2026\.6)-build\.[0-9]*\$#\1${SDK_TAG}#g" .gitmodules
           # Display the updated .gitmodules content
           echo "Updated .gitmodules:"
           cat .gitmodules
