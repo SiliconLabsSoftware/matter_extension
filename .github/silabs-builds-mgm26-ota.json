@@ -1,6 +1,6 @@
 {
     "standard": {
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd4351a_a02"],
                 "arguments": [

@@ -1,12 +1,12 @@
 {
     "standard": {
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4116a"],
                 "arguments": [""]
             }
         ],
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd4116a"],
                 "arguments": [
