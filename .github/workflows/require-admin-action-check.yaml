@@ -1,0 +1,108 @@
+name: Check for sl-require-admin-action label
+
+on:
+    pull_request:
+        branches:
+            - main
+            - release_*
+        types:
+            - opened
+            - reopened
+            - synchronize
+            - labeled
+            - unlabeled
+
+permissions:
+    pull-requests: write
+
+jobs:
+    check-label:
+        name: Fail CI if sl-require-admin-action label is present
+        runs-on: ubuntu-latest
+        concurrency:
+            group: sl-require-admin-action-check
+        if:
+            ${{ contains(github.event.pull_request.labels.*.name,
+            'sl-require-admin-action') }}
+        steps:
+            - name: Add comment to PR
+              uses: actions/github-script@v8
+              with:
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+
+                      const comment = "The check for `sl-require-admin-action` label CI failure for this job is normal. An admin must do the merge.";
+                      const { data: comments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                      });
+
+                      const commentExists = comments.some(c => c.body.trim() === comment.trim());
+                      if (!commentExists) {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: prNumber,
+                          body: comment,
+                        });
+                      }
+
+            - name: Trigger CI failure
+              run: |
+                  echo "The sl-require-admin-action label is present. Failing the job."
+                  exit 1
+              env:
+                  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+    prevent-label-removal:
+        name: Prevent sl-require-admin-action label from being removed
+        runs-on: ubuntu-latest
+        concurrency:
+            group: sl-require-admin-action-check
+        if:
+            github.event.action == 'unlabeled' && github.event.label.name ==
+            'sl-require-admin-action'
+        steps:
+            - name: Add comment to PR
+              uses: actions/github-script@v8
+              with:
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+
+                      const comment = "The `sl-require-admin-action` label cannot be removed once it has been added.";
+                      const { data: comments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                      });
+
+                      const commentExists = comments.some(c => c.body.trim() === comment.trim());
+                      if (!commentExists) {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: prNumber,
+                          body: comment,
+                        });
+                      }
+
+            - name: Re-add sl-require-admin-action label
+              uses: actions/github-script@v8
+              with:
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+
+                      await github.rest.issues.addLabels({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                        labels: ['sl-require-admin-action'],
+                      });
+
+            - name: Trigger CI failure
+              run: |
+                  echo "The sl-require-admin-action label cannot be removed. Failing the job."
+                  exit 1
+              env:
+                  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
