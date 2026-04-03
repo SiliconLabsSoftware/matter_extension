@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       sisdk-version:
-        description: 'SiSDK version'
+        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → integration/sdk-26q2)'
         required: true
         type: choice
         default: '2026.6'
@@ -35,6 +35,15 @@ jobs:
             exit 1
           fi
 
+          case "$SISDK_VERSION" in
+            "2025.12")
+              TARGET_BRANCH="release_2.8"
+              ;;
+            "2026.6")
+              TARGET_BRANCH="integration/sdk-26q2"
+              ;;
+          esac
+
           SDK_TAG="v${SISDK_VERSION}-build.${SISDK_BUILD_NUMBER}"
           PR_BRANCH="automation/update_sdk_submodules_${SISDK_VERSION//./_}_${SISDK_BUILD_NUMBER}"
 
@@ -42,9 +51,11 @@ jobs:
           echo "sisdk_build_number=$SISDK_BUILD_NUMBER" >> "$GITHUB_OUTPUT"
           echo "sdk_tag=$SDK_TAG" >> "$GITHUB_OUTPUT"
           echo "pr_branch=$PR_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "target_branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
 
           echo "Selected SiSDK version: $SISDK_VERSION"
           echo "Selected build number: $SISDK_BUILD_NUMBER"
+          echo "Resolved target branch: $TARGET_BRANCH"
           echo "Resolved SDK tag: $SDK_TAG"
           echo "Resolved PR branch: $PR_BRANCH"
 
@@ -52,7 +63,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: false
-          ref: ${{ github.ref }}
+          ref: ${{ steps.resolve_inputs.outputs.target_branch }}
           persist-credentials: false
       
       - name: Mark repository as safe for Git
@@ -108,13 +119,13 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           branch: ${{ steps.resolve_inputs.outputs.pr_branch }}
-          base: ${{ github.ref_name }}
-          title: "Update SDK submodules to ${{ steps.resolve_inputs.outputs.sdk_tag }} on ${{ github.ref_name }}"
+          base: ${{ steps.resolve_inputs.outputs.target_branch }}
+          title: "Update SDK submodules to ${{ steps.resolve_inputs.outputs.sdk_tag }} on ${{ steps.resolve_inputs.outputs.target_branch }}"
           body: |
-            This PR updates the simplicity_sdk and wifi_sdk submodules to `${{ steps.resolve_inputs.outputs.sdk_tag }}` on the `${{ github.ref_name }}` branch.
+            This PR updates the simplicity_sdk and wifi_sdk submodules to `${{ steps.resolve_inputs.outputs.sdk_tag }}` on the `${{ steps.resolve_inputs.outputs.target_branch }}` branch.
 
             - SiSDK version: `${{ steps.resolve_inputs.outputs.sisdk_version }}`
             - Build number: `${{ steps.resolve_inputs.outputs.sisdk_build_number }}`
             - Resolved tag: `${{ steps.resolve_inputs.outputs.sdk_tag }}`
 
-            token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ steps.generate_token.outputs.token }}
