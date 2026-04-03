@@ -1,6 +1,6 @@
 {
     "standard": {
-        "window-app": [
+        "window_app": [
             {
                 "boards": ["brd4337a"],
                 "arguments": [
