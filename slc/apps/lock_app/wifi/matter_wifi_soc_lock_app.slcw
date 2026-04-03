@@ -1,0 +1,9 @@
+workspace_name: matter_wifi_soc_lock_app
+label: Matter - SoC Lock over Wi-Fi
+quality: production
+package: matter
+description: Demonstrates a sample implementation of a Matter over Wi-Fi door lock app
+project:
+  - path: ./matter_wifi_soc_lock_app.slcp
+    id: application
+    output: lock_app_siwx
