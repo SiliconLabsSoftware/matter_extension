@@ -24,22 +24,22 @@ jobs:
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
             json_file: ./.github/silabs-builds-mg24-ota.json
-            window_app_path: slc/apps/window-app/thread/window-app.slcp
+            window_app_path: slc/apps/window_app/thread/matter_thread_soc_window_app.slcp
 
           - id: mg26
             display: MG26
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
             json_file: ./.github/silabs-builds-mg26-ota.json
-            lighting_path: slc/apps/lighting-app/thread/lighting-app.slcp
-            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
+            lighting_path: slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp
+            zigbee_matter_light_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light.slcp
 
           - id: mgm26
             display: MGM26
             page_size: 8192 # bytes (8 KiB flash page)
             available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
             json_file: ./.github/silabs-builds-mgm26-ota.json
-            zigbee_matter_light_path: slc/apps/zigbee-matter-light/thread/zigbee-matter-light.slcp
+            zigbee_matter_light_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light.slcp
 
     steps:
       - name: Checkout
@@ -56,7 +56,7 @@ jobs:
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
-          example-app: window-app
+          example-app: window_app
           build-script: "./slc/build.sh"
           output-directory: " "
           build-type: standard
@@ -67,7 +67,7 @@ jobs:
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
-          example-app: lighting-app
+          example-app: lighting_app
           build-script: "./slc/build.sh"
           output-directory: " "
           build-type: standard
@@ -78,7 +78,7 @@ jobs:
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
-          example-app: zigbee-matter-light
+          example-app: zigbee_light
           build-script: "./slc/build.sh"
           output-directory: " "
           build-type: standard

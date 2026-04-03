@@ -1,0 +1,26 @@
+project_name: matter_thread_host_openthread_border_router_doc
+label: Matter - Host OpenThread Border Router
+description: Guides users to main documentation for setting up the OpenThread Border Router
+category: Matter Documentation
+quality: production
+package: matter
+vendor: silabs
+
+filter:
+  - name: Type
+    value:
+      - Host
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
+readme:
+  - path: ./README.md
+
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true

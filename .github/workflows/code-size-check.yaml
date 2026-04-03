@@ -35,7 +35,7 @@ jobs:
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  path-to-example-app: "./slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app.slcp"
                   example-app: code-canary
                   build-script: "./slc/build.sh"
                   output-directory: " "
@@ -47,7 +47,7 @@ jobs:
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./baseline/slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  path-to-example-app: "./baseline/slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app.slcp"
                   example-app: code-canary
                   build-script: "./baseline/slc/build.sh"
                   output-directory: " "
