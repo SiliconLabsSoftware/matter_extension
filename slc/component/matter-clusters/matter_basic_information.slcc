@@ -12,13 +12,15 @@ metadata:
 provides:
   - name: matter_basic_information
 source:
-  - path: third_party/matter_sdk/src/app/clusters/basic-information/BasicInformationCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/basic-information/CodegenIntegration.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/basic-information
     file_list:
       - path: BasicInformationCluster.h
+      - path: BasicInformationOptionalAttributes.h
       - path: CodegenIntegration.h
+      - path: DeviceLayerBasicInformationPolicy.h
+      - path: PolicyBased.h
 template_contribution:
   - name: component_catalog
     value: matter_basic_information

@@ -823,6 +823,7 @@
         ],
         "Air Quality": [
             "AirQuality",
+            "ClusterRevision",
             "FeatureMap"
         ],
         "Electrical Energy Measurement": [

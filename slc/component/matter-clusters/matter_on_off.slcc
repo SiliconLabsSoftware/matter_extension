@@ -11,6 +11,8 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_on_off
+requires:
+  - name: matter_scenes
 source:
   - path: third_party/matter_sdk/src/app/clusters/on-off-server/codegen/level-control-integration.cpp
   - path: third_party/matter_sdk/src/app/clusters/on-off-server/codegen/mode-base-integration.cpp
@@ -30,8 +32,6 @@ include:
       - path: OnOffDelegate.h
       - path: OnOffEffectDelegate.h
       - path: OnOffLightingCluster.h
-requires:
-  - name: matter_scenes
 template_contribution:
   - name: component_catalog
     value: matter_on_off
