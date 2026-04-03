@@ -18,6 +18,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/actions-server
     file_list:
       - path: actions-server.h
+      - path: ActionsCluster.h
       - path: ActionsDelegate.h
       - path: ActionsStructs.h
       - path: CodegenIntegration.h

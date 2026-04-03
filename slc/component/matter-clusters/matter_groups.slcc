@@ -11,6 +11,8 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_groups
+requires:
+  - name: matter_scenes
 source:
   - path: third_party/matter_sdk/src/app/clusters/groups-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/groups-server/GroupsCluster.cpp
@@ -18,8 +20,6 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/groups-server
     file_list:
       - path: GroupsCluster.h
-requires:
-  - name: matter_scenes
 template_contribution:
   - name: component_catalog
     value: matter_groups

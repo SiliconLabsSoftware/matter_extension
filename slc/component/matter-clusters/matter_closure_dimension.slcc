@@ -9,25 +9,22 @@ quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
-requires:
-  - name: matter_cluster_building_blocks
 provides:
   - name: matter_closure_dimension
+requires:
+  - name: matter_cluster_building_blocks
 source:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterLogic.cpp
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server
     file_list:
-      - path: closure-dimension-cluster-logic.h
       - path: closure-dimension-cluster-objects.h
       - path: closure-dimension-delegate.h
       - path: closure-dimension-matter-context.h
       - path: closure-dimension-server.h
       - path: ClosureDimensionCluster.h
       - path: ClosureDimensionClusterDelegate.h
-      - path: ClosureDimensionClusterLogic.h
       - path: ClosureDimensionClusterMatterContext.h
       - path: CodegenIntegration.h
       - path: GenericDimensionState.h

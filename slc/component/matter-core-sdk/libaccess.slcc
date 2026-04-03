@@ -27,6 +27,7 @@ include:
   - path: third_party/matter_sdk/src/access/examples
     file_list:
     -   path: ExampleAccessControlDelegate.h
+    -   path: GroupAuxiliaryAccessControlDelegate.h
     -   path: PermissiveAccessControlDelegate.h
 label: libaccess
 package: matter
@@ -40,6 +41,7 @@ source:
   - path: third_party/matter_sdk/src/access/AccessControl.cpp
   - path: third_party/matter_sdk/src/access/AccessRestrictionProvider.cpp
   - path: third_party/matter_sdk/src/access/examples/ExampleAccessControlDelegate.cpp
+  - path: third_party/matter_sdk/src/access/examples/GroupAuxiliaryAccessControlDelegate.cpp
   - path: third_party/matter_sdk/src/access/examples/PermissiveAccessControlDelegate.cpp
 ui_hints:
   visibility: never
