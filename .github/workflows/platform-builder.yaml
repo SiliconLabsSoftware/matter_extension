@@ -68,7 +68,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
@@ -78,7 +78,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-internal
@@ -88,7 +88,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-trustzone.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/matter_thread_soc_${{ inputs.example-app }}_trustzone_series_2.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/matter_thread_soc_${{ inputs.example-app }}_trustzone_series_2_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-trustzone
@@ -98,7 +98,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24
@@ -108,7 +108,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24-internal.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24-internal
@@ -118,7 +118,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26
@@ -128,7 +128,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26-internal.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
@@ -138,7 +138,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm26-internal.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm26-internal
@@ -148,7 +148,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
@@ -158,7 +158,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-siwx.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_soc_${{ inputs.example-app }}.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_soc_${{ inputs.example-app }}_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
@@ -168,7 +168,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'
-            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_3.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_3_freertos.slcw
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: sixg301
