@@ -101,19 +101,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: CHIPProjectConfig.h
-      - path: WindowManager.h
-      - path: AppTask.h
       - path: AppEvent.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: CommonAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/AppTask.cpp
-    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/WindowManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/window-app/silabs/src/DataModelCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/CommonAppTask.cpp
     directory: src
 
 define:
