@@ -5,10 +5,10 @@ description: Demonstrates a sample implementation of a Matter over Thread lighti
 quality: production
 package: matter
 project:
-  - path: ./matter_thread_soc_lighting_app_trustzone_secure_freertos.slcp
+  - path: ./matter_thread_soc_lighting_app_trustzone_s_freertos.slcp
     id: trustzone-secure
     output: lighting_app_secure
-  - path: ./matter_thread_soc_lighting_app_trustzone_non_secure_freertos.slcp
+  - path: ./matter_thread_soc_lighting_app_trustzone_ns_freertos.slcp
     id: application
     output: lighting_app_nonsecure
   - path: ../../../bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcp
