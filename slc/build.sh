@@ -6,56 +6,56 @@
 #   ./slc/build.sh <slcp/slcw path> <board>
 #
 #   Example .slcp usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/
 #
 #   Example --configuration option usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --skip_gen option : Allows to skip the slc gen step and only run the make command to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
 #                       This option only works if the project has previously been generated
 #   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --skip_gen
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --skip_gen
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
 #   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --with_app '<component1>,<component2>'
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --with_app '<component1>,<component2>'
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --without_app option : Allows to exclude specific components from the application build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app.slcp brd4187c --without_app '<component1>,<component2>'
-#       output in: out/brd4187c/matter_thread_soc_lighting_app/
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --without_app '<component1>,<component2>'
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat.slcw brd4187c --with_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_solution/
+#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat_freertos.slcw brd4187c --with_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_freertos_solution/
 #
 #   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only. If provided for .slcp file, silently ignored.
 #   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat.slcw brd4187c --without_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_solution/
+#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat_freertos.slcw brd4187c --without_bootloader '<component1>,<component2>'
+#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_freertos_solution/
 #
 #   -pids option : Allows to build only specific parts of a solution (.slcw) project. If provided for .slcp file, silently ignored.
 #   Valid arguments: 'bootloader' or 'application'
 #   Example bootloader-only build:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c -pids bootloader
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/ (builds only bootloader)
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids bootloader
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only bootloader)
 #   Example application-only build:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2.slcw brd4187c -pids application
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_solution/ (builds only application)
+#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids application
+#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
 
 # Helper functions to build component arguments
