@@ -5,6 +5,7 @@ on:
         branches:
             - main
             - "release_*"
+            - "feature/CRTP_lighting"
     schedule:
         - cron: "5 0 * * 5" # Thursday at 8:05 PM EDT
     workflow_dispatch:
