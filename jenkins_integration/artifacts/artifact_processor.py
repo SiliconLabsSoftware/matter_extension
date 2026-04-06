@@ -521,15 +521,15 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
             _upload_board_artifact_files(artifact_solution_folder, ubai_app_name, board_id, branch_name, build_number)
         # For OTA, we need the application without bootloader uploaded to UBAI as well (not applicable to 917SoC).
         if ("ota" in ubai_app_name or "series_3" in app_name_path) and "wifi_soc" not in app_name_path:
-            if "matter_bootloader" in app_name_folder:
+            if app_name_folder.startswith("matter_bootloader_"):
                 app_name_base = "matter_bootloader"
-            elif "_series" in app_name_folder: # Thread
-                app_name_base = app_name_folder.split("_series")[0]
-            else: # WIFI NCP
-                app_name_base = app_name_folder.split("_solution")[0]
-            artifact_app_only_folder = os.path.join(app_name_path, app_name_base, 'artifact')
-            if os.path.exists(artifact_app_only_folder) and os.path.isdir(artifact_app_only_folder):
-                _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
+            else: # Thread / WIFI NCP
+                app_name_base = next((e.name for e in os.scandir(app_name_path)
+                                      if e.is_dir() and e.name != "matter_bootloader"), None)
+            if app_name_base:
+                artifact_app_only_folder = os.path.join(app_name_path, app_name_base, 'artifact')
+                if os.path.isdir(artifact_app_only_folder):
+                    _upload_board_artifact_files(artifact_app_only_folder, ubai_app_name, board_id, branch_name, build_number)
     except Exception as e:
         print(f"Error during binary upload: {e}")
 
