@@ -124,6 +124,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
+    directory: src
 
 define:
   - name: CCP_SI917_BRINGUP
