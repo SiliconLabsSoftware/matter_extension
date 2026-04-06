@@ -185,14 +185,14 @@ def run_code_size_analysis() {
                 echo ""
                 
                 CODE_SIZE_BUILDS='
-                    brd4187c/matter_thread_soc_lighting_app_series_2_solution   
-                    brd4187c/matter_thread_soc_lock_app_series_2_solution   
-                    brd4187c/matter_thread_soc_zigbee_light_series_2_solution   
-                    brd4407a/matter_thread_soc_lighting_app_series_3_solution   
-                    brd4407a/matter_thread_soc_lock_app_series_3_solution   
-                    brd4407a/matter_thread_soc_zigbee_light_series_3_solution   
-                    brd4338a/matter_wifi_soc_lighting_app_solution   
-                    brd4338a/matter_wifi_soc_lock_app_solution   
+                    brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution   
+                    brd4187c/matter_thread_soc_lock_app_series_2_freertos_solution   
+                    brd4187c/matter_thread_soc_zigbee_light_series_2_freertos_solution   
+                    brd4407a/matter_thread_soc_lighting_app_series_3_freertos_solution   
+                    brd4407a/matter_thread_soc_lock_app_series_3_freertos_solution   
+                    brd4407a/matter_thread_soc_zigbee_light_series_3_freertos_solution   
+                    brd4338a/matter_wifi_soc_lighting_app_freertos_solution   
+                    brd4338a/matter_wifi_soc_lock_app_freertos_solution   
                 '
                 
                 PATTERN=""
