@@ -48,9 +48,6 @@ def run_code_size_analysis() {
                             *lock_app*)
                                 app_name="lock-app"
                                 ;;
-                            *)
-                                app_name=\$(echo "\$base_name" | sed -E 's/^([^-]+-[^-]+)-.*/\\1/')
-                                ;;
                         esac
                     else
                         echo "ERROR: Could not find solution directory in path: \$path" >&2
