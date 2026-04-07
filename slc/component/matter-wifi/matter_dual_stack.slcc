@@ -1,18 +1,17 @@
-# Matter LwIP integration when using dual network stack (offload + host LwIP).
-# Use this instead of matter_lwip in projects that use sl_si91x_network_dual_stack.
+# Matter LwIP integration for the Si91x dual network stack (offloaded stack on the NWP plus LwIP on the host).
+# Use instead of matter_lwip when the project includes the sl_si91x_network_dual_stack Wi-Fi SDK component.
 id: matter_dual_stack
 package: matter
 description: >
-  Provides the LwIP TCP/IP networking stack configuration and FreeRTOS port for Matter over Wi-Fi when using the dual network stack.
-  Satisfies matter_lwip so matter_wifi can use either matter_lwip (LwIP-only) or matter_dual_stack (dual stack).
-label: Matter Dual Stack
+  Provides the LwIP TCP/IP networking stack configuration and FreeRTOS port used by Matter applications running over Wi-Fi on Silicon Labs Si91x platforms.
+  Use this component instead of matter_lwip when the dual network stack is enabled: offloaded networking on the wireless processor together with LwIP on the host MCU (sl_si91x_network_dual_stack). matter_lwip and matter_dual_stack are mutually exclusive.
+label: Matter LwIP (Dual Network Stack)
 category: Matter-WiFi|lwip
 quality: production
 metadata:
   sbom:
     license: Zlib
 provides:
-  - name: matter_lwip
   - name: matter_dual_stack
   - name: lwip
   - name: lwip_port_freertos
