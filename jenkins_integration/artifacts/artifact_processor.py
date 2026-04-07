@@ -530,7 +530,7 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
                 app_name_base = "matter_bootloader"
             else: # Thread / WIFI NCP
                 app_name_base = next((e.name for e in os.scandir(app_name_path)
-                                      if e.is_dir() and e.name != "matter_bootloader"), None)
+                                      if e.is_dir() and e.name not in ("matter_bootloader", "artifact")), None)
             if app_name_base:
                 artifact_app_only_folder = os.path.join(app_name_path, app_name_base, 'artifact')
                 if os.path.isdir(artifact_app_only_folder):
