@@ -67,9 +67,6 @@ source:
   condition: [matter_ble]
 
 define:
-- name: SLI_SI91X_ENABLE_BLE
-  value: "1"
-  unless: [matter_ble]
 - name: SL_MATTER_SIWX_WIFI_ENABLE
 - name: EXP_BOARD
   value: 1
