@@ -363,13 +363,13 @@ fi
 if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; then
 	# Use bootloader makefile instead of solution makefile
 	echo "Building bootloader only..."
-	BOOTLOADER_MAKEFILE=$(find "$OUTPUT_DIR/matter-bootloader" -maxdepth 1 -name "*.Makefile" | head -1)
+	BOOTLOADER_MAKEFILE=$(find "$OUTPUT_DIR/matter_bootloader" -maxdepth 1 -name "*.Makefile" | head -1)
 	if [ -z "$BOOTLOADER_MAKEFILE" ]; then
-		echo "ERROR: No bootloader Makefile found in $OUTPUT_DIR/matter-bootloader"
+		echo "ERROR: No bootloader Makefile found in $OUTPUT_DIR/matter_bootloader"
 		exit 1
 	fi
 	BOOTLOADER_MAKEFILE_NAME=$(basename "$BOOTLOADER_MAKEFILE")
-	if ! make all -C "$OUTPUT_DIR/matter-bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
+	if ! make all -C "$OUTPUT_DIR/matter_bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
 		echo "ERROR: Failed to build bootloader"
 		exit 1
 	fi
