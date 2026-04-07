@@ -1,0 +1,54 @@
+# Matter LwIP integration when using dual network stack (offload + host LwIP).
+# Use this instead of matter_lwip in projects that use sl_si91x_network_dual_stack.
+id: matter_dual_stack
+package: matter
+description: >
+  Provides the LwIP TCP/IP networking stack configuration and FreeRTOS port for Matter over Wi-Fi when using the dual network stack.
+  Satisfies matter_lwip so matter_wifi can use either matter_lwip (LwIP-only) or matter_dual_stack (dual stack).
+label: Matter Dual Stack
+category: Matter-WiFi|lwip
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+provides:
+  - name: matter_lwip
+  - name: matter_dual_stack
+  - name: lwip
+  - name: lwip_port_freertos
+  - name: netstack_silabs_lwip_port_freertos
+  - name: sl_si91x_errno
+
+requires:
+  - name: sl_si91x_network_dual_stack
+    condition: [sl_si91x_wireless]
+
+include:
+  - path: third_party/matter_sdk/src/lwip/silabs
+    file_list:
+      - path: lwipopts.h
+      - path: lwipopts-siwx.h
+      - path: arch/cc.h
+      - path: arch/perf.h
+      - path: lwippools.h
+  - path: slc/inc/lwip
+    file_list:
+      - path: lwip_buildconfig.h
+  - path: slc/inc/wifi
+    file_list:
+      - path: brd4186c.h
+      - path: brd4187c.h
+      - path: sl_custom_board.h
+  - path: third_party/matter_sdk/src/lwip/freertos
+    file_list:
+      - path: arch/sys_arch.h
+
+source:
+  - path: third_party/matter_sdk/src/lwip/freertos/sys_arch.c
+
+define:
+  - name: SLI_SI91X_NETWORK_DUAL_STACK
+  - name: LWIP_NETIF_API
+    value: 1
+  - name: LWIP_IPV6
+    value: 1
