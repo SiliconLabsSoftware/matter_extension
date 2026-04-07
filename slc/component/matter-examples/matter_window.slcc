@@ -5,6 +5,11 @@ description: >
   included in all Window applications to help resolve SLC dependencies. Only applicable to Window applications.
 id: matter_window
 quality: production
+template_file:
+  - path: third_party/matter_sdk/examples/window-app/silabs/src/AppTask.cpp
+  - path: third_party/matter_sdk/examples/window-app/silabs/include/AppTask.h
+  - path: third_party/matter_sdk/examples/window-app/silabs/include/AppTaskImpl.h
+
 provides:
   - name: matter_window
 ui_hints:
