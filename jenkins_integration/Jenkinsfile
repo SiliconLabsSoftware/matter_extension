@@ -123,7 +123,7 @@ pipeline
         }
         stage('Code Size Analysis') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("feature/MATTER-5911-new") } // TODO: Remove branch after testing
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
