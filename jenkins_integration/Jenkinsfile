@@ -149,25 +149,24 @@ pipeline
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
                                 '3251', 'lighting-app','thread','BRD4187C',"",
-                                branch_name, env.BUILD_NUMBER)
+                                branch_name, env.BUILD_NUMBER, CSA_MATTER_VERSION)
                         }
                     }
                     parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
-                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
+                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER, CSA_MATTER_VERSION)
                         }
                     }
-//                     Temp comment out due to SQA setup issues
-//                     parallelNodes['SiMG301 Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-//                                 '4878', 'lighting-app','thread','BRD4407A',"",
-//                                 branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
+                    // parallelNodes['SiMG301 Lighting-App'] = {
+                    //     pipelineFunctions.actionWithRetry {
+                    //         failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
+                    //             'gsdkMontrealNode','utf-matter-thread-4407a-ci',
+                    //             '4878', 'lighting-app','thread','BRD4407A',"",
+                    //             branch_name, env.BUILD_NUMBER, CSA_MATTER_VERSION)
+                    //     }
+                    // }
 
                     parallelNodes.failFast = false
                     parallel parallelNodes
