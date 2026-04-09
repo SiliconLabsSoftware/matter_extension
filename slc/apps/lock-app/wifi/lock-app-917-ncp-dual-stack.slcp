@@ -2,7 +2,7 @@
 project_name: lock-app-917-ncp-dual-stack
 label: Matter Lock WiFi (NCP dual stack)
 description: >
-  Matter Lock App For WiFi with BLE on NCP (dual stack: WiFi + BLE on SiWx917)
+  Matter Lock App For WiFi on NCP with BLE on host (Dual stack: IPV6 on EFR32, IPV4 on SiWx917)
 quality: production
 package: matter
 
