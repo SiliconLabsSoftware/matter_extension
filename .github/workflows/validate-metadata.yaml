@@ -139,3 +139,17 @@ jobs:
         run: |
           set -e
           python3 -u './slc/script/find_missing_sbom.py' slc/component --verbose
+
+  validate-demo-images:
+    name: Validate matter_demos.xml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Validate matter_demos.xml
+        shell: bash
+        run: |
+          python3 -u './slc/script/validate_demo_images.py'

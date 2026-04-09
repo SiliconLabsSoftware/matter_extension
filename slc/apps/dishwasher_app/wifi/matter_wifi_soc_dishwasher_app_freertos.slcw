@@ -1,6 +1,6 @@
 workspace_name: matter_wifi_soc_dishwasher_app_freertos
 label: Matter WiFi - SoC Dishwasher FreeRTOS
-quality: production
+quality: internal
 package: matter
 description: Demonstrates a sample implementation of a Matter over Wi-Fi dishwasher app
 project:

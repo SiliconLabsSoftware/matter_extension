@@ -177,13 +177,22 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - companion:secure_app
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
 
 readme:
   - path: ../README.md
@@ -223,6 +232,3 @@ import:
 
 post_build:
   profile: tz_nonsecure_application
-
-tag:
-  - companion:secure_app

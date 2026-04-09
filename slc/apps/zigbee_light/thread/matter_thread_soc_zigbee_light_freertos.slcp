@@ -123,11 +123,6 @@ toolchain_settings:
   - option: cxx_standard
     value: gnu++17
 
-tag:
-  - prebuilt_demo
-  - hardware:device:flash:1536
-  - hardware:device:ram:192
-
 configuration:
   - name: SL_TOKEN_MANAGER_STATIC_SECURE_TOKEN_SIZE
     value: 8192
@@ -259,13 +254,22 @@ include:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:!device:device_family_mgm24
+  - hidden
 
 post_build:
   profile: application

@@ -64,13 +64,18 @@ configuration:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - prebuilt_demo
+  - hwfilter:device:device_series_3
+  - hidden
 
 readme:
   - path: ./readme.md
