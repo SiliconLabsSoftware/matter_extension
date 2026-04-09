@@ -1,17 +1,16 @@
 name: Generate OT-RCP Binaries
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   build-rcp:
     runs-on: ubuntu-latest
-    container: ${{ (github.ref == 'refs/heads/main') && 'ghcr.io/siliconlabssoftware/matter_extension_dependencies:SiSDKv2025.6.2_WiFi_SDKv3.5.2' || '' }}
     
     steps:
       
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           submodules: false
       
@@ -47,8 +46,8 @@ jobs:
           python3 slc/script/build_ot_rcp.py
 
       - name: Upload OT-RCP binaries
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: ot-rcp-binaries
+          name: out/ot-rcp_binaries.zip
           path: out/ot-rcp_binaries.zip
           if-no-files-found: error
