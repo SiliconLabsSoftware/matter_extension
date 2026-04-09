@@ -1,16 +1,6 @@
 #!groovy
 @Library('gsdk-shared-lib@master')
 
-def pipelineProperties = []
-
-// Configure pollSCM triggers
-if(env.BRANCH_NAME == 'main'){
-    // Trigger Thursday at 10:05pm EDT (2 hrs after github trigger)
-    pipelineProperties << pipelineTriggers([pollSCM('5 2 * * 5')])
-} 
-
-properties(pipelineProperties)
-
 def commit_sha = ""
 def run_number = ""
 def workflow_id = ""
