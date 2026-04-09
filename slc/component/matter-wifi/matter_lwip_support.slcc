@@ -15,7 +15,6 @@ provides:
 
 requires:
   - name: matter_lwip
-    unless: [matter_dual_stack]
 
 include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi/lwip-support

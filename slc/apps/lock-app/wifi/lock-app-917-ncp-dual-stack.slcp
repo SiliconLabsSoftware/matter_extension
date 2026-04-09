@@ -76,7 +76,7 @@ component:
   - id: matter_test_event_trigger
   - id: matter_icd_management
   - id: matter_log_uart
-  - id: matter_dual_stack
+  - id: matter_lwip
 
   - id: wifi_resources
   - id: wifi
@@ -128,8 +128,6 @@ define:
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
   - name: SLI_SI91X_ENABLE_IPV6
-    value: "1"
-  - name: LWIP_IPV6
     value: "1"
 configuration:
   - name: SL_SPIDRV_EXP_BITRATE
