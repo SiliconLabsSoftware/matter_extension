@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [release_2.9-1.6]
+        branch: [release_2.9-1.6] # TODO: re-enable this workflow in UI after release_2.9-1.6 is created
 
     steps:
       - name: Checkout repository
