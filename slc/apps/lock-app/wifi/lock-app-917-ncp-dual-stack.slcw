@@ -1,7 +1,7 @@
 label: lock-app-917-ncp-dual-stack
 quality: production
 package: matter
-description: Matter solution containing both a Matter bootloader and Lock over WiFi (NCP dual stack) Example
+description: Matter solution with Matter bootloader and Lock WiFi (917 NCP dual stack)
 project:
   - path: ./lock-app-917-ncp-dual-stack.slcp
     id: application
