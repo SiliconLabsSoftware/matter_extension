@@ -20,6 +20,7 @@ provides:
 requires:
   - name: sl_si91x_lwip_stack
     condition: [sl_si91x_wireless]
+    unless: [sl_si91x_network_dual_stack]
 
 include:
   - path: third_party/matter_sdk/src/lwip/silabs

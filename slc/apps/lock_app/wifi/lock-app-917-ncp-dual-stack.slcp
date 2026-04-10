@@ -28,6 +28,8 @@ component:
   - id: matter_efr32_ncp
   - id: matter_wifi
   - id: siwx917_ncp
+  - id: sl_si91x_network_dual_stack
+  - id: sl_si91x_asynchronous_socket
   - id: matter_lock
   - id: app_common
   - id: matter_provision_default
@@ -82,6 +84,10 @@ component:
   - id: sl_si91x_basic_buffers
   - id: sl_si91x_wireless
 
+# Require LCD and QR Code components only on the boards that support LCD
+#requires:
+#  - name: matter_default_lcd_config
+
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
     directory: common
@@ -121,6 +127,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: SLI_SI91X_ENABLE_IPV6
+    value: "1"
 configuration:
   - name: SL_SPIDRV_EXP_BITRATE
     value: "10000000"
