@@ -1355,12 +1355,16 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/color-control-server/color-control-server.cpp
   - third_party/matter_sdk/src/app/clusters/color-control-server/color-control-server.h
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/commissioner-control-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/CommissionerControlCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/commissioner-control-server/CommissionerControlCluster.h
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/Delegate.h
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/commissioner-control-server/commissioner-control-server.h
+  - third_party/matter_sdk/src/app/clusters/commissioner-control-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/commissioner-control-server/tests/TestCommissionerControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/commodity-metering-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/commodity-metering-server/CommodityMeteringTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/commodity-metering-server/app_config_dependent_sources.cmake
@@ -1710,9 +1714,11 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/meter-identification-server/meter-identification-server.cpp
   - third_party/matter_sdk/src/app/clusters/meter-identification-server/meter-identification-server.h
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/Delegate.h
+  - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/MicrowaveOvenControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/microwave-oven-control-server.cpp
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/microwave-oven-control-server.h
   - third_party/matter_sdk/src/app/clusters/mode-base-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/mode-base-server/README.md
@@ -2172,14 +2178,18 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/window-covering-server/window-covering-delegate.h
   - third_party/matter_sdk/src/app/clusters/window-covering-server/window-covering-server.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/zone-management-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/zone-management-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/Delegate.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/TwoDCartesianZoneStorage.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/ZoneInformationStorage.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/ZoneManagementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/zone-management-server/ZoneManagementCluster.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/zone-management-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/zone-management-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/zone-management-server/tests/TestZoneManagementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/zone-management-server/tests/TestZoneManagementClusterBackwardsCompatibility.cpp
   - third_party/matter_sdk/src/app/clusters/zone-management-server/tests/TestZonePolygon.cpp
   - third_party/matter_sdk/src/app/clusters/zone-management-server/zone-geometry.h
   - third_party/matter_sdk/src/app/clusters/zone-management-server/zone-management-server.h
@@ -3121,6 +3131,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/group-key-mgmt-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/groupcast-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/groups-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/humidistat-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/icd-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/identify-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/illuminance-measurement-cluster.xml
@@ -3154,6 +3165,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/power-source-configuration-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/power-topology-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/pressure-measurement-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/proximity-ranging-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/proxy-configuration-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/proxy-discovery-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/proxy-valid-cluster.xml

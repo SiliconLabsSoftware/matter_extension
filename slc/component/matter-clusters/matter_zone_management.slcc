@@ -12,6 +12,7 @@ metadata:
 provides:
   - name: matter_zone_management
 source:
+  - path: third_party/matter_sdk/src/app/clusters/zone-management-server/CodegenIntegration.cpp
   - path: third_party/matter_sdk/src/app/clusters/zone-management-server/ZoneManagementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/zone-management-server
@@ -22,6 +23,7 @@ include:
       - path: zone-geometry.h
       - path: zone-management-server.h
       - path: ZoneInformationStorage.h
+      - path: ZoneManagementCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_zone_management
