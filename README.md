@@ -234,9 +234,9 @@ Users can upgrade a project to a newer Matter extension version by performing th
 Checkout the target tag/branch to which you need to upgrade the project.
 1. Run the slc/sl_setup_env.py script to check out dependencies of that target tag/branch.
 1. Run the slc/sl_project_upgrade.py script to upgrade the project to the target Matter extension version.
-1. For example, to upgrade a project to Matter extension v2.8.1:
+1. For example, to upgrade a project to Matter extension v2.8.0:
    
-`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app.slcp 2.8.1`
+`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app.slcp 2.8.0`
 
 
 ## Getting Started with Simplicity Studio Development 
