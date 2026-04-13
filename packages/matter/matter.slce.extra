@@ -302,10 +302,8 @@ components:
   - server_cluster
   - siwx917
   - siwx917_common
-  - siwx917_data_segment_in_psram
   - siwx917_ncp
   - siwx917_ncp_brd4357a
-  - siwx917_text_segment_in_psram
   - siwx917_tinycrypt
   - syscalls_stub
   - test_paa_store
@@ -367,6 +365,7 @@ extra_files:
   - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/bootloader-storage-internal-single-series-2.slcp
   - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/pkg.slt
   - slc/apps/bootloaders/bootloader-storage-internal-single-series-2/readme.md
+  - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-series-3.slcw
   - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/bootloader-storage-single-4096k-series-3.slcp
   - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/pkg.slt
   - slc/apps/bootloaders/bootloader-storage-single-4096k-series-3/readme.md
@@ -495,6 +494,12 @@ extra_files:
   - slc/apps/platform-template/wifi/pkg.slt
   - slc/apps/platform-template/wifi/platform-template-siwx.slcp
   - slc/apps/platform-template/wifi/platform-template-siwx.slcw
+  - slc/apps/rangehood-app/thread/README.md
+  - slc/apps/rangehood-app/thread/pkg.slt
+  - slc/apps/rangehood-app/thread/rangehood-app-series-2-internal.slcw
+  - slc/apps/rangehood-app/thread/rangehood-app-series-2.slcw
+  - slc/apps/rangehood-app/thread/rangehood-app-series-3.slcw
+  - slc/apps/rangehood-app/thread/rangehood-app.slcp
   - slc/apps/rangehood-app/wifi/README.md
   - slc/apps/rangehood-app/wifi/pkg.slt
   - slc/apps/rangehood-app/wifi/rangehood-app-siwx.slcp
@@ -815,8 +820,6 @@ extra_files:
   - slc/component/matter-platform/shell/matter_shell.slcc
   - slc/component/matter-platform/siwx917/matter_crypto_psa_siwx917.slcc
   - slc/component/matter-platform/siwx917/matter_crypto_tinycrypt_siwx917.slcc
-  - slc/component/matter-platform/siwx917_data_segment_in_psram.slcc
-  - slc/component/matter-platform/siwx917_text_segment_in_psram.slcc
   - slc/component/matter-platform/size-reduction/matter_no_debug.slcc
   - slc/component/matter-platform/size-reduction/matter_no_lcd_shell.slcc
   - slc/component/matter-platform/third_party/matter_nlassert.slcc
@@ -837,7 +840,6 @@ extra_files:
   - slc/component/matter-wifi/917-ncp/siwx917_ncp.slcc
   - slc/component/matter-wifi/917-ncp/siwx917_ncp_brd4357a.slcc
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
-  - slc/component/matter-wifi/917-soc/linkerfile_psram_SoC.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/matter_aws.slcc
   - slc/component/matter-wifi/matter_aws_ota.slcc
@@ -870,6 +872,7 @@ extra_files:
   - slc/script/code_size_diff_check.py
   - slc/script/code_size_result.sh
   - slc/script/dependency_versions.yaml
+  - slc/script/em1-augmentation.py
   - slc/script/enable_copy_contents.py
   - slc/script/file_path_length_analyzer.py
   - slc/script/find_missing_sbom.py
@@ -1314,6 +1317,8 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/chime-server/ChimeCluster.h
   - third_party/matter_sdk/src/app/clusters/chime-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/chime-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/chime-server/MigrateChimeServerStorage.cpp
+  - third_party/matter_sdk/src/app/clusters/chime-server/MigrateChimeServerStorage.h
   - third_party/matter_sdk/src/app/clusters/chime-server/README.md
   - third_party/matter_sdk/src/app/clusters/chime-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/chime-server/app_config_dependent_sources.gni
@@ -2556,7 +2561,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/Test_AddNewFabricFromExistingFabric.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/PICS.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_ACE_1_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_ACE_1_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_ACFREMON_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_ACL_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_ACT_2_1.yaml
