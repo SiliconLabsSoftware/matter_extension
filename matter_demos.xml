@@ -10,6 +10,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4116A</description>
 	</demo>
+	<demo name="brd4116a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4116a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4116a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4116A</description>
+	</demo>
 	<demo name="brd4116a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -390,6 +400,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4351A_A02</description>
 	</demo>
+	<demo name="brd4351a_a02.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a_a02"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4351a_a02/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4351A_A02</description>
+	</demo>
 	<demo name="brd4351a_a02.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -439,6 +459,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4407A</description>
+	</demo>
+	<demo name="brd4407a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4407a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4407a/rangehood-app-series-3-solution/artifact/rangehood-app-series-3-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4407A</description>
 	</demo>
 	<demo name="brd4407a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -590,6 +620,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4317A</description>
 	</demo>
+	<demo name="brd4317a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4317a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4317a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4317A</description>
+	</demo>
 	<demo name="brd4317a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -709,6 +749,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4187C</description>
+	</demo>
+	<demo name="brd4187c.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4187c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4187c/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4187C</description>
 	</demo>
 	<demo name="brd4187c.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -1180,6 +1230,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4319A_A00</description>
 	</demo>
+	<demo name="brd4319a_a00.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4319a_a00"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4319a_a00/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4319A_A00</description>
+	</demo>
 	<demo name="brd4319a_a00.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -1229,6 +1289,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4121A</description>
+	</demo>
+	<demo name="brd4121a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4121a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4121a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4121A</description>
 	</demo>
 	<demo name="brd4121a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -1460,6 +1530,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4350A_A02</description>
 	</demo>
+	<demo name="brd4350a_a02.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a_a02"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4350a_a02/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4350A_A02</description>
+	</demo>
 	<demo name="brd4350a_a02.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -1599,6 +1679,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4350A</description>
+	</demo>
+	<demo name="brd4350a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4350a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4350a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4350A</description>
 	</demo>
 	<demo name="brd4350a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
@@ -1790,6 +1880,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD2719A</description>
 	</demo>
+	<demo name="brd2719a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2719a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2719a/rangehood-app-series-3-solution/artifact/rangehood-app-series-3-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2719A</description>
+	</demo>
 	<demo name="brd2719a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -1940,6 +2040,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD2608A</description>
 	</demo>
+	<demo name="brd2608a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2608a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2608a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2608A</description>
+	</demo>
 	<demo name="brd2608a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -2079,6 +2189,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4118A</description>
+	</demo>
+	<demo name="brd4118a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4118a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4118a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4118A</description>
 	</demo>
 	<demo name="brd4118a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -2359,6 +2479,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD1019A,SIMG301M113WIH</description>
+	</demo>
+	<demo name="brd1019a,simg301m113wih.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd1019a,simg301m113wih"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd1019a,SIMG301M113WIH/rangehood-app-series-3-solution/artifact/rangehood-app-series-3-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD1019A,SIMG301M113WIH</description>
 	</demo>
 	<demo name="brd1019a,simg301m113wih.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -2650,6 +2780,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4408A</description>
 	</demo>
+	<demo name="brd4408a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4408a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4408a/rangehood-app-series-3-solution/artifact/rangehood-app-series-3-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4408A</description>
+	</demo>
 	<demo name="brd4408a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -2870,6 +3010,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD2703A</description>
 	</demo>
+	<demo name="brd2703a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2703a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2703a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2703A</description>
+	</demo>
 	<demo name="brd2703a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3010,6 +3160,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4351A</description>
 	</demo>
+	<demo name="brd4351a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4351a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4351a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4351A</description>
+	</demo>
 	<demo name="brd4351a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3059,6 +3219,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4318A</description>
+	</demo>
+	<demo name="brd4318a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4318a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4318a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4318A</description>
 	</demo>
 	<demo name="brd4318a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -3250,6 +3420,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD4337A</description>
 	</demo>
+	<demo name="brd4337a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4337a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4337a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4337A</description>
+	</demo>
 	<demo name="brd4337a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3390,6 +3570,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD2709A</description>
 	</demo>
+	<demo name="brd2709a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2709a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2709a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2709A</description>
+	</demo>
 	<demo name="brd2709a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3510,6 +3700,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Platform Template Application over Thread for BRD2704A</description>
 	</demo>
+	<demo name="brd2704a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2704a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2704a/rangehood-app-series-2-internal-solution/artifact/rangehood-app-series-2-internal-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2704A</description>
+	</demo>
 	<demo name="brd2704a.demo.window_app_thread" label="Matter - SoC Window Covering over Thread">
 		<property key="demos.blurb" value="Matter - SoC Window Covering app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -3559,6 +3759,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4186C</description>
+	</demo>
+	<demo name="brd4186c.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4186c"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4186c/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4186C</description>
 	</demo>
 	<demo name="brd4186c.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -3940,6 +4150,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4316A</description>
 	</demo>
+	<demo name="brd4316a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4316a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4316a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4316A</description>
+	</demo>
 	<demo name="brd4316a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -4059,6 +4279,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4120A</description>
+	</demo>
+	<demo name="brd4120a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4120a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4120a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4120A</description>
 	</demo>
 	<demo name="brd4120a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
@@ -4200,6 +4430,16 @@
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD4117A</description>
 	</demo>
+	<demo name="brd4117a.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd4117a"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd4117a/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD4117A</description>
+	</demo>
 	<demo name="brd4117a.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
 		<property key="core.partCompatibility" value=".*"/>
@@ -4339,6 +4579,16 @@
 		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
 		<property key="core.quality" value="PRODUCTION"/>
 		<description>This is a Matter Onoff Plug Application over Thread for BRD2601B</description>
+	</demo>
+	<demo name="brd2601b.demo.rangehood_app_thread" label="Matter - SoC Rangehood over Thread">
+		<property key="demos.blurb" value="Matter - SoC Rangehood app"/>
+		<property key="core.partCompatibility" value=".*"/>
+		<property key="core.boardCompatibility" value="brd2601b"/>
+		<property key="demos.imageFile" value="asset://extension.matter_2.8.1/demos/brd2601b/rangehood-app-series-2-solution/artifact/rangehood-app-series-2-full.s37"/>
+		<property key="core.readmeFiles" value="slc/apps/rangehood-app/thread/README.md"/>
+		<property key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+		<property key="core.quality" value="PRODUCTION"/>
+		<description>This is a Matter Rangehood Application over Thread for BRD2601B</description>
 	</demo>
 	<demo name="brd2601b.demo.air_quality_sensor_app_thread" label="Matter - SoC Air Quality Sensor over Thread">
 		<property key="demos.blurb" value="Matter - SoC Air Quality Sensor app"/>
