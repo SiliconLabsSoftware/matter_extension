@@ -1,7 +1,6 @@
 workspace_name: matter_thread_soc_lighting_app_trustzone_series_2_freertos
 label: Matter Thread - SoC Lighting TrustZone with external Bootloader FreeRTOS
 description: Demonstrates a sample implementation of a Matter over Thread lighting app with TrustZone and external bootloader
-    Workspace to build the TrustZone-enabled application and accompanying bootloader.
 quality: production
 package: matter
 project:
