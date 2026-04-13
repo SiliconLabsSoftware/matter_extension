@@ -62,6 +62,10 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: matter_segger_rtt
+  # EXPERIMENTAL
+  - id: tz_secure_execution
+    condition:
+      - device_series_3
 
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
