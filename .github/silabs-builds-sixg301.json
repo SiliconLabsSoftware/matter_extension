@@ -170,6 +170,33 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-ble",
                               "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
+            },
+            {
+                "boards": ["brd4407a", "brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
+                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
+                              "--with_app matter_zigbee_concurrent,zigbee_high_datarate_phy,sl_rail_util_ieee802154_rx_duty_cycling",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
+                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
+                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
+            },
+            {   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-ota-2","--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-hdr-dc",
+                              "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
+                              "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling"]
+            },
+            {   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-hdr-dc-ota-2","--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
             }
         ],
         "closure-app": [
