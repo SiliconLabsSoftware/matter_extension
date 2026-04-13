@@ -14,12 +14,14 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/chime-server/ChimeCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/chime-server/CodegenIntegration.cpp
+  - path: third_party/matter_sdk/src/app/clusters/chime-server/MigrateChimeServerStorage.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/chime-server
     file_list:
       - path: chime-server.h
       - path: ChimeCluster.h
       - path: CodegenIntegration.h
+      - path: MigrateChimeServerStorage.h
 template_contribution:
   - name: component_catalog
     value: matter_chime
