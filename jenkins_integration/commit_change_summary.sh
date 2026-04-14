@@ -8,7 +8,7 @@ PREV="${PREV_BASELINE:-}"
 HEADS=$(git rev-parse --short HEAD 2>/dev/null || echo "?")
 PREV_FULL=
 
-if [ -z "$PREV"] || ! PREV_FULL=$(git rev-parse -q --verify "${PREV}^{commit}" 2>/dev/null); then # baseline SHA not in repo (e.g. force-push, shallow clone)
+if [ -z "$PREV" ] || ! PREV_FULL=$(git rev-parse -q --verify "${PREV}^{commit}" 2>/dev/null); then # baseline SHA not in repo (e.g. force-push, shallow clone)
   MAIN=$(git log -n "$MAX" --oneline HEAD 2>/dev/null)
   printf "*matter_extension:* no previous Jenkins baseline; last %s commits:\n%s\n\n" "$MAX" "$MAIN"
 else # valid baseline commit
@@ -30,11 +30,9 @@ fi
 
 if [ -n "$PREV_SM" ] && [ -n "$CURR_SM" ] && [ "$PREV_SM" != "$CURR_SM" ]; then # submodule pointer moved
   git -C third_party/matter_sdk fetch --quiet origin "$PREV_SM" "$CURR_SM" 2>/dev/null || true
-  SM_LOG=$(git -C third_party/matter_sdk log --oneline "${PREV_SM}..${CURR_SM}" 2>/dev/null | head -n "$MAX")
   PS=$(echo "$PREV_SM" | cut -c1-7)
   CS=$(echo "$CURR_SM" | cut -c1-7)
-  [ -z "$SM_LOG" ] && SM_LOG="(unable to list commits; pointer ${PS} -> ${CS})" # fetch/history missing
-  printf "*matter_sdk (%s..%s):*\n%s\n" "$PS" "$CS" "$SM_LOG"
+  printf "*matter_sdk (%s..%s)*\n" "$PS" "$CS"
 elif [ -z "$PREV_FULL" ] && [ -n "$CURR_SM" ]; then # no resolved baseline; only show current pointer
   CS=$(echo "$CURR_SM" | cut -c1-7)
   printf "*matter_sdk:* no previous Jenkins baseline; pointer %s\n" "$CS"
