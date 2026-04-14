@@ -31,17 +31,17 @@ starting point for building production products on the Silicon Labs platform. Th
 
 ### HW Requirements
 
-For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#hardware-requirements) documentation.
+For a full list of hardware requirements, see [Matter Hardware Requirements](https://docs.silabs.com/matter/2.8.1/matter-overview/#hardware-requirements) documentation.
 
 ### SW Requirements
 
-For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.0/matter-overview/#software-requirements) documentation.
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.1/matter-overview/#software-requirements) documentation.
 
 ## Steps to Run Demo
 
 ### Configuration and Setup
 
-This sample app works out of the box with no additional configuration required. To customize the device, see the [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
+This sample app works out of the box with no additional configuration required. To customize the device, see the [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
 **ICD configurations (default):**
 
@@ -61,7 +61,7 @@ This sample app works out of the box with no additional configuration required. 
 2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the device is waiting for commissioning.
 3. Commission the device using one of the following methods:
 
-   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub is in the [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img).
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub is in the [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.1/matter-wifi/raspi-img).
    ```shell
    chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840
    ```
@@ -125,8 +125,8 @@ This sample app works out of the box with no additional configuration required. 
 
 ## Resources
 
-- [Silicon Labs Matter over Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.0/matter-wifi)
-- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.0/matter-wifi/raspi-img)
+- [Silicon Labs Matter over Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.1/matter-wifi)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.1/matter-wifi/raspi-img)
 - [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support
