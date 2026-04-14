@@ -474,6 +474,12 @@
     ]
   },
   {
+    "clusterCode": "relative humidity measurement-server",
+    "value": [
+      "%extension-matter%matter_relative_humidity_measurement"
+    ]
+  },
+  {
     "clusterCode": "water tank level monitoring-server",
     "value": [
       "%extension-matter%matter_resource_monitoring"
