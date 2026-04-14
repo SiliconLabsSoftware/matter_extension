@@ -6,7 +6,7 @@ description: Demonstrates a sample implementation of a Matter and Zigbee multipr
 project:
   - path: ./matter_thread_soc_zigbee_light_freertos.slcp
     id: application
-    output: zigbee_matter_light
+    output: zigbee_light
   - path: ../../bootloaders/bootloader_storage_external_single_series_2/matter_bootloader_external_series_2.slcp
     id: bootloader
     output: matter_bootloader
