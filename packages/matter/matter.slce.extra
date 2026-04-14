@@ -227,6 +227,7 @@ components:
   - matter_rangehood
   - matter_refrigerator
   - matter_refrigerator_alarm
+  - matter_relative_humidity_measurement
   - matter_resource_monitoring
   - matter_rgb_leds
   - matter_sample_mei
@@ -627,6 +628,7 @@ extra_files:
   - slc/component/matter-clusters/matter_pump_configuration_and_control.slcc
   - slc/component/matter-clusters/matter_push_av_stream_transport.slcc
   - slc/component/matter-clusters/matter_refrigerator_alarm.slcc
+  - slc/component/matter-clusters/matter_relative_humidity_measurement.slcc
   - slc/component/matter-clusters/matter_resource_monitoring.slcc
   - slc/component/matter-clusters/matter_sample_mei.slcc
   - slc/component/matter-clusters/matter_scenes.slcc
@@ -1890,6 +1892,16 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/refrigerator-alarm-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/refrigerator-alarm-server/refrigerator-alarm-server.cpp
   - third_party/matter_sdk/src/app/clusters/refrigerator-alarm-server/refrigerator-alarm-server.h
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/README.md
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/RelativeHumidityMeasurementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/RelativeHumidityMeasurementCluster.h
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/app_config_dependent_sources.cmake
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/relative-humidity-measurement-server/tests/TestRelativeHumidityMeasurementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/resource-monitoring-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/resource-monitoring-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/resource-monitoring-server/CodegenIntegration.h

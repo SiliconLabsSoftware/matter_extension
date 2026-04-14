@@ -28,6 +28,7 @@ include:
     - path: GroupKeyManagement.h
     - path: IcdManagement.h
     - path: LocalizationConfiguration.h
+    - path: RelativeHumidityMeasurement.h
     - path: ScenesManagement.h
     - path: SoftwareDiagnostics.h
     - path: Switch.h
