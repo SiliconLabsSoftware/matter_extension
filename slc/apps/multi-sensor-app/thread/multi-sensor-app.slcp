@@ -66,6 +66,7 @@ component:
     condition: [hardware_board_has_si70xx]
   - id: matter_log_uart
   - id: matter_multi_sensor_app
+  - id: matter_relative_humidity_measurement
 
   # ICD configurations
   - id: matter_icd_core

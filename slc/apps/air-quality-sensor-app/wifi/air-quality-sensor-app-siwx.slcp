@@ -48,6 +48,7 @@ component:
   - id: matter_temperature_measurement
     from: matter
   - id: matter_thread_network_diagnostics
+  - id: matter_relative_humidity_measurement
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: segger_rtt

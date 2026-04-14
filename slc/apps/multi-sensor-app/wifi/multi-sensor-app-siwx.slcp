@@ -49,6 +49,7 @@ component:
     from: matter
   - id: matter_time_format_localization
   - id: matter_user_label
+  - id: matter_relative_humidity_measurement
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
