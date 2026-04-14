@@ -80,7 +80,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        TOOLCHAIN_VER=12.2.rel1
+        TOOLCHAIN_VER=14.2.rel1
         case "$(uname -m)" in
           x86_64) HOST_TAG=x86_64 ;;
           aarch64) HOST_TAG=aarch64 ;;
