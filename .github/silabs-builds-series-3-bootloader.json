@@ -1,0 +1,19 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix btl_lockbit_override","--with_bootloader btl_lockbit_override"]
+            }
+        ]
+    }
+}
+

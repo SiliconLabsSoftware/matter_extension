@@ -7,7 +7,7 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.0"
+    version: "2.8.1"
     vendor: silabs
   - id: wiseconnect3_sdk
     version: "4.1.0"
@@ -41,6 +41,7 @@ component:
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
   - id: matter_groups
+  - id: matter_groupcast
   - id: matter_identify
   - id: matter_localization_configuration
   - id: matter_network_commissioning
@@ -56,8 +57,6 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: segger_rtt
-
-  - id: toolchain_gcc_common
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: matter_shell

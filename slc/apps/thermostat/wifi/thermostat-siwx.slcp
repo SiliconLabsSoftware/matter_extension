@@ -7,7 +7,7 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.0"
+    version: "2.8.1"
     vendor: silabs
   - id: wiseconnect3_sdk
     version: "4.1.0"
@@ -60,7 +60,6 @@ component:
   - id: matter_unit_localization
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
-  - id: toolchain_gcc_common
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_lwip
@@ -106,7 +105,7 @@ configuration:
     value: "0"
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/thermostat.zap
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-wifi-app.zap
     directory: common
     file_id: zap_config
   - path: ../../../../provision.mattpconf

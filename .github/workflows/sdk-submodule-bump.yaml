@@ -3,6 +3,14 @@ name: SDK Submodule Bump
 on:
   workflow_dispatch:
     inputs:
+      sisdk-version:
+        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → integration/sdk-26q2)'
+        required: true
+        type: choice
+        default: '2026.6'
+        options:
+          - 2025.12
+          - 2026.6
       sisdk-build-number:
         description: 'SDK (sisdk-prerelease and wiseconnect-prerelease) Build Number to bump to (e.g., 1355)'
         required: true
@@ -12,11 +20,50 @@ jobs:
   bump-sdk-submodules:
     runs-on: ubuntu-latest
     steps:
+      - name: Resolve SiSDK version and tag
+        id: resolve_inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          SISDK_VERSION="${{ inputs.sisdk-version }}"
+          SISDK_BUILD_NUMBER="${{ inputs.sisdk-build-number }}"
+
+          # Input validation - ensure build number contains only digits
+          if [[ ! "$SISDK_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "Error: Build number must contain only digits. Received: $SISDK_BUILD_NUMBER"
+            exit 1
+          fi
+
+          case "$SISDK_VERSION" in
+            "2025.12")
+              TARGET_BRANCH="release_2.8"
+              ;;
+            "2026.6")
+              TARGET_BRANCH="integration/sdk-26q2"
+              ;;
+          esac
+
+          SDK_TAG="v${SISDK_VERSION}-build.${SISDK_BUILD_NUMBER}"
+          PR_BRANCH="automation/update_sdk_submodules_${SISDK_VERSION//./_}_${SISDK_BUILD_NUMBER}"
+
+          echo "sisdk_version=$SISDK_VERSION" >> "$GITHUB_OUTPUT"
+          echo "sisdk_build_number=$SISDK_BUILD_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "sdk_tag=$SDK_TAG" >> "$GITHUB_OUTPUT"
+          echo "pr_branch=$PR_BRANCH" >> "$GITHUB_OUTPUT"
+          echo "target_branch=$TARGET_BRANCH" >> "$GITHUB_OUTPUT"
+
+          echo "Selected SiSDK version: $SISDK_VERSION"
+          echo "Selected build number: $SISDK_BUILD_NUMBER"
+          echo "Resolved target branch: $TARGET_BRANCH"
+          echo "Resolved SDK tag: $SDK_TAG"
+          echo "Resolved PR branch: $PR_BRANCH"
+
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           submodules: false
-          ref: release_2.8-1.5
+          ref: ${{ steps.resolve_inputs.outputs.target_branch }}
           persist-credentials: false
       
       - name: Mark repository as safe for Git
@@ -27,32 +74,30 @@ jobs:
       - name: Bump SDK submodules
         shell: bash
         run: |
-          set -euo pipefail
-          
-          SISDK_BUILD_NUMBER="${{ inputs.sisdk-build-number }}"
-          
-          # Input validation - ensure build number contains only digits
-          if [[ ! "$SISDK_BUILD_NUMBER" =~ ^[0-9]+$ ]]; then
-            echo "Error: Build number must contain only digits. Received: $SISDK_BUILD_NUMBER"
-            exit 1
-          fi
-          
-          echo "Bumping simplicity_sdk to build number: $SISDK_BUILD_NUMBER"
+          set -euo pipefail          
+          SISDK_VERSION="${{ steps.resolve_inputs.outputs.sisdk_version }}"
+          SISDK_BUILD_NUMBER="${{ steps.resolve_inputs.outputs.sisdk_build_number }}"
+          SDK_TAG="${{ steps.resolve_inputs.outputs.sdk_tag }}"
+
+          echo "Bumping simplicity_sdk and wifi_sdk"
+          echo "SiSDK version: $SISDK_VERSION"
+          echo "Build number: $SISDK_BUILD_NUMBER"
+          echo "Tag: $SDK_TAG"
 
           git submodule update --init third_party/simplicity_sdk
           git submodule update --init third_party/wifi_sdk
           cd third_party/simplicity_sdk
           git fetch origin
-          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          git checkout "$SDK_TAG"
+
           cd ../wifi_sdk
           git fetch origin
-          git checkout v2025.12-build.$SISDK_BUILD_NUMBER
+          git checkout "$SDK_TAG"
           cd ../..
 
           echo "Updating .gitmodules tags..."
           # Update the tags in .gitmodules
-          sed -i "s|^\(\s*tag = \)v2025\.12-build\.[0-9]*$|\1v2025.12-build.$SISDK_BUILD_NUMBER|g" .gitmodules
-          
+          sed -i -E "s#^([[:space:]]*tag = )(v2025\.12|v2026\.6)-build\.[0-9]*\$#\1${SDK_TAG}#g" .gitmodules
           # Display the updated .gitmodules content
           echo "Updated .gitmodules:"
           cat .gitmodules
@@ -73,11 +118,14 @@ jobs:
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v8
         with:
-            branch: automation/update_sdk_submodules
-            base: release_2.8-1.5
-            title: "Update SDK submodules on release_2.8-1.5"
-            body: |
-                This PR updates the simplicity_sdk and wifi_sdk submodules to the ${{ inputs.sisdk-build-number }} on the release_2.8-1.5 branch.
+          branch: ${{ steps.resolve_inputs.outputs.pr_branch }}
+          base: ${{ steps.resolve_inputs.outputs.target_branch }}
+          title: "Update SDK submodules to ${{ steps.resolve_inputs.outputs.sdk_tag }} on ${{ steps.resolve_inputs.outputs.target_branch }}"
+          body: |
+            This PR updates the simplicity_sdk and wifi_sdk submodules to `${{ steps.resolve_inputs.outputs.sdk_tag }}` on the `${{ steps.resolve_inputs.outputs.target_branch }}` branch.
 
-                **User Needs to Trigger Jenkins CI**
-            token: ${{ steps.generate_token.outputs.token }}
+            - SiSDK version: `${{ steps.resolve_inputs.outputs.sisdk_version }}`
+            - Build number: `${{ steps.resolve_inputs.outputs.sisdk_build_number }}`
+            - Resolved tag: `${{ steps.resolve_inputs.outputs.sdk_tag }}`
+
+          token: ${{ steps.generate_token.outputs.token }}

@@ -9,10 +9,10 @@ quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
-requires:
-  - name: matter_cluster_building_blocks
 provides:
   - name: matter_operational_state
+requires:
+  - name: matter_cluster_building_blocks
 source:
   - path: third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-server.cpp
 include:

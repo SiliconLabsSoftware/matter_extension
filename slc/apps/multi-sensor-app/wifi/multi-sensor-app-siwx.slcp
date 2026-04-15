@@ -7,7 +7,7 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.0"
+    version: "2.8.1"
     vendor: silabs
   - id: wiseconnect3_sdk
     version: "4.1.0"
@@ -49,6 +49,7 @@ component:
     from: matter
   - id: matter_time_format_localization
   - id: matter_user_label
+  - id: matter_relative_humidity_measurement
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -57,7 +58,6 @@ component:
   - id: matter_ota_requestor
   - id: matter_occupancy_sensor
   - id: matter_ota_support
-  - id: toolchain_gcc_common
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
