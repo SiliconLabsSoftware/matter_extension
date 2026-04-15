@@ -17,16 +17,16 @@ of the refrigerator's temperature-controlled state.
 
 For more general information on running matter applications and pre-requisites please look at online 
 documentation for Matter available on docs.silabs.com. Follow Wi-Fi instructions depending on the example you are running.
-[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.8.1/matter-wifi)
+[Demo instructions for Wi-Fi](https://docs.silabs.com/matter/2.9.0/matter-wifi)
 
 ## Region code Setting (917 WiFi projects)
 
 In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.8.1/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp).
+[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.9.0/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp).
 Search for `REGION_CODE` (build-time default) or `region_code` in the Wi-Fi configuration struct.
 
 The available region codes are defined by the `sl_wifi_region_code_t` enum in
-[sl_wifi_constants.h](https://github.com/SiliconLabs/wiseconnect/blob/v4.0.1-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h).
+[sl_wifi_constants.h](https://github.com/SiliconLabs/wiseconnect/blob/v4.1.0-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h).
 Search for `sl_wifi_region_code_t` or the `SL_WIFI_REGION_` enumerator names.
 
 ## Refrigerator Example User Interface
@@ -81,9 +81,9 @@ After 15 minutes, the advertisement stops. In addition, this button should also 
 
 ## Provision and Control
 
-You can provision and control the Matter device using the python controller, Chip tool standalone, Android, iOS app or the Matter Hub provided by Silicon Labs. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img)
+You can provision and control the Matter device using the python controller, Chip tool standalone, Android, iOS app or the Matter Hub provided by Silicon Labs. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.9.0/matter-thread/raspi-img)
 
-The pre-built chip-tool instance ships with the Matter Hub image which is available from Silicon Labs here: [Silicon Labs Matter Hub](https://www.silabs.com/documents/public/software/SilabsMatterPi_2.8.1-1.5-extension.zip)
+The pre-built chip-tool instance ships with the Matter Hub image which is available from Silicon Labs here: [Silicon Labs Matter Hub](https://www.silabs.com/documents/public/software/SilabsMatterPi_2.9.0-1.6-extension.zip)
     
 More information on using the chip-tool directly can be found here: [CHIPTool](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
