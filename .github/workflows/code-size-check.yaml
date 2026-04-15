@@ -59,7 +59,7 @@ jobs:
               shell: bash
               run: |
                   ./slc/script/code_size_result.sh ./current/ current.csv
-                  ./slc/script/code_size_result.sh ./baseline/out/ target.csv
+                  ./slc/script/code_size_result.sh ./out/ target.csv
                   cat ./current.csv
                   cat ./target.csv
                   python3 ./slc/script/code_size_diff_check.py ./current.csv ./target.csv | tee code_size_report.txt
