@@ -126,7 +126,13 @@ run_slc_generate_with_retry() {
 	return $exit_code
 }
 
-MATTER_ROOT="${MATTER_ROOT:-$(pwd -P)}"
+# Use MATTER_ROOT=... only; MATTER_ROOT:=... is not assignment and fails with "command not found".
+if [ -n "${MATTER_ROOT:-}" ]; then
+	echo "MATTER_ROOT (from environment): $MATTER_ROOT"
+else
+	MATTER_ROOT=$(pwd -P)
+	echo "MATTER_ROOT (from pwd): $MATTER_ROOT"
+fi
 echo "MATTER_ROOT: $MATTER_ROOT"
 : "${SISDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 
