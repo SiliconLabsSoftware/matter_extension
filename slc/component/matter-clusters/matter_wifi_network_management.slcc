@@ -13,6 +13,7 @@ provides:
   - name: matter_wifi_network_management
 source:
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-management-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-management-server/WiFiNetworkManagementCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/wifi-network-management-server

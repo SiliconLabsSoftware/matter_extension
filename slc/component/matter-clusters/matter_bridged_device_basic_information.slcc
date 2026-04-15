@@ -14,6 +14,7 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/bridged-device-basic-information-server/BridgedDeviceBasicInformationCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/bridged-device-basic-information-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
 include:
   - path: third_party/matter_sdk/src/app/clusters/bridged-device-basic-information-server
     file_list:

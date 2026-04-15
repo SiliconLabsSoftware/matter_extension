@@ -115,6 +115,9 @@ requires:
   - name: matter_callbacks
   - name: matter_check_in_message
   - name: matter_codegen_data_model_sources
+    unless: [matter_code_driven]
+  - name: matter_code_driven_data_model_sources
+    condition: [matter_code_driven]  
   - name: matter_data_model
   - name: matter_data_model_provider
   - name: matter_encode_decode
@@ -127,6 +130,7 @@ requires:
   - name: matter_tracing_headers
   # TODO: Remove once Zap issue is fixed
   - name: matter_zap_include
+    unless: [matter_code_driven]
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override

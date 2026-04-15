@@ -16,6 +16,7 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/bindings/BindingCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/bindings/BindingManager.cpp
   - path: third_party/matter_sdk/src/app/clusters/bindings/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/bindings/PendingNotificationMap.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/bindings

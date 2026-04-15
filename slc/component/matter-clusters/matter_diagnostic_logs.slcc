@@ -14,6 +14,7 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/BDXDiagnosticLogsProvider.cpp
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server/DiagnosticLogsCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/diagnostic-logs-server

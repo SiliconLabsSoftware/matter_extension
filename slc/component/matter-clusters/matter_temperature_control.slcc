@@ -13,6 +13,7 @@ provides:
   - name: matter_temperature_control
 source:
   - path: third_party/matter_sdk/src/app/clusters/temperature-control-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/temperature-control-server/TemperatureControlCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/temperature-control-server

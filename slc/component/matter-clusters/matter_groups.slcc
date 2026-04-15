@@ -15,6 +15,7 @@ requires:
   - name: matter_scenes
 source:
   - path: third_party/matter_sdk/src/app/clusters/groups-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/groups-server/GroupsCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/groups-server

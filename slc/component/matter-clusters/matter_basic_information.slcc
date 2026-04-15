@@ -13,12 +13,14 @@ provides:
   - name: matter_basic_information
 source:
   - path: third_party/matter_sdk/src/app/clusters/basic-information/CodegenIntegration.cpp
+    unless: [matter_code_driven]
 include:
   - path: third_party/matter_sdk/src/app/clusters/basic-information
     file_list:
       - path: BasicInformationCluster.h
       - path: BasicInformationOptionalAttributes.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven]
       - path: DeviceLayerBasicInformationPolicy.h
       - path: PolicyBased.h
 template_contribution:

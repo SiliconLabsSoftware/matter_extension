@@ -13,6 +13,7 @@ provides:
   - name: matter_valve_configuration_and_control
 source:
   - path: third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/CodegenIntegration.cpp
+    unless: [matter_code_driven]
   - path: third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server/ValveConfigurationAndControlCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/valve-configuration-and-control-server
