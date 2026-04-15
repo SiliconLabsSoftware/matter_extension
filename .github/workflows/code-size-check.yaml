@@ -42,7 +42,8 @@ jobs:
                   build-type: "standard"
             - name: Move results
               run: |
-                  mv ./out ./current      
+                  mv ./out ./current 
+
             - name: Build code-canary app on PR target
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
@@ -52,6 +53,8 @@ jobs:
                   build-script: "./baseline/slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
+              env:
+                MATTER_ROOT: ${{ github.workspace }}/baseline
             - name: Generate Code Size Results and Compare
               shell: bash
               run: |
