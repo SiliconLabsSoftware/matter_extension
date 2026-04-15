@@ -28,7 +28,7 @@ In Wifi configurations, the region code can be set in this
 Search for `REGION_CODE` (build-time default) or `region_code` in the Wi-Fi configuration struct.
 
 The available region codes are defined by the `sl_wifi_region_code_t` enum in
-[sl_wifi_constants.h](https://github.com/SiliconLabs/wiseconnect/blob/v4.0.1-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h).
+[sl_wifi_constants.h](https://github.com/SiliconLabs/wiseconnect/blob/v4.1.0-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h).
 Search for `sl_wifi_region_code_t` or the `SL_WIFI_REGION_` enumerator names.
 
 ## Light Switch Specific Interface
