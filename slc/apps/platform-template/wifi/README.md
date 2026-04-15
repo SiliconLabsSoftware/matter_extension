@@ -31,7 +31,7 @@ documentation for Matter available at docs.silabs.com. Follow the instructions f
 ## Region code Setting (917 WiFi projects)
 
 In Wifi configurations, the region code can be set in this
-[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.8.1/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp).
+[file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.9.0/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp).
 Search for `REGION_CODE` (build-time default) or `region_code` in the Wi-Fi configuration struct.
 
 The available region codes are defined by the `sl_wifi_region_code_t` enum in
