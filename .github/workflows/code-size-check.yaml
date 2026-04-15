@@ -54,7 +54,7 @@ jobs:
                   output-directory: " "
                   build-type: "standard"
               env:
-                MATTER_ROOT: ./baseline
+                MATTER_ROOT: ${{ github.workspace }}/baseline
             - name: Generate Code Size Results and Compare
               shell: bash
               run: |
