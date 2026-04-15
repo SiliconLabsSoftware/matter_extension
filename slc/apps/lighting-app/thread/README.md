@@ -109,9 +109,19 @@ To implement custom app behavior you can override any Silicon Labs implemented A
 3. Implement the method in `CommonAppTask.cpp`.
 4. Build the project. Each overridable API is resolved as follows: **if you implemented that `*Impl()` in CommonAppTask, your implementation is used, otherwise the Silicon Labs default implementation is used.** You only implement what you need, everything else falls back to the default automatically.
 
-### Required Override
+### DataModelCallbacks and CommonAppTask
 
-- **`CHIP_ERROR AppInitImpl()`** — Required to override default AppTask implementation. 
+`DataModelCallbacks.cpp` implements existing
+data model methods for this app and forwards attribute updates into `AppTask`
+through CRTP.
+
+- **Methods that already exist in `DataModelCallbacks.cpp`** — Customize them by
+  overriding the matching `*Impl()` method in `CommonAppTask`. Do not rely on
+  editing `DataModelCallbacks.cpp` directly.
+
+- **New custom data model methods** — Add method in `CommonAppTask` directly. Do
+  not add new application logic in `DataModelCallbacks.cpp`, edits to this file
+  will not survive project upgrades
 
 ### Sample Implementation
 
