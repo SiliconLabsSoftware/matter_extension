@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       sisdk-version:
-        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → integration/sdk-26q2)'
+        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → release_2.9-1.6)'
         required: true
         type: choice
         default: '2026.6'
@@ -40,7 +40,7 @@ jobs:
               TARGET_BRANCH="release_2.8"
               ;;
             "2026.6")
-              TARGET_BRANCH="integration/sdk-26q2"
+              TARGET_BRANCH="release_2.9-1.6"
               ;;
           esac
 
