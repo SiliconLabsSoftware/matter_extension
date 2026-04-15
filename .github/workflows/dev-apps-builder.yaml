@@ -259,7 +259,6 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ startsWith(github.ref_name, 'release_') }}
         permissions:
             contents: read
             actions: write

@@ -210,9 +210,6 @@ pipeline
             }
         }
         stage('Upload SQA Artifacts') {
-            when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
-            }
             steps {
                 script {
                     retry(12) {
