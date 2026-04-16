@@ -22,3 +22,7 @@ include:
 template_contribution:
   - name: component_catalog
     value: matter_groupcast
+define:
+  # This define is temporary until Groupcast is certified.
+  - name: CHIP_CONFIG_ENABLE_GROUPCAST
+    value: 1
