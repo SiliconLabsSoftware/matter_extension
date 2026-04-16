@@ -34,6 +34,12 @@
                 "arguments": ["--output_suffix lto", "--with_app toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             }
         ],
+        "lock-app": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
+            }
+        ],
         "platform-template": [
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],
@@ -91,6 +97,11 @@
                               "--with_app toolchain_gcc_lto"]
             },
             {
+                "boards": ["brd4338a", "brd4343a"],
+                "arguments": ["--output_suffix lto-ota-2", "--with_app wiseconnect_toolchain_gcc_lto",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
                               "--with_app matter_platform_low_power",
@@ -102,6 +113,11 @@
                               "--with_app matter_platform_low_power",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "arguments": ["--output_suffix lto",
+                              "--with_app wiseconnect_toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4338a"],
