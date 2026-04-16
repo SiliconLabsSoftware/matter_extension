@@ -31,6 +31,7 @@ component:
   - id: matter_closure_control
   - id: matter_closure_dimension
   - id: app_common
+  - id: matter_zap_driven_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information

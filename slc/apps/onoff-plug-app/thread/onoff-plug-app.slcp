@@ -34,6 +34,7 @@ component:
   - id: app_common
   - id: matter_provision_default
 
+  - id: matter_zap_driven_dm
   - id: matter_access_control
   - id: matter_descriptor
   - id: matter_localization_configuration

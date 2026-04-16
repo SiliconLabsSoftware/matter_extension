@@ -26,6 +26,7 @@ component:
   - id: app_common
   - id: matter_provision_flash
 
+  - id: matter_zap_driven_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information

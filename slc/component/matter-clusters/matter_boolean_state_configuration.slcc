@@ -15,7 +15,7 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/BooleanStateConfigurationCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/BooleanStateConfigurationTestEventTriggerHandler.cpp
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/CodegenIntegration.cpp
-    unless: [matter_code_driven]
+    unless: [matter_code_driven_dm]
 include:
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server
     file_list:
