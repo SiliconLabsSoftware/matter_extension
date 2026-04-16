@@ -15,7 +15,6 @@ template_file:
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
-  - path: third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
 
 define:
   - name: IS_DEMO_LIGHT
