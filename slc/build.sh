@@ -290,9 +290,9 @@ if ! [ -d "$ARM_GCC_DIR/bin" ]; then
 	exit 1
 fi
 
-if ! [ -x "$(command -v arm-none-eabi-gcc-12.2.1)" ]; then
+if ! [ -x "$(command -v arm-none-eabi-gcc-14.2.1)" ]; then
 	echo "WARNING: might be an incompatible toolchain."
-	echo "Please install gcc-arm-none-eabi-12.2.Rel1 for your host."
+	echo "Please install gcc-arm-none-eabi-14.2.Rel1 for your host."
 fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
