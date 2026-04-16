@@ -95,6 +95,7 @@ component:
   - { id: matter_shell }
   - { id: matter_power_source }
   - { id: app_common }
+  - { id: matter_zap_driven_dm }
   - { id: matter_provision_default }
   - { id: matter_log_uart }
   - { id: matter_zigbee_multiprotocol_common }
