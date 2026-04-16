@@ -43,7 +43,7 @@ component:
   - id: psa_crypto_tls12_prf
     condition: [matter_aws]
 
-  - id: matter_zap_driven_dm
+  - id: matter_codegen_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information

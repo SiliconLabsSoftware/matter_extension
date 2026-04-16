@@ -31,7 +31,7 @@ component:
   - id: matter_platform_template
 
   - id: app_common
-  - id: matter_zap_driven_dm
+  - id: matter_codegen_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information

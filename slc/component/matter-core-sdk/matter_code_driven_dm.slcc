@@ -17,4 +17,4 @@ template_contribution:
   - name: component_catalog
     value: matter_code_driven_dm
 conflicts:
-  - name: matter_zap_driven_dm
+  - name: matter_codegen_dm
