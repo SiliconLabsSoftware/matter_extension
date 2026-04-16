@@ -284,7 +284,10 @@ for clustercomponentname in sorted(cluster_data.keys()):
             path = "  - path: {}".format(src)
             filedata.append(path)
             if os.path.basename(src) == "CodegenIntegration.cpp":
-                filedata.append("    unless: [matter_code_driven]")
+                filedata.append("    unless: [matter_code_driven_dm]")
+            if os.path.basename(src) == "CodegenInstance.cpp":
+                filedata.append("    unless: [matter_code_driven_dm]")
+
 
     if len(includes) > 0:
         filedata.append("include:")
