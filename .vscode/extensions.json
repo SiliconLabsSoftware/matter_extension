@@ -1,0 +1,16 @@
+{
+    "recommendations": [
+        "ms-vscode.cpptools",
+        "ms-python.autopep8",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "foxundermoon.shell-format",
+        "redhat.vscode-yaml",
+        "christian-kohler.path-intellisense",
+        "rioj7.command-variable",
+        "augustocdias.tasks-shell-input",
+        "marus25.cortex-debug",
+        "mcu-debug.memory-view",
+        "mcu-debug.rtos-views",
+    ]
+}
