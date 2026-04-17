@@ -11,6 +11,8 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_closure_dimension
+requires:
+  - name: matter_cluster_building_blocks
 source:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.cpp
