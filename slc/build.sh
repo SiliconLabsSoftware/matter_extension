@@ -135,7 +135,12 @@ set -a
 if [ -f "$MATTER_ROOT/slc/tools/.env" ]; then
 	echo "Loading environment variables from $MATTER_ROOT/slc/tools/.env"
 	. "$MATTER_ROOT/slc/tools/.env"
-	PATH="$TOOLS_PATH:$PATH"
+	# Windows .env uses ';' in TOOLS_PATH; bash splits PATH on ':' only, so convert for Git Bash.
+	if [ -n "$TOOLS_PATH" ] && [[ "$TOOLS_PATH" == *';'* ]] && command -v cygpath >/dev/null 2>&1; then
+		PATH="$(cygpath -p -u "$TOOLS_PATH"):$PATH"
+	else
+		PATH="$TOOLS_PATH:$PATH"
+	fi
 fi
 set +a
 
@@ -151,8 +156,44 @@ SILABS_BOARD=$2
 CONFIG_ARGS=""
 BRD_ONLY=$(echo "$SILABS_BOARD" | cut -f1 -d";")
 if [ -z "$POST_BUILD_EXE" ]; then
-	export POST_BUILD_EXE=$(which commander)
+	export POST_BUILD_EXE=$(command -v commander 2>/dev/null || which commander 2>/dev/null || true)
 fi
+# .env often sets POST_BUILD_EXE=commander.exe; recursive make may not keep that in PATH, and
+# POST_BUILD_EXE_WIN uses $(USERPROFILE) which is empty in sub-makes -> /.silabs/.../commander.exe.
+if [ -n "$POST_BUILD_EXE" ] && [[ "$POST_BUILD_EXE" != */* ]] && [[ "$POST_BUILD_EXE" != *\\* ]]; then
+	_cmdr=$(command -v "$POST_BUILD_EXE" 2>/dev/null || true)
+	[ -n "$_cmdr" ] && export POST_BUILD_EXE="$_cmdr"
+fi
+
+# Generated *.Makefile uses ifeq ($(OS),Windows_NT) with USERPROFILE and ARM_GCC_DIR_WIN /
+# POST_BUILD_EXE_WIN. Git Bash + recursive make: pass overrides on the command line (MAKEFLAGS).
+MAKE_EXTRA_ARGS=()
+case "$(uname -s 2>/dev/null)" in
+MINGW*|MSYS*)
+	export OS="${OS:-Windows_NT}"
+	MAKE_EXTRA_ARGS+=(OS=Windows_NT)
+	if [ -n "${ARM_GCC_DIR:-}" ]; then
+		if command -v cygpath >/dev/null 2>&1; then
+			_ARM_GCC_DIR_FOR_MAKE=$(cygpath -m "$ARM_GCC_DIR" 2>/dev/null) || _ARM_GCC_DIR_FOR_MAKE=$ARM_GCC_DIR
+		else
+			_ARM_GCC_DIR_FOR_MAKE=$ARM_GCC_DIR
+		fi
+		MAKE_EXTRA_ARGS+=("ARM_GCC_DIR=${_ARM_GCC_DIR_FOR_MAKE}")
+	fi
+	if [ -n "${POST_BUILD_EXE:-}" ]; then
+		if command -v cygpath >/dev/null 2>&1; then
+			_POST_BUILD_FOR_MAKE=$(cygpath -m "$POST_BUILD_EXE" 2>/dev/null) || _POST_BUILD_FOR_MAKE=$POST_BUILD_EXE
+		else
+			_POST_BUILD_FOR_MAKE=$POST_BUILD_EXE
+		fi
+		MAKE_EXTRA_ARGS+=("POST_BUILD_EXE=${_POST_BUILD_FOR_MAKE}")
+	fi
+	if [ -n "${USERPROFILE:-}" ] && command -v cygpath >/dev/null 2>&1; then
+		_USERPROFILE_FOR_MAKE=$(cygpath -m "$USERPROFILE" 2>/dev/null) || _USERPROFILE_FOR_MAKE=$USERPROFILE
+		MAKE_EXTRA_ARGS+=("USERPROFILE=${_USERPROFILE_FOR_MAKE}")
+	fi
+	;;
+esac
 
 # Determine vars based on project type provided (.slcw solution example or .slcp project example file)
 if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
@@ -275,7 +316,7 @@ fi
 
 # Validate required tools and environment
 
-if ! [ -x "$(command -v slc)" ]; then
+if ! command -v slc >/dev/null 2>&1 && ! command -v slc.bat >/dev/null 2>&1; then
 	echo "ERROR: please install slc_cli for your host."
 	exit 1
 fi
@@ -293,6 +334,14 @@ fi
 if ! [ -x "$(command -v arm-none-eabi-gcc-12.2.1)" ]; then
 	echo "WARNING: might be an incompatible toolchain."
 	echo "Please install gcc-arm-none-eabi-12.2.Rel1 for your host."
+fi
+
+if ! command -v make >/dev/null 2>&1; then
+	echo "ERROR: GNU Make is not installed or not on PATH."
+	echo "       After SLC generation, this script runs make to compile the project."
+	echo "       Install make for Windows (for example: MSYS2 pacman -S make, or Chocolatey: choco install make),"
+	echo "       then open a new shell and confirm with: which make && make --version"
+	exit 1
 fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
@@ -369,7 +418,7 @@ if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; the
 		exit 1
 	fi
 	BOOTLOADER_MAKEFILE_NAME=$(basename "$BOOTLOADER_MAKEFILE")
-	if ! make all -C "$OUTPUT_DIR/matter-bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
+	if ! make "${MAKE_EXTRA_ARGS[@]}" all -C "$OUTPUT_DIR/matter-bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
 		echo "ERROR: Failed to build bootloader"
 		exit 1
 	fi
@@ -383,13 +432,13 @@ elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; t
 	fi
 	APP_DIR=$(dirname "$APP_MAKEFILE")
 	APP_MAKEFILE_NAME=$(basename "$APP_MAKEFILE")
-	if ! make all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j13; then
+	if ! make "${MAKE_EXTRA_ARGS[@]}" all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j13; then
 		echo "ERROR: Failed to build application"
 		exit 1
 	fi
 else
 	echo "Building solution..."
-	if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
+	if ! make "${MAKE_EXTRA_ARGS[@]}" all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
 		echo "ERROR: Failed to build solution"
 		exit 1
 	fi
