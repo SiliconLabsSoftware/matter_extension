@@ -281,6 +281,8 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if len(source_data) > 0:
         filedata.append("source:")
         for src in sorted(source_data,key=str.casefold):
+            if os.path.basename(src) == "GenericFaultTestEventTriggerHandler.cpp":
+                continue
             path = "  - path: {}".format(src)
             filedata.append(path)
             if os.path.basename(src) == "CodegenIntegration.cpp":
@@ -296,8 +298,14 @@ for clustercomponentname in sorted(cluster_data.keys()):
             filedata.append(path)
             filedata.append("    file_list:")
             for header in sorted(include["file_list"],key=str.casefold):
+                if os.path.basename(header) == "GenericFaultTestEventTriggerHandler.h":
+                    continue
                 path = "      - path: {}".format(header)
                 filedata.append(path)
+                if os.path.basename(header) == "CodegenIntegration.h":
+                    filedata.append("        unless: [matter_code_driven_dm]")
+                if os.path.basename(header) == "CodegenInstance.h":
+                    filedata.append("        unless: [matter_code_driven_dm]")
 
     if config_file_data:
         filedata.append("config_file:")
