@@ -2,6 +2,19 @@ name: Build SQA apps
 
 on:
     workflow_call:
+        inputs:
+            head-sha:
+                required: false
+                type: string
+                default: ''
+            head-branch:
+                required: false
+                type: string
+                default: ''
+
+env:
+    BUILD_HEAD_SHA: ${{ inputs.head-sha }}
+    BUILD_HEAD_BRANCH: ${{ inputs.head-branch }}
 
 jobs:
     build-lock-app:
@@ -15,6 +28,8 @@ jobs:
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-lighting-app:
         name: Build Lighting App
@@ -26,6 +41,8 @@ jobs:
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-window-app:
         name: Build Window App
@@ -41,6 +58,8 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     #  build-dishwasher-app:
     #      name: Build Dishwasher App
@@ -73,6 +92,8 @@ jobs:
             mgm26-internal-support: false
             wifi-soc-support: false
             sixg301-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-light-switch-app:
         name: Build Light Switch App
@@ -85,6 +106,8 @@ jobs:
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-multi-sensor-app:
         name: Build Multi Sensor App
@@ -99,6 +122,8 @@ jobs:
             mg26-internal-support: false
             mgm26-internal-support: false
             sixg301-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-zigbee-matter-light:
         name: Build Zigbee Matter Light
@@ -111,6 +136,8 @@ jobs:
             mgm24-support: false
             mgm24-internal-support: false
             wifi-soc-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-closure-app:
         name: Build Closure App
@@ -123,6 +150,8 @@ jobs:
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     build-platform-template:
         name: Build Platform App
@@ -135,6 +164,8 @@ jobs:
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
+            head-sha: ${{ env.BUILD_HEAD_SHA }}
+            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
 
     merge-apps:
         name: Merge SQA App Artifacts

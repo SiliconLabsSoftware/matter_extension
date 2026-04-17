@@ -1,15 +1,15 @@
 name: Wait for Test Results
 
 on:
-    workflow_call:
-        secrets:
-            SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY:
-                required: true
+   workflow_run:
+    workflows: ['Build Dev apps']
+    types: ['completed']
 
 jobs:
-  wait-for-jenkins-status:
+    wait-for-jenkins-status:
       name: Wait for Jenkins Status
       runs-on: ubuntu-latest
+      if: github.event.workflow_run.conclusion == 'success'
       steps:
         - name: Generate GitHub App Token
           id: generate_app_token
@@ -27,9 +27,11 @@ jobs:
           with:
               github-token: ${{ steps.generate_app_token.outputs.token }}
               script: |
-                    const headSha = (context.eventName === 'pull_request')
-                      ? context.payload.pull_request.head.sha
-                      : context.sha;
+                    const headSha = context.eventName === 'workflow_run'
+                        ? context.payload.workflow_run.head_sha
+                        : context.eventName === 'pull_request'
+                            ? context.payload.pull_request.head.sha
+                            : context.sha;
                     const { data } = await github.rest.checks.create({
                         owner: context.repo.owner,
                         repo: context.repo.repo,
@@ -163,4 +165,64 @@ jobs:
                     core.info('Waiting for check run to complete...');
                     await new Promise(r => setTimeout(r, pollIntervalSeconds * 1000));
                     elapsed += pollIntervalSeconds;
-                }
+                }   
+    
+    cache-tools:
+        name: Cache tools
+        needs: [wait-for-jenkins-status]
+        runs-on: ubuntu-latest
+        if: |
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
+        permissions:
+            contents: read
+            actions: write
+        outputs:
+            cache-key: ${{ steps.cache-tools.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+            - uses: ./.github/actions/cache-tools
+              id: cache-tools
+
+    build-sqa-apps:
+        name: Build SQA apps
+        needs: [cache-tools]
+        if: |
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
+        permissions:
+            contents: read
+            actions: write
+        uses: ./.github/workflows/sqa-apps-builder.yaml
+        with:
+            head-sha: ${{ github.event.workflow_run.head_sha }}
+            head-branch: ${{ github.event.workflow_run.head_branch }}
+    
+    delete-cache:
+        name: Delete tools cache
+        needs: [build-sqa-apps, cache-tools]
+        if: |
+            always() &&
+            github.event.workflow_run.head_repository.full_name == github.repository &&
+            (github.event.workflow_run.head_branch == 'main' ||
+            startsWith(github.event.workflow_run.head_branch, 'release_'))
+        runs-on: ubuntu-latest
+        permissions:
+            actions: write
+        steps:
+            - name: Delete tools cache
+              uses: actions/github-script@v8
+              with:
+                github-token: ${{ secrets.GITHUB_TOKEN }}
+                script: |
+                    await github.rest.actions.deleteActionsCacheByKey({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        key: '${{ needs.cache-tools.outputs.cache-key }}',
+                    });
+  
