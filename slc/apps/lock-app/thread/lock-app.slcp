@@ -35,6 +35,7 @@ component:
   - id: app_common
   - id: matter_provision_default
 
+  - id: matter_codegen_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information
