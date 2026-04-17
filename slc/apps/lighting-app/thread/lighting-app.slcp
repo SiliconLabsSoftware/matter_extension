@@ -88,19 +88,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
       - path: CHIPProjectConfig.h
-      - path: LightingManager.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: CommonAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/LightingManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/CommonAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
