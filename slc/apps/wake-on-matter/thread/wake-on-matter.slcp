@@ -49,22 +49,25 @@ component:
   - id: app_common
 
   # OT-NCP components
-  #- id: ot_ncp_source
-  #- id: ot_multi_instance_cert_libs
-#  - id: iostream_usart
-#    instance:
-#      - vcom
-#    condition:
-#      - device_series_2
-#  - id: iostream_eusart
-#    instance:
-#      - vcom
-#   condition:
-#      - device_series_3
+  - id: mbedtls_jpake
+  - id: mbedtls_tls
+  - id: mbedtls_dtls
+  - id: ot_ncp_source
+ # - id: ot_crash_handler
+  - id: iostream_usart
+    instance:
+      - vcom
+    condition:
+      - device_series_2
+  - id: iostream_eusart
+    instance:
+      - vcom
+    condition:
+      - device_series_3
 
   # Override configuration for JTAG use
   - id: matter_segger_rtt
-#  - id: configuration_over_swo
+  - id: configuration_over_swo
   - id: matter_test_event_trigger
 requires:
   # On Series 2 LCD and external flash run over USART, VCOM runs over EUSART
