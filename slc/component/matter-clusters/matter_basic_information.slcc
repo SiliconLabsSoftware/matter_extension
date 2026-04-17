@@ -20,6 +20,7 @@ include:
       - path: BasicInformationCluster.h
       - path: BasicInformationOptionalAttributes.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: DeviceLayerBasicInformationPolicy.h
       - path: PolicyBased.h
 template_contribution:

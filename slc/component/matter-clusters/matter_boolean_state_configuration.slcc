@@ -24,6 +24,7 @@ include:
       - path: BooleanStateConfigurationCluster.h
       - path: BooleanStateConfigurationTestEventTriggerHandler.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
 template_contribution:
   - name: component_catalog
     value: matter_boolean_state_configuration

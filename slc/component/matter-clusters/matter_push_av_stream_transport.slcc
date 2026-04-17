@@ -20,6 +20,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/push-av-stream-transport-server
     file_list:
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: constants.h
       - path: push-av-stream-transport-delegate.h
       - path: push-av-stream-transport-storage.h

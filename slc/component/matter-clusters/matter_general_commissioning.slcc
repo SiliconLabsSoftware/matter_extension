@@ -20,6 +20,7 @@ include:
     file_list:
       - path: BreadCrumbTracker.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: GeneralCommissioningCluster.h
 template_contribution:
   - name: component_catalog

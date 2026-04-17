@@ -21,6 +21,7 @@ include:
     file_list:
       - path: BDXDiagnosticLogsProvider.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: diagnostic-logs-server.h
       - path: DiagnosticLogsCluster.h
       - path: DiagnosticLogsProviderDelegate.h

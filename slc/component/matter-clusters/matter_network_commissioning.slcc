@@ -21,6 +21,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/network-commissioning
     file_list:
       - path: CodegenInstance.h
+        unless: [matter_code_driven_dm]
       - path: constants.h
       - path: network-commissioning.h
       - path: NetworkCommissioningCluster.h

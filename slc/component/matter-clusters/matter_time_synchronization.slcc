@@ -21,6 +21,7 @@ include:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server
     file_list:
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: DefaultTimeSyncDelegate.h
       - path: time-synchronization-delegate.h
       - path: time-synchronization-server.h
@@ -29,6 +30,3 @@ include:
 template_contribution:
   - name: component_catalog
     value: matter_time_synchronization
-define:
-  - name: TIME_SYNC_ENABLE_TSC_FEATURE
-    value: 1

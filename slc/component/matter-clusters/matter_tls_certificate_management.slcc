@@ -22,6 +22,7 @@ include:
       - path: CertificateTable.h
       - path: CertificateTableImpl.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: IncrementingIdHelper.h
       - path: TLSCertificateManagementCluster.h
 template_contribution:

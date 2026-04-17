@@ -20,6 +20,7 @@ include:
     file_list:
       - path: BooleanStateCluster.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
 template_contribution:
   - name: component_catalog
     value: matter_boolean_state

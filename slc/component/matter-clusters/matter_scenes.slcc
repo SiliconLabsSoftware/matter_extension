@@ -11,8 +11,6 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_scenes
-requires:
-  - name: matter_fabric_table
 source:
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/CodegenAttributeValuePairValidator.cpp
   - path: third_party/matter_sdk/src/app/clusters/scenes-server/CodegenIntegration.cpp
@@ -28,6 +26,7 @@ include:
       - path: CodegenAttributeValuePairValidator.h
       - path: CodegenEndpointToIndex.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: Constants.h
       - path: ExtensionFieldSets.h
       - path: ExtensionFieldSetsImpl.h
