@@ -485,6 +485,11 @@
             "ClusterRevision",
             "FeatureMap"
         ],
+        "Flow Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
+        ],
         "Temperature Measurement": [
             "ClusterRevision",
             "FeatureMap",
