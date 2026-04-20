@@ -161,11 +161,6 @@ configuration:
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17
-template_contribution:
-  - name: memory_ram_start
-    value: 0x20000000
-  - name: memory_ram_size
-    value: 0x42000
 
 readme:
   - path: ./README_WiFi.md
