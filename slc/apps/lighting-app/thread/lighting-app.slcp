@@ -89,13 +89,13 @@ include:
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
     directory: include
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
       - path: CommonAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/CommonAppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CommonAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
