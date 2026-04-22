@@ -235,7 +235,7 @@ config_file:
     directory: provision
     file_id: provision_config
 source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CommonAppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
@@ -251,7 +251,7 @@ include:
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
-      - path: CommonAppTask.h
+      - path: CustomerAppTask.h
     directory: include
 post_build:
   profile: application
