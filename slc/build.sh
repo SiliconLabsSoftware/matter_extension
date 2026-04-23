@@ -57,6 +57,12 @@
 #   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app-series-2.slcw brd4187c -pids application
 #       output in: out/brd4187c/lighting-app-series-2-solution/ (builds only application)
 #
+#   --cmake option : Use CMake as the build system instead of the default Makefile-based build.
+#                   SLC will generate CMake project files and the build will run via 'cmake --workflow --preset project'.
+#   Example:
+#   ./slc/build.sh slc/apps/lighting-app/thread/lighting-app.slcp brd4187c --cmake
+#       output in: out/brd4187c/lighting-app/
+#
 
 # Helper functions to build component arguments
 build_with_arg() {
@@ -184,6 +190,8 @@ PIDS_ARG=""
 GENERATE_BOOTLOADER=true
 GENERATE_APPLICATION=true
 GENERATE_TZ_SECURE=false
+# BUILD_SYSTEM="makefile"
+BUILD_SYSTEM="cmake"
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--clean)
@@ -261,6 +269,11 @@ while [ $# -gt 0 ]; do
 		shift
 		;;
 
+	--cmake)
+		BUILD_SYSTEM="cmake"
+		shift
+		;;
+
 	*)
 		# Collect remaining arguments as configuration options
 		CONFIG_ARGS+="$1 "
@@ -318,7 +331,7 @@ if [ "$skip_gen" = false ]; then
 
 			# Generate bootloader
 			echo "Generating bootloader..."
-			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=180 -o makefile
+			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $BOOTLOADER_WITH_ARG $BOOTLOADER_WITHOUT_ARG -pids bootloader $CONFIG_ARGS --generator-timeout=360 -o "$BUILD_SYSTEM"
 			if [ $? -ne 0 ]; then
 				echo "ERROR: Failed to generate bootloader for: $SILABS_APP_PATH"
 				exit 1
@@ -330,7 +343,7 @@ if [ "$skip_gen" = false ]; then
 			WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_APP_COMPONENTS")
 
 			echo "Generating trustzone-secure..."
-			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $WITH_ARG -pids trustzone-secure $CONFIG_ARGS --generator-timeout=180 -o makefile
+			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $WITH_ARG -pids trustzone-secure $CONFIG_ARGS --generator-timeout=360 -o "$BUILD_SYSTEM"
 			if [ $? -ne 0 ]; then
 				echo "ERROR: Failed to generate application for: $SILABS_APP_PATH"
 				exit 1
@@ -343,7 +356,7 @@ if [ "$skip_gen" = false ]; then
 			APP_WITHOUT_ARG=$(build_without_arg "$WITHOUT_APP_COMPONENTS")
 
 			echo "Generating application..."
-			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=180 -o makefile
+			run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" $APP_WITH_ARG $APP_WITHOUT_ARG -pids application $CONFIG_ARGS --generator-timeout=360 -o "$BUILD_SYSTEM"
 			if [ $? -ne 0 ]; then
 				echo "ERROR: Failed to generate application for: $SILABS_APP_PATH"
 				exit 1
@@ -351,7 +364,7 @@ if [ "$skip_gen" = false ]; then
 		fi
 	else
 		# Generate .slcp projects
-		run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" --with "$SILABS_BOARD" $CONFIG_ARGS --generator-timeout=180 -o makefile
+		run_slc_generate_with_retry generate -d "$OUTPUT_DIR" --sdk-package-path "$SISDK_ROOT" --sdk-package-path "$EXTENSION_DIR" --sdk-package-path "$WISECONNECT3_DIR" $PROJECT_FLAG "$SILABS_APP_PATH" --with "$SILABS_BOARD" $CONFIG_ARGS --generator-timeout=360 -o "$BUILD_SYSTEM"
 		if [ $? -ne 0 ]; then
 			echo "ERROR: Failed to generate project for: $SILABS_APP_PATH"
 			exit 1
@@ -361,37 +374,89 @@ fi
 
 # Build the project
 if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; then
-	# Use bootloader makefile instead of solution makefile
 	echo "Building bootloader only..."
-	BOOTLOADER_MAKEFILE=$(find "$OUTPUT_DIR/matter-bootloader" -maxdepth 1 -name "*.Makefile" | head -1)
-	if [ -z "$BOOTLOADER_MAKEFILE" ]; then
-		echo "ERROR: No bootloader Makefile found in $OUTPUT_DIR/matter-bootloader"
-		exit 1
-	fi
-	BOOTLOADER_MAKEFILE_NAME=$(basename "$BOOTLOADER_MAKEFILE")
-	if ! make all -C "$OUTPUT_DIR/matter-bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
-		echo "ERROR: Failed to build bootloader"
-		exit 1
+	if [ "$BUILD_SYSTEM" = "cmake" ]; then
+		# Bootloader cmake folder is cmake_gcc inside the matter-bootloader subdirectory
+		BOOTLOADER_CMAKE_DIR="$OUTPUT_DIR/matter-bootloader/cmake_gcc"
+		if [ ! -d "$BOOTLOADER_CMAKE_DIR" ]; then
+			echo "ERROR: cmake directory not found: $BOOTLOADER_CMAKE_DIR"
+			exit 1
+		fi
+		if ! (cd "$BOOTLOADER_CMAKE_DIR" && cmake --workflow --preset project); then
+			echo "ERROR: Failed to build bootloader"
+			exit 1
+		fi
+	else
+		BOOTLOADER_MAKEFILE=$(find "$OUTPUT_DIR/matter-bootloader" -maxdepth 1 -name "*.Makefile" | head -1)
+		if [ -z "$BOOTLOADER_MAKEFILE" ]; then
+			echo "ERROR: No bootloader Makefile found in $OUTPUT_DIR/matter-bootloader"
+			exit 1
+		fi
+		BOOTLOADER_MAKEFILE_NAME=$(basename "$BOOTLOADER_MAKEFILE")
+		if ! make all -C "$OUTPUT_DIR/matter-bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
+			echo "ERROR: Failed to build bootloader"
+			exit 1
+		fi
 	fi
 elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; then
-	# Use application makefile instead of solution makefile
 	echo "Building application only..."
-	APP_MAKEFILE=$(find "$OUTPUT_DIR" -mindepth 2 -maxdepth 2 -name "*.Makefile" ! -name "*.solution.Makefile" | head -1)
-	if [ -z "$APP_MAKEFILE" ]; then
-		echo "ERROR: No application Makefile found in $OUTPUT_DIR"
-		exit 1
-	fi
-	APP_DIR=$(dirname "$APP_MAKEFILE")
-	APP_MAKEFILE_NAME=$(basename "$APP_MAKEFILE")
-	if ! make all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j13; then
-		echo "ERROR: Failed to build application"
-		exit 1
+	if [ "$BUILD_SYSTEM" = "cmake" ]; then
+		# Application cmake folder is cmake_gcc inside the app subdirectory (exclude matter-bootloader)
+		APP_CMAKE_DIR=$(find "$OUTPUT_DIR" -mindepth 2 -maxdepth 2 -type d -name "cmake_gcc" ! -path "*/matter-bootloader/*" | head -1)
+		if [ -z "$APP_CMAKE_DIR" ]; then
+			echo "ERROR: No cmake_gcc directory found in $OUTPUT_DIR"
+			exit 1
+		fi
+		if ! (cd "$APP_CMAKE_DIR" && cmake --workflow --preset project); then
+			echo "ERROR: Failed to build application"
+			exit 1
+		fi
+	else
+		APP_MAKEFILE=$(find "$OUTPUT_DIR" -mindepth 2 -maxdepth 2 -name "*.Makefile" ! -name "*.solution.Makefile" | head -1)
+		if [ -z "$APP_MAKEFILE" ]; then
+			echo "ERROR: No application Makefile found in $OUTPUT_DIR"
+			exit 1
+		fi
+		APP_DIR=$(dirname "$APP_MAKEFILE")
+		APP_MAKEFILE_NAME=$(basename "$APP_MAKEFILE")
+		if ! make all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j13; then
+			echo "ERROR: Failed to build application"
+			exit 1
+		fi
 	fi
 else
-	echo "Building solution..."
-	if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
-		echo "ERROR: Failed to build solution"
-		exit 1
+	if [ "$BUILD_SYSTEM" = "cmake" ]; then
+		if [[ "$SILABS_APP_PATH" == *.slcp ]]; then
+			# For .slcp, cmake folder is cmake_gcc directly inside the output directory
+			echo "Building project with cmake..."
+			CMAKE_DIR="$OUTPUT_DIR/cmake_gcc"
+			if [ ! -d "$CMAKE_DIR" ]; then
+				echo "ERROR: cmake directory not found: $CMAKE_DIR"
+				exit 1
+			fi
+			if ! (cd "$CMAKE_DIR" && cmake --workflow --preset project); then
+				echo "ERROR: cmake build failed"
+				exit 1
+			fi
+		else
+			# For .slcw, the solution cmake folder is <solution>_cmake at the root of OUTPUT_DIR
+			echo "Building solution with cmake..."
+			CMAKE_DIR="$OUTPUT_DIR/${SILABS_APP}_cmake"
+			if [ ! -d "$CMAKE_DIR" ]; then
+				echo "ERROR: cmake directory not found: $CMAKE_DIR"
+				exit 1
+			fi
+			if ! (cd "$CMAKE_DIR" && cmake --workflow --preset project); then
+				echo "ERROR: cmake build failed"
+				exit 1
+			fi
+		fi
+	else
+		echo "Building solution..."
+		if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
+			echo "ERROR: Failed to build solution"
+			exit 1
+		fi
 	fi
 fi
 

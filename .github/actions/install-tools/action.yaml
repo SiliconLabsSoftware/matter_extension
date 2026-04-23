@@ -56,6 +56,11 @@ runs:
         echo "Failed to install slc-cli after $MAX_ATTEMPTS attempts"
         exit 1
     
+    - name: Install java21
+      shell: bash
+      run: |
+        slt install java21
+    
     - name: Set Environment Variables
       shell: bash
       run: |
@@ -75,6 +80,14 @@ runs:
         COMMANDER_PATH=$(slt where commander)
         echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
         echo "$COMMANDER_PATH" >> $GITHUB_PATH
+    
+    - name: Install cmake
+      shell: bash
+      run: |
+        slt install cmake
+        CMAKE_PATH=$(slt where cmake)
+        echo "CMAKE_PATH=$CMAKE_PATH" >> $GITHUB_ENV
+        echo "$CMAKE_PATH" >> $GITHUB_PATH
     
     - name: install gcc-arm-none-eabi
       shell: bash
