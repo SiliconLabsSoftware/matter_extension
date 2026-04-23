@@ -15,17 +15,16 @@ requires:
   - name: matter_cluster_building_blocks
 source:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.cpp
-  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.cpp
+  - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
 include:
   - path: third_party/matter_sdk/src/app/clusters/closure-dimension-server
     file_list:
       - path: closure-dimension-cluster-objects.h
       - path: closure-dimension-delegate.h
-      - path: closure-dimension-matter-context.h
       - path: closure-dimension-server.h
       - path: ClosureDimensionCluster.h
       - path: ClosureDimensionClusterDelegate.h
-      - path: ClosureDimensionClusterMatterContext.h
       - path: CodegenIntegration.h
         unless: [matter_code_driven_dm]
       - path: GenericDimensionState.h
