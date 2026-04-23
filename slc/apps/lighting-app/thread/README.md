@@ -94,6 +94,115 @@ If LEDs are supported by the board but not enabled in a project they can be enab
 -   Install instances (led0 and led1) of the _Simple LED_ component under _Platform->Driver->LED->Simple LED_
 -   Install the WSTK LED Support component under _Silicon Labs Matter->Matter->Platform->WSTK LED Support_
 
+## Extending Base App Implementation
+
+### CustomerAppTask
+
+To implement custom app behavior you can override any Silicon Labs implemented API in the CustomerAppTask file. This example provides `CustomerAppTask.h` and `CustomerAppTask.cpp` for that purpose. The base implementation and the full set of overridable `*Impl()` APIs are supplied by the build system in `AppTask.cpp` and `AppTaskImpl.h` under `autogen/`. Any `*Impl()` you do not override keeps the Silicon Labs default behavior.
+
+### How to Override APIs
+
+`CustomerAppTask` extends the base AppTask through the Curiously Recurring Template Pattern (CRTP). You override only the `*Impl()` methods you need, the base declares one `*Impl()` per overridable API. Steps:
+
+1. Find the method to override in the base API (see [Override API reference](#override-api-reference) below).
+2. Declare the same method signature in `CustomerAppTask` in your `CustomerAppTask.h` under `private:`
+3. Implement the method in `CustomerAppTask.cpp`.
+4. Build the project. Each overridable API is resolved as follows: **if you implemented that `*Impl()` in CustomerAppTask, your implementation is used, otherwise the Silicon Labs default implementation is used.** You only implement what you need, everything else falls back to the default automatically.
+
+### Required Override
+
+- **`CHIP_ERROR AppInitImpl()`** — Required to override default AppTask implementation. 
+
+### Sample Implementation
+
+The following shows a minimal example `CustomerAppTask` that overrides `AppInitImpl()` (required) and `ButtonEventHandlerImpl()`.
+
+**CustomerAppTask.h**
+
+```cpp
+#pragma once
+#include "AppTaskImpl.h"
+
+/**
+ * Minimal AppTaskImpl-derived class. Override only the *Impl() methods you need;
+ * add AppInitImpl(), GetAppTask(), and sAppTask as required by the CRTP base.
+ */
+class CustomerAppTask : public AppTaskImpl<CustomerAppTask>
+{
+public:
+    static CustomerAppTask & GetAppTask() { return sAppTask; }
+
+private:
+    friend class AppTaskImpl<CustomerAppTask>;
+    CHIP_ERROR AppInitImpl();
+    void ButtonEventHandlerImpl(uint8_t button, uint8_t btnAction);
+    static CustomerAppTask sAppTask;
+};
+```
+
+**CustomerAppTask.cpp**
+
+```cpp
+#include "CustomerAppTask.h"
+#include "AppTask.h"
+#include "AppConfig.h"
+#include "AppEvent.h"
+#include <platform/CHIPDeviceLayer.h>
+#include <platform/silabs/platformAbstraction/SilabsPlatform.h>
+#include <platform/silabs/tracing/SilabsTracingMacros.h>
+
+using namespace ::chip::DeviceLayer::Silabs;
+
+#define APP_FUNCTION_BUTTON 0
+#define APP_LIGHT_SWITCH     1
+
+CustomerAppTask CustomerAppTask::sAppTask;
+
+AppTask & AppTask::GetAppTask()
+{
+    return CustomerAppTask::GetAppTask();
+}
+
+CHIP_ERROR CustomerAppTask::AppInitImpl()
+{
+    SILABS_LOG("CustomerAppTask: custom implementation (AppInitImpl)");
+    CHIP_ERROR err = this->AppTask::AppInit();
+    if (err == CHIP_NO_ERROR)
+    {
+        // Override the SDK default button handler registered in AppTask::AppInit().
+        chip::DeviceLayer::Silabs::GetPlatform().SetButtonsCb(CustomerAppTask::ButtonEventHandler);
+    }
+    return err;
+}
+
+// override code goes here
+void CustomerAppTask::ButtonEventHandlerImpl(uint8_t button, uint8_t btnAction)
+{
+    AppEvent button_event           = {};
+    button_event.Type               = AppEvent::kEventType_Button;
+    button_event.ButtonEvent.Action = btnAction;
+    if (button == APP_LIGHT_SWITCH && btnAction == static_cast<uint8_t>(SilabsPlatform::ButtonAction::ButtonPressed))
+    {
+        button_event.Handler = LightActionEventHandler;
+        AppTask::GetAppTask().PostEvent(&button_event);
+    }
+    else if (button == APP_FUNCTION_BUTTON)
+    {
+        button_event.Handler = BaseApplication::ButtonHandler;
+        AppTask::GetAppTask().PostEvent(&button_event);
+    }
+}
+```
+
+### Override API Reference
+
+The base API and implementation are generated into your project and live under `autogen/` directory. These files are regenerated on every project upgrade and match your installed SDK version. Use them as the reference for overridable methods and app configuration.
+
+| File | Purpose |
+|------|--------|
+| `autogen/AppTaskImpl.h` | Declarations of every overridable `*Impl()` method. Copy the signatures you need from here into `CustomerAppTask.h`. |
+| `autogen/AppTask.cpp` | Silicon Labs default implementation of AppTask. This is what runs for any `*Impl()` you do not override. Use as reference when customizing behavior. |
+
 ## Provision and Control
 
 You can provision and control the Matter device using the python controller, chip-tool (standalone or pre-built), Android, iOS app or the mattertool utility from the Matter Hub package provided by Silicon Labs. The pre-built chip-tool instance ships with the Matter Hub image. More information on using the Matter Hub can be found in the online Matter documentation here: [Silicon Labs Matter Documentation](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img)
