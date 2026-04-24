@@ -14,11 +14,13 @@ provides:
 source:
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-server/BooleanStateCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
 include:
   - path: third_party/matter_sdk/src/app/clusters/boolean-state-server
     file_list:
       - path: BooleanStateCluster.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
 template_contribution:
   - name: component_catalog
     value: matter_boolean_state
