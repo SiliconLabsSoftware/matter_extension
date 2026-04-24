@@ -1,0 +1,38 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug",
+      "type": "cortex-debug",
+      "cwd": "${workspaceFolder}",
+      "request": "attach",
+      "servertype": "jlink",
+      "serverpath": "/usr/local/bin/JLinkGDBServer",
+      "armToolchainPath": "/Users/svc_matter/.silabs/slt/installs/conan/p/gcc-af360b79bab9e3/p/bin/",
+      "showDevDebugOutput": "vscode",
+      "runToEntryPoint": "main",
+      "rttConfig": {
+        "enabled": true,
+        "address": "auto",
+        "decoders": [
+          {
+            "port": 0, // In RTT lingo, this is the buffer index (or channel)
+            "type": "console"
+          }
+        ]
+      },
+      // BRD4338A
+      "executable": "${workspaceFolder}/out/brd4338a/lighting-app-siwx-solution/lighting-app-siwx/build/debug/lighting-app-siwx.out",
+      "device": "${input:device}",
+      "serialNumber": ""
+    }
+  ],
+  "inputs": [
+    {
+      "id": "device",
+      "type": "pickString",
+      "description": "pick device",
+      "options": ["SiWG917M111M", "EFR32MG12PXXXF1024"]
+    }
+  ]
+}
