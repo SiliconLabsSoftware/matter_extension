@@ -105,6 +105,7 @@ source:
     condition: [matter_tracing]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble/BLEShellCommands.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im/IMShellCommands.cpp
+    condition: [matter_read_client]
     
 define:
   - name: ENABLE_CHIP_SHELL
