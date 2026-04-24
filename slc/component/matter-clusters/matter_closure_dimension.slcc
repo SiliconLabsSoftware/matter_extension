@@ -27,6 +27,7 @@ include:
       - path: ClosureDimensionClusterDelegate.h
       - path: ClosureDimensionClusterMatterContext.h
       - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: GenericDimensionState.h
 template_contribution:
   - name: component_catalog
