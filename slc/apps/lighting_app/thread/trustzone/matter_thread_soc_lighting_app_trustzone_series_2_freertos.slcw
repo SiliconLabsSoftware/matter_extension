@@ -14,4 +14,4 @@ project:
     id: bootloader
     output: matter_bootloader
 post_build:
-    profile: ot-tz-workspace
+  path: ../../../../postbuild/ws_trustzone_series2_workspace.slpb
