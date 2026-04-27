@@ -34,12 +34,6 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "lighting_app": [
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
-            }
-        ],
         "platform_template": [
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],
@@ -73,16 +67,6 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
-            },
-            {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": ["--output_suffix lto",
-                              "--with_app wiseconnect_toolchain_gcc_lto"]
-            },
-            {
-                "boards": ["brd4338a", "brd4342a"],
-                "arguments": ["--output_suffix lto-ota-2", "--with_app wiseconnect_toolchain_gcc_lto",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "lock_app" :[
