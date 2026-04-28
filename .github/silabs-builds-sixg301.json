@@ -58,6 +58,10 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
                 "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "thermostat": [
