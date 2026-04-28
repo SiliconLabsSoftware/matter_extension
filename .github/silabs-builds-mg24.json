@@ -57,6 +57,10 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
             }
         ],
         "lock_app": [
