@@ -13,7 +13,7 @@ Example using Matter alongside Zigbee on Silicon Labs MG24/MG26. The light can b
 
 ## Purpose/Scope
 
-This example demonstrates Matter and Silicon Labs Zigbee running together on EFR32 (MG24/MG26). The lighting device can receive On/Off commands from both a Zigbee switch (e.g. [Z3 switch](https://www.silabs.com/support/training/Zigbee-application-layer-concepts/building-a-Zigbee-3-0-switch-and-light-from-scratch) sample app) and a Matter controller (Google, Apple, chip-tool). The device is commissioned over BLE; credentials are then provided so it joins the Thread network.
+This example demonstrates Matter and Silicon Labs Zigbee running together on EFR32 (MG24/MG26). The lighting device can receive On/Off commands from both a Zigbee switch (e.g. [Z3 switch](https://www.silabs.com/support/training/Zigbee-application-layer-concepts/building-a-Zigbee-3-0-switch-and-light-from-scratch) sample app) and a Matter controller (Google, Apple, chip-tool). The device is commissioned over BLE, credentials are then provided so it joins the Thread network.
 
 ![Target behaviour](./target_behaviour.png)
 
@@ -25,7 +25,7 @@ For a full list of hardware requirements, see [Matter Hardware Requirements](htt
 
 ### SW Requirements
 
-For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.1/matter-overview/#software-requirements) documentation. The following prerequisites must be installed on the host: ARM GCC 12.2; ZAP (version 2024.05.07 or greatest); SLC-CLI; environment variables set (e.g. ARM_GCC_DIR, TOOLDIR, STUDIO_ADAPTER_PACK_PATH).
+For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.8.1/matter-overview/#software-requirements) documentation. The following prerequisites must be installed on the host: ARM GCC 12.2, ZAP (version 2024.05.07 or greatest), SLC-CLI, environment variables set (e.g. ARM_GCC_DIR, TOOLDIR, STUDIO_ADAPTER_PACK_PATH).
 
 ## Steps to Run Demo
 
@@ -85,13 +85,13 @@ For Matter customization see also [Custom Matter Device Development](https://doc
 
 **Button and LED reference:**
 
-Button and LED behavior depends on the project configuration; refer to the lighting and Zigbee components for application-specific mappings. LED 0 typically indicates commissioning/connectivity when WSTK LED Support is installed.
+Button and LED behavior depends on the project configuration, refer to the lighting and Zigbee components for application-specific mappings. LED 0 typically indicates commissioning/connectivity when WSTK LED Support is installed.
 
 ## Troubleshooting
 
 **Commissioning fails**
 - Ensure the Thread Border Router is running and the `operationalDataset` matches your network.
-- In concurrent mode, if Zigbee was commissioned first, Matter commissioning may trigger a Zigbee network leave/restart; re-pair Zigbee devices afterward.
+- In concurrent mode, if Zigbee was commissioned first, Matter commissioning may trigger a Zigbee network leave/restart, re-pair Zigbee devices afterward.
 
 **Zigbee or Matter control not working**
 - In concurrent mode, ensure Matter was commissioned first to avoid channel conflicts.

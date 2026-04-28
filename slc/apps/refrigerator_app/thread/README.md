@@ -77,7 +77,7 @@ This sample app works out of the box with no additional configuration required. 
    [SVR] Copy/paste the below URL in a browser to see the QR Code:
    [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
    ```
-   This QR code is only valid for an unprovisioned device; provisioning may change it.
+   This QR code is only valid for an unprovisioned device, provisioning may change it.
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
@@ -87,7 +87,7 @@ This sample app works out of the box with no additional configuration required. 
 
 | Control | Action            | Result                                                          |
 |---------|-------------------|-----------------------------------------------------------------|
-| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs |
+| BTN0    | Press and release | Start/restart BLE advertisement, print QR code URL to RTT logs |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
 | LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
 | LED 0   | Rapid even flash  | BLE connected, commissioning in progress                       |

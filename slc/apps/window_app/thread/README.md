@@ -52,7 +52,7 @@ available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.1/m
 This sample app works out of the box with no additional configuration required. To customize the device, see the
 [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-Once the device is provisioned, it will join the Thread network once established; look for the RTT log. You can verify that the device is on the Thread network with the command `router table` using a serial terminal (screen / minicom etc.) on the board running the window-app example. You can also get the address list with the command `ipaddr` in the serial terminal.
+Once the device is provisioned, it will join the Thread network once established, look for the RTT log. You can verify that the device is on the Thread network with the command `router table` using a serial terminal (screen / minicom etc.) on the board running the window-app example. You can also get the address list with the command `ipaddr` in the serial terminal.
 
 Example RTT log output:
 ```shell
@@ -96,7 +96,7 @@ Example RTT log output:
    [SVR] Copy/paste the below URL in a browser to see the QR Code:
    [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
    ```
-   This QR code is only valid for an unprovisioned device; provisioning may change it.
+   This QR code is only valid for an unprovisioned device, provisioning may change it.
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 

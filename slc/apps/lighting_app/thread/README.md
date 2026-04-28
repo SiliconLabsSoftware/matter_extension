@@ -105,7 +105,7 @@ commander flash out/brd4187c/lighting-app-solution/artifact/lighting-app-combine
 
 | Control | Action            | Result                                                          |
 |---------|-------------------|-----------------------------------------------------------------|
-| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to RTT logs |
+| BTN0    | Press and release | Start/restart BLE advertisement, print QR code URL to RTT logs |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)          |
 | BTN1    | Press and release | Toggle light on/off                                             |
 | LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |

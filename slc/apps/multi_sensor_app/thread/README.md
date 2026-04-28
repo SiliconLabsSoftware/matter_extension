@@ -51,7 +51,7 @@ available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.8.1/m
 This sample app works out of the box with no additional configuration required. To customize the device, see the
 [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-**Multi-Sensor-app configuration:** In `sl_matter_sensor_config.h`: `SL_MATTER_SENSOR_TIMER_PERIOD_S` configures how often the device reads sensor values (default 1 minute). `SL_MATTER_SENSOR_REPORT_THRESHOLD` is the change from the last reported value required to trigger a subscription update, in centi-units (default 100; with default, the device reports when there is 1 unit of change from the last reported value).
+**Multi-Sensor-app configuration:** In `sl_matter_sensor_config.h`: `SL_MATTER_SENSOR_TIMER_PERIOD_S` configures how often the device reads sensor values (default 1 minute). `SL_MATTER_SENSOR_REPORT_THRESHOLD` is the change from the last reported value required to trigger a subscription update, in centi-units (default 100. With default, the device reports when there is 1 unit of change from the last reported value).
 
 **ICD configurations (default):**
 
@@ -88,7 +88,7 @@ This sample app works out of the box with no additional configuration required. 
    [SVR] Copy/paste the below URL in a browser to see the QR Code:
    [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
    ```
-   This QR code is only valid for an unprovisioned device; provisioning may change it.
+   This QR code is only valid for an unprovisioned device, provisioning may change it.
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
@@ -104,7 +104,7 @@ This sample app works out of the box with no additional configuration required. 
 
 | Control | Action            | Result                                                          |
 |---------|-------------------|-----------------------------------------------------------------|
-| BTN0    | Press and release | Cycle LCD screen; start/restart BLE advertisement; print QR URL to RTT |
+| BTN0    | Press and release | Cycle LCD screen, start/restart BLE advertisement, print QR URL to RTT |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)            |
 | BTN1    | Press and release | Toggle occupancy sensor state (detected / undetected)            |
 | LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |

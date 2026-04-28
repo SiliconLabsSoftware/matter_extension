@@ -13,11 +13,11 @@ Matter performance testing via "perf ping" and "perf mx" Matter Shell commands. 
 
 ## Purpose/Scope
 
-This example enables Matter performance testing on Silicon Labs EFR32 SoC over Thread. The **perf ping** and **perf mx** Matter Shell CLI commands send the EmptyCommand to the custom Performance Testing cluster on Endpoint 0 of the destination node. For ping, the command is sent to a destination NodeId and the response is the ping reply; for multicast, the command is sent to a groupId with no response expected. The node issuing commands is the "sender"; the node processing the command is the "receiver."
+This example enables Matter performance testing on Silicon Labs EFR32 SoC over Thread. The **perf ping** and **perf mx** Matter Shell CLI commands send the EmptyCommand to the custom Performance Testing cluster on Endpoint 0 of the destination node. For ping, the command is sent to a destination NodeId and the response is the ping reply. For multicast, the command is sent to a groupId with no response expected. The node issuing commands is the "sender", the node processing the command is the "receiver."
 
-The device is commissioned over BLE; credentials are then provided so the device joins the Thread network. Enable the functionality by installing the Performance Testing Utilities and CLI component and adding the custom Performance Testing cluster (see [Defining a Custom Cluster](https://docs.silabs.com/matter/2.8.1/matter-references/matter-zap#defining-a-custom-cluster)); cluster XML: `performance-test-cluster.xml` in this app directory. For multicast, enable the Groups cluster server on Endpoint 0 in ZAP.
+The device is commissioned over BLE. Credentials are then provided so the device joins the Thread network. Enable the functionality by installing the Performance Testing Utilities and CLI component and adding the custom Performance Testing cluster (see [Defining a Custom Cluster](https://docs.silabs.com/matter/2.8.1/matter-references/matter-zap#defining-a-custom-cluster)), cluster XML: [`performance-test-cluster.xml`](https://github.com/SiliconLabsSoftware/matter_extension/blob/v2.8.1/slc/apps/performance-test-app/thread/performance-test-cluster.xml). For multicast, enable the Groups cluster server on Endpoint 0 in ZAP.
 
-**Commands:** `perf ping <count> <fabricIndex> <destNodeId> <timeout_ms>`; `perf mx <fabricIndex> <destGroupId> <sequence number>`.
+**Commands:** `perf ping <count> <fabricIndex> <destNodeId> <timeout_ms>`,`perf mx <fabricIndex> <destGroupId> <sequence number>`.
 
 ## Prerequisites/Setup Requirements
 
@@ -41,7 +41,7 @@ If building the sample application on its own, a bootloader must be flashed sepa
 
 **Enabling the functionality**
 
-- **Simplicity Studio:** Create a Matter over Thread project. Install the Performance Testing Utilities component under _Silicon Labs Matter > Platform_. In ZAP (Configuration Tools > Zigbee Cluster Configurator) enable the Groups cluster server on Endpoint 0 (required for multicast). Add the custom Performance Testing cluster per [Defining a Custom Cluster](https://docs.silabs.com/matter/2.8.1/matter-references/matter-zap#defining-a-custom-cluster); cluster XML: `performance-test-cluster.xml` in this app directory. Build; the same binary can act as sender and receiver.
+- **Simplicity Studio:** Create a Matter over Thread project. Install the Performance Testing Utilities component under _Silicon Labs Matter > Platform_. In ZAP (Configuration Tools > Zigbee Cluster Configurator) enable the Groups cluster server on Endpoint 0 (required for multicast). Add the custom Performance Testing cluster per [Defining a Custom Cluster](https://docs.silabs.com/matter/2.8.1/matter-references/matter-zap#defining-a-custom-cluster), cluster XML: [`performance-test-cluster.xml`](https://github.com/SiliconLabsSoftware/matter_extension/blob/v2.8.1/slc/apps/performance-test-app/thread/performance-test-cluster.xml). Build, the same binary can act as sender and receiver.
 - **SLC CLI:** In a Thread sample app, edit the ZAP file (see project .slcp), set Groups server enabled on the MA-rootdevice endpoint, add the custom Performance Testing cluster as above, then run `slc generate` with `--with "matter_performance_testing"`. The same binary can act as sender and receiver.
 
 See [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matter-references/custom-matter-device#custom-matter-device-development) for customization.
@@ -54,8 +54,8 @@ See [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matt
    ```shell
    chip-tool accesscontrol write acl '[{"fabricIndex": 1, "privilege": 5, "authMode": 2, "subjects": null, "targets": null}]' <receiverNodeId> 0
    ```
-   On the sender, run `perf ping <count> <fabricIndex> <destNodeId> <timeout_ms>`. The sender establishes a CASE session and sends EmptyCommand; when the count is done it prints e.g. "Ping: 44 packets transmitted, 44 packets received." Ping and multicast both print a sequence number to the PTI channel (ping uses 1729).
-4. **Multicast:** Create the same group and group key set on sender and receiver, then add an ACL on the receiver for the group. Example for Group 257 (run on sender then receiver; use your node IDs):
+   On the sender, run `perf ping <count> <fabricIndex> <destNodeId> <timeout_ms>`. The sender establishes a CASE session and sends EmptyCommand. When the count is done it prints e.g. "Ping: 44 packets transmitted, 44 packets received." Ping and multicast both print a sequence number to the PTI channel (ping uses 1729).
+4. **Multicast:** Create the same group and group key set on sender and receiver, then add an ACL on the receiver for the group. Example for Group 257 (run on sender then receiver, use your node IDs):
    ```shell
    chip-tool groupkeymanagement key-set-write '{"groupKeySetID": 42, "groupKeySecurityPolicy": 0, "epochKey0": "d0d1d2d3d4d5d6d7d8d9dadbdcdddedf", "epochStartTime0": 2220000, "epochKey1": "d1d1d2d3d4d5d6d7d8d9dadbdcdddedf", "epochStartTime1": 2220001, "epochKey2": "d2d1d2d3d4d5d6d7d8d9dadbdcdddedf", "epochStartTime2": 2220002}' <nodeId> 0
    chip-tool groupkeymanagement write group-key-map '[{"groupId": 257, "groupKeySetID": 42}]' <nodeId> 0
@@ -69,7 +69,7 @@ See [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matt
 
 **Button and LED reference:**
 
-This app focuses on performance-test CLI commands; button/LED behavior follows the base Matter platform (e.g. LED 0 for commissioning state if WSTK LED Support is installed).
+This app focuses on performance-test CLI commands, button/LED behavior follows the base Matter platform (e.g. LED 0 for commissioning state if WSTK LED Support is installed).
 
 ## Troubleshooting
 

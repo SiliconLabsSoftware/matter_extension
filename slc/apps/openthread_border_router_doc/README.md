@@ -32,7 +32,7 @@ For software requirements and image setup, see [Matter Software Requirements](ht
 1. Download the OpenThread Border Router image for your platform from the Silicon Labs documentation.
 2. Flash the image to your device following the steps in the [OpenThread Border Router Documentation](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img).
 
-This project is not intended to be built or flashed directly; use the pre-built image instead.
+This project is not intended to be built or flashed directly, use the pre-built image instead.
 
 ## Troubleshooting
 

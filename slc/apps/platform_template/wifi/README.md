@@ -41,7 +41,7 @@ This sample app works out of the box with no additional configuration required. 
 
 **Expected behaviour:** After build and flash, the device advertises over BLE and shows the Matter QR code if the display is enabled. Once commissioned, the device can be managed through Matter controllers over Wi-Fi for configuration and monitoring.
 
-**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.8.1/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.0.1-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
 
 ### Steps for Execution
 
@@ -70,7 +70,7 @@ This app does not define application-specific buttons or LEDs. If WSTK LED Suppo
 ## Resources
 
 - [Silicon Labs Matter over Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.1/matter-wifi)
-- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.1/matter-wifi/raspi-img)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img)
 - [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support

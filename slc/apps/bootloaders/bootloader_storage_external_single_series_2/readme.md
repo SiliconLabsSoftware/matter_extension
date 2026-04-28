@@ -1,6 +1,6 @@
 # SPI Flash Storage Bootloader (Single Image with Slot Size of 1024 KB)
 
-SPI flash storage bootloader; single 1024 kB image slot. Requires external SPI flash of at least 1 MB. Default for Matter projects. See UG489 for configuration and storage layout.
+SPI flash storage bootloader, single 1024 kB image slot. Requires external SPI flash of at least 1 MB. Default for Matter projects. See UG489 for configuration and storage layout.
 
 ## Table of Contents
 

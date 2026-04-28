@@ -45,7 +45,7 @@ For a full list of software requirements, see [Matter Software Requirements](htt
 This sample app works out of the box with no additional configuration required. To customize the device, see the
 [Custom Matter Device Development](https://docs.silabs.com/matter/2.8.1/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/085bd03532990e5b1f99ff4b08ebce4f4ca5edf6/src/platform/silabs/wifi/SiWx/WifiInterface.cpp#L125). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/f675628eefa1ac4990e94146abb75dd08b522571/components/device/silabs/si91x/wireless/inc/sl_si91x_types.h#L71).
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.8.1/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.0.1-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
 
 ### Sample Endpoint Configuration for Closure
 
@@ -60,7 +60,7 @@ This sample app works out of the box with no additional configuration required. 
 
    **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
    with the Matter Hub image. More information on using the Matter Hub is in the
-   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.1/matter-wifi/raspi-img).
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img).
    ```shell
    chip-tool pairing ble-wifi 1 <SSID> <PSK> 20202021 3840
    ```
@@ -76,13 +76,13 @@ This sample app works out of the box with no additional configuration required. 
    [SVR] Copy/paste the below URL in a browser to see the QR Code:
    [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
    ```
-   This QR code is only valid for an unprovisioned device; provisioning may change it.
+   This QR code is only valid for an unprovisioned device, provisioning may change it.
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
 4. Control the device. For sample endpoint configuration, see [Closure Sample Endpoint](/slc/image/closure-sample-endpoint.png).
 
-   **Closure control (chip-tool)** (after commissioning; use your node-id if different from 1):
+   **Closure control (chip-tool)** (after commissioning, use your node-id if different from 1):
    ```shell
    chip-tool closurecontrol read cluster-revision 1 1
    ```
@@ -91,7 +91,7 @@ This sample app works out of the box with no additional configuration required. 
 
 | Control | Action            | Result                                                          |
 |---------|-------------------|-----------------------------------------------------------------|
-| BTN0    | Press and release | Start/restart BLE advertisement; print QR code URL to device logs |
+| BTN0    | Press and release | Start/restart BLE advertisement, print QR code URL to device logs |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
 | LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
 | LED 0   | Rapid even flash  | BLE connected, commissioning in progress                        |
@@ -119,7 +119,7 @@ This sample app works out of the box with no additional configuration required. 
 ## Resources
 
 - [Silicon Labs Matter over Wi-Fi Documentation](https://docs.silabs.com/matter/2.8.1/matter-wifi)
-- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.1/matter-wifi/raspi-img)
+- [Matter Hub Setup](https://docs.silabs.com/matter/2.8.1/matter-thread/raspi-img)
 - [chip-tool README](https://github.com/project-chip/connectedhomeip/blob/master/examples/chip-tool/README.md)
 
 ## Report Bugs & Get Support
