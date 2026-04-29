@@ -18,6 +18,7 @@ def pr_number = ""
 def bypass_send_results_gh = ""
 def build_description = ""
 def commit_change_summary = ""
+def source_branch_name = ""
 
 def combineSlackSummary(String commitSummary, String extra) {
     def c = commitSummary?.trim() ?: ''
@@ -86,6 +87,8 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
+                    source_branch_name = env.CHANGE_BRANCH ?: env.BRANCH_NAME
+                    echo "source_branch_name=${source_branch_name}"
                     sh 'git submodule update --init --checkout third_party/simplicity_sdk'
                     sh 'git submodule update --init --checkout third_party/wifi_sdk'
                     sisdk_build_number = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
@@ -222,7 +225,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
             }
             steps {
                 script {
