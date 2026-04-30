@@ -1,0 +1,53 @@
+name: Generate OT-RCP Binaries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-rcp:
+    runs-on: ubuntu-latest
+    
+    steps:
+      
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+      
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+            git config --global --add safe.directory /__w/matter_extension/matter_extension
+      
+      - name: Checkout Simplicity SDK submodules
+        run: |
+          git submodule update --init --checkout third_party/simplicity_sdk
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          if command -v sudo >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y make
+          else
+            apt-get update
+            apt-get install -y make
+          fi
+          
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
+      - name: Build OT-RCP binaries
+        run: |
+          python3 slc/script/build_ot_rcp.py
+
+      - name: Upload OT-RCP binaries
+        uses: actions/upload-artifact@v7
+        with:
+          name: out/ot-rcp_binaries.zip
+          path: out/ot-rcp_binaries.zip
+          if-no-files-found: error
