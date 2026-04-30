@@ -4,11 +4,11 @@ on:
     workflow_call:
 
 jobs:
-    build-lock-app:
+    build_lock_app:
         name: Build Lock App
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lock-app"
+            example-app: "lock_app"
             build-type: "custom-sqa"
             ncp-917-support: true
             mg24-internal-support: false
@@ -16,22 +16,22 @@ jobs:
             mg26-internal-support: false
             mgm26-internal-support: false
 
-    build-lighting-app:
+    build_lighting_app:
         name: Build Lighting App
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lighting-app"
+            example-app: "lighting_app"
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-internal-support: false
             mg26-internal-support: false
             mgm26-internal-support: false
 
-    build-window-app:
+    build_window_app:
         name: Build Window App
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "window-app"
+            example-app: "window_app"
             build-type: "custom-sqa"
             mg24-support: false
             mg24-internal-support: false
@@ -42,24 +42,24 @@ jobs:
             wifi-soc-support: false
             sixg301-support: false
 
-    #  build-dishwasher-app:
-    #      name: Build Dishwasher App
-    #      uses: ./.github/workflows/platform-builder.yaml
-    #      with:
-    #          example-app: "dishwasher-app"
-    #          build-type: "custom-sqa"
-    #          mg24-support: false
-    #          mg24-internal-support: false
-    #          mgm24-support: false
-    #          mgm24-internal-support: false
-    #          mg26-support: false
-    #          mg26-internal-support: false
-    #          mgm26-internal-support: false
-    #          wifi-soc-support: false
-    #          sixg301-support: false
+  #  build_dishwasher_app:
+  #      name: Build Dishwasher App
+  #      uses: ./.github/workflows/platform-builder.yaml
+  #      with:
+  #          example-app: "dishwasher_app"
+  #          build-type: "custom-sqa"
+  #          mg24-support: false
+  #          mg24-internal-support: false
+  #          mgm24-support: false
+  #          mgm24-internal-support: false
+  #          mg26-support: false
+  #          mg26-internal-support: false
+  #          mgm26-internal-support: false
+  #          wifi-soc-support: false
+  #          sixg301-support: false
 
-    build-thermostat:
-        name: Build Thermostat
+    build_thermostat_app:
+        name: Build Thermostat App
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
@@ -74,11 +74,11 @@ jobs:
             wifi-soc-support: false
             sixg301-support: false
 
-    build-light-switch-app:
+    build_light_switch_app:
         name: Build Light Switch App
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "light-switch-app"
+            example-app: "light_switch_app"
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-support: false
@@ -86,11 +86,11 @@ jobs:
             mg26-internal-support: false
             mgm26-internal-support: false
 
-    build-multi-sensor-app:
+    build_multi_sensor_app:
         name: Build Multi Sensor App
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "multi-sensor-app"
+            example-app: "multi_sensor_app"
             build-type: "custom-sqa"
             mg24-internal-support: false
             mgm24-support: false
@@ -100,11 +100,11 @@ jobs:
             mgm26-internal-support: false
             sixg301-support: false
 
-    build-zigbee-matter-light:
-        name: Build Zigbee Matter Light
+    build_zigbee_light:
+        name: Build Zigbee Light
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "zigbee-matter-light"
+            example-app: "zigbee_light"
             build-type: "custom-sqa"
             mg24-support: false
             mg24-internal-support: false
@@ -112,44 +112,44 @@ jobs:
             mgm24-internal-support: false
             wifi-soc-support: false
 
-    build-closure-app:
-        name: Build Closure App
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "closure-app"
-            build-type: "custom-sqa"
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
+    build_closure_app:
+      name: Build Closure App
+      uses: ./.github/workflows/platform-builder.yaml
+      with:
+        example-app: "closure_app"
+        build-type: "custom-sqa"
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-internal-support: false
+        mgm26-internal-support: false
 
-    build-platform-template:
-        name: Build Platform App
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "platform-template"
-            build-type: "custom-sqa"
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
+    build_platform_template:
+      name: Build Platform App
+      uses: ./.github/workflows/platform-builder.yaml
+      with:
+        example-app: "platform_template"
+        build-type: "custom-sqa"
+        mg24-internal-support: false
+        mgm24-support: false
+        mgm24-internal-support: false
+        mg26-internal-support: false
+        mgm26-internal-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts
         runs-on: ubuntu-latest
         needs:
-            - build-lock-app
-            - build-lighting-app
-            - build-window-app
-            # - build-dishwasher-app
-            - build-thermostat
-            - build-light-switch-app
-            - build-multi-sensor-app
-            - build-zigbee-matter-light
-            - build-closure-app
-            - build-platform-template
+            - build_lock_app
+            - build_lighting_app
+            - build_window_app
+            # - build_dishwasher_app
+            - build_thermostat_app
+            - build_light_switch_app
+            - build_multi_sensor_app
+            - build_zigbee_light
+            - build_closure_app
+            - build_platform_template
         if: always()
 
         steps:

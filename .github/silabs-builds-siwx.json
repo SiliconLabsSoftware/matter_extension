@@ -10,13 +10,13 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix  peripherals-icd","--with_app matter_peripherals_917soc,matter_icd_core"]
             }
         ],
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
@@ -50,7 +50,7 @@
         ]
     },
     "custom-sqa": {
-        "lighting-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix ota-2",
@@ -69,7 +69,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ],
-        "lock-app" :[
+        "lock_app" :[
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix ota-2",
@@ -114,14 +114,14 @@
                               "--with_app sl_si91x_sleep_timer_clock_selection, sl_si91x_lf_fsm_clock_selection"]
             }
         ],
-        "light-switch-app": [
+        "light_switch_app": [
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "multi-sensor-app" :[
+        "multi_sensor_app" :[
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
@@ -129,14 +129,14 @@
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
-        "closure-app": [
+        "closure_app": [
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals_917soc", "--without_app matter_log_rtt",
