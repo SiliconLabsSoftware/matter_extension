@@ -23,7 +23,7 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform-template": [
+        "platform_template": [
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
@@ -39,7 +39,7 @@
         ]
     },
     "custom-sqa": {
-        "window-app" :[
+        "window_app" :[
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",

@@ -12,6 +12,7 @@ components:
   - app_common
   - callbacks
   - chip_trace_decoder
+  - code_driven_data_model_sources
   - codegen_data_model_sources
   - commandline
   - configuration_data
@@ -106,6 +107,8 @@ components:
   - matter_closure_control
   - matter_closure_dimension
   - matter_cluster_building_blocks
+  - matter_code_driven_dm
+  - matter_codegen_dm
   - matter_color_control
   - matter_commissioner_control
   - matter_commodity_metering
@@ -144,6 +147,7 @@ components:
   - matter_fan_control_app
   - matter_fault_injection
   - matter_fixed_label
+  - matter_flow_measurement
   - matter_gatt_additional_advertising
   - matter_gatt_dynamic
   - matter_gatt_static
@@ -321,7 +325,6 @@ extra_files:
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
   - docs/images/silabs-logo.jpg
-  - examples/zigbee-matter-light/config/zcl/zcl_config.matter
   - jenkins_integration/Jenkinsfile
   - jenkins_integration/artifacts/artifact_processor.py
   - jenkins_integration/artifacts/artifactory_client.py
@@ -592,6 +595,7 @@ extra_files:
   - slc/component/matter-clusters/matter_fan_control.slcc
   - slc/component/matter-clusters/matter_fault_injection.slcc
   - slc/component/matter-clusters/matter_fixed_label.slcc
+  - slc/component/matter-clusters/matter_flow_measurement.slcc
   - slc/component/matter-clusters/matter_general_commissioning.slcc
   - slc/component/matter-clusters/matter_general_diagnostics.slcc
   - slc/component/matter-clusters/matter_group_key_mgmt.slcc
@@ -670,6 +674,7 @@ extra_files:
   - slc/component/matter-core-sdk/callbacks.slcc
   - slc/component/matter-core-sdk/check_in_message.slcc
   - slc/component/matter-core-sdk/chip_trace_decoder.slcc
+  - slc/component/matter-core-sdk/code_driven_data_model_sources.slcc
   - slc/component/matter-core-sdk/codegen_data_model_sources.slcc
   - slc/component/matter-core-sdk/commandline.slcc
   - slc/component/matter-core-sdk/configuration_data.slcc
@@ -734,6 +739,8 @@ extra_files:
   - slc/component/matter-core-sdk/manager.slcc
   - slc/component/matter-core-sdk/matter_check_in_sender.slcc
   - slc/component/matter-core-sdk/matter_cluster_building_blocks.slcc
+  - slc/component/matter-core-sdk/matter_code_driven_dm.slcc
+  - slc/component/matter-core-sdk/matter_zap_driven_dm.slcc
   - slc/component/matter-core-sdk/memory.slcc
   - slc/component/matter-core-sdk/messagedef.slcc
   - slc/component/matter-core-sdk/monitoring_table.slcc
@@ -1346,16 +1353,18 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.cpp
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionCluster.h
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterDelegate.h
-  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.cpp
-  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/ClosureDimensionClusterMatterContext.h
+  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/GenericDimensionState.h
+  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/README.md
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-cluster-objects.h
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-delegate.h
-  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-matter-context.h
   - third_party/matter_sdk/src/app/clusters/closure-dimension-server/closure-dimension-server.h
+  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/tests/TestClosureDimensionCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/closure-dimension-server/tests/TestClosureDimensionClusterObjects.cpp
   - third_party/matter_sdk/src/app/clusters/color-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/color-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/color-control-server/app_config_dependent_sources.gni
@@ -1552,6 +1561,15 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/fixed-label-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/fixed-label-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/fixed-label-server/tests/TestFixedLabelCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/FlowMeasurementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/FlowMeasurementCluster.h
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/app_config_dependent_sources.cmake
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/flow-measurement-server/tests/TestFlowMeasurementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/BreadCrumbTracker.h
   - third_party/matter_sdk/src/app/clusters/general-commissioning-server/CodegenIntegration.cpp
@@ -1801,11 +1819,13 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/TestOperationalCredentials.cpp
   - third_party/matter_sdk/src/app/clusters/operational-state-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateCluster.h
+  - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateDelegate.h
   - third_party/matter_sdk/src/app/clusters/operational-state-server/README.md
   - third_party/matter_sdk/src/app/clusters/operational-state-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/operational-state-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-cluster-objects.h
-  - third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-server.cpp
   - third_party/matter_sdk/src/app/clusters/operational-state-server/operational-state-server.h
   - third_party/matter_sdk/src/app/clusters/ota-provider/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/ota-provider/CodegenIntegration.cpp
@@ -1822,17 +1842,24 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/ota-requestor/BDXDownloader.cpp
   - third_party/matter_sdk/src/app/clusters/ota-requestor/BDXDownloader.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/CodegenIntegrationInternal.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestor.cpp
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestor.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorDriver.cpp
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorDriver.h
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorEventGenerator.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorStorage.cpp
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorStorage.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/DefaultOTARequestorUserConsent.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/ExtendedOTARequestorDriver.cpp
   - third_party/matter_sdk/src/app/clusters/ota-requestor/ExtendedOTARequestorDriver.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/OTADownloader.h
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorAttributes.cpp
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorAttributes.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorCluster.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorDriver.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorInterface.h
   - third_party/matter_sdk/src/app/clusters/ota-requestor/OTARequestorStorage.h
@@ -1842,7 +1869,9 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/ota-requestor/README.md
   - third_party/matter_sdk/src/app/clusters/ota-requestor/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/ota-requestor/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/ota-requestor/ota-requestor-server.h
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/tests/TestOTARequestorAttributes.cpp
+  - third_party/matter_sdk/src/app/clusters/ota-requestor/tests/TestOTARequestorCluster.cpp
   - third_party/matter_sdk/src/app/clusters/power-source-configuration-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/power-source-configuration-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/power-source-configuration-server/app_config_dependent_sources.gni
@@ -2241,6 +2270,7 @@ extra_files:
   - third_party/matter_sdk/src/app/data-model-provider/ActionContext.h
   - third_party/matter_sdk/src/app/data-model-provider/ActionReturnStatus.cpp
   - third_party/matter_sdk/src/app/data-model-provider/ActionReturnStatus.h
+  - third_party/matter_sdk/src/app/data-model-provider/AttributeChangeListener.h
   - third_party/matter_sdk/src/app/data-model-provider/BUILD.gn
   - third_party/matter_sdk/src/app/data-model-provider/ClusterMetadataProvider.h
   - third_party/matter_sdk/src/app/data-model-provider/Context.h
@@ -2250,8 +2280,8 @@ extra_files:
   - third_party/matter_sdk/src/app/data-model-provider/MetadataLookup.h
   - third_party/matter_sdk/src/app/data-model-provider/MetadataTypes.h
   - third_party/matter_sdk/src/app/data-model-provider/OperationTypes.h
+  - third_party/matter_sdk/src/app/data-model-provider/Provider.cpp
   - third_party/matter_sdk/src/app/data-model-provider/Provider.h
-  - third_party/matter_sdk/src/app/data-model-provider/ProviderChangeListener.h
   - third_party/matter_sdk/src/app/data-model-provider/ProviderMetadataTree.cpp
   - third_party/matter_sdk/src/app/data-model-provider/ProviderMetadataTree.h
   - third_party/matter_sdk/src/app/data-model-provider/StringBuilderAdapters.cpp
@@ -2263,6 +2293,7 @@ extra_files:
   - third_party/matter_sdk/src/app/data-model-provider/tests/TestConstants.h
   - third_party/matter_sdk/src/app/data-model-provider/tests/TestEventEmitting.cpp
   - third_party/matter_sdk/src/app/data-model-provider/tests/TestMetadataEntries.cpp
+  - third_party/matter_sdk/src/app/data-model-provider/tests/TestProviderListeners.cpp
   - third_party/matter_sdk/src/app/data-model-provider/tests/WriteTesting.h
   - third_party/matter_sdk/src/app/docs/README.md
   - third_party/matter_sdk/src/app/dynamic_server/AccessControl.cpp
@@ -2406,8 +2437,8 @@ extra_files:
   - third_party/matter_sdk/src/app/server-cluster/testing/FabricTestFixture.h
   - third_party/matter_sdk/src/app/server-cluster/testing/MockCommandHandler.cpp
   - third_party/matter_sdk/src/app/server-cluster/testing/MockCommandHandler.h
+  - third_party/matter_sdk/src/app/server-cluster/testing/TestAttributeChangeListener.h
   - third_party/matter_sdk/src/app/server-cluster/testing/TestEventGenerator.h
-  - third_party/matter_sdk/src/app/server-cluster/testing/TestProviderChangeListener.h
   - third_party/matter_sdk/src/app/server-cluster/testing/TestServerClusterContext.h
   - third_party/matter_sdk/src/app/server-cluster/testing/ValidateGlobalAttributes.cpp
   - third_party/matter_sdk/src/app/server-cluster/testing/ValidateGlobalAttributes.h
@@ -2438,8 +2469,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/TestBuilderParser.cpp
   - third_party/matter_sdk/src/app/tests/TestCertificateTableImpl.cpp
   - third_party/matter_sdk/src/app/tests/TestCheckInHandler.cpp
-  - third_party/matter_sdk/src/app/tests/TestClosureDimensionCluster.cpp
-  - third_party/matter_sdk/src/app/tests/TestClosureDimensionClusterObjects.cpp
   - third_party/matter_sdk/src/app/tests/TestClusterStateCache.cpp
   - third_party/matter_sdk/src/app/tests/TestCommandHandlerInterfaceRegistry.cpp
   - third_party/matter_sdk/src/app/tests/TestCommandInteraction.cpp
@@ -3170,6 +3199,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/mode-base-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/mode-select-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/network-commissioning-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/network-identity-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/occupancy-sensing-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/onoff-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/operational-credentials-cluster.xml
