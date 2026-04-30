@@ -1597,6 +1597,26 @@ include:
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
+      - path: clusters/NetworkIdentityManagement/AttributeIds.h
+      - path: clusters/NetworkIdentityManagement/Attributes.h
+      - path: clusters/NetworkIdentityManagement/Attributes.ipp
+      - path: clusters/NetworkIdentityManagement/ClusterId.h
+      - path: clusters/NetworkIdentityManagement/CommandIds.h
+      - path: clusters/NetworkIdentityManagement/Commands.h
+      - path: clusters/NetworkIdentityManagement/Commands.ipp
+      - path: clusters/NetworkIdentityManagement/Enums.h
+      - path: clusters/NetworkIdentityManagement/EnumsCheck.h
+      - path: clusters/NetworkIdentityManagement/EventIds.h
+      - path: clusters/NetworkIdentityManagement/Events.h
+      - path: clusters/NetworkIdentityManagement/Events.ipp
+      - path: clusters/NetworkIdentityManagement/Ids.h
+      - path: clusters/NetworkIdentityManagement/Metadata.h
+      - path: clusters/NetworkIdentityManagement/MetadataProvider.h
+      - path: clusters/NetworkIdentityManagement/Structs.h
+      - path: clusters/NetworkIdentityManagement/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
       - path: clusters/NitrogenDioxideConcentrationMeasurement/AttributeIds.h
       - path: clusters/NitrogenDioxideConcentrationMeasurement/Attributes.h
       - path: clusters/NitrogenDioxideConcentrationMeasurement/Attributes.ipp

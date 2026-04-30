@@ -258,6 +258,12 @@
     ]
   },
   {
+    "clusterCode": "flow measurement-server",
+    "value": [
+      "%extension-matter%matter_flow_measurement"
+    ]
+  },
+  {
     "clusterCode": "general commissioning-server",
     "value": [
       "%extension-matter%matter_general_commissioning"
