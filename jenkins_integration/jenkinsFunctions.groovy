@@ -403,7 +403,7 @@ def trigger_sqa_pipelines(pipeline_type)
 {
     if(sqaFunctions.isProductionJenkinsServer())
     {
-        def smoke_list = ['project_upgrades_lighting_app/smoke/matter']
+        def smoke_list = ['smoke']
         def regression_list = ['feature-thread', 'feature-wifi', 'feature-cmp', 'regression-thread', 'regression-wifi', 'regression-cmp',
                                'regression-ota-thread', 'regression-ota-wifi', 'regression-ota-cmp', 'regression-metrics',
                                'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
