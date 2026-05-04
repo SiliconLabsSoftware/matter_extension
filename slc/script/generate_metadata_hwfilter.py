@@ -5,7 +5,7 @@ This script uses hwfilter tools to generate
   - matter_demos.xml  
   - board_compatibility_matrix.html
 
-Config files in packages/matter/
+Config files in slc/script/
   - hwfilter-config.yml: Board & device allowlists, flash requirements, quality requirements
   - metadata-generation.yml: Demo variants, board overrides, template exclusions
 """
@@ -21,6 +21,8 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple, List, Dict
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
 
 HWFILTER_REPO = "https://github.com/SiliconLabsInternal/hwfilter.git"
 HWFILTER_BRANCH = "main"
@@ -172,8 +174,8 @@ def boards_for_workspace_from_records(
                     boards.append(b)
     return boards
 
-def load_variants_config(repo_root: Path) -> Dict:
-    path = repo_root / "packages" / "matter" / "metadata-generation.yml"
+def load_variants_config() -> Dict:
+    path = _SCRIPT_DIR / "metadata-generation.yml"
     if not path.exists():
         return {}
     try:
@@ -337,9 +339,9 @@ def get_slt_paths() -> dict:
 
     return paths
 
-def prepare_config(repo_root: Path, slt_paths: dict) -> Path:
+def prepare_config(slt_paths: dict) -> Path:
     """Substitute environment variables in config file"""
-    config_source = repo_root / "packages" / "matter" / "hwfilter-config.yml"
+    config_source = _SCRIPT_DIR / "hwfilter-config.yml"
     
     if not config_source.exists():
         log_error(f"Config not found: {config_source}")
@@ -470,7 +472,7 @@ def prepare_template_with_version(
         sys.exit(1)
     wifi_boards = get_wifi_boards(slt_paths)
 
-    template_path = repo_root / "packages" / "matter" / template_name
+    template_path = _SCRIPT_DIR / template_name
     with open(template_path, "r", encoding="utf-8") as f:
         content = f.read()
     lines = [
@@ -559,8 +561,7 @@ def generate_metadata(
                 f.unlink()
 
 def main():
-    script_dir = Path(__file__).parent.resolve()
-    repo_root = script_dir.parent.parent
+    repo_root = _SCRIPT_DIR.parent.parent
     
     print("=" * 42)
     print("Generate Matter studio metadata")
@@ -578,9 +579,9 @@ def main():
     slt_paths = get_slt_paths()
     print()
     
-    config_path = prepare_config(repo_root, slt_paths)
+    config_path = prepare_config(slt_paths)
 
-    variants_config = load_variants_config(repo_root)
+    variants_config = load_variants_config()
     ci_records = load_ci_json_records(repo_root / ".github", "full")
 
     try:
