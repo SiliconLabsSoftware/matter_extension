@@ -40,7 +40,7 @@ jobs:
             - name: Initialize matter_sdk submodule
               shell: bash
               run: |
-                  git submodule update --init --recursive=false third_party/matter_sdk
+                  git submodule update --init third_party/matter_sdk
 
             - name: Checkout matter_sdk linux submodules
               shell: bash
