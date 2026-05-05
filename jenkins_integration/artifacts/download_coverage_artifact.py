@@ -1,6 +1,6 @@
 """
 Download the lcov coverage artifact produced by the GitHub Actions workflow
-'.github/workflows/coverage-lcov-builder.yaml' for a given workflow run.
+'.github/workflows/coverage-builder.yaml' for a given workflow run.
 
 If no matching artifact is present (expected for runs that are not main/release_*
 with build-type=full), the script exits 0 with a clear message.

@@ -1,4 +1,4 @@
-name: Coverage LCOV Builder
+name: Coverage Builder
 
 on:
     workflow_call:
