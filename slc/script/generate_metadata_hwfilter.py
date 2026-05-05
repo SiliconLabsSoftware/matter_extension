@@ -212,6 +212,19 @@ def check_hwfilter_installed() -> bool:
         return True
     return False
 
+def check_virtualenv():
+    """Check if running inside a virtual environment"""
+    in_venv = (
+        hasattr(sys, 'real_prefix') or
+        (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix)
+    )
+    if not in_venv:
+        log_error("This script must be run inside a Python virtual environment")
+        log_error("Create and activate a venv first:")
+        log_error("  python3 -m venv .venv")
+        log_error("  source .venv/bin/activate")
+        sys.exit(1)
+
 def install_hwfilter():
     """Install hwfilter from GitHub"""
     log_info("Installing hwfilter from GitHub...")
@@ -247,6 +260,8 @@ def check_prerequisites():
     if sys.version_info < (3, 10):
         log_error("Python 3.10 or higher is required")
         sys.exit(1)
+    
+    check_virtualenv()
     
     if not check_command_exists("slt"):
         log_error("slt is not installed")
