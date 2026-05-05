@@ -63,6 +63,15 @@ jobs:
                   cd third_party/matter_sdk
                   source scripts/bootstrap.sh -p linux
 
+            - name: Install Matter Python test requirements
+              shell: bash
+              run: |
+                  cd third_party/matter_sdk
+                  source scripts/activate.sh
+                  python -m pip install --upgrade pip
+                  python -m pip install -r scripts/tests/requirements.txt
+                  python -m pip install -r src/python_testing/requirements.txt
+
             - name: Run build_coverage.sh
               shell: bash
               run: |
