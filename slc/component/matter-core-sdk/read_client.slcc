@@ -16,11 +16,11 @@ define:
   - name: CHIP_CONFIG_ENABLE_READ_CLIENT
     value: 1
 include:
-- path: third_party/matter_sdk/src/app
-  file_list:
-  - BufferedReadCallback.h
-  - ClusterStateCache.h
-  - ReadClient.h
+  - path: third_party/matter_sdk/src/app
+    file_list:
+      - path: BufferedReadCallback.h
+      - path: ReadClient.h
+      - path: ClusterStateCache.h
 source:
 - path: third_party/matter_sdk/src/app/ReadClient.cpp
 - path: third_party/matter_sdk/src/app/BufferedReadCallback.cpp

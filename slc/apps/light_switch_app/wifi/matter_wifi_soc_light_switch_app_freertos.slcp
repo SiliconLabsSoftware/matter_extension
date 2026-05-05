@@ -24,6 +24,7 @@ component:
   - id: mbedtls_entropy_default_aws
     condition: [matter_aws]
   - id: matter_wifi
+  - id: matter_read_client
 
   - id: matter_light_switch
   - id: app_common

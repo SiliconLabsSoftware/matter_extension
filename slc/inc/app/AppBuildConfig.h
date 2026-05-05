@@ -13,7 +13,9 @@
 
 // <i> Default: 0
 // <q CHIP_CONFIG_ENABLE_READ_CLIENT> Read Client
+#ifndef CHIP_CONFIG_ENABLE_READ_CLIENT
 #define CHIP_CONFIG_ENABLE_READ_CLIENT 0
+#endif
 
 // <i> Default: 1
 // <q CHIP_CONFIG_ENABLE_SESSION_RESUMPTION> Session Resumption
