@@ -118,6 +118,29 @@ pipeline
                 }
             }
         }
+        stage('Code Coverage (GitHub artifact)') {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.actionWithRetry {
+                            pipelineFunctions.download_coverage_artifact(workflow_id)
+                        }
+                    }
+                    archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
+                    sh '''
+                        if [ -f coverage/coverage.info ]; then
+                            echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
+                            ls -la coverage/
+                        else
+                            echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
+                        fi
+                    '''
+                }
+            }
+        }
         stage('Code Size Analysis') {
             when {
                 expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }

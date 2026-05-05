@@ -1,0 +1,109 @@
+name: Coverage LCOV Builder
+
+on:
+    workflow_call:
+        inputs:
+            build-type:
+                required: true
+                type: string
+
+permissions:
+    contents: read
+    actions: write
+
+env:
+    CHIP_NO_LOG_TIMESTAMPS: true
+
+jobs:
+    coverage:
+        name: Build Coverage (lcov)
+        runs-on: ubuntu-latest
+
+        container:
+            image: ghcr.io/project-chip/chip-build:167
+            volumes:
+                - "/:/runner-root-volume"
+                - "/tmp/log_output:/tmp/test_logs"
+            options: --privileged --sysctl "net.ipv6.conf.all.disable_ipv6=0 net.ipv4.conf.all.forwarding=1 net.ipv6.conf.all.forwarding=1"
+
+        steps:
+            - name: Checkout matter_extension
+              uses: actions/checkout@v6
+              with:
+                  submodules: false
+
+            - name: Mark repository as safe for Git
+              shell: bash
+              run: |
+                  git config --global --add safe.directory '*'
+
+            - name: Initialize matter_sdk submodule
+              shell: bash
+              run: |
+                  git submodule update --init --recursive=false third_party/matter_sdk
+
+            - name: Checkout matter_sdk linux submodules
+              shell: bash
+              run: |
+                  cd third_party/matter_sdk
+                  ./scripts/checkout_submodules.py --shallow --platform linux
+
+            - name: Install coverage dependencies
+              shell: bash
+              run: |
+                  apt-get update
+                  apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev
+
+            - name: Bootstrap matter_sdk environment
+              shell: bash
+              env:
+                  PW_NO_CIPD_CACHE_DIR: 1
+                  PW_ENVSETUP_NO_BANNER: 1
+              run: |
+                  cd third_party/matter_sdk
+                  source scripts/bootstrap.sh -p linux
+
+            - name: Run build_coverage.sh
+              shell: bash
+              run: |
+                  cd third_party/matter_sdk
+                  ./scripts/build_coverage.sh --yaml --xml
+
+            - name: Stage coverage artifact
+              shell: bash
+              run: |
+                  set -e
+                  src="third_party/matter_sdk/out/coverage/coverage"
+                  dst="coverage"
+                  mkdir -p "$dst"
+
+                  if [ -f "$src/lcov_final.info" ]; then
+                      cp "$src/lcov_final.info" "$dst/coverage.info"
+                  elif [ -f "$src/coverage.info" ]; then
+                      cp "$src/coverage.info" "$dst/coverage.info"
+                  else
+                      echo "ERROR: No lcov info file found under $src" >&2
+                      ls -la "$src" || true
+                      exit 1
+                  fi
+
+                  if [ -f "$src/coverage.xml" ]; then
+                      cp "$src/coverage.xml" "$dst/coverage.xml"
+                  fi
+
+                  if [ -d "$src/html" ]; then
+                      cp -r "$src/html" "$dst/html"
+                  fi
+
+                  lcov --summary "$dst/coverage.info" > "$dst/coverage-summary.txt" 2>&1 || true
+                  echo "Staged coverage artifact:"
+                  ls -la "$dst"
+
+            - name: Upload coverage artifact
+              uses: actions/upload-artifact@v7
+              with:
+                  name: lcov-report-${{ inputs.build-type }}-coverage
+                  path: coverage/**
+                  if-no-files-found: error
+                  retention-days: 30
+                  overwrite: true

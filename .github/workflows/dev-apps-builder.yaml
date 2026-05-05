@@ -221,6 +221,14 @@ jobs:
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build_coverage:
+        name: Build Coverage (lcov)
+        needs: [set-build-type]
+        if: ${{ needs.set-build-type.outputs.build-type == 'full' && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_')) }}
+        uses: ./.github/workflows/coverage-lcov-builder.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
