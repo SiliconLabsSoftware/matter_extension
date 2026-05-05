@@ -52,7 +52,7 @@ jobs:
               shell: bash
               run: |
                   apt-get update
-                  apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev
+                  apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev libevent-dev
 
             - name: Bootstrap matter_sdk environment
               shell: bash
