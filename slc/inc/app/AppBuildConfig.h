@@ -11,7 +11,7 @@
 // <q CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION> Matter Subscription Timeout Resumption
 #define CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION 1
 
-// <i> Default: 1
+// <i> Default: 0
 // <q CHIP_CONFIG_ENABLE_READ_CLIENT> Read Client
 #define CHIP_CONFIG_ENABLE_READ_CLIENT 0
 
