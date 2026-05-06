@@ -8,6 +8,7 @@ if(env.BRANCH_NAME == 'main'){
     // Trigger Thursday at 10:05pm EDT (2 hrs after github trigger)
     pipelineProperties << pipelineTriggers([pollSCM('5 2 * * 5')])
 } 
+SQA_UTF_BRANCH = "release_2.9-1.6" // to be set only for release and main branches
 
 properties(pipelineProperties)
 
@@ -140,10 +141,14 @@ pipeline
                     } else {
                         branch_name = env.BRANCH_NAME
                     }
-                    if ENV.BRANCH_NAME.startsWith("release_") {
-                        utf_branch_name = env.BRANCH_NAME
+                    if (env.CHANGE_TARGET == null) {
+                        utf_branch_name = SQA_UTF_BRANCH
                     } else {
-                        utf_branch_name = "main"
+                        if (env.CHANGE_TARGET.startsWith("release_")) {
+                            utf_branch_name = env.CHANGE_TARGET
+                        } else {
+                            utf_branch_name = "main" // default to main if not a release branch
+                        }
                     }
                     parallelNodes['MG24 Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
