@@ -287,6 +287,11 @@ def check_prerequisites():
         log_error("envsubst not installed (part of gettext package)")
         sys.exit(1)
 
+def log_conan_download_notice() -> None:
+    log_info(
+        "Apply Conan remotes from packages/, then `slt update` for simplicity-sdk and wiseconnect."
+    )
+
 def setup_conan_environment():
     """Set up Conan environment variables"""
     conan_home = os.path.expanduser("~/.silabs/slt/installs/conan")
@@ -586,6 +591,9 @@ def main():
     check_prerequisites()
     print()
     
+    log_conan_download_notice()
+    print()
+
     setup_conan_environment()
     configure_conan_remotes(repo_root)
     update_slt_packages()
