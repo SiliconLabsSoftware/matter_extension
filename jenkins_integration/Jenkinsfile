@@ -144,16 +144,33 @@ pipeline
                         pipelineFunctions.actionWithRetry {
                             pipelineFunctions.download_coverage_artifact(workflow_id)
                         }
+                        sh '''
+                            if [ -f coverage/coverage.info ]; then
+                                echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
+                                ls -la coverage/
+                                if ! command -v gcovr >/dev/null 2>&1; then
+                                    pip3 install --user "gcovr==8.3"
+                                fi
+                                export PATH="${HOME}/.local/bin:${PATH}"
+                                gcovr --add-tracefile coverage/coverage.info \
+                                    --sonarqube \
+                                    -o coverage/sonarqube-coverage.xml
+                                echo "[SUCCESS] Wrote coverage/sonarqube-coverage.xml"
+                            else
+                                echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
+                            fi
+                        '''
                     }
                     archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
-                    sh '''
-                        if [ -f coverage/coverage.info ]; then
-                            echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
-                            ls -la coverage/
-                        else
-                            echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
-                        fi
-                    '''
+                    if (fileExists('coverage/sonarqube-coverage.xml')) {
+                        withSonarQubeEnv('SonarQube') {
+                            sh '''
+                                sonar-scanner
+                            '''
+                        }
+                    } else {
+                        echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
+                    }
                 }
             }
         }
