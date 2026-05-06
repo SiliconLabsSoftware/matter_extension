@@ -149,9 +149,8 @@ pipeline
                                 echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
                                 ls -la coverage/
                                 if ! command -v gcovr >/dev/null 2>&1; then
-                                    pip3 install --user "gcovr==8.3"
+                                    pip3 install "gcovr==8.3"
                                 fi
-                                export PATH="${HOME}/.local/bin:${PATH}"
                                 gcovr --add-tracefile coverage/coverage.info \
                                     --sonarqube \
                                     -o coverage/sonarqube-coverage.xml
