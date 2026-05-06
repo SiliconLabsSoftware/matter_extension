@@ -97,27 +97,6 @@ pipeline
                 }
             }
         }
-        stage('Upload Artifacts') {
-            steps {
-                script {
-                    retry(9) {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            pipelineFunctions.actionWithRetry {
-                                def result = pipelineFunctions.upload_artifacts()
-                                commit_sha = result.commit_sha
-                                run_number = result.run_number
-                                workflow_id = result.workflow_id
-                                bypass_send_results_gh = result.bypass_send_results
-                                pr_number = result.pr_number
-                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
-                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
-                                buildDescription(build_description)
-                            }
-                        }
-                    }
-                }
-            }
-        }
         stage('Code Coverage (GitHub artifact)') {
             when {
                 expression {
@@ -142,6 +121,27 @@ pipeline
                             echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
                         fi
                     '''
+                }
+            }
+        }
+        stage('Upload Artifacts') {
+            steps {
+                script {
+                    retry(9) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            pipelineFunctions.actionWithRetry {
+                                def result = pipelineFunctions.upload_artifacts()
+                                commit_sha = result.commit_sha
+                                run_number = result.run_number
+                                workflow_id = result.workflow_id
+                                bypass_send_results_gh = result.bypass_send_results
+                                pr_number = result.pr_number
+                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
+                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
+                                buildDescription(build_description)
+                            }
+                        }
+                    }
                 }
             }
         }
