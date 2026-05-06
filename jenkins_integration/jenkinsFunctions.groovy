@@ -345,7 +345,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             "UTF_COMMANDER_PATH=${commanderPath}",
                             "TCM_SIMPLICITYCOMMANDER=${commanderPath}",
                             "SECMGR_COMMANDER_PATH=${commanderPath}",
-                            "CSA_MATTER_VERSION=1.5",
+                            "CSA_MATTER_VERSION=1.6",
                             "PATH+COMMANDER_PATH=${commanderDir}"
                         ])
                         {
