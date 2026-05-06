@@ -50,3 +50,6 @@ define:
     value: 1
   - name: LWIP_IPV6
     value: 1
+  - name: SL_MATTER_ENABLE_DUAL_STACK
+    value: "1"
+    condition: [sl_si91x_network_dual_stack]
