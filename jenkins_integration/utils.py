@@ -30,12 +30,19 @@ def parse_arguments():
     parser.add_argument("--branch_name", required=True, help="Name of the branch or PR (e.g., 'main', 'PR-123')")
     parser.add_argument("--build_number", required=True, help="Build number from Jenkins (e.g., '1')")
     parser.add_argument("--sqa", required=True, choices=['true', 'false'], help="Boolean flag to indicate SQA builds")
-    parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA)")
-    parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA)")
-    parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
+    parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA); use 'null' when unknown")
+    parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA); use 'null' when unknown")
+    parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA); use 'null' when unknown")
+    parser.add_argument(
+        "--skip_merge_wait",
+        default="false",
+        choices=["true", "false"],
+        help="If true, do not wait for Merge App Artifacts (coverage-only GitHub runs)",
+    )
 
     args = parser.parse_args()
     args.sqa = True if args.sqa == 'true' else False
+    args.skip_merge_wait = True if args.skip_merge_wait == 'true' else False
     return args
 
 
@@ -84,19 +91,30 @@ def artifacts_already_uploaded(workflow_info, sqa):
     ubai_artifact = search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa)
     return True if len(ubai_artifact) > 0 else False
 
-def process_artifacts(workflow_info, sqa):
+def process_artifacts(workflow_info, sqa, skip_merge_wait=False):
     """
     Process artifacts by waiting for them to be ready, then downloading and uploading.
-    
+
     Args:
         workflow_info (dict): Workflow information containing commit_sha, branch_name, build_number, and workflow_id
         sqa (bool): Whether this is an SQA build
+        skip_merge_wait (bool): If True, skip wait_for_artifacts (no merged dev-artifacts expected)
     """
     print("Merged artifacts file not present in UBAI. Proceeding to download and upload artifacts.")
-    wait_for_artifacts(workflow_info['commit_sha'], sqa)
-    download_and_upload_artifacts(
-        workflow_info['workflow_id'],
-        workflow_info['branch_name'],
-        workflow_info['build_number'],
-        sqa
-    ) 
+    if not skip_merge_wait:
+        wait_for_artifacts(workflow_info['commit_sha'], sqa)
+    else:
+        print("Skipping wait for Merge App Artifacts (skip_merge_wait=true).")
+    try:
+        download_and_upload_artifacts(
+            workflow_info['workflow_id'],
+            workflow_info['branch_name'],
+            workflow_info['build_number'],
+            sqa
+        )
+    except RuntimeError as exc:
+        msg = str(exc)
+        if skip_merge_wait and ('dev-artifacts' in msg or 'No dev artifact' in msg):
+            print(f"No dev binary artifacts for this workflow; skipping upload. ({msg})")
+            return
+        raise

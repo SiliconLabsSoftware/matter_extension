@@ -1,14 +1,37 @@
-def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
+def resolve_workflow_for_coverage() {
+    withCredentials([
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ]) {
+        def output = sh(
+            script: "python3 -u jenkins_integration/artifacts/resolve_workflow_for_coverage.py --branch_name ${env.BRANCH_NAME} --commit_sha \$(git rev-parse HEAD)",
+            returnStdout: true
+        ).trim()
+        echo "resolve_workflow_for_coverage output:\n${output}"
+        def parsed = parse_upload_artifacts_output(output)
+        def skipMerge = output.contains('SKIP_DEV_MERGE_WAIT=1')
+        echo "skip_merge_wait for binary upload: ${skipMerge}"
+        return [
+            commit_sha       : parsed.commit_sha,
+            run_number       : parsed.run_number,
+            workflow_id      : parsed.workflow_id,
+            bypass_results   : parsed.bypass_results,
+            pr_number        : parsed.pr_number,
+            skip_merge_wait  : skipMerge ? 'true' : 'false'
+        ]
+    }
+}
+
+def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null", skip_merge_wait="false") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} --skip_merge_wait ${skip_merge_wait}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
-            return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_send_results_gh, pr_number: result.pr_number]
+            return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_results, pr_number: result.pr_number]
         }
     }
 }
@@ -258,6 +281,11 @@ def parse_upload_artifacts_output(output) {
             echo "Workflow Run Number: ${run_number}"
         } else {
             error("Workflow run number not found in output.")
+        }
+        if (workflow_id) {
+            echo "Workflow ID: ${workflow_id}"
+        } else {
+            error("Workflow ID not found in output.")
         }
         if (pr_number) {
             echo "PR Number: ${pr_number}"

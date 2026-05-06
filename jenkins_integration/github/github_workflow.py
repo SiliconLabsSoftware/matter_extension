@@ -8,6 +8,7 @@ This module handles all GitHub API interactions including:
 - Managing workflow runs and check runs.
 """
 
+import fnmatch
 import requests
 import time
 import os
@@ -69,7 +70,7 @@ def get_workflow_info(branch_name):
     if branch_name.startswith("PR"):
         head_branch = _get_pr_latest_sha(branch_name)
         if head_branch:
-            pr_url = f"{config.actions_runs_url_pr}&branch={head_branch}"
+            pr_url = f"{config.actions_runs_url_pr}&branch={requests.utils.quote(head_branch, safe='')}"
         else:
             pr_url = config.actions_runs_url_pr
         print(f"Fetching workflow runs from actions/runs event Pull Request URL: {pr_url}")
@@ -410,4 +411,123 @@ def _is_artifact_job_complete(check_run):
         print(f"{job_name} finished successfully. Artifacts are built. "
               f"Workflow Id: {check_run['id']}")
         return True
-    return False 
+    return False
+
+
+def _fetch_workflow_runs_page(url):
+    """Fetch one page of workflow runs from a list URL."""
+    response = _make_github_api_request(url)
+    return response.json()
+
+
+def find_build_dev_apps_run_for_commit(branch_name, head_sha):
+    """
+    Find the 'Build Dev apps' workflow run whose head commit matches head_sha.
+
+    Unlike get_workflow_info(), this matches completed runs as well, so Jenkins
+    can resolve the run after GitHub Actions has finished (e.g. workflow_dispatch test).
+
+    Args:
+        branch_name: Git branch (e.g. main) or PR identifier PR-<n>.
+        head_sha: Full 40-char commit SHA from the Jenkins workspace.
+
+    Returns:
+        tuple: (run_number, workflow_id, commit_sha, pr_number_or_none)
+
+    Raises:
+        RuntimeError: If no matching workflow run is found.
+    """
+    workflow_name = "Build Dev apps"
+    workflow_runs = []
+
+    if branch_name.startswith("PR-"):
+        pr_number = branch_name.split('-')[1]
+        response = _make_github_api_request(config.pr_sha_url)
+        prs_data = response.json()
+        commit_from_pr, head_branch = _find_pr_commit_sha(prs_data, pr_number)
+        if commit_from_pr != head_sha:
+            print(f"Warning: PR #{pr_number} head SHA from API ({commit_from_pr}) != "
+                  f"Jenkins head_sha ({head_sha}); using workflow runs matching Jenkins SHA.")
+        pr_url = f"{config.actions_runs_url_pr}&branch={requests.utils.quote(head_branch, safe='')}"
+        print(f"Fetching PR workflow runs: {pr_url}")
+        data = _fetch_workflow_runs_page(pr_url)
+        workflow_runs = data.get('workflow_runs') or []
+    else:
+        encoded = requests.utils.quote(branch_name, safe='')
+        branch_url = f"{config.actions_runs_url}&branch={encoded}"
+        print(f"Fetching branch workflow runs: {branch_url}")
+        data = _fetch_workflow_runs_page(branch_url)
+        workflow_runs = data.get('workflow_runs') or []
+
+    matches = [
+        w for w in workflow_runs
+        if w.get('name') == workflow_name and w.get('head_sha') == head_sha
+    ]
+
+    if not matches:
+        in_progress = [
+            w for w in workflow_runs
+            if w.get('name') == workflow_name and w.get('status') == 'in_progress'
+        ]
+        for w in in_progress:
+            if w.get('head_sha') == head_sha:
+                matches.append(w)
+
+    if not matches:
+        raise RuntimeError(
+            f"No '{workflow_name}' run found for commit {head_sha} on branch/PR '{branch_name}'. "
+            f"Recent runs: {[(w.get('id'), w.get('head_sha')[:7], w.get('status')) for w in workflow_runs[:5]]}"
+        )
+
+    def sort_key(w):
+        st = w.get('status') or ''
+        pri = 0 if st == 'in_progress' else 1 if st == 'queued' else 2
+        return (pri, -(w.get('run_number') or 0))
+
+    matches.sort(key=sort_key)
+    chosen = matches[0]
+    pr_num = None
+    prs = chosen.get('pull_requests') or []
+    if prs:
+        pr_num = prs[0].get('number')
+
+    return _extract_workflow_info(chosen) + (pr_num,)
+
+
+def wait_for_lcov_coverage_artifact(workflow_id, max_retries=20, wait_interval=60):
+    """
+    Poll GitHub until the workflow run exposes an lcov-report-*-coverage artifact.
+
+    Raises:
+        TimeoutError: If the artifact does not appear in time.
+        RuntimeError: On API errors.
+    """
+    workflow_id = int(workflow_id)
+    artifact_url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
+    pattern = "lcov-report-*-coverage"
+
+    for attempt in range(1, max_retries + 2):
+        print(f"Checking for LCOV artifact on workflow {workflow_id} (attempt {attempt}/{max_retries + 1})")
+        response = _make_github_api_request(artifact_url)
+        artifacts = response.json().get('artifacts') or []
+        for a in artifacts:
+            if fnmatch.fnmatch(a.get('name', ''), pattern):
+                print(f"LCOV artifact found: {a['name']}")
+                return
+        if attempt > max_retries:
+            names = [a.get('name') for a in artifacts]
+            raise TimeoutError(
+                f"No artifact matching '{pattern}' for workflow {workflow_id} after "
+                f"{max_retries} minutes. Available: {names}"
+            )
+        print(f"LCOV artifact not ready yet. Waiting {wait_interval} seconds...")
+        time.sleep(wait_interval)
+
+
+def github_run_has_dev_artifacts(workflow_id):
+    """Return True if the run has a merged dev-artifacts-* artifact."""
+    workflow_id = int(workflow_id)
+    url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
+    response = _make_github_api_request(url)
+    artifacts = response.json().get('artifacts') or []
+    return any((a.get('name') or '').startswith('dev-artifacts') for a in artifacts)
