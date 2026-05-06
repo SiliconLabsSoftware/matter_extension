@@ -24,6 +24,7 @@ component:
   - id: matter_wifi_ble
   - id: matter_ota_support
   - id: matter_crypto
+  - id: matter_read_client
 
   - id: matter_efr32_ncp
   - id: matter_wifi
