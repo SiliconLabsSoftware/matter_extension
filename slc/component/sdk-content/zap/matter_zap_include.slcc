@@ -37,6 +37,7 @@ include:
     - path: TimeSynchronization.h
     - path: AccessControl.h
     - path: OperationalCredentials.h
+    - path: OtaSoftwareUpdateRequestor.h
     - path: UserLabel.h
     - path: UnitLocalization.h
     - path: OccupancySensing.h
