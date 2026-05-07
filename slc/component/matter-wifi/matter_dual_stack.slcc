@@ -1,16 +1,20 @@
-# Re-work this component to implement proper matter_sdk source code and/or SiSDK/WiFi SDK components
-id: matter_lwip
+id: matter_dual_stack
 package: matter
 description: >
-  Provides the LwIP TCP/IP networking stack configuration and FreeRTOS port used by Matter applications running over Wi-Fi on Silicon Labs platforms.
-  This component integrates Matter's LwIP adaptations with the Silicon Labs Wi-Fi SDK, enabling IPv6 networking required for Matter over Wi-Fi.
-label: Matter LwIP
+  Matter Wi-Fi network stack provider for dual-stack configurations on
+  SiWx917-based platforms (IPv4 over NWP offload + IPv6 over host LwIP).
+  Drop-in alternative to matter_lwip; selected in place of it for dual-stack
+  Matter applications. Defines SL_MATTER_ENABLE_DUAL_STACK=1, mirroring the
+  enable_matter_dual_stack flag in the GN build system.
+label: Matter Dual Stack
 category: Matter-WiFi|lwip
 quality: production
 metadata:
   sbom:
     license: Zlib
+
 provides:
+  - name: matter_dual_stack
   - name: matter_lwip
   - name: lwip
   - name: lwip_port_freertos
@@ -18,8 +22,8 @@ provides:
   - name: sl_si91x_errno
 
 requires:
-  - name: sl_si91x_lwip_stack
-    condition: [sl_si91x_wireless]
+  - name: sl_si91x_network_dual_stack
+  - name: sl_si91x_asynchronous_socket
 
 include:
   - path: third_party/matter_sdk/src/lwip/silabs
@@ -49,3 +53,5 @@ define:
     value: 1
   - name: LWIP_IPV6
     value: 1
+  - name: SL_MATTER_ENABLE_DUAL_STACK
+    value: "1"
