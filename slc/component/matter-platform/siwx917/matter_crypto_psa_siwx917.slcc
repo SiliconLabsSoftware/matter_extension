@@ -90,3 +90,5 @@ define:
     value: <siwx917-chip-psa-config.h>
   - name: SLI_SI91X_TRNG_DUPLICATE_CHECK
     value: 0
+  - name: SL_SI91X_SIDE_BAND_CRYPTO
+    value: 1
