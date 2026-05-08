@@ -18,9 +18,9 @@ include:
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/Si70xxSensorGsdk.cpp
-    condition: matter_thread
+    condition: matter_platform_mg
   - path: third_party/matter_sdk/examples/platform/silabs/Si70xxSensorWiseMcu.cpp
-    condition: matter_wifi
+    condition: matter_platform_siwx917
 
 define:
   - name: SL_MATTER_USE_SI70XX_SENSOR
