@@ -2133,9 +2133,11 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/thermostat-user-interface-configuration-server.cpp
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementCluster.h
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementDelegate.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/thread-border-router-management-server.cpp
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/thread-border-router-management-server.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/thread-br-delegate.h
   - third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server/BUILD.gn
@@ -2288,6 +2290,8 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/wifi-network-management-server/wifi-network-management-server.h
   - third_party/matter_sdk/src/app/clusters/window-covering-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/window-covering-server/WindowCoveringCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/window-covering-server/WindowCoveringCluster.h
+  - third_party/matter_sdk/src/app/clusters/window-covering-server/WindowCoveringDelegate.h
   - third_party/matter_sdk/src/app/clusters/window-covering-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/window-covering-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/window-covering-server/window-covering-delegate.h
@@ -3185,6 +3189,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/actions-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/administrator-commissioning-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/air-quality-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/alchemy_allowlists.yaml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/ambient-context-sensing-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/application-basic-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/application-launcher-cluster.xml
