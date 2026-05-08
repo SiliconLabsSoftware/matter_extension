@@ -148,13 +148,11 @@ pipeline
                             if [ -f coverage/coverage.info ]; then
                                 echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
                                 ls -la coverage/
-                                if ! command -v gcovr >/dev/null 2>&1; then
-                                    pip3 install "gcovr==8.3"
+                                if [ -f coverage/sonarqube-coverage.xml ]; then
+                                    echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
+                                else
+                                    echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
                                 fi
-                                gcovr --add-tracefile coverage/coverage.info \
-                                    --sonarqube \
-                                    -o coverage/sonarqube-coverage.xml
-                                echo "[SUCCESS] Wrote coverage/sonarqube-coverage.xml"
                             else
                                 echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
                             fi
