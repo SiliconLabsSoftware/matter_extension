@@ -18,9 +18,9 @@ on:
                     - full
                     - test
 
-concurrency:
-    group: dev-build-examples-${{ github.ref }}
-    cancel-in-progress: true
+# concurrency:
+#     group: dev-build-examples-${{ github.ref }}
+#     cancel-in-progress: true
 
 permissions:
   contents: read
