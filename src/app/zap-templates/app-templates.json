@@ -301,6 +301,11 @@
             "path": "templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt",
             "name": "Descriptor static cluster configuration",
             "output": "app/static-cluster-config/Descriptor.h"
+        },
+        {
+            "path": "templates/app/slc_compatibility/static-cluster-config-Groups.zapt",
+            "name": "Groups static cluster configuration",
+            "output": "app/static-cluster-config/Groups.h"
         }
 
     ],
