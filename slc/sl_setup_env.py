@@ -239,7 +239,7 @@ class MatterEnvSetup:
                 logging.error(f"Tool path for {tool} is invalid or does not exist: {path}")
                 sys.exit(1)
 
-        arm_gcc_bin = os.path.join(self.paths.get('gcc-arm-none-eabi'), "bin")
+        arm_gcc_bin = os.path.join(self.paths.get('gcc-arm-none-eabi/14.2.rel1'), "bin")
         path_separator = ";" if self.platform == "win32" else ":"
 
         if self.platform == "darwin":
@@ -337,7 +337,7 @@ class MatterEnvSetup:
     
     def setup_tools(self):
         """Install and configure all required development tools."""
-        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi", "commander", "ninja", "cmake"]
+        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi/14.2.rel1", "commander", "ninja", "cmake"]
         self.paths = {}
         for tool in tools_list:
             self.paths[tool] = self.install_tools(tool)
