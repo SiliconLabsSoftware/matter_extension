@@ -265,7 +265,7 @@ class MatterEnvSetup:
         try:
             with open(env_path, "w") as outfile:
                 outfile.write(f"STUDIO_ADAPTER_PACK_PATH={self.zap_path}\n")
-                outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi')}\n")
+                outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi/14.2.rel1')}\n")
                 outfile.write(f"JAVA_HOME={java_path}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
