@@ -105,7 +105,7 @@ jobs:
                   fi
 
                   lcov --summary "$dst/coverage.info" > "$dst/coverage-summary.txt" 2>&1 || true
-                  gcovr --add-tracefile "$dst/coverage.info" \
+                  gcovr --lcov-add-tracefile "$dst/coverage.info" \
                       --sonarqube \
                       -o "$dst/sonarqube-coverage.xml"
                   echo "Staged coverage artifact:"
