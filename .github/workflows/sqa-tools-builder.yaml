@@ -6,9 +6,6 @@ on:
       build-type:
         required: true
         type: string
-  push:
-    branches:
-      - 'fix/chip-tool'
 
 concurrency:
   group: sqa-tools-builder-${{ github.ref }}
