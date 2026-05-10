@@ -112,7 +112,7 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-  bbuild-sqa-tools:
+  build-sqa-tools:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/project-chip/chip-build-crosscompile:194
