@@ -112,8 +112,10 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-  build-sqa-tools:
-    runs-on: ghcr.io/project-chip/chip-build-crosscompile:182
+  bbuild-sqa-tools:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/project-chip/chip-build-crosscompile:194
 
     steps:
       - name: Checkout repository
