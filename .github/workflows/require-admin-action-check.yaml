@@ -26,7 +26,7 @@ jobs:
             'sl-require-admin-action') }}
         steps:
             - name: Add comment to PR
-              uses: actions/github-script@v8
+              uses: actions/github-script@v9
               with:
                   script: |
                       const prNumber = context.payload.pull_request.number;
@@ -65,7 +65,7 @@ jobs:
             'sl-require-admin-action'
         steps:
             - name: Add comment to PR
-              uses: actions/github-script@v8
+              uses: actions/github-script@v9
               with:
                   script: |
                       const prNumber = context.payload.pull_request.number;
@@ -88,7 +88,7 @@ jobs:
                       }
 
             - name: Re-add sl-require-admin-action label
-              uses: actions/github-script@v8
+              uses: actions/github-script@v9
               with:
                   script: |
                       const prNumber = context.payload.pull_request.number;

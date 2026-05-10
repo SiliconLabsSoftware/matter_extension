@@ -35,23 +35,26 @@ jobs:
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  path-to-example-app: "./slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app_freertos.slcp"
                   example-app: code-canary
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
             - name: Move results
               run: |
-                  mv ./out ./current      
+                  mv ./out ./current 
+
             - name: Build code-canary app on PR target
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
                   json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./baseline/slc/apps/multi-sensor-app/thread/multi-sensor-app.slcp"
+                  path-to-example-app: "./baseline/slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app_freertos.slcp"
                   example-app: code-canary
                   build-script: "./baseline/slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
+              env:
+                MATTER_ROOT: ${{ github.workspace }}/baseline
             - name: Generate Code Size Results and Compare
               shell: bash
               run: |
