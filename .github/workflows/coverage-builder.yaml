@@ -102,8 +102,8 @@ jobs:
                       cp "$src/lcov_final.info" "$dst/coverage.info"
                   elif [ -f "$src/coverage.info" ]; then
                       cp "$src/coverage.info" "$dst/coverage.info"
-                  elif [ -f "$src/sonarqube-coverage.xml" ]; then
-                      cp "$src/sonarqube-coverage.xml" "$dst/sonarqube-coverage.xml"
+                  elif [ -f "$src/../../../sonarqube-coverage.xml" ]; then
+                      cp "$src/../../../sonarqube-coverage.xml" "$dst/sonarqube-coverage.xml"
                   else
                       echo "ERROR: No lcov info file found under $src" >&2
                       ls -la "$src" || true
