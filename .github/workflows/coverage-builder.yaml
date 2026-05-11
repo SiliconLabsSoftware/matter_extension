@@ -82,7 +82,13 @@ jobs:
             - name: Build SonarQube XML
               shell: bash
               run: |
+                  cd third_party/matter_sdk
                   gcovr --sonarqube sonarqube-coverage.xml
+                  echo "<<<<<<<<<<< /out/coverage/coverage >>>>>>>>>>>>>>>>>>"
+                  ls -la /out/coverage/coverage
+                  echo "Path: "
+                  pwd
+                  ls -la
 
             - name: Stage coverage artifact
               shell: bash
