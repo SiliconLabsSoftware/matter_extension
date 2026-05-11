@@ -204,6 +204,22 @@
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
+  <descriptors name="MatterLockOverWiFi" label="Matter WiFi - 917 NCP Lock Dual Stack FreeRTOS"
+               description="Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi door lock app with BLE on host (Dual stack - IPV6 on EFR32, IPV4 on SiWx917)">
+    <properties key="namespace" value="template.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.apps.lock_app.wifi.matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcp"/>
+    <properties key="boardCompatibility" value="brd4186c brd4187c com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="core.hidden" value="true"/>
+  </descriptors>
   <descriptors name="MatterRefrigeratorOverWiFi" label="Matter WiFi - SoC Refrigerator FreeRTOS"
                description="Demonstrates a sample implementation of a Matter over Wi-Fi refrigerator app">
     <properties key="namespace" value="template.uc"/>
@@ -631,6 +647,23 @@
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_internal_single_series_2.matter_bootloader_internal_series_2.slcp slc.apps.lock_app.wifi.matter_wifi_917_ncp_lock_app_freertos.slcp"/>
+  </descriptors>
+  <descriptors name="MatterLockOverWifiSolution" label="Matter WiFi - 917 NCP Lock Dual Stack FreeRTOS"
+               description="Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi door lock app with BLE on host (Dual stack - IPV6 on EFR32, IPV4 on SiWx917) with internal bootloader">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.apps.lock_app.wifi.matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/lock_app/wifi/README_WiFi.md"/>
+    <properties key="boardCompatibility" value=" brd4186c brd4187c  com.silabs.board.none"/>
+    <properties key="partCompatibility" value=".*efr32mg24.*"/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="PRODUCTION"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|NCP Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_internal_single_series_2.matter_bootloader_internal_series_2.slcp slc.apps.lock_app.wifi.matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcp"/>
   </descriptors>
   <descriptors name="MatterOnOffPlugOverThreadSolution" label="Matter Thread - SoC Onoff Plug with external Bootloader FreeRTOS"
                description="Demonstrates a sample implementation of a Matter over Thread on/off plug app with external bootloader">
