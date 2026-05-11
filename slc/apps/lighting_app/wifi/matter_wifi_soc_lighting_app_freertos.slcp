@@ -63,6 +63,7 @@ component:
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
+  - id: matter_lwip
 
   - id: matter_lighting
 
