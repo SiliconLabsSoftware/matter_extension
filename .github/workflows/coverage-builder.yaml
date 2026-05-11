@@ -78,14 +78,11 @@ jobs:
                   cd third_party/matter_sdk
                   ./scripts/build_coverage.sh --yaml --xml
 
-                  gcovr --exclude=zzz_generated/ \
-                  --exclude=third_party/ \
-                  --exclude=".*tests/.*" \
-                  --exclude=".*testing/.*" \
-                  --include=src/ \
-                  --gcov-ignore-parse-errors \
-                  --merge-mode-functions=merge-use-line-min \
-                  --sonarqube="$COVERAGE_ROOT"/sonarqube-coverage.xml
+
+            - name: Build SonarQube XML
+              shell: bash
+              run: |
+                  gcovr --sonarqube sonarqube-coverage.xml
 
             - name: Stage coverage artifact
               shell: bash
