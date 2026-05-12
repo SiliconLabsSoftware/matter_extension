@@ -4,7 +4,7 @@
                 "default": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--with_app abcexcjcndndjcnsad"]
+                "arguments": [""]
             },
             {
                 "boards": ["brd4187c"],
