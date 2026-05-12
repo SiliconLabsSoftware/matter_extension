@@ -49,7 +49,6 @@ _NCP_README_HINT = re.compile(
 _APP_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 
 _DESCRIPTION_SAMPLE_PREFIX = "Demonstrates a sample implementation of "
-
 @dataclass(frozen=True)
 class _LabelClaimRequiresProjectName:
     """If label matches label_pattern, project_name must satisfy name_ok"""
@@ -70,12 +69,11 @@ _LABEL_CLAIM_REQUIRES_PROJECT_NAME: Tuple[_LabelClaimRequiresProjectName, ...] =
         "label taxonomy: label claims Zigbee but 'zigbee' not in project_name",
     ),
     _LabelClaimRequiresProjectName(
-        re.compile(r"\bDual Stack\b"),
+        re.compile(r"\bDual Stack\b", re.IGNORECASE),
         lambda n, _segs: "dual_stack" in n,
         "label taxonomy: label claims Dual Stack but 'dual_stack' not in project_name",
     ),
 )
-
 @dataclass
 class FileReport:
     path: Path
