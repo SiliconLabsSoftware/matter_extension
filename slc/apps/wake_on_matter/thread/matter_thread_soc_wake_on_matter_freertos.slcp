@@ -1,5 +1,5 @@
 project_name: matter_thread_soc_wake_on_matter_freertos
-label: Matter Thread - SoC Wake on Matter
+label: Matter Thread - SoC Wake on Matter FreeRTOS
 description: >
   Demonstrates a simple way of receiving Matter subscription on a Thread NCP
 quality: production
@@ -57,18 +57,14 @@ component:
   - id: mbedtls_tls
   - id: mbedtls_dtls
   - id: ot_ncp_source
-#  - id: ot_rtt_log
-#  - id: ot_reset_utils
-#  - id: ot_multi_instance_cli
- # - id: ot_crash_handler
   - id: iostream_usart
     instance:
-      - vcom
+      - vcom # Temp fix for Matter CLI
     condition:
       - device_series_2
   - id: iostream_eusart
     instance:
-      - vcom
+      - vcom # Need this by default for OTBR communication
     condition:
       - device_series_3
 
@@ -244,6 +240,8 @@ configuration:
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17
+  - option: optimize
+    value: debug
 readme:
   - path: ./README.md
 ui_hints:
