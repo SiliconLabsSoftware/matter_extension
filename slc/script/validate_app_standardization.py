@@ -33,7 +33,7 @@ def _path_for_report(path: Path) -> str:
     except ValueError:
         return path.as_posix()
 
-ALLOWED_TYPES: frozenset[str] = frozenset({"SoC", "RCP", "NCP", "Host"})
+ALLOWED_TYPES: frozenset[str] = frozenset({"SoC Project", "RCP Project", "NCP Project", "Host"})
 ALLOWED_DIFFICULTY: frozenset[str] = frozenset({"Beginner", "Advanced"})
 
 _ROLE_TOKEN = re.compile(r"(?<=_)(soc|ncp|rcp|host)(?=_)")
