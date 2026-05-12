@@ -48,7 +48,10 @@ _NCP_README_HINT = re.compile(
 
 _APP_NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 
-_DESCRIPTION_SAMPLE_PREFIX = "Demonstrates a sample implementation of "
+_DESCRIPTION_ALLOWED_PREFIXES: Tuple[str, ...] = (
+    "Demonstrates a sample implementation of ",
+    "Demonstrates a POC of ",
+)
 @dataclass(frozen=True)
 class _LabelClaimRequiresProjectName:
     """If label matches label_pattern, project_name must satisfy name_ok"""
@@ -433,10 +436,12 @@ def _validate_common_studio_fields(
         skip_desc_shape = _is_bootloaderish(rel_posix, app_name_for_taxonomy) or (
             "/openthread_border_router_doc/" in rp
         )
-        if not skip_desc_shape and not desc.startswith(_DESCRIPTION_SAMPLE_PREFIX):
+        if not skip_desc_shape and not any(
+            desc.startswith(p) for p in _DESCRIPTION_ALLOWED_PREFIXES
+        ):
             rep.add(
-                "description must start with \"Demonstrates a sample implementation of ...\" "
-                "(SiSDK pattern for Matter apps)"
+                "description must start with \"Demonstrates a sample implementation of ...\" (production quality apps) "
+                'or "Demonstrates a POC of ..." (non-production quality apps)'
             )
 
 def validate_slcp(path: Path, rel_posix: str) -> FileReport:
