@@ -1,7 +1,7 @@
 
 {
     "standard": {
-                "default": [
+        "default": [
             {
                 "boards": ["brd4187c"],
                 "arguments": [""]
