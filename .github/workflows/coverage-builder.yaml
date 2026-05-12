@@ -84,17 +84,13 @@ jobs:
               run: |
                   cd third_party/matter_sdk
                   gcovr --sonarqube sonarqube-coverage.xml
-                  echo "<<<<<<<<<<< /out/coverage/coverage >>>>>>>>>>>>>>>>>>"
-                  ls -la ./out/coverage/coverage
-                  echo "Path: "
-                  pwd
-                  ls -la
 
             - name: Stage coverage artifact
               shell: bash
               run: |
                   set -e
                   src="third_party/matter_sdk/out/coverage/coverage"
+                  msd="third_party/matter_sdk"
                   dst="coverage"
                   mkdir -p "$dst"
 
@@ -102,12 +98,14 @@ jobs:
                       cp "$src/lcov_final.info" "$dst/coverage.info"
                   elif [ -f "$src/coverage.info" ]; then
                       cp "$src/coverage.info" "$dst/coverage.info"
-                  elif [ -f "$src/../../../sonarqube-coverage.xml" ]; then
-                      cp "$src/../../../sonarqube-coverage.xml" "$dst/sonarqube-coverage.xml"
                   else
                       echo "ERROR: No lcov info file found under $src" >&2
                       ls -la "$src" || true
                       exit 1
+                  fi
+
+                  if [ -f "$msd/sonarqube-coverage.xml" ]; then
+                      cp "$msd/sonarqube-coverage.xml" "$dst/sonarqube-coverage.xml"
                   fi
 
                   if [ -f "$src/coverage.xml" ]; then
