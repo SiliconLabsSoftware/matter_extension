@@ -25,8 +25,8 @@
         "lock_app" :[
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix lto",
-                              "--with_app wiseconnect_toolchain_gcc_lto"]
+                "arguments": ["--output_suffix sit-300",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:300'"]
             }
         ]
     },
