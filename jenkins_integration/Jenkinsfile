@@ -23,6 +23,9 @@ def commit_change_summary = ""
 // Temporary: set true to run Upload, tests, SQA, etc. after Code Coverage.
 def run_stages_after_coverage = false
 
+// Jenkins Secret text credential ID (user or global). Job must be allowed to use it.
+def sonarqubeTokenCredentialId = 'matter_extension_sonarqube_token'
+
 def combineSlackSummary(String commitSummary, String extra) {
     def c = commitSummary?.trim() ?: ''
     def e = extra?.trim() ?: ''
@@ -160,9 +163,11 @@ pipeline
                     }
                     archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
                     if (fileExists('coverage/sonarqube-coverage.xml')) {
-                        withSonarQubeEnv('SonarQube') {
+                        withCredentials([string(credentialsId: 'ardutta-sonar-token', variable: 'SONAR_TOKEN')]) {
                             sh '''
-                                sonar-scanner
+                                sonar-scanner \
+                                    -Dsonar.token="$SONAR_TOKEN" \
+                                    -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
                             '''
                         }
                     } else {
