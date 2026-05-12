@@ -21,6 +21,12 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
             }
+        ],
+        "lock_app" :[
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
+            }
         ]
     },
     "full": {

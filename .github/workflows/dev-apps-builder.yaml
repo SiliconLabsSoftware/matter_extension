@@ -59,14 +59,14 @@ jobs:
             - uses: ./.github/actions/cache-tools
               id: cache-tools
 
-    build_lighting_app:
-        name: Build Lighting App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "lighting_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            trustzone-support: true
+#    build_lighting_app:
+#        name: Build Lighting App
+#        needs: [set-build-type, cache-tools]
+#        uses: ./.github/workflows/platform-builder.yaml
+#        with:
+#            example-app: "lighting_app"
+#            build-type: ${{ needs.set-build-type.outputs.build-type }}
+#            trustzone-support: true
 
 #    build_air_quality_sensor_app:
 #        name: Build Air Quality Sensor App
@@ -84,14 +84,14 @@ jobs:
 #            example-app: "light_switch_app"
 #            build-type: ${{ needs.set-build-type.outputs.build-type }}
 #
-#    build_lock_app:
-#        name: Build Lock App
-#        needs: [set-build-type, cache-tools]
-#        uses: ./.github/workflows/platform-builder.yaml
-#        with:
-#            example-app: "lock_app"
-#            build-type: ${{ needs.set-build-type.outputs.build-type }}
-#            ncp-917-support: true
+    build_lock_app:
+        name: Build Lock App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "lock_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
 #
 #    build_thermostat_app:
 #        name: Build Thermostat App
