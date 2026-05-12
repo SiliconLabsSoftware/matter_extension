@@ -25,7 +25,8 @@
         "lock_app" :[
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
+                "arguments": ["--output_suffix lto",
+                              "--with_app wiseconnect_toolchain_gcc_lto"]
             }
         ]
     },
