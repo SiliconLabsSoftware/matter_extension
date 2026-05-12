@@ -1,6 +1,6 @@
 project_name: matter_thread_soc_code_size_sensor_freertos
 label: Matter Thread - SoC Code Size Sensor FreeRTOS
-description: Demonstrates a minimal sensor app implementation used for code size analysis
+description: Demonstrates a sample implementation of a minimal sensor app used for code size analysis
 category: Matter Application
 quality: production
 package: matter
