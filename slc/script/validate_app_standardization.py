@@ -288,13 +288,13 @@ def _readme_intro_under_h1_gaps(text: str, max_chars: int = 200) -> List[str]:
     while i < len(lines) and not lines[i].strip():
         i += 1
     if i >= len(lines):
-        gaps.append("readme: empty or whitespace only")
+        gaps.append("empty or whitespace only")
         return gaps
     first = lines[i].strip()
     m = re.match(r"^(#+)\s*(.*)$", first)
     if not m or len(m.group(1)) != 1 or not m.group(2).strip():
         gaps.append(
-            "readme: first non-empty line must be a single top-level (#) title with text",
+            "first non-empty line must be a single top-level (#) title with text",
         )
         return gaps
 
@@ -310,12 +310,12 @@ def _readme_intro_under_h1_gaps(text: str, max_chars: int = 200) -> List[str]:
     intro = "\n".join(body_lines).strip()
     if not intro:
         gaps.append(
-            "readme: missing brief high-level description under the top-level (#) title "
+            "missing brief high-level description under the top-level (#) title "
             "(before the first ## section)",
         )
     elif len(intro) > max_chars:
         gaps.append(
-            f"readme: description under title is {len(intro)} characters, maximum is {max_chars}",
+            f"description under title is {len(intro)} characters; maximum is {max_chars}",
         )
     return gaps
 
@@ -581,6 +581,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         reports.append(validate_slcw(p, rel))
 
     issue_count = sum(len(r.issues) for r in reports)
+    files_with_issues = sum(1 for r in reports if r.issues)
 
     if issue_count == 0:
         print(
@@ -594,7 +595,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         rel = _path_for_report(r.path)
         for msg in r.issues:
             print(f"{rel}: {msg}", file=sys.stderr)
-    print(f"\nFailed: {issue_count} issue(s) in {len(reports)} files", file=sys.stderr)
+    print(
+        f"\nFailed: {issue_count} issue(s) in {files_with_issues} file(s) "
+        f"({len(reports)} scanned)",
+        file=sys.stderr,
+    )
     return 1
 
 if __name__ == "__main__":
