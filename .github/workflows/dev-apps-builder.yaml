@@ -189,6 +189,9 @@ jobs:
            example-app: "wake_on_matter"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
            mgm24-support: false
+           mg24-internal-support: false
+           mg26-internal-support: false
+           mgm26-internal-support: false
            mgm24-internal-support: false
            sixg301-support: false
            trustzone-support: false
@@ -262,6 +265,7 @@ jobs:
             - build_oven_app
             - build_rangehood_app
             - build_series_3_bootloader
+            - build_wake_on_matter_app
         if: success()
 
         steps:

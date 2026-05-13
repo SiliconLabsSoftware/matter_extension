@@ -1,9 +1,17 @@
 project_name: matter_thread_soc_wake_on_matter_freertos
 label: Matter Thread - SoC Wake on Matter FreeRTOS
 description: >
-  Demonstrates a simple way of receiving Matter subscription on a Thread NCP
-quality: production
+  DDemonstrates a POC of receiving Matter subscription on a Thread NCP
+quality: experimental
 package: matter
+category: Matter Application
+filter:  
+  - name: Type    
+    value: Example  
+  - name: Difficulty
+    value: Advanced
+  - name: Wireless Technology
+    value: Matter
 
 sdk_extension:
   - id: matter
@@ -107,7 +115,7 @@ source:
 define:
   - name: SL_OPENTHREAD_MULTI_PAN_ENABLE
     value: 1
-  - name:  OPENTHREAD_CONFIG_NCP_HDLC_ENABLE
+  - name: OPENTHREAD_CONFIG_NCP_HDLC_ENABLE
     value: 1
   - name: SL_MATTER_OPENTHREAD_NCP_ENABLE
     value: 1

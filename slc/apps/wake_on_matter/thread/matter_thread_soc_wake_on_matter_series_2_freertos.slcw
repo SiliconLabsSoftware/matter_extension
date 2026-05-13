@@ -2,7 +2,7 @@ workspace_name: matter_thread_soc_wake_on_matter_series_2_freertos
 label: Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS
 quality: production
 package: matter
-description: Demonstrates a simple way of receiving Matter subscription on a Thread NCP with external bootloader
+description: Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader
 project:
   - path: ./matter_thread_soc_wake_on_matter_freertos.slcp
     id: application
