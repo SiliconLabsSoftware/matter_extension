@@ -1752,6 +1752,23 @@
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_single_4096k_series_3.matter_bootloader_internal_series_3.slcp slc.apps.platform_template.thread.matter_thread_soc_platform_template_freertos.slcp"/>
   </descriptors>
+  <descriptors name="MatterWakeOnMatterSolution" label="Matter Thread - SoC Matter with Thread NCP with internal Bootloader FreeRTOS"
+               description="Demonstrates a PoC of a Matter over Thread with a Thread NCP with internal bootloader">
+    <properties key="namespace" value="template.solution.uc"/>
+    <properties key="keywords" value="Matter"/>
+    <properties key="solutionReferenceId" value="slc.apps.wake_on_matter.thread.matter_thread_soc_wake_on_matter_series_2_freertos.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/wake_on_matter/thread/matter_thread_soc_wake_on_matter_series_2_freertos.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
+    <properties key="boardCompatibility" value="brd1019a brd2719a brd4116a brd4117a brd4118a brd4120a brd4121a brd4186c brd4187c brd4316a brd4317a brd4318a brd4337a brd4407a brd4408a brd2601b brd2608a brd2703a com.silabs.board.none "/>
+    <properties key="partCompatibility" value=".*efr32mg24.* .*efr32mg26.* .*mgm24.* .*mgm26.* "/>
+    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
+    <properties key="toolchainCompatibility" value="gcc"/>
+    <properties key="category" value="Matter Application"/>
+    <properties key="quality" value="EXPERIMENTAL"/>
+    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
+    <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_single_512k.matter_bootloader_internal_series_2.slcp slc.apps.wake_on_matter.thread.matter_thread_soc_wake_on_matter_freertos.slcp"/>
+  </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter WiFi - SoC Platform Template FreeRTOS"
                description="Demonstrates a sample implementation of a Matter over Wi-Fi platform template app">
     <properties key="namespace" value="template.solution.uc"/>
