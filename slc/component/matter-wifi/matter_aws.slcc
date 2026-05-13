@@ -15,7 +15,10 @@ provides:
 
 requires:
   - name: mbedtls_sha1
-  - name: mbedtls_tls
+  - name: mbedtls_ssl_tls
+  - name: mbedtls_ssl_client
+  - name: mbedtls_ssl_keep_peer_certificate
+  - name: mbedtls_ssl_server_name_indication
   - name: mbedtls_rsa
   - name: mbedtls_aes
   - name: mbedtls_pki

@@ -23,7 +23,13 @@ requires:
     condition: [matter_multi_image_ota_encryption]
 
   # Mbedtls components
-  - name: mbedtls_x509
+  - name: mbedtls_x509_use
+  - name: mbedtls_x509_create
+  - name: mbedtls_x509_crt_parse
+  - name: mbedtls_x509_crl_parse
+  - name: mbedtls_x509_csr_parse
+  - name: mbedtls_x509_csr_write
+  - name: mbedtls_pk_write
   - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
   - name: mbedtls_base64
   - name: mbedtls_cmac
@@ -35,21 +41,45 @@ requires:
 
 
   # OT CoAP Cert libs
-  - name: mbedtls_tls
+  - name: mbedtls_ssl_tls
     condition: [ot_coap_cert_libs]
-  - name: mbedtls_dtls
+  - name: mbedtls_ssl_client
     condition: [ot_coap_cert_libs]
-  - name: mbedtls_tls_server
+  - name: mbedtls_ssl_keep_peer_certificate
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_server_name_indication
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_proto_dtls
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_dtls_anti_replay
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_dtls_hello_verify
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_cookie
+    condition: [ot_coap_cert_libs]
+  - name: mbedtls_ssl_server
     condition: [ot_coap_cert_libs]
   - name: mbedtls_jpake
     condition: [ot_coap_cert_libs]
 
   # OT Multi-Instance Cert libs
-  - name: mbedtls_tls
+  - name: mbedtls_ssl_tls
     condition: [ot_multi_instance_cert_libs]
-  - name: mbedtls_dtls
+  - name: mbedtls_ssl_client
     condition: [ot_multi_instance_cert_libs]
-  - name: mbedtls_tls_server
+  - name: mbedtls_ssl_keep_peer_certificate
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_server_name_indication
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_proto_dtls
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_dtls_anti_replay
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_dtls_hello_verify
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_cookie
+    condition: [ot_multi_instance_cert_libs]
+  - name: mbedtls_ssl_server
     condition: [ot_multi_instance_cert_libs]
   - name: mbedtls_jpake
     condition: [ot_multi_instance_cert_libs]

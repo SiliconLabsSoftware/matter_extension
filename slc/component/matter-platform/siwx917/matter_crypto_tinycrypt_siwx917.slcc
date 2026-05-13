@@ -36,7 +36,13 @@ requires:
   - name: mbedtls_random
   - name: mbedtls_sha256
   - name: mbedtls_version
-  - name: mbedtls_x509
+  - name: mbedtls_x509_use
+  - name: mbedtls_x509_create
+  - name: mbedtls_x509_crt_parse
+  - name: mbedtls_x509_crl_parse
+  - name: mbedtls_x509_csr_parse
+  - name: mbedtls_x509_csr_write
+  - name: mbedtls_pk_write
 
   # wiseconnect SDK components
   - name: sl_si91x_trng
