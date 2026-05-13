@@ -24,7 +24,6 @@ include:
     - path: GeneralCommissioning.h
     - path: GeneralDiagnostics.h
     - path: Groupcast.h
-    - path: Groups.h
     - path: GroupKeyManagement.h
     - path: IcdManagement.h
     - path: LocalizationConfiguration.h

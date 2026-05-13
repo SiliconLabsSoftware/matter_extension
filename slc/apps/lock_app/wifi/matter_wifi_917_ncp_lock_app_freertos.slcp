@@ -51,7 +51,6 @@ component:
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
-  - id: matter_groups
   - id: matter_identify
   - id: matter_localization_configuration
   - id: matter_network_commissioning

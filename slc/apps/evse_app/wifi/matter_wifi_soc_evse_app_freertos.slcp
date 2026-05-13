@@ -55,8 +55,6 @@ component:
     from: matter
   - id: matter_group_key_mgmt
     from: matter
-  - id: matter_groups
-    from: matter
   - id: matter_identify
     from: matter
   - id: matter_localization_configuration
