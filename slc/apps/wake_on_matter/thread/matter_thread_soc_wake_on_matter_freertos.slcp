@@ -7,11 +7,14 @@ package: matter
 category: Matter Application
 filter:  
   - name: Type    
-    value: Example  
+    value: 
+      - SoC
   - name: Difficulty
-    value: Advanced
+    value: 
+      - Advanced
   - name: Wireless Technology
-    value: Matter
+    value: 
+      - Matter
 
 sdk_extension:
   - id: matter
