@@ -136,8 +136,8 @@
             },
             {
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
-                "arguments": ["--output_suffix sit-300",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:300'"]
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "light_switch_app": [
@@ -145,6 +145,11 @@
                 "boards": ["brd4338a", "brd4342a", "brd4343a"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "multi_sensor_app" :[
@@ -172,6 +177,10 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals_917soc,matter_icd_core", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4338a", "brd4343a", "brd4342a"],
+                "arguments": ["--output_suffix  peripherals-icd-sit-", "--with_app matter_peripherals_917soc,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }
