@@ -101,25 +101,10 @@ include:
       - path: CHIPProjectConfig.h
     directory: include
 
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/include
-    file_list:
-      - path: BindingHandler.h
-      - path: LightSwitchMgr.h
-      - path: ShellCommands.h
-    directory: include
-
 source:
   - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/AppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/BindingHandler.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/LightSwitchMgr.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/ShellCommands.cpp
     directory: src
 
 define:
