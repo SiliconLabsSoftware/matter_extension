@@ -180,7 +180,7 @@
             },
             {
                 "boards": ["brd4338a", "brd4343a", "brd4342a"],
-                "arguments": ["--output_suffix  peripherals-icd-sit-", "--with_app matter_peripherals_917soc,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+                "arguments": ["--output_suffix  peripherals-icd-sit-200", "--with_app matter_peripherals_917soc,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }
