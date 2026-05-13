@@ -25,8 +25,23 @@
         "lock_app" :[
             {
                 "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+            },
+            {
+                "boards": ["brd4338a"],
                 "arguments": ["--output_suffix sit-300",
                               "'--configuration SL_IDLE_MODE_DURATION_S:300'"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-400",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:400'"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-500",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:500'"]
             }
         ]
     },
