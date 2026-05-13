@@ -3,7 +3,7 @@
         "default": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"]
+                "arguments": ["--configuration OPENTHREAD_FULL_LOGS_ENABLE:1"]
             },
             {
                 "boards": ["brd4407a"],
