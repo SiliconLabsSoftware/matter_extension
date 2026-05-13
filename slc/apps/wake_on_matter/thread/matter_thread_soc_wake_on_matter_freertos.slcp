@@ -59,6 +59,7 @@ component:
   - id: matter_provision_default
   - id: app_common
   - id: bootloader_interface
+  - id: bootloader_interface_s2
     condition: [matter_platform_mg, device_series_2]
   - id: bootloader_interface_s3
     condition: [matter_platform_mg, device_series_3]
