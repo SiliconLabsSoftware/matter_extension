@@ -82,8 +82,6 @@ component:
     from: matter
   - id: matter_ota_support
     from: matter
-  - id: toolchain_gcc_common
-    from: matter
   - id: matter_power_source
     from: matter
   - id: matter_shell
