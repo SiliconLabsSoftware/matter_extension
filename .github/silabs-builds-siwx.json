@@ -21,28 +21,6 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
             }
-        ],
-        "lock_app" :[
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-200",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
-            },
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-300",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:300'"]
-            },
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-400",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:400'"]
-            },
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-500",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:500'"]
-            }
         ]
     },
     "full": {
@@ -155,6 +133,11 @@
                 "arguments": ["--output_suffix clock-config-clk-both",
                               "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL,LF_FSM_CLOCK_SELECTION:RC_KHZ_CLK_SEL",
                               "--with_app sl_si91x_sleep_timer_clock_selection, sl_si91x_lf_fsm_clock_selection"]
+            },
+            {
+                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "arguments": ["--output_suffix sit-300",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:300'"]
             }
         ],
         "light_switch_app": [

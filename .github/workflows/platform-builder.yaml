@@ -12,7 +12,7 @@ on:
             thread-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             thread-keyword:
                 required: false
                 type: string
@@ -28,35 +28,35 @@ on:
             mg24-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mg24-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mgm24-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mgm24-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mg26-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mg26-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             mgm26-internal-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             sixg301-support:
                 required: false
                 type: boolean
-                default: false
+                default: true
             trustzone-support:
                 required: false
                 type: boolean
