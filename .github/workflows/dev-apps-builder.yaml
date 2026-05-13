@@ -35,7 +35,11 @@ jobs:
               id: set-build-type
               run: |
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                      fi
                   elif [[ "${{ github.event_name }}" == "schedule" ]]; then
                       echo "build-type=full" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
