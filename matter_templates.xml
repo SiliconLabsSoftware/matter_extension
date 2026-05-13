@@ -1767,7 +1767,7 @@
     <properties key="quality" value="EXPERIMENTAL"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Type|SoC Project\ Difficulty|Advanced Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_single_512k.matter_bootloader_internal_series_2.slcp slc.apps.wake_on_matter.thread.matter_thread_soc_wake_on_matter_freertos.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_external_single_series_2.matter_bootloader_external_series_2.slcp slc.apps.wake_on_matter.thread.matter_thread_soc_wake_on_matter_freertos.slcp"/>
   </descriptors>
   <descriptors name="MatterPlatformTemplateOverThreadSolution" label="Matter WiFi - SoC Platform Template FreeRTOS"
                description="Demonstrates a sample implementation of a Matter over Wi-Fi platform template app">
