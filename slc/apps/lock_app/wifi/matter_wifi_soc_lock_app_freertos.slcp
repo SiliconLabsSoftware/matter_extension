@@ -17,7 +17,7 @@ component:
   - id: matter_leds
   - id: matter
   - id: matter_wifi_ble
-  - id: matter_crypto_tinycrypt_siwx917
+  - id: matter_crypto_psa_siwx917
 
   - id: mbedtls_pki_aws
     condition: [matter_aws]
