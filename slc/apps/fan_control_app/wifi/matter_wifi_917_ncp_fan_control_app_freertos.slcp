@@ -146,13 +146,23 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - NCP
+      - NCP Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:device:device_series_2
+  - hidden
 
 readme:
   - path: ./README_WiFi.md
@@ -161,8 +171,6 @@ ui_hints:
     - path: README_WiFi.md
       focus: false
 
-tag:
-  - hardware:component:led:2+
 post_build:
   profile: application
 
