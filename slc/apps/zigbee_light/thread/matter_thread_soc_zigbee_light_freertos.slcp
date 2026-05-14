@@ -9,6 +9,7 @@ component:
   - id: device_init
   - id: clock_manager
   - id: rail_mux
+  - id: rail_mux_aux
   - id: sl_main
   # Needed to use Network Analyser
   #- id: rail_util_pti
