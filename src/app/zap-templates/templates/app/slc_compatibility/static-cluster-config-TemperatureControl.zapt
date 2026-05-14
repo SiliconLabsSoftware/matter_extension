@@ -28,6 +28,13 @@ inline constexpr AttributeId kEndpoint{{../endpointId}}EnabledAttributes[] = {
 {{/if}}
 {{/user_cluster_attributes}}
 };
+inline constexpr CommandId kEndpoint{{../endpointId}}EnabledCommands[] = {
+{{#user_cluster_commands}}
+{{#if (is_str_equal source "client")}}
+    Commands::{{asUpperCamelCase name}}::Id,
+{{/if}}
+{{/user_cluster_commands}}
+};
 {{/if}}
 {{/if}}
 {{/if}}
@@ -49,7 +56,7 @@ inline constexpr std::array<Clusters::StaticApplicationConfig::ClusterConfigurat
         .endpointNumber    = {{../endpointId}},
         .featureMap        = BitFlags<FeatureBitmapType>{},
         .enabledAttributes = Span<const AttributeId>(detail::kEndpoint{{../endpointId}}EnabledAttributes),
-        .enabledCommands   = Span<const CommandId>(),
+        .enabledCommands   = Span<const CommandId>(detail::kEndpoint{{../endpointId}}EnabledCommands),
     },
 {{/if}}
 {{/if}}
@@ -85,6 +92,14 @@ inline constexpr bool IsCommandEnabledOnSomeEndpoint(CommandId commandId)
 {
     switch (commandId)
     {
+{{#zcl_clusters}}
+{{#if (is_str_equal name "Temperature Control")}}
+{{#zcl_commands_source_client}}
+    case Commands::{{asUpperCamelCase name}}::Id:
+{{/zcl_commands_source_client}}
+{{/if}}
+{{/zcl_clusters}}
+        return true;
     default:
         return false;
     }
