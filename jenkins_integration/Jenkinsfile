@@ -160,18 +160,18 @@ pipeline
                                 echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
                             fi
                         '''
-                    }
-                    archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
-                    if (fileExists('coverage/sonarqube-coverage.xml')) {
-                        withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
-                            sh '''
-                                sonar-scanner \
-                                    -Dsonar.token="$SONAR_TOKEN" \
-                                    -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
-                            '''
+                        archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
+                        if (fileExists('coverage/sonarqube-coverage.xml')) {
+                            withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                                sh '''
+                                    sonar-scanner \
+                                        -Dsonar.token="$SONAR_TOKEN" \
+                                        -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
+                                '''
+                            }
+                        } else {
+                            echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
                         }
-                    } else {
-                        echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
                     }
                 }
             }
