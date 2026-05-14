@@ -22,6 +22,7 @@ include:
         unless: [matter_code_driven_dm]
       - path: electrical-energy-measurement-server.h
       - path: ElectricalEnergyMeasurementCluster.h
+      - path: ElectricalEnergyMeasurementDelegate.h
       - path: EnergyReportingTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog

@@ -324,6 +324,7 @@ extra_files:
   - CODEOWNERS
   - LICENSE
   - README.md
+  - board_compatibility_matrix.html
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
   - docs/images/silabs-logo.jpg
@@ -897,6 +898,7 @@ extra_files:
   - slc/script/build_ot_rcp.py
   - slc/script/code_size_diff_check.py
   - slc/script/code_size_result.sh
+  - slc/script/demos.xml.j2
   - slc/script/dependency_versions.yaml
   - slc/script/em1-augmentation.py
   - slc/script/enable_copy_contents.py
@@ -906,17 +908,23 @@ extra_files:
   - slc/script/gen_components.py
   - slc/script/gen_static_zap_includes.py
   - slc/script/generate_metadata.py
+  - slc/script/generate_metadata_hwfilter.py
   - slc/script/generate_pkg_slt.py
   - slc/script/get_slce_extra_paths.py
   - slc/script/get_zap_version.py
   - slc/script/gsdk_matter.patch
+  - slc/script/hwfilter-config.yml
   - slc/script/list_header_files.py
   - slc/script/matter_package_version
+  - slc/script/metadata-generation.yml
   - slc/script/remove_obsolete_cluster_components.py
   - slc/script/run_sdk_update_scripts.py
   - slc/script/tag_release_version.py
+  - slc/script/templates.xml.j2
   - slc/script/update_version.py
+  - slc/script/validate_app_standardization.py
   - slc/script/validate_components.py
+  - slc/script/validate_demo_images.py
   - slc/script/validate_matter_templates.py
   - slc/script/verify_package_matter.py
   - slc/script/verify_vendor_silabs.py
@@ -940,6 +948,7 @@ extra_files:
   - src/app/zap-templates/templates/app/slc_compatibility/ids.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/metadata.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt
+  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Groups.zapt
   - src/app/zap-templates/zcl/zcl.json
   - tools/console/README.md
   - tools/console/console_log_parser.py
@@ -969,7 +978,6 @@ extra_files:
   - third_party/matter_sdk/src/app/AttributeAccessInterfaceCache.h
   - third_party/matter_sdk/src/app/AttributeAccessInterfaceRegistry.cpp
   - third_party/matter_sdk/src/app/AttributeAccessInterfaceRegistry.h
-  - third_party/matter_sdk/src/app/AttributeAccessToken.h
   - third_party/matter_sdk/src/app/AttributeEncodeState.h
   - third_party/matter_sdk/src/app/AttributePathExpandIterator.cpp
   - third_party/matter_sdk/src/app/AttributePathExpandIterator.h
@@ -1423,10 +1431,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/commodity-tariff-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/commodity-tariff-server/tests/TestCommodityTariffBaseDataClass.cpp
   - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/ConcentrationMeasurementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/ConcentrationMeasurementCluster.h
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/README.md
   - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/concentration-measurement-cluster-objects.h
   - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/concentration-measurement-server.h
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/tests/TestConcentrationMeasurementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/concentration-measurement-server/tests/TestConcentrationMeasurementClusterBackwardsCompat.cpp
   - third_party/matter_sdk/src/app/clusters/content-app-observer/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/content-app-observer/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/content-app-observer/app_config_dependent_sources.gni
@@ -1506,6 +1521,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementCluster.h
+  - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/ElectricalEnergyMeasurementDelegate.h
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/EnergyReportingTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/electrical-energy-measurement-server/app_config_dependent_sources.gni
@@ -1770,12 +1786,14 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/microwave-oven-control-server/tests/TestMicrowaveOvenControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/mode-base-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/mode-base-server/Delegate.h
+  - third_party/matter_sdk/src/app/clusters/mode-base-server/ModeBaseCluster.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/README.md
   - third_party/matter_sdk/src/app/clusters/mode-base-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/mode-base-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-cluster-objects.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-cluster-objects.h
-  - third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/mode-base-server.h
   - third_party/matter_sdk/src/app/clusters/mode-select-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/mode-select-server/app_config_dependent_sources.cmake
@@ -2875,7 +2893,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_4_3.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_4_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_5_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_5_2.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_6_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_6_2.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_6_3.yaml
@@ -3225,6 +3242,7 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/dishwasher-alarm-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/dishwasher-mode-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/door-lock-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/dynamic-lighting-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/ecosystem-information-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-energy-measurement-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-grid-conditions-cluster.xml
