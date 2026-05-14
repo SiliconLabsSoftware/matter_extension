@@ -160,15 +160,15 @@ if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
 	MAKE_FILE=$SILABS_APP.solution.Makefile
 	PROJECT_FLAG="-w"
 	OUTPUT_DIR="out/$BRD_ONLY/${SILABS_APP}_solution"
-	# CMake source dir for solution (only used when USE_LLVM=true).
-	CMAKE_SOURCE_DIR="$OUTPUT_DIR/${SILABS_APP}_llvm_cmake"
+	# CMake subdir under OUTPUT_DIR for solution (only used when USE_LLVM=true).
+	CMAKE_SUBDIR="${SILABS_APP}_llvm_cmake"
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
 	SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)
 	PROJECT_FLAG="-p"
 	OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP"
 	MAKE_FILE=$SILABS_APP.Makefile
-	CMAKE_SOURCE_DIR="$OUTPUT_DIR/cmake_llvm"
+	CMAKE_SUBDIR="cmake_llvm"
 
 else
 	echo "ERROR: Did not provide a valid path for a .slcw or .slcp project file."
@@ -449,7 +449,7 @@ elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; t
 else
 	echo "Building solution..."
 	if [ "$USE_LLVM" = true ]; then
-		cmake_configure_and_build "$CMAKE_SOURCE_DIR" "solution" || exit 1
+		cmake_configure_and_build "$OUTPUT_DIR/$CMAKE_SUBDIR" "solution" || exit 1
 	else
 		if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
 			echo "ERROR: Failed to build solution"
