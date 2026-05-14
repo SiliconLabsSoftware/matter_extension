@@ -9,10 +9,6 @@ quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
-template_file:
-  - path: third_party/matter_sdk/examples/onoff-plug-app/silabs/include/AppTask.h
-  - path: third_party/matter_sdk/examples/onoff-plug-app/silabs/include/AppTaskImpl.h
-  - path: third_party/matter_sdk/examples/onoff-plug-app/silabs/src/AppTask.cpp
 provides:
   - name: matter_on_off
 requires:
