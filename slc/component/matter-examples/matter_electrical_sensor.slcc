@@ -16,12 +16,16 @@ provides:
 include:
   - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/include
     file_list:
+      - path: ElectricalEnergyMeasurementDelegateImpl.h
       - path: ElectricalPowerMeasurementDelegateImpl.h
       - path: PowerTopologyDelegateImpl.h
 
 
 source:
+  - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/src/ElectricalEnergyMeasurementDelegateImpl.cpp
   - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/src/ElectricalPowerMeasurementDelegateImpl.cpp
+  - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/src/ElectricalSensorManager.cpp
   - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/src/PowerTopologyDelegateImpl.cpp
+  - path: third_party/matter_sdk/examples/energy-management/electrical-sensor/src/ElectricalSensorManager.cpp
 ui_hints:
   visibility: never
