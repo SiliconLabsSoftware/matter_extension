@@ -15,6 +15,7 @@ provides:
   - name: matter_aws
 
 requires:
+  - name: matter_aws_transport
   - name: mbedtls_sha1
   - name: mbedtls_tls
   - name: mbedtls_rsa

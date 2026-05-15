@@ -15,9 +15,6 @@ provides:
   - name: matter_aws_transport_nwp
   - name: matter_aws_transport
 
-requires:
-  - name: matter_aws
-
 conflicts:
   - name: matter_aws_transport_lwip
 
