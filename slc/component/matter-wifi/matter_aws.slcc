@@ -3,7 +3,7 @@ package: matter
 description: >
   Enables the Silicon Labs Matter + AWS feature for Matter devices using Wi-Fi, allowing a device to connect directly to proprietary cloud services such as AWS.
   This component integrates MQTT and TLS support with the Matter Wi-Fi platform to enable secure cloud connectivity alongside standard Matter functionality.
-  Install exactly one transport: matter_aws_lwip_transport (SoC Wi-Fi) or matter_aws_nwp_transport (917 NCP / dual-stack NWP offload).
+  Install exactly one transport: matter_aws_transport_lwip (SoC Wi-Fi) or matter_aws_transport_nwp (917 NCP / dual-stack NWP offload).
 label: AWS for Matter WiFi
 category: Matter-WiFi|Features
 quality: production

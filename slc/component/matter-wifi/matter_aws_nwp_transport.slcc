@@ -1,4 +1,4 @@
-id: matter_aws_nwp_transport
+id: matter_aws_transport_nwp
 package: matter
 description: >
   SiWx917 NWP (WiseConnect) MQTT/TLS transport for Matter + AWS: DNS and TLS over
@@ -12,14 +12,14 @@ metadata:
     license: Zlib
 
 provides:
-  - name: matter_aws_nwp_transport
+  - name: matter_aws_transport_nwp
   - name: matter_aws_transport
 
 requires:
   - name: matter_aws
 
 conflicts:
-  - name: matter_aws_lwip_transport
+  - name: matter_aws_transport_lwip
 
 source:
   - path: third_party/matter_sdk/src/platform/silabs/mqtt/mqtt_transport_interface/SiWx917/MqttTransportSi91xNwp.cpp

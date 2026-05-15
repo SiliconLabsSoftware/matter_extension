@@ -1,4 +1,4 @@
-id: matter_aws_lwip_transport
+id: matter_aws_transport_lwip
 package: matter
 description: >
   LwIP altcp-based MQTT/TLS transport for Matter + AWS (host stack). Use with matter_aws
@@ -11,14 +11,14 @@ metadata:
     license: Zlib
 
 provides:
-  - name: matter_aws_lwip_transport
+  - name: matter_aws_transport_lwip
   - name: matter_aws_transport
 
 requires:
   - name: matter_aws
 
 conflicts:
-  - name: matter_aws_nwp_transport
+  - name: matter_aws_transport_nwp
 
 config_file:
   - path: slc/config/matter_aws/sl_matter_wifi_config.h
