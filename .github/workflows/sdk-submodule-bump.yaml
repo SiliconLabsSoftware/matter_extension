@@ -38,7 +38,7 @@ jobs:
               ;;
           esac
 
-          PR_BRANCH="automation/update_sdk_submodules_${SDK_TAG}"
+          PR_BRANCH="automation/update_sdk_submodules_${TARGET_BRANCH}"
 
           echo "sisdk_version=$SISDK_VERSION" >> "$GITHUB_OUTPUT"
           echo "sdk_tag=$SDK_TAG" >> "$GITHUB_OUTPUT"
