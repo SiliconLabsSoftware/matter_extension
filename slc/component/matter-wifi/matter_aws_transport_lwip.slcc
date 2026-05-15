@@ -2,7 +2,7 @@ id: matter_aws_transport_lwip
 package: matter
 description: >
   LwIP altcp-based MQTT/TLS transport for Matter + AWS (host stack). Use with matter_aws
-  on SiWx SoC Wi-Fi builds. Mutually exclusive with matter_aws_nwp_transport.
+  on SiWx SoC Wi-Fi builds. Mutually exclusive with matter_aws_transport_nwp.
 label: Matter AWS LwIP Transport
 category: Matter-WiFi|Features
 quality: production
