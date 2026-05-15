@@ -47,6 +47,7 @@ env:
   TRANSPORT: ${{ inputs.transport || 'thread'}}
   PROJECT_TYPE: ${{ inputs.project-type || 'soc'}}
   BASELINE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || inputs.baseline || 'main'}}
+  CODE_SIZE_JSON: ${{ (inputs.transport || 'thread') == 'wifi' && (inputs.project-type || 'soc') == 'soc' && '.github/silabs-code-size-wifi.json' || '.github/silabs-code-size.json' }}
 
 jobs:
     code-size-check:
@@ -71,7 +72,7 @@ jobs:
             - name: Build code-canary app
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
-                  json-file-path: ".github/silabs-code-size.json"
+                  json-file-path: ${{ env.CODE_SIZE_JSON }}
                   path-to-example-app: "./slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
                   build-script: "./slc/build.sh"
@@ -85,7 +86,7 @@ jobs:
             - name: Build code-canary app on baseline
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
-                  json-file-path: ".github/silabs-code-size.json"
+                  json-file-path: ${{ env.CODE_SIZE_JSON }}
                   path-to-example-app: "./baseline/slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
                   build-script: "./baseline/slc/build.sh"
