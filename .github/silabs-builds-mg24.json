@@ -150,7 +150,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             },
             {
-                "boards": ["brd4186c","brd4187c"],
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sit-200",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
@@ -212,7 +212,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
-                "boards": ["brd4186c","brd4187c"],
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sit-200",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
