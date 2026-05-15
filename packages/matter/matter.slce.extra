@@ -87,6 +87,8 @@ components:
   - matter_application_launcher
   - matter_audio_output
   - matter_aws
+  - matter_aws_lwip_transport
+  - matter_aws_nwp_transport
   - matter_aws_ota
   - matter_basic_information
   - matter_bindings
@@ -866,6 +868,8 @@ extra_files:
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/matter_aws.slcc
+  - slc/component/matter-wifi/matter_aws_lwip_transport.slcc
+  - slc/component/matter-wifi/matter_aws_nwp_transport.slcc
   - slc/component/matter-wifi/matter_aws_ota.slcc
   - slc/component/matter-wifi/matter_efr32_ncp.slcc
   - slc/component/matter-wifi/matter_lwip.slcc
