@@ -21,6 +21,7 @@ include:
     -   path: TextOnlyLogging.h
   - path: third_party/matter_sdk/src/lib/support
     file_list:
+    -   path: Assertions.h
     -   path: AutoRelease.h
     -   path: StringSplitter.h
     -   path: PersistentStorageAudit.h
@@ -76,7 +77,6 @@ include:
     -   path: SortUtils.h
     -   path: ZclString.h
     -   path: PersistentStorageMacros.h
-    -   path: VerificationMacrosNoLogging.h
     -   path: CommonIterator.h
     -   path: Iterators.h
     -   path: PersistentData.h
