@@ -161,7 +161,7 @@ if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
 	PROJECT_FLAG="-w"
 	OUTPUT_DIR="out/$BRD_ONLY/${SILABS_APP}_solution"
 	# CMake subdir under OUTPUT_DIR for solution (only used when USE_LLVM=true).
-	CMAKE_SUBDIR="${SILABS_APP}_llvm_cmake"
+	CMAKE_SUBDIR="cmake_llvm"
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
 	SILABS_APP=$(basename "$SILABS_APP_PATH" .slcp)

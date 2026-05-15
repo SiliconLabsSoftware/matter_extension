@@ -90,29 +90,7 @@ runs:
       id: install-llvm
       shell: bash
       run: |
-        echo "recipes on remote"
-        conan list "llvm-arm-toolchain-for-embedded/*" -r=silabs-conan-prerelease
-        echo "list recipes..."
-        conan list "llvm-arm-toolchain-for-embedded/21.1.1@silabs:*" -r=silabs-conan-prerelease
-        conan download "llvm-arm-toolchain-for-embedded/21.1.1@silabs:*" --remote=silabs-conan-prerelease
-        echo "profile show"
-        conan profile show -pr:a default
-        echo "This ill fail:"
         slt install "llvm-arm-toolchain-for-embedded/21.1.1@silabs" -e conan
         ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
         echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
         echo "$ARM_LLVM_DIR/bin" >> $GITHUB_PATH
-
-    - name: Dump sltconan.log on failure
-      if: failure() && steps.install-llvm.outcome == 'failure'
-      shell: bash
-      run: |
-        LOG=~/.silabs/slt/installs/conan/sltconan.log
-        echo "::group::sltconan.log ($LOG)"
-        if [ -f "$LOG" ]; then
-          cat "$LOG"
-        else
-          echo "Log file not found: $LOG"
-          ls -la ~/.silabs/slt/installs/conan/ 2>&1 || true
-        fi
-        echo "::endgroup::"

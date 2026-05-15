@@ -200,7 +200,16 @@
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix llvm","--with toolchain_llvm_lto"]
+                "arguments": ["--output_suffix llvm-lto",
+                              "--with_app toolchain_llvm_lto",
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"
+                            ]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix llvm",
+                              "--with_app toolchain_llvm"
+                            ]
             }
         ],
         "closure_app": [
