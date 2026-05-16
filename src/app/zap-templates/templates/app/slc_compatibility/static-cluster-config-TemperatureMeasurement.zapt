@@ -1,24 +1,24 @@
 // DO NOT EDIT - Generated file
 //
-// Application configuration for Groups based on EMBER configuration
+// Application configuration for TemperatureMeasurement based on EMBER configuration
 #pragma once
 
 #include <app/util/cluster-config.h>
-#include <clusters/Groups/AttributeIds.h>
-#include <clusters/Groups/CommandIds.h>
-#include <clusters/Groups/Enums.h>
+#include <clusters/TemperatureMeasurement/AttributeIds.h>
+#include <clusters/TemperatureMeasurement/CommandIds.h>
+#include <clusters/TemperatureMeasurement/Enums.h>
 
 #include <array>
 
 namespace chip {
 namespace app {
 namespace Clusters {
-namespace Groups {
+namespace TemperatureMeasurement {
 namespace StaticApplicationConfig {
 namespace detail {
 {{#user_endpoints}}
 {{#user_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Measurement")}}
 {{#if (isServer side)}}
 {{#if enabled}}
 inline constexpr AttributeId kEndpoint{{../endpointId}}EnabledAttributes[] = {
@@ -28,13 +28,6 @@ inline constexpr AttributeId kEndpoint{{../endpointId}}EnabledAttributes[] = {
 {{/if}}
 {{/user_cluster_attributes}}
 };
-inline constexpr CommandId kEndpoint{{../endpointId}}EnabledCommands[] = {
-{{#user_cluster_commands}}
-{{#if (is_str_equal source "client")}}
-    Commands::{{asUpperCamelCase name}}::Id,
-{{/if}}
-{{/user_cluster_commands}}
-};
 {{/if}}
 {{/if}}
 {{/if}}
@@ -42,21 +35,21 @@ inline constexpr CommandId kEndpoint{{../endpointId}}EnabledCommands[] = {
 {{/user_endpoints}}
 } // namespace detail
 
-using FeatureBitmapType = Feature;
+using FeatureBitmapType = Clusters::StaticApplicationConfig::NoFeatureFlagsDefined;
 
 {{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Measurement")}}
 inline constexpr std::array<Clusters::StaticApplicationConfig::ClusterConfiguration<FeatureBitmapType>, {{user_endpoint_count_by_cluster id "server"}}> kFixedClusterConfig = { {
 {{#user_endpoints}}
 {{#user_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Measurement")}}
 {{#if (isServer side)}}
 {{#if enabled}}
     {
         .endpointNumber    = {{../endpointId}},
         .featureMap        = BitFlags<FeatureBitmapType>{},
         .enabledAttributes = Span<const AttributeId>(detail::kEndpoint{{../endpointId}}EnabledAttributes),
-        .enabledCommands   = Span<const CommandId>(detail::kEndpoint{{../endpointId}}EnabledCommands),
+        .enabledCommands   = Span<const CommandId>(),
     },
 {{/if}}
 {{/if}}
@@ -73,7 +66,7 @@ inline constexpr bool IsAttributeEnabledOnSomeEndpoint(AttributeId attributeId)
     switch (attributeId)
     {
 {{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Measurement")}}
 {{#zcl_attributes_server}}
 {{#unless (is_str_equal name "EndpointUniqueID")}}
     case Attributes::{{asUpperCamelCase name}}::Id:
@@ -92,21 +85,13 @@ inline constexpr bool IsCommandEnabledOnSomeEndpoint(CommandId commandId)
 {
     switch (commandId)
     {
-{{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
-{{#zcl_commands_source_client}}
-    case Commands::{{asUpperCamelCase name}}::Id:
-{{/zcl_commands_source_client}}
-{{/if}}
-{{/zcl_clusters}}
-        return true;
     default:
         return false;
     }
 }
 
 } // namespace StaticApplicationConfig
-} // namespace Groups
+} // namespace TemperatureMeasurement
 } // namespace Clusters
 } // namespace app
 } // namespace chip

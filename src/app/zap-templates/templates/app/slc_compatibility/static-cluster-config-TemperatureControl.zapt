@@ -1,24 +1,24 @@
 // DO NOT EDIT - Generated file
 //
-// Application configuration for Groups based on EMBER configuration
+// Application configuration for TemperatureControl based on EMBER configuration
 #pragma once
 
 #include <app/util/cluster-config.h>
-#include <clusters/Groups/AttributeIds.h>
-#include <clusters/Groups/CommandIds.h>
-#include <clusters/Groups/Enums.h>
+#include <clusters/TemperatureControl/AttributeIds.h>
+#include <clusters/TemperatureControl/CommandIds.h>
+#include <clusters/TemperatureControl/Enums.h>
 
 #include <array>
 
 namespace chip {
 namespace app {
 namespace Clusters {
-namespace Groups {
+namespace TemperatureControl {
 namespace StaticApplicationConfig {
 namespace detail {
 {{#user_endpoints}}
 {{#user_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Control")}}
 {{#if (isServer side)}}
 {{#if enabled}}
 inline constexpr AttributeId kEndpoint{{../endpointId}}EnabledAttributes[] = {
@@ -45,11 +45,11 @@ inline constexpr CommandId kEndpoint{{../endpointId}}EnabledCommands[] = {
 using FeatureBitmapType = Feature;
 
 {{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Control")}}
 inline constexpr std::array<Clusters::StaticApplicationConfig::ClusterConfiguration<FeatureBitmapType>, {{user_endpoint_count_by_cluster id "server"}}> kFixedClusterConfig = { {
 {{#user_endpoints}}
 {{#user_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Control")}}
 {{#if (isServer side)}}
 {{#if enabled}}
     {
@@ -73,7 +73,7 @@ inline constexpr bool IsAttributeEnabledOnSomeEndpoint(AttributeId attributeId)
     switch (attributeId)
     {
 {{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Control")}}
 {{#zcl_attributes_server}}
 {{#unless (is_str_equal name "EndpointUniqueID")}}
     case Attributes::{{asUpperCamelCase name}}::Id:
@@ -93,7 +93,7 @@ inline constexpr bool IsCommandEnabledOnSomeEndpoint(CommandId commandId)
     switch (commandId)
     {
 {{#zcl_clusters}}
-{{#if (is_str_equal name "Groups")}}
+{{#if (is_str_equal name "Temperature Control")}}
 {{#zcl_commands_source_client}}
     case Commands::{{asUpperCamelCase name}}::Id:
 {{/zcl_commands_source_client}}
@@ -106,7 +106,7 @@ inline constexpr bool IsCommandEnabledOnSomeEndpoint(CommandId commandId)
 }
 
 } // namespace StaticApplicationConfig
-} // namespace Groups
+} // namespace TemperatureControl
 } // namespace Clusters
 } // namespace app
 } // namespace chip
