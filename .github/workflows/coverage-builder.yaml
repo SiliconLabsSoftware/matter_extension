@@ -105,7 +105,8 @@ jobs:
                   fi
 
                   if [ -f "$msd/sonarqube-coverage.xml" ]; then
-                      cp "$msd/sonarqube-coverage.xml" "$dst/sonarqube-coverage.xml"
+                      # gcovr paths are relative to matter_sdk; SonarScanner uses extension repo root as project base.
+                      sed 's|<file path="|<file path="third_party/matter_sdk/|g' "$msd/sonarqube-coverage.xml" > "$dst/sonarqube-coverage.xml"
                   fi
 
                   if [ -f "$src/coverage.xml" ]; then
