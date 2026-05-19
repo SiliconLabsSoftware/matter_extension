@@ -20,9 +20,6 @@ def skip_merge_wait_flag = "false"
 def build_description = ""
 def commit_change_summary = ""
 
-// Temporary: set true to run Upload, tests, SQA, etc. after Code Coverage.
-def run_stages_after_coverage = false
-
 // Jenkins global (System) Secret text credential ID.
 def sonarqubeTokenCredentialId = 'sonarqube_token'
 
@@ -101,10 +98,11 @@ pipeline
                     build_description += "\nWiFi Extension build number: ${wiseconnect_build_number}"
                     buildDescription(build_description)
                     commit_change_summary = pipelineFunctions.buildCommitChangeSummaryForSlack()
+                    commit_sha = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
                 }
             }
         }
-        stage('Resolve GitHub workflow (coverage)') {
+        stage('Upload Artifacts') {
             when {
                 expression {
                     env.BRANCH_NAME == "main" ||
@@ -114,20 +112,19 @@ pipeline
             }
             steps {
                 script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.actionWithRetry {
-                            def cov = pipelineFunctions.resolve_workflow_for_coverage()
-                            commit_sha = cov.commit_sha
-                            run_number = cov.run_number
-                            workflow_id = cov.workflow_id
-                            bypass_send_results_gh = cov.bypass_results
-                            if (cov.pr_number) {
-                                pr_number = cov.pr_number
+                    retry(9) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            pipelineFunctions.actionWithRetry {
+                                def result = pipelineFunctions.upload_artifacts(false, commit_sha, workflow_id, run_number, skip_merge_wait_flag)
+                                commit_sha = result.commit_sha
+                                run_number = result.run_number
+                                workflow_id = result.workflow_id
+                                bypass_send_results_gh = result.bypass_results
+                                pr_number = result.pr_number
+                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
+                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
+                                buildDescription(build_description)
                             }
-                            skip_merge_wait_flag = cov.skip_merge_wait
-                            echo "Resolved workflow_id=${workflow_id}, skip_merge_wait=${skip_merge_wait_flag}"
-                            build_description += "\nGitHub Workflow Run Number: ${run_number}"
-                            buildDescription(build_description)
                         }
                     }
                 }
@@ -180,36 +177,9 @@ pipeline
                 }
             }
         }
-        stage('Upload Artifacts') {
-            when {
-                expression { run_stages_after_coverage }
-            }
-            steps {
-                script {
-                    retry(9) {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            pipelineFunctions.actionWithRetry {
-                                def result = pipelineFunctions.upload_artifacts(false, commit_sha, workflow_id, run_number, skip_merge_wait_flag)
-                                commit_sha = result.commit_sha
-                                run_number = result.run_number
-                                workflow_id = result.workflow_id
-                                bypass_send_results_gh = result.bypass_results
-                                pr_number = result.pr_number
-                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
-                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
-                                buildDescription(build_description)
-                            }
-                        }
-                    }
-                }
-            }
-        }
         stage('Code Size Analysis') {
             when {
-                allOf {
-                    expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-                    expression { run_stages_after_coverage }
-                }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -221,9 +191,6 @@ pipeline
         }
         stage('Execute CI Tests')
         {
-            when {
-                expression { run_stages_after_coverage }
-            }
             steps {
                 script {
                     def parallelNodes = [:]
@@ -304,10 +271,7 @@ pipeline
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
-                allOf {
-                    expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-                    expression { run_stages_after_coverage }
-                }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -317,10 +281,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                allOf {
-                    expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility") }
-                    expression { run_stages_after_coverage }
-                }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility") }
             }
             steps {
                 script {
@@ -335,10 +296,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                allOf {
-                    expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-                    expression { run_stages_after_coverage }
-                }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
