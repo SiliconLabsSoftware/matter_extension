@@ -134,10 +134,7 @@ The following shows a minimal example `CustomerAppTask` that overrides `AppInitI
 #pragma once
 #include "AppTaskImpl.h"
 
-/**
- * Minimal AppTaskImpl-derived class. Override only the *Impl() methods you need;
- * add AppInitImpl(), GetAppTask(), and sAppTask as required by the CRTP base.
- */
+/** Minimal AppTaskImpl-derived class. Override only the *Impl() methods you need **/
 class CustomerAppTask : public AppTaskImpl<CustomerAppTask>
 {
 public:
