@@ -18,7 +18,6 @@ include:
   - path: third_party/matter_sdk/src/app
     file_list:
     -   path: ReadClient.h # Unless we refactor everything matter needs this header even if the content is not compiled.
-    -   path: AttributeAccessToken.h
     -   path: InteractionModelDelegatePointers.h
     -   path: InteractionModelTimeout.h
     -   path: SubscriptionsInfoProvider.h

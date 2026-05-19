@@ -1,6 +1,6 @@
 project_name: matter_thread_soc_code_size_sensor_freertos
 label: Matter Thread - SoC Code Size Sensor FreeRTOS
-description: Demonstrates a minimal sensor app implementation used for code size analysis
+description: Demonstrates a sample implementation of a minimal sensor app used for code size analysis
 category: Matter Application
 quality: production
 package: matter
@@ -47,7 +47,7 @@ component:
     condition: [hardware_board_has_si70xx]
   - id: matter_multi_sensor_app
 
-  # Optinnal feature
+  # Optional feature
   - id: rail_util_pti
   - id: matter_shell
   - id: matter_segger_rtt
@@ -82,7 +82,7 @@ config_file:
     file_id: zap_config
     condition:
       - matter_thread
-  - path: ../../../provision.mattpconf
+  - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
@@ -98,7 +98,7 @@ include:
 source:
   - path: ./src/AppTask.cpp
   - path: ./src/SensorManager.cpp
-  - path: ../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
   - path: ./src/DataModelCallbacks.cpp
 
 define:
@@ -193,7 +193,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced

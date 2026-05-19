@@ -55,8 +55,6 @@ component:
     from: matter
   - id: matter_group_key_mgmt
     from: matter
-  - id: matter_groups
-    from: matter
   - id: matter_identify
     from: matter
   - id: matter_localization_configuration
@@ -231,7 +229,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -239,15 +237,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+  - hidden
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb
