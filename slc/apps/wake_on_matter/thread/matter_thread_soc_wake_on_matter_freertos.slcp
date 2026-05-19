@@ -1,14 +1,13 @@
 project_name: matter_thread_soc_wake_on_matter_freertos
 label: Matter Thread - SoC Wake on Matter FreeRTOS
-description: >
-  DDemonstrates a POC of receiving Matter subscription on a Thread NCP
+description: Demonstrates a POC of receiving Matter subscription on a Thread NCP
 quality: experimental
 package: matter
 category: Matter Application
 filter:  
   - name: Type    
     value: 
-      - SoC
+      - SoC Project
   - name: Difficulty
     value: 
       - Advanced

@@ -167,6 +167,17 @@ toolchain_settings:
   - option: cxx_standard
     value: gnu++17
 
+filter:
+  - name: Type
+    value:
+      - NCP Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
 readme:
   - path: ./README_WiFi.md
 ui_hints:

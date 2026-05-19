@@ -1,6 +1,6 @@
 # Matter over Thread Wake on Matter Example
 
-The Wake on Matter (WoM) example demonstrates a Matter device that simultaneously operates as an OpenThread Network Co-Processor (OT-NCP). When plugged into an OpenThread Border Router (OTBR) through the USB port, the device acts as the Thread radio for the border router while also running a Matter stack on-chip.
+The Wake on Matter (WoM) example demonstrates a Matter device that also acts as an OpenThread NCP. When plugged to an OTBR over USB, it provides the Thread radio while running Matter on-chip.
 
 ## Table of Contents
 
