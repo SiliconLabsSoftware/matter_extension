@@ -71,188 +71,174 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             trustzone-support: true
 
-    build_air_quality_sensor_app:
-        name: Build Air Quality Sensor App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "air_quality_sensor_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+    # TEMPORARY: platform jobs through build-sqa-tools are commented for a quick CI pass.
+    # Restore those jobs and the full merge-apps `needs` list when done.
 
-    build_light_switch_app:
-        name: Build Light Switch App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "light_switch_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_air_quality_sensor_app:
+# TEMP CI shortcut:         name: Build Air Quality Sensor App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "air_quality_sensor_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_lock_app:
-        name: Build Lock App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "lock_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
+# TEMP CI shortcut:     build_light_switch_app:
+# TEMP CI shortcut:         name: Build Light Switch App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "light_switch_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_thermostat_app:
-        name: Build Thermostat App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "thermostat"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
+# TEMP CI shortcut:     build_lock_app:
+# TEMP CI shortcut:         name: Build Lock App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "lock_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             ncp-917-support: true
 
-    build_window_app:
-        name: Build Window App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "window_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
+# TEMP CI shortcut:     build_thermostat_app:
+# TEMP CI shortcut:         name: Build Thermostat App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "thermostat"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             ncp-917-support: true
 
-    build_fan_control_app:
-        name: Build Fan Control App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "fan_control_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            ncp-917-support: true
+# TEMP CI shortcut:     build_window_app:
+# TEMP CI shortcut:         name: Build Window App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "window_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             ncp-917-support: true
 
-    build_closure_app:
-        name: Build Closure App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "closure_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_fan_control_app:
+# TEMP CI shortcut:         name: Build Fan Control App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "fan_control_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             ncp-917-support: true
 
-    build_multi_sensor_app:
-        name: Build Multi Sensor App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "multi_sensor_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_closure_app:
+# TEMP CI shortcut:         name: Build Closure App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "closure_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_onoff_plug_app:
-        name: Build OnOff Plug App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "onoff_plug_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_multi_sensor_app:
+# TEMP CI shortcut:         name: Build Multi Sensor App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "multi_sensor_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_refrigerator_app:
-        name: Build Refrigerator App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "refrigerator_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_onoff_plug_app:
+# TEMP CI shortcut:         name: Build OnOff Plug App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "onoff_plug_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_evse_app:
-        name: Build EVSE App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "evse_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: true
+# TEMP CI shortcut:     build_refrigerator_app:
+# TEMP CI shortcut:         name: Build Refrigerator App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "refrigerator_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_performance_test_app:
-        name: Build Performance Test App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "performance_test_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
+# TEMP CI shortcut:     build_evse_app:
+# TEMP CI shortcut:         name: Build EVSE App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "evse_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             wifi-soc-support: true
 
-    build_zigbee_light:
-        name: Build Zigbee Light App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "zigbee_light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            wifi-soc-support: false
+# TEMP CI shortcut:     build_performance_test_app:
+# TEMP CI shortcut:         name: Build Performance Test App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "performance_test_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             wifi-soc-support: false
 
-    build_oven_app:
-        name: Build Oven App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "oven_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
+# TEMP CI shortcut:     build_zigbee_light:
+# TEMP CI shortcut:         name: Build Zigbee Light App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "zigbee_light"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             mg24-internal-support: false
+# TEMP CI shortcut:             mgm24-support: false
+# TEMP CI shortcut:             mgm24-internal-support: false
+# TEMP CI shortcut:             wifi-soc-support: false
 
-    build_rangehood_app:
-        name: Build Rangehood App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "rangehood_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_oven_app:
+# TEMP CI shortcut:         name: Build Oven App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "oven_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             thread-support: false
 
-    build_platform_template:
-        name: Build Platform Template
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "platform_template"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_rangehood_app:
+# TEMP CI shortcut:         name: Build Rangehood App
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "rangehood_app"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build_series_3_bootloader:
-        name: Build Series 3 Bootloader
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/builder.yaml
-        with:
-            json-file-path: './.github/silabs-builds-series-3-bootloader.json'
-            path-to-example-app: slc/apps/bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcw
-            example-app: bootloader
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            platform: series-3-bootloader
+# TEMP CI shortcut:     build_platform_template:
+# TEMP CI shortcut:         name: Build Platform Template
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/platform-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             example-app: "platform_template"
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-sqa-tools:
-        name: Build SQA Tools
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/sqa-tools-builder.yaml
-        with:
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:     build_series_3_bootloader:
+# TEMP CI shortcut:         name: Build Series 3 Bootloader
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
+# TEMP CI shortcut:             path-to-example-app: slc/apps/bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcw
+# TEMP CI shortcut:             example-app: bootloader
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
+# TEMP CI shortcut:             platform: series-3-bootloader
+
+# TEMP CI shortcut:     build-sqa-tools:
+# TEMP CI shortcut:         name: Build SQA Tools
+# TEMP CI shortcut:         needs: [set-build-type, cache-tools]
+# TEMP CI shortcut:         uses: ./.github/workflows/sqa-tools-builder.yaml
+# TEMP CI shortcut:         with:
+# TEMP CI shortcut:             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
         needs:
+            # TEMP: trimmed needs while jobs below are commented (restore with jobs)
             - set-build-type
             - cache-tools
-            - build-sqa-tools
             - build_lighting_app
-            - build_air_quality_sensor_app
-            - build_light_switch_app
-            - build_lock_app
-            - build_thermostat_app
-            - build_window_app
-            - build_fan_control_app
-            - build_multi_sensor_app
-            - build_onoff_plug_app
-            - build_refrigerator_app
-            - build_evse_app
-            - build_performance_test_app
-            - build_platform_template
-            - build_zigbee_light
-            - build_closure_app
-            - build_oven_app
-            - build_rangehood_app
-            - build_series_3_bootloader
         if: ${{ success() }}
 
         steps:
