@@ -154,7 +154,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "3000"
+    value: "1000"
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"

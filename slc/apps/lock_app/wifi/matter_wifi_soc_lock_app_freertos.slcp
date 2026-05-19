@@ -152,7 +152,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "3000"
+    value: "1000"
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
