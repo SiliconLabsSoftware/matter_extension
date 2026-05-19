@@ -161,7 +161,7 @@ private:
 using namespace ::chip::DeviceLayer::Silabs;
 
 #define APP_FUNCTION_BUTTON 0
-#define APP_LIGHT_SWITCH     1
+#define APP_ONOFF_BUTTON     1
 
 CustomerAppTask CustomerAppTask::sAppTask;
 
@@ -188,9 +188,9 @@ void CustomerAppTask::ButtonEventHandlerImpl(uint8_t button, uint8_t btnAction)
     AppEvent button_event           = {};
     button_event.Type               = AppEvent::kEventType_Button;
     button_event.ButtonEvent.Action = btnAction;
-    if (button == APP_LIGHT_SWITCH && btnAction == static_cast<uint8_t>(SilabsPlatform::ButtonAction::ButtonPressed))
+    if (button == APP_ONOFF_BUTTON && btnAction == static_cast<uint8_t>(SilabsPlatform::ButtonAction::ButtonPressed))
     {
-        button_event.Handler = LightActionEventHandler;
+        button_event.Handler = OnOffActionEventHandler;
         AppTask::GetAppTask().PostEvent(&button_event);
     }
     else if (button == APP_FUNCTION_BUTTON)
@@ -200,6 +200,15 @@ void CustomerAppTask::ButtonEventHandlerImpl(uint8_t button, uint8_t btnAction)
     }
 }
 ```
+
+### Override API Reference
+
+The base API and implementation are generated into your project and live under `autogen/` directory. These files are regenerated on every project upgrade and match your installed SDK version. Use them as the reference for overridable methods and app configuration.
+
+| File | Purpose |
+|------|--------|
+| `autogen/AppTaskImpl.h` | Declarations of every overridable `*Impl()` method. Copy the signatures you need from here into `CustomerAppTask.h`. |
+| `autogen/AppTask.cpp` | Silicon Labs default implementation of AppTask. This is what runs for any `*Impl()` you do not override. Use as reference when customizing behavior. |
 
 ## Troubleshooting
 
