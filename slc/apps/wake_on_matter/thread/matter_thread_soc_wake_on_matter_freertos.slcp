@@ -66,7 +66,6 @@ component:
     condition: [matter_platform_mg, device_series_3]
 
   # OT-NCP components
-  - id: clock_manager
   - id: ot_reset_utils
   - id: mbedtls_jpake
   - id: mbedtls_tls
@@ -143,7 +142,7 @@ configuration:
     value: '1'
   - name: SL_IOSTREAM_USART_VCOM_RX_BUFFER_SIZE
     value: '1024'
-    condition: [device_series_2]  
+    condition: [device_series_2]
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
     condition: [matter_ble_side_channel]
