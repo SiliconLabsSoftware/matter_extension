@@ -21,13 +21,13 @@ def resolve_workflow_for_coverage() {
     }
 }
 
-def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null", skip_merge_wait="false") {
+def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} --skip_merge_wait ${skip_merge_wait}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)

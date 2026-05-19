@@ -16,7 +16,6 @@ def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
-def skip_merge_wait_flag = "false"
 def build_description = ""
 def commit_change_summary = ""
 
@@ -115,7 +114,7 @@ pipeline
                     retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
-                                def result = pipelineFunctions.upload_artifacts(false, commit_sha, workflow_id, run_number, skip_merge_wait_flag)
+                                def result = pipelineFunctions.upload_artifacts()
                                 commit_sha = result.commit_sha
                                 run_number = result.run_number
                                 workflow_id = result.workflow_id
