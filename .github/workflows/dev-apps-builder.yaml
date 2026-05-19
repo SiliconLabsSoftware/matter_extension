@@ -253,7 +253,6 @@ jobs:
         name: Build Coverage (lcov)
         needs:
             - set-build-type
-            - merge-apps
         if: >-
             ${{ (needs.set-build-type.outputs.build-type == 'standard' || needs.set-build-type.outputs.build-type == 'full')
                 && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_')
@@ -264,7 +263,7 @@ jobs:
 
     wait-for-test-results:
         name: Wait for Test Results
-        needs: merge-apps
+        needs: merge-apps, build_coverage
         if: always()
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
