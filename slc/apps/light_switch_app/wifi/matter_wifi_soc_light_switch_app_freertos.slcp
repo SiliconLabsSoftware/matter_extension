@@ -114,25 +114,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
       - path: CHIPProjectConfig.h
-      - path: BindingHandler.h
-      - path: LightSwitchMgr.h
-      - path: ShellCommands.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/BindingHandler.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/LightSwitchMgr.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/light-switch-app/silabs/src/ShellCommands.cpp
     directory: src
 
 define:
