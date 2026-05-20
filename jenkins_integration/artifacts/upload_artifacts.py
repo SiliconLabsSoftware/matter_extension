@@ -78,7 +78,7 @@ def main():
     if artifacts_already_uploaded(workflow_info, args.sqa):
         print("Merged artifacts file present in UBAI. Do not download and upload artifacts.")
         return
-    process_artifacts(workflow_info, args.sqa, skip_merge_wait=args.skip_merge_wait)
+    process_artifacts(workflow_info, args.sqa)
 
 
 if __name__ == '__main__':

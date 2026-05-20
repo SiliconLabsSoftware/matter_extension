@@ -1,26 +1,3 @@
-def resolve_workflow_for_coverage() {
-    withCredentials([
-        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
-    ]) {
-        def output = sh(
-            script: "python3 -u jenkins_integration/artifacts/resolve_workflow_for_coverage.py --branch_name ${env.BRANCH_NAME} --commit_sha \$(git rev-parse HEAD)",
-            returnStdout: true
-        ).trim()
-        echo "resolve_workflow_for_coverage output:\n${output}"
-        def parsed = parse_upload_artifacts_output(output)
-        def skipMerge = output.contains('SKIP_DEV_MERGE_WAIT=1')
-        echo "skip_merge_wait for binary upload: ${skipMerge}"
-        return [
-            commit_sha       : parsed.commit_sha,
-            run_number       : parsed.run_number,
-            workflow_id      : parsed.workflow_id,
-            bypass_results   : parsed.bypass_results,
-            pr_number        : parsed.pr_number,
-            skip_merge_wait  : skipMerge ? 'true' : 'false'
-        ]
-    }
-}
-
 def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
