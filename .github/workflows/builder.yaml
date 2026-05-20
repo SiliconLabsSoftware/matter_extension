@@ -45,6 +45,7 @@ jobs:
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
+                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
 
             - name: Create asset files
               if: startsWith(github.ref_name, 'release_')
