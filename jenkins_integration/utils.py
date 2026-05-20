@@ -30,9 +30,9 @@ def parse_arguments():
     parser.add_argument("--branch_name", required=True, help="Name of the branch or PR (e.g., 'main', 'PR-123')")
     parser.add_argument("--build_number", required=True, help="Build number from Jenkins (e.g., '1')")
     parser.add_argument("--sqa", required=True, choices=['true', 'false'], help="Boolean flag to indicate SQA builds")
-    parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA); use 'null' when unknown")
-    parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA); use 'null' when unknown")
-    parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA); use 'null' when unknown")
+    parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA)")
+    parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA)")
+    parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
 
     args = parser.parse_args()
     args.sqa = True if args.sqa == 'true' else False

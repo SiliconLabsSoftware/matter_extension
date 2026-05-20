@@ -41,15 +41,6 @@ if workspace_root not in sys.path:
 from jenkins_integration.utils import parse_arguments, get_dev_workflow_info, artifacts_already_uploaded, process_artifacts
 
 
-def _is_precooked_workflow(args):
-    return (
-        not args.sqa
-        and args.workflow_id not in (None, '', 'null')
-        and args.commit_sha not in (None, '', 'null')
-        and args.run_number not in (None, '', 'null')
-    )
-
-
 def main():
     """
     Main entry point for the artifact upload script.
@@ -57,16 +48,7 @@ def main():
     checking for existing artifacts, and coordinating the upload process.
     """
     args = parse_arguments()
-    if not args.sqa and _is_precooked_workflow(args):
-        workflow_info = {
-            'commit_sha': args.commit_sha,
-            'workflow_id': args.workflow_id,
-            'run_number': args.run_number,
-            'branch_name': args.branch_name,
-            'build_number': args.build_number,
-        }
-        print("Using workflow info from Jenkins (resolve coverage / precooked).")
-    elif not args.sqa:
+    if not args.sqa:
         workflow_info = get_dev_workflow_info(args)
     else:
         workflow_info = {

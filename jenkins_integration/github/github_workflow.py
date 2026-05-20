@@ -69,7 +69,7 @@ def get_workflow_info(branch_name):
     if branch_name.startswith("PR"):
         head_branch = _get_pr_latest_sha(branch_name)
         if head_branch:
-            pr_url = f"{config.actions_runs_url_pr}&branch={requests.utils.quote(head_branch, safe='')}"
+            pr_url = f"{config.actions_runs_url_pr}&branch={head_branch}"
         else:
             pr_url = config.actions_runs_url_pr
         print(f"Fetching workflow runs from actions/runs event Pull Request URL: {pr_url}")
@@ -410,5 +410,4 @@ def _is_artifact_job_complete(check_run):
         print(f"{job_name} finished successfully. Artifacts are built. "
               f"Workflow Id: {check_run['id']}")
         return True
-    return False
-
+    return False 

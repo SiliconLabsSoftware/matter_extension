@@ -8,7 +8,7 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
-            return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_results, pr_number: result.pr_number]
+            return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_send_results_gh, pr_number: result.pr_number]
         }
     }
 }
@@ -258,11 +258,6 @@ def parse_upload_artifacts_output(output) {
             echo "Workflow Run Number: ${run_number}"
         } else {
             error("Workflow run number not found in output.")
-        }
-        if (workflow_id) {
-            echo "Workflow ID: ${workflow_id}"
-        } else {
-            error("Workflow ID not found in output.")
         }
         if (pr_number) {
             echo "PR Number: ${pr_number}"
