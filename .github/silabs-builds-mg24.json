@@ -50,7 +50,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix copy-sources-llvm","--with toolchain_llvm", "--copy-sources"]
+                "arguments": ["--output_suffix llvm-copy-sources","--with toolchain_llvm", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -68,7 +68,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-lto", "--with_app matter_no_debug,toolchain_llvm", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix llvm-lto", "--with toolchain_llvm_lto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "lock_app": [

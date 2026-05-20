@@ -199,17 +199,16 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
             },
             {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix llvm-lto",
-                              "--with_app toolchain_llvm_lto",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"
-                            ]
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix llvm-cmp-concurrent-ble",
+                              "--with toolchain_llvm",
+                              "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             },
             {
-                "boards": ["brd4407a"],
-                "arguments": ["--output_suffix llvm",
-                              "--with_app toolchain_llvm"
-                            ]
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix llvm-lto-cmp-concurrent-ble",
+                              "--with toolchain_llvm_lto",
+                              "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             }
         ],
         "closure_app": [
