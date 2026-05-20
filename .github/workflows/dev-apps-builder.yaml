@@ -10,16 +10,16 @@ on:
     workflow_dispatch:
         inputs:
             build-type:
-                description: "standard | full"
+                description: "The build type to use"
                 required: true
                 type: choice
                 options:
                     - standard
                     - full
 
-# concurrency:
-#     group: dev-build-examples-${{ github.ref }}
-#     cancel-in-progress: true
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
 
 permissions:
   contents: read
@@ -174,17 +174,17 @@ jobs:
             wifi-soc-support: false
 
     build_zigbee_light:
-        name: Build Zigbee Light App
-        needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "zigbee_light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            wifi-soc-support: false
-
+       name: Build Zigbee Light App
+       needs: [set-build-type, cache-tools]
+       uses: ./.github/workflows/platform-builder.yaml
+       with:
+           example-app: "zigbee_light"
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
+           mg24-internal-support: false
+           mgm24-support: false
+           mgm24-internal-support: false
+           wifi-soc-support: false
+ 
     build_oven_app:
         name: Build Oven App
         needs: [set-build-type, cache-tools]
@@ -253,7 +253,7 @@ jobs:
             - build_oven_app
             - build_rangehood_app
             - build_series_3_bootloader
-        if: ${{ success() }}
+        if: success()
 
         steps:
             - name: Merge artifacts

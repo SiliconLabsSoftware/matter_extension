@@ -412,9 +412,3 @@ def _is_artifact_job_complete(check_run):
         return True
     return False
 
-
-def _fetch_workflow_runs_page(url):
-    """Fetch one page of workflow runs from a list URL."""
-    response = _make_github_api_request(url)
-    return response.json()
-

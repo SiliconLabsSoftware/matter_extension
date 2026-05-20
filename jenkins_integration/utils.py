@@ -87,7 +87,7 @@ def artifacts_already_uploaded(workflow_info, sqa):
 def process_artifacts(workflow_info, sqa):
     """
     Process artifacts by waiting for them to be ready, then downloading and uploading.
-
+    
     Args:
         workflow_info (dict): Workflow information containing commit_sha, branch_name, build_number, and workflow_id
         sqa (bool): Whether this is an SQA build
@@ -99,4 +99,4 @@ def process_artifacts(workflow_info, sqa):
         workflow_info['branch_name'],
         workflow_info['build_number'],
         sqa
-    )
+    ) 
