@@ -230,15 +230,6 @@ void CustomerAppTask::ButtonEventHandlerImpl(uint8_t button, uint8_t btnAction)
 }
 ```
 
-### Override API Reference
-
-The base API and implementation are generated into your project and live under `autogen/` directory. These files are regenerated on every project upgrade and match your installed SDK version. Use them as the reference for overridable methods and app configuration.
-
-| File | Purpose |
-|------|--------|
-| `autogen/AppTaskImpl.h` | Declarations of every overridable `*Impl()` method. Copy the signatures you need from here into `CustomerAppTask.h`. |
-| `autogen/AppTask.cpp` | Silicon Labs default implementation of AppTask. This is what runs for any `*Impl()` you do not override. Use as reference when customizing behavior. |
-
 ## Troubleshooting
 
 **Device does not advertise over BLE**

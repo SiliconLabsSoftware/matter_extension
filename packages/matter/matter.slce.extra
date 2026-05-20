@@ -229,7 +229,6 @@ components:
   - matter_pressure_measurement
   - matter_provision_default
   - matter_provision_flash
-  - matter_proximity_ranging
   - matter_pump_configuration_and_control
   - matter_push_av_stream_transport
   - matter_qr_code
@@ -389,17 +388,17 @@ extra_files:
   - slc/apps/closure_app/wifi/matter_wifi_soc_closure_app_freertos.slcp
   - slc/apps/closure_app/wifi/matter_wifi_soc_closure_app_freertos.slcw
   - slc/apps/closure_app/wifi/pkg.slt
-  - slc/apps/code_size_sensor/thread/config/sl_matter_sensor_config.h
-  - slc/apps/code_size_sensor/thread/data_model/multi-sensor-thread-app.zap
-  - slc/apps/code_size_sensor/thread/include/AppConfig.h
-  - slc/apps/code_size_sensor/thread/include/AppEvent.h
-  - slc/apps/code_size_sensor/thread/include/AppTask.h
-  - slc/apps/code_size_sensor/thread/include/CHIPProjectConfig.h
-  - slc/apps/code_size_sensor/thread/include/SensorManager.h
-  - slc/apps/code_size_sensor/thread/matter_thread_soc_code_size_sensor_freertos.slcp
-  - slc/apps/code_size_sensor/thread/src/AppTask.cpp
-  - slc/apps/code_size_sensor/thread/src/DataModelCallbacks.cpp
-  - slc/apps/code_size_sensor/thread/src/SensorManager.cpp
+  - slc/apps/code_size_sensor/config/sl_matter_sensor_config.h
+  - slc/apps/code_size_sensor/data_model/multi-sensor-thread-app.zap
+  - slc/apps/code_size_sensor/include/AppConfig.h
+  - slc/apps/code_size_sensor/include/AppEvent.h
+  - slc/apps/code_size_sensor/include/AppTask.h
+  - slc/apps/code_size_sensor/include/CHIPProjectConfig.h
+  - slc/apps/code_size_sensor/include/SensorManager.h
+  - slc/apps/code_size_sensor/matter_thread_soc_code_size_sensor_freertos.slcp
+  - slc/apps/code_size_sensor/src/AppTask.cpp
+  - slc/apps/code_size_sensor/src/DataModelCallbacks.cpp
+  - slc/apps/code_size_sensor/src/SensorManager.cpp
   - slc/apps/dishwasher_app/thread/README.md
   - slc/apps/dishwasher_app/thread/matter_thread_soc_dishwasher_app_freertos.slcp
   - slc/apps/dishwasher_app/thread/matter_thread_soc_dishwasher_app_series_2_freertos.slcw
@@ -648,7 +647,6 @@ extra_files:
   - slc/component/matter-clusters/matter_power_source_configuration.slcc
   - slc/component/matter-clusters/matter_power_topology.slcc
   - slc/component/matter-clusters/matter_pressure_measurement.slcc
-  - slc/component/matter-clusters/matter_proximity_ranging.slcc
   - slc/component/matter-clusters/matter_pump_configuration_and_control.slcc
   - slc/component/matter-clusters/matter_push_av_stream_transport.slcc
   - slc/component/matter-clusters/matter_refrigerator_alarm.slcc
@@ -955,8 +953,6 @@ extra_files:
   - src/app/zap-templates/templates/app/slc_compatibility/metadata.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Groups.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureControl.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureMeasurement.zapt
   - src/app/zap-templates/zcl/zcl.json
   - tools/console/README.md
   - tools/console/console_log_parser.py
@@ -1951,10 +1947,10 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/power-source-configuration-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/power-source-configuration-server/power-source-configuration-server.cpp
   - third_party/matter_sdk/src/app/clusters/power-source-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/power-source-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/power-source-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/power-source-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/power-source-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/power-source-server/codegen/power-source-server.cpp
-  - third_party/matter_sdk/src/app/clusters/power-source-server/codegen/power-source-server.h
   - third_party/matter_sdk/src/app/clusters/power-source-server/power-source-server.h
   - third_party/matter_sdk/src/app/clusters/power-topology-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/power-topology-server/CodegenIntegration.cpp
@@ -1979,17 +1975,6 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/pressure-measurement-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/pressure-measurement-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/pressure-measurement-server/tests/TestPressureMeasurementCluster.cpp
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/CodegenIntegration.cpp
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/CodegenIntegration.h
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/ProximityRangingCluster.cpp
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/ProximityRangingCluster.h
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/ProximityRangingDriver.h
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/README.md
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/app_config_dependent_sources.cmake
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/tests/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/tests/TestProximityRangingCluster.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.gni
@@ -2152,19 +2137,19 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/thermostat-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
   - third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.h
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatCluster.cpp
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatCluster.h
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterAtomic.cpp
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterEvents.cpp
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterEvents.h
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterPresets.cpp
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterPresets.h
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSuggestions.cpp
-  - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatDelegate.h
   - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.cpp
   - third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.h
   - third_party/matter_sdk/src/app/clusters/thermostat-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/thermostat-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-delegate.h
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-atomic.cpp
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-events.cpp
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-events.h
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-presets.cpp
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-presets.h
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server-suggestions.cpp
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.cpp
+  - third_party/matter_sdk/src/app/clusters/thermostat-server/thermostat-server.h
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/app_config_dependent_sources.gni
