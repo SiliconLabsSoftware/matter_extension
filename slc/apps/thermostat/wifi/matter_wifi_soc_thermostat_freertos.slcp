@@ -112,6 +112,8 @@ config_file:
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include/ThermostatConfig.h
+    file_id: thermostat_config
 
 include:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
