@@ -111,6 +111,10 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: CHIP_CONFIG_ICD_OBSERVERS_POOL_SIZE
+    value: 4
+    condition: [matter_icd_core]
+
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
