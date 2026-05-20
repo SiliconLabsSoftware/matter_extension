@@ -65,23 +65,16 @@ component:
     condition: [matter_platform_mg, device_series_3]
 
   # OT-NCP components
+  - id: cpc_secondary_driver_uart_usart
+    instance:
+      - vcom 
+  - id: ot_ncp_cpc
   - id: ot_reset_utils
   - id: mbedtls_jpake
   - id: mbedtls_tls
   - id: mbedtls_dtls
   - id: ot_ncp_source
   - id: ot_cli_source
-  - id: iostream_usart
-    instance:
-      - vcom # Temp fix for Matter CLI
-    condition:
-      - device_series_2
-  - id: iostream_eusart
-    instance:
-      - vcom # Need this by default for OTBR communication
-    condition:
-      - device_series_3
-
   # Override configuration for JTAG use
   - id: matter_segger_rtt
   - id: configuration_over_swo
@@ -202,38 +195,16 @@ configuration:
     value: "1"
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
-
-  # Wake on Matter specific configurations
-  # Temporary solution this project has 2 VCOM instances even if the board only has 1,
-  # the vcom instance for the Matter CLI/Logs is rerouted to EUSART1 with only RX and TX pin enabled
-  # This setup works because the VCOM instance for OT-CLI uses the IOSTREAM driver 
-  # while the vcom instance for Matter uses the legacy UARTDRV. This is a stop gap solution until this samples app support CPC.
-  - name: SL_IOSTREAM_USART_VCOM_BAUDRATE
-    value: 460800
-  - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
-    value: usartHwFlowControlCtsAndRts  
-  - name: EMDRV_UARTDRV_FLOW_CONTROL_ENABLE
-    value: 0
-  - name: SL_UARTDRV_EUSART_VCOM_FLOW_CONTROL_TYPE
-    value: "uartdrvFlowControlNone"
-  - name: SL_UARTDRV_EUSART_VCOM_PERIPHERAL
-    value: "EUSART1"  
-  - name: SL_UARTDRV_EUSART_VCOM_TX_PORT
-    value: "SL_GPIO_PORT_A"  
-  - name: SL_UARTDRV_EUSART_VCOM_TX_PIN
-    value: "6"    
-  - name: SL_UARTDRV_EUSART_VCOM_RX_PORT
-    value: "SL_GPIO_PORT_A"  
-  - name: SL_UARTDRV_EUSART_VCOM_RX_PIN
-    value: "5"
-  - name: SL_UARTDRV_EUSART_VCOM_CTS_PORT
-    value: "SL_GPIO_PORT_C"
-  - name: SL_UARTDRV_EUSART_VCOM_CTS_PIN
-    value: "5"
-  - name: SL_UARTDRV_EUSART_VCOM_RTS_PORT
-    value: "SL_GPIO_PORT_C"
-  - name: SL_UARTDRV_EUSART_VCOM_RTS_PIN
-    value: "7"
+  - name: SL_CPC_DRV_UART_VCOM_BAUDRATE
+    value: '921600'
+  - condition:
+      - cpc_secondary_driver_uart_usart
+    name: SL_CPC_DRV_UART_VCOM_FLOW_CONTROL_TYPE
+    value: usartHwFlowControlCtsAndRts
+  - condition:
+    - cpc_secondary_driver_uart_eusart
+    name: SL_CPC_DRV_UART_VCOM_FLOW_CONTROL_TYPE
+    value: eusartHwFlowControlCtsAndRts
   - condition:
     - ot_rtt_log
     name: OPENTHREAD_CONFIG_LOG_OUTPUT
