@@ -21,14 +21,6 @@
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            },
-            {
-                "boards": ["brd4337a"],
-                "arguments": ["--output_suffix llvm", "--with toolchain_llvm"]
-            },
-            {
-                "boards": ["brd4337a"],
-                "arguments": ["--output_suffix llvm-copy-sources", "--with toolchain_llvm", "--copy-sources"]
             }
         ],
         "platform_template": [

@@ -47,10 +47,6 @@
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-copy-sources","--with toolchain_llvm", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -61,14 +57,6 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-lto", "--with toolchain_llvm_lto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "lock_app": [

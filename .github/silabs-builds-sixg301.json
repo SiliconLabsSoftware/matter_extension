@@ -197,18 +197,6 @@
             {   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-hdr-dc-ota-2","--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            },
-            {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                "arguments": ["--output_suffix llvm-cmp-concurrent-ble",
-                              "--with toolchain_llvm",
-                              "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
-            },
-            {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
-                "arguments": ["--output_suffix llvm-lto-cmp-concurrent-ble",
-                              "--with toolchain_llvm_lto",
-                              "--with_app matter_internal_ble_side_channel,matter_ble_dmp_test,matter_zigbee_concurrent"]
             }
         ],
         "closure_app": [
