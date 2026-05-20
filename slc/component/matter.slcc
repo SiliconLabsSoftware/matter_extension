@@ -45,6 +45,9 @@ toolchain_settings:
     value: -fno-common
   - option: gcc_compiler_option
     value: -Wno-unused-parameter
+  # TODO: Remove once SI91X-21377 is fixed
+  - option: gcc_compiler_option
+    value: -Wno-unused-variable
 
   # LLVM specific compiler options
   - option: llvm_compiler_option
@@ -131,7 +134,7 @@ requires:
   - name: matter_codegen_data_model_sources
     condition: [matter_codegen_dm]
   - name: matter_code_driven_data_model_sources
-    condition: [matter_code_driven_dm]  
+    condition: [matter_code_driven_dm]
   - name: matter_data_model
   - name: matter_data_model_provider
   - name: matter_encode_decode
