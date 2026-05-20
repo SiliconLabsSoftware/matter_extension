@@ -160,8 +160,7 @@ if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
 	MAKE_FILE=$SILABS_APP.solution.Makefile
 	PROJECT_FLAG="-w"
 	OUTPUT_DIR="out/$BRD_ONLY/${SILABS_APP}_solution"
-	# Legacy LLVM workspace layout used cmake_llvm at OUTPUT_DIR root; current SLC
-	# emits ${SILABS_APP}_llvm_cmake (see solution build branch).
+	# CMake subdir under OUTPUT_DIR for solution (only used when USE_LLVM=true).
 	CMAKE_SUBDIR="cmake_llvm"
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
