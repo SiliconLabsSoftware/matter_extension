@@ -449,7 +449,9 @@ elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; t
 else
 	echo "Building solution..."
 	if [ "$USE_LLVM" = true ]; then
-		cmake_configure_and_build "$OUTPUT_DIR/$CMAKE_SUBDIR" "solution" || exit 1
+		# Note: When slc-cli 6.0.21 releases, need to revert back to: 
+		# cmake_configure_and_build "$OUTPUT_DIR/$CMAKE_SUBDIR" "solution" || exit 1 
+		cmake_configure_and_build "$OUTPUT_DIR/${SILABS_APP}_llvm_cmake" "solution" || exit 1        
 	else
 		if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
 			echo "ERROR: Failed to build solution"
