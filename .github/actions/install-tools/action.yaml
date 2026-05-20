@@ -85,3 +85,12 @@ runs:
         ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
         echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
         echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+
+    - name: install llvm
+      id: install-llvm
+      shell: bash
+      run: |
+        slt install "llvm-arm-toolchain-for-embedded/21.1.1@silabs" -e conan
+        ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
+        echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
+        echo "$ARM_LLVM_DIR/bin" >> $GITHUB_PATH
