@@ -1,5 +1,5 @@
 workspace_name: matter_thread_soc_window_app_series_2_freertos
-label: Matter Thread - SoC Window app with external bootloader. This configuration will increase power usage in EM2. FreeRTOS
+label: Matter Thread - SoC Window App with external Bootloader FreeRTOS
 quality: production
 package: matter
 description: Demonstrates a sample implementation of a Matter over Thread window covering app with external bootloader. This configuration will increase power usage in EM2.
