@@ -55,7 +55,6 @@ component:
   - id: matter_configuration_over_swo
   - id: segger_rtt
   - id: matter_si70xx_sensor
-    from: matter
   - id: matter_ota_requestor
   - id: matter_occupancy_sensor
   - id: matter_ota_support
@@ -84,10 +83,8 @@ component:
   - id: sl_si91x_soc_soft_reset
   - id: ble
   - id: sl_i2c
-    from: wiseconnect3_sdk
   - id: i2c_instance
     instance: [i2c2]
-    from: wiseconnect3_sdk
     condition: [sl_i2c]
   - id: sl_si91x_button_917
     instance: [btn0, btn1]
