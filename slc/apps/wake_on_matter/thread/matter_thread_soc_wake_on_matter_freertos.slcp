@@ -1,14 +1,13 @@
 project_name: matter_thread_soc_wake_on_matter_freertos
 label: Matter Thread - SoC Wake on Matter FreeRTOS
-description: >
-  DDemonstrates a POC of receiving Matter subscription on a Thread NCP
+description: Demonstrates a POC of receiving Matter subscription on a Thread NCP
 quality: experimental
 package: matter
 category: Matter Application
 filter:  
   - name: Type    
     value: 
-      - SoC
+      - SoC Project
   - name: Difficulty
     value: 
       - Advanced
@@ -45,6 +44,7 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_log_uart
+  - id: matter_read_client
 
   - id: matter
   - id: matter_platform_mg
@@ -65,10 +65,12 @@ component:
     condition: [matter_platform_mg, device_series_3]
 
   # OT-NCP components
+  - id: ot_reset_utils
   - id: mbedtls_jpake
   - id: mbedtls_tls
   - id: mbedtls_dtls
   - id: ot_ncp_source
+  - id: ot_cli_source
   - id: iostream_usart
     instance:
       - vcom # Temp fix for Matter CLI
@@ -137,6 +139,9 @@ define:
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: '1'
+  - name: SL_IOSTREAM_USART_VCOM_RX_BUFFER_SIZE
+    value: '1024'
+    condition: [device_series_2]
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
     condition: [matter_ble_side_channel]
@@ -145,13 +150,10 @@ configuration:
     condition: [device_series_3]
   - name: SL_OPENTHREAD_ENABLE_APP_TASK
     value: 0
-  - name: SL_OPENTHREAD_ENABLE_CLI_TASK
-    value: 0
-  - name: OPENTHREAD_CONFIG_LOG_OUTPUT
-    value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
+  - name: SL_OPENTHREAD_ENABLE_SERIAL_TASK
+    value: 1
   - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
     value: 1
-    condition: [matter_thread_cert_libs]
   - name: SL_MBEDTLS_KEY_EXCHANGE_PSK_ENABLED
     value: 1
   - name: OPENTHREAD_CONFIG_COAP_API_ENABLE
@@ -207,7 +209,7 @@ configuration:
   # This setup works because the VCOM instance for OT-CLI uses the IOSTREAM driver 
   # while the vcom instance for Matter uses the legacy UARTDRV. This is a stop gap solution until this samples app support CPC.
   - name: SL_IOSTREAM_USART_VCOM_BAUDRATE
-    value: 115200
+    value: 460800
   - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE
     value: usartHwFlowControlCtsAndRts  
   - name: EMDRV_UARTDRV_FLOW_CONTROL_ENABLE

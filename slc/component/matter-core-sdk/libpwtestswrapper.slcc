@@ -58,7 +58,6 @@ include:
     -   path: SortUtils.h
     -   path: ZclString.h
     -   path: PersistentStorageMacros.h
-    -   path: VerificationMacrosNoLogging.h
     -   path: CommonIterator.h
     -   path: Iterators.h
     -   path: PersistentData.h

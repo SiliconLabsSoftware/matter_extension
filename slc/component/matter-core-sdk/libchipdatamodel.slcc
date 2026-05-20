@@ -17,7 +17,6 @@ include:
   - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/app
     file_list:
-    -   path: AttributeAccessToken.h
     -   path: AttributeValueEncoder.h
     -   path: AttributeValueDecoder.h
     -   path: AttributeEncodeState.h

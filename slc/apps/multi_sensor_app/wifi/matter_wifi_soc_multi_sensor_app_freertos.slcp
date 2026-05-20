@@ -37,7 +37,6 @@ component:
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
-  - id: matter_groups
   - id: matter_identify
   - id: matter_localization_configuration
   - id: matter_network_commissioning
@@ -154,7 +153,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "3000"
+    value: "1000"
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"
@@ -183,7 +182,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -191,15 +190,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hidden
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb
