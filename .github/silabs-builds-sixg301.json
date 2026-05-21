@@ -97,6 +97,11 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix wdog", "-pids application",
+                              "--with_app watchdog_manager"]
+            },
+            {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
@@ -141,6 +146,11 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
                             "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-wdog", "-pids application",
+                              "--with_app watchdog_manager,matter_zigbee_concurrent"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -223,6 +233,11 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix peripherals-wdog", "-pids application",
+                              "--with_app watchdog_manager"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
