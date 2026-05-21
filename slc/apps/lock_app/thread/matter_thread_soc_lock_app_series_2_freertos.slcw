@@ -2,7 +2,7 @@ workspace_name: matter_thread_soc_lock_app_series_2_freertos
 label: Matter Thread - SoC Lock with external Bootloader FreeRTOS
 quality: production
 package: matter
-description: Demonstrates a sample implementation of a Matter over Thread door lock app with external bootloader. . This configuration will increase power usage in EM2.
+description: Demonstrates a sample implementation of a Matter over Thread door lock app with external bootloader. This configuration will increase power usage in EM2.
 project:
   - path: ./matter_thread_soc_lock_app_freertos.slcp
     id: application
