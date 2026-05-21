@@ -238,12 +238,6 @@
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
                               "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-sit-200",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart","'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "platform_template": [
@@ -268,6 +262,15 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix sit-200",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+            }
+        ],
+        "window_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": [
+                    "--output_suffix sit-200",
+                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                ]
             }
         ]
     }  

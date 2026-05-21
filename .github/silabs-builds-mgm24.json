@@ -88,6 +88,15 @@
                 "arguments": ["--output_suffix sit-200",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
+        ],
+        "window_app": [
+            {
+                "boards": ["brd4316a"],
+                "arguments": [
+                    "--output_suffix sit-200",
+                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                ]
+            }
         ]
     } 
 }
