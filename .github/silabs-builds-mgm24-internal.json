@@ -63,6 +63,14 @@
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
             }
+        ],
+        "platform_app" :[
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix peripherals-llvm",
+                              "--with toolchain_llvm",
+                              "--with_app matter_peripherals"]
+            }
         ]
     }
 }

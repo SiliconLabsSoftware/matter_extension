@@ -65,10 +65,6 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-lto", "--with toolchain_llvm_lto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "lock_app": [
@@ -168,6 +164,11 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-lto",
+                              "--with toolchain_llvm_lto"]
             }
         ],
         "window_app": [
