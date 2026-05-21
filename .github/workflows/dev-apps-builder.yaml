@@ -261,13 +261,10 @@ jobs:
                   pattern: "*-${{ needs.set-build-type.outputs.build-type }}"
 
     build_coverage:
-        name: Build Coverage (lcov)
+        name: Build Coverage
         needs:
             - set-build-type
-        if: >-
-            ${{ (needs.set-build-type.outputs.build-type == 'standard' || needs.set-build-type.outputs.build-type == 'full')
-                && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_')
-                    || github.ref_name == 'feature/coverage_sonarqube' || github.head_ref == 'feature/coverage_sonarqube') }}
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}

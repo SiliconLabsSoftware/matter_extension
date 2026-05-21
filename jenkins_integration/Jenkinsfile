@@ -123,11 +123,7 @@ pipeline
         }
         stage('Code Coverage & Static Code Analysis') {
             when {
-                expression {
-                    env.BRANCH_NAME == "main" ||
-                        env.BRANCH_NAME.startsWith("release_") ||
-                        env.BRANCH_NAME == "feature/coverage_sonarqube"
-                }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
@@ -144,8 +140,6 @@ pipeline
                                 else
                                     echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
                                 fi
-                            else
-                                echo "[SUCCESS] No LCOV artifact for this workflow run (expected when build-type is not full). Jenkins step completed."
                             fi
                         '''
                         archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
