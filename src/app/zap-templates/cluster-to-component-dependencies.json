@@ -474,6 +474,12 @@
     ]
   },
   {
+    "clusterCode": "proximity ranging-server",
+    "value": [
+      "%extension-matter%matter_proximity_ranging"
+    ]
+  },
+  {
     "clusterCode": "pump configuration and control-server",
     "value": [
       "%extension-matter%matter_pump_configuration_and_control"

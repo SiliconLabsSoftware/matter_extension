@@ -10,6 +10,21 @@ outputs:
 runs:
     using: "composite"
     steps:
+        - name: Free disk space
+          uses: jlumbroso/free-disk-space@v1.3.1
+          with:
+              tool-cache: false
+              android: true
+              dotnet: true
+              haskell: true
+              large-packages: false
+              docker-images: false
+              swap-storage: false
+
+        - name: Report disk space
+          shell: bash
+          run: df -h /
+
         - name: Compute cache key
           id: compute-cache-key
           shell: bash
