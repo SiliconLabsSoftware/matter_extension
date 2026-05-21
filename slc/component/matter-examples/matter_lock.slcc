@@ -16,7 +16,7 @@ template_file:
 
 config_file:
   - path: third_party/matter_sdk/examples/lock-app/silabs/include/LockConfig.h
-    file_id: matter_air_quality_config
+    file_id: matter_lock_config
 provides:
   - name: matter_lock
 define:
