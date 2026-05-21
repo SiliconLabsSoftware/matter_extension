@@ -126,7 +126,7 @@ pipeline
                 expression {
                     env.BRANCH_NAME == "main" ||
                         env.BRANCH_NAME.startsWith("release_") ||
-                        env.BRANCH_NAME == "feature/coverage-ci"
+                        env.BRANCH_NAME == "feature/coverage_sonarqube"
                 }
             }
             steps {
