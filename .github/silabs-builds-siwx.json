@@ -197,7 +197,7 @@
         ],
         "window_app": [
             {
-                "boards": ["brd2605a","brd2708a","brd4338a","brd4343a","brd4342a","brd2911a"],
+                "boards": ["brd4338a","brd4343a"],
                 "arguments": [
                     "--output_suffix sit-200",
                     "'--configuration SL_IDLE_MODE_DURATION_S:200'"
