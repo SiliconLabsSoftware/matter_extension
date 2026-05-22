@@ -62,14 +62,16 @@
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
-            }
-        ],
-        "platform_app" :[
+            },
             {
                 "boards": ["brd4337a"],
-                "arguments": ["--output_suffix peripherals-llvm",
-                              "--with toolchain_llvm",
-                              "--with_app matter_peripherals"]
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with_app toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
     }
