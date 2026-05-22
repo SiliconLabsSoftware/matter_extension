@@ -57,6 +57,7 @@ requires:
   - name: sl_si91x_psa_ecdsa
   - name: sl_si91x_psa_sha
   - name: sl_si91x_crypto_multithread
+  - name: matter_tracing
 
 source:
   - path: third_party/matter_sdk/src/crypto/CHIPCryptoPAL.h
