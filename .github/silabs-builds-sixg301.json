@@ -129,6 +129,16 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with_app toolchain_llvm_lto"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm_lto","-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "zigbee_light":  [
