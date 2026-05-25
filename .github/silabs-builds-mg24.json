@@ -49,7 +49,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm_lto", "-pids application",
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
@@ -188,7 +188,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm_lto", "-pids application",
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
