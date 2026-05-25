@@ -36,6 +36,22 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
+        ],
+        "lighting_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-lto",
+                              "--with toolchain_llvm_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
         ]
     },
     "full": {
