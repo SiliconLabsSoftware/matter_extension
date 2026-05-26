@@ -11,7 +11,7 @@
 {%- for part in example.parts %}
   {%- set _ = part_list.append(".*" + part + ".*") %}
 {%- endfor %}
-{%- if not example.board_only %}
+{%- if not example.board_only and "com.silabs.board.none" not in board_list %}
   {%- set _ = board_list.append("com.silabs.board.none") %}
 {%- endif %}
 {%- set ide_list = ["generic-template", "makefile-ide", "simplicity-ide", "visual-studio-code", "visual-studio-code-cmake"] %}
