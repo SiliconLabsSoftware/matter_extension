@@ -4120,36 +4120,6 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
-  <demo name="brd4316a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
-    <model:description>Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader</model:description>
-    <property key="demos.blurb" value="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS app"/>
-    <property key="core.partCompatibility" value=".*"/>
-    <property key="core.boardCompatibility" value="brd4316a"/>
-    <property key="demos.imageFile" value="asset://extension.matter_2.9.0/demos/brd4316a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
-    <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <property key="core.quality" value="PRODUCTION"/>
-  </demo>
-  <demo name="brd4317a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
-    <model:description>Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader</model:description>
-    <property key="demos.blurb" value="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS app"/>
-    <property key="core.partCompatibility" value=".*"/>
-    <property key="core.boardCompatibility" value="brd4317a"/>
-    <property key="demos.imageFile" value="asset://extension.matter_2.9.0/demos/brd4317a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
-    <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <property key="core.quality" value="PRODUCTION"/>
-  </demo>
-  <demo name="brd4318a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
-    <model:description>Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader</model:description>
-    <property key="demos.blurb" value="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS app"/>
-    <property key="core.partCompatibility" value=".*"/>
-    <property key="core.boardCompatibility" value="brd4318a"/>
-    <property key="demos.imageFile" value="asset://extension.matter_2.9.0/demos/brd4318a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
-    <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <property key="core.quality" value="PRODUCTION"/>
-  </demo>
   <demo name="brd2601b.demo.matter_thread_soc_window_app_series_2_freertos" label="Matter Thread - SoC Window App with external Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Thread window covering app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Window App with external Bootloader FreeRTOS app"/>
