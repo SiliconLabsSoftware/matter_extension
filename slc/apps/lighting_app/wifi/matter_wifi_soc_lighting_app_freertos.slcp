@@ -120,11 +120,23 @@ include:
     file_list:
       - path: CustomerAppTask.h
     directory: include
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
+    file_list:
+      - path: DeviceChipCryptoPALTestMacros.h
+      - path: DeviceChipCryptoPALTests.h
+  - path: ../../../../third_party/matter_sdk/src/crypto/tests
+  - path: ../../../../third_party/matter_sdk/src/credentials/tests
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DeviceChipCryptoPALTests.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/src/credentials/attestation_verifier/TestPAAStore.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/src/credentials/tests/CHIPCert_test_vectors.cpp
     directory: src
 
 define:
