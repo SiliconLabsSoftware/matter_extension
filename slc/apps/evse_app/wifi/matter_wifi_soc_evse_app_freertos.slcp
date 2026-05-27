@@ -45,10 +45,6 @@ component:
     from: matter
   - id: matter_descriptor
     from: matter
-  - id: matter_diagnostic_logs
-    from: matter
-  - id: matter_fixed_label
-    from: matter
   - id: matter_general_commissioning
     from: matter
   - id: matter_general_diagnostics
@@ -63,15 +59,6 @@ component:
     from: matter
   - id: matter_operational_credentials
     from: matter
-  - id: matter_software_diagnostics
-    from: matter
-  - id: matter_time_format_localization
-    from: matter
-  - id: matter_user_label
-    from: matter
-  - id: matter_wifi_network_diagnostics
-    from: matter
-  # Override configuration for JTAG use
   - id: matter_configuration_over_swo
     from: matter
   - id: segger_rtt
@@ -116,9 +103,6 @@ component:
     from: matter
   - id: matter_electrical_power_measurement
     from: matter
-  - id: matter_mode_base
-    from: matter
-
   - id: wifi_resources
     from: wiseconnect3_sdk
   - id: sl_si91x_common_flash_nvm3

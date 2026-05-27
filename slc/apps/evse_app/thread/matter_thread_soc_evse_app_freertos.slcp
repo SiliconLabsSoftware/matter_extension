@@ -61,8 +61,6 @@ component:
     from: matter
   - id: matter_electrical_power_measurement
     from: matter
-  - id: matter_mode_base
-    from: matter
   - id: matter_codegen_dm
   - id: matter_access_control
     from: matter
@@ -71,8 +69,6 @@ component:
   - id: matter_basic_information
     from: matter
   - id: matter_descriptor
-    from: matter
-  - id: matter_fixed_label
     from: matter
   - id: matter_general_commissioning
     from: matter
@@ -93,14 +89,6 @@ component:
   - id: matter_ota_requestor
     from: matter
   - id: matter_power_source
-    from: matter
-  - id: matter_software_diagnostics
-    from: matter
-  - id: matter_thread_network_diagnostics
-    from: matter
-  - id: matter_time_format_localization
-    from: matter
-  - id: matter_user_label
     from: matter
   - id: matter_default_lcd_config
     from: matter
