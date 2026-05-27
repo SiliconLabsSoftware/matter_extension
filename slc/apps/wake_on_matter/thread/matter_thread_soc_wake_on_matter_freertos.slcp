@@ -48,14 +48,12 @@ component:
 
   - id: matter
   - id: matter_platform_mg
-  - id: matter_ble
   - id: ot_stack_ftd
   - id: matter_cpc
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
   #- id: matter_shell
-  - id: matter_gatt_static
   - id: matter_provision_default
   - id: app_common
   - id: bootloader_interface
@@ -110,6 +108,8 @@ source:
     directory: src
 
 define:
+  - name: CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
+    value: 0
   - name: SL_OPENTHREAD_MULTI_PAN_ENABLE
     value: 1
   - name: OPENTHREAD_CONFIG_NCP_HDLC_ENABLE
@@ -133,9 +133,6 @@ configuration:
   - name: SL_IOSTREAM_USART_VCOM_RX_BUFFER_SIZE
     value: '1024'
     condition: [device_series_2]
-  - name: SL_BT_CONFIG_USER_ADVERTISERS
-    value: 2
-    condition: [matter_ble_side_channel]
   - name: SL_TOKEN_MANAGER_STATIC_SECURE_TOKEN_SIZE
     value: 8192
     condition: [device_series_3]
