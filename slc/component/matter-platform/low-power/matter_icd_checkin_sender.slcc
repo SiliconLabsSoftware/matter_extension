@@ -31,7 +31,7 @@ requires:
   - name: matter_check_in_message
 
 conflicts:
-  - name: matter_check_in_sender
+  - name: ot_stack_ftd
 
 documentation:
   docset: matter
