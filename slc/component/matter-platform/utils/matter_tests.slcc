@@ -1,0 +1,16 @@
+id: matter_tests
+label: Matter Test Event Trigger
+description: Enable Test defines for internal tests.
+package: matter
+category: Matter|Utils
+quality: internal
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_tests
+
+define:
+  - name: TEST_WATCHDOG
+    condition: [watchdog_manager]
