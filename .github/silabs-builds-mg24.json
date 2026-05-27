@@ -167,7 +167,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix llvm-lto",
+                "arguments": ["--output_suffix llvm-sqa-lto",
                               "--with toolchain_llvm_lto"]
             },
             {

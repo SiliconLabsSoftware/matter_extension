@@ -210,23 +210,23 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix sequential-llvm",
+                "arguments": ["--output_suffix sequential-llvm-sqa",
                               "--with toolchain_llvm","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix sequential-llvm-ota-2",
+                "arguments": ["--output_suffix sequential-llvm-sqa-ota-2",
                               "--with toolchain_llvm","--with_app matter_zigbee_sequential", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
                         {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent-llvm",
+                "arguments": ["--output_suffix cmp-concurrent-llvm-sqa",
                               "--with toolchain_llvm","--with_app matter_zigbee_concurrent"]
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix cmp-concurrent-llvm-ota-2",
+                "arguments": ["--output_suffix cmp-concurrent-llvm-sqa-ota-2",
                               "--with toolchain_llvm","--with_app matter_zigbee_concurrent", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
@@ -251,12 +251,12 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix peripherals-llvm",
+                "arguments": ["--output_suffix peripherals-llvm-sqa",
                               "--with toolchain_llvm","--with_app matter_peripherals,"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix peripherals-llvm-ota-2",
+                "arguments": ["--output_suffix peripherals-llvm-sqa-ota-2",
                               "--with toolchain_llvm","--with_app matter_peripherals",
                               "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
