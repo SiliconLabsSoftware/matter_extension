@@ -294,6 +294,12 @@
     ]
   },
   {
+    "clusterCode": "humidistat-server",
+    "value": [
+      "%extension-matter%matter_humidistat"
+    ]
+  },
+  {
     "clusterCode": "icd management-server",
     "value": [
       "%extension-matter%matter_icd_management"
