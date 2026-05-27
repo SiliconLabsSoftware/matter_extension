@@ -135,7 +135,7 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
             },
             {
-                "boards": ["brd2719a"],
+                "boards": ["brd4408a"],
                 "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
@@ -212,10 +212,6 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
-            },
-            {
-                "boards": ["brd1019a"],
-                "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "platform_template": [
@@ -228,15 +224,10 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
-            }
-        ],
-        "window_app": [
+            },
             {
-                "boards": ["brd4407a"],
-                "arguments": [
-                    "--output_suffix sit-200",
-                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
-                ]
+                "boards": ["brd1019a"],
+                "arguments": ["--output_suffix peripherals-icd-sit-200","--with_app matter_peripherals,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }
