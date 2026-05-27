@@ -35,7 +35,7 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"] 
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -57,7 +57,7 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             },
             {
                 "boards": ["brd4407a"],
@@ -85,7 +85,7 @@
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"]
             }
         ]
     },
@@ -99,7 +99,7 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix wdog", "-pids application",
-                              "--with_app watchdog_manager"]
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -160,7 +160,7 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-wdog", "-pids application",
-                              "--with_app watchdog_manager,matter_zigbee_concurrent"]
+                              "--with_app watchdog_manager,matter_tests,matter_zigbee_concurrent"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -257,7 +257,7 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-wdog", "-pids application",
-                              "--with_app watchdog_manager"]
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],

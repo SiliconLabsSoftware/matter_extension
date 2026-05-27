@@ -14,7 +14,7 @@
         "zigbee_light": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4187c"],
@@ -24,11 +24,11 @@
         "platform_template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]  
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             }
         ],
         "thermostat": [
@@ -60,7 +60,7 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
+                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"]
             },
             {
                 "boards": ["brd4187c"],
@@ -76,11 +76,11 @@
         "zigbee_light":  [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4186c"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             },
             {
                 "boards": ["brd4187c"],
@@ -94,11 +94,11 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_icd_core,matter_peripherals"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_icd_core,matter_peripherals"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt", "--copy-sources"]
             }
         ],
         "thermostat": [
@@ -127,7 +127,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix wdog",
-                              "--with_app watchdog_manager"]
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd4187c"],
@@ -215,5 +215,5 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
-    }  
+    }
 }
