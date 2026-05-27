@@ -3,13 +3,13 @@
         "default": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix code_size",
+                "arguments": ["--output_suffix code_size_gcc",
                               "'--with matter_platform_low_power'",
                               "'--without matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart'"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix code_size",
+                "arguments": ["--output_suffix code_size_llvm",
                               "'--with matter_platform_low_power,toolchain_llvm'",
                               "'--without matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart'"]
             }
