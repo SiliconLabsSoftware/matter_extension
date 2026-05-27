@@ -1,0 +1,25 @@
+id: matter_cpc
+label: Matter CPC
+description: Enables sources and defines for CPC as used by Matter components
+package: matter
+category: Matter|Platform|CPC
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_cpc
+  - name: matter_uart_interface
+
+conflicts:
+  - name: matter_uart
+
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_cpc.cpp
+
+include:
+  - path: third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: matter_cpc.h
+

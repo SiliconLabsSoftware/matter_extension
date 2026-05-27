@@ -12,8 +12,11 @@ metadata:
 provides:
   - name: matter_shell
 
+recommends:
+  - id: matter_uart
+
 requires:
-  - name: matter_uart
+  - name: matter_uart_interface
   - name: matter_thread_cli
     condition: [matter_thread]
   - name: matter_zigbee_debug

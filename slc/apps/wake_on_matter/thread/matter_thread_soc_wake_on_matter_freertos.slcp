@@ -43,18 +43,18 @@ component:
   - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_operational_credentials
-  - id: matter_log_uart
+  #- id: matter_log_uart
   - id: matter_read_client
 
   - id: matter
   - id: matter_platform_mg
   - id: matter_ble
   - id: ot_stack_ftd
-
+  - id: matter_cpc
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
-  - id: matter_shell
+  #- id: matter_shell
   - id: matter_gatt_static
   - id: matter_provision_default
   - id: app_common
@@ -106,8 +106,6 @@ include:
 source:
   - path: ../../../../third_party/matter_sdk/examples/wake-on-matter/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/wake-on-matter/silabs/src/iostream_uart.c
-    directory: src  
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
 
