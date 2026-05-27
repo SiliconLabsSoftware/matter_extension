@@ -158,6 +158,7 @@ components:
   - matter_group_key_mgmt
   - matter_groupcast
   - matter_groups
+  - matter_humidistat
   - matter_icd_checkin_sender
   - matter_icd_core
   - matter_icd_management
@@ -618,6 +619,7 @@ extra_files:
   - slc/component/matter-clusters/matter_group_key_mgmt.slcc
   - slc/component/matter-clusters/matter_groupcast.slcc
   - slc/component/matter-clusters/matter_groups.slcc
+  - slc/component/matter-clusters/matter_humidistat.slcc
   - slc/component/matter-clusters/matter_icd_management.slcc
   - slc/component/matter-clusters/matter_identify.slcc
   - slc/component/matter-clusters/matter_illuminance_measurement.slcc
@@ -961,6 +963,7 @@ extra_files:
   - tools/console/README.md
   - tools/console/console_log_parser.py
   - tools/console/console_ui.py
+  - tools/console/icon/console_logo.png
   - tools/console/requirements.txt
   - tools/console/silabs_console.py
   - tools/iot_reports.py
@@ -1658,6 +1661,15 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/groups-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/groups-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/groups-server/tests/TestGroupsCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/HumidistatCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/HumidistatCluster.h
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/app_config_dependent_sources.cmake
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/humidistat-server/tests/TestHumidistatCluster.cpp
   - third_party/matter_sdk/src/app/clusters/ias-zone-client/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/ias-zone-client/README.md
   - third_party/matter_sdk/src/app/clusters/ias-zone-client/app_config_dependent_sources.cmake
@@ -2170,11 +2182,15 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/thermostat-user-interface-configuration-server/thermostat-user-interface-configuration-server.cpp
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementCluster.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/ThreadBorderRouterManagementDelegate.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/tests/TestThreadBorderRouterManagementCluster.cpp
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/thread-border-router-management-server.h
   - third_party/matter_sdk/src/app/clusters/thread-border-router-management-server/thread-br-delegate.h
   - third_party/matter_sdk/src/app/clusters/thread-network-diagnostics-server/BUILD.gn
@@ -2611,11 +2627,11 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/TestReportingEngine.cpp
   - third_party/matter_sdk/src/app/tests/TestSceneTable.cpp
   - third_party/matter_sdk/src/app/tests/TestServer.cpp
+  - third_party/matter_sdk/src/app/tests/TestSessionRelease.cpp
   - third_party/matter_sdk/src/app/tests/TestSimpleSubscriptionResumptionStorage.cpp
   - third_party/matter_sdk/src/app/tests/TestStatusIB.cpp
   - third_party/matter_sdk/src/app/tests/TestStatusResponseMessage.cpp
   - third_party/matter_sdk/src/app/tests/TestTestEventTriggerDelegate.cpp
-  - third_party/matter_sdk/src/app/tests/TestThreadBorderRouterManagementCluster.cpp
   - third_party/matter_sdk/src/app/tests/TestTimeSyncDataProvider.cpp
   - third_party/matter_sdk/src/app/tests/TestTimedHandler.cpp
   - third_party/matter_sdk/src/app/tests/TestWriteInteraction.cpp
@@ -2817,7 +2833,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CONTENTLAUNCHER_10_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CONTENTLAUNCHER_10_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CONTENTLAUNCHER_10_7.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_3.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DA_1_6.yaml
@@ -2909,7 +2924,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_3_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_4_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_4_3.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_4_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_5_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_IDM_6_1.yaml
