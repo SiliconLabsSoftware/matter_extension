@@ -2,6 +2,7 @@
 project_name: matter_wifi_917_ncp_lock_app_dual_stack_freertos
 label: Matter WiFi - 917 NCP Lock Dual Stack FreeRTOS
 description: Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi door lock app with BLE on host (Dual stack - IPV6 on EFR32, IPV4 on SiWx917)
+category: Matter Application
 quality: production
 package: matter
 
@@ -184,7 +185,15 @@ ui_hints:
       focus: false
 
 tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
   - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:device:device_series_2
+  - hidden
+
 post_build:
   profile: application
 
