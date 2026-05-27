@@ -20,7 +20,7 @@ jobs:
         runs-on: ubuntu-latest
 
         container:
-            image: ghcr.io/project-chip/chip-build:167
+            image: ghcr.io/project-chip/chip-build:194
             volumes:
                 - "/:/runner-root-volume"
                 - "/tmp/log_output:/tmp/test_logs"
@@ -54,14 +54,8 @@ jobs:
                   apt-get update
                   apt-get install -y jq lcov libglib2.0-dev libdbus-1-dev libevent-dev
 
-            - name: Bootstrap matter_sdk environment
-              shell: bash
-              env:
-                  PW_NO_CIPD_CACHE_DIR: 1
-                  PW_ENVSETUP_NO_BANNER: 1
-              run: |
-                  cd third_party/matter_sdk
-                  source scripts/bootstrap.sh -p linux
+            - name: Run bootstrap action
+              uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
 
             - name: Install Matter Python test requirements
               shell: bash
