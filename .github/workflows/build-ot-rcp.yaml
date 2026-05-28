@@ -57,5 +57,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: out/ot-rcp_binaries.zip
-          path: out/ot-rcp_binaries.zip
+          path: ot-rcp_binaries.zip
           if-no-files-found: error
