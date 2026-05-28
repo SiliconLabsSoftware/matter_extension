@@ -87,9 +87,9 @@ components:
   - matter_application_launcher
   - matter_audio_output
   - matter_aws
+  - matter_aws_ota
   - matter_aws_transport_lwip
   - matter_aws_transport_nwp
-  - matter_aws_ota
   - matter_basic_information
   - matter_bindings
   - matter_ble
@@ -133,6 +133,7 @@ components:
   - matter_dishwasher_alarm
   - matter_door_lock
   - matter_drivers_series_2
+  - matter_dual_stack
   - matter_ecosystem_information
   - matter_efr32_ncp
   - matter_electrical_energy_measurement
@@ -235,6 +236,7 @@ components:
   - matter_push_av_stream_transport
   - matter_qr_code
   - matter_rangehood
+  - matter_read_client
   - matter_refrigerator
   - matter_refrigerator_alarm
   - matter_relative_humidity_measurement
@@ -465,6 +467,8 @@ extra_files:
   - slc/apps/lock_app/thread/pkg.slt
   - slc/apps/lock_app/wifi/README.md
   - slc/apps/lock_app/wifi/README_WiFi.md
+  - slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcp
+  - slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcw
   - slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_freertos.slcp
   - slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_freertos.slcw
   - slc/apps/lock_app/wifi/matter_wifi_soc_lock_app_freertos.slcp
@@ -549,6 +553,9 @@ extra_files:
   - slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_freertos.slcp
   - slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_freertos.slcw
   - slc/apps/thermostat/wifi/pkg.slt
+  - slc/apps/wake_on_matter/thread/README.md
+  - slc/apps/wake_on_matter/thread/matter_thread_soc_wake_on_matter_freertos.slcp
+  - slc/apps/wake_on_matter/thread/matter_thread_soc_wake_on_matter_series_2_freertos.slcw
   - slc/apps/window_app/thread/README.md
   - slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
   - slc/apps/window_app/thread/matter_thread_soc_window_app_series_2_freertos.slcw
@@ -770,6 +777,7 @@ extra_files:
   - slc/component/matter-core-sdk/nodatamodel.slcc
   - slc/component/matter-core-sdk/notifier.slcc
   - slc/component/matter-core-sdk/power_save_interface.slcc
+  - slc/component/matter-core-sdk/read_client.slcc
   - slc/component/matter-core-sdk/records.slcc
   - slc/component/matter-core-sdk/responders.slcc
   - slc/component/matter-core-sdk/server_cluster.slcc
@@ -873,9 +881,10 @@ extra_files:
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/matter_aws.slcc
+  - slc/component/matter-wifi/matter_aws_ota.slcc
   - slc/component/matter-wifi/matter_aws_transport_lwip.slcc
   - slc/component/matter-wifi/matter_aws_transport_nwp.slcc
-  - slc/component/matter-wifi/matter_aws_ota.slcc
+  - slc/component/matter-wifi/matter_dual_stack.slcc
   - slc/component/matter-wifi/matter_efr32_ncp.slcc
   - slc/component/matter-wifi/matter_lwip.slcc
   - slc/component/matter-wifi/matter_lwip_modified.slcc
