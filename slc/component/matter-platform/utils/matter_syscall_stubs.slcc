@@ -9,8 +9,13 @@ metadata:
     license: Zlib
 provides:
   - name: matter_syscall_stubs
+requires:
+  - name: syscalls
+    condition: [matter_platform_siwx917]
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/syscalls_stubs.cpp
+    unless: [matter_platform_siwx917]
 toolchain_settings:
   - option: gcc_linker_option
     value: -Wl,--no-warn-rwx-segment
+    unless: [matter_platform_siwx917]
