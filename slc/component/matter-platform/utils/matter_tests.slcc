@@ -12,5 +12,7 @@ provides:
   - name: matter_tests
 
 define:
-  - name: TEST_WATCHDOG
+  - name: SL_MATTER_TEST_WATCHDOG
     condition: [watchdog_manager]
+ui_hints:
+  visibility: never
