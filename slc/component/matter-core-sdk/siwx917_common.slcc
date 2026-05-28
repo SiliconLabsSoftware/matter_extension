@@ -31,16 +31,11 @@ include:
   - path: LEDWidget.h
   - path: sl_systemview_config.h
   - path: PigweedLogger.h
-  - path: FreeRTOSConfig.h
   - path: Rpc.h
   - path: silabs_creds.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
   - path: BaseAppEvent.h
-- path: third_party/matter_sdk/src/platform/silabs/SiWx
-  file_list:
-  - path: SiWxPlatformInterface.h
-
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/BaseApplication.cpp

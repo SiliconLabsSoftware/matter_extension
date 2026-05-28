@@ -258,6 +258,12 @@
     ]
   },
   {
+    "clusterCode": "flow measurement-server",
+    "value": [
+      "%extension-matter%matter_flow_measurement"
+    ]
+  },
+  {
     "clusterCode": "general commissioning-server",
     "value": [
       "%extension-matter%matter_general_commissioning"
@@ -285,6 +291,12 @@
     "clusterCode": "groups-server",
     "value": [
       "%extension-matter%matter_groups"
+    ]
+  },
+  {
+    "clusterCode": "humidistat-server",
+    "value": [
+      "%extension-matter%matter_humidistat"
     ]
   },
   {
@@ -402,6 +414,12 @@
     ]
   },
   {
+    "clusterCode": "network identity management-server",
+    "value": [
+      "%extension-matter%matter_network_identity_management"
+    ]
+  },
+  {
     "clusterCode": "occupancy sensing-server",
     "value": [
       "%extension-matter%matter_occupancy_sensor"
@@ -456,6 +474,18 @@
     ]
   },
   {
+    "clusterCode": "pressure measurement-server",
+    "value": [
+      "%extension-matter%matter_pressure_measurement"
+    ]
+  },
+  {
+    "clusterCode": "proximity ranging-server",
+    "value": [
+      "%extension-matter%matter_proximity_ranging"
+    ]
+  },
+  {
     "clusterCode": "pump configuration and control-server",
     "value": [
       "%extension-matter%matter_pump_configuration_and_control"
@@ -471,6 +501,12 @@
     "clusterCode": "refrigerator alarm-server",
     "value": [
       "%extension-matter%matter_refrigerator_alarm"
+    ]
+  },
+  {
+    "clusterCode": "relative humidity measurement-server",
+    "value": [
+      "%extension-matter%matter_relative_humidity_measurement"
     ]
   },
   {
