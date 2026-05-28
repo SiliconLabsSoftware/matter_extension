@@ -47,6 +47,7 @@ component:
   - id: matter_network_commissioning
   - id: matter_refrigerator_alarm
   - id: matter_on_off
+  - id: matter_mode_base
   - id: matter_operational_credentials
   - id: matter_ota_support
   - id: matter_ota_requestor
