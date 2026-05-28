@@ -3,6 +3,14 @@ name: Generate OT-RCP Binaries
 on:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  actions: read
+  packages: read
+  id-token: none
+  issues: none
+  pull-requests: none
+
 jobs:
   build-rcp:
     runs-on: ubuntu-latest
