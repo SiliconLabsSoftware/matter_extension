@@ -76,7 +76,7 @@ component:
   - id: sl_assert
   - id: cmsis_rtos2_init
   - id: matter_platform_siwx917
-  - id: wiseconnect3_common
+  - id: wiseconnect_common
   - id: sl_si91x_soc_soft_reset
   - id: ble
   - id: sl_si91x_button_917
