@@ -7,7 +7,7 @@ on:
 jobs:
   check_testing_header:
     runs-on: ubuntu-latest
-    if: ${{ !contains(fromJSON('["dependabot[bot]", "silabs-matter-ci-bot[bot]", "cursoragent", "miduggan24"]'), github.event.pull_request.user.login) }}
+    if: ${{ !contains(fromJSON('["dependabot[bot]", "silabs-matter-ci-bot[bot]", "cursoragent"]'), github.event.pull_request.user.login) }}
     steps:
       - name: Check for "**Testing Done:**" section in PR
         id: check-testing
