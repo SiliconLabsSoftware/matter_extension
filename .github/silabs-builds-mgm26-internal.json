@@ -59,7 +59,6 @@
             {
                 "boards": ["brd4351a"],
                 "arguments": ["--output_suffix low-power-sit-200",
-                              "--with matter_platform_low_power",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"
                              ]
             }
