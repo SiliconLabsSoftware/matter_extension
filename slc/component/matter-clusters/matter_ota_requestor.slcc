@@ -32,9 +32,6 @@ include:
       - path: TypedCommandCallback.h
       - path: TypedReadCallback.h
       - path: WriteInteraction.h
-  - path: third_party/matter_sdk/src/app
-    file_list:
-      - path: BufferedReadCallback.h
   - path: third_party/matter_sdk/src/app/clusters/ota-requestor
     file_list:
       - path: BDXDownloader.h
