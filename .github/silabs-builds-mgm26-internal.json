@@ -58,7 +58,7 @@
         "multi_sensor_app" :[
             {
                 "boards": ["brd4351a"],
-                "arguments": ["--output_suffix low-power-sit-200",
+                "arguments": ["--output_suffix sit-200",
                               "'--configuration SL_IDLE_MODE_DURATION_S:200'"
                              ]
             }
