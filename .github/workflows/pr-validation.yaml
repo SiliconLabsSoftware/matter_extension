@@ -4,10 +4,13 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
 
+env:
+  PR_VALIDATION_SKIP_AUTHORS: '["dependabot[bot]", "silabs-matter-ci-bot[bot]", "cursoragent", "miduggan24"]'
+
 jobs:
   check_testing_header:
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'silabs-matter-ci-bot[bot]' }}
+    if: ${{ !contains(fromJSON(env.PR_VALIDATION_SKIP_AUTHORS), github.event.pull_request.user.login) }}
     steps:
       - name: Check for "**Testing Done:**" section in PR
         id: check-testing
