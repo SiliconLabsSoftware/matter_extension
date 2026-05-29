@@ -139,3 +139,36 @@ jobs:
         run: |
           set -e
           python3 -u './slc/script/find_missing_sbom.py' slc/component --verbose
+
+  project-standardization-validation:
+    name: Validate Project Standardization
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Install PyYAML dependency
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install PyYAML
+
+      - name: Run Project Standardization script
+        shell: bash
+        run: |
+          set -e
+          python3 -u './slc/script/validate_app_standardization.py'
+  validate-demo-images:
+    name: Validate matter_demos.xml
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+
+      - name: Validate matter_demos.xml
+        shell: bash
+        run: |
+          python3 -u './slc/script/validate_demo_images.py'

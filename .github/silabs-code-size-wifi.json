@@ -1,0 +1,12 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix code_size",
+                              "'--with matter_platform_low_power'",
+                              "'--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart'"]
+            }
+        ]
+    }
+}

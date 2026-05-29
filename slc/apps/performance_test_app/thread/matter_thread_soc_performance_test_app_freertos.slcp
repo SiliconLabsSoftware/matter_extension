@@ -48,7 +48,6 @@ component:
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
   - id: matter_groups
-  - id: matter_groupcast
   - id: matter_identify
   - id: matter_level_control
   - id: matter_localization_configuration
@@ -77,7 +76,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 include:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
     file_list:
@@ -183,13 +182,21 @@ config_file:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hidden
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
 
 readme:
   - path: ./README.md

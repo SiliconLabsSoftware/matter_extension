@@ -19,7 +19,7 @@
         "lighting_app": [
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
+                "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
             }
         ]
     },

@@ -47,6 +47,10 @@
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-copy-sources","--with toolchain_llvm", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -57,6 +61,10 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"] 
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
             }
         ],
         "lock_app": [
@@ -107,27 +115,6 @@
     "custom-sqa": {
         "lock_app" :[
             {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-sync-false",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-ota",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            },
-            {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
@@ -136,6 +123,11 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lto",
                               "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix wdog",
+                              "--with_app watchdog_manager"]
             },
             {
                 "boards": ["brd4187c"],
@@ -158,12 +150,12 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix lto",
+                "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
@@ -177,6 +169,16 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with toolchain_llvm_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "window_app": [
@@ -189,52 +191,8 @@
         ],
         "light_switch_app": [
             {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-sync-false",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-ota",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            },
-            {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            }
-        ],
-        "multi_sensor_app": [
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-sync-false",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
-            },
-            {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-ota",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart",
-                              "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],

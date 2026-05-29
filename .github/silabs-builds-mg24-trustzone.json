@@ -3,7 +3,7 @@
         "default": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix trustzone", "-pids trustzone"]
+                "arguments": ["-pids trustzone"]
             }
         ]
     },
@@ -11,7 +11,7 @@
         "default": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix trustzone", "-pids trustzone"]
+                "arguments": ["-pids trustzone"]
             }
         ]
     }

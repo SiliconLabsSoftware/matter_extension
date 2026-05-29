@@ -33,6 +33,13 @@ jobs:
               uses: actions/checkout@v6
               with:
                   submodules: "true"
+                  lfs: true
+
+            - name: Pull LFS objects in submodules
+              run: |
+                  git -C third_party/simplicity_sdk lfs pull
+                  git -C third_party/wifi_sdk lfs pull
+
             - name: Cache tools
               uses: ./.github/actions/cache-tools
             - name: Build ${{ inputs.example-app }}
@@ -45,6 +52,7 @@ jobs:
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
+                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
 
             - name: Create asset files
               if: startsWith(github.ref_name, 'release_')

@@ -797,6 +797,26 @@ include:
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
+      - path: clusters/DynamicLighting/AttributeIds.h
+      - path: clusters/DynamicLighting/Attributes.h
+      - path: clusters/DynamicLighting/Attributes.ipp
+      - path: clusters/DynamicLighting/ClusterId.h
+      - path: clusters/DynamicLighting/CommandIds.h
+      - path: clusters/DynamicLighting/Commands.h
+      - path: clusters/DynamicLighting/Commands.ipp
+      - path: clusters/DynamicLighting/Enums.h
+      - path: clusters/DynamicLighting/EnumsCheck.h
+      - path: clusters/DynamicLighting/EventIds.h
+      - path: clusters/DynamicLighting/Events.h
+      - path: clusters/DynamicLighting/Events.ipp
+      - path: clusters/DynamicLighting/Ids.h
+      - path: clusters/DynamicLighting/Metadata.h
+      - path: clusters/DynamicLighting/MetadataProvider.h
+      - path: clusters/DynamicLighting/Structs.h
+      - path: clusters/DynamicLighting/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
       - path: clusters/EcosystemInformation/AttributeIds.h
       - path: clusters/EcosystemInformation/Attributes.h
       - path: clusters/EcosystemInformation/Attributes.ipp

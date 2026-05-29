@@ -51,7 +51,6 @@ component:
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
-  - id: matter_groups
   - id: matter_identify
   - id: matter_localization_configuration
   - id: matter_network_commissioning
@@ -101,19 +100,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
-      - path: LockManager.h
       - path: CHIPProjectConfig.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
@@ -154,7 +151,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "3000"
+    value: "1000"
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
@@ -170,7 +167,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - NCP
+      - NCP Project
   - name: Difficulty
     value:
       - Advanced
@@ -186,7 +183,15 @@ ui_hints:
       focus: false
 
 tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
   - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:device:device_series_2
+  - hidden
+  
 post_build:
   profile: application
 
