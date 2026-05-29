@@ -1,5 +1,5 @@
 # Build Matter SQA Python environment (linux arm64) from upstream connectedhomeip.
-# Produces a zip overlay for Raspberry Pi testbeds using ~/connectedhomeip (install-on-pi.sh inside zip).
+# Produces a zip overlay for Raspberry Pi testbeds (manifest.json + connectedhomeip/out + .environment).
 #
 # Pi still needs a git checkout of connectedhomeip at the same commit (manifest.json in zip);
 # the zip supplies out/python_lib, out/pyenv, and .environment so the Pi skips bootstrap/build_python compile.
@@ -54,9 +54,6 @@ jobs:
         uses: actions/checkout@v6
         with:
           submodules: false
-          sparse-checkout: |
-            .github
-            scripts/ci
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v6
@@ -148,7 +145,7 @@ jobs:
           if [[ "${INCLUDE_PYTEST_DEPS}" == "yes" ]]; then
             python3 -c "import matter.yamltests; print('matter.yamltests OK')"
             python3 -c "import matter.testing; print('matter.testing OK')"
-            pip list | grep -iE 'matter|yaml'
+            pip list | grep -iE 'matter|yaml' || true
           fi
 
       - name: Prepare Pi bundle directory
@@ -159,26 +156,24 @@ jobs:
           BUNDLE_DIR="matter-sqa-pyenv-bundle-${SHORT_SHA}"
           mkdir -p "${BUNDLE_DIR}/connectedhomeip/out"
 
-          python3 <<PY
+          export BUNDLE_DIR CHIP_REPO_URL CHIP_CHECKOUT_REF HEAD INCLUDE_PYTEST_DEPS
+          python3 <<'PY'
           import json
+          import os
           from datetime import datetime, timezone
           manifest = {
-              "chip_repo_url": "${CHIP_REPO_URL}",
-              "chip_checkout_ref": "${CHIP_CHECKOUT_REF}",
-              "chip_pin_commit": "${HEAD}",
+              "chip_repo_url": os.environ["CHIP_REPO_URL"],
+              "chip_checkout_ref": os.environ["CHIP_CHECKOUT_REF"],
+              "chip_pin_commit": os.environ["HEAD"],
               "built_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
               "runner": "ubuntu-22.04-arm",
-              "include_pytest_deps": "${INCLUDE_PYTEST_DEPS}" == "yes",
+              "include_pytest_deps": os.environ.get("INCLUDE_PYTEST_DEPS") == "yes",
               "pi_install_path": "~/connectedhomeip",
           }
-          with open("${BUNDLE_DIR}/manifest.json", "w") as f:
+          with open(os.path.join(os.environ["BUNDLE_DIR"], "manifest.json"), "w") as f:
               json.dump(manifest, f, indent=2)
               f.write("\n")
           PY
-
-          cp scripts/ci/install_connectedhomeip_pyenv_on_pi.sh "${BUNDLE_DIR}/install-on-pi.sh"
-          chmod +x "${BUNDLE_DIR}/install-on-pi.sh"
-          cp scripts/ci/README-connectedhomeip-pyenv-bundle.txt "${BUNDLE_DIR}/README-DEPLOY.txt"
 
           echo "BUNDLE_DIR=${BUNDLE_DIR}" >> "${GITHUB_ENV}"
           echo "SHORT_SHA=${SHORT_SHA}" >> "${GITHUB_ENV}"
