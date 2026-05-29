@@ -140,10 +140,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Same activation order as UTF CSA tests (TC_CERT_YAML_TEST.py).
+          source scripts/activate.sh
           source out/pyenv/bin/activate
           python3 -c "import matter; print('matter OK')"
           if [[ "${INCLUDE_PYTEST_DEPS}" == "yes" ]]; then
-            python3 -c "import matter_yamltests; print('matter_yamltests OK')"
+            python3 -c "import matter.yamltests; print('matter.yamltests OK')"
+            python3 -c "import matter.testing; print('matter.testing OK')"
+            pip list | grep -iE 'matter|yaml'
           fi
 
       - name: Prepare Pi bundle directory
