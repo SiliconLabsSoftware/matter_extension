@@ -68,14 +68,22 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -y
+          # Match connectedhomeip docs/guides/BUILDING.md (Linux) + libevent for ot-commissioner.
+          # libdbus-1-dev: dbus-python (python_testing requirements) needs pkg-config dbus-1.
           sudo apt-get install -y --no-install-recommends \
             git \
             ccache \
+            pkg-config \
+            libssl-dev \
+            libdbus-1-dev \
             libevent-dev \
+            libavahi-client-dev \
             libgirepository-1.0-1 \
             libgirepository1.0-dev \
             libglib2.0-dev \
-            libglib2.0-dev-bin
+            libglib2.0-dev-bin \
+            libcairo2-dev \
+            libreadline-dev
 
       - name: Clone and pin connectedhomeip
         shell: bash
