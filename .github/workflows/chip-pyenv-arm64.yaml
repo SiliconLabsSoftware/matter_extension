@@ -139,7 +139,8 @@ jobs:
         working-directory: ${{ env.CHIP_REPO_DIR }}
         shell: bash
         run: |
-          set -euo pipefail
+          # No `set -u`: activate.sh uses PW_ENVIRONMENT_ROOT before it is set (line ~174).
+          set -eo pipefail
           # Same activation order as UTF CSA tests (TC_CERT_YAML_TEST.py).
           source scripts/activate.sh
           source out/pyenv/bin/activate
