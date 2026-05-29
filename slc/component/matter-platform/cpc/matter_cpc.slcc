@@ -23,3 +23,7 @@ include:
     file_list:
       - path: matter_cpc.h
 
+define:
+  - name: SL_MATTER_CPC_ENABLED
+    value: 1
+

@@ -212,10 +212,17 @@ configuration:
     - ot_rtt_log
     name: BUFFER_SIZE_DOWN
     value: '0'    
-  - name: OPENTHREAD_CONFIG_MULTIPLE_INSTANCE_ENABLE
-    value: 1
-  - name: OPENTHREAD_CONFIG_MULTIPLE_STATIC_INSTANCE_ENABLE
-    value: 1  
+#  - name: OPENTHREAD_CONFIG_MULTIPLE_INSTANCE_ENABLE
+#    value: 1
+#  - name: OPENTHREAD_CONFIG_MULTIPLE_STATIC_INSTANCE_ENABLE
+#    value: 1  
+  - name: OPENTHREAD_CONFIG_MAX_STATECHANGE_HANDLERS
+    value: 2
+# CPC related config
+  - name: SL_CPC_RX_PAYLOAD_MAX_LENGTH
+    value: 1500 # Handles Matter BDX packet if needs be. 
+  - name: SL_CPC_SECURITY_ENABLED
+    value: 0   
 
 toolchain_settings:
   - option: cxx_standard
