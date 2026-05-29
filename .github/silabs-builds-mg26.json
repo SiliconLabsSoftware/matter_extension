@@ -14,7 +14,7 @@
         "platform_template": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             }
         ],
         "thermostat": [
@@ -39,11 +39,11 @@
         "zigbee_light":  [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             }
         ],
         "platform_template": [
@@ -53,11 +53,11 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"]
             },
             {
                 "boards": ["brd4116a"],
@@ -85,7 +85,7 @@
             {
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix wdog",
-                              "--with_app watchdog_manager"]
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd4116a"],
@@ -256,5 +256,5 @@
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
-    } 
+    }
 }
