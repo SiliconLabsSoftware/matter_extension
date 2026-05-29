@@ -39,12 +39,10 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_ethernet_network_diagnostics
   - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
-  - id: matter_groups
   - id: matter_identify
   - id: matter_localization_configuration
   - id: matter_network_commissioning
@@ -58,7 +56,6 @@ component:
     from: matter
   - id: matter_time_format_localization
   - id: matter_user_label
-  - id: matter_wifi_network_diagnostics
   - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -200,13 +197,21 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
 
 readme:
   - path: ./README.md

@@ -33,7 +33,6 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_ethernet_network_diagnostics
   - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
@@ -46,16 +45,12 @@ component:
   - id: matter_on_off
   - id: matter_scenes
   - id: matter_operational_credentials
-  - id: matter_bridged_device_basic_information
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: matter_software_diagnostics
-  - id: matter_switch
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
-  - id: matter_user_label
   - id: matter_wifi_network_diagnostics
-  - id: matter_bindings
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
@@ -111,19 +106,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
       - path: CHIPProjectConfig.h
-      - path: OnOffPlugManager.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/OnOffPlugManager.cpp
     directory: src
 
 define:
@@ -158,7 +151,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -166,15 +159,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hidden
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

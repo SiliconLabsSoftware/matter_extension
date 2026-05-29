@@ -31,7 +31,6 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
@@ -42,11 +41,9 @@ component:
   - id: matter_operational_credentials
   - id: matter_ota_support
   - id: matter_ota_requestor
-  - id: matter_power_source
   - id: matter_software_diagnostics
   - id: matter_wifi_network_diagnostics
   - id: matter_time_format_localization
-  - id: matter_user_label
   - id: matter_platform_template
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -190,7 +187,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -198,15 +195,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hidden
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

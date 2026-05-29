@@ -44,11 +44,7 @@ component:
   - id: matter_access_control
   - id: matter_administrator_commissioning
   - id: matter_basic_information
-  - id: matter_bindings
   - id: matter_descriptor
-  - id: matter_diagnostic_logs
-  - id: matter_ethernet_network_diagnostics
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
@@ -61,13 +57,8 @@ component:
   - id: matter_software_diagnostics
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
-  - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
     from: matter
-  - id: matter_time_synchronization
-    from: matter
-  - id: matter_user_label
-  - id: matter_unit_localization
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -95,16 +86,19 @@ config_file:
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include/ThermostatConfig.h
+    file_id: thermostat_config
 
 include:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
-      - path: SensorManager.h
-      - path: TemperatureManager.h
       - path: CHIPProjectConfig.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/include
     file_list:
@@ -112,15 +106,9 @@ include:
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
     directory: src
@@ -165,7 +153,7 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - NCP
+      - NCP Project
   - name: Difficulty
     value:
       - Advanced
@@ -173,15 +161,22 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:device:device_series_2
+  - hidden
+
 readme:
   - path: ./README_WiFi.md
 ui_hints:
   highlight:
     - path: README_WiFi.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   profile: application

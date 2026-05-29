@@ -44,16 +44,13 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
   - id: matter_identify
-  - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
-  - id: matter_power_source
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
     from: matter
@@ -169,14 +166,22 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
-      
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
+
 readme:
   - path: ./README.md
 ui_hints:

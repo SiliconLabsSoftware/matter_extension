@@ -36,12 +36,10 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
   - id: matter_identify
-  - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_software_diagnostics
@@ -56,7 +54,6 @@ component:
 
   - id: matter_ota_requestor
   - id: matter_ota_support
-  - id: matter_power_source
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
@@ -168,7 +165,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -176,15 +173,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+  - hidden
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

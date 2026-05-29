@@ -34,7 +34,6 @@ component:
   - id: matter_color_control
   - id: matter_descriptor
   - id: matter_diagnostic_logs
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
@@ -44,13 +43,11 @@ component:
     from: matter
   - id: matter_identify
   - id: matter_level_control
-  - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_on_off
   - id: matter_scenes
   - id: matter_operational_credentials
   - id: matter_software_diagnostics
-  - id: matter_time_format_localization
   - id: matter_user_label
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
@@ -113,19 +110,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
       - path: CHIPProjectConfig.h
-      - path: LightingManager.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/LightingManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/DataModelCallbacks.cpp
     directory: src
 
 define:
@@ -162,7 +157,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -170,15 +165,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+  - hidden
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

@@ -50,7 +50,6 @@ component:
   - id: matter_operational_credentials
   - id: matter_ota_support
   - id: matter_ota_requestor
-  - id: matter_power_source
   - id: matter_software_diagnostics
   - id: matter_thread_network_diagnostics
   - id: matter_user_label
@@ -162,13 +161,21 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
 
 readme:
   - path: ./README.md

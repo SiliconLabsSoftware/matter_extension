@@ -36,7 +36,6 @@ component:
   - id: matter_basic_information
   - id: matter_bindings
   - id: matter_descriptor
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
@@ -46,12 +45,10 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
-  - id: matter_software_diagnostics
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
   - id: matter_thread_network_diagnostics
   - id: matter_user_label
-  - id: matter_unit_localization
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_si70xx_sensor
@@ -92,16 +89,20 @@ config_file:
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include/ThermostatConfig.h
+    file_id: thermostat_config
 
 include:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
-      - path: SensorManager.h
-      - path: TemperatureManager.h
       - path: CHIPProjectConfig.h
+      - path: ThermostatConfig.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/include
     file_list:
@@ -109,15 +110,9 @@ include:
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/TemperatureManager.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/SensorManager.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
     directory: src
@@ -235,13 +230,21 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
 
 readme:
   - path: ./README.md

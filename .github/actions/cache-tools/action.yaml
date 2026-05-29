@@ -18,7 +18,7 @@ runs:
 
         - name: Restore ZAP and SLT tools cache
           id: cache
-          uses: actions/cache/restore@v4
+          uses: actions/cache/restore@v5
           with:
               path: |
                   /tmp/zap-linux-x64
@@ -62,7 +62,7 @@ runs:
 
         - name: Save ZAP and SLT tools cache
           if: steps.cache.outputs.cache-hit != 'true'
-          uses: actions/cache/save@v4
+          uses: actions/cache/save@v5
           with:
               path: |
                   /tmp/zap-linux-x64
