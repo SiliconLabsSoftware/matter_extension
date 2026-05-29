@@ -1,0 +1,194 @@
+# Build Matter SQA Python environment (linux arm64) from upstream connectedhomeip.
+# Produces a zip overlay for Raspberry Pi testbeds using ~/connectedhomeip (install-on-pi.sh inside zip).
+#
+# Pi still needs a git checkout of connectedhomeip at the same commit (manifest.json in zip);
+# the zip supplies out/python_lib, out/pyenv, and .environment so the Pi skips bootstrap/build_python compile.
+
+name: Chip SQA pyenv (arm64)
+
+on:
+  workflow_dispatch:
+    inputs:
+      chip_checkout_ref:
+        description: Branch or tag to fetch before pinning (CHIP_CHECKOUT_REF)
+        required: true
+        default: master
+        type: string
+      chip_pin_commit:
+        description: Exact commit SHA (CHIP_PIN_COMMIT); empty = tip of chip_checkout_ref
+        required: false
+        default: 0be0790bc061852c9c93f349d2b401a8e3afbe2b
+        type: string
+      include_pytest_deps:
+        description: Match bootstrap_matter_sqa_testing.sh --include_pytest_deps
+        required: true
+        default: true
+        type: boolean
+
+concurrency:
+  group: chip-sqa-pyenv-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CHIP_REPO_URL: https://github.com/project-chip/connectedhomeip.git
+  CHIP_REPO_DIR: connectedhomeip
+  CHIP_CHECKOUT_REF: ${{ github.event.inputs.chip_checkout_ref || 'master' }}
+  CHIP_PIN_COMMIT: ${{ github.event.inputs.chip_pin_commit || '0be0790bc061852c9c93f349d2b401a8e3afbe2b' }}
+  INCLUDE_PYTEST_DEPS: ${{ github.event.inputs.include_pytest_deps != 'false' && 'yes' || 'no' }}
+
+jobs:
+  build-pyenv-bundle:
+    name: Build and zip Pi pyenv bundle
+    runs-on: ubuntu-22.04-arm
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout matter_extension
+        uses: actions/checkout@v6
+        with:
+          submodules: false
+          sparse-checkout: |
+            .github
+            scripts/ci
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install system dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends \
+            git \
+            ccache \
+            libevent-dev \
+            libgirepository-1.0-1 \
+            libgirepository1.0-dev \
+            libglib2.0-dev \
+            libglib2.0-dev-bin
+
+      - name: Clone and pin connectedhomeip
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone "${CHIP_REPO_URL}" "${CHIP_REPO_DIR}"
+          cd "${CHIP_REPO_DIR}"
+          git fetch origin "${CHIP_CHECKOUT_REF}"
+          git checkout "${CHIP_CHECKOUT_REF}"
+          if [[ -n "${CHIP_PIN_COMMIT}" ]]; then
+            git fetch origin "${CHIP_PIN_COMMIT}" 2>/dev/null || true
+            if ! git cat-file -e "${CHIP_PIN_COMMIT}^{commit}" 2>/dev/null; then
+              echo "CHIP_PIN_COMMIT ${CHIP_PIN_COMMIT} not found" >&2
+              exit 1
+            fi
+            git reset --hard "${CHIP_PIN_COMMIT}"
+          fi
+          echo "HEAD=$(git rev-parse HEAD)" >> "${GITHUB_ENV}"
+
+      - name: Checkout Matter submodules (linux, shallow)
+        working-directory: ${{ env.CHIP_REPO_DIR }}
+        shell: bash
+        run: ./scripts/checkout_submodules.py --shallow --platform linux
+
+      - name: Bootstrap connectedhomeip
+        working-directory: ${{ env.CHIP_REPO_DIR }}
+        shell: bash
+        env:
+          PW_NO_CIPD_CACHE_DIR: 1
+          PW_ENVSETUP_NO_BANNER: 1
+        run: |
+          set -euo pipefail
+          source scripts/bootstrap.sh -p all,linux
+          touch .bootstrap_done
+
+      - name: build_python.sh (out/pyenv)
+        working-directory: ${{ env.CHIP_REPO_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          export NINJAFLAGS="-j$(nproc)"
+          ./scripts/run_in_build_env.sh \
+            "./scripts/build_python.sh \
+              -i out/pyenv \
+              --clean_virtual_env yes \
+              --enable_nfc false \
+              --enable_webrtc false \
+              --include_pytest_deps ${INCLUDE_PYTEST_DEPS} \
+              --enable-ccache"
+
+      - name: Smoke-test Python imports
+        working-directory: ${{ env.CHIP_REPO_DIR }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          source out/pyenv/bin/activate
+          python3 -c "import matter; print('matter OK')"
+          if [[ "${INCLUDE_PYTEST_DEPS}" == "yes" ]]; then
+            python3 -c "import matter_yamltests; print('matter_yamltests OK')"
+          fi
+
+      - name: Prepare Pi bundle directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          SHORT_SHA="${HEAD:0:12}"
+          BUNDLE_DIR="matter-sqa-pyenv-bundle-${SHORT_SHA}"
+          mkdir -p "${BUNDLE_DIR}/connectedhomeip/out"
+
+          python3 <<PY
+          import json
+          from datetime import datetime, timezone
+          manifest = {
+              "chip_repo_url": "${CHIP_REPO_URL}",
+              "chip_checkout_ref": "${CHIP_CHECKOUT_REF}",
+              "chip_pin_commit": "${HEAD}",
+              "built_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+              "runner": "ubuntu-22.04-arm",
+              "include_pytest_deps": "${INCLUDE_PYTEST_DEPS}" == "yes",
+              "pi_install_path": "~/connectedhomeip",
+          }
+          with open("${BUNDLE_DIR}/manifest.json", "w") as f:
+              json.dump(manifest, f, indent=2)
+              f.write("\n")
+          PY
+
+          cp scripts/ci/install_connectedhomeip_pyenv_on_pi.sh "${BUNDLE_DIR}/install-on-pi.sh"
+          chmod +x "${BUNDLE_DIR}/install-on-pi.sh"
+          cp scripts/ci/README-connectedhomeip-pyenv-bundle.txt "${BUNDLE_DIR}/README-DEPLOY.txt"
+
+          echo "BUNDLE_DIR=${BUNDLE_DIR}" >> "${GITHUB_ENV}"
+          echo "SHORT_SHA=${SHORT_SHA}" >> "${GITHUB_ENV}"
+
+      - name: Stage connectedhomeip artifacts into bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          DEST="${GITHUB_WORKSPACE}/${BUNDLE_DIR}/connectedhomeip"
+          cd "${CHIP_REPO_DIR}"
+          rsync -a out/python_lib/ "${DEST}/out/python_lib/"
+          rsync -a out/pyenv/ "${DEST}/out/pyenv/"
+          rsync -a .environment/ "${DEST}/.environment/"
+          touch "${DEST}/.bootstrap_done"
+          du -sh "${GITHUB_WORKSPACE}/${BUNDLE_DIR}"
+
+      - name: Create zip for Pi
+        shell: bash
+        run: |
+          set -euo pipefail
+          ZIP_NAME="matter-sqa-connectedhomeip-pyenv-linux-arm64-${SHORT_SHA}.zip"
+          zip -r -9 "${ZIP_NAME}" "${BUNDLE_DIR}"
+          ls -lh "${ZIP_NAME}"
+          echo "ZIP_NAME=${ZIP_NAME}" >> "${GITHUB_ENV}"
+
+      - name: Upload Pi bundle zip
+        uses: actions/upload-artifact@v4
+        # compression-level 0: zip step already compresses; avoid double compression timeout on large out/python_lib
+        with:
+          name: matter-sqa-connectedhomeip-pyenv-linux-arm64-${{ env.SHORT_SHA }}
+          path: ${{ env.ZIP_NAME }}
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
