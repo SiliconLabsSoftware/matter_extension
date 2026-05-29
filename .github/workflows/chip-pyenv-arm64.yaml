@@ -107,7 +107,8 @@ jobs:
           PW_NO_CIPD_CACHE_DIR: 1
           PW_ENVSETUP_NO_BANNER: 1
         run: |
-          set -euo pipefail
+          # No `set -u`: bootstrap.sh uses PW_ENVIRONMENT_ROOT before it is set (line ~174).
+          set -eo pipefail
           source scripts/bootstrap.sh -p all,linux
           touch .bootstrap_done
 
