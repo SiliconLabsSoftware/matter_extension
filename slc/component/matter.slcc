@@ -120,6 +120,7 @@ requires:
   - name: matter_ot_mbedtls_override
   - name: matter_server_cluster
   - name: matter_syscall_stubs
+    unless: [matter_platform_siwx917]
   - name: matter_nlassert
   - name: matter_nlio
   - name: matter_includes
