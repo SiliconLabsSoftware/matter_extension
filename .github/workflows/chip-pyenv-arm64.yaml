@@ -21,9 +21,16 @@ on:
         type: string
       include_pytest_deps:
         description: Match bootstrap_matter_sqa_testing.sh --include_pytest_deps
-        required: true
+        required: false
         default: true
         type: boolean
+  # Runs without merging to main (workflow_dispatch UI needs default branch).
+  # Uses env defaults below when inputs are unset.
+  push:
+    branches:
+      - build_chip_pyenv
+    paths:
+      - '.github/workflows/chip-pyenv-arm64.yaml'
 
 concurrency:
   group: chip-sqa-pyenv-${{ github.ref }}
