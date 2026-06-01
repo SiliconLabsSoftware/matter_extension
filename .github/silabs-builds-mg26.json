@@ -28,12 +28,8 @@
 
         "default": [
             {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
+                "boards": ["brd4116a", "brd4117a"],
                 "arguments": [""]
-            },
-            {
-                "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "zigbee_light":  [
