@@ -224,7 +224,7 @@ def update_hwfilter():
     """Install or update hwfilter from the latest GitHub main branch"""
     log_info(f"Updating hwfilter from {HWFILTER_BRANCH}...")
     returncode, _, stderr = run_command(
-        [sys.executable, "-m", "pip", "install", "--upgrade", HWFILTER_PIP_URL],
+        [sys.executable, "-m", "pip", "install", "--force-reinstall", HWFILTER_PIP_URL],
         check=False,
         capture=True,
     )
