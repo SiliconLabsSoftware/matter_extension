@@ -94,11 +94,6 @@ include:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
-      - path: SilabsLockTypes.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
-    file_list:
-      - path: CustomerAppTask.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
