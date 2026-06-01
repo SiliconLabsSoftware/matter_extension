@@ -1,3 +1,4 @@
 python-dotenv
 dload
 pyyaml
+legacy-cgi==2.6.4
