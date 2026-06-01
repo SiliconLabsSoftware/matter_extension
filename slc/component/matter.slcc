@@ -46,6 +46,20 @@ toolchain_settings:
   - option: gcc_compiler_option
     value: -Wno-unused-parameter
 
+  # LLVM specific compiler options
+  - option: llvm_compiler_option
+    value: -Wno-missing-field-initializers
+  - option: llvm_compiler_option
+    value: "-Wno-unused-parameter"
+  - option: llvm_compiler_option
+    value: "-Wno-missing-declarations"
+  - option: llvm_compiler_option
+    value: "-Wno-inconsistent-missing-override"
+  - option: llvm_compiler_option
+    value: "-femulated-tls"
+  - option: llvm_linker_option
+    value: "--rtlib=compiler-rt"
+    
 provides:
   - name: matter
 define:
@@ -106,6 +120,7 @@ requires:
   - name: matter_ot_mbedtls_override
   - name: matter_server_cluster
   - name: matter_syscall_stubs
+    unless: [matter_platform_siwx917]
   - name: matter_nlassert
   - name: matter_nlio
   - name: matter_includes

@@ -6,7 +6,7 @@ description: Demonstrates a bootloader configuration using internal storage for 
 category: Matter Application
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
 
 component:
@@ -64,13 +64,18 @@ configuration:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - prebuilt_demo
+  - hwfilter:device:device_series_3
+  - hidden
 
 readme:
   - path: ./readme.md

@@ -7,10 +7,10 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "4.0.1"
+    version: "4.1.0"
     vendor: silabs
 
 component:
@@ -111,19 +111,17 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
       - path: CHIPProjectConfig.h
-      - path: OnOffPlugManager.h
+    directory: include
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
     directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/AppTask.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/onoff-plug-app/silabs/src/OnOffPlugManager.cpp
     directory: src
 
 define:
@@ -158,7 +156,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -166,15 +164,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hidden
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

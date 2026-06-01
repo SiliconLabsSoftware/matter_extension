@@ -21,6 +21,14 @@
             {
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix llvm", "--with toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix llvm-copy-sources", "--with toolchain_llvm", "--copy-sources"]
             }
         ],
         "platform_template": [
@@ -42,18 +50,28 @@
         "window_app" :[
             {
                 "boards": ["brd4337a"],
-                "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4337a"],
-                "arguments": ["--output_suffix lto-ota-3", "--with_app toolchain_gcc_lto", "-pids application",
+                "arguments": ["--output_suffix sqa-lto-ota-3", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
             },
             {
                 "boards": ["brd4337a"],
-                "arguments": ["--output_suffix lto",
+                "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
     }

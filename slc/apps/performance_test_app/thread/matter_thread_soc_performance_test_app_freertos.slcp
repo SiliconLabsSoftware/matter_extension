@@ -7,7 +7,7 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
 
 component:
@@ -76,15 +76,15 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 include:
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: CHIPProjectConfig.h
       - path: AppTask.h
       - path: AppTaskImpl.h
+      - path: CHIPProjectConfig.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
@@ -96,6 +96,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
 
@@ -105,8 +107,6 @@ define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_LIGHT
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"
@@ -184,13 +184,21 @@ config_file:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hidden
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
 
 readme:
   - path: ./README.md

@@ -294,6 +294,12 @@
     ]
   },
   {
+    "clusterCode": "humidistat-server",
+    "value": [
+      "%extension-matter%matter_humidistat"
+    ]
+  },
+  {
     "clusterCode": "icd management-server",
     "value": [
       "%extension-matter%matter_icd_management"
@@ -408,6 +414,12 @@
     ]
   },
   {
+    "clusterCode": "network identity management-server",
+    "value": [
+      "%extension-matter%matter_network_identity_management"
+    ]
+  },
+  {
     "clusterCode": "occupancy sensing-server",
     "value": [
       "%extension-matter%matter_occupancy_sensor"
@@ -459,6 +471,18 @@
     "clusterCode": "power topology-server",
     "value": [
       "%extension-matter%matter_power_topology"
+    ]
+  },
+  {
+    "clusterCode": "pressure measurement-server",
+    "value": [
+      "%extension-matter%matter_pressure_measurement"
+    ]
+  },
+  {
+    "clusterCode": "proximity ranging-server",
+    "value": [
+      "%extension-matter%matter_proximity_ranging"
     ]
   },
   {

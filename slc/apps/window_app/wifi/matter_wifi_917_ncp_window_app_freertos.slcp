@@ -8,10 +8,10 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "4.0.1"
+    version: "4.1.0"
     vendor: silabs
 
 provides:
@@ -153,7 +153,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "3000"
+    value: "1000"
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
@@ -169,13 +169,23 @@ toolchain_settings:
 filter:
   - name: Type
     value:
-      - NCP
+      - NCP Project
   - name: Difficulty
     value:
       - Advanced
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hwfilter:device:device_series_2
+  - hidden
 
 readme:
   - path: ./README_WiFi.md
@@ -184,8 +194,6 @@ ui_hints:
     - path: README_WiFi.md
       focus: false
 
-tag:
-  - hardware:component:led:2+
 post_build:
   profile: application
 

@@ -13,8 +13,10 @@ from PyQt5.QtCore import QObject, QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QTextCharFormat, QTextCursor
 from PyQt5.QtWidgets import (
     QCheckBox,
+    QComboBox,
     QDialog,
     QFileDialog,
+    QFormLayout,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -87,18 +89,28 @@ class ConsoleUI(QMainWindow):
             'tst': True
         }
         
+        # Custom filter state
+        self.custom_filter_enabled: bool = False
+        self.custom_filter_pattern: str = ""
+        
         # Signals
         self.signals: SignalEmitter = SignalEmitter()
+        
+        # Serial settings (defaults)
+        self.stopbits: float = 1.0
+        self.parity: str = 'N'
+        self.flowcontrol: str = 'rtscts'
         
         # Callbacks (to be set by main application)
         self.on_connect_callback = None
         self.on_disconnect_callback = None
         self.on_send_command_callback = None
+        self.on_settings_changed_callback = None
         
         self.init_ui()
         self.setup_connections()
     
-    def set_callbacks(self, on_connect, on_disconnect, on_send_command) -> None:
+    def set_callbacks(self, on_connect, on_disconnect, on_send_command, on_settings_changed=None) -> None:
         """
         Set callback functions for user actions.
         
@@ -106,10 +118,12 @@ class ConsoleUI(QMainWindow):
             on_connect: Callback for connect action.
             on_disconnect: Callback for disconnect action.
             on_send_command: Callback for sending commands.
+            on_settings_changed: Callback for serial settings changes.
         """
         self.on_connect_callback = on_connect
         self.on_disconnect_callback = on_disconnect
         self.on_send_command_callback = on_send_command
+        self.on_settings_changed_callback = on_settings_changed
     
     def init_ui(self) -> None:
         """Initialize the Qt UI components."""
@@ -262,6 +276,53 @@ class ConsoleUI(QMainWindow):
         """)
         self.more_options_btn.clicked.connect(self.show_module_filter_dialog)
         layout.addWidget(self.more_options_btn)
+        
+        # Separator
+        separator_custom = QLabel("|")
+        separator_custom.setStyleSheet("color: #555; margin: 0 5px;")
+        layout.addWidget(separator_custom)
+        
+        # Custom filter checkbox
+        self.custom_filter_checkbox = QCheckBox("Custom:")
+        self.custom_filter_checkbox.setChecked(False)
+        self.custom_filter_checkbox.setStyleSheet("""
+            QCheckBox {
+                color: #d4d4d4;
+                font-size: 9pt;
+                spacing: 5px;
+            }
+            QCheckBox::indicator {
+                width: 16px;
+                height: 16px;
+                border: 1px solid #555;
+                background-color: #3c3c3c;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #4CAF50;
+                border: 1px solid #4CAF50;
+            }
+        """)
+        self.custom_filter_checkbox.stateChanged.connect(self.on_custom_filter_changed)
+        layout.addWidget(self.custom_filter_checkbox)
+        
+        # Custom filter input
+        self.custom_filter_input = QLineEdit()
+        self.custom_filter_input.setPlaceholderText("Enter filter text...")
+        self.custom_filter_input.setFixedWidth(200)
+        self.custom_filter_input.setStyleSheet("""
+            QLineEdit {
+                background-color: #3c3c3c;
+                color: #d4d4d4;
+                border: 1px solid #555;
+                padding: 3px 5px;
+                font-size: 9pt;
+            }
+            QLineEdit:focus {
+                border: 1px solid #4CAF50;
+            }
+        """)
+        self.custom_filter_input.textChanged.connect(self.on_custom_filter_changed)
+        layout.addWidget(self.custom_filter_input)
     
     def _add_save_load_buttons(self, layout: QHBoxLayout) -> None:
         """Add save/load buttons to the layout."""
@@ -370,6 +431,26 @@ class ConsoleUI(QMainWindow):
         
         interactive_header_layout.addStretch()
         
+        # Serial Settings button (gear icon)
+        self.settings_btn = QPushButton("\u2699")
+        self.settings_btn.setFixedSize(30, 25)
+        self.settings_btn.setToolTip("Serial Communication Settings")
+        self.settings_btn.setCursor(Qt.PointingHandCursor)
+        self.settings_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #3c3c3c;
+                color: #d4d4d4;
+                border: 1px solid #555;
+                font-size: 14pt;
+            }
+            QPushButton:hover {
+                background-color: #4c4c4c;
+                color: #ffffff;
+            }
+        """)
+        self.settings_btn.clicked.connect(self.show_serial_settings_dialog)
+        interactive_header_layout.addWidget(self.settings_btn)
+        
         # Connect/Disconnect button
         self.connect_btn = QPushButton("Connect")
         self.connect_btn.setFixedSize(75, 25)
@@ -429,6 +510,25 @@ class ConsoleUI(QMainWindow):
         self.stats_btn.clicked.connect(self.show_stats_dialog)
         interactive_header_layout.addWidget(self.stats_btn)
         
+        # Clear button
+        self.clear_btn = QPushButton("Clear")
+        self.clear_btn.setFixedSize(60, 25)
+        self.clear_btn.setCursor(Qt.PointingHandCursor)
+        self.clear_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #3c3c3c;
+                color: #ff9800;
+                border: 1px solid #555;
+                font-size: 9pt;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #4c4c4c;
+            }
+        """)
+        self.clear_btn.clicked.connect(self.clear_terminals)
+        interactive_header_layout.addWidget(self.clear_btn)
+        
         # Separator
         separator3 = QLabel("|")
         separator3.setStyleSheet("color: #555; margin: 0 5px;")
@@ -482,11 +582,8 @@ class ConsoleUI(QMainWindow):
         """
         self.all_log_messages.append((message, category, module))
         
-        # Only display if both category and module filters are enabled
-        category_enabled = self.log_filters.get(category, True)
-        module_enabled = self.module_filters.get(module, True) if module else True
-        
-        if category_enabled and module_enabled:
+        # Check if message should be displayed (custom filter bypasses category/module filters)
+        if self.should_display_with_custom_filter(message, category, module):
             self.display_log_message(message, category)
     
     def display_log_message(self, message: str, category: str) -> None:
@@ -575,6 +672,34 @@ class ConsoleUI(QMainWindow):
             self.update_input_font()
             self.statusBar().showMessage(f"Font size: {self.font_size}pt", 2000)
     
+    def on_custom_filter_changed(self) -> None:
+        """Handle changes to custom filter checkbox or input."""
+        self.custom_filter_enabled = self.custom_filter_checkbox.isChecked()
+        self.custom_filter_pattern = self.custom_filter_input.text().strip()
+        self.refresh_log_display()
+    
+    def should_display_with_custom_filter(self, message: str, category: str, module: Optional[str]) -> bool:
+        """
+        Check if a message should be displayed considering custom filter priority.
+        Custom filter, when active, bypasses category and module filters.
+        
+        Args:
+            message: The message to check.
+            category: Message category.
+            module: Message module or None.
+            
+        Returns:
+            True if message should be displayed, False otherwise.
+        """
+        # If custom filter is active (enabled and has text), it takes priority
+        if self.custom_filter_enabled and self.custom_filter_pattern:
+            return self.custom_filter_pattern.lower() in message.lower()
+        
+        # Otherwise, use normal category and module filtering
+        category_enabled = self.log_filters.get(category, True)
+        module_enabled = self.module_filters.get(module, True) if module else True
+        return category_enabled and module_enabled
+    
     def toggle_filter(self, category: str) -> None:
         """
         Toggle log filter for a specific category.
@@ -596,10 +721,7 @@ class ConsoleUI(QMainWindow):
         self.log_terminal.clear()
         
         for message, category, module in self.all_log_messages:
-            category_enabled = self.log_filters.get(category, True)
-            module_enabled = self.module_filters.get(module, True) if module else True
-            
-            if category_enabled and module_enabled:
+            if self.should_display_with_custom_filter(message, category, module):
                 self.display_log_message(message, category)
     
     def show_module_filter_dialog(self) -> None:
@@ -768,6 +890,13 @@ class ConsoleUI(QMainWindow):
         self.update_missed_logs_label()
         self.statusBar().showMessage("Missed logs counter reset", 2000)
     
+    def clear_terminals(self) -> None:
+        """Clear both log and interactive terminal windows."""
+        self.log_terminal.clear()
+        self.interactive_terminal.clear()
+        self.all_log_messages.clear()
+        self.statusBar().showMessage("Terminals cleared", 2000)
+    
     def increment_corrupted_logs(self) -> None:
         """Increment corrupted logs counter."""
         self.corrupted_logs += 1
@@ -784,6 +913,34 @@ class ConsoleUI(QMainWindow):
         """Show the statistics dialog."""
         dialog = StatsDialog(self)
         dialog.exec_()
+    
+    def show_serial_settings_dialog(self) -> None:
+        """Show the serial communication settings dialog."""
+        dialog = SerialSettingsDialog(
+            baudrate=self.baudrate,
+            stopbits=self.stopbits,
+            parity=self.parity,
+            flowcontrol=self.flowcontrol,
+            parent=self
+        )
+        if dialog.exec_() == QDialog.Accepted:
+            settings = dialog.get_settings()
+            self.baudrate = settings['baudrate']
+            self.stopbits = settings['stopbits']
+            self.parity = settings['parity']
+            self.flowcontrol = settings['flowcontrol']
+            
+            if self.on_settings_changed_callback:
+                self.on_settings_changed_callback(
+                    settings['baudrate'],
+                    settings['stopbits'],
+                    settings['parity'],
+                    settings['flowcontrol']
+                )
+            
+            self.statusBar().showMessage(
+                f"Serial settings updated: {settings['baudrate']} baud", 3000
+            )
     
     def toggle_connection(self) -> None:
         """Toggle serial connection on/off."""
@@ -1184,3 +1341,195 @@ class ModuleFilterDialog(QDialog):
             Dictionary mapping module names to enabled state.
         """
         return {key: checkbox.isChecked() for key, checkbox in self.checkboxes.items()}
+
+
+class SerialSettingsDialog(QDialog):
+    """Dialog for editing serial communication settings."""
+    
+    BAUDRATES = [300, 1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200, 230400, 460800, 921600]
+    STOPBITS_OPTIONS = [('1', 1.0), ('1.5', 1.5), ('2', 2.0)]
+    PARITY_OPTIONS = [('None', 'N'), ('Even', 'E'), ('Odd', 'O'), ('Mark', 'M'), ('Space', 'S')]
+    FLOWCONTROL_OPTIONS = [
+        ('None', 'none'),
+        ('RTS/CTS (Hardware)', 'rtscts'),
+        ('DSR/DTR (Hardware)', 'dsrdtr'),
+        ('XON/XOFF (Software)', 'xonxoff')
+    ]
+    
+    def __init__(
+        self,
+        baudrate: int = 115200,
+        stopbits: float = 1.0,
+        parity: str = 'N',
+        flowcontrol: str = 'rtscts',
+        parent: Optional[QWidget] = None
+    ) -> None:
+        """
+        Initialize the serial settings dialog.
+        
+        Args:
+            baudrate: Current baudrate.
+            stopbits: Current stop bits setting.
+            parity: Current parity setting.
+            flowcontrol: Current flow control setting.
+            parent: Parent widget.
+        """
+        super().__init__(parent)
+        self.current_baudrate = baudrate
+        self.current_stopbits = stopbits
+        self.current_parity = parity
+        self.current_flowcontrol = flowcontrol
+        self.init_ui()
+    
+    def init_ui(self) -> None:
+        """Initialize the dialog UI."""
+        self.setWindowTitle("Serial Communication Settings")
+        self.setModal(True)
+        self.setMinimumWidth(350)
+        
+        layout = QVBoxLayout(self)
+        
+        title = QLabel("Serial Port Configuration")
+        title.setStyleSheet("font-weight: bold; font-size: 12pt; margin-bottom: 15px;")
+        layout.addWidget(title)
+        
+        form_layout = QFormLayout()
+        form_layout.setSpacing(15)
+        
+        self.baudrate_combo = QComboBox()
+        for rate in self.BAUDRATES:
+            self.baudrate_combo.addItem(str(rate), rate)
+        current_idx = self.baudrate_combo.findData(self.current_baudrate)
+        if current_idx >= 0:
+            self.baudrate_combo.setCurrentIndex(current_idx)
+        self._style_combo(self.baudrate_combo)
+        form_layout.addRow("Baudrate:", self.baudrate_combo)
+        
+        self.stopbits_combo = QComboBox()
+        for display, value in self.STOPBITS_OPTIONS:
+            self.stopbits_combo.addItem(display, value)
+        current_idx = self.stopbits_combo.findData(self.current_stopbits)
+        if current_idx >= 0:
+            self.stopbits_combo.setCurrentIndex(current_idx)
+        self._style_combo(self.stopbits_combo)
+        form_layout.addRow("Stop Bits:", self.stopbits_combo)
+        
+        self.parity_combo = QComboBox()
+        for display, value in self.PARITY_OPTIONS:
+            self.parity_combo.addItem(display, value)
+        current_idx = self.parity_combo.findData(self.current_parity)
+        if current_idx >= 0:
+            self.parity_combo.setCurrentIndex(current_idx)
+        self._style_combo(self.parity_combo)
+        form_layout.addRow("Parity:", self.parity_combo)
+        
+        self.flowcontrol_combo = QComboBox()
+        for display, value in self.FLOWCONTROL_OPTIONS:
+            self.flowcontrol_combo.addItem(display, value)
+        current_idx = self.flowcontrol_combo.findData(self.current_flowcontrol)
+        if current_idx >= 0:
+            self.flowcontrol_combo.setCurrentIndex(current_idx)
+        self._style_combo(self.flowcontrol_combo)
+        form_layout.addRow("Flow Control:", self.flowcontrol_combo)
+        
+        layout.addLayout(form_layout)
+        
+        separator = QLabel()
+        separator.setStyleSheet("background-color: #555; min-height: 1px; max-height: 1px; margin: 15px 0;")
+        layout.addWidget(separator)
+        
+        button_layout = QHBoxLayout()
+        button_layout.addStretch()
+        
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.reject)
+        cancel_btn.setStyleSheet("""
+            QPushButton {
+                padding: 8px 25px;
+                background-color: #555;
+                color: white;
+                border: 1px solid #666;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #666;
+            }
+        """)
+        button_layout.addWidget(cancel_btn)
+        
+        apply_btn = QPushButton("Apply")
+        apply_btn.clicked.connect(self.accept)
+        apply_btn.setDefault(True)
+        apply_btn.setStyleSheet("""
+            QPushButton {
+                padding: 8px 25px;
+                background-color: #0066cc;
+                color: white;
+                border: 1px solid #0066cc;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #0077dd;
+            }
+        """)
+        button_layout.addWidget(apply_btn)
+        
+        layout.addLayout(button_layout)
+        
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #2b2b2b;
+                color: white;
+            }
+            QLabel {
+                color: white;
+                font-size: 10pt;
+            }
+        """)
+    
+    def _style_combo(self, combo: QComboBox) -> None:
+        """Apply consistent styling to a combo box."""
+        combo.setStyleSheet("""
+            QComboBox {
+                background-color: #3c3c3c;
+                color: white;
+                border: 1px solid #555;
+                padding: 5px 10px;
+                min-width: 150px;
+                font-size: 10pt;
+            }
+            QComboBox:hover {
+                border: 1px solid #0066cc;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 25px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid #d4d4d4;
+                margin-right: 8px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #3c3c3c;
+                color: white;
+                selection-background-color: #0066cc;
+                border: 1px solid #555;
+            }
+        """)
+    
+    def get_settings(self) -> dict:
+        """
+        Get the current settings from the dialog.
+        
+        Returns:
+            Dictionary with baudrate, stopbits, parity, and flowcontrol values.
+        """
+        return {
+            'baudrate': self.baudrate_combo.currentData(),
+            'stopbits': self.stopbits_combo.currentData(),
+            'parity': self.parity_combo.currentData(),
+            'flowcontrol': self.flowcontrol_combo.currentData()
+        }

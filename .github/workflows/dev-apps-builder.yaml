@@ -36,7 +36,11 @@ jobs:
               id: set-build-type
               run: |
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                      if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
+                          echo "build-type=full" >> $GITHUB_OUTPUT
+                      else
+                          echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
+                      fi
                   elif [[ "${{ github.event_name }}" == "schedule" ]]; then
                       echo "build-type=full" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
@@ -178,6 +182,21 @@ jobs:
            mgm24-support: false
            mgm24-internal-support: false
            wifi-soc-support: false
+    build_wake_on_matter_app:
+       name: Build Wake on Matter App
+       needs: [set-build-type, cache-tools]
+       uses: ./.github/workflows/platform-builder.yaml
+       with:
+           example-app: "wake_on_matter"
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
+           mgm24-support: false
+           mg24-internal-support: false
+           mg26-internal-support: false
+           mgm26-internal-support: false
+           mgm24-internal-support: false
+           sixg301-support: false
+           trustzone-support: false
+           wifi-soc-support: false       
  
     build_oven_app:
         name: Build Oven App
@@ -247,6 +266,7 @@ jobs:
             - build_oven_app
             - build_rangehood_app
             - build_series_3_bootloader
+            - build_wake_on_matter_app
         if: success()
 
         steps:

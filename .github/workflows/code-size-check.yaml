@@ -4,14 +4,50 @@ permissions:
   pull-requests: read
 
 on:
+  workflow_dispatch:
+    inputs:
+      example-app: 
+        required: false
+        type: string
+        description: "App name as it appears in the slc/apps directory path (e.g. multi_sensor_app)"
+        default: "multi_sensor_app"
+      transport:
+        required: false
+        type: choice
+        description: "Transport type (e.g. thread, wifi)"
+        default: thread
+        options:
+          - thread
+          - wifi
+      project-type: 
+        required: false
+        type: choice
+        description: "soc or 917 ncp segment in the slcp name"
+        default: soc
+        options:
+          - soc
+          - 917_ncp
+      baseline:
+        required: false
+        type: string
+        description: "Branch baseline to compare against"
+        default: "main"
   pull_request:
     types: [opened, synchronize, reopened]
     branches:
       - main
       - "release_*"
+
 concurrency:
     group: code-size-check-${{ github.ref }}
     cancel-in-progress: true
+
+env:
+  EXAMPLE_APP: ${{ inputs.example-app || 'multi_sensor_app'}}
+  TRANSPORT: ${{ inputs.transport || 'thread'}}
+  PROJECT_TYPE: ${{ inputs.project-type || 'soc'}}
+  BASELINE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || inputs.baseline || 'main'}}
+  CODE_SIZE_JSON: ${{ (inputs.transport || 'thread') == 'wifi' && (inputs.project-type || 'soc') == 'soc' && '.github/silabs-code-size-wifi.json' || '.github/silabs-code-size.json' }}
 
 jobs:
     code-size-check:
@@ -22,39 +58,54 @@ jobs:
               uses: actions/checkout@v6
               with:
                   submodules: "true"
+                  lfs: true
+
+            - name: Pull LFS objects in submodules
+              run: |
+                  git -C third_party/simplicity_sdk lfs pull
+                  git -C third_party/wifi_sdk lfs pull
 
             - name: Install tools
               uses: ./.github/actions/install-tools
-            - name: Checkout PR target branch
+
+            - name: Checkout baseline for comparison
               uses: actions/checkout@v6
               with:
-                  ref: ${{ github.event.pull_request.base.sha }}
+                  ref: ${{ env.BASELINE }}
                   path: baseline
                   submodules: "true"  
+                  lfs: true
+
+            - name: Pull LFS objects in submodules
+              run: |
+                  git -C baseline/third_party/simplicity_sdk lfs pull
+                  git -C baseline/third_party/wifi_sdk lfs pull
             - name: Build code-canary app
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
-                  json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./slc/apps/lock_app/thread/matter_thread_soc_lock_app_freertos.slcp"
+                  json-file-path: ${{ env.CODE_SIZE_JSON }}
+                  path-to-example-app: "./slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
+
             - name: Move results
               run: |
-                  mv ./out ./current 
+                  mv ./out ./current
 
-            - name: Build code-canary app on PR target
+            - name: Build code-canary app on baseline
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:
-                  json-file-path: ".github/silabs-code-size.json"
-                  path-to-example-app: "./baseline/slc/apps/lock_app/thread/matter_thread_soc_lock_app_freertos.slcp"
+                  json-file-path: ${{ env.CODE_SIZE_JSON }}
+                  path-to-example-app: "./baseline/slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
                   build-script: "./baseline/slc/build.sh"
                   output-directory: " "
                   build-type: "standard"
               env:
                 MATTER_ROOT: ${{ github.workspace }}/baseline
+
             - name: Generate Code Size Results and Compare
               shell: bash
               run: |
@@ -63,4 +114,3 @@ jobs:
                   cat ./current.csv
                   cat ./target.csv
                   python3 ./slc/script/code_size_diff_check.py ./current.csv ./target.csv | tee code_size_report.txt
-

@@ -7,10 +7,10 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "4.0.1"
+    version: "4.1.0"
     vendor: silabs
 
 component:
@@ -40,8 +40,6 @@ component:
   - id: matter_group_key_mgmt
   - id: matter_groups
     from: matter
-  - id: matter_groupcast
-    from: matter
   - id: matter_identify
   - id: matter_level_control
   - id: matter_localization_configuration
@@ -63,6 +61,7 @@ component:
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
+  - id: matter_lwip
 
   - id: matter_lighting
 
@@ -113,7 +112,7 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: CHIPProjectConfig.h 
+      - path: CHIPProjectConfig.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
@@ -160,7 +159,7 @@ template_contribution:
 filter:
   - name: Type
     value:
-      - SoC
+      - SoC Project
   - name: Difficulty
     value:
       - Advanced
@@ -168,15 +167,19 @@ filter:
     value:
       - Matter
 
+tag:
+  - prebuilt_demo
+  - hardware:component:led:2+
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+  - hidden
+
 readme:
   - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md
       focus: false
-
-tag:
-  - hardware:component:led:2+
 
 post_build:
   path: ../../../postbuild/matter_wifi_soc.slpb

@@ -3,7 +3,7 @@
         "default": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"]
+                "arguments": [""]
             },
             {
                 "boards": ["brd4407a"],
@@ -13,7 +13,7 @@
         "zigbee_light": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4407a"],
@@ -31,11 +31,11 @@
         "default": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
+                "arguments": [""]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"] 
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -53,11 +53,11 @@
         "zigbee_light":  [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             },
             {
                 "boards": ["brd4407a"],
@@ -76,16 +76,16 @@
         ],
         "platform_template": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"] 
-            },
-            {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"]
             }
         ]
     },
@@ -94,54 +94,74 @@
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix lto",
-                              "--with_app toolchain_gcc_lto", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"]
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix wdog", "-pids application",
+                              "--with_app watchdog_manager,matter_tests"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix sqa-lto",
+                              "--with_app toolchain_gcc_lto"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "lock_app": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
-            },
-            {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix lto",
-                              "--with_app toolchain_gcc_lto", "--configuration SL_MATTER_DEBUG_WATCHDOG_ENABLE:1"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                "arguments": ["--output_suffix sqa-lto",
+                              "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "light_switch_app": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
+                "boards": ["brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with toolchain_llvm_lto"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto","-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "zigbee_light":  [
-              {
-                  "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
-                  "arguments": ["--output_suffix sequential-ota-2","--with_app matter_zigbee_sequential", "-pids application",
-                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
-              },
-              {
-                  "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                  "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
-                                "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
-              },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix sequential-ota-2","--with_app matter_zigbee_sequential", "-pids application",
+                            "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
+                            "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-wdog", "-pids application",
+                              "--with_app watchdog_manager,matter_tests,matter_zigbee_concurrent"]
+            },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-low-power",
@@ -158,13 +178,13 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-boot-metrics",
                               "--with_app matter_zigbee_concurrent",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix sequential-boot-metrics",
                               "--with_app matter_zigbee_sequential",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -176,7 +196,7 @@
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-em1",
                               "'--configuration SL_HDR_PHY_MAX_PACKET_SIZE:2045'",
                               "--with_app matter_zigbee_concurrent,zigbee_high_datarate_phy,sl_rail_util_ieee802154_rx_duty_cycling",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
+                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart,zigbee_zcl_cli,zigbee_core_cli,zigbee_green_power_client_cli"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -186,7 +206,7 @@
             },
             {   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy-ota-2","--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
@@ -196,26 +216,77 @@
             },
             {   "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-hdr-dc-ota-2","--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent,sl_rail_util_ieee802154_rx_duty_cycling", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix sequential-llvm-sqa",
+                              "--with toolchain_llvm","--with_app matter_zigbee_sequential"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix sequential-llvm-sqa-ota-2",
+                              "--with toolchain_llvm","--with_app matter_zigbee_sequential", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+                        {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-llvm-sqa",
+                              "--with toolchain_llvm","--with_app matter_zigbee_concurrent"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix cmp-concurrent-llvm-sqa-ota-2",
+                              "--with toolchain_llvm","--with_app matter_zigbee_concurrent", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "closure_app": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform_template": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix peripherals-wdog", "-pids application",
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\",SL_MATTER_DEBUG_WATCHDOG_ENABLE:1'"]
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix peripherals-llvm-sqa",
+                              "--with toolchain_llvm","--with_app matter_peripherals,"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH"],
+                "arguments": ["--output_suffix peripherals-llvm-sqa-ota-2",
+                              "--with toolchain_llvm","--with_app matter_peripherals",
+                              "--without_app matter_log_rtt", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix peripherals-llvm-sqa-lto",
+                              "--with toolchain_llvm_lto","--with_app matter_peripherals"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix peripherals-llvm-sqa-lto-ota-2",
+                              "--with toolchain_llvm_lto","--with_app matter_peripherals",
+                              "--without_app matter_log_rtt", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
     }

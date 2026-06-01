@@ -30,6 +30,9 @@ requires:
   - name: matter_icd_core
   - name: matter_check_in_message
 
+conflicts:
+  - name: ot_stack_ftd
+
 documentation:
   docset: matter
   document: matter-overview-guides/matter-icd
