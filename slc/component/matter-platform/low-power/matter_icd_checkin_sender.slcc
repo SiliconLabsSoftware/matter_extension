@@ -5,7 +5,7 @@ description: >
   This is a mandatory feature on LIT ICD devices.
 package: matter
 category: Platform|Low-power
-quality: experimental
+quality: production
 metadata:
   sbom:
     license: Zlib
