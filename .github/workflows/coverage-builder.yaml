@@ -72,7 +72,6 @@ jobs:
                   cd third_party/matter_sdk
                   ./scripts/build_coverage.sh --yaml --xml
 
-
             - name: Build SonarQube XML
               shell: bash
               run: |

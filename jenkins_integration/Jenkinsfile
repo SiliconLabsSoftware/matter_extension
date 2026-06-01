@@ -121,55 +121,56 @@ pipeline
                 }
             }
         }
-        stage('Code Coverage & Static Code Analysis') {
+        stage('Coverage and Code Size') {
             when {
                 expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
-            steps {
-                script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.actionWithRetry {
-                            pipelineFunctions.download_coverage_artifact(workflow_id)
+            parallel {
+                stage('Code Coverage & Static Code Analysis') {
+                    steps {
+                        script {
+                            withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                                pipelineFunctions.actionWithRetry {
+                                    pipelineFunctions.download_coverage_artifact(workflow_id)
+                                }
+                                sh '''
+                                    if [ -f coverage/coverage.info ]; then
+                                        echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
+                                        ls -la coverage/
+                                        if [ -f coverage/sonarqube-coverage.xml ]; then
+                                            echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
+                                        else
+                                            echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
+                                        fi
+                                    fi
+                                '''
+                                archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
+                            }
+                            if (fileExists('coverage/sonarqube-coverage.xml')) {
+                                withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                                    sh '''
+                                        docker run --rm \
+                                            -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
+                                            -e SONAR_TOKEN="$SONAR_TOKEN" \
+                                            -v "$WORKSPACE:/usr/src" \
+                                            sonarsource/sonar-scanner-cli:11 \
+                                            -Dsonar.scm.disabled=true \
+                                            -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
+                                    '''
+                                }
+                            } else {
+                                echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
+                            }
                         }
-                        sh '''
-                            if [ -f coverage/coverage.info ]; then
-                                echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
-                                ls -la coverage/
-                                if [ -f coverage/sonarqube-coverage.xml ]; then
-                                    echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
-                                else
-                                    echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
-                                fi
-                            fi
-                        '''
-                        archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
-                    }
-                    if (fileExists('coverage/sonarqube-coverage.xml')) {
-                        withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
-                            sh '''
-                                docker run --rm \
-                                    -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
-                                    -e SONAR_TOKEN="$SONAR_TOKEN" \
-                                    -v "$WORKSPACE:/usr/src" \
-                                    sonarsource/sonar-scanner-cli:11 \
-                                    -Dsonar.scm.disabled=true \
-                                    -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
-                            '''
-                        }
-                    } else {
-                        echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
                     }
                 }
-            }
-        }
-        stage('Code Size Analysis') {
-            when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-            }
-            steps {
-                script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.run_code_size_analysis()
+                stage('Code Size Analysis') {
+                    steps {
+                        script {
+                            withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                                pipelineFunctions.run_code_size_analysis()
+                            }
+                        }
                     }
                 }
             }
