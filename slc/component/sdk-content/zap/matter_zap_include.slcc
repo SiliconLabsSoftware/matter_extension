@@ -10,6 +10,7 @@ metadata:
   sbom:
     license: Zlib
 include:
+  - path: slc/component/sdk-content/zap
   - path: slc/component/sdk-content/zap/clusters/Pm25ConcentrationMeasurement
     file_list:
     - path: AttributeIds.h
