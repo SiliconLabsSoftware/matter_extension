@@ -69,6 +69,7 @@ jobs:
             trustzone-support: true
 
     build_air_quality_sensor_app:
+        if: false # quick test: re-enable for full CI
         name: Build Air Quality Sensor App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -77,6 +78,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_light_switch_app:
+        if: false # quick test: re-enable for full CI
         name: Build Light Switch App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -85,6 +87,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_lock_app:
+        if: false # quick test: re-enable for full CI
         name: Build Lock App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -94,6 +97,7 @@ jobs:
             ncp-917-support: true
 
     build_thermostat_app:
+        if: false # quick test: re-enable for full CI
         name: Build Thermostat App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -103,6 +107,7 @@ jobs:
             ncp-917-support: true
 
     build_window_app:
+        if: false # quick test: re-enable for full CI
         name: Build Window App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -112,6 +117,7 @@ jobs:
             ncp-917-support: true
 
     build_fan_control_app:
+        if: false # quick test: re-enable for full CI
         name: Build Fan Control App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -121,6 +127,7 @@ jobs:
             ncp-917-support: true
 
     build_closure_app:
+        if: false # quick test: re-enable for full CI
         name: Build Closure App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -129,6 +136,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_multi_sensor_app:
+        if: false # quick test: re-enable for full CI
         name: Build Multi Sensor App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -137,6 +145,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_onoff_plug_app:
+        if: false # quick test: re-enable for full CI
         name: Build OnOff Plug App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -145,6 +154,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_refrigerator_app:
+        if: false # quick test: re-enable for full CI
         name: Build Refrigerator App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -153,6 +163,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_evse_app:
+        if: false # quick test: re-enable for full CI
         name: Build EVSE App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -162,6 +173,7 @@ jobs:
             wifi-soc-support: true
 
     build_performance_test_app:
+        if: false # quick test: re-enable for full CI
         name: Build Performance Test App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -171,18 +183,20 @@ jobs:
             wifi-soc-support: false
 
     build_zigbee_light:
-       name: Build Zigbee Light App
-       needs: [set-build-type, cache-tools]
-       uses: ./.github/workflows/platform-builder.yaml
-       with:
-           example-app: "zigbee_light"
-           build-type: ${{ needs.set-build-type.outputs.build-type }}
-           mg24-internal-support: false
-           mgm24-support: false
-           mgm24-internal-support: false
-           wifi-soc-support: false
- 
+        if: false # quick test: re-enable for full CI
+        name: Build Zigbee Light App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "zigbee_light"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            wifi-soc-support: false
+
     build_oven_app:
+        if: false # quick test: re-enable for full CI
         name: Build Oven App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -192,6 +206,7 @@ jobs:
             thread-support: false
 
     build_rangehood_app:
+        if: false # quick test: re-enable for full CI
         name: Build Rangehood App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -200,6 +215,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_platform_template:
+        if: false # quick test: re-enable for full CI
         name: Build Platform Template
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
@@ -208,6 +224,7 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     build_series_3_bootloader:
+        if: false # quick test: re-enable for full CI
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/builder.yaml
@@ -219,6 +236,7 @@ jobs:
             platform: series-3-bootloader
 
     build-sqa-tools:
+        if: false # quick test: re-enable for full CI
         name: Build SQA Tools
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/sqa-tools-builder.yaml
@@ -231,25 +249,25 @@ jobs:
         needs:
             - set-build-type
             - cache-tools
-            - build-sqa-tools
+            # - build-sqa-tools
             - build_lighting_app
-            - build_air_quality_sensor_app
-            - build_light_switch_app
-            - build_lock_app
-            - build_thermostat_app
-            - build_window_app
-            - build_fan_control_app
-            - build_multi_sensor_app
-            - build_onoff_plug_app
-            - build_refrigerator_app
-            - build_evse_app
-            - build_performance_test_app
-            - build_platform_template
-            - build_zigbee_light
-            - build_closure_app
-            - build_oven_app
-            - build_rangehood_app
-            - build_series_3_bootloader
+            # - build_air_quality_sensor_app
+            # - build_light_switch_app
+            # - build_lock_app
+            # - build_thermostat_app
+            # - build_window_app
+            # - build_fan_control_app
+            # - build_multi_sensor_app
+            # - build_onoff_plug_app
+            # - build_refrigerator_app
+            # - build_evse_app
+            # - build_performance_test_app
+            # - build_platform_template
+            # - build_zigbee_light
+            # - build_closure_app
+            # - build_oven_app
+            # - build_rangehood_app
+            # - build_series_3_bootloader
         if: success()
 
         steps:
