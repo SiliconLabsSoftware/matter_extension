@@ -72,8 +72,6 @@ requires:
 
   - name: matter_libinetlayer
     condition: [matter_thread]
-  - name: matter_thread_network_diagnostics
-    condition: [matter_thread]
   - name: matter_libinetlayer_wifi
     condition: [matter_wifi]
 
