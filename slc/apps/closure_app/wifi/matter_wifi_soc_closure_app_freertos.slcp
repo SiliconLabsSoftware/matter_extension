@@ -109,18 +109,24 @@ include:
     - path: AppTask.h
     - path: AppEvent.h
     - path: ClosureManager.h
+    - path: CustomerClosureManager.h
   - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/include
     file_list:
     - path: ClosureControlEndpoint.h
     - path: ClosureDimensionEndpoint.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+    - path: CustomerAppTask.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/AppTask.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/ClosureManager.cpp
-    directory: src    
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/CustomerClosureManager.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+    directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureControlEndpoint.cpp
