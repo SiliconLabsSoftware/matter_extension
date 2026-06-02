@@ -25,6 +25,10 @@ on:
                 required: false
                 type: boolean
                 default: false
+            ncp-917-dual-stack-support:
+                required: false
+                type: boolean
+                default: false
             mg24-support:
                 required: false
                 type: boolean
@@ -152,6 +156,16 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
+
+    ncp-917-dual-stack-build-job:
+        if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'full' }}
+        uses: ./.github/workflows/builder.yaml
+        with:
+            json-file-path: './.github/silabs-builds-917-ncp.json'
+            path-to-example-app: slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcw
+            example-app: lock_app_dual_stack
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-917-dual-stack
 
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}
