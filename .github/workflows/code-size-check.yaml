@@ -117,7 +117,8 @@ jobs:
                       | tee code_size_report_gcc.txt
 
             - name: Generate Code Size Results and Compare (llvm)
-              if: always()
+              ## TODO: Remove the skip condition when wifi on llvm is supported
+              if: always() && env.TRANSPORT != 'wifi'
               shell: bash
               run: |
                   ./slc/script/code_size_result.sh ./current/ current_llvm.csv code_size_llvm
