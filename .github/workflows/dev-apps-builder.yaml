@@ -181,7 +181,7 @@ jobs:
            mgm24-support: false
            mgm24-internal-support: false
            wifi-soc-support: false
- 
+
     build_oven_app:
         name: Build Oven App
         needs: [set-build-type, cache-tools]

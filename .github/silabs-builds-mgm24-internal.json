@@ -54,6 +54,11 @@
                 "boards": ["brd4337a"],
                 "arguments": ["--output_suffix lto",
                               "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4337a"],
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }

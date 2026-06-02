@@ -13,7 +13,7 @@
         "zigbee_light": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4407a"],
@@ -31,11 +31,11 @@
         "default": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": [""] 
+                "arguments": [""]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"] 
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
         "lighting_app": [
@@ -53,11 +53,11 @@
         "zigbee_light":  [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             },
             {
                 "boards": ["brd4407a"],
@@ -77,15 +77,15 @@
         "platform_template": [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             },
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"]
             }
         ]
     },
@@ -122,6 +122,10 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "light_switch_app": [
@@ -129,6 +133,10 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4408a"],
+                "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "zigbee_light":  [
@@ -216,6 +224,10 @@
                 "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd1019a"],
+                "arguments": ["--output_suffix peripherals-icd-sit-200","--with_app matter_peripherals,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }
