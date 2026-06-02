@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 This script copies the contents of the current working directory to a specified target location,
 excluding certain directories and files based on predefined rules.
@@ -36,7 +37,6 @@ exclude_submodules = [
 # specific exlude from matter_sdk
 matter_sdk_exclude = [
     'matter_sdk/third_party',
-    'matter_sdk/zzz_generated',
     'matter_sdk/examples/virtual-device-app',
     'matter_sdk/src/controller/java/generated',
     'matter_sdk/examples/chef/devices',
@@ -65,7 +65,8 @@ def should_exclude(root, path):
         # print(f"Excluding hidden path: {path}")
         return True
 
-    full_path = os.path.join(root, path)
+    # Normalize separators so exclusion rules (written with '/') work on Windows.
+    full_path = os.path.join(root, path).replace(os.sep, "/")
 
     # Exclude submodules
     if "third_party/" in full_path:
@@ -98,7 +99,7 @@ def should_exclude(root, path):
             return True
 
     # Exclude directories if any part of the path matches exclude_directory
-    if any(exclude in full_path.split(os.sep) for exclude in exclude_root_directories):
+    if any(exclude in full_path.split("/") for exclude in exclude_root_directories):
         # print(f"Excluding directory from split path: {full_path}")
         return True
 
@@ -125,6 +126,9 @@ def copy_directory(source_directory, target_location):
         for file in files:
             # Skip hidden files
             if file.startswith("."):
+                continue
+            # Skip .slt files
+            if file.endswith(".slt"):
                 continue
             source_file = os.path.join(root, file)
             if not os.path.exists(source_file):

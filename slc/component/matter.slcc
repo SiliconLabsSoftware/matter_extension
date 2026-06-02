@@ -8,7 +8,7 @@ metadata:
   sbom:
     license: Zlib
 config_file:
-  - path: third_party/matter_sdk/examples/platform/silabs/FreeRTOSConfig.h
+  - path: third_party/matter_sdk/examples/platform/silabs/freertos_config/FreeRTOSConfig.h
     override:
       component: freertos
       file_id: freertos_config
@@ -23,12 +23,10 @@ config_file:
   - path: slc/inc/matter/tracing/build_config.h
     file_id: build_config
     directory: matter/tracing
-  - path: third_party/matter_sdk/src/platform/silabs/tracing/SilabsTracingConfig.h
+  - path: slc/inc/platform/silabs/tracing/SilabsTracingConfig.h
     file_id: silabs_tracing_config
-    directory: matter/tracing
+    directory: platform/silabs/tracing
 toolchain_settings:
-  - option: gcc_compiler_option
-    value: -Wno-deprecated-declarations
   - option: gcc_compiler_option
     value: -Wno-maybe-uninitialized
   - option: gcc_compiler_option
@@ -63,6 +61,7 @@ include:
       - path: ICDMonitoringTable.h
 requires:
   - name: cpp_support
+  - name: matter_static_generated_zap_content
 
   # Matter over Thread and Matter over Wifi uses these separate components per networking protocol
 
@@ -116,6 +115,9 @@ requires:
   - name: matter_callbacks
   - name: matter_check_in_message
   - name: matter_codegen_data_model_sources
+    condition: [matter_codegen_dm]
+  - name: matter_code_driven_data_model_sources
+    condition: [matter_code_driven_dm]  
   - name: matter_data_model
   - name: matter_data_model_provider
   - name: matter_encode_decode
@@ -128,6 +130,7 @@ requires:
   - name: matter_tracing_headers
   # TODO: Remove once Zap issue is fixed
   - name: matter_zap_include
+    condition: [matter_codegen_dm]
 recommends:
   - id: matter_configuration_over_swo
   - id: matter_ot_mbedtls_override

@@ -1,6 +1,8 @@
 id: matter_multi_image_ota_encryption
 label: OTA Multi Image Requestor Encryption
-description: Encryption for OTA Multi Image Requestor for Matter
+description: >
+  Enables encryption support for Matter OTA multi-image update flows.
+  This component adds secure handling of encrypted OTA TLVs by integrating platform-specific key management using PSA Crypto or Mbed TLS, depending on the target device.
 package: matter
 category: Stack
 quality: production
@@ -13,6 +15,7 @@ provides:
 
 requires:
   - name: matter_multi_image_ota
+  - name: mbedtls_cipher_ctr
 
 source:
   - path: third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKeyPSA.cpp

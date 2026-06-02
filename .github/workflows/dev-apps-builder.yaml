@@ -1,15 +1,12 @@
 name: Build Dev apps
 
 on:
-    push:
-        branches:
-            - main
-            - "release_*"
     pull_request:
         branches:
             - main
             - "release_*"
-
+    schedule:
+        - cron: "5 0 * * 5" # Thursday at 8:05 PM EDT
     workflow_dispatch:
         inputs:
             build-type:
@@ -24,6 +21,10 @@ concurrency:
     group: dev-build-examples-${{ github.ref }}
     cancel-in-progress: true
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
     set-build-type:
         runs-on: ubuntu-latest
@@ -34,143 +35,192 @@ jobs:
               id: set-build-type
               run: |
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-                      echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                      echo "build-type=standard" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "push" ]]; then
-                      if [[ "${{ github.ref }}" == "refs/heads/main" ]] || [[ "${{ github.ref }}" == refs/heads/release_* ]]; then
+                      if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
                       else
-                          echo "build-type=standard" >> $GITHUB_OUTPUT
+                          echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                       fi
+                  elif [[ "${{ github.event_name }}" == "schedule" ]]; then
+                      echo "build-type=full" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
-    build-lighting-app:
+    cache-tools:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            actions: write
+        outputs:
+            cache-key: ${{ steps.cache-tools.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v6
+            - uses: ./.github/actions/cache-tools
+              id: cache-tools
+
+    build_lighting_app:
         name: Build Lighting App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lighting-app"
+            example-app: "lighting_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            trustzone-support: true
 
-    build-air-quality-sensor-app:
+    build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "air-quality-sensor-app"
+            example-app: "air_quality_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-light-switch-app:
+    build_light_switch_app:
         name: Build Light Switch App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "light-switch-app"
+            example-app: "light_switch_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-    build-lock-app:
+
+    build_lock_app:
         name: Build Lock App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "lock-app"
+            example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
 
-    build-thermostat-app:
+    build_thermostat_app:
         name: Build Thermostat App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-wf200-support: true
 
-    build-window-app:
+    build_window_app:
         name: Build Window App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "window-app"
+            example-app: "window_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
 
-    build-fan-control-app:
+    build_fan_control_app:
         name: Build Fan Control App
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "fan-control-app"
+            example-app: "fan_control_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            ncp-917-support: true
+
+    build_closure_app:
+        name: Build Closure App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "closure_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build_multi_sensor_app:
+        name: Build Multi Sensor App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "multi_sensor_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build_onoff_plug_app:
+        name: Build OnOff Plug App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "onoff_plug_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build_refrigerator_app:
+        name: Build Refrigerator App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "refrigerator_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+
+    build_evse_app:
+        name: Build EVSE App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "evse_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: true
+
+    build_performance_test_app:
+        name: Build Performance Test App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "performance_test_app"
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            wifi-soc-support: false
+
+    build_zigbee_light:
+       name: Build Zigbee Light App
+       needs: [set-build-type, cache-tools]
+       uses: ./.github/workflows/platform-builder.yaml
+       with:
+           example-app: "zigbee_light"
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
+           mg24-internal-support: false
+           mgm24-support: false
+           mgm24-internal-support: false
+           wifi-soc-support: false
+
+    build_oven_app:
+        name: Build Oven App
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "oven_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             thread-support: false
 
-    build-closure-app:
-        name: Build Closure App
-        needs: set-build-type
+    build_rangehood_app:
+        name: Build Rangehood App
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "closure-app"
+            example-app: "rangehood_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-multi-sensor-app:
-        name: Build Multi Sensor App
-        needs: set-build-type
+    build_platform_template:
+        name: Build Platform Template
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
-            example-app: "multi-sensor-app"
+            example-app: "platform_template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
-    build-onoff-plug-app:
-        name: Build OnOff Plug App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
+    build_series_3_bootloader:
+        name: Build Series 3 Bootloader
+        needs: [set-build-type, cache-tools]
+        uses: ./.github/workflows/builder.yaml
         with:
-            example-app: "onoff-plug-app"
+            json-file-path: './.github/silabs-builds-series-3-bootloader.json'
+            path-to-example-app: slc/apps/bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcw
+            example-app: bootloader
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-
-    build-refrigerator-app:
-        name: Build Refrigerator App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "refrigerator-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-
-    build-performance-test-app:
-        name: Build Performance Test App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "performance-test-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            wifi-soc-support: false
-
-    build-zigbee-matter-light-app:
-        name: Build Zigbee Matter Light App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "zigbee-matter-light"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-keyword: ""
-            mg24-internal-support: false
-            mgm24-support: false
-            mgm24-internal-support: false
-            wifi-soc-support: false
-
-    build-platform-app:
-        name: Build Platform App
-        needs: set-build-type
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "platform-app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            platform: series-3-bootloader
 
     build-sqa-tools:
         name: Build SQA Tools
-        needs: set-build-type
+        needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -180,26 +230,31 @@ jobs:
         runs-on: ubuntu-latest
         needs:
             - set-build-type
+            - cache-tools
             - build-sqa-tools
-            - build-lighting-app
-            - build-air-quality-sensor-app
-            - build-light-switch-app
-            - build-lock-app
-            - build-thermostat-app
-            - build-window-app
-            - build-fan-control-app
-            - build-multi-sensor-app
-            - build-onoff-plug-app
-            - build-refrigerator-app
-            - build-performance-test-app
-            - build-platform-app
-            - build-zigbee-matter-light-app
-            - build-closure-app
+            - build_lighting_app
+            - build_air_quality_sensor_app
+            - build_light_switch_app
+            - build_lock_app
+            - build_thermostat_app
+            - build_window_app
+            - build_fan_control_app
+            - build_multi_sensor_app
+            - build_onoff_plug_app
+            - build_refrigerator_app
+            - build_evse_app
+            - build_performance_test_app
+            - build_platform_template
+            - build_zigbee_light
+            - build_closure_app
+            - build_oven_app
+            - build_rangehood_app
+            - build_series_3_bootloader
         if: success()
 
         steps:
             - name: Merge artifacts
-              uses: actions/upload-artifact/merge@v4
+              uses: actions/upload-artifact/merge@v7
               with:
                   name: "dev-artifacts-${{ needs.set-build-type.outputs.build-type }}"
                   delete-merged: true
@@ -212,18 +267,26 @@ jobs:
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
-    trigger-sqa-workflow:
-        name: Trigger SQA Workflow
+    build-sqa-apps:
+        name: Build SQA apps
         needs: wait-for-test-results
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        permissions:
+            contents: read
+            actions: write
+        uses: ./.github/workflows/sqa-apps-builder.yaml
+
+    delete-cache:
+        name: Delete tools cache
+        needs: [build-sqa-apps, cache-tools]
+        if: always()
         runs-on: ubuntu-latest
-        if: ${{ startsWith(github.ref, 'refs/heads/release_') || github.ref == 'refs/heads/main' }}
+        permissions:
+            actions: write
         steps:
-            - name: Trigger Workflow
+            - name: Delete tools cache
               run: |
-                  curl -X POST \
-                      -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                      -H "Accept: application/vnd.github.v3+json" \
-                      https://api.github.com/repos/${{ github.repository }}/actions/workflows/sqa-apps-builder.yaml/dispatches \
-                      -d '{
-                          "ref": "${{ github.ref }}"
-                      }'
+                curl -s -X DELETE \
+                  -H "Accept: application/vnd.github+json" \
+                  -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/repos/${{ github.repository }}/actions/caches?key=${{ needs.cache-tools.outputs.cache-key }}"

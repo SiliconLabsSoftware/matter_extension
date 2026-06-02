@@ -40,6 +40,12 @@ requires:
   - name: zigbee_pro_stack
 provides:
   - name: matter_zigbee_cmp
+
+recommends:
+  - id: zigbee_ipc
+    vendor: silabs
+  - id: zigbee_pro_stack
+    vendor: silabs
         
 define:
   - name: OS_CFG_COMPAT_INIT

@@ -4,9 +4,9 @@
 
 Welcome to the Silicon Labs Matter Extension repo. Matter is an application layer that provides a standardized interface between protocols and devices. With Matter, it is transparent to the underlying device whether the interaction is from a Thread application or a Wi-Fi application. For more information on Matter in general, see the main [Matter Overview](https://www.silabs.com/wireless/matter) page. Silicon Labs supports Matter on both 802.15.4 (Thread) and 802.11 (Wi-Fi) transport protocols.
 
-Silicon Labs supports Matter on several different hardware platforms including the EFR32, WF200, and the new SiWx917, which is a Wi-Fi System-on-Chip (SoC).
+Silicon Labs supports Matter on several different hardware platforms including the EFR32, and the new SiWx917, which is a Wi-Fi System-on-Chip (SoC).
 
-**This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.8.0/matter-start/)**
+**This repo is intended to be used directly for bleeding edge development that closely tracks the CSA Matter codebase. If you are interested in a stable release, we recommend following our official documentation which can be found on [docs.silabs.com](https://docs.silabs.com/matter/2.8.1/matter-start/)**
 
 _To see official release notes containing a list of features and known issues, go to [SiliconLabs/matter_extension/releases](https://github.com/SiliconLabs/matter_extension/releases) and find the corresponding notes for the release you are using._
 
@@ -26,7 +26,7 @@ _To see official release notes containing a list of features and known issues, g
 
 Your local repo is now ready for development. Follow the rest of this document for instructions on how to create and build a project.
 
-Additional setup required for contributing to this repo (not enabled yet): [Contributing](./docs/CONTRIBUTING.md)
+Additional setup required for contributing to this repo: [Contributing](./docs/CONTRIBUTING.md)
 
 Steps for directly cherry-picking CSA Matter repo commits into your environment: [Cherry-picking CSA Commits](docs/CHERRY_PICKING_CSA_COMMITS.md)
 
@@ -46,8 +46,6 @@ pip3 install -r requirements.txt
 
 The `sl_setup_env.py` script creates an `.env` file containing all relevant virtual environment paths used by the `sl_create_new_app.py` and `sl_build.py` scripts. This file is for internal use by the scripts and does not need to be edited directly.
 
-It will also create `environment_variables_vscode.txt`. This file can be referenced to add environment variables for VS Code-based builds.
-
 For Mac and Linux:
 ```sh
 python3 slc/sl_setup_env.py
@@ -58,7 +56,7 @@ For Windows:
 ```sh
 python slc\sl_setup_env.py
 ```
-The sl_setup_env.py script syncs and checks out the submodules and creates symbolic links for matter_extension. Windows users may need to enable long paths in the system and run the terminal with admin privileges to create the symbolic links.
+The sl_setup_env.py script syncs and checks out the submodules for matter_extension. Windows users may need to enable long paths in the system and run the terminal with admin privileges.
 
 Users may enable long paths for git by running:
 ```
@@ -67,19 +65,19 @@ git config --system core.longpaths true  
 
 ### Creating an Application Project
 
-Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the lighting-app-thread.slcp example or from the `lighting-app-thread-bootloader.slcw` [solution](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-solutions) application project file:
+Run the `sl_create_new_app.py` script to create a BRD4187C project with name MyNewApp starting from the `matter_thread_soc_lighting_app_freertos.slcp` example or from the `matter_thread_soc_lighting_app_series_2_freertos.slcw` [solution](https://docs.silabs.com/matter/2.8.1/matter-overview-guides/matter-solutions) application project file:
 
 Sample-App Example: 
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_create_new_app.py MyNewApp slc/sample-app/lighting-app/efr32/lighting-app-thread.slcp brd4187c
+python3 slc/sl_create_new_app.py MyNewApp slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_create_new_app.py MyNewApp slc\sample-app\lighting-app\efr32\lighting-app-thread.slcp brd4187c
+python slc\sl_create_new_app.py MyNewApp slc\apps\lighting_app\thread\matter_thread_soc_lighting_app_freertos.slcp brd4187c
 ```
 
 Solutions Examples:
@@ -87,13 +85,13 @@ Solutions Examples:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_create_new_app.py MyNewApp slc/solutions/lighting-app/series-2/lighting-app-thread-bootloader.slcw brd4187c
+python3 slc/sl_create_new_app.py MyNewApp slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_create_new_app.py MyNewApp slc\solutions\lighting-app\series-2\lighting-app-thread-bootloader.slcw brd4187c
+python slc\sl_create_new_app.py MyNewApp slc\apps\lighting_app\thread\matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
 ```
 
 ### Building an Application Project
@@ -104,13 +102,13 @@ Sample-App Example:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_build.py MyNewApp/lighting-app-thread.slcp brd4187c
+python3 slc/sl_build.py MyNewApp/matter_thread_soc_lighting_app_freertos.slcp brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_build.py MyNewApp\lighting-app-thread.slcp brd4187c
+python slc\sl_build.py MyNewApp\matter_thread_soc_lighting_app_freertos.slcp brd4187c
 ```
 
 Solutions Examples:
@@ -118,13 +116,13 @@ Solutions Examples:
 For Mac and Linux:
 
 ```sh
-python3 slc/sl_build.py MyNewApp/lighting-app-thread-bootloader.slcw brd4187c
+python3 slc/sl_build.py MyNewApp/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
 ```
 
 For Windows:
 
 ```sh
-python slc\sl_build.py MyNewApp\lighting-app-thread-bootloader.slcw brd4187c
+python slc\sl_build.py MyNewApp\matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
 ```
 
 Alternatively, one can use SLC-CLI commands directly to generate the project and then use `make` to build it.
@@ -140,12 +138,24 @@ Windows users will need to install `make` on their system. You can use your own 
 
 ## Flash an Application to Device
 
-The generated application binaries can be found at MyNewApp/artifact/lighting-app-thread.s37.
+The generated application binaries can be found at MyNewApp/artifact/matter_thread_soc_lighting_app_series_2_freertos_full.s37.
 
-Simplicity Commander is used to flash binaries to the device. It is downloaded by the sl_setup.py script and can be found at slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander.
+Simplicity Commander is used to flash binaries to the device. After running `sl_setup_env.py`, find the Commander installation by running:
 
 ```sh
-slc/tools/SimplicityCommander-Mac/Commander.app/Contents/MacOS/commander flash MyNewApp/artifact/lighting-app-thread.s37
+slc/tools/slt where commander
+```
+
+On macOS the output is typically `~/.silabs/slt/installs/archive/Commander.app`. Use it to flash:
+
+```sh
+~/.silabs/slt/installs/archive/Commander.app/Contents/MacOS/commander flash MyNewApp/artifact/matter_thread_soc_lighting_app_series_2_freertos_full.s37
+```
+
+On Linux the output is typically `~/.silabs/slt/installs/archive/commander`. Use it to flash:
+
+```sh
+~/.silabs/slt/installs/archive/commander/commander flash MyNewApp/artifact/matter_thread_soc_lighting_app_series_2_freertos_full.s37
 ```
 
 **Note:** If using SiWx917 SoC, `.rps` file will need be flashed, instead of the `.s37` file.
@@ -214,7 +224,7 @@ The relevant entry from `src/app/zap-templates/cluster-to-component-dependencies
     ]
   }
 ```
-More details on how to develop using SLC CLI can be found at [Creating Matter Applications using SLC CLI](https://docs.silabs.com/matter/2.8.0/matter-overview-guides/matter-slc-cli)
+More details on how to develop using SLC CLI can be found at [Creating Matter Applications using SLC CLI](https://docs.silabs.com/matter/2.8.1/matter-overview-guides/matter-slc-cli)
 
 
 ## Project Upgrades
@@ -226,7 +236,7 @@ Checkout the target tag/branch to which you need to upgrade the project.
 1. Run the slc/sl_project_upgrade.py script to upgrade the project to the target Matter extension version.
 1. For example, to upgrade a project to Matter extension v2.8.0:
    
-`python3 slc/sl_project_upgrade.py MyNewApp/lighting-app-thread.slcp 2.8.0`
+`python3 slc/sl_project_upgrade.py MyNewApp/matter_thread_soc_lighting_app_freertos.slcp 2.8.0`
 
 
 ## Getting Started with Simplicity Studio Development 
@@ -238,7 +248,7 @@ To stage the Extension for loading it in Studio, invoke the following script pas
 ```
 python3 slc/stage_extension.py <any/location/on/disk>
 ```
-The stage_extension.py script requires that submodules are initialized and checked out. The `sl_setup.py` script already checks out submodules, alternatively, users can manually checkout the submodules using the following commands.
+The stage_extension.py script requires that submodules are initialized and checked out. The `sl_setup_env.py` script already checks out submodules, alternatively, users can manually checkout the submodules using the following commands.
 ```
 git submodule sync 
 git submodule update --init

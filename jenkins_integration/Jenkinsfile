@@ -1,12 +1,81 @@
 #!groovy
 @Library('gsdk-shared-lib@master')
 
+def pipelineProperties = []
+
+// Configure pollSCM triggers
+if(env.BRANCH_NAME == 'main'){
+    // Trigger Thursday at 10:05pm EDT (2 hrs after github trigger)
+    pipelineProperties << pipelineTriggers([pollSCM('5 2 * * 5')])
+} 
+
+properties(pipelineProperties)
+
 def commit_sha = ""
 def run_number = ""
 def workflow_id = ""
 def pr_number = ""
 def bypass_send_results_gh = ""
-def formatted_build_number = ""
+def build_description = ""
+def commit_change_summary = ""
+
+def combineSlackSummary(String commitSummary, String extra) {
+    def c = commitSummary?.trim() ?: ''
+    def e = extra?.trim() ?: ''
+    if (c && e) {
+        return "${c}\n\n---\n\n${e}"
+    }
+    return c ?: e ?: ''
+}
+
+def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
+    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
+    def statusEmoji = status == "PASS" ? "✅" : "❌"
+    def alertEmoji = status == "PASS" ? "🎉" : "🚨"
+    
+    def notificationColor = color ?: (status == "PASS" ? "good" : "danger")
+    
+    def message = """${alertEmoji} *${messageType.toUpperCase()}* ${alertEmoji}
+                    
+*Repository:* Matter Extension
+*Branch:* `${env.BRANCH_NAME}`
+*Build Number:* #${env.BUILD_NUMBER}
+*Status:* ${statusEmoji} ${status}
+*Timestamp:* ${currentTime} UTC
+
+📋 *Details:*"""
+    
+    if (commitSha) {
+        message += "\n• *Commit SHA:* `${commitSha}`"
+    }
+    if (runNumber) {
+        message += "\n• *GitHub Workflow Run:* #${runNumber}"
+    }
+    if (workflowId) {
+        message += "\n• *Workflow ID:* ${workflowId}"
+    }
+    
+    if (summary && summary.trim()) {
+        message += "\n\n📊 *Summary:*\n${summary}"
+    }
+    
+    message += "\n\n🔗 *Links:*"
+    message += "\n• <${env.BUILD_URL}|Jenkins Build>"
+    message += "\n• <${env.BUILD_URL}console|Console Output>"
+    
+    if (commitSha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commitSha}|GitHub Commit>"
+    }
+    
+    if (status == "FAIL") {
+        message += "\n\n⚠️ *Action Required:* Please investigate and resolve the issue."
+    }
+    
+    slackSend(channel: 'matter-release-build-notifications',
+              color: notificationColor,
+              message: message)
+}
+
 pipeline
 {
     agent { node { label 'Build-Farm-Large' } }
@@ -17,13 +86,21 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
+                    sh 'git submodule update --init --checkout third_party/simplicity_sdk'
+                    sh 'git submodule update --init --checkout third_party/wifi_sdk'
+                    sisdk_build_number = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
+                    wiseconnect_build_number = sh(script: 'cat third_party/wifi_sdk/.build-number', returnStdout: true).trim()
+                    build_description = "SISDK build number: ${sisdk_build_number}"
+                    build_description += "\nWiFi Extension build number: ${wiseconnect_build_number}"
+                    buildDescription(build_description)
+                    commit_change_summary = pipelineFunctions.buildCommitChangeSummaryForSlack()
                 }
             }
         }
         stage('Upload Artifacts') {
             steps {
                 script {
-                    retry(3) {
+                    retry(9) {
                         withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                             pipelineFunctions.actionWithRetry {
                                 def result = pipelineFunctions.upload_artifacts()
@@ -33,9 +110,22 @@ pipeline
                                 bypass_send_results_gh = result.bypass_send_results
                                 pr_number = result.pr_number
                                 echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
-                                buildDescription("GitHub Workflow Run Number: ${run_number}")
+                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
+                                buildDescription(build_description)
                             }
                         }
+                    }
+                }
+            }
+        }
+        stage('Code Size Analysis') {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.run_code_size_analysis()
                     }
                 }
             }
@@ -50,31 +140,30 @@ pipeline
                     } else {
                         branch_name = env.BRANCH_NAME
                     }
-                    formatted_build_number = "${workflow_id}.${run_number}"
                     parallelNodes['MG24 Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4187c-ci',
-                                '3251', 'matter_thread_template', 'lighting-app','thread','BRD4187C',"",
-                                branch_name, formatted_build_number)
+                                '3251', 'lighting-app','thread','BRD4187C',"",
+                                branch_name, env.BUILD_NUMBER)
                         }
                     }
-
-                    parallelNodes['917-SoC Lighting-App'] = {
+                    parallelNodes['SIWX Lighting-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249', 'matter_wifi_soc_template',
-                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, formatted_build_number)
+                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
+                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
-                    parallelNodes['SiMG301 Lighting-App'] = {
-                        pipelineFunctions.actionWithRetry {
-                            failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-                                '4878', 'matter_thread_template', 'lighting-app','thread','BRD4407A',"",
-                                branch_name, formatted_build_number)
-                        }
-                    }
+//                     Temp comment out due to SQA setup issues
+//                     parallelNodes['SiMG301 Lighting-App'] = {
+//                         pipelineFunctions.actionWithRetry {
+//                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
+//                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
+//                                 '4878', 'lighting-app','thread','BRD4407A',"",
+//                                 branch_name, env.BUILD_NUMBER)
+//                         }
+//                     }
 
                     parallelNodes.failFast = false
                     parallel parallelNodes
@@ -92,10 +181,11 @@ pipeline
                         failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
                     }
 
-                    if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
-                        totalFailedTests += failed_tests_4407a.failedCount
-                        failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
-                    }
+//                     Temp comment out due to SQA setup issues
+//                     if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
+//                         totalFailedTests += failed_tests_4407a.failedCount
+//                         failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
+//                     }
 
                     def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
                     def sqa_tests_summary = failedTestsSummary.isEmpty() ? "All tests passed successfully." : failedTestsSummary.join('\n')
@@ -109,18 +199,10 @@ pipeline
                     }
                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
                         if (sqa_tests_result == "FAIL") {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'danger',
-                                      message: "[FAIL] Sanity tests failed for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\nGitHub Workflow Run Number: ${run_number}\n" +
-                                               "See summary:\n${sqa_tests_summary}\nJenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Failed", "FAIL", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
                         } else {
-                            slackSend(channel: 'matter-release-build-notifications',
-                                      color: 'good',
-                                      message: "[PASS] All tests passed successfully for branch ${env.BRANCH_NAME}, Jenkins build number ${env.BUILD_NUMBER}.\n" +
-                                               "Commit SHA: ${commit_sha}\n GitHub Workflow Run Number: ${run_number}\n" +
-                                               "Jenkins Job URL: ${env.BUILD_URL}")
+                            sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
                     }
@@ -134,32 +216,43 @@ pipeline
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke", formatted_build_number)
+                    pipelineFunctions.trigger_sqa_pipelines("smoke")
                 }
             }
-       }
-       stage('Upload SQA Artifacts') {
+        }
+        stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
             }
             steps {
                 script {
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, run_number=run_number)
+                    retry(12) {
+                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, workflow_id=workflow_id)
+                        }
                     }
                 }
             }
         }
-        stage('Trigger SQA Regression Pipelines') 
+        stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression {  env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression", formatted_build_number)
+                    pipelineFunctions.trigger_sqa_pipelines("regression")
                 }
             }
-       }
+        }
+    }
+    post {
+        failure {
+            script {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_"))) {
+                    sendSlackNotification("Pipeline Failure", "FAIL", combineSlackSummary(commit_change_summary, "Pipeline execution failed. Please check the console output for details."), "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
+                }
+            }
+        }
     }
 }

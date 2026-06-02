@@ -2,7 +2,7 @@
     "description": "Matter SDK ZCL data",
     "category": "matter",
     "version": 1,
-    "requiredFeatureLevel": 102,
+    "requiredFeatureLevel": 109,
     "xmlRoot": [
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/.",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"
@@ -15,6 +15,7 @@
         "account-login-cluster.xml",
         "administrator-commissioning-cluster.xml",
         "air-quality-cluster.xml",
+        "ambient-context-sensing-cluster.xml",
         "application-basic-cluster.xml",
         "application-launcher-cluster.xml",
         "audio-output-cluster.xml",
@@ -48,7 +49,11 @@
         "diagnostic-logs-cluster.xml",
         "dishwasher-alarm-cluster.xml",
         "dishwasher-mode-cluster.xml",
+        "dynamic-lighting-cluster.xml",
+        "electrical-distribution-cluster.xml",
+        "electrical-protection-alarm-cluster.xml",
         "groupcast-cluster.xml",
+        "humidistat-cluster.xml",
         "microwave-oven-mode-cluster.xml",
         "meter-identification-cluster.xml",
         "door-lock-cluster.xml",
@@ -89,6 +94,8 @@
         "messages-cluster.xml",
         "mode-base-cluster.xml",
         "mode-select-cluster.xml",
+        "network-identity-management-cluster.xml",
+        "proximity-ranging-cluster.xml",
         "push-av-stream-transport-cluster.xml",
         "semantic-tag-namespace-enums.xml",
         "network-commissioning-cluster.xml",
@@ -132,7 +139,6 @@
         "thread-network-directory-cluster.xml",
         "time-format-localization-cluster.xml",
         "time-synchronization-cluster.xml",
-        "timer-cluster.xml",
         "tls-certificate-management-cluster.xml",
         "tls-client-management-cluster.xml",
         "user-label-cluster.xml",
@@ -188,6 +194,10 @@
             "AdminFabricIndex",
             "AdminVendorId"
         ],
+        "Ambient Context Sensing": [
+            "HoldTimeLimits",
+            "ObjectCountConfig"
+        ],
         "Basic Information": [
             "FeatureMap",
             "ClusterRevision",
@@ -214,6 +224,7 @@
             "ProductAppearance",
             "SpecificationVersion",
             "MaxPathsPerInvoke",
+            "DeviceLocation",
             "ConfigurationVersion"
         ],
         "Boolean State": [
@@ -222,6 +233,7 @@
             "StateValue"
         ],
         "Bridged Device Basic Information": [
+            "DeviceLocation",
             "ProductAppearance"
         ],
         "Binding": [
@@ -232,18 +244,34 @@
             "SelectedChime",
             "Enabled"
         ],
+        "Commissioner Control": [
+            "SupportedDeviceCategories",
+            "FeatureMap",
+            "ClusterRevision"
+        ],
         "Closure Control": [
             "CountdownTime",
+            "MainState",
+            "CurrentErrorList",
             "OverallCurrentState",
             "OverallTargetState",
+            "LatchControlModes",
             "FeatureMap",
             "ClusterRevision"
         ],
         "Closure Dimension": [
             "CurrentState",
             "TargetState",
+            "Resolution",
+            "StepValue",
+            "Unit",
             "UnitRange",
             "LimitRange",
+            "TranslationDirection",
+            "RotationAxis",
+            "Overflow",
+            "ModulationType",
+            "LatchControlModes",
             "FeatureMap",
             "ClusterRevision"
         ],
@@ -269,7 +297,8 @@
         ],
         "Descriptor": [
             "ClusterRevision",
-            "FeatureMap"
+            "FeatureMap",
+            "EndpointUniqueID"
         ],
         "Device Energy Management": [
             "ESAType",
@@ -361,7 +390,7 @@
             "UpTime",
             "TotalOperationalHours",
             "BootReason",
-            "FeatureMap",
+            "DeviceLoadStatus",
             "ClusterRevision"
         ],
         "Group Key Management": [
@@ -371,6 +400,7 @@
             "FeatureMap"
         ],
         "ICD Management": [
+            "ClusterRevision",
             "IdleModeDuration",
             "ActiveModeDuration",
             "ActiveModeThreshold",
@@ -386,6 +416,16 @@
             "FeatureMap",
             "IdentifyTime",
             "IdentifyType"
+        ],
+        "Illuminance Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
+        ],
+        "Relative Humidity Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
         ],
         "Joint Fabric Datastore": [
             "Status"
@@ -413,13 +453,17 @@
             "SupportedWiFiBands",
             "ThreadVersion"
         ],
+        "Network Identity Management": [
+            "ClientTableSize",
+            "ClusterRevision",
+            "FeatureMap"
+        ],
         "Occupancy Sensing": [
             "HoldTimeLimits",
             "HoldTime",
             "PIROccupiedToUnoccupiedDelay",
             "UltrasonicOccupiedToUnoccupiedDelay",
             "PhysicalContactOccupiedToUnoccupiedDelay",
-            "FeatureMap",
             "ClusterRevision"
         ],
         "Operational Credentials": [
@@ -429,6 +473,16 @@
             "FeatureMap",
             "ClusterRevision"
         ],
+        "OTA Software Update Requestor": [
+            "UpdatePossible",
+            "UpdateState",
+            "UpdateStateProgress",
+            "FeatureMap",
+            "ClusterRevision"
+        ],
+        "Scenes Management": [
+            "ClusterRevision"
+        ],
         "Software Diagnostics": [
             "ClusterRevision",
             "CurrentHeapFree",
@@ -436,6 +490,10 @@
             "CurrentHeapUsed",
             "FeatureMap",
             "ThreadMetrics"
+        ],
+        "Switch": [
+            "ClusterRevision",
+            "CurrentPosition"
         ],
         "Unit Testing": [
             "struct_attr",
@@ -449,6 +507,16 @@
             "LabelList",
             "ClusterRevision",
             "FeatureMap"
+        ],
+        "Flow Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
+        ],
+        "Temperature Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
         ],
         "Thread Border Router Management": [
             "BorderRouterName",
@@ -563,10 +631,12 @@
             "LocalTime",
             "Granularity",
             "TimeZoneListMaxSize",
-            "DSTOffsetListMaxSize"
+            "DSTOffsetListMaxSize",
+            "ClusterRevision"
         ],
         "Temperature Control": [
-            "SupportedTemperatureLevels"
+            "SupportedTemperatureLevels",
+            "ClusterRevision"
         ],
         "Dishwasher Mode": [
             "SupportedModes",
@@ -588,7 +658,8 @@
             "SupportedWatts",
             "SelectedWattIndex",
             "WattRating",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Laundry Washer Mode": [
             "SupportedModes",
@@ -638,7 +709,8 @@
             "InPlaceIndicator",
             "LastChangedTime",
             "ReplacementProductList",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "HEPA Filter Monitoring": [
             "Condition",
@@ -647,7 +719,8 @@
             "InPlaceIndicator",
             "LastChangedTime",
             "ReplacementProductList",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Carbon Monoxide Concentration Measurement": [
             "MeasuredValue",
@@ -791,6 +864,7 @@
         ],
         "Air Quality": [
             "AirQuality",
+            "ClusterRevision",
             "FeatureMap"
         ],
         "Electrical Energy Measurement": [
@@ -806,6 +880,15 @@
             "LocalGenerationAvailable",
             "CurrentConditions",
             "ForecastConditions",
+            "FeatureMap"
+        ],
+        "Electrical Protection Alarm": [
+            "OverLoadRating",
+            "OverVoltageRating",
+            "SurgeProtectionRating",
+            "ShortCircuitRating",
+            "ResidualCurrentRating",
+            "ArcFaultRating",
             "FeatureMap"
         ],
         "Electrical Power Measurement": [
@@ -837,10 +920,23 @@
             "ClusterRevision"
         ],
         "Valve Configuration and Control": [
-            "RemainingDuration"
+            "OpenDuration",
+            "AutoCloseTime",
+            "RemainingDuration",
+            "CurrentState",
+            "TargetState",
+            "CurrentLevel",
+            "TargetLevel",
+            "ValveFault",
+            "ClusterRevision"
         ],
         "Boolean State Configuration": [
-            "CurrentSensitivityLevel"
+            "AlarmsActive",
+            "AlarmsEnabled",
+            "AlarmsSuppressed",
+            "ClusterRevision",
+            "CurrentSensitivityLevel",
+            "SensorFault"
         ],
         "Water Heater Management": [
             "HeaterTypes",
@@ -906,10 +1002,19 @@
             "LocalSnapshotRecordingEnabled",
             "StatusLightEnabled",
             "StatusLightBrightness",
+            "ImageRotationDiscreteAngles",
             "FeatureMap"
         ],
         "Camera AV Settings User Level Management": [
-            "MPTZPosition"
+            "FeatureMap",
+            "MPTZPosition",
+            "MaxPresets",
+            "ZoomMax",
+            "TiltMin",
+            "TiltMax",
+            "PanMin",
+            "PanMax",
+            "MovementState"
         ],
         "Fixed Label": [
             "LabelList",
@@ -923,6 +1028,7 @@
             "FeatureMap"
         ],
         "Unit Localization": [
+            "ClusterRevision",
             "TemperatureUnit"
         ],
         "Localization Configuration": [

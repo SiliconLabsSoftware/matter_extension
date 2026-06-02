@@ -1,7 +1,7 @@
 id: siwx917
 package: matter
 label: siwx917
-description: siwx917
+description: Provides the Matter platform implementation for Silicon Labs SiWx917 Wi-Fi devices.
 category: Matter|Core
 quality: production
 metadata:
@@ -17,7 +17,7 @@ include:
 - path: third_party/matter_sdk/src
 - path: third_party/matter_sdk/src/include
 - path: third_party/matter_sdk/src/lib
-- path: third_party/matter_sdk/src/platform/silabs/SiWx917
+- path: third_party/matter_sdk/src/platform/silabs/SiWx
 - path: third_party/matter_sdk/src/platform/silabs/wifi
 - path: third_party/nlassert/include
 - path: third_party/nlio/include
@@ -27,7 +27,6 @@ include:
   - path: DeviceInfoProvider.h
   - path: ConnectivityManager.h
   - path: GeneralUtils.h
-  - path: AttributeList.h
   - path: DiagnosticDataProvider.h
   - path: PlatformManager.h
   - path: KeyValueStoreManager.h
@@ -39,6 +38,7 @@ include:
   - path: NetworkCommissioning.h
   - path: CHIPDeviceConfig.h
   - path: DeviceControlServer.h
+  - path: DefaultTimerDelegate.h
   - path: DeviceInstanceInfoProvider.h
   - path: CHIPDeviceLayer.h
   - path: ConfigurationManager.h
@@ -99,8 +99,7 @@ include:
   - path: CompatClusterObjects.h
 - path: third_party/matter_sdk/src/lwip/silabs
   file_list:
-  - path: lwipopts-wf200.h
-  - path: lwipopts-rs911x.h
+  - path: lwipopts-siwx.h
   - path: lwippools.h
   - path: lwipopts.h
 - path: third_party/matter_sdk/examples/platform/silabs
@@ -110,10 +109,10 @@ include:
   - path: SoftwareFaultReports.h
   - path: silabs_utils.h
   - path: MatterConfig.h
+  - path: CRTPHelpers.h
   - path: LEDWidget.h
   - path: sl_systemview_config.h
   - path: PigweedLogger.h
-  - path: FreeRTOSConfig.h
   - path: Rpc.h
   - path: silabs_creds.h
   - path: MemMonitoring.h
@@ -123,11 +122,10 @@ include:
   file_list:
   - path: SilabsPlatformBase.h
   - path: SilabsPlatform.h
-- path: third_party/matter_sdk/src/platform/silabs/rs911x
+- path: third_party/matter_sdk/src/platform/silabs/SiWx/ble
   file_list:
   - path: ble_config.h
-  - path: wfx_sl_ble_init.h
-  - path: rsi_ble_config.h
+  - path: sl_si91x_ble_init.h
 - path: third_party/matter_sdk/src/platform
   file_list:
   - path: DeviceSafeQueue.h
@@ -158,7 +156,7 @@ include:
   - path: SystemTimeSupport.h
   - path: GenericThreadStackManagerImpl_FreeRTOS.h
   - path: GenericThreadStackManagerImpl_FreeRTOS.hpp
-- path: third_party/matter_sdk/src/platform/silabs/SiWx917
+- path: third_party/matter_sdk/src/platform/silabs/SiWx
   file_list:
   - path: siwx917-chip-psa-config.h
   - path: siwx917-chip-mbedtls-config.h
@@ -174,6 +172,7 @@ include:
 source:
 - path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
 - path: third_party/matter_sdk/src/platform/SingletonConfigurationManager.cpp
+- path: third_party/matter_sdk/src/platform/silabs/ChipDie.cpp
 - path: third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
 - path: third_party/matter_sdk/src/platform/silabs/ConfigurationManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/ConnectivityManagerImpl_WIFI.cpp
@@ -182,16 +181,16 @@ source:
 - path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
 - path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
 - path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
-- path: third_party/matter_sdk/src/platform/silabs/SiWx917/OTAImageProcessorImpl.cpp
+- path: third_party/matter_sdk/src/platform/silabs/SiWx/OTAImageProcessorImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/PlatformManagerImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/WiseMcuSpam.cpp
 - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction/SilabsPlatform.cpp
-- path: third_party/matter_sdk/src/platform/silabs/rs911x/BLEManagerImpl.cpp
-- path: third_party/matter_sdk/src/platform/silabs/rs911x/wfx_sl_ble_init.cpp
+- path: third_party/matter_sdk/src/platform/silabs/SiWx/ble/BLEManagerImpl.cpp
+- path: third_party/matter_sdk/src/platform/silabs/SiWx/ble/sl_si91x_ble_init.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp
 - path: third_party/matter_sdk/src/platform/silabs/wifi/WifiInterface.cpp
-
+- path: third_party/matter_sdk/src/platform/silabs/ChipDie.cpp
 define:
   - name: CHIP_HAVE_CONFIG_H
     value: "1"

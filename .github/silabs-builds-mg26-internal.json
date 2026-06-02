@@ -2,8 +2,12 @@
     "standard": {
         "default": [
             {
-                "boards": [],
+                "boards": ["brd2709a"],
                 "arguments": [""]
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     },
@@ -19,15 +23,38 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "zigbee-matter-light":  [
+        "zigbee_light":  [
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
             },
             {
                 "boards": ["brd2709a"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+            }
+        ],
+        "platform_template": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"] 
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+            },
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
             }
         ]
-    } 
+    },
+    "custom-sqa": {
+        "zigbee_light": [
+            {
+                "boards": ["brd2709a"],
+                "arguments": ["--output_suffix cmp-concurrent-ota-2", "-pids application", "--with_app matter_zigbee_concurrent",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ]
+    }
 }

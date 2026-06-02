@@ -2,7 +2,7 @@ id: matter_shell
 package: matter
 label: Matter Shell
 description: >
-  Enables the Matter Shell (CHIP Shell) functionality
+  Enables the Matter Shell (CHIP Shell), a command-line interface for interacting with and inspecting Matter device state at runtime.
 category: Stack|Shell
 quality: production
 metadata:
@@ -40,6 +40,10 @@ include:
     file_list:
       - path: ChipShellCollection.h
       - path: Globals.h
+  - path: third_party/matter_sdk/examples/light-switch-app/silabs/include
+    condition: [matter_light_switch]
+    file_list:
+      - path: ShellCommands.h
   - path: third_party/matter_sdk/examples/lock-app/silabs/include
     condition: [matter_lock]
     file_list:
@@ -57,9 +61,11 @@ include:
     file_list:
       - path: TracingShellCommands.h
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble
-    condition: [matter_ble_side_channel]
     file_list:
       - path: BLEShellCommands.h
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/im
+    file_list:
+      - path: IMShellCommands.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/MatterShell.cpp
@@ -93,6 +99,8 @@ source:
     condition: [matter_multi_image_ota]
   - path: third_party/matter_sdk/src/lib/shell/commands/Ota.cpp
     condition: [matter_platform_siwx917]
+  - path: third_party/matter_sdk/examples/light-switch-app/silabs/src/ShellCommands.cpp
+    condition: [matter_light_switch]
   - path: third_party/matter_sdk/examples/lock-app/silabs/src/EventHandlerLibShell.cpp
     condition: [matter_lock]
   - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/EventHandlerLibShell.cpp
@@ -102,7 +110,7 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/tracing/TracingShellCommands.cpp
     condition: [matter_tracing]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble/BLEShellCommands.cpp
-    condition: [matter_ble_side_channel]
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/im/IMShellCommands.cpp
     
 define:
   - name: ENABLE_CHIP_SHELL
