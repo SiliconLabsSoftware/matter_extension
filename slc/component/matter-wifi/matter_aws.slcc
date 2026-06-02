@@ -47,6 +47,7 @@ include:
       - path: MatterAws.h
       - path: MatterAwsConfig.h
       - path: MatterAwsControl.h
+      - path: MatterAwsDoorLockRemote.h
       - path: MatterAwsNvmCert.h
   - path: third_party/matter_sdk/src/platform/silabs/mqtt/stack
     file_list:
