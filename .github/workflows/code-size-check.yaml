@@ -110,6 +110,7 @@ jobs:
               shell: bash
               run: |
                   ./slc/script/code_size_result.sh ./current/ current_gcc.csv code_size_gcc
+                  ./slc/script/code_size_result.sh ./out/     target_gcc.csv  code_size_gcc
                   cat ./current_gcc.csv
                   cat ./target_gcc.csv
                   python3 ./slc/script/code_size_diff_check.py ./current_gcc.csv ./target_gcc.csv --toolchain gcc \
@@ -121,6 +122,7 @@ jobs:
               shell: bash
               run: |
                   ./slc/script/code_size_result.sh ./current/ current_llvm.csv code_size_llvm
+                  ./slc/script/code_size_result.sh ./out/     target_llvm.csv  code_size_llvm
                   cat ./current_llvm.csv
                   cat ./target_llvm.csv
                   python3 ./slc/script/code_size_diff_check.py ./current_llvm.csv ./target_llvm.csv --toolchain llvm \
