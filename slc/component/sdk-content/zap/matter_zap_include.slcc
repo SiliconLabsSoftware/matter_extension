@@ -14,20 +14,21 @@ include:
     file_list:
       - path: clusters/Pm25ConcentrationMeasurement/AttributeIds.h
       - path: clusters/Pm25ConcentrationMeasurement/Attributes.h
-      - path: clusters/Pm25ConcentrationMeasurement/Attributes.ipp
       - path: clusters/Pm25ConcentrationMeasurement/ClusterId.h
       - path: clusters/Pm25ConcentrationMeasurement/CommandIds.h
       - path: clusters/Pm25ConcentrationMeasurement/Commands.h
-      - path: clusters/Pm25ConcentrationMeasurement/Commands.ipp
       - path: clusters/Pm25ConcentrationMeasurement/Enums.h
       - path: clusters/Pm25ConcentrationMeasurement/EnumsCheck.h
       - path: clusters/Pm25ConcentrationMeasurement/EventIds.h
       - path: clusters/Pm25ConcentrationMeasurement/Events.h
-      - path: clusters/Pm25ConcentrationMeasurement/Events.ipp
       - path: clusters/Pm25ConcentrationMeasurement/Ids.h
       - path: clusters/Pm25ConcentrationMeasurement/Metadata.h
       - path: clusters/Pm25ConcentrationMeasurement/MetadataProvider.h
       - path: clusters/Pm25ConcentrationMeasurement/Structs.h
-      - path: clusters/Pm25ConcentrationMeasurement/Structs.ipp
+source:
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm25ConcentrationMeasurement/Attributes.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm25ConcentrationMeasurement/Commands.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm25ConcentrationMeasurement/Events.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common/clusters/Pm25ConcentrationMeasurement/Structs.ipp
 ui_hints:
     visibility: never
