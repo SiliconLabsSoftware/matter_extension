@@ -15,8 +15,13 @@ provides:
 conflicts:
   - name: matter_uart
 
+requires:
+  - name: cpc_secondary
+
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/matter_cpc.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/cpc_shell_interface.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/cpc_shell_interface.hpp
 
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
