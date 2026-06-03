@@ -19,5 +19,3 @@ config_file:
     file_id: fan_control_config
 provides:
   - name: matter_fan_control_app
-ui_hints:
-  visibility: never
