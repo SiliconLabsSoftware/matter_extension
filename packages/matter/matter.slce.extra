@@ -265,6 +265,7 @@ components:
   - matter_test_cluster
   - matter_test_event_trigger
   - matter_testing
+  - matter_tests
   - matter_thermostat
   - matter_thermostat_app
   - matter_thermostat_user_interface_configuration
@@ -868,6 +869,7 @@ extra_files:
   - slc/component/matter-platform/utils/matter_performance_testing.slcc
   - slc/component/matter-platform/utils/matter_syscall_stubs.slcc
   - slc/component/matter-platform/utils/matter_test_event_trigger.slcc
+  - slc/component/matter-platform/utils/matter_tests.slcc
   - slc/component/matter-platform/wstk-leds/matter_leds.slcc
   - slc/component/matter-platform/wstk-leds/matter_rgb_leds.slcc
   - slc/component/matter-thread/matter_multipan.slcc
