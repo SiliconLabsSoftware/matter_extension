@@ -65,6 +65,10 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-lto", "--with toolchain_llvm_lto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
             }
         ],
         "lock_app": [
