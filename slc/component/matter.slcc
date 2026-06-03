@@ -59,7 +59,7 @@ toolchain_settings:
     value: "-femulated-tls"
   - option: llvm_linker_option
     value: "--rtlib=compiler-rt"
-    
+
 provides:
   - name: matter
 define:
@@ -120,7 +120,7 @@ requires:
   - name: matter_ot_mbedtls_override
   - name: matter_server_cluster
   - name: matter_syscall_stubs
-    unless: [matter_platform_siwx917]
+    condition: [matter_efr32]
   - name: matter_nlassert
   - name: matter_nlio
   - name: matter_includes
@@ -132,7 +132,7 @@ requires:
   - name: matter_codegen_data_model_sources
     condition: [matter_codegen_dm]
   - name: matter_code_driven_data_model_sources
-    condition: [matter_code_driven_dm]  
+    condition: [matter_code_driven_dm]
   - name: matter_data_model
   - name: matter_data_model_provider
   - name: matter_encode_decode
