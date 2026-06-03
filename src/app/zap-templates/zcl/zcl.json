@@ -49,6 +49,9 @@
         "diagnostic-logs-cluster.xml",
         "dishwasher-alarm-cluster.xml",
         "dishwasher-mode-cluster.xml",
+        "dynamic-lighting-cluster.xml",
+        "electrical-distribution-cluster.xml",
+        "electrical-protection-alarm-cluster.xml",
         "groupcast-cluster.xml",
         "humidistat-cluster.xml",
         "microwave-oven-mode-cluster.xml",
@@ -91,6 +94,7 @@
         "messages-cluster.xml",
         "mode-base-cluster.xml",
         "mode-select-cluster.xml",
+        "network-identity-management-cluster.xml",
         "proximity-ranging-cluster.xml",
         "push-av-stream-transport-cluster.xml",
         "semantic-tag-namespace-enums.xml",
@@ -135,7 +139,6 @@
         "thread-network-directory-cluster.xml",
         "time-format-localization-cluster.xml",
         "time-synchronization-cluster.xml",
-        "timer-cluster.xml",
         "tls-certificate-management-cluster.xml",
         "tls-client-management-cluster.xml",
         "user-label-cluster.xml",
@@ -259,8 +262,16 @@
         "Closure Dimension": [
             "CurrentState",
             "TargetState",
+            "Resolution",
+            "StepValue",
+            "Unit",
             "UnitRange",
             "LimitRange",
+            "TranslationDirection",
+            "RotationAxis",
+            "Overflow",
+            "ModulationType",
+            "LatchControlModes",
             "FeatureMap",
             "ClusterRevision"
         ],
@@ -442,6 +453,11 @@
             "SupportedWiFiBands",
             "ThreadVersion"
         ],
+        "Network Identity Management": [
+            "ClientTableSize",
+            "ClusterRevision",
+            "FeatureMap"
+        ],
         "Occupancy Sensing": [
             "HoldTimeLimits",
             "HoldTime",
@@ -454,6 +470,13 @@
             "SupportedFabrics",
             "CommissionedFabrics",
             "CurrentFabricIndex",
+            "FeatureMap",
+            "ClusterRevision"
+        ],
+        "OTA Software Update Requestor": [
+            "UpdatePossible",
+            "UpdateState",
+            "UpdateStateProgress",
             "FeatureMap",
             "ClusterRevision"
         ],
@@ -484,6 +507,11 @@
             "LabelList",
             "ClusterRevision",
             "FeatureMap"
+        ],
+        "Flow Measurement": [
+            "ClusterRevision",
+            "FeatureMap",
+            "MeasuredValue"
         ],
         "Temperature Measurement": [
             "ClusterRevision",
@@ -630,7 +658,8 @@
             "SupportedWatts",
             "SelectedWattIndex",
             "WattRating",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Laundry Washer Mode": [
             "SupportedModes",
@@ -853,6 +882,15 @@
             "ForecastConditions",
             "FeatureMap"
         ],
+        "Electrical Protection Alarm": [
+            "OverLoadRating",
+            "OverVoltageRating",
+            "SurgeProtectionRating",
+            "ShortCircuitRating",
+            "ResidualCurrentRating",
+            "ArcFaultRating",
+            "FeatureMap"
+        ],
         "Electrical Power Measurement": [
             "PowerMode",
             "NumberOfMeasurementTypes",
@@ -964,6 +1002,7 @@
             "LocalSnapshotRecordingEnabled",
             "StatusLightEnabled",
             "StatusLightBrightness",
+            "ImageRotationDiscreteAngles",
             "FeatureMap"
         ],
         "Camera AV Settings User Level Management": [

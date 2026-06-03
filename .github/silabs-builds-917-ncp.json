@@ -36,7 +36,7 @@
         ]
     },
     "custom-sqa": {
-        "lock-app": [
+        "lock_app": [
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",

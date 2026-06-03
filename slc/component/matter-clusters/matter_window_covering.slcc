@@ -18,6 +18,8 @@ include:
     file_list:
       - path: window-covering-delegate.h
       - path: window-covering-server.h
+      - path: WindowCoveringCluster.h
+      - path: WindowCoveringDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_window_covering

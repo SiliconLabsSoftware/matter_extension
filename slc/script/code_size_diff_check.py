@@ -87,8 +87,8 @@ def main():
         sys.exit(1)
     
     # Thresholds
-    FLASH_THRESHOLD_PCT = 1.0
-    RAM_THRESHOLD_PCT = 2.0
+    FLASH_THRESHOLD_PCT = 0.2 # Allow 0.2% increase in flash size (for a 1MB baseline, this is 2KB)
+    RAM_THRESHOLD_PCT = 1.0
     
     print(f"Comparing current build ({Path(current_file).name}) against baseline ({Path(baseline_file).name})")
     print(f"Thresholds: Flash > {FLASH_THRESHOLD_PCT}%, RAM > {RAM_THRESHOLD_PCT}%")

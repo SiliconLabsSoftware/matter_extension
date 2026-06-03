@@ -57,7 +57,7 @@ jobs:
             This PR updates the Matter Extension and SDK versions based on the workflow inputs.
             Ran the following command to update the version:
             ```
-            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} readme=${{ inputs.update_readme }}
+            python3 slc/script/update_version.py ${{ inputs.extension_version }} ${{ inputs.sdk_version }} ${{ inputs.wiseconnect_version }} readme=${{ inputs.update_readme }}
             ```
 
             - Matter Extension version: `${{ inputs.extension_version }}`

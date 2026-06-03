@@ -17,7 +17,7 @@ jobs:
       - id: branches
         run: |
           if [ "$EVENT_NAME" == "schedule" ]; then
-            echo 'value=["main","release_2.8-1.5"]' >> $GITHUB_OUTPUT
+            echo 'value=["main","release_2.9-1.6"]' >> $GITHUB_OUTPUT
           else
             echo "value=[\"$REF_NAME\"]" >> $GITHUB_OUTPUT
           fi

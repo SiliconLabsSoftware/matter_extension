@@ -216,11 +216,16 @@ for clustercomponentname in sorted(cluster_data.keys()):
         if len(current_include_data)>1:
             include = {}
             for i in range(len(current_include_data)):
-                if current_include_data[i]["path"] not in cluster_data[clustercomponentname]["include"]:
-                    headers = []
-                    for header in current_include_data[i]["file_list"]:
-                        headers.append(header["path"])
-                    include = {"path": current_include_data[i]["path"], "file_list": headers}
+                inc_path = current_include_data[i]["path"]
+                if not os.path.isdir(inc_path) or inc_path == cluster_data[clustercomponentname]["include"]:
+                    continue
+                headers = []
+                for header in current_include_data[i]["file_list"]:
+                    if not os.path.isfile(os.path.join(inc_path, header["path"])):
+                        continue
+                    headers.append(header["path"])
+                if headers:
+                    include = {"path": inc_path, "file_list": headers}
                     includes.append(include)
         
         #merge with extracted define data and remove duplicates
@@ -281,8 +286,15 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if len(source_data) > 0:
         filedata.append("source:")
         for src in sorted(source_data,key=str.casefold):
+            if os.path.basename(src) == "GenericFaultTestEventTriggerHandler.cpp":
+                continue
             path = "  - path: {}".format(src)
             filedata.append(path)
+            if os.path.basename(src) == "CodegenIntegration.cpp":
+                filedata.append("    unless: [matter_code_driven_dm]")
+            if os.path.basename(src) == "CodegenInstance.cpp":
+                filedata.append("    unless: [matter_code_driven_dm]")
+
 
     if len(includes) > 0:
         filedata.append("include:")
@@ -291,8 +303,14 @@ for clustercomponentname in sorted(cluster_data.keys()):
             filedata.append(path)
             filedata.append("    file_list:")
             for header in sorted(include["file_list"],key=str.casefold):
+                if os.path.basename(header) == "GenericFaultTestEventTriggerHandler.h":
+                    continue
                 path = "      - path: {}".format(header)
                 filedata.append(path)
+                if os.path.basename(header) == "CodegenIntegration.h":
+                    filedata.append("        unless: [matter_code_driven_dm]")
+                if os.path.basename(header) == "CodegenInstance.h":
+                    filedata.append("        unless: [matter_code_driven_dm]")
 
     if config_file_data:
         filedata.append("config_file:")
