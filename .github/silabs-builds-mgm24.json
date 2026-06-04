@@ -70,11 +70,6 @@
             },
             {
                 "boards": ["brd4316a"],
-                "arguments": ["--output_suffix ota-3", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
-            },
-            {
-                "boards": ["brd4316a"],
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
             },
