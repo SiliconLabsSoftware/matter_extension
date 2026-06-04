@@ -27,8 +27,6 @@ enabled_variants:
 # Apps that should appear in demos xml but not in templates xml
 templates_exclude:
   - matter_thread_soc_zigbee_light_series_2_freertos
-  - matter_thread_soc_lighting_app_trustzone_ns_freertos
-  - matter_thread_soc_lighting_app_trustzone_s_freertos
   - matter_thread_soc_code_size_sensor_freertos
 
 # Apps that should appear in templates xml but not in demos xml (as they are not built in ci)
