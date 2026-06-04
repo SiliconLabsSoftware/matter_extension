@@ -127,6 +127,10 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "light_switch_app": [
@@ -144,6 +148,10 @@
                 "boards": ["brd1019a,SIMG301M113WIH"],
                 "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto","-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4408a"],
+                "arguments": ["--output_suffix sit-200", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "zigbee_light":  [
@@ -270,6 +278,10 @@
                               "--with toolchain_llvm_lto","--with_app matter_peripherals",
                               "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
+                "arguments": ["--output_suffix peripherals-icd-sit-200","--with_app matter_peripherals,matter_icd_core", "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
     }

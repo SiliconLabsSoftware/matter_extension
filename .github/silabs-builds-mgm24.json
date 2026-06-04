@@ -78,6 +78,15 @@
                 "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
+        ],
+        "light_switch_app": [
+            {
+                "boards": ["brd4316a"],
+                "arguments": [
+                    "--output_suffix sit-200",
+                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                ]
+            }
         ]
     } 
 }

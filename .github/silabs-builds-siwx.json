@@ -116,6 +116,11 @@
             },
             {
                 "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+            },
+            {
+                "boards": ["brd4338a"],    
                 "arguments": ["--output_suffix clock-config-clk-sleep-timer-ota-2",
                               "'--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'",
                               "--with_app sl_si91x_sleep_timer_clock_selection"]
@@ -153,9 +158,8 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix low-power",
-                              "--with matter_platform_low_power",
-                              "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "multi_sensor_app" :[
@@ -164,6 +168,12 @@
                 "arguments": ["--output_suffix low-power",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd4343a"],
+                "arguments": ["--output_suffix sit-200",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                             ]
             }
         ],
         "window_app" :[
@@ -191,6 +201,19 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix peripherals-icd-ota-2", "--with_app matter_peripherals_917soc,matter_icd_core", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix  peripherals-icd-sit-200","--with_app matter_peripherals_917soc,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+            }
+        ],
+        "window_app": [
+            {
+                "boards": ["brd4342a"],
+                "arguments": [
+                    "--output_suffix sit-200",
+                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                ]
             }
         ]
     }
