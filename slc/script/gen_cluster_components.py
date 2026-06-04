@@ -259,11 +259,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
     
     label_str = "label: {}".format(label)
     filedata.append(label_str)
-    # special case as only component with experimental quality
-    if clustername == "scenes":
-        filedata.append("quality: experimental")
-    else:
-        filedata.append("quality: production")
+    filedata.append("quality: production")
 
     filedata.append("metadata:")
     filedata.append("  sbom:")
