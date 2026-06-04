@@ -210,6 +210,10 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals-ota-3","--with_app matter_peripherals", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd-sit-200","--with_app matter_peripherals,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ],
         "closure_app": [
