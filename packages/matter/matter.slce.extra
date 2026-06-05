@@ -318,6 +318,7 @@ components:
   - siwx917_common
   - siwx917_ncp
   - siwx917_ncp_brd4357a
+  - siwx917_ncp_brd4357c
   - siwx917_tinycrypt
   - syscalls_stub
   - test_paa_store
@@ -880,6 +881,7 @@ extra_files:
   - slc/component/matter-thread/matter_thread_cli.slcc
   - slc/component/matter-wifi/917-ncp/siwx917_ncp.slcc
   - slc/component/matter-wifi/917-ncp/siwx917_ncp_brd4357a.slcc
+  - slc/component/matter-wifi/917-ncp/siwx917_ncp_brd4357c.slcc
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/matter_aws.slcc

@@ -93,12 +93,14 @@ def recurse_dir(file_or_dir):
                 board_type = "917-ncp"
             elif board_type == "brd4357a":
                 board_type = "917-ncp-brd4357a"
+            elif board_type == "brd4357c":
+                board_type = "917-ncp-brd4357c"
             elif board_type == "soc" or board_type == "example" or board_type == "siwx":
                 board_type = "917-soc"
 
 
             if brd not in demos_map['demos'].keys():
-                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {'917-soc': [], '917-ncp': [], '917-ncp-brd4357a': []}}
+                demos_map['demos'][brd] = {'OpenThread': [], 'WiFi': {'917-soc': [], '917-ncp': [], '917-ncp-brd4357a': [], '917-ncp-brd4357c': []}}
 
             rel_path = os.path.relpath(file_or_dir, out_folder_dir)
             
@@ -264,12 +266,15 @@ for brd, val in demos_map['demos'].items():
                     demo_name_ = ' '.join(elem.capitalize() for elem in demo_name_.split())
                     demo_name = demo_name.strip()
                     
-                    # Handle brd4357a suffix for name and label (check if -brd4357a is in path)
+                    # Handle board-specific NCP suffixes for name and label.
                     name_suffix = ""
                     label_suffix = ""
                     if "-brd4357a" in demo_path:
                         name_suffix = "_brd4357a"
                         label_suffix = " brd4357a"
+                    elif "-brd4357c" in demo_path:
+                        name_suffix = "_brd4357c"
+                        label_suffix = " brd4357c"
                     
                     demo = ET.SubElement(demos, 'demo')
                     blurbProp = ET.SubElement(demo, 'property')
