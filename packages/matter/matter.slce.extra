@@ -244,6 +244,7 @@ components:
   - matter_rgb_leds
   - matter_sample_mei
   - matter_scenes
+  - matter_scenes_support
   - matter_segger_rtt
   - matter_service_area
   - matter_shell
@@ -666,6 +667,7 @@ extra_files:
   - slc/component/matter-clusters/matter_resource_monitoring.slcc
   - slc/component/matter-clusters/matter_sample_mei.slcc
   - slc/component/matter-clusters/matter_scenes.slcc
+  - slc/component/matter-clusters/matter_scenes_support.slcc
   - slc/component/matter-clusters/matter_service_area.slcc
   - slc/component/matter-clusters/matter_smoke_co_alarm.slcc
   - slc/component/matter-clusters/matter_software_diagnostics.slcc
@@ -966,10 +968,7 @@ extra_files:
   - src/app/zap-templates/templates/app/slc_compatibility/event-ids.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/ids.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/metadata.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Groups.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureControl.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureMeasurement.zapt
+  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config.h.zapt
   - src/app/zap-templates/zcl/zcl.json
   - tools/console/README.md
   - tools/console/console_log_parser.py
