@@ -81,15 +81,12 @@ component:
   - { id: matter }
   - { id: matter_ota_support }
   - { id: matter_ota_requestor }
-  - { id: matter_software_diagnostics }
   - { id: matter_access_control }
   - { id: matter_general_commissioning }
   - { id: matter_identify }
   - { id: matter_general_diagnostics }
   - { id: matter_color_control }
   - { id: matter_level_control }
-  - { id: matter_user_label }
-  - { id: matter_fixed_label }
   - { id: matter_shell }
   - { id: matter_power_source }
   - { id: app_common }
@@ -105,7 +102,6 @@ component:
   - { id: matter_buttons }
   - { id: matter_configuration_over_swo }
   - { id: matter_ble }
-  - { id: matter_thread_network_diagnostics }
   - { id: matter_thread }
   - { id: matter_leds }
 

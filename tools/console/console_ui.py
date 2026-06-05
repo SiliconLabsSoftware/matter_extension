@@ -6,8 +6,9 @@ This module contains all Qt UI components for the Silicon Labs Matter Console
 application, including the main window, dialogs, and widgets.
 """
 
+import glob
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
 
 from PyQt5.QtCore import QObject, QTimer, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFont, QTextCharFormat, QTextCursor
@@ -21,12 +22,39 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QSplitter,
     QTextEdit,
     QVBoxLayout,
     QWidget,
 )
+
+
+# Light purple color used to render Zigbee ([ZB]) log entries.
+ZIGBEE_COLOR = "#C77DFF"
+
+# Glob patterns matching plausible serial ports for a Matter project under /dev/.
+SERIAL_PORT_GLOBS = (
+    "/dev/cu.*",
+    "/dev/tty.usb*",
+    "/dev/ttyACM*",
+)
+
+
+def find_available_serial_ports() -> List[str]:
+    """
+    Scan /dev/ for serial port device files plausible for a Matter project.
+    
+    Matches files against ``cu.*``, ``tty.usb*`` and ``ttyACM*`` patterns.
+    
+    Returns:
+        Sorted list of unique device paths.
+    """
+    ports: set = set()
+    for pattern in SERIAL_PORT_GLOBS:
+        ports.update(glob.glob(pattern))
+    return sorted(ports)
 
 
 class SignalEmitter(QObject):
@@ -74,7 +102,8 @@ class ConsoleUI(QMainWindow):
             'warn': True,
             'info': True,
             'detail': True,
-            'silabs': True
+            'silabs': True,
+            'zigbee': True
         }
         
         # Module filtering state
@@ -106,11 +135,19 @@ class ConsoleUI(QMainWindow):
         self.on_disconnect_callback = None
         self.on_send_command_callback = None
         self.on_settings_changed_callback = None
+        self.on_port_changed_callback = None
         
         self.init_ui()
         self.setup_connections()
     
-    def set_callbacks(self, on_connect, on_disconnect, on_send_command, on_settings_changed=None) -> None:
+    def set_callbacks(
+        self,
+        on_connect,
+        on_disconnect,
+        on_send_command,
+        on_settings_changed=None,
+        on_port_changed=None,
+    ) -> None:
         """
         Set callback functions for user actions.
         
@@ -119,15 +156,18 @@ class ConsoleUI(QMainWindow):
             on_disconnect: Callback for disconnect action.
             on_send_command: Callback for sending commands.
             on_settings_changed: Callback for serial settings changes.
+            on_port_changed: Callback invoked with a new port string when the
+                user selects a port (e.g. from the port selection dialog).
         """
         self.on_connect_callback = on_connect
         self.on_disconnect_callback = on_disconnect
         self.on_send_command_callback = on_send_command
         self.on_settings_changed_callback = on_settings_changed
+        self.on_port_changed_callback = on_port_changed
     
     def init_ui(self) -> None:
         """Initialize the Qt UI components."""
-        self.setWindowTitle(f"Silicon Labs Console - {self.port}")
+        self._update_window_title()
         self.setGeometry(100, 100, 1200, 800)
         
         # Central widget and layout
@@ -153,7 +193,17 @@ class ConsoleUI(QMainWindow):
         layout.addWidget(splitter)
         
         # Status bar
-        self.statusBar().showMessage(f"Ready - Not Connected to {self.port}")
+        if self.port:
+            self.statusBar().showMessage(f"Ready - Not Connected to {self.port}")
+        else:
+            self.statusBar().showMessage("Ready - No port selected. Click Connect to choose one.")
+    
+    def _update_window_title(self) -> None:
+        """Refresh the main window title to reflect the current port."""
+        if self.port:
+            self.setWindowTitle(f"Silicon Labs Console - {self.port}")
+        else:
+            self.setWindowTitle("Silicon Labs Console")
     
     def _create_log_terminal(self) -> QWidget:
         """Create the log terminal widget."""
@@ -232,6 +282,7 @@ class ConsoleUI(QMainWindow):
             ('info', '[info]', 50, '#d4d4d4'),
             ('detail', '[detail]', 60, '#aaaaaa'),
             ('silabs', '[silabs]', 60, '#6496ff'),
+            ('zigbee', '[ZB]', 50, ZIGBEE_COLOR),
         ]
         
         self.filter_buttons = {}
@@ -605,6 +656,8 @@ class ConsoleUI(QMainWindow):
             fmt.setForeground(QColor(255, 170, 0))
         elif category == 'silabs':
             fmt.setForeground(QColor(100, 150, 255))
+        elif category == 'zigbee':
+            fmt.setForeground(QColor(ZIGBEE_COLOR))
         elif category == 'detail':
             fmt.setForeground(QColor(170, 170, 170))
         else:
@@ -947,9 +1000,53 @@ class ConsoleUI(QMainWindow):
         if self.connected:
             if self.on_disconnect_callback:
                 self.on_disconnect_callback()
-        else:
-            if self.on_connect_callback:
-                self.on_connect_callback()
+            return
+        
+        # If no port is set yet, prompt the user to pick one.
+        if not self.port:
+            if not self.prompt_for_serial_port():
+                return
+        
+        if self.on_connect_callback:
+            self.on_connect_callback()
+    
+    def prompt_for_serial_port(self) -> bool:
+        """
+        Show a dialog letting the user pick a serial port from /dev/.
+        
+        Returns:
+            True if the user accepted a selection (and the port was updated),
+            False if the dialog was cancelled or no ports were available.
+        """
+        available_ports = find_available_serial_ports()
+        
+        if not available_ports:
+            QMessageBox.warning(
+                self,
+                "No Serial Ports Found",
+                "No serial ports were found under /dev/ matching "
+                "'cu.*', 'tty.usb*' or 'ttyACM*'.\n\n"
+                "Plug in a device and try again, or pass the port path on the "
+                "command line.",
+            )
+            return False
+        
+        dialog = PortSelectionDialog(available_ports, self)
+        if dialog.exec_() != QDialog.Accepted:
+            return False
+        
+        selected = dialog.get_selected_port()
+        if not selected:
+            return False
+        
+        self.port = selected
+        self._update_window_title()
+        
+        if self.on_port_changed_callback:
+            self.on_port_changed_callback(selected)
+        
+        self.statusBar().showMessage(f"Selected port: {selected}", 3000)
+        return True
     
     def set_connected_state(self, connected: bool) -> None:
         """
@@ -1533,3 +1630,135 @@ class SerialSettingsDialog(QDialog):
             'parity': self.parity_combo.currentData(),
             'flowcontrol': self.flowcontrol_combo.currentData()
         }
+
+
+class PortSelectionDialog(QDialog):
+    """Dialog for picking a serial port from the list of plausible /dev/ entries."""
+    
+    def __init__(self, ports: List[str], parent: Optional[QWidget] = None) -> None:
+        """
+        Initialize the port selection dialog.
+        
+        Args:
+            ports: Available serial port paths to offer in the combo box.
+            parent: Parent widget.
+        """
+        super().__init__(parent)
+        self._ports: List[str] = list(ports)
+        self.init_ui()
+    
+    def init_ui(self) -> None:
+        """Initialize the dialog UI."""
+        self.setWindowTitle("Select Serial Port")
+        self.setModal(True)
+        self.setMinimumWidth(420)
+        
+        layout = QVBoxLayout(self)
+        
+        title = QLabel("Select a serial port to connect to:")
+        title.setStyleSheet("font-weight: bold; font-size: 11pt; margin-bottom: 10px;")
+        layout.addWidget(title)
+        
+        hint = QLabel(
+            "Showing devices under /dev/ matching cu.*, tty.usb*, or ttyACM*."
+        )
+        hint.setStyleSheet("color: #aaaaaa; font-size: 9pt; margin-bottom: 10px;")
+        hint.setWordWrap(True)
+        layout.addWidget(hint)
+        
+        self.port_combo = QComboBox()
+        for port in self._ports:
+            self.port_combo.addItem(port, port)
+        self.port_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #3c3c3c;
+                color: white;
+                border: 1px solid #555;
+                padding: 5px 10px;
+                min-width: 300px;
+                font-size: 10pt;
+            }
+            QComboBox:hover {
+                border: 1px solid #0066cc;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 25px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-top: 6px solid #d4d4d4;
+                margin-right: 8px;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #3c3c3c;
+                color: white;
+                selection-background-color: #0066cc;
+                border: 1px solid #555;
+            }
+        """)
+        layout.addWidget(self.port_combo)
+        
+        separator = QLabel()
+        separator.setStyleSheet("background-color: #555; min-height: 1px; max-height: 1px; margin: 15px 0;")
+        layout.addWidget(separator)
+        
+        button_layout = QHBoxLayout()
+        button_layout.addStretch()
+        
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(self.reject)
+        cancel_btn.setStyleSheet("""
+            QPushButton {
+                padding: 6px 20px;
+                background-color: #555;
+                color: white;
+                border: 1px solid #666;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #666;
+            }
+        """)
+        button_layout.addWidget(cancel_btn)
+        
+        ok_btn = QPushButton("Connect")
+        ok_btn.clicked.connect(self.accept)
+        ok_btn.setDefault(True)
+        ok_btn.setStyleSheet("""
+            QPushButton {
+                padding: 6px 20px;
+                background-color: #0066cc;
+                color: white;
+                border: 1px solid #0066cc;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: #0077dd;
+            }
+        """)
+        button_layout.addWidget(ok_btn)
+        
+        layout.addLayout(button_layout)
+        
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #2b2b2b;
+                color: white;
+            }
+            QLabel {
+                color: white;
+            }
+        """)
+    
+    def get_selected_port(self) -> str:
+        """
+        Return the port chosen by the user.
+        
+        Returns:
+            The selected port path, or an empty string if none is selected.
+        """
+        data = self.port_combo.currentData()
+        return data if data else ""

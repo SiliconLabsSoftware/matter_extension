@@ -216,7 +216,7 @@ for clustercomponentname in sorted(cluster_data.keys()):
         if len(current_include_data)>1:
             include = {}
             for i in range(len(current_include_data)):
-                if current_include_data[i]["path"] not in cluster_data[clustercomponentname]["include"]:
+                if current_include_data[i]["path"] != cluster_data[clustercomponentname]["include"]:
                     headers = []
                     for header in current_include_data[i]["file_list"]:
                         headers.append(header["path"])
