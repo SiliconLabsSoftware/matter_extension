@@ -161,9 +161,9 @@ jobs:
         if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
         uses: ./.github/workflows/builder.yaml
         with:
-            json-file-path: './.github/silabs-builds-917-ncp.json'
+            json-file-path: './.github/silabs-builds-917-ncp-dual-stack.json'
             path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}_dual_stack_freertos.slcw
-            example-app: lock_app_dual_stack
+            example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917-dual-stack
 
