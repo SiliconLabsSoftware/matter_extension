@@ -158,7 +158,7 @@ jobs:
             platform: ncp-917
 
     ncp-917-dual-stack-build-job:
-        if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'full' }}
+        if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp.json'

@@ -92,7 +92,6 @@ jobs:
             example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             ncp-917-support: true
-            ncp-917-dual-stack-support: true
 
     build_thermostat_app:
         name: Build Thermostat App

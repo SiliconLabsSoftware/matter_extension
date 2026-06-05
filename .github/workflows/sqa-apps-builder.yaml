@@ -11,6 +11,7 @@ jobs:
             example-app: "lock_app"
             build-type: "custom-sqa"
             ncp-917-support: true
+            ncp-917-dual-stack-support: true
             mgm24-internal-support: false
             mgm26-internal-support: false
 
