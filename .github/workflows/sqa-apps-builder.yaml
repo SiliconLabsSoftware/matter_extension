@@ -2,6 +2,7 @@ name: Build SQA apps
 
 on:
     workflow_call:
+    workflow_dispatch:
 
 jobs:
     build_lock_app:
