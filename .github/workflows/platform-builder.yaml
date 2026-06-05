@@ -162,7 +162,7 @@ jobs:
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp.json'
-            path-to-example-app: slc/apps/lock_app/wifi/matter_wifi_917_ncp_lock_app_dual_stack_freertos.slcw
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}_dual_stack_freertos.slcw
             example-app: lock_app_dual_stack
             build-type: ${{ inputs.build-type }}
             platform: ncp-917-dual-stack
