@@ -33,6 +33,12 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix brd4357a-copy-sources", "--with_app siwx917_ncp_brd4357a", "--copy-sources"]
             }
+        ],
+        "lock_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
+            }
         ]
     },
     "custom-sqa": {
