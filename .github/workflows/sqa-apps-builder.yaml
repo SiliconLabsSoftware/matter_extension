@@ -6,6 +6,10 @@ on:
         branches:
             - test/dual_stack_aws_ci
 
+permissions:
+    contents: read
+    actions: write
+
 jobs:
     build_lock_app:
         name: Build Lock App
