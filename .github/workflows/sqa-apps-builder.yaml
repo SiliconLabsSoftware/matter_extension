@@ -2,7 +2,9 @@ name: Build SQA apps
 
 on:
     workflow_call:
-    workflow_dispatch:
+    push:
+        branches:
+            - test/dual_stack_aws_ci
 
 jobs:
     build_lock_app:
