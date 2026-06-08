@@ -217,6 +217,26 @@ include:
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
+      - path: clusters/AvAnalysis/AttributeIds.h
+      - path: clusters/AvAnalysis/Attributes.h
+      - path: clusters/AvAnalysis/Attributes.ipp
+      - path: clusters/AvAnalysis/ClusterId.h
+      - path: clusters/AvAnalysis/CommandIds.h
+      - path: clusters/AvAnalysis/Commands.h
+      - path: clusters/AvAnalysis/Commands.ipp
+      - path: clusters/AvAnalysis/Enums.h
+      - path: clusters/AvAnalysis/EnumsCheck.h
+      - path: clusters/AvAnalysis/EventIds.h
+      - path: clusters/AvAnalysis/Events.h
+      - path: clusters/AvAnalysis/Events.ipp
+      - path: clusters/AvAnalysis/Ids.h
+      - path: clusters/AvAnalysis/Metadata.h
+      - path: clusters/AvAnalysis/MetadataProvider.h
+      - path: clusters/AvAnalysis/Structs.h
+      - path: clusters/AvAnalysis/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
       - path: clusters/BallastConfiguration/AttributeIds.h
       - path: clusters/BallastConfiguration/Attributes.h
       - path: clusters/BallastConfiguration/Attributes.ipp
@@ -834,6 +854,26 @@ include:
       - path: clusters/EcosystemInformation/MetadataProvider.h
       - path: clusters/EcosystemInformation/Structs.h
       - path: clusters/EcosystemInformation/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
+      - path: clusters/ElectricalAlarm/AttributeIds.h
+      - path: clusters/ElectricalAlarm/Attributes.h
+      - path: clusters/ElectricalAlarm/Attributes.ipp
+      - path: clusters/ElectricalAlarm/ClusterId.h
+      - path: clusters/ElectricalAlarm/CommandIds.h
+      - path: clusters/ElectricalAlarm/Commands.h
+      - path: clusters/ElectricalAlarm/Commands.ipp
+      - path: clusters/ElectricalAlarm/Enums.h
+      - path: clusters/ElectricalAlarm/EnumsCheck.h
+      - path: clusters/ElectricalAlarm/EventIds.h
+      - path: clusters/ElectricalAlarm/Events.h
+      - path: clusters/ElectricalAlarm/Events.ipp
+      - path: clusters/ElectricalAlarm/Ids.h
+      - path: clusters/ElectricalAlarm/Metadata.h
+      - path: clusters/ElectricalAlarm/MetadataProvider.h
+      - path: clusters/ElectricalAlarm/Structs.h
+      - path: clusters/ElectricalAlarm/Structs.ipp
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
