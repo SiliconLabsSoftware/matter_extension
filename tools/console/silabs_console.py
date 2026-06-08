@@ -29,7 +29,7 @@ class SilabsMatterConsole:
         Initialize the Matter console application.
         
         Args:
-            port: Serial port name.
+            port: Serial port name (may be empty to be chosen at connect time).
             baudrate: Serial baudrate.
         """
         self.port: str = port
@@ -51,7 +51,8 @@ class SilabsMatterConsole:
             on_connect=self.connect_serial,
             on_disconnect=self.disconnect_serial,
             on_send_command=self.send_command,
-            on_settings_changed=self.apply_serial_settings
+            on_settings_changed=self.apply_serial_settings,
+            on_port_changed=self.set_port
         )
     
     def open_serial(self) -> bool:
@@ -165,6 +166,15 @@ class SilabsMatterConsole:
             except (serial.SerialException, OSError) as e:
                 self.ui.signals.error_message.emit(f"Error sending command: {e}")
     
+    def set_port(self, port: str) -> None:
+        """
+        Update the serial port to use for the connection.
+        
+        Args:
+            port: New serial port name.
+        """
+        self.port = port
+    
     def apply_serial_settings(self, baudrate: int, stopbits: float, parity: str, flowcontrol: str) -> None:
         """
         Apply new serial communication settings.
@@ -225,11 +235,14 @@ with a Silicon Labs device over a serial connection.
 Features:
   - Dedicated log terminal for framed messages (SOF 0x01 ... EOF 0x04)
   - Interactive terminal for unframed messages
-  - Color-coded log levels: [error] (red), [silabs] (blue), [info]/[detail] (white)
+  - Color-coded log levels: [error] (red), [silabs] (blue), [ZB] (light purple),
+    [info]/[detail] (white)
   - Auto-scrolling terminals with smooth rendering
   - Command input with history
   - Hardware flow control (RTS/CTS) enabled
   - Resizable window
+  - Serial port can be selected at runtime via the Connect button if not provided
+    on the command line
 
 Message Format:
   Framed logs: SOF(0x01) + message + EOF(0x04) + \\r\\n
@@ -243,7 +256,10 @@ Requirements:
     
     parser.add_argument(
         "port",
-        help="Serial port to connect to (e.g., /dev/ttyACM0 or COM3)"
+        nargs="?",
+        default="",
+        help="Serial port to connect to (e.g., /dev/ttyACM0 or COM3). "
+             "Optional: if omitted, you will be prompted to pick a port when clicking Connect."
     )
     
     parser.add_argument(

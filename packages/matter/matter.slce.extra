@@ -244,6 +244,7 @@ components:
   - matter_rgb_leds
   - matter_sample_mei
   - matter_scenes
+  - matter_scenes_support
   - matter_segger_rtt
   - matter_service_area
   - matter_shell
@@ -318,6 +319,7 @@ components:
   - siwx917_common
   - siwx917_ncp
   - siwx917_ncp_brd4357a
+  - siwx917_ncp_brd4357c
   - siwx917_tinycrypt
   - syscalls_stub
   - test_paa_store
@@ -666,6 +668,7 @@ extra_files:
   - slc/component/matter-clusters/matter_resource_monitoring.slcc
   - slc/component/matter-clusters/matter_sample_mei.slcc
   - slc/component/matter-clusters/matter_scenes.slcc
+  - slc/component/matter-clusters/matter_scenes_support.slcc
   - slc/component/matter-clusters/matter_service_area.slcc
   - slc/component/matter-clusters/matter_smoke_co_alarm.slcc
   - slc/component/matter-clusters/matter_software_diagnostics.slcc
@@ -880,6 +883,7 @@ extra_files:
   - slc/component/matter-thread/matter_thread_cli.slcc
   - slc/component/matter-wifi/917-ncp/siwx917_ncp.slcc
   - slc/component/matter-wifi/917-ncp/siwx917_ncp_brd4357a.slcc
+  - slc/component/matter-wifi/917-ncp/siwx917_ncp_brd4357c.slcc
   - slc/component/matter-wifi/917-soc/linkerfile_common.ld.jinja
   - slc/component/matter-wifi/917-soc/toolchain_gcc_common.slcc
   - slc/component/matter-wifi/matter_aws.slcc
@@ -966,10 +970,7 @@ extra_files:
   - src/app/zap-templates/templates/app/slc_compatibility/event-ids.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/ids.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/metadata.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Descriptor.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-Groups.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureControl.zapt
-  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config-TemperatureMeasurement.zapt
+  - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config.h.zapt
   - src/app/zap-templates/zcl/zcl.json
   - tools/console/README.md
   - tools/console/console_log_parser.py
@@ -1210,6 +1211,8 @@ extra_files:
   - third_party/matter_sdk/src/app/cluster-building-blocks/tests/BUILD.gn
   - third_party/matter_sdk/src/app/cluster-building-blocks/tests/TestQuieterReporting.cpp
   - third_party/matter_sdk/src/app/clusters/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/access-control-server/AccessControlEventHelper.cpp
+  - third_party/matter_sdk/src/app/clusters/access-control-server/AccessControlEventHelper.h
   - third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.cpp
   - third_party/matter_sdk/src/app/clusters/access-control-server/ArlEncoder.h
   - third_party/matter_sdk/src/app/clusters/access-control-server/BUILD.gn
@@ -2313,10 +2316,11 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/wake-on-lan-server.cpp
   - third_party/matter_sdk/src/app/clusters/wake-on-lan-server/wake-on-lan-server.h
   - third_party/matter_sdk/src/app/clusters/water-heater-management-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/water-heater-management-server/WaterHeaterManagementCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/water-heater-management-server/WaterHeaterManagementCluster.h
   - third_party/matter_sdk/src/app/clusters/water-heater-management-server/WaterHeaterManagementTestEventTriggerHandler.h
   - third_party/matter_sdk/src/app/clusters/water-heater-management-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/water-heater-management-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/water-heater-management-server/water-heater-management-server.cpp
   - third_party/matter_sdk/src/app/clusters/water-heater-management-server/water-heater-management-server.h
   - third_party/matter_sdk/src/app/clusters/webrtc-transport-provider-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/webrtc-transport-provider-server/CodegenIntegration.cpp
@@ -2577,7 +2581,6 @@ extra_files:
   - third_party/matter_sdk/src/app/server-cluster/testing/TestAttributeChangeListener.h
   - third_party/matter_sdk/src/app/server-cluster/testing/TestEventGenerator.h
   - third_party/matter_sdk/src/app/server-cluster/testing/TestServerClusterContext.h
-  - third_party/matter_sdk/src/app/server-cluster/testing/ValidateGlobalAttributes.cpp
   - third_party/matter_sdk/src/app/server-cluster/testing/ValidateGlobalAttributes.h
   - third_party/matter_sdk/src/app/server-cluster/tests/BUILD.gn
   - third_party/matter_sdk/src/app/server-cluster/tests/TestAttributeListBuilder.cpp
@@ -3288,9 +3291,11 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/door-lock-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/dynamic-lighting-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/ecosystem-information-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-distribution-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-energy-measurement-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-grid-conditions-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-power-measurement-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/electrical-protection-alarm-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/energy-evse-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/energy-evse-mode-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/energy-preference-cluster.xml
@@ -3375,7 +3380,6 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/thread-network-directory-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/time-format-localization-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/time-synchronization-cluster.xml
-  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/timer-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/tls-certificate-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/tls-client-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/unit-localization-cluster.xml
