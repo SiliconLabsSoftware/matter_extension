@@ -70,10 +70,6 @@ on:
                 type: string
                 default: ''
 
-env:
-    BUILD_HEAD_SHA: ${{ inputs.head-sha }}
-    BUILD_HEAD_BRANCH: ${{ inputs.head-branch }}
-
 jobs:
     mg24-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support }}
@@ -84,8 +80,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mg24-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
@@ -96,8 +92,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-internal
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mg24-trustzone-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
@@ -108,8 +104,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-trustzone
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mgm24-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}
@@ -120,8 +116,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mgm24-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
@@ -132,8 +128,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24-internal
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mg26-build-job:
         if: ${{ inputs.thread-support && inputs.mg26-support }}
@@ -144,8 +140,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mg26-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
@@ -156,8 +152,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     mgm26-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
@@ -168,8 +164,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm26-internal
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     ncp-917-build-job:
         if: ${{ inputs.ncp-917-support }}
@@ -180,8 +176,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}
@@ -192,8 +188,8 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
 
     sixg301-build-job:
         if: ${{ inputs.thread-support && inputs.sixg301-support }}
@@ -204,5 +200,5 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: sixg301
-            head-sha: ${{ env.BUILD_HEAD_SHA }}
-            head-branch: ${{ env.BUILD_HEAD_BRANCH }}
+            head-sha: ${{ inputs.head-sha }}
+            head-branch: ${{ inputs.head-branch }}
