@@ -239,7 +239,7 @@ class MatterEnvSetup:
                 logging.error(f"Tool path for {tool} is invalid or does not exist: {path}")
                 sys.exit(1)
 
-        arm_gcc_bin = os.path.join(self.paths.get('gcc-arm-none-eabi'), "bin")
+        arm_gcc_bin = os.path.join(self.paths.get('gcc-arm-none-eabi/14.2.rel1'), "bin")
         path_separator = ";" if self.platform == "win32" else ":"
 
         if self.platform == "darwin":
@@ -265,7 +265,7 @@ class MatterEnvSetup:
         try:
             with open(env_path, "w") as outfile:
                 outfile.write(f"STUDIO_ADAPTER_PACK_PATH={self.zap_path}\n")
-                outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi')}\n")
+                outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi/14.2.rel1')}\n")
                 outfile.write(f"JAVA_HOME={java_path}\n")
                 outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
                 outfile.write(
@@ -294,17 +294,12 @@ class MatterEnvSetup:
         Raises:
             SystemExit: If tool installation fails
         """
-        try:
-            result = subprocess.run(
-                [self.slt_cli_path, "--non-interactive", "where", tool],
-                capture_output=True,
-                text=True,
-                check=True,
-            )
-            tool_dir = result.stdout.strip()
-        except subprocess.CalledProcessError as e:
-            logging.error(f"Failed to query tool location for {tool}: {e}")
-            sys.exit(1)
+        result = subprocess.run(
+            [self.slt_cli_path, "--non-interactive", "where", tool],
+            capture_output=True,
+            text=True,
+        )
+        tool_dir = result.stdout.strip()
 
         if not tool_dir:
             logging.info(f"Downloading {tool}")
@@ -337,7 +332,7 @@ class MatterEnvSetup:
     
     def setup_tools(self):
         """Install and configure all required development tools."""
-        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi", "commander", "ninja", "cmake"]
+        tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi/14.2.rel1", "commander", "ninja", "cmake"]
         self.paths = {}
         for tool in tools_list:
             self.paths[tool] = self.install_tools(tool)
