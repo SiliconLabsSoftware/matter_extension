@@ -1,0 +1,40 @@
+name: SLC CLI Scripts
+
+on:
+  workflow_dispatch:
+  push:
+permissions:
+  contents: read
+  actions: read
+  packages: read
+  id-token: none
+  issues: none
+  pull-requests: none
+jobs:
+  slc-cli-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+    
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run sl_setup_env.py
+        run: |
+          python slc/sl_setup_env.py
+    
+      - name: Run sl_create_new_app.py
+        run: |
+          python slc/sl_create_new_app.py -n out/lighting-app -p slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw -b brd4187c -v
+
+      - name: Run sl_build_app.py
+        run: |
+          python slc/sl_build_app.py -p out/lighting-app -b brd4187c -v
+    
