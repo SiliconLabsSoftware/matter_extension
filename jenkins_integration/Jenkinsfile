@@ -127,6 +127,9 @@ pipeline
             }
             parallel {
                 stage('Code Coverage & Static Code Analysis') {
+                    when {
+                        expression { env.BRANCH_NAME == "main" }
+                    }
                     steps {
                         script {
                             withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
