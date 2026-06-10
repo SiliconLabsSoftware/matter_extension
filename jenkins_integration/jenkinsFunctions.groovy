@@ -13,6 +13,15 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
     }
 }
 
+def download_coverage_artifact(workflow_id) {
+    withCredentials([
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ])
+    {
+        sh "python3 -u jenkins_integration/artifacts/download_coverage_artifact.py --workflow_id ${workflow_id} --dest_dir ./coverage"
+    }
+}
+
 def run_code_size_analysis() {
     echo "Starting code size analysis for branch: ${env.BRANCH_NAME}"
         
