@@ -38,5 +38,5 @@ jobs:
 
       - name: Run sl_build_app.py
         run: |
-          python slc/sl_build_app.py -p out/lighting-app -b brd4187c -v
+          python slc/sl_build.py -p out/lighting-app -b brd4187c -v
     
