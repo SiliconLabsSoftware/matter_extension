@@ -71,6 +71,7 @@ class MatterEnvSetup:
         self.verbose = verbose
         self.clean_reinstall = clean_reinstall
         self.pre_release = pre_release
+        os.environ["SLT_CI"] = "true"
         self.setup_logging()
         self.set_root_paths()
         self.set_platform_vars()
@@ -156,7 +157,7 @@ class MatterEnvSetup:
                 logging.error(f"Failed to download/extract slt-cli: {e}")
                 sys.exit(1)
 
-        update_cmd = [self.slt_cli_path, "--non-interactive", "update", "--self"]
+        update_cmd = [self.slt_cli_path, "update", "--self"]
         try:
             subprocess.run(update_cmd, check=True)
         except subprocess.CalledProcessError as e:
@@ -298,7 +299,7 @@ class MatterEnvSetup:
             SystemExit: If tool installation fails
         """
         result = subprocess.run(
-            [self.slt_cli_path, "--non-interactive", "where", tool],
+            [self.slt_cli_path, "where", tool],
             capture_output=True,
             text=True,
         )
@@ -307,11 +308,11 @@ class MatterEnvSetup:
         if not tool_dir:
             logging.info(f"Downloading {tool}")
             try:
-                command = [self.slt_cli_path, "--non-interactive", "install", tool]
+                command = [self.slt_cli_path, "install", tool]
                 logging.debug(f"Running command: {command}")
                 subprocess.run(command, check=True)
                 result = subprocess.run(
-                    [self.slt_cli_path, "--non-interactive", "where", tool],
+                    [self.slt_cli_path, "where", tool],
                     capture_output=True,
                     text=True,
                     check=True,
