@@ -376,8 +376,8 @@ class MatterEnvSetup:
 
 def main():
     parser = argparse.ArgumentParser(description="Setup environment for Matter project using Silicon Labs Configurator.")
-    parser.add_argument('--verbose', action='store_true', help='Enable verbose (debug) logging')
-    parser.add_argument('--pre_release', action='store_true', help='Use Pre-release Server')
+    parser.add_argument('-v', '--verbose', action='store_true', help='Enable verbose (debug) logging')
+    parser.add_argument('-pr', '--pre-release', action='store_true', help='Use Pre-release Server')
     parser.add_argument(
         '-c',
         '--clean-reinstall',
