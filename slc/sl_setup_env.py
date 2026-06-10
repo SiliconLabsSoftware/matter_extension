@@ -307,7 +307,9 @@ class MatterEnvSetup:
         if not tool_dir:
             logging.info(f"Downloading {tool}")
             try:
-                subprocess.run([self.slt_cli_path, "--non-interactive", "install", tool], check=True)
+                command = [self.slt_cli_path, "--non-interactive", "install", tool]
+                logging.debug(f"Running command: {command}")
+                subprocess.run(command, check=True)
                 result = subprocess.run(
                     [self.slt_cli_path, "--non-interactive", "where", tool],
                     capture_output=True,
@@ -332,7 +334,7 @@ class MatterEnvSetup:
             sys.exit(1)
         conan_path = os.path.join(conan_path, "conan","conan")
         try:
-            subprocess.run([conan_path, "remote", "add", "pre-release", "https://conan-prerelease.silabs.net/"], check=True)
+            subprocess.run([conan_path, "remote", "add", "silabs-conan-prerelease", "https://conan-prerelease.silabs.net/"], check=True)
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to setup Pre-release Server: {e}")
             sys.exit(1)
