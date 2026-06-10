@@ -28,7 +28,7 @@ jobs:
 
       - name: Run sl_setup_env.py
         run: |
-          python slc/sl_setup_env.py
+          python slc/sl_setup_env.py --pre_release
     
       - name: Run sl_create_new_app.py
         run: |

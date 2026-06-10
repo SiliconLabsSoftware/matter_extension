@@ -16,6 +16,7 @@
  *   - Ninja Build System
  *   - Simplicity Commander
  *   - SLT CLI (Silicon Labs Tools Command Line Interface)
+ *   - Pre-release Use Pre-release Server (Silicon Labs Pre-release Server, internal use only)
  *
  * @section usage Usage
  *   @code{.sh}
@@ -59,15 +60,17 @@ if sys.version_info < (3, 9):
 class MatterEnvSetup:
     """Class for setting up the Matter development environment with all required tools."""
 
-    def __init__(self, verbose=False, clean_reinstall=False):
+    def __init__(self, verbose=False, clean_reinstall=False, pre_release=False):
         """Initialize MatterEnvSetup instance.
 
         Args:
             verbose: Enable verbose (debug) logging if True
             clean_reinstall: If True, remove slc/tools before setup (fresh tool install)
+            pre_release: If True, use Pre-release Server
         """
         self.verbose = verbose
         self.clean_reinstall = clean_reinstall
+        self.pre_release = pre_release
         self.setup_logging()
         self.set_root_paths()
         self.set_platform_vars()
@@ -319,6 +322,15 @@ class MatterEnvSetup:
         logging.info(f"{tool} = {tool_dir}")
         return tool_dir
 
+    def setup_pre_release(self):
+        """Setup Pre-release Server."""
+        logging.info("Setting up Pre-release Server")
+        try:
+            subprocess.run(["conan", "remote", "add", "pre-release", "https://conan-prerelease.silabs.net/"], check=True)
+        except subprocess.CalledProcessError as e:
+            logging.error(f"Failed to setup Pre-release Server: {e}")
+            sys.exit(1)
+
     def _make_executable(self, path):
         """Make a file executable on Unix-like systems."""
         if path and os.path.exists(path):
@@ -348,6 +360,8 @@ class MatterEnvSetup:
             self.remove_tools_directory()
         self.sync_submodules()
         self.download_and_extract_slt_cli()
+        if self.pre_release:
+            self.setup_pre_release()
         self.setup_tools()
         self.write_env_file()
         logging.info("\nEnvironment setup completed successfully")
@@ -355,6 +369,7 @@ class MatterEnvSetup:
 def main():
     parser = argparse.ArgumentParser(description="Setup environment for Matter project using Silicon Labs Configurator.")
     parser.add_argument('--verbose', action='store_true', help='Enable verbose (debug) logging')
+    parser.add_argument('--pre_release', action='store_true', help='Use Pre-release Server')
     parser.add_argument(
         '-c',
         '--clean-reinstall',
@@ -362,7 +377,7 @@ def main():
         help='Remove slc/tools then run a full tool setup',
     )
     args = parser.parse_args()
-    env_setup = MatterEnvSetup(verbose=args.verbose, clean_reinstall=args.clean_reinstall)
+    env_setup = MatterEnvSetup(verbose=args.verbose, clean_reinstall=args.clean_reinstall, pre_release=args.pre_release)
     env_setup.run_setup()
 
 
