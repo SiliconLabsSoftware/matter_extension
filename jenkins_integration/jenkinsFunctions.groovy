@@ -32,10 +32,10 @@ def run_code_size_analysis() {
                     local path=$1
                     local app_name
                     
-                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*_solution(_lto)?" | head -1)
+                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*_solution(_lto|_llvm(-lto)?)?" | head -1)
                     
                     if [ -n "$solution_dir" ]; then
-                        local base_name=\$(echo "\$solution_dir" | sed -E 's/_solution(_lto)?\$//')
+                        local base_name=\$(echo "\$solution_dir" | sed -E 's/_solution(_lto|_llvm(-lto)?)?\$//')
                         
                         # Extract app name from file name
                         case "\$base_name" in
@@ -70,8 +70,8 @@ def run_code_size_analysis() {
                     local path=$1
                     if [[ "$path" == *"_solution_lto/"* ]]; then
                         echo "-lto"
-                    elif [[ "$path" == *"_solution_llvm_lto/"* ]]; then
-                        echo "-lto"    
+                    elif [[ "$path" == *"_solution_llvm-lto/"* ]]; then
+                        echo "-lto"
                     else
                         echo ""
                     fi
@@ -79,7 +79,7 @@ def run_code_size_analysis() {
 
                 determine_compiler() {
                     local path=$1
-                    if [[ "$path" == *"_llvm_/"* ]]; then
+                    if [[ "$path" == *"_solution_llvm_lto/"* ]]; then
                         echo "llvm"
                     else
                         echo "gcc"
