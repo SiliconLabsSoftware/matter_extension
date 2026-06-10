@@ -325,8 +325,14 @@ class MatterEnvSetup:
     def setup_pre_release(self):
         """Setup Pre-release Server."""
         logging.info("Setting up Pre-release Server")
+
+        conan_path = self.install_tools("conan")
+        if not conan_path:
+            logging.error("Failed to install conan")
+            sys.exit(1)
+        conan_path = os.path.join(conan_path, "conan","conan")
         try:
-            subprocess.run(["conan", "remote", "add", "pre-release", "https://conan-prerelease.silabs.net/"], check=True)
+            subprocess.run([conan_path, "remote", "add", "pre-release", "https://conan-prerelease.silabs.net/"], check=True)
         except subprocess.CalledProcessError as e:
             logging.error(f"Failed to setup Pre-release Server: {e}")
             sys.exit(1)
