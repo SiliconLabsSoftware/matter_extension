@@ -20,8 +20,8 @@ requires:
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/matter_cpc.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/cpc_shell_interface.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/cpc_shell_interface.hpp
+  - path: third_party/matter_sdk/examples/platform/silabs/cpc/cpc_shell_interface.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/cpc/cpc_shell_interface.hpp
 
 include:
   - path: third_party/matter_sdk/examples/platform/silabs

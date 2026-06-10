@@ -44,6 +44,7 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   #- id: matter_log_uart
+  - id: matter_log_rtt
   - id: matter_read_client
 
   - id: matter
@@ -110,8 +111,6 @@ source:
 define:
   - name: CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
     value: 0
-  - name: SL_OPENTHREAD_MULTI_PAN_ENABLE
-    value: 1
   - name: OPENTHREAD_CONFIG_NCP_HDLC_ENABLE
     value: 1
   - name: SL_MATTER_OPENTHREAD_NCP_ENABLE
@@ -126,6 +125,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: OPENTHREAD_CONFIG_MAX_STATECHANGE_HANDLERS
+    value: 3
 
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
@@ -191,7 +192,7 @@ configuration:
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
   - name: SL_CPC_DRV_UART_VCOM_BAUDRATE
-    value: '921600'
+    value: '115200'
   - condition:
       - cpc_secondary_driver_uart_usart
     name: SL_CPC_DRV_UART_VCOM_FLOW_CONTROL_TYPE
@@ -216,8 +217,7 @@ configuration:
 #    value: 1
 #  - name: OPENTHREAD_CONFIG_MULTIPLE_STATIC_INSTANCE_ENABLE
 #    value: 1  
-  - name: OPENTHREAD_CONFIG_MAX_STATECHANGE_HANDLERS
-    value: 2
+
 # CPC related config
   - name: SL_CPC_RX_PAYLOAD_MAX_LENGTH
     value: 1500 # Handles Matter BDX packet if needs be. 
