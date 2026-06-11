@@ -334,6 +334,7 @@ extra_files:
   - jenkins_integration/Jenkinsfile
   - jenkins_integration/artifacts/artifact_processor.py
   - jenkins_integration/artifacts/artifactory_client.py
+  - jenkins_integration/artifacts/download_coverage_artifact.py
   - jenkins_integration/artifacts/ubai_client.py
   - jenkins_integration/artifacts/upload_artifacts.py
   - jenkins_integration/commit_change_summary.sh
@@ -941,6 +942,7 @@ extra_files:
   - slc/sl_setup_env.py
   - slc/stage_extension.py
   - sled-library.json
+  - sonar-project.properties
   - src/app/zap-templates/app-templates.json
   - src/app/zap-templates/cluster-to-component-dependencies.json
   - src/app/zap-templates/common/override.js
@@ -1902,8 +1904,8 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/operational-credentials-server/tests/TestOperationalCredentials.cpp
   - third_party/matter_sdk/src/app/clusters/operational-state-server/BUILD.gn
-  - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateCluster.cpp
-  - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateCluster.h
+  - third_party/matter_sdk/src/app/clusters/operational-state-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/operational-state-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/operational-state-server/OperationalStateDelegate.h
   - third_party/matter_sdk/src/app/clusters/operational-state-server/README.md
   - third_party/matter_sdk/src/app/clusters/operational-state-server/app_config_dependent_sources.cmake
@@ -3261,7 +3263,6 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/camera-av-stream-management-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/channel-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/chime-cluster.xml
-  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/chip-ota.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/chip-types.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/closure-control-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/closure-dimension-cluster.xml
@@ -3337,6 +3338,8 @@ extra_files:
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/operational-state-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/operational-state-oven-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/operational-state-rvc-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/ota-provider-cluster.xml
+  - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/ota-requestor-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/oven-mode-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/power-source-cluster.xml
   - third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip/power-source-configuration-cluster.xml
