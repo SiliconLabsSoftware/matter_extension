@@ -7,7 +7,7 @@ id: matter_evse
 quality: production
 metadata:
   sbom:
-    license: MSLA
+    license: "Apache 2.0"
 requires:
   - name: matter_electrical_sensor
   - name: matter_energy_evse
@@ -35,9 +35,6 @@ source:
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/EnergyEvseTargetsStore.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/ChargingTargetsMemMgr.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/energy-evse-mode.cpp
-metadata:
-  sbom:
-    license: "Apache 2.0"
 template_file:
   - path: third_party/matter_sdk/examples/evse-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/evse-app/silabs/include/AppTaskImpl.h
