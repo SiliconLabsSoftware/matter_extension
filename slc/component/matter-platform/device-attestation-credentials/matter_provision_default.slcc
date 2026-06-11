@@ -77,10 +77,6 @@ library:
       - device_family_mgm26
     unless:
       - toolchain_llvm
-  - path: third_party/matter_support/provision/libs/libProvision-mgm26-clang.a
-    condition:
-      - device_family_mgm26
-      - toolchain_llvm
   - path: third_party/matter_support/provision/libs/libProvisionPSA-si917.a
     condition:
       - device_family_siwg917
