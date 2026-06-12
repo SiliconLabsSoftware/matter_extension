@@ -1,0 +1,22 @@
+id: mbedtls_x509_use_aws
+package: platform_core
+label: X.509 Use certificates
+description: >-
+  This component is the core for using X.509 standard-
+  based certificates in Mbed TLS.
+category: Platform|Security|Mbed TLS|Upper Layer
+quality: production
+provides:
+- name: mbedtls_x509_use
+  condition: [matter_aws]
+requires:
+- name: mbedtls_asn1_parse
+- name: mbedtls_oid
+- name: mbedtls_pk_parse
+template_contribution:
+- name: mbedtls_config
+  value: MBEDTLS_X509_USE_C
+metadata:
+  sbom:
+    reference: mbedtls_sbom
+root_path: platform_core
