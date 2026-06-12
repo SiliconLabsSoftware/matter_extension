@@ -1588,11 +1588,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/ethernet-network-diagnostics-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/ethernet-network-diagnostics-server/tests/TestEthernetDiagnosticsCluster.cpp
   - third_party/matter_sdk/src/app/clusters/fan-control-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/fan-control-server/FanControlCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/FanControlCluster.h
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/README.md
   - third_party/matter_sdk/src/app/clusters/fan-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/fan-control-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/fan-control-server/fan-control-delegate.h
   - third_party/matter_sdk/src/app/clusters/fan-control-server/fan-control-server.h
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/fan-control-server/tests/TestFanControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/fault-injection-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/fault-injection-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/fault-injection-server/app_config_dependent_sources.gni
@@ -2095,10 +2101,11 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/service-area-server/service-area-storage-delegate.cpp
   - third_party/matter_sdk/src/app/clusters/service-area-server/service-area-storage-delegate.h
   - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/SmokeCOTestEventTriggerHandler.h
+  - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/SmokeCoAlarmCluster.cpp
   - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/smoke-co-alarm-server.cpp
   - third_party/matter_sdk/src/app/clusters/smoke-co-alarm-server/smoke-co-alarm-server.h
   - third_party/matter_sdk/src/app/clusters/software-diagnostics-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/software-diagnostics-server/CodegenIntegration.cpp
