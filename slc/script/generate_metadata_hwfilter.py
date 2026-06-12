@@ -509,8 +509,29 @@ def _run_hwstudio(
         "-t", str(template_path),
         "-q", "internal",
     ])
-    run_command(cmd, check=False, capture=True)
-    return Path(output_file).exists()
+
+    out_path = Path(output_file)
+    mtime_before = out_path.stat().st_mtime if out_path.exists() else None
+
+    returncode, stdout, stderr = run_command(cmd, check=False, capture=True)
+
+    if returncode != 0:
+        log_error(f"hwstudio failed for {output_file} (exit code {returncode})")
+        if stderr.strip():
+            log_error(f"hwstudio stderr:\n{stderr.strip()}")
+        if stdout.strip():
+            log_error(f"hwstudio stdout:\n{stdout.strip()}")
+        return False
+
+    if not out_path.exists():
+        log_error(f"hwstudio exited 0 but {output_file} was not created")
+        return False
+
+    if mtime_before is not None and out_path.stat().st_mtime == mtime_before:
+        log_error(f"hwstudio exited 0 but {output_file} was not updated (stale output)")
+        return False
+
+    return True
 
 def generate_metadata(
     repo_root: Path,
@@ -522,6 +543,7 @@ def generate_metadata(
     os.chdir(repo_root)
 
     temp_files = []
+    failures: List[str] = []
 
     try:
         temp_templates = prepare_template_with_version(
@@ -532,6 +554,8 @@ def generate_metadata(
         log_info("Generating templates XML...")
         if _run_hwstudio("matter_templates.xml", config_path, temp_templates):
             log_info("Generated matter_templates.xml")
+        else:
+            failures.append("matter_templates.xml")
 
         temp_demos = prepare_template_with_version(
             repo_root, "demos.xml.j2", slt_paths, ci_records, variants_config
@@ -541,20 +565,40 @@ def generate_metadata(
         log_info("Generating demos XML...")
         if _run_hwstudio("matter_demos.xml", config_path, temp_demos, demo=True):
             log_info("Generated matter_demos.xml")
+        else:
+            failures.append("matter_demos.xml")
 
         log_info("Generating board compatibility matrix...")
-        run_command(
-            ["hwmatrix", "-o", "board_compatibility_matrix.html",
+        matrix = "board_compatibility_matrix.html"
+        matrix_path = repo_root / matrix
+        matrix_mtime_before = matrix_path.stat().st_mtime if matrix_path.exists() else None
+        rc, _, matrix_stderr = run_command(
+            ["hwmatrix", "-o", matrix,
              "slc/apps/**/*.slc[pw]", "-c", str(config_path)],
             check=False, capture=True,
         )
-        if (repo_root / "board_compatibility_matrix.html").exists():
-            log_info("Generated board_compatibility_matrix.html")
+        if rc != 0:
+            log_error(f"hwmatrix failed (exit code {rc})")
+            if matrix_stderr.strip():
+                log_error(f"hwmatrix stderr:\n{matrix_stderr.strip()}")
+            failures.append(matrix)
+        elif not matrix_path.exists() or (
+            matrix_mtime_before is not None
+            and matrix_path.stat().st_mtime == matrix_mtime_before
+        ):
+            log_error(f"hwmatrix exited 0 but {matrix} was not updated")
+            failures.append(matrix)
+        else:
+            log_info(f"Generated {matrix}")
 
     finally:
         for f in temp_files:
             if f and f.exists():
                 f.unlink()
+
+    if failures:
+        log_error(f"Metadata generation failed for: {', '.join(failures)}")
+        sys.exit(1)
 
 def main():
     repo_root = _SCRIPT_DIR.parent.parent
