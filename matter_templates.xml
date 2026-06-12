@@ -672,22 +672,6 @@
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_external_single_series_2.matter_bootloader_external_series_2.slcp slc.apps.lighting_app.thread.trustzone.matter_thread_soc_lighting_app_trustzone_ns_freertos.slcp slc.apps.lighting_app.thread.trustzone.matter_thread_soc_lighting_app_trustzone_s_freertos.slcp"/>
   </descriptors>
-  <descriptors name="matter_thread_soc_lighting_app_trustzone_series_3_freertos" label="Matter Thread - SoC Lighting TrustZone with internal Bootloader FreeRTOS" description="Demonstrates a sample implementation of a Matter over Thread lighting app with TrustZone and internal bootloader">
-    <properties key="namespace" value="template.solution.uc"/>
-    <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.lighting_app.thread.trustzone.matter_thread_soc_lighting_app_trustzone_series_3_freertos.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/lighting_app/thread/trustzone/matter_thread_soc_lighting_app_trustzone_series_3_freertos.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/lighting_app/thread/README.md"/>
-    <properties key="boardCompatibility" value="brd1019a brd2719a brd4407a brd4408a com.silabs.board.none"/>
-    <properties key="partCompatibility" value=".*simg301m103lih.* .*simg301m103wih.* .*simg301m104lgh.* .*simg301m104lgl.* .*simg301m104lih.* .*simg301m104lil.* .*simg301m104xil.* .*simg301m113wih.* .*simg301m114kgh.* .*simg301m114kih.* .*simg301m114lgh.* .*simg301m114lih.*"/>
-    <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
-    <properties key="toolchainCompatibility" value="gcc"/>
-    <properties key="category" value="Matter Application"/>
-    <properties key="quality" value="PRODUCTION"/>
-    <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_single_4096k_series_3.matter_bootloader_internal_series_3.slcp slc.apps.lighting_app.thread.trustzone.matter_thread_soc_lighting_app_trustzone_ns_freertos.slcp slc.apps.lighting_app.thread.trustzone.matter_thread_soc_lighting_app_trustzone_s_freertos.slcp"/>
-  </descriptors>
   <descriptors name="matter_wifi_soc_lighting_app_freertos" label="Matter WiFi - SoC Lighting FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi lighting app">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
