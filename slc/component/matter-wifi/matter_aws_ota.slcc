@@ -47,7 +47,7 @@ include:
   - path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/portable/os
     file_list:
       - path: ota_os_freertos.h
-  # TODO: these are not initnalized currently hence commenting it will be added correctly as a part of 26Q4
+  # TODO: these are not initialized currently hence commenting. It will be added correctly as a part of 26Q4
   #- path: third_party/aws_ota_sdk/ota-for-aws-iot-embedded-sdk/source/dependency/3rdparty/tinycbor/src
   #  file_list:
   #    - path: cbor.h
