@@ -305,7 +305,8 @@ components:
   - matter_zigbee_sequential
   - matter_zone_management
   - mbedtls_entropy_default_aws
-  - mbedtls_pki_aws
+  - mbedtls_x509_create_aws
+  - mbedtls_x509_use_aws
   - memory
   - messagedef
   - monitoring_table
@@ -900,7 +901,8 @@ extra_files:
   - slc/component/matter-wifi/matter_sleep_manager.slcc
   - slc/component/matter-wifi/matter_wifi.slcc
   - slc/component/matter-wifi/mbedtls_entropy_default_aws.slcc
-  - slc/component/matter-wifi/mbedtls_pki_aws.slcc
+  - slc/component/matter-wifi/mbedtls_x509_create_aws.slcc
+  - slc/component/matter-wifi/mbedtls_x509_use_aws.slcc
   - slc/component/matter.slcc
   - slc/component/sdk-content/simplicity-sdk/util/third_party/segger/systemview/Config/SEGGER_RTT_Conf.h
   - slc/component/sdk-content/simplicity-sdk/util/third_party/segger/systemview/SEGGER/SEGGER.h
