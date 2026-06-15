@@ -265,7 +265,6 @@ components:
   - matter_temperature_measurement
   - matter_test_cluster
   - matter_test_event_trigger
-  - matter_testing
   - matter_tests
   - matter_thermostat
   - matter_thermostat_app
@@ -459,7 +458,6 @@ extra_files:
   - slc/apps/lighting_app/thread/trustzone/matter_thread_soc_lighting_app_trustzone_ns_freertos.slcp
   - slc/apps/lighting_app/thread/trustzone/matter_thread_soc_lighting_app_trustzone_s_freertos.slcp
   - slc/apps/lighting_app/thread/trustzone/matter_thread_soc_lighting_app_trustzone_series_2_freertos.slcw
-  - slc/apps/lighting_app/thread/trustzone/matter_thread_soc_lighting_app_trustzone_series_3_freertos.slcw
   - slc/apps/lighting_app/wifi/README.md
   - slc/apps/lighting_app/wifi/matter_wifi_soc_lighting_app_freertos.slcp
   - slc/apps/lighting_app/wifi/matter_wifi_soc_lighting_app_freertos.slcw
@@ -680,7 +678,6 @@ extra_files:
   - slc/component/matter-clusters/matter_temperature_control.slcc
   - slc/component/matter-clusters/matter_temperature_measurement.slcc
   - slc/component/matter-clusters/matter_test_cluster.slcc
-  - slc/component/matter-clusters/matter_testing.slcc
   - slc/component/matter-clusters/matter_thermostat.slcc
   - slc/component/matter-clusters/matter_thermostat_user_interface_configuration.slcc
   - slc/component/matter-clusters/matter_thread_border_router_management.slcc
