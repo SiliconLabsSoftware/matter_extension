@@ -144,7 +144,7 @@
     ]
   },
   {
-    "clusterCode": "radon concentration measurement-server",
+    "clusterCode": "smoke concentration measurement-server",
     "value": [
       "%extension-matter%matter_concentration_measurement"
     ]
@@ -258,6 +258,12 @@
     ]
   },
   {
+    "clusterCode": "flow measurement-server",
+    "value": [
+      "%extension-matter%matter_flow_measurement"
+    ]
+  },
+  {
     "clusterCode": "general commissioning-server",
     "value": [
       "%extension-matter%matter_general_commissioning"
@@ -285,6 +291,12 @@
     "clusterCode": "groups-server",
     "value": [
       "%extension-matter%matter_groups"
+    ]
+  },
+  {
+    "clusterCode": "humidistat-server",
+    "value": [
+      "%extension-matter%matter_humidistat"
     ]
   },
   {
@@ -402,6 +414,12 @@
     ]
   },
   {
+    "clusterCode": "network identity management-server",
+    "value": [
+      "%extension-matter%matter_network_identity_management"
+    ]
+  },
+  {
     "clusterCode": "occupancy sensing-server",
     "value": [
       "%extension-matter%matter_occupancy_sensor"
@@ -453,6 +471,18 @@
     "clusterCode": "power topology-server",
     "value": [
       "%extension-matter%matter_power_topology"
+    ]
+  },
+  {
+    "clusterCode": "pressure measurement-server",
+    "value": [
+      "%extension-matter%matter_pressure_measurement"
+    ]
+  },
+  {
+    "clusterCode": "proximity ranging-server",
+    "value": [
+      "%extension-matter%matter_proximity_ranging"
     ]
   },
   {

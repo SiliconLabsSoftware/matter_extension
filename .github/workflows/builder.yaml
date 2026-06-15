@@ -45,6 +45,7 @@ jobs:
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
+                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
 
             - name: Create asset files
               if: startsWith(github.ref_name, 'release_')
@@ -68,8 +69,8 @@ jobs:
                       ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
-                      !out/**/*-bootloader/build/debug/*.map
-                      !out/**/*-bootloader/build/debug/*.out
-                      !out/**/*-copy-sources/**
+                      !out/**/*_bootloader/build/debug/*.map
+                      !out/**/*_bootloader/build/debug/*.out
+                      !out/**/*copy-sources/**
                   if-no-files-found: warn
                   overwrite: true
