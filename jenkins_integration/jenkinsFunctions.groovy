@@ -79,7 +79,7 @@ def run_code_size_analysis() {
 
                 determine_compiler() {
                     local path=$1
-                    if [[ "$path" == *"_solution_llvm_lto/"* ]]; then
+                    if [[ "$path" == *"_solution_llvm"* ]]; then
                         echo "llvm"
                     else
                         echo "gcc"
