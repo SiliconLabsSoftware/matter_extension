@@ -39,13 +39,19 @@ class Colors:
     YELLOW = '\033[1;33m'
     NC = '\033[0m'
 
-def log_info(message: str):
+def log_info(message: str, *args):
+    if args:
+        message = message % args
     print(f"{Colors.GREEN}[INFO]{Colors.NC} {message}")
 
-def log_warn(message: str):
+def log_warn(message: str, *args):
+    if args:
+        message = message % args
     print(f"{Colors.YELLOW}[WARN]{Colors.NC} {message}")
 
-def log_error(message: str):
+def log_error(message: str, *args):
+    if args:
+        message = message % args
     print(f"{Colors.RED}[ERROR]{Colors.NC} {message}")
 @dataclass(frozen=True)
 class CiJsonRecord:
@@ -516,19 +522,19 @@ def _run_hwstudio(
     returncode, stdout, stderr = run_command(cmd, check=False, capture=True)
 
     if returncode != 0:
-        log_error(f"hwstudio failed for {output_file} (exit code {returncode})")
+        log_error("hwstudio failed for %s (exit code %s)", output_file, returncode)
         if stderr.strip():
-            log_error(f"hwstudio stderr:\n{stderr.strip()}")
+            log_error("hwstudio stderr:\n%s", stderr.strip())
         if stdout.strip():
-            log_error(f"hwstudio stdout:\n{stdout.strip()}")
+            log_error("hwstudio stdout:\n%s", stdout.strip())
         return False
 
     if not out_path.exists():
-        log_error(f"hwstudio exited 0 but {output_file} was not created")
+        log_error("hwstudio exited 0 but %s was not created", output_file)
         return False
 
     if mtime_before is not None and out_path.stat().st_mtime == mtime_before:
-        log_error(f"hwstudio exited 0 but {output_file} was not updated (stale output)")
+        log_error("hwstudio exited 0 but %s was not updated (stale output)", output_file)
         return False
 
     return True
@@ -578,18 +584,18 @@ def generate_metadata(
             check=False, capture=True,
         )
         if rc != 0:
-            log_error(f"hwmatrix failed (exit code {rc})")
+            log_error("hwmatrix failed (exit code %s)", rc)
             if matrix_stderr.strip():
-                log_error(f"hwmatrix stderr:\n{matrix_stderr.strip()}")
+                log_error("hwmatrix stderr:\n%s", matrix_stderr.strip())
             failures.append(matrix)
         elif not matrix_path.exists() or (
             matrix_mtime_before is not None
             and matrix_path.stat().st_mtime == matrix_mtime_before
         ):
-            log_error(f"hwmatrix exited 0 but {matrix} was not updated")
+            log_error("hwmatrix exited 0 but %s was not updated", matrix)
             failures.append(matrix)
         else:
-            log_info(f"Generated {matrix}")
+            log_info("Generated %s", matrix)
 
     finally:
         for f in temp_files:
@@ -597,7 +603,7 @@ def generate_metadata(
                 f.unlink()
 
     if failures:
-        log_error(f"Metadata generation failed for: {', '.join(failures)}")
+        log_error("Metadata generation failed for: %s", ", ".join(failures))
         sys.exit(1)
 
 def main():
