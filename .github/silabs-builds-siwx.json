@@ -22,7 +22,7 @@
                 "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
             }
         ],
-        "thermostat_app": [
+        "thermostat": [
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
