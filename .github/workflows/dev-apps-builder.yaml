@@ -280,7 +280,7 @@ jobs:
         name: Build Coverage
         needs:
             - set-build-type
-        if: always() || (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility'))
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
