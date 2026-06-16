@@ -1,8 +1,11 @@
 name: SLC CLI Scripts
 
 on:
+  pull_request:
+    branches:
+        - main
+        - "release_*"
   workflow_dispatch:
-  push:
 permissions:
   contents: read
   actions: read
