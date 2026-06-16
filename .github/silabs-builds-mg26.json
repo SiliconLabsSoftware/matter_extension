@@ -14,7 +14,7 @@
         "platform_template": [
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             }
         ],
         "thermostat": [
@@ -39,11 +39,11 @@
         "zigbee_light":  [
             {
                 "boards": ["brd4116a", "brd4117a", "brd4118a", "brd2608a", "brd4120a", "brd4121a"],
-                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"] 
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             }
         ],
         "platform_template": [
@@ -53,15 +53,15 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"] 
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"] 
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "--copy-sources"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-llvm","--with toolchain_llvm,matter_peripherals"]
+                "arguments": ["--output_suffix peripherals-llvm","--with toolchain_llvm","--with_app matter_peripherals"]
             }
         ],
         "thermostat": [
@@ -81,6 +81,11 @@
                 "boards": ["brd4116a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix wdog",
+                              "--with_app watchdog_manager,matter_tests"]
             },
             {
                 "boards": ["brd4116a"],
@@ -122,12 +127,6 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
         "light_switch_app": [
@@ -138,35 +137,13 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix llvm-lto",
+                "arguments": ["--output_suffix llvm-sqa-lto",
                               "--with toolchain_llvm_lto"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with_app toolchain_llvm_lto", "-pids application",
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
-            }
-        ],
-        "multi_sensor_app": [
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            }
-        ],
-        "window_app": [
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix low-power",
-                              "--with_app matter_platform_low_power",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
         "zigbee_light": [
@@ -190,32 +167,8 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix sequential-ota-3", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
-                              "--with_app matter_zigbee_sequential"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent-ota-3", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'",
-                              "--with_app matter_zigbee_concurrent"]
-            },
-            {
-                "boards": ["brd4116a"],
                 "arguments": ["--output_suffix cmp-concurrent-high-bw-phy",
                               "--with_app zigbee_high_datarate_phy,matter_zigbee_concurrent"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent-low-power",
-                              "--with_app matter_platform_low_power","--with_app matter_zigbee_concurrent",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
-            },
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix sequential-low-power",
-                              "--with_app matter_platform_low_power","--with_app matter_zigbee_sequential",
-                              "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4116a"],
@@ -238,14 +191,17 @@
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd-ota-3", "--with_app matter_peripherals,matter_icd_core", "--without_app matter_log_rtt", "-pids application",
-                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:3,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"3\"'"]
+                "arguments": ["--output_suffix peripherals-llvm-sqa","--with toolchain_llvm","--with_app matter_peripherals"]
             },
             {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-llvm-ota-2","--with toolchain_llvm,matter_peripherals", "--without_app matter_log_rtt", "-pids application",
+                "arguments": ["--output_suffix peripherals-llvm-sqa-ota-2","--with toolchain_llvm","--with_app matter_peripherals", "--without_app matter_log_rtt", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4116a"],
+                "arguments": ["--output_suffix peripherals-icd-sit-200","--with_app matter_peripherals,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:200'"]
             }
         ]
-    } 
+    }
 }

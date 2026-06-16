@@ -19,8 +19,6 @@ component:
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
 
-  - id: mbedtls_pki_aws
-    condition: [matter_aws]
   - id: mbedtls_entropy_default_aws
     condition: [matter_aws]
   - id: matter_wifi
@@ -32,7 +30,6 @@ component:
   - id: matter_administrator_commissioning
   - id: matter_basic_information
   - id: matter_descriptor
-  - id: matter_diagnostic_logs
   - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
@@ -54,7 +51,6 @@ component:
   
   - id: matter_ota_requestor
   - id: matter_ota_support
-  - id: matter_power_source
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
@@ -109,21 +105,19 @@ include:
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
-      - path: AppTask.h
-      - path: RangeHoodManager.h
       - path: CHIPProjectConfig.h
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/rangehood-app/rangehood-app-common/include
     file_list:
     - path: ExtractorHoodEndpoint.h
     - path: LightEndpoint.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+    directory: include
 
 source:
-  - path: ../../../../third_party/matter_sdk/examples/rangehood-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/rangehood-app/silabs/src/RangeHoodManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/rangehood-app/silabs/src/DataModelCallbacks.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
