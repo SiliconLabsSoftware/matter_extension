@@ -32,21 +32,33 @@ jobs:
               with:
                   submodules: false
             
-            - name: Free disk space
-              uses: jlumbroso/free-disk-space@v1.3.1
-              with:
-                tool-cache: false
-                android: true
-                dotnet: true
-                haskell: true
-                large-packages: false
-                docker-images: false
-                swap-storage: false
-        
-            - name: Report disk space
+            - name: Free runner disk space
               shell: bash
               run: |
-                  df -h /
+                  root=/runner-root-volume
+                  prune=(
+                    /usr/share/dotnet
+                    /usr/local/lib/android/sdk/platforms
+                    /usr/local/lib/android/sdk/build-tools
+                  )
+
+                  if [ ! -d "$root" ]; then
+                      echo "Runner root is not mounted at $root; skipping disk cleanup."
+                      exit 0
+                  fi
+
+                  df -h "$root"
+
+                  for dir in "${prune[@]}"; do
+                      if [ -d "${root}${dir}" ]; then
+                          echo "Removing ${dir}"
+                          rm -rf "${root}${dir}"
+                      else
+                          echo "Skipping ${dir}; not found"
+                      fi
+                  done
+
+                  df -h "$root"
 
             - name: Mark repository as safe for Git
               shell: bash
