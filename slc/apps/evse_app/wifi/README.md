@@ -101,19 +101,7 @@ This sample app works out of the box with no additional configuration required. 
 
 ### CustomerAppTask
 
-To implement custom app behavior you can override any Silicon Labs implemented
-API in the CustomerAppTask file. This example provides
-[`CustomerAppTask.h`](../../platform/silabs/customer/CustomerAppTask.h) and
-[`CustomerAppTask.cpp`](../../platform/silabs/customer/CustomerAppTask.cpp) for
-that purpose. The base implementation and the full set of overridable `*Impl()`
-APIs live in this example's source tree under
-[`include/AppTaskImpl.h`](include/AppTaskImpl.h) and
-[`src/AppTask.cpp`](src/AppTask.cpp). Any `*Impl()` you do not override keeps
-the Silicon Labs default behavior. To customize behavior, copy
-[`CustomerAppTask.h`](../../platform/silabs/customer/CustomerAppTask.h) and
-[`CustomerAppTask.cpp`](../../platform/silabs/customer/CustomerAppTask.cpp) from
-`examples/platform/silabs/customer/` into this app's `include/` and `src/`
-folders, then update the corresponding paths in `BUILD.gn`.
+To implement custom app behavior you can override any Silicon Labs implemented API in the CustomerAppTask file. This example provides `CustomerAppTask.h` and `CustomerAppTask.cpp` for that purpose. The base implementation and the full set of overridable `*Impl()` APIs are supplied by the build system in `AppTask.cpp` and `AppTaskImpl.h` under `autogen/`. Any `*Impl()` you do not override keeps the Silicon Labs default behavior.
 
 ### How to Override APIs
 
