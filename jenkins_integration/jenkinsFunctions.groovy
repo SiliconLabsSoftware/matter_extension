@@ -18,7 +18,7 @@ def run_code_size_analysis() {
         
     sh 'python3 -m venv code_size_analysis_venv'
     sh '. code_size_analysis_venv/bin/activate && python3 -m pip install --upgrade pip'
-    sh '. code_size_analysis_venv/bin/activate && pip3 install code_size_analyzer_client-python>=1.0.1'
+    sh '. code_size_analysis_venv/bin/activate && pip3 install "code_size_analyzer_client-python>=1.2.0"'
     
     echo "Build number: ${env.BUILD_NUMBER}"
     echo "Branch name: ${env.BRANCH_NAME}"
@@ -223,6 +223,39 @@ def run_code_size_analysis() {
         
         echo "Code size analysis completed"
     }
+
+def compare_code_size_analysis(previousBuildNumber) {
+    echo "Comparing code size analysis against previous successful build: ${previousBuildNumber}"
+
+    sh 'python3 -m venv code_size_compare_venv'
+    sh '. code_size_compare_venv/bin/activate && python3 -m pip install --upgrade pip'
+    sh '. code_size_compare_venv/bin/activate && pip3 install "code_size_analyzer_client-python>=1.2.0"'
+
+    withEnv([
+        "BRANCH_NAME=${env.BRANCH_NAME}",
+        "CURRENT_BUILD_NUMBER=${env.BUILD_NUMBER}",
+        "PREVIOUS_BUILD_NUMBER=${previousBuildNumber}",
+        "CODE_SIZE_FLASH_THRESHOLD_PCT=0.2",
+        "CODE_SIZE_RAM_THRESHOLD_PCT=1.0"
+    ]) {
+        def compareStatus = sh(script: '''#!/bin/bash
+set -o pipefail
+. code_size_compare_venv/bin/activate
+unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+python3 jenkins_integration/code_size/compare_code_size_results.py \
+    --branch-name "$BRANCH_NAME" \
+    --current-build "$CURRENT_BUILD_NUMBER" \
+    --previous-build "$PREVIOUS_BUILD_NUMBER" \
+    --service-url https://code-size-analyzer.silabs.net \
+    --flash-threshold-pct "$CODE_SIZE_FLASH_THRESHOLD_PCT" \
+    --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" | tee code_size_compare_report.txt
+        ''', returnStatus: true)
+        archiveArtifacts artifacts: 'code_size_compare_report.txt', allowEmptyArchive: true
+        if (compareStatus != 0) {
+            error("Code size comparison failed. See code_size_compare_report.txt for details.")
+        }
+    }
+}
 
 def parse_upload_artifacts_output(output) {
         def sha_matcher = output =~ /Commit SHA - (\w+)/

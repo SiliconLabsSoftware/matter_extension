@@ -28,6 +28,12 @@ def combineSlackSummary(String commitSummary, String extra) {
     return c ?: e ?: ''
 }
 
+def isCodeSizeBranch() {
+    return env.BRANCH_NAME == "main" ||
+           env.BRANCH_NAME.startsWith("release_") ||
+           env.BRANCH_NAME == "test_sqa_tuan"
+}
+
 def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
     def statusEmoji = status == "PASS" ? "✅" : "❌"
@@ -120,12 +126,30 @@ pipeline
         }
         stage('Code Size Analysis') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { isCodeSizeBranch() }
             }
             steps {
                 script {
                     withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                         pipelineFunctions.run_code_size_analysis()
+                    }
+                }
+            }
+        }
+        stage('Compare Code Size') {
+            when {
+                expression { isCodeSizeBranch() }
+            }
+            steps {
+                script {
+                    def previousSuccessful = currentBuild.previousSuccessfulBuild
+                    if (previousSuccessful == null) {
+                        echo "No previous successful build found. Skipping code size comparison."
+                        return
+                    }
+
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.compare_code_size_analysis(previousSuccessful.number)
                     }
                 }
             }
