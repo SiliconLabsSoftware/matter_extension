@@ -13,3 +13,5 @@ provides:
 define:
   - name: SL_MATTER_EM4_SLEEP
     value: "1"
+requires:
+  - name: matter_icd
