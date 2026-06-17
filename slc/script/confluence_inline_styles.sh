@@ -1,4 +1,14 @@
 #!/usr/bin/env bash
+# Generate inline styles for board compatibility matrix HTML for Confluence compatibility.
+#
+# Replaces CSS classes with inline styles so colors, borders, and
+# headers survive Confluence's HTML sanitizer. Content is unchanged.
+#
+# Usage: confluence_inline_styles.sh INPUT_HTML OUTPUT_DIR
+# Output: OUTPUT_DIR/<stem>.confluence.html
+#
+# Example:
+#   confluence_inline_styles.sh board_compatibility_matrix.html .
 set -euo pipefail
 
 if [ "$#" -lt 2 ]; then
