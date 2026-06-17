@@ -44,13 +44,14 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   #- id: matter_log_uart
-  - id: matter_log_rtt
+  #- id: matter_log_rtt
   - id: matter_read_client
 
   - id: matter
   - id: matter_platform_mg
   - id: ot_stack_ftd
-  - id: matter_cpc
+  #- id: matter_cpc
+  - id: matter_mmic
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
@@ -63,17 +64,22 @@ component:
   - id: bootloader_interface_s3
     condition: [matter_platform_mg, device_series_3]
 
-  # OT-NCP components
-  - id: cpc_secondary_driver_uart_usart
+ #mmic testting
+  - id: iostream_eusart
     instance:
-      - vcom 
-  - id: ot_ncp_cpc
-  - id: ot_reset_utils
-  - id: mbedtls_jpake
-  - id: mbedtls_tls
-  - id: mbedtls_dtls
-  - id: ot_ncp_source
-  - id: ot_cli_source
+      - vcom
+
+  # OT-NCP components
+  #- id: cpc_secondary_driver_uart_usart
+  #  instance:
+  #    - vcom 
+  #- id: ot_ncp_cpc
+  #- id: ot_reset_utils
+  #- id: mbedtls_jpake
+  #- id: mbedtls_tls
+  #- id: mbedtls_dtls
+  #- id: ot_ncp_source
+  #- id: ot_cli_source
   # Override configuration for JTAG use
   - id: matter_segger_rtt
   - id: configuration_over_swo
@@ -212,7 +218,9 @@ configuration:
   - condition:
     - ot_rtt_log
     name: BUFFER_SIZE_DOWN
-    value: '0'    
+    value: '0'  
+  - name: SL_BOARD_ENABLE_VCOM
+    value: '1'    
 #  - name: OPENTHREAD_CONFIG_MULTIPLE_INSTANCE_ENABLE
 #    value: 1
 #  - name: OPENTHREAD_CONFIG_MULTIPLE_STATIC_INSTANCE_ENABLE

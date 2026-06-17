@@ -1,0 +1,29 @@
+id: matter_mmic
+label: Matter CPC
+description: Enables sources and defines for CPC as used by Matter components
+package: matter
+category: Matter|Platform|CPC
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_mmic
+
+conflicts:
+  - name: matter_log
+
+
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic.c
+  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic_task.c
+
+
+include:
+  - path: third_party/matter_sdk/examples/platform/silabs/mmic
+    file_list:
+      - path: mmic.h
+      - path: mmic_task.h
+
+
