@@ -55,6 +55,11 @@ class CreateApp:
         sys.exit(1)
 
     @staticmethod
+    def _tool_exists(tool):
+        """Return True when a tool name or explicit executable path is usable."""
+        return bool(tool) and (os.path.isfile(tool) or shutil.which(tool) is not None)
+
+    @staticmethod
     def validate_tools():
         """Validate that all required build tools are available on the system.
         
@@ -68,9 +73,9 @@ class CreateApp:
         Raises:
             SystemExit: If any required tool is not found
         """
-        slc_exe = os.getenv("SLC_EXECUTABLE", "slc")
-        ninja_exe = os.getenv("NINJA_EXECUTABLE", "ninja") 
-        commander_exe = os.getenv("COMMANDER_EXECUTABLE", "commander")
+        slc_exe = os.getenv("SLC_EXECUTABLE") or "slc"
+        ninja_exe = os.getenv("NINJA_EXECUTABLE") or os.getenv("NINJA_EXE_PATH") or os.getenv("NINJA_PATH") or "ninja"
+        commander_exe = os.getenv("COMMANDER_EXECUTABLE") or "commander"
         
         tools = [
             (slc_exe, "slc not detected on host. Please run slc/sl_setup_env.py to install slc."),
@@ -82,7 +87,7 @@ class CreateApp:
         
         missing_tools = []
         for tool, error_msg in tools:
-            if not shutil.which(tool):
+            if not CreateApp._tool_exists(tool):
                 logging.error(error_msg)
                 missing_tools.append(tool)
         
@@ -157,11 +162,14 @@ class CreateApp:
         try:
             env_path = os.path.join(os.getcwd(), "slc", "tools", ".env")
             load_dotenv(env_path, override=True)
-            os.environ["PATH"] = os.getenv("TOOLS_PATH") + os.environ["PATH"]
+            tools_path = os.getenv("TOOLS_PATH")
+            if not tools_path:
+                raise TypeError("TOOLS_PATH is missing")
+            os.environ["PATH"] = os.pathsep.join([tools_path, os.environ["PATH"]])
             self.java_path = os.getenv("JAVA_HOME")
             self.silabs_chip_root = os.getenv("silabs_chip_root")
             self.POST_BUILD_EXE = os.getenv("POST_BUILD_EXE")
-            self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH")
+            self.NINJA_EXE_PATH = os.getenv("NINJA_EXE_PATH") or os.getenv("NINJA_PATH")
             self.sisdk_root = os.getenv("SISDK_ROOT")
             self.wiseconnect_root = os.getenv("WISECONNECT_ROOT")
             self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
