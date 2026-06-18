@@ -236,7 +236,7 @@ class MatterEnvSetup:
             return "slc.bat" if self.platform == "win32" else "slc"
         if tool == "java21":
             if self.platform == "darwin":
-                return os.path.join("jre", "Contents", "Home", "bin", "java")
+                return os.path.join("jre", "bin", "java")
             java_executable = "java.exe" if self.platform == "win32" else "java"
             return os.path.join("jre", "bin", java_executable)
         if tool == "gcc-arm-none-eabi":
@@ -249,8 +249,11 @@ class MatterEnvSetup:
         if tool == "ninja":
             return "ninja.exe" if self.platform == "win32" else "ninja"
         if tool == "cmake":
-            cmake_executable = "cmake.exe" if self.platform == "win32" else "cmake"
-            return os.path.join("bin", cmake_executable)
+            if self.platform == "darwin":
+                return os.path.join("CMake.app", "Contents", "bin", "cmake")
+            else:
+                cmake_executable = "cmake.exe" if self.platform == "win32" else "cmake"
+                return os.path.join("bin", cmake_executable)
         return ""
 
     def _resolve_tool_paths(self, tool, location):
