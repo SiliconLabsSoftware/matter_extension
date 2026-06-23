@@ -16,6 +16,7 @@ template_file:
   - path: third_party/matter_sdk/examples/closure-app/silabs/include/ClosureManager.h
   - path: third_party/matter_sdk/examples/closure-app/silabs/include/ClosureManagerImpl.h
   - path: third_party/matter_sdk/examples/closure-app/silabs/src/AppTask.cpp
+  - path: third_party/matter_sdk/examples/closure-app/silabs/src/ClosureManager.cpp
 
 ui_hints:
   visibility: never
