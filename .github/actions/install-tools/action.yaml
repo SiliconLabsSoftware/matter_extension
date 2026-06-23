@@ -89,6 +89,7 @@ runs:
       id: install-llvm
       shell: bash
       run: |
+        conan remote add silabs-conan-prerelease https://conan-prerelease.silabs.net
         slt install llvm-arm-toolchain-for-embedded
         ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
         echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
