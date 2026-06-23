@@ -11,9 +11,8 @@ jobs:
             example-app: "lock_app"
             build-type: "custom-sqa"
             ncp-917-support: true
-            mg24-internal-support: false
+            ncp-917-dual-stack-support: true
             mgm24-internal-support: false
-            mg26-internal-support: false
             mgm26-internal-support: false
 
     build_lighting_app:
@@ -23,8 +22,8 @@ jobs:
             example-app: "lighting_app"
             build-type: "custom-sqa"
             mg24-internal-support: false
-            mgm24-internal-support: false
             mg26-internal-support: false
+            mgm24-internal-support: false
             mgm26-internal-support: false
 
     build_window_app:
@@ -33,13 +32,7 @@ jobs:
         with:
             example-app: "window_app"
             build-type: "custom-sqa"
-            mg24-support: false
-            mg24-internal-support: false
             mgm24-support: false
-            mg26-support: false
-            mg26-internal-support: false
-            mgm26-internal-support: false
-            wifi-soc-support: false
             sixg301-support: false
 
   #  build_dishwasher_app:
@@ -64,6 +57,7 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
+            ncp-917-support: false
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
@@ -80,10 +74,8 @@ jobs:
         with:
             example-app: "light_switch_app"
             build-type: "custom-sqa"
-            mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            mg26-internal-support: false
             mgm26-internal-support: false
 
     build_multi_sensor_app:
@@ -92,11 +84,9 @@ jobs:
         with:
             example-app: "multi_sensor_app"
             build-type: "custom-sqa"
-            mg24-internal-support: false
+            mg24-support: false
             mgm24-support: false
             mgm24-internal-support: false
-            mg26-support: false
-            mg26-internal-support: false
             mgm26-internal-support: false
             sixg301-support: false
 
@@ -113,28 +103,26 @@ jobs:
             wifi-soc-support: false
 
     build_closure_app:
-      name: Build Closure App
-      uses: ./.github/workflows/platform-builder.yaml
-      with:
-        example-app: "closure_app"
-        build-type: "custom-sqa"
-        mg24-internal-support: false
-        mgm24-support: false
-        mgm24-internal-support: false
-        mg26-internal-support: false
-        mgm26-internal-support: false
+        name: Build Closure App
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "closure_app"
+            build-type: "custom-sqa"
+            mgm24-support: false
+            mgm24-internal-support: false
+            mgm26-internal-support: false
 
     build_platform_template:
-      name: Build Platform App
-      uses: ./.github/workflows/platform-builder.yaml
-      with:
-        example-app: "platform_template"
-        build-type: "custom-sqa"
-        mg24-internal-support: false
-        mgm24-support: false
-        mgm24-internal-support: false
-        mg26-internal-support: false
-        mgm26-internal-support: false
+        name: Build Platform App
+        uses: ./.github/workflows/platform-builder.yaml
+        with:
+            example-app: "platform_template"
+            build-type: "custom-sqa"
+            mg24-internal-support: false
+            mgm24-support: false
+            mgm24-internal-support: false
+            mg26-internal-support: false
+            mgm26-internal-support: false
 
     merge-apps:
         name: Merge SQA App Artifacts

@@ -93,7 +93,9 @@ for xml_path in cluster_xml_path:
         filename = xmlfile.split(".")[0]
 
         # Handle special cases for filename differences
-        if "ota" in filename:
+        if "ota-provider" in filename:
+            clustername = "ota_provider"
+        elif "ota-requestor" in filename:
             clustername = "ota_requestor"
         elif "occupancy" in filename:
             clustername = "occupancy_sensor"
@@ -134,18 +136,9 @@ for xml_path in cluster_xml_path:
                     name = line.split("<name>")[-1].split("<")[0]
             # If both category and name are found, store them in the dictionary
             if category != "" and name != "":
-                if "ota" in clustername:
-                    namecategories[clustername] = {}
-                    namecategories[clustername]["category"] = category
-                    namecategories[clustername]["name"] = name
-                    clustername = "ota_provider"
-                    namecategories[clustername] = {}
-                    namecategories[clustername]["category"] = category
-                    namecategories[clustername]["name"] = name.replace("Requestor", "Provider")
-                else:
-                    namecategories[clustername] = {}
-                    namecategories[clustername]["category"] = category
-                    namecategories[clustername]["name"] = name
+                namecategories[clustername] = {}
+                namecategories[clustername]["category"] = category
+                namecategories[clustername]["name"] = name
             else :
                 namecategories[clustername] = {}
                 namecategories[clustername]["category"] = "General"
@@ -216,11 +209,16 @@ for clustercomponentname in sorted(cluster_data.keys()):
         if len(current_include_data)>1:
             include = {}
             for i in range(len(current_include_data)):
-                if current_include_data[i]["path"] not in cluster_data[clustercomponentname]["include"]:
-                    headers = []
-                    for header in current_include_data[i]["file_list"]:
-                        headers.append(header["path"])
-                    include = {"path": current_include_data[i]["path"], "file_list": headers}
+                inc_path = current_include_data[i]["path"]
+                if not os.path.isdir(inc_path) or inc_path == cluster_data[clustercomponentname]["include"]:
+                    continue
+                headers = []
+                for header in current_include_data[i]["file_list"]:
+                    if not os.path.isfile(os.path.join(inc_path, header["path"])):
+                        continue
+                    headers.append(header["path"])
+                if headers:
+                    include = {"path": inc_path, "file_list": headers}
                     includes.append(include)
         
         #merge with extracted define data and remove duplicates

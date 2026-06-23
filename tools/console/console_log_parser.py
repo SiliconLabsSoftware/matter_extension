@@ -29,7 +29,7 @@ class LogParser:
             message: The log message to categorize.
             
         Returns:
-            Category string: 'error', 'warn', 'silabs', 'detail', or 'info'.
+            Category string: 'error', 'warn', 'silabs', 'zigbee', 'detail', or 'info'.
         """
         message_lower = message.lower()
         if '[error]' in message_lower or '[error ]' in message_lower:
@@ -38,6 +38,8 @@ class LogParser:
             return 'warn'
         elif '[silabs]' in message_lower or '[silabs ]' in message_lower:
             return 'silabs'
+        elif '[zb]' in message_lower or '[zb ]' in message_lower:
+            return 'zigbee'
         elif '[detail]' in message_lower or '[detail ]' in message_lower:
             return 'detail'
         elif '[info]' in message_lower or '[info ]' in message_lower:
@@ -222,7 +224,8 @@ class LogFilter:
             'warn': True,
             'info': True,
             'detail': True,
-            'silabs': True
+            'silabs': True,
+            'zigbee': True
         }
         
         self.module_filters: dict = {

@@ -36,7 +36,6 @@ component:
   - id: matter_basic_information
   - id: matter_bindings
   - id: matter_descriptor
-  - id: matter_fixed_label
   - id: matter_general_commissioning
   - id: matter_general_diagnostics
   - id: matter_group_key_mgmt
@@ -46,12 +45,10 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
-  - id: matter_software_diagnostics
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
   - id: matter_thread_network_diagnostics
   - id: matter_user_label
-  - id: matter_unit_localization
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_si70xx_sensor
@@ -77,7 +74,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/cmp/config/sl_cmp_config.h
     condition: [matter_zigbee_multiprotocol_common]
@@ -177,8 +174,13 @@ configuration:
   - name: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
     value: 1088
     condition: [matter_zigbee_multiprotocol_common, device_series_2]
-    
-# CMP configs for Zigbee Matter
+    unless: [matter_ble_dmp_test]
+  - name: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
+    value: 1400
+    condition:
+      [matter_zigbee_multiprotocol_common, device_series_2, matter_ble_dmp_test]
+
+  # CMP configs for Zigbee Matter
   - name: SLI_ZIGBEE_PRIMARY_NETWORK_DEVICE_TYPE
     value: SLI_ZIGBEE_NETWORK_DEVICE_TYPE_COORDINATOR_OR_ROUTER
     condition: [matter_zigbee_multiprotocol_common]
@@ -212,7 +214,7 @@ configuration:
   - name: SL_LEGACY_HAL_DISABLE_WATCHDOG
     value: 1
     condition: [matter_zigbee_multiprotocol_common]
-# series 3 requires more stack in zb stacks
+  # series 3 requires more stack in zb stacks
   - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
     value: 1500
     condition: [device_series_3, matter_zigbee_multiprotocol_common]
