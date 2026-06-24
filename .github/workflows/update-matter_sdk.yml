@@ -33,7 +33,7 @@ jobs:
         target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
     steps:
       - name: Checkout target branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ matrix.target_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
 
       - name: Checkout PR branch
         if: steps.find_pr.outputs.pr_number != ''
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ steps.find_pr.outputs.head_ref }}
           token: ${{ steps.app_token.outputs.token }}
