@@ -51,7 +51,7 @@ jobs:
           echo "Resolved PR branch: $PR_BRANCH"
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: false
           ref: ${{ steps.resolve_inputs.outputs.target_branch }}
