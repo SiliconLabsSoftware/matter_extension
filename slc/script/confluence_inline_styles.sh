@@ -27,6 +27,7 @@ stem="${base%.*}"
 out="${outdir}/${stem}.confluence.html"
 
 perl -0777 -pe '
+s/<h2>Legend<\/h2>\s*<table>.*?<\/table>//s;
 s/<table>/<table style="border-collapse:collapse;border:1px solid #999;">/g;
 s/<td class='\''compatible'\''>/<td style="border:1px solid #999;padding:4px;width:50px;text-align:center;background-color:yellow;color:black;">/g;
 s/<td class='\''incompatible'\''>/<td style="border:1px solid #999;padding:4px;width:50px;text-align:center;background-color:lightgrey;color:black;">/g;
