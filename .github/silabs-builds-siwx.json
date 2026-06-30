@@ -21,6 +21,12 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter-aws", "--with_app matter_aws"]
             }
+        ],
+		"window_app": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-60", "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
+            }
         ]
     },
     "full": {
