@@ -2627,7 +2627,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/AppTestContext.cpp
   - third_party/matter_sdk/src/app/tests/AppTestContext.h
   - third_party/matter_sdk/src/app/tests/BUILD.gn
-  - third_party/matter_sdk/src/app/tests/CASESessionManagerTestAccess.h
   - third_party/matter_sdk/src/app/tests/TestAclAttribute.cpp
   - third_party/matter_sdk/src/app/tests/TestAclCommand.cpp
   - third_party/matter_sdk/src/app/tests/TestAclEvent.cpp
@@ -2639,7 +2638,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/TestBasicCommandPathRegistry.cpp
   - third_party/matter_sdk/src/app/tests/TestBufferedReadCallback.cpp
   - third_party/matter_sdk/src/app/tests/TestBuilderParser.cpp
-  - third_party/matter_sdk/src/app/tests/TestCASESessionManagerReleaseSession.cpp
   - third_party/matter_sdk/src/app/tests/TestCertificateTableImpl.cpp
   - third_party/matter_sdk/src/app/tests/TestCheckInHandler.cpp
   - third_party/matter_sdk/src/app/tests/TestClusterStateCache.cpp
