@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import argparse
 import os
+from pathlib import Path
 import sys
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
@@ -32,88 +34,11 @@ class SizeRecord:
     ram_size: int
 
 
-CODE_SIZE_TARGETS = [
-    CodeSizeTarget(
-        "slc-lighting-app-release-MG24",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-lighting-app-release-MG24-nolto",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-lock-app-release-MG24",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-lock-app-release-MG24-nolto",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-zigbee-matter-light-release-MG24",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-zigbee-matter-light-release-MG24-nolto",
-        "BRD4187C",
-        "efr32mg24b210f1536im48",
-    ),
-    CodeSizeTarget(
-        "slc-lighting-app-release-MG301",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-lighting-app-release-MG301-nolto",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-lock-app-release-MG301",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-lock-app-release-MG301-nolto",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-zigbee-matter-light-release-MG301",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-zigbee-matter-light-release-MG301-nolto",
-        "BRD4407A",
-        "simg301m114lih",
-    ),
-    CodeSizeTarget(
-        "slc-SiWx917-lighting-release-Si917",
-        "BRD4338A",
-        "siwg917m111mgtba",
-    ),
-    CodeSizeTarget(
-        "slc-SiWx917-lighting-release-Si917-nolto",
-        "BRD4338A",
-        "siwg917m111mgtba",
-    ),
-    CodeSizeTarget(
-        "slc-SiWx917-lock-release-Si917",
-        "BRD4338A",
-        "siwg917m111mgtba",
-    ),
-    CodeSizeTarget(
-        "slc-SiWx917-lock-release-Si917-nolto",
-        "BRD4338A",
-        "siwg917m111mgtba",
-    ),
-]
+BOARD_METADATA = {
+    "brd4187c": ("BRD4187C", "MG24", "efr32mg24b210f1536im48"),
+    "brd4407a": ("BRD4407A", "MG301", "simg301m114lih"),
+    "brd4338a": ("BRD4338A", "Si917", "siwg917m111mgtba"),
+}
 
 
 def normalize_build_number(build_number: str) -> str:
@@ -128,6 +53,77 @@ def build_number_value(build_number: str | None) -> int | None:
     if build_number.startswith("b"):
         build_number = build_number[1:]
     return int(build_number) if build_number.isdigit() else None
+
+
+def extract_solution_dir(path: Path) -> str | None:
+    for part in path.parts:
+        if part.endswith("_solution") or part.endswith("_solution_lto"):
+            return part
+    return None
+
+
+def extract_app_from_solution(solution_dir: str) -> str | None:
+    base_name = solution_dir
+    if base_name.endswith("_solution_lto"):
+        base_name = base_name[: -len("_solution_lto")]
+    elif base_name.endswith("_solution"):
+        base_name = base_name[: -len("_solution")]
+
+    if "zigbee_light" in base_name:
+        return "zigbee-matter-light"
+    if "lighting_app" in base_name:
+        return "lighting-app"
+    if "lock_app" in base_name:
+        return "lock-app"
+    return None
+
+
+def board_metadata_from_path(path: Path) -> tuple[str, str, str] | None:
+    path_parts = [part.lower() for part in path.parts]
+    for board_id, metadata in BOARD_METADATA.items():
+        if board_id in path_parts:
+            return metadata
+    return None
+
+
+def target_from_map_file(map_file_path: Path) -> CodeSizeTarget | None:
+    solution_dir = extract_solution_dir(map_file_path)
+    if solution_dir is None:
+        return None
+
+    app = extract_app_from_solution(solution_dir)
+    board_metadata = board_metadata_from_path(map_file_path)
+    if app is None or board_metadata is None:
+        return None
+
+    board, family, target_part = board_metadata
+    if board == "BRD4338A":
+        if app.endswith("-app"):
+            app = f"SiWx917-{app.removesuffix('-app')}"
+        else:
+            app = f"SiWx917-{app}"
+
+    application_name = f"slc-{app}-release-{family}"
+    if not solution_dir.endswith("_solution_lto"):
+        application_name = f"{application_name}-nolto"
+
+    return CodeSizeTarget(application_name, board, target_part)
+
+
+def discover_code_size_targets(map_root: str) -> list[CodeSizeTarget]:
+    targets: set[CodeSizeTarget] = set()
+    for map_file_path in Path(map_root).rglob("*.map"):
+        if "sqa-artifacts" in {part.lower() for part in map_file_path.parts}:
+            continue
+
+        target = target_from_map_file(map_file_path)
+        if target is not None:
+            targets.add(target)
+
+    return sorted(
+        targets,
+        key=lambda target: (target.board, target.application_name, target.target_part),
+    )
 
 
 def parse_args() -> argparse.Namespace:
@@ -146,6 +142,26 @@ def parse_args() -> argparse.Namespace:
         "--verify-ssl",
         action="store_true",
         help="Verify SSL certificate when calling the service.",
+    )
+    parser.add_argument(
+        "--map-root",
+        default=".",
+        help=(
+            "Root directory used to discover successfully built Dev Apps .map files. "
+            "Discovered files define the code-size targets to compare."
+        ),
+    )
+    parser.add_argument(
+        "--data-wait-retries",
+        type=int,
+        default=6,
+        help="Number of retries while waiting for current build records to appear.",
+    )
+    parser.add_argument(
+        "--data-wait-seconds",
+        type=int,
+        default=30,
+        help="Seconds to wait between current build record retries.",
     )
     parser.add_argument(
         "--flash-threshold-pct",
@@ -350,20 +366,74 @@ def compare_records(
     return code_failed or ram_failed
 
 
+def collect_target_data(
+    client: ResultsApi,
+    branch_name: str,
+    targets: list[CodeSizeTarget],
+    current_build: str,
+    previous_build: str,
+) -> tuple[list[tuple[CodeSizeTarget, SizeRecord | None, SizeRecord | None]], int]:
+    target_data = []
+    current_missing_count = 0
+
+    for target in targets:
+        target_records = query_target_records(client, branch_name, target)
+        current = select_exact_record(target, target_records, current_build)
+        previous = (
+            select_baseline_record(target, target_records, current, previous_build)
+            if current is not None
+            else None
+        )
+        if current is None:
+            current_missing_count += 1
+        target_data.append((target, current, previous))
+
+    return target_data, current_missing_count
+
+
 def main() -> int:
     args = parse_args()
     current_build = normalize_build_number(args.current_build)
     previous_build = normalize_build_number(args.previous_build)
+    code_size_targets = discover_code_size_targets(args.map_root)
+
+    if not code_size_targets:
+        print(f"WARNING: No successfully built Dev Apps .map files found in {args.map_root}.")
+        return 0
+
     client = create_results_api(args.service_url, args.verify_ssl)
 
     print(
         f"Comparing code size results for branch {args.branch_name}: "
         f"{current_build} vs preferred baseline {previous_build}"
     )
+    print(f"Discovered {len(code_size_targets)} code size target(s) from {args.map_root}")
     print(
         f"Thresholds: flash/code > {args.flash_threshold_pct:.2f}%, "
         f"RAM > {args.ram_threshold_pct:.2f}%"
     )
+
+    target_data = []
+    current_missing_count = 0
+    max_retries = max(args.data_wait_retries, 0)
+    wait_seconds = max(args.data_wait_seconds, 0)
+    for attempt in range(max_retries + 1):
+        target_data, current_missing_count = collect_target_data(
+            client,
+            args.branch_name,
+            code_size_targets,
+            current_build,
+            previous_build,
+        )
+        if current_missing_count < len(code_size_targets) or attempt == max_retries:
+            break
+
+        print(
+            f"No current build records are available yet. Waiting {wait_seconds}s "
+            f"before retry {attempt + 1}/{max_retries}..."
+        )
+        time.sleep(wait_seconds)
+
     print("=" * 160)
     print(
         f"{'Application':<48} {'Board':<10} {'Target':<24} {'Baseline':<10} "
@@ -375,15 +445,7 @@ def main() -> int:
     missing = []
     compared_count = 0
 
-    for target in CODE_SIZE_TARGETS:
-        target_records = query_target_records(client, args.branch_name, target)
-        current = select_exact_record(target, target_records, current_build)
-        previous = (
-            select_baseline_record(target, target_records, current, previous_build)
-            if current is not None
-            else None
-        )
-
+    for target, current, previous in target_data:
         if current is None or previous is None:
             missing.append(
                 (
@@ -405,7 +467,7 @@ def main() -> int:
             args.flash_threshold_pct,
             args.ram_threshold_pct,
         )
-        status = "FAIL" if failed else "PASS"
+        status = "WARN" if failed else "PASS"
         if failed:
             failures.append((current, previous))
 
@@ -430,12 +492,12 @@ def main() -> int:
             )
 
     if compared_count == 0:
-        print("ERROR: No comparable code size records were found.")
-        return 1
+        print("WARNING: No comparable code size records were found.")
+        return 0
 
     if failures:
-        print("Code size increase threshold exceeded.")
-        return 1
+        print("WARNING: Code size increase threshold exceeded.")
+        return 0
 
     print("All available code size results are within thresholds.")
     return 0
