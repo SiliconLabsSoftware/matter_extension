@@ -16,7 +16,5 @@ requires:
   - name: siwx917_ncp
 
 define:
-  - name: USE_BYPASS_CLOCK
-    value: "1"
   - name: SL_SI91X_ACX_MODULE
     value: "1"

@@ -1,0 +1,56 @@
+name: SLC CLI Scripts
+
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+  packages: read
+  id-token: none
+  issues: none
+  pull-requests: none
+jobs:
+  slc-cli-scripts:
+    name: SLC CLI Scripts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Enable Git long paths on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          git config --global core.longpaths true
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          submodules: true
+          lfs: true
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+    
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run sl_setup_env.py
+        run: |
+          python slc/sl_setup_env.py -v
+    
+      - name: Run sl_create_new_app.py
+        run: |
+          python slc/sl_create_new_app.py -n out/lighting-app -p slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw -b brd4187c -v
+
+      - name: Run sl_build_app.py
+        run: |
+          python slc/sl_build.py -p out/lighting-app/matter_thread_soc_lighting_app_series_2_freertos.slcw -b brd4187c -v
+    

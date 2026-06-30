@@ -215,6 +215,12 @@
                     "'--configuration SL_IDLE_MODE_DURATION_S:200'"
                 ]
             }
+        ],
+        "thermostat": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
+            }
         ]
     }
 }
