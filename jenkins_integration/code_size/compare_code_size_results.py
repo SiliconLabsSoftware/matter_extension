@@ -154,13 +154,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--data-wait-retries",
         type=int,
-        default=6,
+        default=10,
         help="Number of retries while waiting for current build records to appear.",
     )
     parser.add_argument(
         "--data-wait-seconds",
         type=int,
-        default=30,
+        default=60,
         help="Seconds to wait between current build record retries.",
     )
     parser.add_argument(

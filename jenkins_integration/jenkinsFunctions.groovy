@@ -245,7 +245,9 @@ def compare_code_size_analysis(previousBuildNumber) {
         "CURRENT_BUILD_NUMBER=${env.BUILD_NUMBER}",
         "PREVIOUS_BUILD_NUMBER=${previousBuildNumber}",
         "CODE_SIZE_FLASH_THRESHOLD_PCT=0.2",
-        "CODE_SIZE_RAM_THRESHOLD_PCT=1.0"
+        "CODE_SIZE_RAM_THRESHOLD_PCT=1.0",
+        "CODE_SIZE_DATA_WAIT_RETRIES=10",
+        "CODE_SIZE_DATA_WAIT_SECONDS=60"
     ]) {
         def compareStatus = sh(script: '''#!/bin/bash
 set -o pipefail
@@ -257,7 +259,9 @@ python3 jenkins_integration/code_size/compare_code_size_results.py \
     --previous-build "$PREVIOUS_BUILD_NUMBER" \
     --service-url https://code-size-analyzer.silabs.net \
     --flash-threshold-pct "$CODE_SIZE_FLASH_THRESHOLD_PCT" \
-    --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" | tee code_size_compare_report.txt
+    --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" \
+    --data-wait-retries "$CODE_SIZE_DATA_WAIT_RETRIES" \
+    --data-wait-seconds "$CODE_SIZE_DATA_WAIT_SECONDS" | tee code_size_compare_report.txt
         ''', returnStatus: true)
         archiveArtifacts artifacts: 'code_size_compare_report.txt', allowEmptyArchive: true
         if (compareStatus != 0) {
