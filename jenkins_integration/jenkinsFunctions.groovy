@@ -251,6 +251,7 @@ def compare_code_size_analysis(previousBuildNumber) {
         "PREVIOUS_BUILD_NUMBER=${previousBuildNumber}",
         "CODE_SIZE_FLASH_THRESHOLD_PCT=0.2",
         "CODE_SIZE_RAM_THRESHOLD_PCT=1.0",
+        "CODE_SIZE_INITIAL_WAIT_SECONDS=120",
         "CODE_SIZE_DATA_WAIT_RETRIES=10",
         "CODE_SIZE_DATA_WAIT_SECONDS=60"
     ]) {
@@ -258,6 +259,10 @@ def compare_code_size_analysis(previousBuildNumber) {
 set -o pipefail
 . code_size_compare_venv/bin/activate
 unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+if [ "$CODE_SIZE_INITIAL_WAIT_SECONDS" -gt 0 ]; then
+    echo "Waiting ${CODE_SIZE_INITIAL_WAIT_SECONDS}s before querying code size analyzer records..."
+    sleep "$CODE_SIZE_INITIAL_WAIT_SECONDS"
+fi
 python3 jenkins_integration/code_size/compare_code_size_results.py \
     --branch-name "$BRANCH_NAME" \
     --current-build "$CURRENT_BUILD_NUMBER" \

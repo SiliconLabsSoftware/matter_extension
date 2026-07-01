@@ -247,7 +247,10 @@ def value_from_size_entry(entry: Any, *names: str) -> int | None:
     return None
 
 
-def extract_size_pair(summary: dict[str, Any]) -> tuple[int, int]:
+def extract_size_pair(
+    summary: dict[str, Any],
+    allow_section_sum: bool = True,
+) -> tuple[int, int]:
     direct_code = value_from_size_entry(summary, "code_size", "codeSize")
     direct_ram = value_from_size_entry(summary, "RAM_size", "RAMSize", "ram_size")
     if direct_code is not None and direct_ram is not None:
@@ -273,20 +276,24 @@ def extract_size_pair(summary: dict[str, Any]) -> tuple[int, int]:
             if code is not None and ram is not None:
                 return code, ram
 
-    code_total = 0
-    ram_total = 0
-    found = False
-    for value in summary.values():
-        code = value_from_size_entry(value, "code_size", "codeSize")
-        ram = value_from_size_entry(value, "RAM_size", "RAMSize", "ram_size")
-        if code is not None and ram is not None:
-            code_total += code
-            ram_total += ram
-            found = True
+    if allow_section_sum:
+        code_total = 0
+        ram_total = 0
+        found = False
+        for value in summary.values():
+            code = value_from_size_entry(value, "code_size", "codeSize")
+            ram = value_from_size_entry(value, "RAM_size", "RAMSize", "ram_size")
+            if code is not None and ram is not None:
+                code_total += code
+                ram_total += ram
+                found = True
 
-    if not found:
+        if found:
+            return code_total, ram_total
+
+    if allow_section_sum:
         raise ValueError(f"Could not extract code/RAM sizes from summary: {summary}")
-    return code_total, ram_total
+    raise ValueError(f"Could not extract total code/RAM sizes from summary: {summary}")
 
 
 def create_results_api(service_url: str, verify_ssl: bool) -> ResultsApi:
@@ -371,7 +378,7 @@ def load_local_size_record(
         if not isinstance(summary, dict):
             raise ValueError(f"Could not find summary data in {output_file}")
 
-        code_size, ram_size = extract_size_pair(summary)
+        code_size, ram_size = extract_size_pair(summary, allow_section_sum=False)
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"WARNING: Could not read local code size output {output_file}: {error}")
         return None
@@ -513,7 +520,7 @@ def main() -> int:
     )
     print(f"Discovered {len(code_size_targets)} code size target(s) from {target_source}")
     if local_current_outputs:
-        print("Using local analyzer output as fallback for current build records.")
+        print("Local analyzer output is available as a fallback for current build records.")
     print(
         f"Thresholds: flash/code > {args.flash_threshold_pct:.2f}%, "
         f"RAM > {args.ram_threshold_pct:.2f}%"
@@ -530,16 +537,30 @@ def main() -> int:
             code_size_targets,
             current_build,
             previous_build,
-            local_current_outputs,
         )
-        if current_missing_count < len(code_size_targets) or attempt == max_retries:
+        if current_missing_count == 0 or attempt == max_retries:
             break
 
         print(
-            f"No current build records are available yet. Waiting {wait_seconds}s "
+            f"Current build records are still missing for {current_missing_count} "
+            f"target(s). Waiting {wait_seconds}s "
             f"before retry {attempt + 1}/{max_retries}..."
         )
         time.sleep(wait_seconds)
+
+    if local_current_outputs and current_missing_count > 0:
+        print(
+            f"Using local analyzer output fallback for {current_missing_count} "
+            "current build record(s) that are still unavailable from the service."
+        )
+        target_data, current_missing_count = collect_target_data(
+            client,
+            args.branch_name,
+            code_size_targets,
+            current_build,
+            previous_build,
+            local_current_outputs,
+        )
 
     print("=" * 160)
     print(
