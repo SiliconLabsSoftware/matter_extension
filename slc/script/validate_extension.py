@@ -8,30 +8,15 @@ Ownership model:
   MATTER_FAILURE   Files under the repo root and outside third_party/. These
                    are Matter owned, any finding causes a non-zero exit and
                    fails CI.
-  MATTER_ADVISORY  Matter owned files where the finding is intentionally
-                   deferred. Reported but do not fail CI.
   SUBMODULE        Files under third_party/ Not Matter extension 
                    responsibility, reported as informational only.
 
 Per section policy:
-  SDK warnings
-    Path based ownership. MATTER_FAILURE if matter owned, SUBMODULE otherwise.
-
   Config File on Include Path
     Path based on the config file path embedded in the finding.
     MATTER_FAILURE if matter owned, SUBMODULE otherwise.
 
-  Studio SDK Metadata
-    "not defined in a templates.xml file": path based on the slcp path.
-      SUBMODULE if under third_party/, MATTER_FAILURE if under slc/apps.
-    "No board data found for": MATTER_ADVISORY. Board data depends on the
-      SDK version being validated against, advisory until boards are GA.
-
-  Missing Documentation Reference
-    MATTER_ADVISORY for all findings. User visible components
-    lack documentation: blocks today, advisory until work is done.
-
-  Any other section
+  Any other section (including SDK warnings, Studio SDK Metadata)
     Fully enforced, path based: SUBMODULE if third_party/, otherwise
     MATTER_FAILURE.
 
@@ -59,7 +44,6 @@ _THIRD_PARTY_ROOT = _REPO_ROOT / "third_party"
 
 # Finding categories
 MATTER_FAILURE = "matter-failure"
-MATTER_ADVISORY = "matter-advisory"
 SUBMODULE = "submodule"
 
 def _parse_sections(output: str) -> Dict[str, List[str]]:
@@ -162,7 +146,6 @@ class SectionStats(NamedTuple):
     section: str
     total: int
     matter_failures: int
-    matter_advisories: int
     submodule: int
 
 def _path_based(path_str: Optional[str]) -> str:
@@ -173,18 +156,11 @@ def _path_based(path_str: Optional[str]) -> str:
 
 def _classify_finding(section: str, finding: str, filepath: Optional[str] = None) -> str:
     """
-    Return MATTER_FAILURE, MATTER_ADVISORY, or SUBMODULE for a single finding.
+    Return MATTER_FAILURE or SUBMODULE for a single finding, decided by path ownership.
 
     filepath: for SDK warnings the path is known separately, pass it explicitly.
               For all other sections it is extracted from the finding string.
     """
-    # Advisory sections: Matter owned but intentionally deferred.
-    if section == "Missing Documentation Reference":
-        return MATTER_ADVISORY
-    if section == "Studio SDK Metadata" and "No board data found for" in finding:
-        return MATTER_ADVISORY
-
-    # Everything else is decided by path ownership.
     path_str = filepath if filepath is not None else _extract_path_from_finding(finding)
     return _path_based(path_str)
 
@@ -210,21 +186,18 @@ def _classify(
 ) -> Tuple[
     List[Tuple[str, str]],
     List[Tuple[str, str]],
-    List[Tuple[str, str]],
     List[SectionStats],
 ]:
     """
     Classify findings from every slc validate section.
 
     Returns:
-        matter_failures   - (section, finding) that must fail CI
-        matter_advisories - (section, finding) that are Matter owned but deferred
-        submodule_finds   - (section, finding) from submodule code
-        section_stats     - per-section tallies, in first-seen order
+        matter_failures - (section, finding) that must fail CI
+        submodule_finds - (section, finding) from submodule code
+        section_stats   - per-section tallies, in first-seen order
     """
     buckets: Dict[str, List[Tuple[str, str]]] = {
         MATTER_FAILURE: [],
-        MATTER_ADVISORY: [],
         SUBMODULE: [],
     }
     counts: Dict[str, List[int]] = {}
@@ -234,9 +207,9 @@ def _classify(
         cat = _classify_finding(section, finding, filepath=filepath)
         buckets[cat].append((section, finding))
         if section not in counts:
-            counts[section] = [0, 0, 0]  # [failures, advisories, submodule]
+            counts[section] = [0, 0]  # [failures, submodule]
             order.append(section)
-        idx = {MATTER_FAILURE: 0, MATTER_ADVISORY: 1, SUBMODULE: 2}[cat]
+        idx = {MATTER_FAILURE: 0, SUBMODULE: 1}[cat]
         counts[section][idx] += 1
 
     section_stats = [
@@ -245,7 +218,6 @@ def _classify(
     ]
     return (
         buckets[MATTER_FAILURE],
-        buckets[MATTER_ADVISORY],
         buckets[SUBMODULE],
         section_stats,
     )
@@ -255,11 +227,10 @@ def _log_section_summary(section_stats: List[SectionStats]) -> None:
     logger.info("slc validate sections:")
     for stat in section_stats:
         logger.info(
-            "  %s: %d findings (%d matter-failure, %d matter-advisory, %d submodule)",
+            "  %s: %d findings (%d matter-failure, %d submodule)",
             stat.section,
             stat.total,
             stat.matter_failures,
-            stat.matter_advisories,
             stat.submodule,
         )
 
@@ -383,7 +354,7 @@ def main(argv: List[str]) -> int:
         if preamble_lines:
             logger.info("slc validate preamble:\n%s", "\n".join(preamble_lines))
 
-    matter_failures, matter_advisories, submodule_finds, section_stats = _classify(sections)
+    matter_failures, submodule_finds, section_stats = _classify(sections)
     _log_section_summary(section_stats)
 
     if matter_failures:
@@ -394,16 +365,11 @@ def main(argv: List[str]) -> int:
             logger.error("  [%s] %s", section, finding)
         return 1
 
-    parts = []
-    if matter_advisories:
-        parts.append(f"{len(matter_advisories)} Matter-advisory (extension owned, deferred)")
     if submodule_finds:
-        parts.append(f"{len(submodule_finds)} submodule (not extension owned)")
-
-    if parts:
         logger.info(
-            "Validation passed. %s. Run with --full-log for the full slc validate log.",
-            "; ".join(parts),
+            "Validation passed. %d submodule (not extension owned). "
+            "Run with --full-log for the full slc validate log.",
+            len(submodule_finds),
         )
     else:
         logger.info("Validation passed. No issues detected.")
