@@ -1,11 +1,11 @@
 name: Validate Metadata
 
 on:
-  workflow_dispatch: # TODO: remove after testing
   push:
       branches:
           - main
           - "release_*"
+          - feature/MATTER-5484 # TODO: remove after testing
   pull_request:
         branches:
           - main
