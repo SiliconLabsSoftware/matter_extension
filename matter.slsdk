@@ -1,11 +1,4 @@
 # Properties file for Simplicity Studio metadata
-id=com.silabs.sdk.matter
-
-version=2.9.0
-
-label=Silicon Labs Matter
-description=Matter extension for Simplicity SDK Suite
-
 prop.file.templatesFile=matter_templates.xml
 prop.file.zcl.matterTemplateJsonFile=src/app/zap-templates/app-templates.json
 prop.file.zcl.matterZclJsonFile=src/app/zap-templates/zcl/zcl.json

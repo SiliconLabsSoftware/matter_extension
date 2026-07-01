@@ -1,6 +1,7 @@
 name: Validate Metadata
 
 on:
+  workflow_dispatch: # TODO: remove after testing
   push:
       branches:
           - main
@@ -63,62 +64,23 @@ jobs:
       run: |
         python3 -u './slc/script/file_path_length_analyzer.py' --directory . --verbose --ci
         
-  matter-templates:
-    name: Validate Matter Templates
+  validate-extension:
+    name: Validate Extension
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
         with:
-          submodules: false 
+          submodules: true
 
-      - name: Validate Matter Templates 
-        shell: bash
-        run: | 
-          set -e
-          python3 -u './slc/script/validate_matter_templates.py'
-   
-  components:
-    name: Validate Components
-    runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/siliconlabssoftware/matter_extension_dependencies:latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v6
-        with:
-          submodules: false 
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
 
-      - name: Mark Repository as Safe for Git
+      - name: Validate Extension
         shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init \
-            third_party/aws_ota_sdk \
-            third_party/matter_sdk \
-            third_party/matter_support \
-            third_party/mbedtls \
-            third_party/nlassert \
-            third_party/nlio \
-            third_party/QR-Code-generator
-      
-      - name: Trust SDK 
-        shell: bash
-        run: |
-          set -e 
-          echo "Trusting SDK at ${SISDK_ROOT}"
-          slc configuration --sdk ${SISDK_ROOT} -data ${SISDK_ROOT}/out/dmp_uc.data
-          slc signature trust --sdk ${SISDK_ROOT}
-          
-      - name: Validate Components
-        shell: bash
-        continue-on-error: true # TO-DO: Set to false once work is completed to resolve validate components errors
         run: |
           set -e
-          python3 -u './slc/script/validate_components.py' slc/component slc
+          python3 -u './slc/script/validate_extension.py' --full-log
 
   sbom-validation:
     name: Validate SBOM Metadata
