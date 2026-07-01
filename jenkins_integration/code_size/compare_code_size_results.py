@@ -259,6 +259,10 @@ def extract_size_pair(summary: dict[str, Any]) -> tuple[int, int]:
         "TOTAL",
         "application",
         "Application",
+        "APPLICATION",
+        "app",
+        "App",
+        "APP",
         "all",
         "ALL",
     )
