@@ -3,6 +3,9 @@ version: 2.9.0
 description: "Matter extension for Simplicity SDK Suite"
 label: "Silicon Labs Matter"
 vendor: silabs
+sdk:
+  id: simplicity_sdk
+  version: 2026.6.0
 upgrade_manifest:
   - path: upgrade.slcu
 supplier: Silicon Laboratories Inc.
