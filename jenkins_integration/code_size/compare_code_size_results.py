@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
 import sys
@@ -152,6 +153,14 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
+        "--analysis-manifest",
+        default="code_size_analysis_manifest.tsv",
+        help=(
+            "Manifest written by Code Size Analysis. When present, compare uses it "
+            "to read local current-build analyzer JSON output before querying the service."
+        ),
+    )
+    parser.add_argument(
         "--data-wait-retries",
         type=int,
         default=10,
@@ -176,6 +185,51 @@ def parse_args() -> argparse.Namespace:
         help="Allowed RAM size increase percentage.",
     )
     return parser.parse_args()
+
+
+def load_analysis_manifest(
+    manifest_path: str,
+) -> tuple[list[CodeSizeTarget], dict[CodeSizeTarget, Path]]:
+    manifest = Path(manifest_path)
+    if not manifest.is_file():
+        return [], {}
+
+    targets: dict[CodeSizeTarget, Path] = {}
+    with manifest.open(encoding="utf-8") as manifest_file:
+        header = manifest_file.readline().rstrip("\n").split("\t")
+        column_index = {name: index for index, name in enumerate(header)}
+        required_columns = {
+            "application_name",
+            "board",
+            "target_part",
+            "compiler",
+            "stack",
+            "output_file",
+        }
+        if not required_columns.issubset(column_index):
+            raise ValueError(f"Invalid code size analysis manifest header: {header}")
+
+        for line in manifest_file:
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) < len(header):
+                continue
+            target = CodeSizeTarget(
+                application_name=parts[column_index["application_name"]],
+                board=parts[column_index["board"]],
+                target_part=parts[column_index["target_part"]],
+                compiler=parts[column_index["compiler"]],
+                stack=parts[column_index["stack"]],
+            )
+            output_file = Path(parts[column_index["output_file"]])
+            if not output_file.is_absolute():
+                output_file = manifest.parent / output_file
+            targets[target] = output_file
+
+    sorted_targets = sorted(
+        targets,
+        key=lambda target: (target.board, target.application_name, target.target_part),
+    )
+    return sorted_targets, targets
 
 
 def value_from_size_entry(entry: Any, *names: str) -> int | None:
@@ -289,6 +343,38 @@ def record_to_size_record(target: CodeSizeTarget, result: dict[str, Any]) -> Siz
     return SizeRecord(target, result["build_number"], code_size, ram_size)
 
 
+def load_local_size_record(
+    target: CodeSizeTarget,
+    build_number: str,
+    output_file: Path | None,
+) -> SizeRecord | None:
+    if output_file is None or not output_file.is_file():
+        return None
+
+    try:
+        with output_file.open(encoding="utf-8") as result_file:
+            result = json.load(result_file)
+
+        if not isinstance(result, dict):
+            raise ValueError(f"Unsupported code size output format in {output_file}")
+
+        summary = (
+            result.get("summary_json")
+            or result.get("summary")
+            or result.get("summaryJson")
+            or result
+        )
+        if not isinstance(summary, dict):
+            raise ValueError(f"Could not find summary data in {output_file}")
+
+        code_size, ram_size = extract_size_pair(summary)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        print(f"WARNING: Could not read local code size output {output_file}: {error}")
+        return None
+
+    return SizeRecord(target, build_number, code_size, ram_size)
+
+
 def select_exact_record(
     target: CodeSizeTarget, records: list[dict[str, Any]], build_number: str
 ) -> SizeRecord | None:
@@ -372,6 +458,7 @@ def collect_target_data(
     targets: list[CodeSizeTarget],
     current_build: str,
     previous_build: str,
+    local_current_outputs: dict[CodeSizeTarget, Path] | None = None,
 ) -> tuple[list[tuple[CodeSizeTarget, SizeRecord | None, SizeRecord | None]], int]:
     target_data = []
     current_missing_count = 0
@@ -379,6 +466,12 @@ def collect_target_data(
     for target in targets:
         target_records = query_target_records(client, branch_name, target)
         current = select_exact_record(target, target_records, current_build)
+        if current is None and local_current_outputs:
+            current = load_local_size_record(
+                target,
+                current_build,
+                local_current_outputs.get(target),
+            )
         previous = (
             select_baseline_record(target, target_records, current, previous_build)
             if current is not None
@@ -395,7 +488,14 @@ def main() -> int:
     args = parse_args()
     current_build = normalize_build_number(args.current_build)
     previous_build = normalize_build_number(args.previous_build)
-    code_size_targets = discover_code_size_targets(args.map_root)
+    code_size_targets, local_current_outputs = load_analysis_manifest(
+        args.analysis_manifest
+    )
+    target_source = f"analysis manifest {args.analysis_manifest}"
+    if not code_size_targets:
+        code_size_targets = discover_code_size_targets(args.map_root)
+        local_current_outputs = {}
+        target_source = args.map_root
 
     if not code_size_targets:
         print(f"WARNING: No successfully built Dev Apps .map files found in {args.map_root}.")
@@ -407,7 +507,9 @@ def main() -> int:
         f"Comparing code size results for branch {args.branch_name}: "
         f"{current_build} vs preferred baseline {previous_build}"
     )
-    print(f"Discovered {len(code_size_targets)} code size target(s) from {args.map_root}")
+    print(f"Discovered {len(code_size_targets)} code size target(s) from {target_source}")
+    if local_current_outputs:
+        print("Using local analyzer output as fallback for current build records.")
     print(
         f"Thresholds: flash/code > {args.flash_threshold_pct:.2f}%, "
         f"RAM > {args.ram_threshold_pct:.2f}%"
@@ -424,6 +526,7 @@ def main() -> int:
             code_size_targets,
             current_build,
             previous_build,
+            local_current_outputs,
         )
         if current_missing_count < len(code_size_targets) or attempt == max_retries:
             break

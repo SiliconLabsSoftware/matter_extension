@@ -176,6 +176,9 @@ def run_code_size_analysis() {
                         --verify_ssl False \\
                         --uc_component_branch_name "silabs_slc/$BRANCH_NAME"; then
                         echo "  Analysis completed successfully"
+                        printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n" \\
+                            "$application_name" "$brd" "$target_part" "gcc" "matter" \\
+                            "$output_file" "$map_file_path" >> code_size_analysis_manifest.tsv
                     else
                         echo "  Analysis failed"
                     fi
@@ -183,6 +186,8 @@ def run_code_size_analysis() {
                 
                 echo "Cleaning up leftover JSON files"
                 rm -f *.json
+                rm -f code_size_analysis_manifest.tsv
+                printf "application_name\\tboard\\ttarget_part\\tcompiler\\tstack\\toutput_file\\tmap_file\\n" > code_size_analysis_manifest.tsv
                 
                 echo "Available map files:"
                 map_files_found=\$(find . -name "*.map" | grep -v "sqa-artifacts" | sort)
@@ -229,7 +234,7 @@ def run_code_size_analysis() {
                 done
             '''
         }
-        
+        archiveArtifacts artifacts: 'code_size_analysis_manifest.tsv,*.json', allowEmptyArchive: true
         echo "Code size analysis completed"
     }
 
