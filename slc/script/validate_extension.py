@@ -357,6 +357,14 @@ def main(argv: List[str]) -> int:
     matter_failures, submodule_finds, section_stats = _classify(sections)
     _log_section_summary(section_stats)
 
+    if slc_exit_code != 0 and not matter_failures and not submodule_finds:
+        logger.error(
+            "slc validate exited %d but no findings could be classified from its output, "
+            "treating as a tool/parsing error. Rerun with --full-log to inspect.",
+            slc_exit_code,
+        )
+        return 2
+
     if matter_failures:
         logger.error(
             "Validation failed with %d Matter owned finding(s):", len(matter_failures)
