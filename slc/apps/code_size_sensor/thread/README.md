@@ -1,10 +1,7 @@
 # Matter over Thread Code Size Sensor Example
 
 The Matter over Thread code size sensor example is a minimal sensor application
-used internally for code size analysis. It is a stripped down variant of the
-multi sensor example with logging disabled and a reduced feature set, intended
-as a baseline for measuring the footprint of a Matter over Thread device built
-with Simplicity SDK.
+used internally for code size analysis.
 
 ## Table of Contents
 
