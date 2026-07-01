@@ -950,7 +950,6 @@ extra_files:
   - slc/script/run_sdk_update_scripts.py
   - slc/script/tag_release_version.py
   - slc/script/templates.xml.j2
-  - slc/script/test_validate_extension.py
   - slc/script/update_version.py
   - slc/script/validate_app_standardization.py
   - slc/script/validate_demo_images.py
