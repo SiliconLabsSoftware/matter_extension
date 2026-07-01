@@ -6,6 +6,15 @@ multi sensor example with logging disabled and a reduced feature set, intended
 as a baseline for measuring the footprint of a Matter over Thread device built
 with Simplicity SDK.
 
+## Table of Contents
+
+- [Purpose/Scope](#purposescope)
+- [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
+- [Steps to Run Demo](#steps-to-run-demo)
+- [Troubleshooting](#troubleshooting)
+- [Resources](#resources)
+- [Report Bugs & Get Support](#report-bugs--get-support)
+
 ## Purpose/Scope
 
 This example builds a minimal Matter over Thread sensor on a Silicon Labs EFR32
@@ -23,6 +32,62 @@ For a full list of hardware requirements, see [Matter Hardware Requirements](htt
 ### SW Requirements
 
 For a full list of software requirements, see [Matter Software Requirements](https://docs.silabs.com/matter/2.9.0/matter-overview/#software-requirements) documentation.
+
+## Steps to Run Demo
+
+### Program a Bootloader
+
+If building a solution, the bootloader is included and flashed as part of the combined
+artifact.
+
+If building the sample application on its own, a bootloader must be flashed separately
+before the application. Pre-built bootloader binaries for all supported devices are
+available at [Matter Bootloader Binaries](https://docs.silabs.com/matter/2.9.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
+
+### Configuration and Setup
+
+This sample app works out of the box with no additional configuration required. To customize the device, see the
+[Custom Matter Device Development](https://docs.silabs.com/matter/2.9.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
+
+### Steps for Execution
+
+1. Build and flash the bootloader and application to your board.
+2. On startup, **LED 0** flashes short-on (50 ms on / 950 ms off), indicating the
+   device is waiting for commissioning.
+3. Commission the device using one of the following methods:
+
+   **chip-tool (standalone or pre-built):** The pre-built chip-tool instance ships
+   with the Matter Hub image. More information on using the Matter Hub is in the
+   [Silicon Labs Matter Hub Documentation](https://docs.silabs.com/matter/2.9.0/matter-thread/raspi-img).
+   ```shell
+   chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840
+   ```
+
+   **Simplicity Connect mobile app:** Scan the QR code shown on the LCD or the URL
+   printed to RTT logs on startup or by pressing BTN0. The URL can also be retrieved
+   via the Matter shell:
+   ```shell
+   matterCli> onboardingcodes ble qrcodeurl
+   ```
+   Example RTT log output:
+   ```
+   [SVR] Copy/paste the below URL in a browser to see the QR Code:
+   [SVR] https://project-chip.github.io/connectedhomeip/qrcode.html?data=MT%3A6FCJ142C00KA0648G00
+   ```
+   This QR code is only valid for an unprovisioned device, provisioning may change it.
+
+   **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
+
+## Troubleshooting
+
+**Device does not advertise over BLE**
+- Press BTN0 to restart BLE advertisement.
+- Confirm the bootloader is flashed to the device.
+
+**Commissioning fails**
+- Ensure the Thread Border Router is running and reachable.
+- Verify the `operationalDataset` hex string matches your Thread network.
+- Factory reset the device (hold BTN0 for 6 s) and retry.
 
 ## Resources
 
