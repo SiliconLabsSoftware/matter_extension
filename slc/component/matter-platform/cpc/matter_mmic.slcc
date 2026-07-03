@@ -16,8 +16,12 @@ conflicts:
 
 
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic.c
-  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic_task.c
+  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/mmic/mmic_task.cpp
+
+define:
+  - name: SL_MATTER_MMIC_ENABLED
+    value: 1
 
 
 include:

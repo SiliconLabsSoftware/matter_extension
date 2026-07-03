@@ -157,6 +157,25 @@ to receive state changes and to act accordingly.
 - Verify the `operationalDataset` hex string matches your Thread network.
 - Factory reset the device (hold BTN0 for 6 s) and retry.
 
+## Building OTBR with CPC
+sudo INFRA_IF_NAME=eth0 OTBR_OPTIONS="-DOT_THREAD_VERSION=1.4 -DOT_MULTIPAN_RCP=ON -DCPCD_SOURCE_DIR=$CPCD_DIR -DOT_POSIX_RCP_HDLC_BUS=ON -DOT_POSIX_RCP_SPI_BUS=ON -DOT_POSIX_RCP_VENDOR_BUS=ON -DOT_POSIX_CONFIG_RCP_VENDOR_DEPS_PACKAGE=$SDK_DIR/openthread/platform-abstraction/posix/posix_vendor_rcp.cmake -DOT_POSIX_CONFIG_RCP_VENDOR_INTERFACE=$SDK_DIR/openthread/platform-abstraction/posix/cpc_interface.cpp -DOT_PLATFORM_CONFIG=$SDK_DIR/openthread/platform-abstraction/posix/openthread-core-silabs-posix-config.h -DOTBR_DUA_ROUTING=ON -DOTBR_DHCP6_PD=ON" ./script/setup
+
+
+sudo INFRA_IF_NAME=eth0 \
+     OTBR_OPTIONS="-DOT_THREAD_VERSION=1.4 \
+                   -DOT_MULTIPAN_RCP=ON \
+                   -DCPCD_SOURCE_DIR=$CPCD_DIR \
+                   -DOT_POSIX_RCP_HDLC_BUS=ON \
+                   -DOT_POSIX_RCP_SPI_BUS=ON \
+                   -DOT_POSIX_RCP_VENDOR_BUS=ON \
+                   -DOT_POSIX_CONFIG_RCP_VENDOR_DEPS_PACKAGE=$SDK_DIR/openthread/platform-abstraction/posix/posix_vendor_rcp.cmake \
+                   -DOT_POSIX_CONFIG_RCP_VENDOR_INTERFACE=$SDK_DIR/openthread/platform-abstraction/posix/cpc_interface.cpp \
+                   -DOT_PLATFORM_CONFIG=$SDK_DIR/openthread/platform-abstraction/posix/openthread-core-silabs-posix-config.h \
+                   -DOTBR_DUA_ROUTING=ON \
+                   -DOTBR_DHCP6_PD=ON \
+                   -DOTBR_NAME=SL-OPENTHREAD-BR -DOTBR_VERSION=3.0.1.0_GitHub-ab0c1351e -DOT_PACKAGE_NAME=SL-OPENTHREAD -DOT_PACKAGE_VERSION=3.0.1.0_GitHub-61e43cffb" \
+     ./script/setup
+
 ## Resources
 
 - [Silicon Labs Matter over Thread Documentation](https://docs.silabs.com/matter/2.9.0/matter-thread)

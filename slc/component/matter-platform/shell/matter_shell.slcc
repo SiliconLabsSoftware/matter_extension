@@ -69,6 +69,10 @@ include:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im
     file_list:
       - path: IMShellCommands.h
+  - path: third_party/matter_sdk/examples/platform/silabs/subscription
+    condition: [matter_read_client]
+    file_list:
+      - path: SubscriptionManager
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/MatterShell.cpp
@@ -115,6 +119,8 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble/BLEShellCommands.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im/IMShellCommands.cpp
     condition: [matter_read_client]
+  - path: third_party/matter_sdk/examples/platform/silabs/subscription/SubscriptionManager.cpp #required for IMShell
+    condition: [matter_read_client]  
     
 define:
   - name: ENABLE_CHIP_SHELL
