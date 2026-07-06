@@ -38,12 +38,20 @@
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix lto", "--with_app toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix nolto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             }
         ],
         "lock_app": [
             {
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix lto", "--with_app toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
+            },
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix nolto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             }
         ],
         "platform_template": [
