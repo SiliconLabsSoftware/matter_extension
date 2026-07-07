@@ -124,7 +124,7 @@ pipeline
         }
         stage('Coverage and Code Size') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "bugfix/MATTER-6779" }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             parallel {
                 stage('Code Coverage & Static Code Analysis') {
