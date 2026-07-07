@@ -16,5 +16,7 @@ requires:
 define:
   - name: SILABS_LOG_OUT_UART
     value: 1
+  - name: SILABS_LOG_ENABLED
+    value: 1  
 conflicts:
   - name: matter_log_rtt
