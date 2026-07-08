@@ -50,7 +50,7 @@ component:
   # Optional feature
   - id: rail_util_pti
   - id: matter_shell
-  - id: matter_segger_rtt
+  - id: segger_rtt
   - id: matter_configuration_over_swo
   - id: matter_log_uart
   - id: matter_default_lcd_config
