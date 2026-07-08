@@ -79,8 +79,6 @@ def run_code_size_analysis() {
                     local path=$1
                     if [[ "$path" == *"_solution_lto/"* ]]; then
                         echo "-lto"
-                    elif [[ "$path" == *"_solution_llvm-lto/"* ]]; then
-                        echo "-lto"
                     elif [[ "$path" == *"_solution_nolto/"* ]]; then
                         echo "-nolto"
                     else
