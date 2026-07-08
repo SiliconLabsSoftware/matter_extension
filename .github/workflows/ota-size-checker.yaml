@@ -48,10 +48,10 @@ jobs:
           submodules: "true"
           lfs: true
 
-            - name: Pull LFS objects in submodules
-              run: |
-                  git -C third_party/simplicity_sdk lfs pull
-                  git -C third_party/wifi_sdk lfs pull
+      - name: Pull LFS objects in submodules
+        run: |
+            git -C third_party/simplicity_sdk lfs pull
+            git -C third_party/wifi_sdk lfs pull
 
       - name: Install tools
         uses: ./.github/actions/install-tools
