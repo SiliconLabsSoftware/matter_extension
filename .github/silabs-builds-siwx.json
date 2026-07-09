@@ -37,7 +37,7 @@
         "lighting_app": [
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix lto", "--with_app toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
+                "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             },
             {
                 "boards": ["brd4338a"],
@@ -47,7 +47,7 @@
         "lock_app": [
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix lto", "--with_app toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
+                "arguments": ["--output_suffix lto", "--with_app wiseconnect_toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd"]
             },
             {
                 "boards": ["brd4338a"],
