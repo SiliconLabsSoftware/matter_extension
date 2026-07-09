@@ -109,13 +109,10 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
       - path: CustomerAppTask.h
-      - path: CustomerAppManager.h
     directory: include
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppManager.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
