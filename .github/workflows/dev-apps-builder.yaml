@@ -66,8 +66,7 @@ jobs:
         with:
             example-app: "lighting_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            # Disabled until TrustZone NS link failure is fixed (missing psa_util symbols).
-            trustzone-support: false
+            trustzone-support: true
 
     build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
