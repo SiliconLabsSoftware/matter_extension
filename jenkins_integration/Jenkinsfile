@@ -261,7 +261,7 @@ pipeline
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || true }
             }
             steps {
                 script {
