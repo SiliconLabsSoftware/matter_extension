@@ -6,12 +6,9 @@ either SL_POWER_MANAGER_EM2 or SL_POWER_MANAGER_EM1 based on the provided argume
 and updates LFRCO precision in board clock configs (brd4407a_brd4001a, brd4407a_brd4002a)
 to match (EM2 -> cmuPrecisionHigh, EM1 -> cmuPrecisionDefault).
 
-Target files:
-- third_party/simplicity_sdk/.../openthread/platform-abstraction/efr32/sleep.c
-- third_party/simplicity_sdk/boards/hardware/board/config/brd4407a_brd4001a/sl_clock_manager_oscillator_config.h
-- third_party/simplicity_sdk/boards/hardware/board/config/brd4407a_brd4002a/sl_clock_manager_oscillator_config.h
-- third_party/simplicity_sdk/boards/hardware/board/config/brd1019a_brd4001a/sl_clock_manager_oscillator_config.h
-- third_party/simplicity_sdk/boards/hardware/board/config/brd1019a_brd4002a/sl_clock_manager_oscillator_config.h
+Target files (under SISDK_ROOT from slc/tools/.env):
+- .../openthread/platform-abstraction/efr32/sleep.c
+- .../boards/hardware/board/config/brd4407a_brd4001a/sl_clock_manager_oscillator_config.h
 """
 
 import os
@@ -20,6 +17,11 @@ import re
 import argparse
 from pathlib import Path
 
+# Allow importing stack_tooling when run as script from repo root or slc/script
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+from stack_tooling import require_sisdk_root
 
 def update_sleep_c_file(file_path, target_mode):
     """
@@ -63,47 +65,35 @@ def update_sleep_c_file(file_path, target_mode):
     return True
 
 
-def find_sleep_c_file(workspace_root):
+def find_sleep_c_file(workspace_root, sisdk_root):
     """
-    Search for sleep.c file under third_party/simplicity_sdk.
+    Search for sleep.c file under SISDK_ROOT.
     Looks for the file in openthread/platform-abstraction/efr32/sleep.c
-    
-    Args:
-        workspace_root: Root directory of the workspace
-        
-    Returns:
-        Path to the sleep.c file, or None if not found
     """
-    simplicity_sdk_path = workspace_root / "third_party" / "simplicity_sdk"
-    
+    simplicity_sdk_path = Path(sisdk_root)
+
     if not simplicity_sdk_path.exists():
-        print(f"Error: third_party/simplicity_sdk directory not found at {simplicity_sdk_path}")
-        print("Make sure submodules are checked out.")
+        print(f"Error: SISDK_ROOT directory not found at {simplicity_sdk_path}")
         return None
-    
-    # Search for sleep.c files under third_party/simplicity_sdk
-    # We're looking for the one in openthread/platform-abstraction/efr32/
+
     sleep_c_files = list(simplicity_sdk_path.rglob("sleep.c"))
     
     # Filter for the specific file we want (in openthread/platform-abstraction/efr32/)
     target_file = None
     for file_path in sleep_c_files:
-        # Check if this is the file we're looking for
-        path_parts = file_path.parts
         try:
-            # Find the index of 'simplicity_sdk' in the path
-            sdk_index = path_parts.index('simplicity_sdk')
-            # Check if the path contains the expected subdirectory structure
-            relative_parts = path_parts[sdk_index + 1:]
-            if (len(relative_parts) >= 4 and 
-                'openthread' in relative_parts and
-                'platform-abstraction' in relative_parts and
-                'efr32' in relative_parts and
-                file_path.name == 'sleep.c'):
-                target_file = file_path
-                break
+            file_path.relative_to(simplicity_sdk_path)
         except ValueError:
             continue
+        parts = file_path.parts
+        if (
+            "openthread" in parts
+            and "platform-abstraction" in parts
+            and "efr32" in parts
+            and file_path.name == "sleep.c"
+        ):
+            target_file = file_path
+            break
     
     if target_file is None:
         # If we didn't find the exact path, try to find any sleep.c that contains setWakeRequirement
@@ -131,14 +121,11 @@ LFRCO_PRECISION_BOARD_CONFIGS = (
 )
 
 
-def find_clock_manager_oscillator_configs(workspace_root):
+def find_clock_manager_oscillator_configs(sisdk_root):
     """
     Find sl_clock_manager_oscillator_config.h under board config dirs (brd4407a, brd1019a).
-
-    Returns:
-        List of Paths to existing config files.
     """
-    base = workspace_root / "third_party" / "simplicity_sdk" / "boards" / "hardware" / "board" / "config"
+    base = Path(sisdk_root) / "boards" / "hardware" / "board" / "config"
     if not base.exists():
         return []
     paths = []
@@ -190,13 +177,16 @@ def main():
     # Get the workspace root (assuming script is in slc/script/)
     script_dir = Path(__file__).parent
     workspace_root = script_dir.parent.parent
-    
-    # Search for the sleep.c file
-    sleep_c_path = find_sleep_c_file(workspace_root)
-    
+    try:
+        sisdk_root = require_sisdk_root(workspace_root)
+    except RuntimeError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    sleep_c_path = find_sleep_c_file(workspace_root, sisdk_root)
+
     if sleep_c_path is None:
-        print("Error: sleep.c file not found under third_party/simplicity_sdk")
-        print("Make sure submodules are checked out.")
+        print("Error: sleep.c file not found under SISDK_ROOT")
         sys.exit(1)
     
     print(f"Found sleep.c file at: {sleep_c_path}")
@@ -206,7 +196,7 @@ def main():
 
     # Update LFRCO precision in board clock configs: EM2 -> 1, EM1 -> 0
     target_value = 1 if args.mode == "EM2" else 0
-    clock_configs = find_clock_manager_oscillator_configs(workspace_root)
+    clock_configs = find_clock_manager_oscillator_configs(sisdk_root)
     for cfg_path in clock_configs:
         if update_lfrco_precision(cfg_path, target_value):
             print(f"Updated LFRCO precision to {target_value} in {cfg_path}")

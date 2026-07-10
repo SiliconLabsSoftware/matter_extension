@@ -1,7 +1,7 @@
 category: Matter|Examples
 package: matter
 description: >
-  Provides example component for a Lock application. This component should be 
+  Provides example component for a Lock application. This component should be
   included in all Lock applications to help resolve SLC dependencies. Only applicable to Lock applications.
 id: matter_lock
 quality: production
@@ -13,7 +13,30 @@ provides:
 define:
   - name: IS_DEMO_LOCK
     value: "1"
+config_file:
+  - path: third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
+    directory: common
+    file_id: zap_config
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppConfig.h
+    directory: include
+    file_id: lock_app_config
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppEvent.h
+    directory: include
+    file_id: lock_app_event
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppTask.h
+    directory: include
+    file_id: lock_app_task
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include/LockManager.h
+    directory: include
+    file_id: lock_manager_header
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include/CHIPProjectConfig.h
+    directory: include
+    file_id: lock_chip_project_config
 source:
-  - path: third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp 
+  - path: third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp
+  - path: third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
+  - path: third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/lock-app/silabs/src/DataModelCallbacks.cpp
 ui_hints:
   visibility: never

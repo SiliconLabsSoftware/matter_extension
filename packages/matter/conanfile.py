@@ -14,17 +14,27 @@ import yaml
 
 
 try:
-    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
-    if str(_PKG_ROOT) not in sys.path:
-        sys.path.insert(0, str(_PKG_ROOT))
+    _recipe_dir = Path(__file__).resolve().parent
+    for _base in (_recipe_dir, _recipe_dir.parent):
+        if (_base / "_shared").is_dir() and str(_base) not in sys.path:
+            sys.path.insert(0, str(_base))
+            break
 except Exception:
     pass
-from _shared.base_recipe import MatterBaseRecipe
+from _shared.base_recipe import (
+    MatterBaseRecipe,
+    matter_sdk_export_stub,
+    package_matter_sdk_tree,
+    resolve_matter_sdk_source_root,
+)
 
 
 class matterRecipe(MatterBaseRecipe):
     # Specific description (can override base if needed)
     description = "Matter extension for Simplicity SDK Suite"
+
+    def set_version(self):
+        self.version = self.matter_package_version
 
     # Other attributes
     # revision_mode = "scm"
@@ -76,18 +86,8 @@ class matterRecipe(MatterBaseRecipe):
         return str(self.repo_root)
 
     def requirements(self):
-        """Declare recipe dependencies using centralized version mapping.
-
-        Rationale:
-            Centralizing dependency versions makes alignment with other tooling
-            (e.g. generation scripts) simpler and reduces risk of version skew.
-
-        To update a version, modify the DEP_VERSIONS mapping defined below the
-        class. Optionally, future work could externalize this to a single
-        versions file consumed by both scripts and recipes.
-        """
-
-        for dep_name, dep_version in self.dep_versions.items():  # preserves insertion order (Python 3.7+)
+        """Declare stack SDK deps; matter_sdk sources are copied into this package."""
+        for dep_name, dep_version in self.matter_stack_requires.items():
             self.requires(f"{dep_name}/{dep_version}@{self.user}")
 
     def slt_requirements(self):
@@ -103,7 +103,7 @@ class matterRecipe(MatterBaseRecipe):
         pass
 
     def export(self):
-        pass
+        self.export_shared_recipe_support()
 
     def package_id(self):
         # Completely clear all the info, resulting ``package_id`` will be the same
@@ -127,17 +127,18 @@ class matterRecipe(MatterBaseRecipe):
 
         slce_file = self._get_local_slce_file()
 
-        files = silabs_package_assistant.find_slc_files_to_release(
-            slc_sdk_or_extension_def_file=slce_file,
-            desired_qualities=["production", "evaluation", "experimental"],
-            fail_on_missing_files=False,
-            include_slcp=False,
-            include_slcc=True,
-            # Defaults to slce extension ID;
-            # SLCCs with slcc:package field set to
-            # the package names in desired_packages will be included
-            desired_packages=["matter"],
-        )
+        with matter_sdk_export_stub(self.repo_root):
+            files = silabs_package_assistant.find_slc_files_to_release(
+                slc_sdk_or_extension_def_file=slce_file,
+                desired_qualities=["production", "evaluation", "experimental"],
+                fail_on_missing_files=True,
+                include_slcp=False,
+                include_slcc=True,
+                # Defaults to slce extension ID;
+                # SLCCs with slcc:package field set to
+                # the package names in desired_packages will be included
+                desired_packages=["matter"],
+            )
         files_to_package.update(files)
 
         files_to_package = {
@@ -176,6 +177,28 @@ class matterRecipe(MatterBaseRecipe):
 
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
+        sdk_root = resolve_matter_sdk_source_root(self.repo_root)
+        package_matter_sdk_tree(
+            self,
+            Path(self.package_folder),
+            sdk_root,
+            self.repo_root,
+        )
+        self.output.info(
+            f"Packaged matter_sdk tree from {sdk_root} into matter package folder"
+        )
+        self._package_slconf_tools()
+
+    def _package_slconf_tools(self) -> None:
+        script_dir = self.repo_root / "slc" / "script"
+        bin_dir = os.path.join(self.package_folder, "bin")
+        python_dir = os.path.join(self.package_folder, "python", "matter_slconf")
+        copy(self, "matter-app-slconf", src=str(script_dir), dst=bin_dir)
+        copy(self, "*.py", src=str(script_dir / "matter_slconf"), dst=python_dir)
+        cli = os.path.join(bin_dir, "matter-app-slconf")
+        if os.path.isfile(cli):
+            os.chmod(cli, 0o755)
+
     def build(self):
         # Define the source folder for the matter component (property-backed)
 
@@ -196,17 +219,18 @@ class matterRecipe(MatterBaseRecipe):
 
         slce_file = self._get_local_slce_file()
 
-        files = silabs_package_assistant.find_slc_files_to_release(
-            slc_sdk_or_extension_def_file=slce_file,
-            desired_qualities=["production", "evaluation"],
-            fail_on_missing_files=False,
-            include_slcp=False,
-            include_slcc=True,
-            # Defaults to slce extension ID;
-            # SLCCs with slcc:package field set to
-            # the package names in desired_packages will be included
-            desired_packages=["matter"],
-        )
+        with matter_sdk_export_stub(self.repo_root):
+            files = silabs_package_assistant.find_slc_files_to_release(
+                slc_sdk_or_extension_def_file=slce_file,
+                desired_qualities=["production", "evaluation"],
+                fail_on_missing_files=True,
+                include_slcp=False,
+                include_slcc=True,
+                # Defaults to slce extension ID;
+                # SLCCs with slcc:package field set to
+                # the package names in desired_packages will be included
+                desired_packages=["matter"],
+            )
         files_to_package.update(files)
 
         files_to_package = {
@@ -231,8 +255,27 @@ class matterRecipe(MatterBaseRecipe):
         self.buildenv_info.append_path(
             "SLC_SDK_PACKAGE_PATH", self.package_folder
         )
+        self.buildenv_info.append_path(
+            "PATH", os.path.join(self.package_folder, "bin")
+        )
+        self.buildenv_info.define(
+            "MATTER_APP_SLCONF",
+            os.path.join(self.package_folder, "bin", "matter-app-slconf"),
+        )
 
     # ------------------------- Helpers -------------------------
+    def _resolve_slce_extra_path(self, filename: str = "matter.slce.extra") -> Optional[Path]:
+        """Locate matter.slce.extra (recipe dir, packages/matter/, or repo root)."""
+        repo = self.repo_root
+        for candidate in (
+            Path(self.recipe_folder) / filename,
+            repo / "packages" / "matter" / filename,
+            repo / filename,
+        ):
+            if candidate.is_file():
+                return candidate.resolve()
+        return None
+
     def _process_slce_extra(self, filename: str = "matter.slce.extra") -> dict:
         """Parse matter.slce.extra and collect extra packaging metadata.
 
@@ -243,22 +286,30 @@ class matterRecipe(MatterBaseRecipe):
 
         Missing or malformed YAML gracefully degrades with warnings.
         """
-        filename = os.path.join(self.repo_root, filename)
         os.chdir(self.repo_root)
         result = {
             "extra_files_including_descriptor": set(),
             "git_extra_files": [],
             "git_path_mapping": [],
         }
-        if not os.path.exists(filename):
+        slce_extra = self._resolve_slce_extra_path(filename)
+        if slce_extra is None:
+            self.output.warning(
+                f"{filename} not found; extra_files will not be included in the package"
+            )
             return result
 
-        result["extra_files_including_descriptor"].add(filename)
         try:
-            with open(filename, "r", encoding="utf-8") as f:
+            descriptor_rel = str(slce_extra.relative_to(self.repo_root))
+        except ValueError:
+            descriptor_rel = str(slce_extra)
+        result["extra_files_including_descriptor"].add(descriptor_rel)
+
+        try:
+            with open(slce_extra, "r", encoding="utf-8") as f:
                 data = yaml.safe_load(f) or {}
         except Exception as e:
-            self.output.warning(f"Failed to parse {filename}: {e}")
+            self.output.warning(f"Failed to parse {slce_extra}: {e}")
             return result
 
         # extra_files
