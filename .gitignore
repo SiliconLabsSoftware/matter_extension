@@ -95,3 +95,12 @@ examples/*/esp32/dependencies.lock
 # jupyter temporary files
 .ipynb_checkpoints
 
+# Legacy SDK paths (use SLT/Conan via sl_setup_env.py instead)
+third_party/simplicity_sdk
+third_party/wifi_sdk
+
+# Local SLT / slc generate outputs
+**/autogen/
+**/pkg.lock
+**/user.slconf
+

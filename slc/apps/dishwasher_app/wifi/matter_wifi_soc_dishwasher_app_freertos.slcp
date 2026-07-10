@@ -5,11 +5,21 @@ category: Matter Application
 quality: internal
 package: matter
 
+sdk:
+  id: simplicity_sdk
+  version: "2026.6.0"
+  vendor: silabs
 sdk_extension:
   - id: matter
     version: "2.9.0"
     vendor: silabs
-  - id: wiseconnect3_sdk
+  - id: wifi
+    version: "4.1.0"
+    vendor: silabs
+  - id: platform_siwx91x
+    version: "4.1.0"
+    vendor: silabs
+  - id: bluetooth_le_siwx91x
     version: "4.1.0"
     vendor: silabs
 
