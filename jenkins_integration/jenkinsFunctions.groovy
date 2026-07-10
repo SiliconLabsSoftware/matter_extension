@@ -57,6 +57,9 @@ def run_code_size_analysis() {
                             *lock_app*)
                                 app_name="lock-app"
                                 ;;
+                            *multi_sensor_app*)
+                                app_name="multi-sensor-app"
+                                ;;
                         esac
                     else
                         echo "ERROR: Could not find solution directory in path: \$path" >&2
