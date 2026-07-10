@@ -63,7 +63,7 @@ component:
   - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: matter_segger_rtt
+  - id: segger_rtt
   # Generate additional ZAP content for custom clusters
   - id: matter_zap_custom_generation
 

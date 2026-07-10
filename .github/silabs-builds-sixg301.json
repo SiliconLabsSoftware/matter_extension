@@ -41,13 +41,21 @@
         "lighting_app": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
             }
         ],
         "lock_app": [
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
             }
         ],
         "zigbee_light":  [
@@ -61,7 +69,11 @@
             },
             {
                 "boards": ["brd4407a"],
-                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
             }
         ],
         "thermostat": [

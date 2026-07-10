@@ -241,7 +241,6 @@ components:
   - matter_sample_mei
   - matter_scenes
   - matter_scenes_support
-  - matter_segger_rtt
   - matter_service_area
   - matter_shell
   - matter_si70xx_sensor
@@ -847,7 +846,6 @@ extra_files:
   - slc/component/matter-platform/peripherals/matter_peripherals.slcc
   - slc/component/matter-platform/peripherals/matter_peripherals_917SOC.slcc
   - slc/component/matter-platform/segger/matter_configuration_over_swo.slcc
-  - slc/component/matter-platform/segger/matter_segger_rtt.slcc
   - slc/component/matter-platform/sensors/matter_si70xx_sensor.slcc
   - slc/component/matter-platform/shell/matter_shell.slcc
   - slc/component/matter-platform/siwx917/matter_crypto_psa_siwx917.slcc

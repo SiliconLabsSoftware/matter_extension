@@ -57,6 +57,9 @@ def run_code_size_analysis() {
                             *lock_app*)
                                 app_name="lock-app"
                                 ;;
+                            *multi_sensor_app*)
+                                app_name="multi-sensor-app"
+                                ;;
                         esac
                     else
                         echo "ERROR: Could not find solution directory in path: \$path" >&2
@@ -79,8 +82,19 @@ def run_code_size_analysis() {
                     local path=$1
                     if [[ "$path" == *"_solution_lto/"* ]]; then
                         echo "-lto"
+                    elif [[ "$path" == *"_solution_nolto/"* ]]; then
+                        echo "-nolto"
                     else
-                        echo ""
+                        echo "-debug"
+                    fi
+                }
+
+                determine_compiler() {
+                    local path=$1
+                    if [[ "$path" == *"_solution_llvm"* ]]; then
+                        echo "llvm"
+                    else
+                        echo "gcc"
                     fi
                 }
                 
@@ -145,14 +159,16 @@ def run_code_size_analysis() {
                         target_part="siwg917m111mgtba"
                     fi
                     
-                    application_name="slc-${app}-release-${family}"
                     output_file="${app}-${example_type}-${family}.json"
-                    
+
                     if [ "$options" = "-lto" ]; then
-                        : # no-op
-                    else
-                        application_name="${application_name}-nolto"
+                        application_name="slc-${app}-release-${family}"
+                    elif [ "$options" = "-nolto" ]; then
+                        application_name="slc-${app}-release-${family}-nolto"
                         output_file="${output_file%.json}-nolto.json"
+                    else
+                        application_name="slc-${app}-debug-${family}"
+                        output_file="${output_file%.json}-debug.json"
                     fi
                     
                     echo "  Running analysis:"
@@ -196,9 +212,11 @@ def run_code_size_analysis() {
                 CODE_SIZE_BUILDS='
                     brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution   
                     brd4187c/matter_thread_soc_lock_app_series_2_freertos_solution   
-                    brd4187c/matter_thread_soc_zigbee_light_series_2_freertos_solution   
+                    brd4187c/matter_thread_soc_zigbee_light_series_2_freertos_solution
+                    brd4187c/matter_thread_soc_multi_sensor_app_series_2_freertos_solution   
                     brd4407a/matter_thread_soc_lighting_app_series_3_freertos_solution   
-                    brd4407a/matter_thread_soc_lock_app_series_3_freertos_solution   
+                    brd4407a/matter_thread_soc_lock_app_series_3_freertos_solution
+                    brd4407a/matter_thread_soc_multi_sensor_app_series_3_freertos_solution   
                     brd4407a/matter_thread_soc_zigbee_light_series_3_freertos_solution   
                     brd4338a/matter_wifi_soc_lighting_app_freertos_solution   
                     brd4338a/matter_wifi_soc_lock_app_freertos_solution   
@@ -207,7 +225,7 @@ def run_code_size_analysis() {
                 PATTERN=""
                 for build in $CODE_SIZE_BUILDS; do
                 [ -n "$PATTERN" ] && PATTERN="${PATTERN}|"
-                PATTERN="${PATTERN}${build}/.*\\.map\\$|${build}_lto/.*\\.map\\$"
+                PATTERN="${PATTERN}${build}/.*\\.map\\$|${build}_lto/.*\\.map\\$|${build}_nolto/.*\\.map\\$"
                 done
 
                 filtered_map_files=$(echo "$map_files_found" | grep -E "$PATTERN")
