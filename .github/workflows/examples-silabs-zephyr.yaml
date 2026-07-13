@@ -79,18 +79,11 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export SiWx917 Zephyr ELF
+      - name: Export SiWx917 Zephyr HEX
         shell: bash
         run: |
           mkdir -p artifacts
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.elf artifacts/siwx917_rb4338a-zephyr.elf
-
-      - name: Upload SiWx917 Zephyr ELF
-        uses: actions/upload-artifact@v7
-        with:
-          name: siwx917_rb4338a-zephyr-elf
-          path: artifacts/siwx917_rb4338a-zephyr.elf
-          if-no-files-found: error
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/siwx917_rb4338a-zephyr.hex
 
       - name: Build EFR32xG24 Zephyr Lighting App
         shell: bash
@@ -99,15 +92,20 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export EFR32xG24 Zephyr ELF
+      - name: Export EFR32xG24 Zephyr HEX
         shell: bash
         run: |
-          mkdir -p artifacts
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.elf artifacts/xg24_rb4187c-zephyr.elf
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/xg24_rb4187c-zephyr.hex
 
-      - name: Upload EFR32xG24 Zephyr ELF
+      - name: Package Zephyr HEX artifacts
+        shell: bash
+        run: |
+          cd artifacts
+          zip -j silabs-zephyr-lighting-app-hex.zip siwx917_rb4338a-zephyr.hex xg24_rb4187c-zephyr.hex
+
+      - name: Upload Zephyr HEX artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: xg24_rb4187c-zephyr-elf
-          path: artifacts/xg24_rb4187c-zephyr.elf
+          name: silabs-zephyr-lighting-app-hex
+          path: artifacts/silabs-zephyr-lighting-app-hex.zip
           if-no-files-found: error
