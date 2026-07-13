@@ -51,21 +51,21 @@ jobs:
         with:
           submodules: false
 
-      # - name: Mark repository as safe for Git
-      #   shell: bash
-      #   run: |
-      #     git config --global --add safe.directory '*'
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory '*'
 
-      # - name: Initialize matter_sdk submodule
-      #   shell: bash
-      #   run: |
-      #     git submodule update --init third_party/matter_sdk
+      - name: Initialize matter_sdk submodule
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
 
-      # - name: Checkout matter_sdk silabs submodules
-      #   shell: bash
-      #   run: |
-      #     cd third_party/matter_sdk
-      #     ./scripts/checkout_submodules.py --shallow --platform silabs_docker
+      - name: Checkout matter_sdk silabs submodules
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
 
       - name: Bootstrap
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
