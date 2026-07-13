@@ -17,10 +17,14 @@ name: Build example - Silabs Zephyr
 on:
   push:
     branches:
-      - master
-      - "v*-branch"
+      - main
+      - "release_*"
   pull_request:
   merge_group:
+
+permissions:
+  contents: read
+
 
 concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}-${{ (github.event_name == 'pull_request' && github.event.number) || (github.event_name == 'workflow_dispatch' && github.run_number) || github.sha }}
@@ -28,6 +32,7 @@ concurrency:
 
 env:
   CHIP_LOG_TIMESTAMPS: false
+  PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
 jobs:
   silabs:
@@ -40,20 +45,41 @@ jobs:
       image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-      - name: Checkout submodules & Bootstrap
-        uses: project-chip/connectedhomeip/github/actions/checkout-submodules-and-bootstrap@db364c9fb72db2b2c24b38ab4806bd98ef5c600d
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory '*'
+
+      - name: Initialize matter_sdk submodule
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
+
+      - name: Checkout matter_sdk silabs submodules
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
+
+      - name: Bootstrap
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
         with:
           platform: silabs_docker
 
       - name: Build SiWx917 Zephyr Lighting App
+        shell: bash
         run: |
-          cd ${GITHUB_WORKSPACE} && ./scripts/run_in_build_env.sh \
+          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
              "cd /opt/silabs/zephyr-silabs \
-              && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/examples/lighting-app/silabs/zephyr"
+              && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
       - name: Build EFR32xG24 Zephyr Lighting App
+        shell: bash
         run: |
-          cd ${GITHUB_WORKSPACE} && ./scripts/run_in_build_env.sh \
+          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
              "cd /opt/silabs/zephyr-silabs \
-              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/examples/lighting-app/silabs/zephyr"
+              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
