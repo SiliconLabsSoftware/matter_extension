@@ -21,9 +21,11 @@ on:
       - "release_*"
   pull_request:
   merge_group:
+  workflow_dispatch:
 
 permissions:
   contents: read
+  actions: write
 
 
 concurrency:
@@ -49,21 +51,21 @@ jobs:
         with:
           submodules: false
 
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory '*'
+      # - name: Mark repository as safe for Git
+      #   shell: bash
+      #   run: |
+      #     git config --global --add safe.directory '*'
 
-      - name: Initialize matter_sdk submodule
-        shell: bash
-        run: |
-          git submodule update --init third_party/matter_sdk
+      # - name: Initialize matter_sdk submodule
+      #   shell: bash
+      #   run: |
+      #     git submodule update --init third_party/matter_sdk
 
-      - name: Checkout matter_sdk silabs submodules
-        shell: bash
-        run: |
-          cd third_party/matter_sdk
-          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
+      # - name: Checkout matter_sdk silabs submodules
+      #   shell: bash
+      #   run: |
+      #     cd third_party/matter_sdk
+      #     ./scripts/checkout_submodules.py --shallow --platform silabs_docker
 
       - name: Bootstrap
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
@@ -77,9 +79,35 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
+      - name: Export SiWx917 Zephyr ELF
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.elf artifacts/siwx917_rb4338a-zephyr.elf
+
+      - name: Upload SiWx917 Zephyr ELF
+        uses: actions/upload-artifact@v7
+        with:
+          name: siwx917_rb4338a-zephyr-elf
+          path: artifacts/siwx917_rb4338a-zephyr.elf
+          if-no-files-found: error
+
       - name: Build EFR32xG24 Zephyr Lighting App
         shell: bash
         run: |
           cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
              "cd /opt/silabs/zephyr-silabs \
               && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+
+      - name: Export EFR32xG24 Zephyr ELF
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.elf artifacts/xg24_rb4187c-zephyr.elf
+
+      - name: Upload EFR32xG24 Zephyr ELF
+        uses: actions/upload-artifact@v7
+        with:
+          name: xg24_rb4187c-zephyr-elf
+          path: artifacts/xg24_rb4187c-zephyr.elf
+          if-no-files-found: error
