@@ -1,4 +1,4 @@
-name: Build Zephyr lighting app
+name: Build Zephyr
 
 on:
   push:
@@ -18,7 +18,7 @@ env:
 
 jobs:
   zephyr-lighting-app:
-    name: Zephyr Lighting App
+    name: Lighting App
 
     runs-on: ubuntu-latest
     if: github.actor != 'restyled-io[bot]'
@@ -77,15 +77,9 @@ jobs:
         run: |
           cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.bin artifacts/xg24_rb4187c-zephyr.bin
 
-      - name: Package Zephyr binary artifacts
-        shell: bash
-        run: |
-          cd artifacts
-          zip -j silabs-zephyr-lighting-app-bin.zip siwx917_rb4338a-zephyr.bin xg24_rb4187c-zephyr.bin
-
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
         with:
           name: silabs-zephyr-lighting-app-bin
-          path: artifacts/silabs-zephyr-lighting-app-bin.zip
+          path: artifacts/
           if-no-files-found: error
