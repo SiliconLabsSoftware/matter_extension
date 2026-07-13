@@ -1,18 +1,4 @@
-# Copyright (c) 2026 Project CHIP Authors
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-# http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-name: Build example - Silabs Zephyr
+name: Build Zephyr lighting app
 
 on:
   push:
@@ -20,25 +6,19 @@ on:
       - main
       - "release_*"
   pull_request:
-  merge_group:
   workflow_dispatch:
 
 permissions:
   contents: read
   actions: write
 
-
-concurrency:
-  group: ${{ github.ref }}-${{ github.workflow }}-${{ (github.event_name == 'pull_request' && github.event.number) || (github.event_name == 'workflow_dispatch' && github.run_number) || github.sha }}
-  cancel-in-progress: true
-
 env:
   CHIP_LOG_TIMESTAMPS: false
   PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
 jobs:
-  silabs:
-    name: Silabs Zephyr
+  zephyr-lighting-app:
+    name: Zephyr Lighting App
 
     runs-on: ubuntu-latest
     if: github.actor != 'restyled-io[bot]'
@@ -79,11 +59,11 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export SiWx917 Zephyr HEX
+      - name: Export SiWx917 Zephyr binary
         shell: bash
         run: |
           mkdir -p artifacts
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/siwx917_rb4338a-zephyr.hex
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.bin artifacts/siwx917_rb4338a-zephyr.bin
 
       - name: Build EFR32xG24 Zephyr Lighting App
         shell: bash
@@ -92,20 +72,20 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export EFR32xG24 Zephyr HEX
+      - name: Export EFR32xG24 Zephyr binary
         shell: bash
         run: |
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/xg24_rb4187c-zephyr.hex
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.bin artifacts/xg24_rb4187c-zephyr.bin
 
-      - name: Package Zephyr HEX artifacts
+      - name: Package Zephyr binary artifacts
         shell: bash
         run: |
           cd artifacts
-          zip -j silabs-zephyr-lighting-app-hex.zip siwx917_rb4338a-zephyr.hex xg24_rb4187c-zephyr.hex
+          zip -j silabs-zephyr-lighting-app-bin.zip siwx917_rb4338a-zephyr.bin xg24_rb4187c-zephyr.bin
 
-      - name: Upload Zephyr HEX artifacts
+      - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: silabs-zephyr-lighting-app-hex
-          path: artifacts/silabs-zephyr-lighting-app-hex.zip
+          name: silabs-zephyr-lighting-app-bin
+          path: artifacts/silabs-zephyr-lighting-app-bin.zip
           if-no-files-found: error
