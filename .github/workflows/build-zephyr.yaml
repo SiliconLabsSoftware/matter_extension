@@ -59,11 +59,11 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export SiWx917 Zephyr binary
+      - name: Export SiWx917 Zephyr RPS
         shell: bash
         run: |
           mkdir -p artifacts
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.bin artifacts/siwx917_rb4338a-zephyr.bin
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps artifacts/siwx917_rb4338a-zephyr.rps
 
       - name: Build EFR32xG24 Zephyr Lighting App
         shell: bash
@@ -72,10 +72,10 @@ jobs:
              "cd /opt/silabs/zephyr-silabs \
               && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export EFR32xG24 Zephyr binary
+      - name: Export EFR32xG24 Zephyr HEX
         shell: bash
         run: |
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.bin artifacts/xg24_rb4187c-zephyr.bin
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/xg24_rb4187c-zephyr.hex
 
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
