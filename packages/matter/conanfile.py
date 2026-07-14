@@ -30,6 +30,7 @@ from _shared.base_recipe import (
 
 
 class matterRecipe(MatterBaseRecipe):
+    name = "matter"
     # Specific description (can override base if needed)
     description = "Matter extension for Simplicity SDK Suite"
 

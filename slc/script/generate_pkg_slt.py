@@ -10,7 +10,7 @@ transitively by SLT at install time (matter_app -> matter -> stack).
 
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
-    2. Version field from the matter.slce file in the extension root (auto-appended with "-0.dev").
+    2. Version field from the matter.slce file in the extension root.
 
 SAMPLE APP PACKAGE
     By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt'.
@@ -63,7 +63,6 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
             if slce_data and "version" in slce_data:
                 version = str(slce_data["version"]).strip()
                 if version:
-                    version = version + "-0.dev"
                     logger.debug("Matter version read from matter.slce: %s", version)
                     return version
                 logger.warning("Version field in %s is empty", slce_file)

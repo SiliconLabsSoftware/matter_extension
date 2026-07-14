@@ -4,9 +4,40 @@
 from __future__ import annotations
 
 import argparse
+import os
+import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+
+def _resolve_executable(name: str, *, env_var: str, hint: str) -> str | None:
+    override = os.environ.get(env_var, "").strip()
+    if override:
+        if os.path.isfile(override) and os.access(override, os.X_OK):
+            return override
+        print(f"ERROR: {env_var} is not executable: {override}", file=sys.stderr)
+        print(hint, file=sys.stderr)
+        return None
+
+    found = shutil.which(name)
+    if found:
+        return found
+
+    if name == "slt":
+        loc = Path.home() / ".silabs" / "slt" / "slt.location"
+        if loc.is_file():
+            candidate = loc.read_text(encoding="utf-8").strip()
+            if candidate and os.access(candidate, os.X_OK):
+                return candidate
+
+    print(f"ERROR: {name} not found on PATH.", file=sys.stderr)
+    print(hint, file=sys.stderr)
+    return None
+
+
+def _board_only(board: str) -> str:
+    return board.split(";")[0]
 
 
 def _write_slconf(app_dir: Path, slcp_name: str) -> int:
@@ -33,6 +64,18 @@ def _validate_slcp(slcp_path: Path, slconf_path: Path) -> int:
     return 0
 
 
+def _find_makefile(
+    gen_out: Path,
+    out_base: Path,
+    project: str,
+) -> tuple[Path, str] | None:
+    makefile_name = f"{project}.Makefile"
+    for directory in (gen_out, out_base):
+        if (directory / makefile_name).is_file():
+            return directory, makefile_name
+    return None
+
+
 def _build_app(app_dir: Path, slcp_name: str, board: str, out_dir: Path) -> int:
     app_dir = app_dir.resolve()
     slcp_path = app_dir / slcp_name
@@ -45,29 +88,46 @@ def _build_app(app_dir: Path, slcp_name: str, board: str, out_dir: Path) -> int:
         print(f"ERROR: pkg.slt not found: {pkg_slt}", file=sys.stderr)
         return 1
 
-    slt = "slt"
-    steps = [
-        [slt, "install", "-f", str(pkg_slt), "--non-interactive"],
-    ]
-    for cmd in steps:
-        print("Running:", " ".join(cmd))
-        if subprocess.run(cmd, cwd=app_dir).returncode != 0:
-            return 1
+    slt_hint = (
+        "Install SLT CLI and add it to PATH, or set SLT_EXE.\n"
+        "  export PATH=\"$HOME/SilabsSoftware/slt:$PATH\""
+    )
+    slc_hint = (
+        "Install slc-cli via SLT and add it to PATH, or set SLC_EXECUTABLE.\n"
+        "  slt install slc-cli --non-interactive"
+    )
+    slt = _resolve_executable("slt", env_var="SLT_EXE", hint=slt_hint)
+    slc = _resolve_executable("slc", env_var="SLC_EXECUTABLE", hint=slc_hint)
+    if not slt or not slc:
+        return 1
+
+    install_cmd = [slt, "install", "-f", str(pkg_slt), "--non-interactive"]
+    print("Running:", " ".join(install_cmd))
+    if subprocess.run(install_cmd, cwd=app_dir).returncode != 0:
+        return 1
 
     if _write_slconf(app_dir, slcp_name) != 0:
         return 1
 
+    slconf = app_dir / "autogen" / "pkg.slconf"
+    if slconf.is_file() and _validate_slcp(slcp_path, slconf) != 0:
+        return 1
+
+    project = Path(slcp_name).stem
+    brd = _board_only(board)
     out_dir = out_dir.resolve()
-    out_dir.mkdir(parents=True, exist_ok=True)
+    gen_out = (out_dir / brd / project).resolve()
+    gen_out.mkdir(parents=True, exist_ok=True)
+
     gen_cmd = [
-        "slc",
+        slc,
         "generate",
         "-p",
         slcp_name,
         "--with",
         board,
         "-d",
-        str(out_dir),
+        str(gen_out),
         "-o",
         "makefile",
         "--generator-timeout=180",
@@ -76,7 +136,18 @@ def _build_app(app_dir: Path, slcp_name: str, board: str, out_dir: Path) -> int:
     if subprocess.run(gen_cmd, cwd=app_dir).returncode != 0:
         return 1
 
-    if subprocess.run(["make", "-C", str(out_dir), "-j"], cwd=app_dir).returncode != 0:
+    found = _find_makefile(gen_out, out_dir, project)
+    if not found:
+        print(
+            f"ERROR: {project}.Makefile not found under {gen_out}",
+            file=sys.stderr,
+        )
+        return 1
+    make_dir, makefile_name = found
+
+    make_cmd = ["make", "all", "-C", str(make_dir), "-f", makefile_name, "-j"]
+    print("Running:", " ".join(make_cmd))
+    if subprocess.run(make_cmd, cwd=app_dir).returncode != 0:
         return 1
     return 0
 
@@ -121,7 +192,7 @@ def main(argv: list[str] | None = None) -> int:
         "--out-dir",
         type=Path,
         default=Path("./out"),
-        help="Output directory for slc generate / make",
+        help="Output base directory (generate uses <out-dir>/<board>/<project>/)",
     )
 
     args = parser.parse_args(argv)

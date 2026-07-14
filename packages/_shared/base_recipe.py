@@ -3,11 +3,15 @@ from conan import ConanFile
 from conan.tools.files import copy
 from contextlib import contextmanager
 import os
+import shutil
 import yaml
 
 # Shared metadata and helpers for matter packages
 
 MATTER_SDK_PATH_PREFIX = "third_party/matter_sdk/"
+
+# VCS metadata is not used at build time; copying it bloats the matter package (~10 GB).
+MATTER_SDK_PACKAGE_EXCLUDES = (".git",)
 
 NESTED_MATTER_SDK_THIRD_PARTY_NAMES = ("nlio", "nlassert")
 EXTENSION_THIRD_PARTY_NAMES = ("mbedtls", "nlio", "nlassert")
@@ -215,6 +219,13 @@ def _package_nested_third_party_copy(
     )
 
 
+def _remove_packaged_git_metadata(tree_root: Path) -> None:
+    """Drop any .git directory left under a packaged tree (defensive cleanup)."""
+    git_dir = tree_root / ".git"
+    if git_dir.is_dir():
+        shutil.rmtree(git_dir)
+
+
 def package_matter_sdk_tree(
     conanfile: ConanFile,
     package_folder: Path,
@@ -230,7 +241,9 @@ def package_matter_sdk_tree(
         src=str(sdk_source_root),
         dst=str(sdk_dst),
         keep_path=True,
+        excludes=MATTER_SDK_PACKAGE_EXCLUDES,
     )
+    _remove_packaged_git_metadata(sdk_dst)
     root = (repo_root or SHARED_REPO_ROOT).resolve()
     _package_extension_third_party_copy(conanfile, root, package_folder)
 
@@ -314,7 +327,7 @@ def resolve_matter_package_version(repo_root: Path) -> str:
         version = str(data.get("version", "")).strip()
         if not version:
             raise RuntimeError(f"Version field missing or empty in {slce_path}")
-        return f"{version}-0.dev"
+        return version
     raise FileNotFoundError(
         f"SLCE file not found under {repo_root} or exported recipe folder"
     )
