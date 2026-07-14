@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 MATTER_SUBMODULES = [
     "third_party/matter_support",
-    "third_party/aws_ota_sdk",
     "third_party/QR-Code-generator",
     "third_party/third_party_hw_drivers_extension",
     "third_party/matter_sdk",
@@ -82,7 +81,7 @@ def resolve_matter_package_version(repo_root: Path) -> str:
     version = str(data.get("version", "")).strip()
     if not version:
         raise RuntimeError(f"Version field missing or empty in {slce_path}")
-    return f"{version}-0.dev"
+    return version
 
 
 def resolve_conan_exe() -> str:

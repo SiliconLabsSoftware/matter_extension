@@ -11,7 +11,7 @@ sdk:
   vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.9.0"
+    version: "2.10.0-alpha.1"
     vendor: silabs
   - id: openthread
     version: "3.1.0"

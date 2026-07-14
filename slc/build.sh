@@ -57,6 +57,13 @@
 #   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids application
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
+#   --from-package : Dev workflow — git clone + installed SLT packages (uses write_app_slconf.py).
+#   --package-only : Customer workflow — no git clone; uses matter/matter_app SLT packages only.
+#   Example package-only:
+#   cd "$(slt where matter)"
+#   ./slc/build.sh --package-only slc/apps/lock_app/wifi/matter_wifi_soc_lock_app_freertos.slcp brd4338a
+#       output in: <matter_app>/slc/apps/lock_app/wifi/out/brd4338a/matter_wifi_soc_lock_app_freertos/
+#
 
 # Helper functions to build component arguments
 build_with_arg() {
@@ -78,6 +85,97 @@ build_without_arg() {
 	else
 		echo ""
 	fi
+}
+
+resolve_slt_exe() {
+	local matter_root="$1"
+	if [ -n "${SLT_EXE:-}" ] && [ -x "$SLT_EXE" ]; then
+		echo "$SLT_EXE"
+		return 0
+	fi
+	if [ -n "$matter_root" ] && [ -x "$matter_root/slc/tools/slt" ]; then
+		echo "$matter_root/slc/tools/slt"
+		return 0
+	fi
+	if command -v slt >/dev/null 2>&1; then
+		command -v slt
+		return 0
+	fi
+	local loc="$HOME/.silabs/slt/slt.location"
+	if [ -f "$loc" ]; then
+		local candidate
+		candidate="$(tr -d '\r\n' < "$loc")"
+		if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+			echo "$candidate"
+			return 0
+		fi
+	fi
+	echo "ERROR: slt not found (set SLT_EXE or install SLT CLI)" >&2
+	return 1
+}
+
+resolve_slc_exe() {
+	if [ -n "${SLC_EXECUTABLE:-}" ] && [ -x "$SLC_EXECUTABLE" ]; then
+		echo "$SLC_EXECUTABLE"
+		return 0
+	fi
+	if command -v slc >/dev/null 2>&1; then
+		command -v slc
+		return 0
+	fi
+	echo "ERROR: slc (slc-cli) not found on PATH (install via SLT or set SLC_EXECUTABLE)" >&2
+	return 1
+}
+
+resolve_slt_pkg_path() {
+	local spec="$1"
+	local raw path
+	raw=$("$SLT_EXE" where --non-interactive "$spec" 2>/dev/null | tail -1)
+	raw="${raw// /}"
+	if [[ "$raw" == /* ]]; then
+		path="$raw"
+	elif [[ "$raw" == *'?'* ]]; then
+		path=$(printf '%s' "$raw" | sed 's/.*?\s*//')
+	else
+		path="$raw"
+	fi
+	if [ -z "$path" ] || [ ! -d "$path" ]; then
+		echo "ERROR: SLT package not installed: $spec" >&2
+		return 1
+	fi
+	echo "$path"
+}
+
+write_app_slconf() {
+	local app_dir="$1"
+	local slcp_name="$2"
+
+	if [ "$PACKAGE_ONLY" = true ]; then
+		local cli="${MATTER_APP_SLCONF:-$MATTER_PKG/bin/matter-app-slconf}"
+		if [ ! -x "$cli" ]; then
+			echo "ERROR: matter-app-slconf not found at $cli" >&2
+			return 1
+		fi
+		if [ ! -f "$app_dir/pkg.slt" ]; then
+			echo "ERROR: pkg.slt not found in $app_dir" >&2
+			return 1
+		fi
+		echo "Running: $SLT_EXE install -f $app_dir/pkg.slt --non-interactive"
+		if ! "$SLT_EXE" install -f "$app_dir/pkg.slt" --non-interactive; then
+			return 1
+		fi
+		echo "Running: $cli slconf --app-dir $app_dir --slcp-name $slcp_name"
+		"$cli" slconf --app-dir "$app_dir" --slcp-name "$slcp_name"
+		return $?
+	fi
+
+	if [ ! -f "$MATTER_ROOT/slc/script/write_app_slconf.py" ]; then
+		echo "ERROR: write_app_slconf.py not found under $MATTER_ROOT/slc/script" >&2
+		return 1
+	fi
+	python3 "$MATTER_ROOT/slc/script/write_app_slconf.py" \
+		--app-dir "$app_dir" \
+		--slcp-name "$slcp_name"
 }
 
 # Helper function to run slc generate with retry on timeout
@@ -153,11 +251,27 @@ MATTER_ROOT="${MATTER_ROOT:-$(pwd -P)}"
 echo "MATTER_ROOT: $MATTER_ROOT"
 
 FROM_PACKAGE=false
+PACKAGE_ONLY=false
 if [ "${MATTER_FROM_PACKAGE:-}" = "1" ] || [ "$1" = "--from-package" ]; then
 	FROM_PACKAGE=true
 	if [ "$1" = "--from-package" ]; then
 		shift
 	fi
+fi
+if [ "${MATTER_PACKAGE_ONLY:-}" = "1" ] || [ "$1" = "--package-only" ]; then
+	PACKAGE_ONLY=true
+	if [ "$1" = "--package-only" ]; then
+		shift
+	fi
+fi
+if [ "$FROM_PACKAGE" = true ] && [ "$PACKAGE_ONLY" = true ]; then
+	echo "ERROR: --from-package and --package-only are mutually exclusive" >&2
+	exit 1
+fi
+
+USE_SLT_PACKAGES=false
+if [ "$FROM_PACKAGE" = true ] || [ "$PACKAGE_ONLY" = true ]; then
+	USE_SLT_PACKAGES=true
 fi
 
 : "${SISDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
@@ -171,38 +285,22 @@ if [ -f "$MATTER_ROOT/slc/tools/.env" ]; then
 fi
 set +a
 
-if [ "$FROM_PACKAGE" = true ]; then
-	SLT_EXE="${SLT_EXE:-$MATTER_ROOT/slc/tools/slt}"
-	if [ ! -x "$SLT_EXE" ]; then
-		SLT_EXE=$(command -v slt)
+if [ "$USE_SLT_PACKAGES" = true ]; then
+	SLT_EXE="$(resolve_slt_exe "$MATTER_ROOT")" || exit 1
+	export SLT_EXE
+	if [ "$PACKAGE_ONLY" = true ]; then
+		SLC_EXE="$(resolve_slc_exe)" || exit 1
+		export SLC_EXECUTABLE="$SLC_EXE"
+		export PATH="$(dirname "$SLT_EXE"):$(dirname "$SLC_EXE"):$PATH"
 	fi
-	if [ ! -x "$SLT_EXE" ]; then
-		echo "ERROR: --from-package requires slt at $MATTER_ROOT/slc/tools/slt, in PATH, or SLT_EXE"
-		exit 1
-	fi
-	resolve_slt_pkg() {
-		local spec="$1"
-		local raw path
-		raw=$("$SLT_EXE" where --non-interactive "$spec" 2>/dev/null | tail -1)
-		raw="${raw// /}"
-		if [[ "$raw" == /* ]]; then
-			path="$raw"
-		elif [[ "$raw" == *'?'* ]]; then
-			path=$(printf '%s' "$raw" | sed 's/.*?\s*//')
-		else
-			path="$raw"
-		fi
-		if [ -z "$path" ] || [ ! -d "$path" ]; then
-			echo "ERROR: SLT package not installed: $spec (run ./slc/script/refresh_local_packages.sh)" >&2
-			return 1
-		fi
-		echo "$path"
-	}
-	MATTER_APP_PKG=$(resolve_slt_pkg "matter_app") || exit 1
-	MATTER_PKG=$(resolve_slt_pkg "matter") || exit 1
+	MATTER_APP_PKG=$(resolve_slt_pkg_path "matter_app") || exit 1
+	MATTER_PKG=$(resolve_slt_pkg_path "matter") || exit 1
 	if [ ! -d "$MATTER_PKG/third_party/matter_sdk" ]; then
 		echo "ERROR: matter package missing third_party/matter_sdk at $MATTER_PKG/third_party/matter_sdk" >&2
 		exit 1
+	fi
+	if [ "$PACKAGE_ONLY" = true ]; then
+		MATTER_ROOT="${MATTER_ROOT:-$MATTER_PKG}"
 	fi
 	EXTENSION_DIR="$MATTER_PKG"
 	export silabs_chip_root="$MATTER_PKG"
@@ -243,7 +341,7 @@ REPO_APP_DIR=""
 if [[ "$ORIG_APP_ARG" != /* ]]; then
 	REPO_APP_DIR="$MATTER_ROOT/$(dirname "$ORIG_APP_ARG")"
 fi
-if [ "$FROM_PACKAGE" = true ]; then
+if [ "$USE_SLT_PACKAGES" = true ]; then
 	if [[ "$SILABS_APP_PATH" != /* ]]; then
 		SILABS_APP_PATH="$MATTER_APP_PKG/$SILABS_APP_PATH"
 	fi
@@ -251,17 +349,23 @@ if [ "$FROM_PACKAGE" = true ]; then
 		echo "ERROR: Project file not found in matter_app package: $SILABS_APP_PATH" >&2
 		exit 1
 	fi
-	SLCONF_APP_DIR="$REPO_APP_DIR"
-	if [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
+	if [ "$PACKAGE_ONLY" = true ]; then
 		SLCONF_APP_DIR="$(dirname "$SILABS_APP_PATH")"
+	else
+		SLCONF_APP_DIR="$REPO_APP_DIR"
+		if [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
+			SLCONF_APP_DIR="$(dirname "$SILABS_APP_PATH")"
+		fi
 	fi
 	if [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
-		echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (run ./slc/script/refresh_local_packages.sh)" >&2
+		if [ "$PACKAGE_ONLY" = true ]; then
+			echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (slt install -f pkg.slt failed?)" >&2
+		else
+			echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (run ./slc/script/refresh_local_packages.sh)" >&2
+		fi
 		exit 1
 	fi
-	python3 "$MATTER_ROOT/slc/script/write_app_slconf.py" \
-		--app-dir "$SLCONF_APP_DIR" \
-		--slcp-name "$(basename "$SILABS_APP_PATH")"
+	write_app_slconf "$SLCONF_APP_DIR" "$(basename "$SILABS_APP_PATH")" || exit 1
 	USE_APP_SLCONF=true
 	SLC_WORK_DIR="$SLCONF_APP_DIR"
 	SLC_PROJECT_FILE="$(basename "$SILABS_APP_PATH")"
@@ -291,7 +395,9 @@ else
 	exit 1
 fi
 
-if [ "$FROM_PACKAGE" = true ]; then
+if [ "$PACKAGE_ONLY" = true ]; then
+	OUTPUT_DIR_ABS="$SLCONF_APP_DIR/$OUTPUT_DIR"
+elif [ "$FROM_PACKAGE" = true ]; then
 	OUTPUT_DIR_ABS="$MATTER_ROOT/$OUTPUT_DIR"
 else
 	OUTPUT_DIR_ABS="$OUTPUT_DIR"
@@ -405,25 +511,40 @@ if ! [ -x "$(command -v slc)" ]; then
 	exit 1
 fi
 
-if ! [ -d "$ARM_GCC_DIR" ]; then
-	echo "ERROR: ARM_GCC_DIR is not set or directory does not exist."
+if [ -n "${ARM_GCC_DIR:-}" ] && [ -d "$ARM_GCC_DIR" ] && [ -d "$ARM_GCC_DIR/bin" ]; then
+	if ! [ -x "$ARM_GCC_DIR/bin/arm-none-eabi-gcc" ]; then
+		echo "WARNING: might be an incompatible toolchain."
+		echo "Please install gcc-arm-none-eabi for your host (see sl_setup_env.py)."
+	fi
+elif [ "$PACKAGE_ONLY" = true ] && command -v arm-none-eabi-gcc >/dev/null 2>&1; then
+	: # gcc on PATH is sufficient for package-only builds without .env
+elif [ "$PACKAGE_ONLY" = true ]; then
+	echo "ERROR: arm-none-eabi-gcc not found (install gcc-arm-none-eabi via SLT or source slc/tools/.env)" >&2
 	exit 1
-fi
+else
+	if ! [ -d "$ARM_GCC_DIR" ]; then
+		echo "ERROR: ARM_GCC_DIR is not set or directory does not exist."
+		exit 1
+	fi
 
-if ! [ -d "$ARM_GCC_DIR/bin" ]; then
-	echo "ERROR: $ARM_GCC_DIR path should have a bin folder."
-	exit 1
-fi
+	if ! [ -d "$ARM_GCC_DIR/bin" ]; then
+		echo "ERROR: $ARM_GCC_DIR path should have a bin folder."
+		exit 1
+	fi
 
-if ! [ -x "$ARM_GCC_DIR/bin/arm-none-eabi-gcc" ]; then
-	echo "WARNING: might be an incompatible toolchain."
-	echo "Please install gcc-arm-none-eabi for your host (see sl_setup_env.py)."
+	if ! [ -x "$ARM_GCC_DIR/bin/arm-none-eabi-gcc" ]; then
+		echo "WARNING: might be an incompatible toolchain."
+		echo "Please install gcc-arm-none-eabi for your host (see sl_setup_env.py)."
+	fi
 fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
-if [ "$FROM_PACKAGE" = true ]; then
+if [ "$USE_SLT_PACKAGES" = true ]; then
 	echo "Package mode: matter_app=$MATTER_APP_PKG matter=$MATTER_PKG"
+	if [ "$PACKAGE_ONLY" = true ]; then
+		echo "Package-only: output=$OUTPUT_DIR_ABS"
+	fi
 fi
 
 # Make ZAP available to SLC-CLI

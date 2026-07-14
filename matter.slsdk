@@ -1,7 +1,7 @@
 # Properties file for Simplicity Studio metadata
 id=com.silabs.sdk.matter
 
-version=2.8.1
+version=2.10.0
 
 label=Silicon Labs Matter
 description=Matter extension for Simplicity SDK Suite

@@ -46,7 +46,6 @@ jobs:
       shell: bash
       run: |
         git submodule update --init \
-          third_party/aws_ota_sdk \
           third_party/matter_sdk \
           third_party/matter_support \
           third_party/mbedtls \
@@ -97,7 +96,6 @@ jobs:
         shell: bash
         run: |
           git submodule update --init \
-            third_party/aws_ota_sdk \
             third_party/matter_sdk \
             third_party/matter_support \
             third_party/mbedtls \
