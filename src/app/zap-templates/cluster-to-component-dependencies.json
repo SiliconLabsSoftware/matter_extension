@@ -30,6 +30,12 @@
     ]
   },
   {
+    "clusterCode": "ambient context sensing-server",
+    "value": [
+      "%extension-matter%matter_ambient_context_sensing"
+    ]
+  },
+  {
     "clusterCode": "application basic-server",
     "value": [
       "%extension-matter%matter_application_basic"
@@ -576,7 +582,7 @@
     ]
   },
   {
-    "clusterCode": "unit testing-server",
+    "clusterCode": "test hidden manufacturer specific-server",
     "value": [
       "%extension-matter%matter_test_cluster"
     ]

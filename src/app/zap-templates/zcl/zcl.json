@@ -19,6 +19,7 @@
         "ambient-sensing-union-cluster.xml",
         "application-basic-cluster.xml",
         "application-launcher-cluster.xml",
+        "audio-control-cluster.xml",
         "audio-output-cluster.xml",
         "av-analysis-cluster.xml",
         "ballast-configuration-cluster.xml",
@@ -37,6 +38,7 @@
         "clusters-extensions.xml",
         "color-control-cluster.xml",
         "commissioner-control-cluster.xml",
+        "commissioning-proxy-cluster.xml",
         "commodity-metering-cluster.xml",
         "commodity-price-cluster.xml",
         "commodity-tariff-cluster.xml",
@@ -56,6 +58,7 @@
         "electrical-protection-alarm-cluster.xml",
         "groupcast-cluster.xml",
         "humidistat-cluster.xml",
+        "media-file-management-cluster.xml",
         "microwave-oven-mode-cluster.xml",
         "meter-identification-cluster.xml",
         "door-lock-cluster.xml",
@@ -134,8 +137,10 @@
         "target-navigator-cluster.xml",
         "temperature-control-cluster.xml",
         "microwave-oven-control-cluster.xml",
+        "temperature-controlled-cabinet-topology-cluster.xml",
         "temperature-measurement-cluster.xml",
         "test-cluster.xml",
+        "test-hidden-manufacturer-specific-cluster.xml",
         "thermostat-cluster.xml",
         "thermostat-user-interface-configuration-cluster.xml",
         "thread-border-router-management-cluster.xml",
@@ -278,6 +283,16 @@
             "LatchControlModes",
             "FeatureMap",
             "ClusterRevision"
+        ],
+        "Commissioning Proxy": [
+            "Transport",
+            "ScanMaxTime",
+            "MaxSessions",
+            "MaxCachedResults",
+            "NumCachedResults",
+            "CacheTimeout",
+            "CachedResults",
+            "WiFiBand"
         ],
         "Commodity Price": [
             "TariffUnit",
@@ -682,6 +697,11 @@
             "CurrentMode",
             "FeatureMap"
         ],
+        "Oven Mode": [
+            "SupportedModes",
+            "CurrentMode",
+            "FeatureMap"
+        ],
         "Refrigerator And Temperature Controlled Cabinet Mode": [
             "SupportedModes",
             "CurrentMode",
@@ -698,24 +718,30 @@
             "FeatureMap"
         ],
         "Operational State": [
-            "OperationalState",
-            "OperationalError",
+            "PhaseList",
             "CurrentPhase",
             "CountdownTime",
+            "OperationalStateList",
+            "OperationalState",
+            "OperationalError",
             "ClusterRevision"
         ],
         "RVC Operational State": [
-            "OperationalState",
-            "OperationalError",
+            "PhaseList",
             "CurrentPhase",
             "CountdownTime",
+            "OperationalStateList",
+            "OperationalState",
+            "OperationalError",
             "ClusterRevision"
         ],
         "Oven Cavity Operational State": [
-            "OperationalState",
-            "OperationalError",
+            "PhaseList",
             "CurrentPhase",
             "CountdownTime",
+            "OperationalStateList",
+            "OperationalState",
+            "OperationalError",
             "ClusterRevision"
         ],
         "Activated Carbon Filter Monitoring": [
@@ -933,7 +959,11 @@
             "FeatureMap"
         ],
         "Power Source": [
-            "ClusterRevision"
+            "ClusterRevision",
+            "ActiveWiredFaults",
+            "ActiveBatFaults",
+            "ActiveBatChargeFaults",
+            "EndpointList"
         ],
         "Valve Configuration and Control": [
             "OpenDuration",

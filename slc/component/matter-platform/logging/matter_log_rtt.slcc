@@ -12,7 +12,7 @@ provides:
 define:
   - name: SILABS_LOG_OUT_UART
     value: 0
-  - name: SILABS_LOG_ENABLE
+  - name: SILABS_LOG_ENABLED
     value: 1  
 conflicts:
   - name: matter_log_uart
