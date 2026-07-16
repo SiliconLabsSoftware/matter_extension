@@ -124,6 +124,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: SL_WIFI_LIT_APP
+    value: "1"
 
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
