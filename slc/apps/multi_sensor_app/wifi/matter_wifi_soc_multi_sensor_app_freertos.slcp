@@ -59,6 +59,8 @@ component:
   - id: matter_lwip
   - id: matter_icd_core
   - id: matter_icd_management
+  - id: matter_icd_checkin_sender
+  - id: matter_check_in_message
   - id: matter_multi_sensor_app
 
   - id: wifi_resources
@@ -149,9 +151,15 @@ configuration:
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
-    value: "0"
+    value: "5000"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "1000"
+    value: "SL_IDLE_MODE_DURATION_S"
+  - name: CHIP_CONFIG_ENABLE_ICD_LIT
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_CIP
+    value: 1
+  - name: CHIP_CONFIG_ENABLE_ICD_UAT
+    value: 1
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"

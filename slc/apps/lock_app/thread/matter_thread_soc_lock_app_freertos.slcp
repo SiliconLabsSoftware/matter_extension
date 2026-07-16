@@ -150,7 +150,7 @@ configuration:
 
   # Default ICD configurations
   - name: SL_IDLE_MODE_DURATION_S
-    value: "600"
+    value: "300"
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
