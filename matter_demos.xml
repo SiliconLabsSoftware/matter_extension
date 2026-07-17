@@ -300,7 +300,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_closure_app_series_2_freertos" label="Matter Thread - SoC Closure with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_air_quality_sensor_app_freertos" label="Matter WiFi - SoC Air Quality Sensor FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi air quality sensor app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Air Quality Sensor FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_air_quality_sensor_app_freertos_solution/artifact/matter_wifi_soc_air_quality_sensor_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/air_quality_sensor_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_closure_app_series_2_freertos" label="Matter Thread - SoC Closure with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread closure app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Closure with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -600,7 +614,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_evse_app_series_2_freertos" label="Matter Thread - SoC EVSE with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_closure_app_freertos" label="Matter WiFi - SoC Closure FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi closure app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Closure FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_closure_app_freertos_solution/artifact/matter_wifi_soc_closure_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/closure_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_evse_app_series_2_freertos" label="Matter Thread - SoC EVSE with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread EVSE app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC EVSE with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -900,7 +928,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_fan_control_app_series_2_freertos" label="Matter Thread - SoC Fan Control with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_evse_app_freertos" label="Matter WiFi - SoC EVSE FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi EVSE app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC EVSE FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_evse_app_freertos_solution/artifact/matter_wifi_soc_evse_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/evse_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_fan_control_app_series_2_freertos" label="Matter Thread - SoC Fan Control with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread fan control app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Fan Control with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -1260,7 +1302,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_light_switch_app_series_2_freertos" label="Matter Thread - SoC Light Switch with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_fan_control_app_freertos" label="Matter WiFi - SoC Fan Control FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi fan control app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Fan Control FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_fan_control_app_freertos_solution/artifact/matter_wifi_soc_fan_control_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/fan_control_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_light_switch_app_series_2_freertos" label="Matter Thread - SoC Light Switch with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread light switch app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Light Switch with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -1556,6 +1612,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4343c"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343c/matter_wifi_soc_light_switch_app_freertos_solution/artifact/matter_wifi_soc_light_switch_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/light_switch_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4343s.demo.matter_wifi_soc_light_switch_app_freertos" label="Matter WiFi - SoC Light Switch FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi light switch app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Light Switch FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_light_switch_app_freertos_solution/artifact/matter_wifi_soc_light_switch_app_freertos.rps"/>
     <property key="core.readmeFiles" value="slc/apps/light_switch_app/wifi/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -1880,7 +1946,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_lock_app_series_2_freertos" label="Matter Thread - SoC Lock with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_lighting_app_freertos" label="Matter WiFi - SoC Lighting FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi lighting app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Lighting FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_lighting_app_freertos_solution/artifact/matter_wifi_soc_lighting_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/lighting_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_lock_app_series_2_freertos" label="Matter Thread - SoC Lock with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread door lock app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Lock with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -2240,7 +2320,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_multi_sensor_app_series_2_freertos" label="Matter Thread - SoC Multi Sensor with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_lock_app_freertos" label="Matter WiFi - SoC Lock FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi door lock app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Lock FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_lock_app_freertos_solution/artifact/matter_wifi_soc_lock_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/lock_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_multi_sensor_app_series_2_freertos" label="Matter Thread - SoC Multi Sensor with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread multi-sensor app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Multi Sensor with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -2540,7 +2634,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_onoff_plug_app_series_2_freertos" label="Matter Thread - SoC Onoff Plug with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_multi_sensor_app_freertos" label="Matter WiFi - SoC Multi Sensor FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi multi-sensor app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Multi Sensor FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_multi_sensor_app_freertos_solution/artifact/matter_wifi_soc_multi_sensor_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/multi_sensor_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_onoff_plug_app_series_2_freertos" label="Matter Thread - SoC Onoff Plug with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread on/off plug app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Onoff Plug with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -2840,7 +2948,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2605b.demo.matter_wifi_soc_oven_app_freertos" label="Matter WiFi - SoC Oven FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_onoff_plug_app_freertos" label="Matter WiFi - SoC Onoff Plug FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi on/off plug app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Onoff Plug FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_onoff_plug_app_freertos_solution/artifact/matter_wifi_soc_onoff_plug_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/onoff_plug_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2605b.demo.matter_wifi_soc_oven_app_freertos" label="Matter WiFi - SoC Oven FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi oven app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Oven FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -2910,7 +3032,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_platform_template_series_2_freertos" label="Matter Thread - SoC Platform Template with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_oven_app_freertos" label="Matter WiFi - SoC Oven FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi oven app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Oven FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_oven_app_freertos_solution/artifact/matter_wifi_soc_oven_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/oven_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_platform_template_series_2_freertos" label="Matter Thread - SoC Platform Template with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread platform template app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Platform Template with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -3210,7 +3346,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_rangehood_app_series_2_freertos" label="Matter Thread - SoC Rangehood with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_platform_template_freertos" label="Matter WiFi - SoC Platform Template FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi platform template app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Platform Template FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_platform_template_freertos_solution/artifact/matter_wifi_soc_platform_template_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/platform_template/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_rangehood_app_series_2_freertos" label="Matter Thread - SoC Rangehood with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread rangehood app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Rangehood with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -3510,7 +3660,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_refrigerator_app_series_2_freertos" label="Matter Thread - SoC Refrigerator with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_rangehood_app_freertos" label="Matter WiFi - SoC Rangehood FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi rangehood app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Rangehood FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_rangehood_app_freertos_solution/artifact/matter_wifi_soc_rangehood_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/rangehood_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_refrigerator_app_series_2_freertos" label="Matter Thread - SoC Refrigerator with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter over Thread refrigerator app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Refrigerator with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -3806,6 +3970,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4343c"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343c/matter_wifi_soc_refrigerator_app_freertos_solution/artifact/matter_wifi_soc_refrigerator_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/refrigerator_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4343s.demo.matter_wifi_soc_refrigerator_app_freertos" label="Matter WiFi - SoC Refrigerator FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi refrigerator app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Refrigerator FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_refrigerator_app_freertos_solution/artifact/matter_wifi_soc_refrigerator_app_freertos.rps"/>
     <property key="core.readmeFiles" value="slc/apps/refrigerator_app/wifi/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -4230,7 +4404,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_thermostat_freertos" label="Matter WiFi - SoC Thermostat FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Thermostat FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_thermostat_freertos_solution/artifact/matter_wifi_soc_thermostat_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS app"/>
     <property key="core.partCompatibility" value=".*"/>
@@ -4680,7 +4868,21 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+<<<<<<< HEAD
   <demo name="brd2601d.demo.matter_thread_soc_zigbee_light_series_2_freertos_sequential" label="Matter Thread - SoC Zigbee Light with external Bootloader FreeRTOS Sequential">
+=======
+  <demo name="brd4343s.demo.matter_wifi_soc_window_app_freertos" label="Matter WiFi - SoC Window App FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi window covering app</model:description>
+    <property key="demos.blurb" value="Matter WiFi - SoC Window App FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343s"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.1/demos/brd4343s/matter_wifi_soc_window_app_freertos_solution/artifact/matter_wifi_soc_window_app_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/window_app/wifi/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd2601d.demo.matter_thread_soc_zigbee_light_series_2_freertos_sequential" label="Matter Thread - SoC Zigbee Light with external Bootloader FreeRTOS Sequential">
+>>>>>>> release_2.9-1.6
     <model:description>Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread with external bootloader Sequential</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Zigbee Light with external Bootloader FreeRTOS Sequential app"/>
     <property key="core.partCompatibility" value=".*"/>
