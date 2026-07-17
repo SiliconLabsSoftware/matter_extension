@@ -149,7 +149,7 @@ fi
 SILABS_APP_PATH=$1
 SILABS_BOARD=$2
 CONFIG_ARGS=""
-# Sanitize for filesystem path: Series 3 boards use board,part (comma breaks -Wl,-Map=).
+# tr converts board,part to board_part to avoid breaking clang builds.
 BRD_ONLY=$(echo "$SILABS_BOARD" | cut -f1 -d";" | tr ',' '_')
 if [ -z "$POST_BUILD_EXE" ]; then
 	export POST_BUILD_EXE=$(which commander)
