@@ -40,13 +40,13 @@ requires:
       - brd4118a
   - name: simple_button_recommended_instance
     condition:
-      - brd2608a
+      - brd2608b
   - name: simple_button_recommended_instance
     condition:
       - brd4121a
   - name: simple_button_recommended_instance
     condition:
-      - brd2601b
+      - brd2601d
   - name: simple_button_recommended_instance
     condition:
       - brd2703a
