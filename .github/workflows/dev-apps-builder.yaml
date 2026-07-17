@@ -38,7 +38,7 @@ jobs:
               id: set-build-type
               run: |
                   if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
-                      if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
+                      if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]] || [[ "${{ github.ref_name }}" == "test/brd4343s" ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
                       else
                           echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
