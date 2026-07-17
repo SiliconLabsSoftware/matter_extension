@@ -928,6 +928,7 @@ extra_files:
   - slc/script/build_ot_rcp.py
   - slc/script/code_size_diff_check.py
   - slc/script/code_size_result.sh
+  - slc/script/confluence_inline_styles.sh
   - slc/script/demos.xml.j2
   - slc/script/dependency_versions.yaml
   - slc/script/em1-augmentation.py
