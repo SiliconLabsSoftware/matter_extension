@@ -1,6 +1,9 @@
 name: Build Dev apps
 
 on:
+    push:
+        branches:
+            - test/brd4343s
     pull_request:
         branches:
             - main
@@ -34,7 +37,7 @@ jobs:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                  if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
                       if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
                       else
