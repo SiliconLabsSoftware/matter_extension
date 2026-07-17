@@ -488,23 +488,24 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_num
                 upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, build_number)
 
 
-def _upload_board_artifacts(board_id, board_path, branch_name, build_number):
+def _upload_board_artifacts(board_dir_name, board_path, branch_name, build_number):
     """
     Upload board-specific artifacts to UBAI.
 
     Args:
-        board_id (str): Board identifier
+        board_dir_name (str): Out directory name (may include part suffix)
         board_path (str): Path to the board directory
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
-    board_id_upper = board_id.upper()
-    print(f"Processing board ID: {board_id_upper}")
+    # Series 3 out dirs use board_part: CMake writes -Wl,-Map=<path> and clang's -Wl, splits on commas.
+    board_id = board_dir_name.upper().replace(",", "_").split("_")[0]
+    print(f"Processing board directory: {board_dir_name} -> UBAI board ID: {board_id}")
     for app_name_folder in os.listdir(board_path):
         app_name_path = os.path.join(board_path, app_name_folder)
         print(f"Sample App Path: {app_name_path}")
         if os.path.isdir(app_name_path):
-            _process_board_app(app_name_folder, app_name_path, board_id_upper, branch_name, build_number)
+            _process_board_app(app_name_folder, app_name_path, board_id, branch_name, build_number)
 
 
 def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, build_number):
@@ -514,12 +515,11 @@ def _process_board_app(app_name_folder, app_name_path, board_id, branch_name, bu
     Args:
         app_name_folder (str): Application folder name
         app_name_path (str): Path to the application directory
-        board_id (str): Board identifier
+        board_id (str): Normalized UBAI board identifier
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
     """
     try:
-        board_id = board_id.split(",")[0] # Handles 1019A 3MB BRD1019A,SIMG301M113WIH
         ubai_app_name = determine_ubai_app_name(app_name_folder)
         artifact_solution_folder = os.path.join(app_name_path, 'artifact')
         if os.path.exists(artifact_solution_folder) and os.path.isdir(artifact_solution_folder):
