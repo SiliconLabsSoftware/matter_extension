@@ -22,10 +22,13 @@ MATTER_SUBMODULES = [
     "third_party/QR-Code-generator",
     "third_party/third_party_hw_drivers_extension",
     "third_party/matter_sdk",
-    "third_party/mbedtls",
-    "third_party/nlio",
-    "third_party/nlassert",
 ]
+
+MATTER_SDK_NESTED_SUBMODULES = (
+    "third_party/nlio/repo",
+    "third_party/nlassert/repo",
+    "third_party/mbedtls/repo",
+)
 
 FORBIDDEN_SDK_PATHS = (
     "third_party/simplicity_sdk",
@@ -328,6 +331,20 @@ def sdk_package_paths_for_build(
     return filtered
 
 
+def sync_matter_sdk_nested_submodules(sdk_root: Path) -> None:
+    """Init nlio, nlassert, and mbedtls inside a matter_sdk tree (no --recursive)."""
+    sdk_root = sdk_root.resolve()
+    if not (sdk_root / "src").is_dir():
+        raise FileNotFoundError(f"matter_sdk root not found: {sdk_root}")
+    logger.info("Initializing matter_sdk nested submodules under %s", sdk_root)
+    for nested in MATTER_SDK_NESTED_SUBMODULES:
+        subprocess.run(
+            ["git", "submodule", "update", "--init", nested],
+            check=True,
+            cwd=sdk_root,
+        )
+
+
 def sync_matter_submodules(repo_root: Path) -> None:
     logger.info("Initializing Matter extension submodules")
     for subpath in MATTER_SUBMODULES:
@@ -336,6 +353,7 @@ def sync_matter_submodules(repo_root: Path) -> None:
             check=True,
             cwd=repo_root,
         )
+    sync_matter_sdk_nested_submodules(default_matter_sdk_source_root(repo_root))
 
 
 def assert_no_legacy_sdk_paths(repo_root: Path) -> None:

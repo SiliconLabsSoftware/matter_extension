@@ -11,8 +11,6 @@ include:
   - path: third_party/matter_sdk/src
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
-  - path: third_party/nlassert/include
-  - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/app/icd/server
     file_list:
       - path: ICDMonitoringTable.h
@@ -26,6 +24,9 @@ label: monitoring_table
 package: matter
 provides:
   - name: matter_monitoring_table
+requires:
+  - name: matter_nlassert
+  - name: matter_nlio
 quality: production
 metadata:
   sbom:

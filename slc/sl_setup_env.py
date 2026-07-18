@@ -101,7 +101,7 @@ class MatterEnvSetup:
         os.makedirs(self.tools_folder_path, exist_ok=True)
 
     def sync_submodules(self):
-        """Sync extension git submodules (matter_sdk, mbedtls, nlio, nlassert, etc.)."""
+        """Sync extension git submodules and matter_sdk nested nlio/nlassert/mbedtls."""
         logging.info("Syncing extension submodules")
         try:
             sync_matter_submodules(Path(self.silabs_chip_root))

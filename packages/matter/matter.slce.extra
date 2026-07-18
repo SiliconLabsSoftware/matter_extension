@@ -801,7 +801,6 @@ extra_files:
   - slc/component/matter-examples/matter_light_switch.slcc
   - slc/component/matter-examples/matter_lighting.slcc
   - slc/component/matter-examples/matter_lock.slcc
-  - slc/component/matter-examples/matter_lock_soc_app.slcc
   - slc/component/matter-examples/matter_multi_sensor_app.slcc
   - slc/component/matter-examples/matter_onoff_plug.slcc
   - slc/component/matter-examples/matter_oven.slcc
