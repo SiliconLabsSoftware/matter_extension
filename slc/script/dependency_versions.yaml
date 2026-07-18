@@ -3,14 +3,11 @@
 # Pin leaf technology packages only; platform/rail/bluetooth resolve transitively.
 
 thread:
-  openthread: "[>=3.2.0 <3.2.1,include_prerelease]"
-  openthread_stack: "[>=3.2.0 <3.2.1,include_prerelease]"
+  thread: "[>=3.2.0 <3.2.1,include_prerelease]"
   multiprotocol: "[>=1.2.0 <1.2.1,include_prerelease]"
-  common_15_4: "[>=1.2.0 <1.2.1,include_prerelease]"
 
 wifi:
   wifi: "[>=4.2.0 <4.2.1,include_prerelease]"
-  platform_siwx91x: "[>=4.2.0 <4.2.1,include_prerelease]"
   platform_nwp_siwx91x: "[>=4.2.0 <4.2.1,include_prerelease]"
   netstack_silabs_lwip: "[>=1.2.0 <1.2.1,include_prerelease]"
   bluetooth_le_siwx91x: "[>=4.2.0 <4.2.1,include_prerelease]"

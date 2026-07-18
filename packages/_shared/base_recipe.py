@@ -13,9 +13,6 @@ MATTER_SDK_PATH_PREFIX = "third_party/matter_sdk/"
 # VCS metadata is not used at build time; copying it bloats the matter package (~10 GB).
 MATTER_SDK_PACKAGE_EXCLUDES = (".git",)
 
-NESTED_MATTER_SDK_THIRD_PARTY_NAMES = ("nlio", "nlassert")
-EXTENSION_THIRD_PARTY_NAMES = ("mbedtls", "nlio", "nlassert")
-
 _RECIPE_PATH = Path(__file__).resolve()
 try:
     SHARED_REPO_ROOT = _RECIPE_PATH.parents[2]
@@ -145,94 +142,13 @@ def is_matter_sdk_package_path(path: str) -> bool:
     return normalized.startswith(MATTER_SDK_PATH_PREFIX) or normalized == MATTER_SDK_PATH_PREFIX.rstrip("/")
 
 
-def _package_extension_third_party_copy(
-    conanfile: ConanFile,
-    repo_root: Path,
-    package_folder: Path,
-) -> None:
-    """Copy mbedtls/nlio/nlassert from extension third_party into the matter package."""
-    for name in ("nlio", "nlassert"):
-        src_dir = repo_root / "third_party" / name
-        dst_dir = package_folder / "third_party" / name
-        if not src_dir.is_dir():
-            raise FileNotFoundError(
-                f"extension third_party/{name} not found under {repo_root}"
-            )
-        copy(
-            conanfile,
-            "*",
-            src=str(src_dir),
-            dst=str(dst_dir),
-            keep_path=True,
-        )
-
-    mbedtls_src = repo_root / "third_party" / "mbedtls"
-    mbedtls_dst = (
-        package_folder / "third_party" / "matter_sdk" / "third_party" / "mbedtls"
-    )
-    if not mbedtls_src.is_dir():
-        raise FileNotFoundError(
-            f"extension third_party/mbedtls not found under {repo_root}"
-        )
-    for sub in ("library", "include"):
-        sub_src = mbedtls_src / sub
-        if sub_src.is_dir():
-            copy(
-                conanfile,
-                "*",
-                src=str(sub_src),
-                dst=str(mbedtls_dst / sub),
-                keep_path=True,
-            )
-
-
-def _package_nested_third_party_copy(
-    conanfile: ConanFile,
-    sdk_source_root: Path,
-    package_folder: Path,
-    name: str,
-) -> None:
-    """Copy nlio/nlassert from matter_sdk tree to top-level third_party paths."""
-    src_dir = sdk_source_root / "third_party" / name
-    dst_dir = package_folder / "third_party" / name
-    repo_include = src_dir / "repo" / "include"
-    if repo_include.is_dir():
-        copy(
-            conanfile,
-            "*",
-            src=str(repo_include),
-            dst=str(dst_dir / "include"),
-            keep_path=True,
-        )
-        return
-    if src_dir.is_dir():
-        copy(
-            conanfile,
-            "*",
-            src=str(src_dir),
-            dst=str(dst_dir),
-            keep_path=True,
-        )
-        return
-    raise FileNotFoundError(
-        f"matter_sdk sources missing third_party/{name} under {sdk_source_root}"
-    )
-
-
-def _remove_packaged_git_metadata(tree_root: Path) -> None:
-    """Drop any .git directory left under a packaged tree (defensive cleanup)."""
-    git_dir = tree_root / ".git"
-    if git_dir.is_dir():
-        shutil.rmtree(git_dir)
-
-
 def package_matter_sdk_tree(
     conanfile: ConanFile,
     package_folder: Path,
     sdk_source_root: Path,
     repo_root: Path | None = None,
 ) -> None:
-    """Copy matter_sdk tree; mbedtls/nlio/nlassert come from extension third_party."""
+    """Copy matter_sdk tree (nlio/nlassert/mbedtls come from nested matter_sdk submodules)."""
     sdk_source_root = sdk_source_root.resolve()
     sdk_dst = package_folder / "third_party" / "matter_sdk"
     copy(
@@ -244,8 +160,13 @@ def package_matter_sdk_tree(
         excludes=MATTER_SDK_PACKAGE_EXCLUDES,
     )
     _remove_packaged_git_metadata(sdk_dst)
-    root = (repo_root or SHARED_REPO_ROOT).resolve()
-    _package_extension_third_party_copy(conanfile, root, package_folder)
+
+
+def _remove_packaged_git_metadata(tree_root: Path) -> None:
+    """Drop any .git directory left under a packaged tree (defensive cleanup)."""
+    git_dir = tree_root / ".git"
+    if git_dir.is_dir():
+        shutil.rmtree(git_dir)
 
 
 def _ensure_export_symlink(link_path: Path, target: Path) -> bool:
@@ -260,35 +181,9 @@ def _ensure_export_symlink(link_path: Path, target: Path) -> bool:
     return True
 
 
-def _link_extension_third_party_for_export(
-    repo_root: Path,
-    maybe_link,
-) -> None:
-    """Expose extension third_party deps on matter_sdk paths used by SLCC files."""
-    matter_sdk = (repo_root / "third_party" / "matter_sdk").resolve()
-    top_mbedtls = repo_root / "third_party" / "mbedtls"
-    nested_mbedtls = matter_sdk / "third_party" / "mbedtls"
-    for sub in ("library", "include"):
-        nested = nested_mbedtls / sub
-        top = top_mbedtls / sub
-        if not nested.exists() and top.is_dir():
-            maybe_link(nested, top)
-
-    for name in NESTED_MATTER_SDK_THIRD_PARTY_NAMES:
-        top_include = repo_root / "third_party" / name / "include"
-        if top_include.is_dir():
-            continue
-        src_dir = matter_sdk / "third_party" / name
-        repo_include = src_dir / "repo" / "include"
-        if repo_include.is_dir():
-            maybe_link(top_include, repo_include)
-        elif src_dir.is_dir():
-            maybe_link(repo_root / "third_party" / name, src_dir)
-
-
 @contextmanager
 def matter_sdk_export_stub(repo_root: Path):
-    """Link extension third_party deps for SLCC validation during export."""
+    """Link matter_sdk for SLCC validation during export when submodule is absent."""
     sdk_root = resolve_matter_sdk_source_root(repo_root)
     created: list[Path] = []
 
@@ -299,8 +194,6 @@ def matter_sdk_export_stub(repo_root: Path):
     matter_sdk_link = repo_root / "third_party" / "matter_sdk"
     if not matter_sdk_link.exists():
         maybe_link(matter_sdk_link, sdk_root)
-
-    _link_extension_third_party_for_export(repo_root, maybe_link)
 
     prev_cwd = os.getcwd()
     os.chdir(repo_root)

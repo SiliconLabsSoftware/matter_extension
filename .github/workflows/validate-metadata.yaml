@@ -48,10 +48,11 @@ jobs:
         git submodule update --init \
           third_party/matter_sdk \
           third_party/matter_support \
-          third_party/mbedtls \
-          third_party/nlassert \
-          third_party/nlio \
           third_party/QR-Code-generator
+        git -C third_party/matter_sdk submodule update --init \
+          third_party/nlio/repo \
+          third_party/nlassert/repo \
+          third_party/mbedtls/repo
       
     - name: Stage Extension
       run: python3 slc/stage_extension.py ../staged
@@ -98,10 +99,11 @@ jobs:
           git submodule update --init \
             third_party/matter_sdk \
             third_party/matter_support \
-            third_party/mbedtls \
-            third_party/nlassert \
-            third_party/nlio \
             third_party/QR-Code-generator
+          git -C third_party/matter_sdk submodule update --init \
+            third_party/nlio/repo \
+            third_party/nlassert/repo \
+            third_party/mbedtls/repo
       
       - name: Trust SDK 
         shell: bash
