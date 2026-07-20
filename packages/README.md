@@ -51,10 +51,16 @@ source slc/tools/.env
 
 ```bash
 source slc/tools/.env
+# dev mode (default): export + build from git tree
 ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
+
+# SQA/CI: installed packages only
+./slc/build.sh --sqa slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
 ```
 
-`build.sh` runs `slt install -f pkg.slt` (beside the project or parent dir), then `slc generate` without repo SDK paths.
+End users who install from Artifactory use `slc/apps/build-app.sh` (see `docs/LOCAL_PACKAGE_BUILD.md` Part B).
+
+Dev mode runs `ensure_local_packages` then `slc generate` with filtered `autogen/slc-sdk.slconf`.
 
 ---
 
@@ -100,7 +106,7 @@ Re-exports local Conan packages and regenerates `pkg.slt` manifests after source
 
 ### `slc/script/dependency_versions.yaml`
 
-Single source of truth for stack dependency versions consumed by Conan recipes, `generate_pkg_slt.py`, and `sl_setup_env.py`.
+Single source of truth for stack dependency Conan version ranges consumed by the `matter` Conan recipe.
 
 ### `slc/script/get_slce_extra_paths.py`
 

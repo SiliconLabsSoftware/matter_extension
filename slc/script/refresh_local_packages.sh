@@ -74,6 +74,8 @@ if [ $# -gt 0 ]; then
 			python3 slc/script/write_app_slconf.py --app-dir "$app_dir"
 		fi
 	done
-else
-	echo "Done. Re-install app deps with: slt install -f <path/to/pkg.slt>"
 fi
+
+python3 slc/script/ensure_local_packages.py \
+	--repo-root "$MATTER_ROOT" \
+	--write-stamps-only

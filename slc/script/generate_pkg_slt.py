@@ -8,33 +8,36 @@ Sample app pkg.slt files declare a dependency on matter_app only. Stack and
 platform dependencies are declared in the matter Conan recipe and resolved
 transitively by SLT at install time (matter_app -> matter -> stack).
 
-MATTER VERSION RESOLUTION (priority)
-    1. Explicit --matter-version CLI argument.
-    2. Version field from the matter.slce file in the extension root.
-
-SAMPLE APP PACKAGE
-    By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt'.
-    By default (--update-stack-pkg True), also generates 'packages/matter/pkg.slt'.
-
-VERSION-ONLY MODE
-    Use --version-only to resolve and print just the Matter version without
-    generating any pkg.slt files.
+MATTER VERSION RESOLUTION
+    SLC line version: matter.slce (X.Y.Z)
+    Conan export ref: slc/script/matter_package_version or MATTER_PACKAGE_VERSION
+    pkg.slt ranges: SLT syntax, e.g. >=2.10.0 <2.10.1 with prerelease=true
 
 USAGE EXAMPLES
     python3 slc/script/generate_pkg_slt.py -d slc
-    python3 slc/script/generate_pkg_slt.py -d slc --matter-version 2.7.0-beta.1
     python3 slc/script/generate_pkg_slt.py --version-only
+    python3 slc/script/generate_pkg_slt.py --line-version-only
 """
 
 import argparse
 import logging
 import os
 import sys
-from typing import Optional
-
-import yaml
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+_SCRIPT_DIR = Path(__file__).resolve().parent
+_REPO_ROOT = _SCRIPT_DIR.parents[1]
+_SHARED_DIR = _REPO_ROOT / "packages" / "_shared"
+if str(_SHARED_DIR) not in sys.path:
+    sys.path.insert(0, str(_SHARED_DIR))
+
+from matter_version import (  # noqa: E402
+    matter_slt_range,
+    resolve_matter_conan_version,
+    resolve_matter_line_version,
+)
 
 
 def build_pkg_slt_content(package_name: str, package_version: str) -> str:
@@ -45,37 +48,12 @@ version = "0"
 
 [dependency]
 # Get a specific version of the package
-{package_name} = {{ version = "{package_version}", installer ="conan", prerelease=true }}
+{package_name} = {{version = "{package_version}", installer = "conan", user="silabs", prerelease = true}}
 """
 
 
-def resolve_matter_version(cli_version: Optional[str]) -> str:
-    """Determine the Matter package version to embed."""
-    if cli_version:
-        logger.debug("Matter version provided via CLI: %s", cli_version)
-        return cli_version
-
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    slce_file = os.path.join(script_dir, "..", "..", "matter.slce")
-    try:
-        with open(slce_file, "r", encoding="utf-8") as sf:
-            slce_data = yaml.safe_load(sf)
-            if slce_data and "version" in slce_data:
-                version = str(slce_data["version"]).strip()
-                if version:
-                    logger.debug("Matter version read from matter.slce: %s", version)
-                    return version
-                logger.warning("Version field in %s is empty", slce_file)
-    except FileNotFoundError:
-        logger.debug("matter.slce file %s not found", slce_file)
-    except Exception as e:
-        logger.warning("Failed to parse matter.slce file %s: %s", slce_file, e)
-
-    logger.error(
-        "Unable to determine Matter package version: provide --matter-version "
-        "or ensure matter.slce has a valid version field."
-    )
-    sys.exit(1)
+def resolve_matter_slt_range(repo_root: Path) -> str:
+    return matter_slt_range(resolve_matter_line_version(repo_root))
 
 
 def write_pkg_slt(pkg_slt_path: str, package_name: str, package_version: str) -> None:
@@ -126,12 +104,12 @@ def main():
     )
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
     parser.add_argument(
-        "--matter-version",
-        help="Explicit Matter/matter_app package version; overrides matter.slce file.",
+        "--version-only", action="store_true",
+        help="Print the Matter Conan export version and exit.",
     )
     parser.add_argument(
-        "--version-only", action="store_true",
-        help="Only resolve and print the Matter version, then exit.",
+        "--line-version-only", action="store_true",
+        help="Print the Matter SLC line version from matter.slce and exit.",
     )
     parser.add_argument(
         "--exclude", "-e", action="append", default=[],
@@ -154,11 +132,19 @@ def main():
     log_level = logging.DEBUG if args.verbose else logging.INFO
     logging.basicConfig(level=log_level, format="%(message)s")
 
-    matter_version = resolve_matter_version(args.matter_version)
+    repo_root = _REPO_ROOT
 
     if args.version_only:
-        print(matter_version)
+        print(resolve_matter_conan_version(repo_root))
         sys.exit(0)
+
+    if args.line_version_only:
+        print(resolve_matter_line_version(repo_root))
+        sys.exit(0)
+
+    matter_range = resolve_matter_slt_range(repo_root)
+    logger.info("Matter SLC line version: %s", resolve_matter_line_version(repo_root))
+    logger.info("Matter SLT range for pkg.slt: %s", matter_range)
 
     exclude_patterns = []
     for entry in args.exclude:
@@ -168,12 +154,12 @@ def main():
         exclude_patterns = ["third_party"]
         logger.info("No --exclude provided; defaulting to exclude: %s", exclude_patterns)
 
-    generate_app_pkg_slt_files(args.directory, matter_version, exclude_patterns)
+    generate_app_pkg_slt_files(args.directory, matter_range, exclude_patterns)
 
     if args.update_sample_app_pkg:
-        write_pkg_slt("packages/matter_app/pkg.slt", "matter_app", matter_version)
+        write_pkg_slt("packages/matter_app/pkg.slt", "matter_app", matter_range)
     if args.update_stack_pkg:
-        write_pkg_slt("packages/matter/pkg.slt", "matter", matter_version)
+        write_pkg_slt("packages/matter/pkg.slt", "matter", matter_range)
 
 
 if __name__ == "__main__":

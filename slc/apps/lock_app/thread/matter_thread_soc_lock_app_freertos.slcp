@@ -11,16 +11,16 @@ sdk:
   vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.10.0-alpha.1"
+    version: "2.10.0"
     vendor: silabs
-  - id: openthread
-    version: "3.2.0"
-    vendor: silabs
-  - id: openthread_stack
+  - id: thread
     version: "3.2.0"
     vendor: silabs
   - id: multiprotocol
     version: "1.2.0"
+    vendor: silabs
+  - id: zigbee
+    version: "9.2.0"
     vendor: silabs
 
 component:
