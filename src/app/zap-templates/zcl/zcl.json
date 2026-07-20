@@ -88,6 +88,7 @@
         "joint-fabric-datastore-cluster.xml",
         "joint-fabric-administrator-cluster.xml",
         "keypad-input-cluster.xml",
+        "laundry-washer-controls-cluster.xml",
         "laundry-washer-mode-cluster.xml",
         "laundry-dryer-controls-cluster.xml",
         "level-control-cluster.xml",
@@ -461,6 +462,13 @@
         "Joint Fabric Datastore": [
             "Status"
         ],
+        "Laundry Washer Controls": [
+            "ClusterRevision",
+            "SpinSpeeds",
+            "SpinSpeedCurrent",
+            "NumberOfRinses",
+            "SupportedRinses"
+        ],
         "Meter Identification": [
             "MeterType",
             "PointOfDelivery",
@@ -645,7 +653,8 @@
         "Media Playback": [
             "SampledPosition",
             "ActiveAudioTrack",
-            "ActiveTextTrack"
+            "ActiveTextTrack",
+            "ContentInfo"
         ],
         "Application Launcher": [
             "CurrentApp"

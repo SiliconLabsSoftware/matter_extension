@@ -185,6 +185,7 @@ components:
   - matter_lwip
   - matter_lwip_modified
   - matter_lwip_support
+  - matter_media_file_management
   - matter_media_input
   - matter_media_playback
   - matter_memory_monitoring
@@ -633,6 +634,7 @@ extra_files:
   - slc/component/matter-clusters/matter_level_control.slcc
   - slc/component/matter-clusters/matter_localization_configuration.slcc
   - slc/component/matter-clusters/matter_low_power.slcc
+  - slc/component/matter-clusters/matter_media_file_management.slcc
   - slc/component/matter-clusters/matter_media_input.slcc
   - slc/component/matter-clusters/matter_media_playback.slcc
   - slc/component/matter-clusters/matter_messages.slcc
@@ -1754,10 +1756,14 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/LaundryWasherControlsCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/LaundryWasherControlsCluster.h
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/laundry-washer-controls-delegate.h
   - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/laundry-washer-controls-server.h
+  - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/laundry-washer-controls-server/tests/TestLaundryWasherControlsCluster.cpp
   - third_party/matter_sdk/src/app/clusters/level-control/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/level-control/LevelControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/level-control/LevelControlCluster.h
@@ -1787,6 +1793,12 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/low-power-server/low-power-delegate.h
   - third_party/matter_sdk/src/app/clusters/low-power-server/low-power-server.cpp
   - third_party/matter_sdk/src/app/clusters/low-power-server/low-power-server.h
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/app_config_dependent_sources.cmake
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/app_config_dependent_sources.gni
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/media-file-management-delegate.h
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/media-file-management-server.cpp
+  - third_party/matter_sdk/src/app/clusters/media-file-management-server/media-file-management-server.h
   - third_party/matter_sdk/src/app/clusters/media-input-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/media-input-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/media-input-server/app_config_dependent_sources.gni
@@ -2879,7 +2891,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CHANNEL_5_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CHANNEL_5_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CMOCONC_2_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CNET_4_11.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CNET_4_12.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CNET_4_13.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_CNET_4_14.yaml
@@ -3107,7 +3118,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SWTCH_3_2.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_2.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_3.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_6.yaml

@@ -372,6 +372,12 @@
     ]
   },
   {
+    "clusterCode": "media file management-server",
+    "value": [
+      "%extension-matter%matter_media_file_management"
+    ]
+  },
+  {
     "clusterCode": "media input-server",
     "value": [
       "%extension-matter%matter_media_input"
@@ -582,7 +588,7 @@
     ]
   },
   {
-    "clusterCode": "test hidden manufacturer specific-server",
+    "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"
     ]
