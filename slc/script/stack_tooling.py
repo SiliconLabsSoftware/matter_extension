@@ -76,15 +76,21 @@ def default_matter_sdk_source_root(repo_root: Path) -> Path:
 
 
 def resolve_matter_package_version(repo_root: Path) -> str:
-    slce_path = repo_root / "matter.slce"
-    if not slce_path.exists():
-        raise FileNotFoundError(f"SLCE file not found: {slce_path}")
-    with slce_path.open("r", encoding="utf-8") as f:
-        data = yaml.safe_load(f) or {}
-    version = str(data.get("version", "")).strip()
-    if not version:
-        raise RuntimeError(f"Version field missing or empty in {slce_path}")
-    return version
+    shared_dir = repo_root / "packages" / "_shared"
+    if str(shared_dir) not in sys.path:
+        sys.path.insert(0, str(shared_dir))
+    from matter_version import resolve_matter_conan_version
+
+    return resolve_matter_conan_version(repo_root)
+
+
+def resolve_matter_line_version(repo_root: Path) -> str:
+    shared_dir = repo_root / "packages" / "_shared"
+    if str(shared_dir) not in sys.path:
+        sys.path.insert(0, str(shared_dir))
+    from matter_version import resolve_matter_line_version as _resolve_line
+
+    return _resolve_line(repo_root)
 
 
 def resolve_conan_exe() -> str:

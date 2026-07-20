@@ -4,9 +4,10 @@ quality: production
 label: Matter - SoC Bootloader External Storage Series 2
 description: Demonstrates a bootloader configuration using external SPI flash storage for Matter firmware updates on Series 2 devices
 category: Matter Application
+
 sdk_extension:
   - id: matter
-    version: "2.10.0-alpha.1"
+    version: "2.10.0"
     vendor: silabs
 
 component:

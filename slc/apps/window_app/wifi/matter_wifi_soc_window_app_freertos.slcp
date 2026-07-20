@@ -7,20 +7,20 @@ package: matter
 
 sdk:
   id: simplicity_sdk
-  version: "2026.6.0"
+  version: "2026.12.0"
   vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.10.0-alpha.1"
+    version: "2.10.0"
     vendor: silabs
   - id: wifi
-    version: "4.1.0"
+    version: "4.2.0"
     vendor: silabs
   - id: platform_siwx91x
-    version: "4.1.0"
+    version: "4.2.0"
     vendor: silabs
   - id: bluetooth_le_siwx91x
-    version: "4.1.0"
+    version: "4.2.0"
     vendor: silabs
 
 provides:

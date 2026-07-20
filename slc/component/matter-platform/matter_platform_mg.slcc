@@ -57,7 +57,9 @@ requires:
   - name: udelay
   - name: component_catalog
   - name: rail_lib_multiprotocol
+    condition: [matter_thread]
   - name: rail_util_pti
+    condition: [matter_thread]
   - name: freertos_heap_3
   # components required for series 2
   - name: gpiointerrupt

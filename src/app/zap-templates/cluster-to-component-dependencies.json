@@ -372,6 +372,12 @@
     ]
   },
   {
+    "clusterCode": "media file management-server",
+    "value": [
+      "%extension-matter%matter_media_file_management"
+    ]
+  },
+  {
     "clusterCode": "media input-server",
     "value": [
       "%extension-matter%matter_media_input"

@@ -4,9 +4,10 @@ quality: production
 label: Matter - SoC Bootloader Internal Storage Series 2
 description: Demonstrates a bootloader configuration using internal storage for Matter firmware updates on Series 2 devices
 category: Matter Application
+
 sdk_extension:
   - id: matter
-    version: "2.10.0-alpha.1"
+    version: "2.10.0"
     vendor: silabs
 
 component:

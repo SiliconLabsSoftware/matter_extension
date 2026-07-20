@@ -79,7 +79,7 @@ class matter_appRecipe(MatterBaseRecipe):
         self.version = self.matter_package_version
 
     def requirements(self):
-        self.requires(f"matter/{self.version}@{self.user}")
+        self.requires(f"matter/{self.matter_conan_range}@{self.user}")
 
     def layout(self):
         pass

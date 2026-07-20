@@ -4,9 +4,29 @@ from conan.tools.files import copy
 from contextlib import contextmanager
 import os
 import shutil
+import sys
 import yaml
 
 # Shared metadata and helpers for matter packages
+
+_SHARED_DIR = Path(__file__).resolve().parent
+if str(_SHARED_DIR) not in sys.path:
+    sys.path.insert(0, str(_SHARED_DIR))
+
+
+def _matter_version_helpers():
+    """Load matter_version from this directory (works in Conan export cache)."""
+    import importlib.util
+
+    module_path = _SHARED_DIR / "matter_version.py"
+    spec = importlib.util.spec_from_file_location(
+        "_matter_version_helpers", module_path
+    )
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Cannot load matter_version helpers from {module_path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 MATTER_SDK_PATH_PREFIX = "third_party/matter_sdk/"
 
@@ -54,6 +74,14 @@ class MatterBaseRecipe(ConanFile):
     @property
     def matter_stack_requires(self) -> dict[str, str]:
         return load_matter_sdk_dependencies(self.repo_root)
+
+    @property
+    def matter_line_version(self) -> str:
+        return resolve_matter_line_version(self.repo_root)
+
+    @property
+    def matter_conan_range(self) -> str:
+        return matter_conan_range_for_repo(self.repo_root)
 
     @property
     def matter_package_version(self) -> str:
@@ -207,23 +235,17 @@ def matter_sdk_export_stub(repo_root: Path):
 
 
 def resolve_matter_package_version(repo_root: Path) -> str:
-    candidates = [
-        repo_root / "matter.slce",
-        _RECIPE_PATH.parent.parent / "matter.slce",
-        _RECIPE_PATH.parent / "matter.slce",
-    ]
-    for slce_path in candidates:
-        if not slce_path.exists():
-            continue
-        with slce_path.open("r", encoding="utf-8") as f:
-            data = yaml.safe_load(f) or {}
-        version = str(data.get("version", "")).strip()
-        if not version:
-            raise RuntimeError(f"Version field missing or empty in {slce_path}")
-        return version
-    raise FileNotFoundError(
-        f"SLCE file not found under {repo_root} or exported recipe folder"
-    )
+    """Concrete Conan package version (backward-compatible alias)."""
+    return _matter_version_helpers().resolve_matter_conan_version(repo_root)
+
+
+def resolve_matter_line_version(repo_root: Path) -> str:
+    return _matter_version_helpers().resolve_matter_line_version(repo_root)
+
+
+def matter_conan_range_for_repo(repo_root: Path) -> str:
+    helpers = _matter_version_helpers()
+    return helpers.matter_conan_range(helpers.resolve_matter_line_version(repo_root))
 
 
 def _load_dep_versions_shared(filename: str = "dependency_versions.yaml") -> dict:

@@ -1,10 +1,12 @@
-# Technology Conan packages for the Matter stack (SiSDK 2026.6.0 suite).
+# Technology Conan packages for the Matter stack (SiSDK 2026.12.0 suite).
 # Conan version ranges are resolved concretely at slt install; pkg.lock pins refs.
-# Pin leaf technology packages only; platform/rail/bluetooth resolve transitively.
+# Pin leaf technology packages only; platform/rail resolve transitively.
 
 thread:
   thread: "[>=3.2.0 <3.2.1,include_prerelease]"
   multiprotocol: "[>=1.2.0 <1.2.1,include_prerelease]"
+  zigbee: "[>=9.2.0 <9.2.1,include_prerelease]"
+  bluetooth_le_host: "[>=11.2.0 <11.2.1,include_prerelease]"
 
 wifi:
   wifi: "[>=4.2.0 <4.2.1,include_prerelease]"

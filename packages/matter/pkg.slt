@@ -4,4 +4,4 @@ version = "0"
 
 [dependency]
 # Get a specific version of the package
-matter = { version = "2.10.0-alpha.2", installer ="conan", prerelease=true }
+matter = {version = ">=2.10.0 <2.10.1", installer = "conan", user="silabs", prerelease = true}

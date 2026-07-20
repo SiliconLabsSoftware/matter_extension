@@ -184,6 +184,7 @@ components:
   - matter_lwip
   - matter_lwip_modified
   - matter_lwip_support
+  - matter_media_file_management
   - matter_media_input
   - matter_media_playback
   - matter_memory_monitoring
@@ -632,6 +633,7 @@ extra_files:
   - slc/component/matter-clusters/matter_level_control.slcc
   - slc/component/matter-clusters/matter_localization_configuration.slcc
   - slc/component/matter-clusters/matter_low_power.slcc
+  - slc/component/matter-clusters/matter_media_file_management.slcc
   - slc/component/matter-clusters/matter_media_input.slcc
   - slc/component/matter-clusters/matter_media_playback.slcc
   - slc/component/matter-clusters/matter_messages.slcc

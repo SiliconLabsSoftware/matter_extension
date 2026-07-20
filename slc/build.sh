@@ -3,9 +3,13 @@
 # This script generates and builds the SLC project for the given Matter application and board.
 #
 #   Usage:
-#   ./slc/build.sh <slcp/slcw path> <board>
+#   ./slc/build.sh <slcp/slcw path> <board>              # dev mode (default)
+#   ./slc/build.sh --sqa <slcp/slcw path> <board>        # SQA/CI — installed packages, no export
+#   ./slc/build.sh --col <slcp/slcw path> <board>        # COL legacy git-tree SDK paths
 #
-#   Example .slcp usage:
+#   End users who install from Artifactory use slc/apps/build-app.sh (not build.sh).
+#
+#   Example .slcp usage (dev mode):
 #   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
@@ -23,9 +27,9 @@
 #   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --skip_gen
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
-#   --sisdk option : Allows to build a project using a different SISDK folder, at the provided path, rather than the default one found in third_party/simplicity_sdk
+#   --sisdk option : COL mode only — override SISDK_ROOT (default: third_party/simplicity_sdk)
 #   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --sisdk /Users/Shared/silabs/Github/sisdk
+#   ./slc/build.sh --col slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --sisdk /path/to/sisdk
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored.
@@ -57,12 +61,12 @@
 #   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids application
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
-#   --from-package : Dev workflow — git clone + installed SLT packages (uses write_app_slconf.py).
-#   --package-only : Customer workflow — no git clone; uses matter/matter_app SLT packages only.
-#   Example package-only:
-#   cd "$(slt where matter)"
-#   ./slc/build.sh --package-only slc/apps/lock_app/wifi/matter_wifi_soc_lock_app_freertos.slcp brd4338a
-#       output in: <matter_app>/slc/apps/lock_app/wifi/out/brd4338a/matter_wifi_soc_lock_app_freertos/
+#   Build modes (mutually exclusive flags):
+#   (default) / --dev   Developer — git tree + export + ensure_local_packages.
+#   --sqa               SQA/CI — installed matter/matter_app packages only (no export).
+#   --col               COL legacy — git-tree SDK paths (SISDK_ROOT / STACK_SDK_PATHS).
+#
+#   Deprecated aliases: --from-package (--dev), --package-only (--sqa).
 #
 
 # Helper functions to build component arguments
@@ -150,7 +154,7 @@ write_app_slconf() {
 	local app_dir="$1"
 	local slcp_name="$2"
 
-	if [ "$PACKAGE_ONLY" = true ]; then
+	if [ "$BUILD_MODE" = "sqa" ]; then
 		local cli="${MATTER_APP_SLCONF:-$MATTER_PKG/bin/matter-app-slconf}"
 		if [ ! -x "$cli" ]; then
 			echo "ERROR: matter-app-slconf not found at $cli" >&2
@@ -174,6 +178,20 @@ write_app_slconf() {
 		return 1
 	fi
 	python3 "$MATTER_ROOT/slc/script/write_app_slconf.py" \
+		--app-dir "$app_dir" \
+		--slcp-name "$slcp_name"
+}
+
+ensure_local_packages() {
+	local app_dir="$1"
+	local slcp_name="$2"
+	if [ ! -f "$MATTER_ROOT/slc/script/ensure_local_packages.py" ]; then
+		echo "ERROR: ensure_local_packages.py not found under $MATTER_ROOT/slc/script" >&2
+		return 1
+	fi
+	python3 "$MATTER_ROOT/slc/script/ensure_local_packages.py" \
+		--repo-root "$MATTER_ROOT" \
+		--slt-exe "$SLT_EXE" \
 		--app-dir "$app_dir" \
 		--slcp-name "$slcp_name"
 }
@@ -250,31 +268,57 @@ run_slc_generate_project() {
 MATTER_ROOT="${MATTER_ROOT:-$(pwd -P)}"
 echo "MATTER_ROOT: $MATTER_ROOT"
 
-FROM_PACKAGE=false
-PACKAGE_ONLY=false
-if [ "${MATTER_FROM_PACKAGE:-}" = "1" ] || [ "$1" = "--from-package" ]; then
-	FROM_PACKAGE=true
-	if [ "$1" = "--from-package" ]; then
-		shift
-	fi
+BUILD_MODE="${MATTER_BUILD_MODE:-dev}"
+if [ "${MATTER_COL_MODE:-}" = "1" ]; then
+	BUILD_MODE=col
+elif [ "${MATTER_PACKAGE_ONLY:-}" = "1" ]; then
+	BUILD_MODE=sqa
+elif [ "${MATTER_FROM_PACKAGE:-}" = "1" ]; then
+	BUILD_MODE=dev
 fi
-if [ "${MATTER_PACKAGE_ONLY:-}" = "1" ] || [ "$1" = "--package-only" ]; then
-	PACKAGE_ONLY=true
-	if [ "$1" = "--package-only" ]; then
+
+while [ $# -gt 0 ]; do
+	case "$1" in
+	--dev)
+		BUILD_MODE=dev
 		shift
-	fi
-fi
-if [ "$FROM_PACKAGE" = true ] && [ "$PACKAGE_ONLY" = true ]; then
-	echo "ERROR: --from-package and --package-only are mutually exclusive" >&2
+		;;
+	--sqa)
+		BUILD_MODE=sqa
+		shift
+		;;
+	--col)
+		BUILD_MODE=col
+		shift
+		;;
+	--package-only)
+		echo "WARNING: --package-only is deprecated; use --sqa" >&2
+		BUILD_MODE=sqa
+		shift
+		;;
+	--from-package)
+		echo "WARNING: --from-package is deprecated; dev mode is the default" >&2
+		BUILD_MODE=dev
+		shift
+		;;
+	*)
+		break
+		;;
+	esac
+done
+
+case "$BUILD_MODE" in
+dev | sqa | col) ;;
+*)
+	echo "ERROR: invalid build mode '$BUILD_MODE' (expected dev, sqa, or col)" >&2
 	exit 1
-fi
+	;;
+esac
 
 USE_SLT_PACKAGES=false
-if [ "$FROM_PACKAGE" = true ] || [ "$PACKAGE_ONLY" = true ]; then
+if [ "$BUILD_MODE" != "col" ]; then
 	USE_SLT_PACKAGES=true
 fi
-
-: "${SISDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 
 # include env variables from .env file generated by sl_setup_env.py
 set -a
@@ -285,13 +329,33 @@ if [ -f "$MATTER_ROOT/slc/tools/.env" ]; then
 fi
 set +a
 
+if [ -z "$1" ] || [ -z "$2" ]; then
+	echo "ERROR: Missing required arguments." >&2
+	echo "Usage: $0 [--dev|--sqa|--col] <slcp/slcw path> <board> [options...]" >&2
+	exit 1
+fi
+
 if [ "$USE_SLT_PACKAGES" = true ]; then
 	SLT_EXE="$(resolve_slt_exe "$MATTER_ROOT")" || exit 1
 	export SLT_EXE
-	if [ "$PACKAGE_ONLY" = true ]; then
+	if [ "$BUILD_MODE" = "sqa" ]; then
 		SLC_EXE="$(resolve_slc_exe)" || exit 1
 		export SLC_EXECUTABLE="$SLC_EXE"
 		export PATH="$(dirname "$SLT_EXE"):$(dirname "$SLC_EXE"):$PATH"
+	fi
+	if [ "$BUILD_MODE" = "dev" ]; then
+		ORIG_APP_ARG_EARLY="$1"
+		REPO_APP_DIR_EARLY=""
+		if [[ "$ORIG_APP_ARG_EARLY" != /* ]]; then
+			REPO_APP_DIR_EARLY="$MATTER_ROOT/$(dirname "$ORIG_APP_ARG_EARLY")"
+		else
+			REPO_APP_DIR_EARLY="$(dirname "$ORIG_APP_ARG_EARLY")"
+		fi
+		if [ -z "$REPO_APP_DIR_EARLY" ] || [ ! -d "$REPO_APP_DIR_EARLY" ]; then
+			echo "ERROR: app directory not found in repo: $REPO_APP_DIR_EARLY" >&2
+			exit 1
+		fi
+		ensure_local_packages "$REPO_APP_DIR_EARLY" "$(basename "$ORIG_APP_ARG_EARLY")" || exit 1
 	fi
 	MATTER_APP_PKG=$(resolve_slt_pkg_path "matter_app") || exit 1
 	MATTER_PKG=$(resolve_slt_pkg_path "matter") || exit 1
@@ -299,7 +363,7 @@ if [ "$USE_SLT_PACKAGES" = true ]; then
 		echo "ERROR: matter package missing third_party/matter_sdk at $MATTER_PKG/third_party/matter_sdk" >&2
 		exit 1
 	fi
-	if [ "$PACKAGE_ONLY" = true ]; then
+	if [ "$BUILD_MODE" = "sqa" ]; then
 		MATTER_ROOT="${MATTER_ROOT:-$MATTER_PKG}"
 	fi
 	EXTENSION_DIR="$MATTER_PKG"
@@ -309,29 +373,32 @@ if [ "$USE_SLT_PACKAGES" = true ]; then
 	SLC_WORK_DIR=""
 	SLC_PROJECT_FILE=""
 else
+	: "${SISDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
 	EXTENSION_DIR=$MATTER_ROOT
 	PACKAGE_PATHS=(--sdk-package-path "$EXTENSION_DIR")
 	USE_APP_SLCONF=false
 	SLC_WORK_DIR=""
 	SLC_PROJECT_FILE=""
+	_col_has_stack=false
 	if [ -n "$STACK_SDK_PATHS" ]; then
 		IFS=':' read -ra _stack_paths <<< "$STACK_SDK_PATHS"
 		for _p in "${_stack_paths[@]}"; do
 			PACKAGE_PATHS+=(--sdk-package-path "$_p")
 		done
-	elif [ -d "$SISDK_ROOT" ]; then
+		_col_has_stack=true
+	elif [ -n "$SISDK_ROOT" ] && [ -d "$SISDK_ROOT" ]; then
 		PACKAGE_PATHS+=(--sdk-package-path "$SISDK_ROOT")
+		_col_has_stack=true
 		if [ -n "$WISECONNECT_ROOT" ] && [ -d "$WISECONNECT_ROOT" ]; then
 			PACKAGE_PATHS+=(--sdk-package-path "$WISECONNECT_ROOT")
 		fi
 	fi
-fi
-
-# Validate required arguments
-if [ -z "$1" ] || [ -z "$2" ]; then
-	echo "ERROR: Missing required arguments."
-	echo "Usage: $0 <slcp/slcw path> <board> [options...]"
-	exit 1
+	if [ "$_col_has_stack" != true ]; then
+		echo "ERROR: COL mode requires stack SDK paths." >&2
+		echo "Set STACK_SDK_PATHS in slc/tools/.env, or provide SISDK_ROOT (e.g. third_party/simplicity_sdk checkout)." >&2
+		echo "Use dev mode (default) for SLT-based builds." >&2
+		exit 1
+	fi
 fi
 
 SILABS_APP_PATH=$1
@@ -349,20 +416,13 @@ if [ "$USE_SLT_PACKAGES" = true ]; then
 		echo "ERROR: Project file not found in matter_app package: $SILABS_APP_PATH" >&2
 		exit 1
 	fi
-	if [ "$PACKAGE_ONLY" = true ]; then
+	if [ "$BUILD_MODE" = "sqa" ]; then
 		SLCONF_APP_DIR="$(dirname "$SILABS_APP_PATH")"
 	else
 		SLCONF_APP_DIR="$REPO_APP_DIR"
-		if [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
-			SLCONF_APP_DIR="$(dirname "$SILABS_APP_PATH")"
-		fi
 	fi
-	if [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
-		if [ "$PACKAGE_ONLY" = true ]; then
-			echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (slt install -f pkg.slt failed?)" >&2
-		else
-			echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (run ./slc/script/refresh_local_packages.sh)" >&2
-		fi
+	if [ "$BUILD_MODE" = "sqa" ] && [ ! -f "$SLCONF_APP_DIR/autogen/pkg.slconf" ]; then
+		echo "ERROR: missing autogen/pkg.slconf in $SLCONF_APP_DIR (slt install -f pkg.slt failed?)" >&2
 		exit 1
 	fi
 	write_app_slconf "$SLCONF_APP_DIR" "$(basename "$SILABS_APP_PATH")" || exit 1
@@ -395,9 +455,9 @@ else
 	exit 1
 fi
 
-if [ "$PACKAGE_ONLY" = true ]; then
+if [ "$BUILD_MODE" = "sqa" ]; then
 	OUTPUT_DIR_ABS="$SLCONF_APP_DIR/$OUTPUT_DIR"
-elif [ "$FROM_PACKAGE" = true ]; then
+elif [ "$BUILD_MODE" = "dev" ]; then
 	OUTPUT_DIR_ABS="$MATTER_ROOT/$OUTPUT_DIR"
 else
 	OUTPUT_DIR_ABS="$OUTPUT_DIR"
@@ -426,6 +486,10 @@ while [ $# -gt 0 ]; do
 		shift
 		;;
 	--sisdk)
+		if [ "$BUILD_MODE" != "col" ]; then
+			echo "ERROR: --sisdk is only supported in COL mode (pass --col before app path)." >&2
+			exit 1
+		fi
 		SISDK_ROOT="$2"
 		shift
 		shift
@@ -516,9 +580,9 @@ if [ -n "${ARM_GCC_DIR:-}" ] && [ -d "$ARM_GCC_DIR" ] && [ -d "$ARM_GCC_DIR/bin"
 		echo "WARNING: might be an incompatible toolchain."
 		echo "Please install gcc-arm-none-eabi for your host (see sl_setup_env.py)."
 	fi
-elif [ "$PACKAGE_ONLY" = true ] && command -v arm-none-eabi-gcc >/dev/null 2>&1; then
-	: # gcc on PATH is sufficient for package-only builds without .env
-elif [ "$PACKAGE_ONLY" = true ]; then
+elif [ "$BUILD_MODE" != "col" ] && command -v arm-none-eabi-gcc >/dev/null 2>&1; then
+	: # gcc on PATH is sufficient for package builds without .env
+elif [ "$BUILD_MODE" != "col" ]; then
 	echo "ERROR: arm-none-eabi-gcc not found (install gcc-arm-none-eabi via SLT or source slc/tools/.env)" >&2
 	exit 1
 else
@@ -540,10 +604,12 @@ fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
-if [ "$USE_SLT_PACKAGES" = true ]; then
-	echo "Package mode: matter_app=$MATTER_APP_PKG matter=$MATTER_PKG"
-	if [ "$PACKAGE_ONLY" = true ]; then
-		echo "Package-only: output=$OUTPUT_DIR_ABS"
+if [ "$BUILD_MODE" = "col" ]; then
+	echo "Build mode: col (legacy git-tree SDK paths)"
+elif [ "$USE_SLT_PACKAGES" = true ]; then
+	echo "Build mode: $BUILD_MODE (matter_app=$MATTER_APP_PKG matter=$MATTER_PKG)"
+	if [ "$BUILD_MODE" = "sqa" ]; then
+		echo "Output: $OUTPUT_DIR_ABS"
 	fi
 fi
 

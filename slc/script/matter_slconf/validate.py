@@ -11,6 +11,17 @@ import yaml
 from .filters import path_is_slc_extension_root
 from .slconf_io import parse_pkg_slconf_sdk_paths
 
+_LINE_VERSION_RE = re.compile(r"^(\d+\.\d+\.\d+)")
+
+
+def _slc_line_version(version: str) -> str:
+    match = _LINE_VERSION_RE.match(version.strip())
+    return match.group(1) if match else version.strip()
+
+
+def _versions_compatible(requested: str, installed: str) -> bool:
+    return _slc_line_version(requested) == _slc_line_version(installed)
+
 
 def _read_slce_version(package_path: Path) -> Optional[str]:
     for slce in package_path.glob("*.slce"):
@@ -66,7 +77,7 @@ def validate_slcp_against_slconf(slcp_path: Path, slconf_path: Path) -> list[str
         sdk_id = str(sdk.get("id", ""))
         sdk_version = str(sdk.get("version", ""))
         installed = available.get(sdk_id)
-        if installed and installed != sdk_version:
+        if installed and not _versions_compatible(sdk_version, installed):
             errors.append(
                 f"sdk {sdk_id}: slcp requests {sdk_version}, package has {installed}"
             )
@@ -79,7 +90,7 @@ def validate_slcp_against_slconf(slcp_path: Path, slconf_path: Path) -> list[str
         installed = available.get(ext_id)
         if not installed:
             errors.append(f"extension {ext_id} not found on sdk-package-path")
-        elif installed != ext_version:
+        elif not _versions_compatible(ext_version, installed):
             errors.append(
                 f"extension {ext_id}: slcp requests {ext_version}, package has {installed}"
             )
