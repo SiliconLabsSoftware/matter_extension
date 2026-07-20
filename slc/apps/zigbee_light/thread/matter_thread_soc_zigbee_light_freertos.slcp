@@ -15,8 +15,7 @@ component:
   - instance: [example]
     id: cli
   - id: iostream_stdio
-  - id: segger_rtt
-  #Zigbee Components
+    #Zigbee Components
   - id: zigbee_ble_dmp_cli
   - id: zigbee_address_table
   - id: zigbee_application_bootloader

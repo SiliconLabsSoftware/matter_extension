@@ -58,8 +58,7 @@ component:
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-  #  - id: i2cspm
+    #  - id: i2cspm
   #    instance: [sensor]
   
   - id: wifi_resources  

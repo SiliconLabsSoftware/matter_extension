@@ -45,8 +45,7 @@ component:
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-
+  
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: matter_shell
