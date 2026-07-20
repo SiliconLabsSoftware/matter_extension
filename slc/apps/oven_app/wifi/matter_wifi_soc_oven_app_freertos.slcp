@@ -40,7 +40,7 @@ component:
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-    - id: matter_on_off
+  - id: matter_on_off
   - id: matter_temperature_control
   - id: matter_temperature_measurement
   - id: matter_oven

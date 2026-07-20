@@ -59,7 +59,7 @@ component:
   - id: wifi_resources
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-    - id: sl_si91x_common_flash_nvm3
+  - id: sl_si91x_common_flash_nvm3
   - id: sl_si91x_wireless
   - id: wifi
   - id: basic_network_config_manager
