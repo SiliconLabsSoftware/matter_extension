@@ -8,7 +8,7 @@ metadata:
   sbom:
     license: Zlib
 config_file:
-  - path: third_party/matter_sdk/src/lwip/silabs/lwipopts.h
+  - path: third_party/matter_sdk/src/lwip/silabs/config/lwipopts.h
     override:
       component: "wifi_resources"
       file_id: lwipopts

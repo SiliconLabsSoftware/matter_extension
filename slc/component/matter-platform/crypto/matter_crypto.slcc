@@ -60,9 +60,9 @@ recommends:
 config_file:
   - path: slc/config/sli_psa_builtin_config.h
     file_id: sli_psa_builtin_config
-  - path: third_party/matter_sdk/src/platform/silabs/efr32/efr32-chip-mbedtls-config.h
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/config/efr32-chip-mbedtls-config.h
     file_id: efr32-chip-mbedtls-config
-  - path: third_party/matter_sdk/src/platform/silabs/efr32/efr32-psa-crypto-config.h
+  - path: third_party/matter_sdk/src/platform/silabs/efr32/config/efr32-psa-crypto-config.h
     file_id: efr32-psa-crypto-config
 
 define:
