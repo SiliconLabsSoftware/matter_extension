@@ -9,6 +9,11 @@
     "name": "matter-conan-dev",
     "url": "https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev",
     "verify_ssl": true
+  },
+  {
+    "name": "conan-prerelease",
+    "url": "https://conan-prerelease.silabs.net",
+    "verify_ssl": true
   }
  ]
 }

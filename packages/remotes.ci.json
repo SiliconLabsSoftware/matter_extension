@@ -1,0 +1,9 @@
+{
+  "remotes": [
+    {
+      "name": "conan-prerelease",
+      "url": "https://conan-prerelease.silabs.net",
+      "verify_ssl": true
+    }
+  ]
+}

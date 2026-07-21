@@ -17,6 +17,8 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
+CONAN_REMOTES_PROFILE_ENV = "CONAN_REMOTES_PROFILE"
+
 MATTER_SUBMODULES = [
     "third_party/matter_support",
     "third_party/QR-Code-generator",
@@ -113,26 +115,121 @@ def resolve_conan_exe() -> str:
     )
 
 
-def configure_conan_remotes(repo_root: Path, conan_exe: Optional[str] = None) -> None:
+def resolve_conan_remotes_profile(explicit: Optional[str] = None) -> str:
+    """Return remotes profile: ``default`` (VPN/local) or ``ci`` (GitHub Actions)."""
+    if explicit:
+        return explicit
+    env_profile = os.environ.get(CONAN_REMOTES_PROFILE_ENV, "").strip()
+    if env_profile:
+        return env_profile
+    if os.environ.get("GITHUB_ACTIONS", "").lower() == "true":
+        return "ci"
+    return "default"
+
+
+def conan_remotes_config_path(repo_root: Path, profile: str) -> Path:
     packages_dir = repo_root / "packages"
-    if not packages_dir.is_dir():
-        raise FileNotFoundError(f"Packages directory not found: {packages_dir}")
+    if profile == "ci":
+        return packages_dir / "remotes.ci.json"
+    return packages_dir / "remotes.json"
+
+
+def load_conan_remotes(repo_root: Path, profile: Optional[str] = None) -> list[dict]:
+    resolved_profile = resolve_conan_remotes_profile(profile)
+    path = conan_remotes_config_path(repo_root, resolved_profile)
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"Conan remotes config not found: {path} (profile={resolved_profile})"
+        )
+    data = json.loads(path.read_text(encoding="utf-8"))
+    remotes = data.get("remotes")
+    if not isinstance(remotes, list) or not remotes:
+        raise ValueError(f"Invalid remotes config in {path}")
+    for remote in remotes:
+        if not isinstance(remote, dict) or not remote.get("name") or not remote.get("url"):
+            raise ValueError(f"Each remote must have name and url in {path}")
+    return remotes
+
+
+def _list_conan_remote_names(conan: str) -> list[str]:
+    result = subprocess.run(
+        [conan, "remote", "list"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(
+            f"Failed to list Conan remotes: {result.stderr or result.stdout}"
+        )
+    names: list[str] = []
+    for line in result.stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        name = line.split(":", 1)[0].strip()
+        if name:
+            names.append(name)
+    return names
+
+
+def configure_conan_remotes(
+    repo_root: Path,
+    conan_exe: Optional[str] = None,
+    profile: Optional[str] = None,
+) -> str:
+    """Register Conan remotes from packages/remotes*.json.
+
+    Uses ``remotes.ci.json`` when profile is ``ci`` (auto on GitHub Actions).
+    Internal VPN-only remotes are pruned in the ci profile so cached runners
+    do not contact artifactory-local endpoints.
+    """
+    resolved_profile = resolve_conan_remotes_profile(profile)
+    remotes = load_conan_remotes(repo_root, resolved_profile)
 
     conan = conan_exe or resolve_conan_exe()
     conan_home = os.path.expanduser("~/.silabs/slt/installs/conan")
     os.environ["CONAN_HOME"] = conan_home
-    logger.info("Configuring Conan remotes (CONAN_HOME=%s)", conan_home)
-
-    result = subprocess.run(
-        [conan, "config", "install", str(packages_dir)],
-        check=False,
-        capture_output=True,
-        text=True,
+    logger.info(
+        "Configuring Conan remotes profile=%s (CONAN_HOME=%s)",
+        resolved_profile,
+        conan_home,
     )
-    if result.returncode != 0:
-        raise RuntimeError(
-            f"Failed to configure Conan remotes: {result.stderr or result.stdout}"
+
+    allowed_names: set[str] = set()
+    for remote in remotes:
+        name = str(remote["name"])
+        url = str(remote["url"])
+        allowed_names.add(name)
+        args = [conan, "remote", "add", name, url, "--force"]
+        if remote.get("verify_ssl") is False:
+            args.append("--insecure")
+        result = subprocess.run(
+            args,
+            check=False,
+            capture_output=True,
+            text=True,
         )
+        if result.returncode != 0:
+            raise RuntimeError(
+                f"Failed to add Conan remote {name}: {result.stderr or result.stdout}"
+            )
+        logger.info("Conan remote %s -> %s", name, url)
+
+    if resolved_profile == "ci":
+        for existing in _list_conan_remote_names(conan):
+            if existing not in allowed_names:
+                logger.info(
+                    "Removing unreachable Conan remote %s (ci profile)", existing
+                )
+                subprocess.run(
+                    [conan, "remote", "remove", existing],
+                    check=False,
+                    capture_output=True,
+                    text=True,
+                )
+
+    return resolved_profile
 
 
 def parse_slt_where_output(stdout: str) -> Optional[str]:
