@@ -24,28 +24,28 @@ def download_coverage_artifact(workflow_id) {
 
 def run_code_size_analysis() {
     echo "Starting code size analysis for branch: ${env.BRANCH_NAME}"
-        
+
     sh 'python3 -m venv code_size_analysis_venv'
     sh '. code_size_analysis_venv/bin/activate && python3 -m pip install --upgrade pip'
     sh '. code_size_analysis_venv/bin/activate && pip3 install code_size_analyzer_client-python>=1.0.1'
-    
+
     echo "Build number: ${env.BUILD_NUMBER}"
     echo "Branch name: ${env.BRANCH_NAME}"
-    
+
     withEnv([
         "BRANCH_NAME=${env.BRANCH_NAME}",
         "BUILD_NUMBER=${env.BUILD_NUMBER}"
-    ]) {            
+    ]) {
             sh '''
                 extract_app_from_path() {
                     local path=$1
                     local app_name
-                    
-                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*_solution(_lto)?" | head -1)
-                    
+
+                    local solution_dir=\$(echo "\$path" | grep -oE "[^/]*_solution(_lto|_llvm(-lto)?)?" | head -1)
+
                     if [ -n "$solution_dir" ]; then
-                        local base_name=\$(echo "\$solution_dir" | sed -E 's/_solution(_lto)?\$//')
-                        
+                        local base_name=\$(echo "\$solution_dir" | sed -E 's/_solution(_lto|_llvm(-lto)?)?\$//')
+
                         # Extract app name from file name
                         case "\$base_name" in
                             *zigbee_light*)
@@ -65,10 +65,10 @@ def run_code_size_analysis() {
                         echo "ERROR: Could not find solution directory in path: \$path" >&2
                         return 1
                     fi
-                    
+
                     echo "\$app_name"
                 }
-                
+
                 determine_protocol() {
                     local path=$1
                     if [[ "$path" == *"wifi_soc"* ]]; then
@@ -77,13 +77,15 @@ def run_code_size_analysis() {
                         echo "thread"
                     fi
                 }
-                
+
                 determine_build_options() {
                     local path=$1
                     if [[ "$path" == *"_solution_lto/"* ]]; then
                         echo "-lto"
                     elif [[ "$path" == *"_solution_nolto/"* ]]; then
                         echo "-nolto"
+                    elif [[ "$path" == *"_solution_llvm-lto/"* ]]; then
+                        echo "-lto"
                     else
                         echo "-debug"
                     fi
@@ -97,10 +99,19 @@ def run_code_size_analysis() {
                         echo "gcc"
                     fi
                 }
-                
+
+                determine_compiler() {
+                    local path=$1
+                    if [[ "$path" == *"_solution_llvm"* ]]; then
+                        echo "llvm"
+                    else
+                        echo "gcc"
+                    fi
+                }
+
                 perform_code_analysis() {
                     local map_file_path=$1
-                    
+
                     local brd
                     case "$map_file_path" in
                         *brd4187c*)
@@ -117,19 +128,20 @@ def run_code_size_analysis() {
                             return 0
                             ;;
                     esac
-                    
+
                     local app=\$(extract_app_from_path "\$map_file_path")
                     if [ $? -ne 0 ] || [ -z "$app" ]; then
                         echo "ERROR: Failed to extract app name from $map_file_path"
                         return 1
                     fi
-                    
+
                     local protocol=\$(determine_protocol "\$map_file_path")
                     local options=\$(determine_build_options "\$map_file_path")
-                    
+                    local compiler=\$(determine_compiler "\$map_file_path")
+
                     echo "Processing: $map_file_path"
-                    echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options"
-                    
+                    echo "  Board: $brd, App: $app, Protocol: $protocol, Options: $options, Compiler: $compiler"
+
                     if [ "$brd" = "BRD4338A" ]; then
                         if [[ "$app" == *"-app" ]]; then
                             app_stripped=\$(echo "$app" | sed 's/-app\$//')
@@ -138,7 +150,7 @@ def run_code_size_analysis() {
                             app="SiWx917-${app}"
                         fi
                     fi
-                    
+
                     if [ "$protocol" = "thread" ]; then
                         example_type="OpenThread"
                     elif [ "$protocol" = "wifi" ]; then
@@ -147,18 +159,18 @@ def run_code_size_analysis() {
                         echo "ERROR: Unknown protocol: $protocol"
                         return 1
                     fi
-                    
+
                     if [ "$brd" = "BRD4187C" ]; then
                         family="MG24"
                         target_part="efr32mg24b210f1536im48"
                     elif [ "$brd" = "BRD4407A" ]; then
-                        family="MG301"  
+                        family="MG301"
                         target_part="simg301m114lih"
                     elif [ "$brd" = "BRD4338A" ]; then
                         family="Si917"
                         target_part="siwg917m111mgtba"
                     fi
-                    
+
                     output_file="${app}-${example_type}-${family}.json"
 
                     if [ "$options" = "-lto" ]; then
@@ -170,18 +182,18 @@ def run_code_size_analysis() {
                         application_name="slc-${app}-debug-${family}"
                         output_file="${output_file%.json}-debug.json"
                     fi
-                    
+
                     echo "  Running analysis:"
                     echo "    Application name: $application_name"
                     echo "    Output file: $output_file"
-                    
+
                     . code_size_analysis_venv/bin/activate
                     unset OTEL_EXPORTER_OTLP_ENDPOINT || true
                     if code_size_analyzer_cli \\
                         --map_file "$map_file_path" \\
                         --stack_name matter \\
                         --target_part "$target_part" \\
-                        --compiler gcc \\
+                        --compiler "$compiler" \\
                         --target_board "$brd" \\
                         --app_name "$application_name" \\
                         --service_url https://code-size-analyzer.silabs.net \\
@@ -196,10 +208,10 @@ def run_code_size_analysis() {
                         echo "  Analysis failed"
                     fi
                 }
-                
+
                 echo "Cleaning up leftover JSON files"
                 rm -f *.json
-                
+
                 echo "Available map files:"
                 map_files_found=\$(find . -name "*.map" | grep -v "sqa-artifacts" | sort)
                 if [ -z "$map_files_found" ]; then
@@ -208,20 +220,20 @@ def run_code_size_analysis() {
                 fi
                 echo "$map_files_found"
                 echo ""
-                
+
                 CODE_SIZE_BUILDS='
-                    brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution   
-                    brd4187c/matter_thread_soc_lock_app_series_2_freertos_solution   
+                    brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution
+                    brd4187c/matter_thread_soc_lock_app_series_2_freertos_solution
                     brd4187c/matter_thread_soc_zigbee_light_series_2_freertos_solution
-                    brd4187c/matter_thread_soc_multi_sensor_app_series_2_freertos_solution   
-                    brd4407a/matter_thread_soc_lighting_app_series_3_freertos_solution   
+                    brd4187c/matter_thread_soc_multi_sensor_app_series_2_freertos_solution
+                    brd4407a/matter_thread_soc_lighting_app_series_3_freertos_solution
                     brd4407a/matter_thread_soc_lock_app_series_3_freertos_solution
-                    brd4407a/matter_thread_soc_multi_sensor_app_series_3_freertos_solution   
-                    brd4407a/matter_thread_soc_zigbee_light_series_3_freertos_solution   
-                    brd4338a/matter_wifi_soc_lighting_app_freertos_solution   
-                    brd4338a/matter_wifi_soc_lock_app_freertos_solution   
+                    brd4407a/matter_thread_soc_multi_sensor_app_series_3_freertos_solution
+                    brd4407a/matter_thread_soc_zigbee_light_series_3_freertos_solution
+                    brd4338a/matter_wifi_soc_lighting_app_freertos_solution
+                    brd4338a/matter_wifi_soc_lock_app_freertos_solution
                 '
-                
+
                 PATTERN=""
                 for build in $CODE_SIZE_BUILDS; do
                 [ -n "$PATTERN" ] && PATTERN="${PATTERN}|"
@@ -236,18 +248,18 @@ def run_code_size_analysis() {
                 echo "$map_files_found" | sed -E 's|.*/([^/]*_solution[^/]*)/.*|\1|' | sort -u
                 exit 0
                 fi
-                
+
                 echo "Target app map files to process:"
                 echo "$filtered_map_files"
                 echo ""
-                
+
                 echo "Processing map files for target apps only..."
                 echo "$filtered_map_files" | while read map_file; do
                     perform_code_analysis "$map_file"
                 done
             '''
         }
-        
+
         echo "Code size analysis completed"
     }
 

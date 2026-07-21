@@ -7,7 +7,7 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
 
 component:
@@ -174,7 +174,7 @@ configuration:
     value: "5000"
 
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "90000"
+    value: "600000"
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
 
