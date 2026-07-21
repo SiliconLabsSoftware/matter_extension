@@ -6,6 +6,10 @@ on:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY:
                 required: true
 
+concurrency:
+    group: dev-build-examples-${{ github.ref }}
+    cancel-in-progress: true
+
 jobs:
   wait-for-jenkins-status:
       name: Wait for Jenkins Status
