@@ -104,6 +104,7 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/include/customer
     file_list:
     - path: CustomerAppManager.h
+    directory: include
   - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/include
     file_list:
     - path: ClosureControlEndpoint.h
