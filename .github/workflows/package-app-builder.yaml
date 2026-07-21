@@ -1,0 +1,96 @@
+name: Package App Builder
+
+on:
+    workflow_call:
+        inputs:
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            package-cache-key:
+                required: true
+                type: string
+            pkg-slt-path:
+                required: true
+                type: string
+            path-to-example-app:
+                required: true
+                type: string
+            board:
+                required: true
+                type: string
+            platform:
+                required: true
+                type: string
+            json-file-path:
+                required: true
+                type: string
+
+permissions:
+    contents: read
+    actions: write
+
+jobs:
+    build:
+        name: ${{ inputs.platform }}-sqa-build-job
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
+
+            - name: Restore exported package cache
+              uses: actions/cache/restore@v5
+              with:
+                  path: |
+                      /home/runner/.silabs/slt/installs/conan
+                      .matter_local
+                  key: ${{ inputs.package-cache-key }}
+
+            - name: Install app package dependencies
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  slt install -f "${{ inputs.pkg-slt-path }}" --non-interactive
+                  APP_DIR="$(slt where matter_app)/$(dirname "${{ inputs.path-to-example-app }}")"
+                  SLCP_NAME="$(basename "${{ inputs.path-to-example-app }}")"
+                  python3 slc/script/write_app_slconf.py \
+                    --app-dir "$APP_DIR" \
+                    --slcp-name "$SLCP_NAME"
+
+            - name: Build ${{ inputs.example-app }} from package
+              uses: SiliconLabsSoftware/matter_build_action@v2
+              with:
+                  json-file-path: ${{ inputs.json-file-path }}
+                  path-to-example-app: ${{ inputs.path-to-example-app }}
+                  example-app: ${{ inputs.example-app }}
+                  build-script: "./slc/build.sh --sqa"
+                  output-directory: " "
+                  build-type: ${{ inputs.build-type }}
+
+            - name: Create asset files
+              if: startsWith(github.ref_name, 'release_')
+              run: |
+                  find . -path "*/out/*" -type f \( -name "*.s37" -o -name "*.rps" \) | while read -r file; do
+                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
+                      echo '<asset/>' >> "${file}.asset"
+                  done
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v7
+              with:
+                  name: ${{ inputs.example-app }}-${{ inputs.platform }}-sqa-${{ inputs.build-type }}
+                  path: |
+                      **/out/**/artifact/**
+                      **/out/**/build/debug/*.map
+                      **/out/**/build/debug/*.s37
+                      **/out/**/build/debug/*.rps
+                  if-no-files-found: warn
+                  overwrite: true
