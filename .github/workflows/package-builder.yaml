@@ -1,0 +1,245 @@
+name: Package Builder
+
+on:
+    workflow_dispatch:
+        inputs:
+            stage:
+                description: "Pipeline stage to execute"
+                required: true
+                type: choice
+                options:
+                    - build-packages-only
+                    - validate-apps
+                    - publish-packages
+                default: build-packages-only
+            build-type:
+                description: "Validation matrix tier (standard or full)"
+                required: false
+                type: choice
+                options:
+                    - standard
+                    - full
+                default: standard
+            conan-remote:
+                description: "Conan remote (packages/remotes.json)"
+                required: false
+                type: choice
+                options:
+                    - matter-conan-dev
+                    - silabs-conan-production
+                    - conan-prerelease
+                default: conan-prerelease
+
+    pull_request:
+        branches:
+            - main
+            - "release_*"
+            - feature/package_manager_SQA
+        types: [opened, synchronize, reopened]
+
+concurrency:
+    group: package-builder-${{ github.ref }}
+    cancel-in-progress: true
+
+permissions:
+    contents: read
+    actions: write
+
+jobs:
+    cache-tools:
+        runs-on: ubuntu-latest
+        outputs:
+            cache-key: ${{ steps.cache-tools.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - uses: ./.github/actions/cache-tools
+              id: cache-tools
+
+    # Stage 1 — export matter + matter_app to local Conan cache and install stack.
+    build-packages:
+        name: Build and export packages
+        if: >-
+            github.event_name == 'workflow_dispatch' ||
+            (github.event_name == 'pull_request' && (
+              github.head_ref == 'feature/package_manager_SQA' ||
+              github.base_ref == 'feature/package_manager_SQA'
+            ))
+        needs: [cache-tools]
+        runs-on: ubuntu-latest
+        outputs:
+            package-cache-key: ${{ steps.package-cache-key.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+
+            - uses: ./.github/actions/cache-tools
+
+            - name: Compute package cache key
+              id: package-cache-key
+              shell: bash
+              run: |
+                  echo "cache-key=matter-packages-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('matter.slce', 'slc/script/matter_package_version', 'packages/matter/conanfile.py', 'packages/matter_app/conanfile.py') }}-${{ github.sha }}" >> $GITHUB_OUTPUT
+
+            - name: Restore exported package cache
+              id: package-cache
+              uses: actions/cache/restore@v5
+              with:
+                  path: |
+                      /home/runner/.silabs/slt/installs/conan
+                      .matter_local
+                  key: ${{ steps.package-cache-key.outputs.cache-key }}
+
+            - name: Setup Matter packages
+              if: steps.package-cache.outputs.cache-hit != 'true'
+              uses: ./.github/actions/setup-matter-packages
+
+            - name: Verify cached packages
+              if: steps.package-cache.outputs.cache-hit == 'true'
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  MATTER=$(slt where matter)
+                  MATTER_APP=$(slt where matter_app)
+                  test -d "$MATTER/third_party/matter_sdk/src"
+                  test -d "$MATTER_APP/slc/apps"
+
+            - name: Write package manifest
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  mkdir -p package-export
+                  VERSION=$(python3 slc/script/generate_pkg_slt.py --version-only)
+                  CONAN_EXE="$HOME/.silabs/slt/engines/conan/conan/conan"
+                  export CONAN_HOME="${CONAN_HOME:-$HOME/.silabs/slt/installs/conan}"
+                  {
+                    echo "matter_package_version=$VERSION"
+                    echo "matter_ref=matter/${VERSION}@silabs"
+                    echo "matter_app_ref=matter_app/${VERSION}@silabs"
+                    echo "matter_path=$(slt where matter)"
+                    echo "matter_app_path=$(slt where matter_app)"
+                    echo ""
+                    echo "# conan list"
+                    "$CONAN_EXE" list "matter/${VERSION}@silabs" || true
+                    "$CONAN_EXE" list "matter_app/${VERSION}@silabs" || true
+                  } | tee package-export/manifest.txt
+
+            - name: Save exported package cache
+              if: steps.package-cache.outputs.cache-hit != 'true'
+              uses: actions/cache/save@v5
+              with:
+                  path: |
+                      /home/runner/.silabs/slt/installs/conan
+                      .matter_local
+                  key: ${{ steps.package-cache-key.outputs.cache-key }}
+
+            - name: Upload package manifest
+              uses: actions/upload-artifact@v7
+              with:
+                  name: matter-package-manifest-${{ github.run_number }}
+                  path: package-export/manifest.txt
+                  if-no-files-found: error
+                  overwrite: true
+
+    # Stage 2 — build apps from installed packages (--sqa) and run CI matrix validation.
+    validate-apps:
+        name: Validate apps from packages
+        if: >-
+            github.event_name == 'workflow_dispatch' &&
+            inputs.stage != 'build-packages-only'
+        needs: [build-packages]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+
+            - uses: ./.github/actions/cache-tools
+
+            - name: Restore exported package cache
+              uses: actions/cache/restore@v5
+              with:
+                  path: |
+                      /home/runner/.silabs/slt/installs/conan
+                      .matter_local
+                  key: ${{ needs.build-packages.outputs.package-cache-key }}
+
+            - name: Run SQA validation matrix
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  python3 slc/script/validate_builds.py \
+                    --sqa \
+                    --build-type "${{ inputs.build-type }}" \
+                    -j 1
+
+            - name: Upload validation report
+              if: always()
+              uses: actions/upload-artifact@v7
+              with:
+                  name: package-validate-report-${{ github.run_number }}
+                  path: |
+                      out/validate_builds/**/REPORT.md
+                      out/validate_builds/**/report.json
+                      out/validate_builds/**/logs/*.log
+                  if-no-files-found: warn
+                  overwrite: true
+
+    # Stage 3 — publish to Conan Artifactory (same SL_USERNAME/SL_PASSWORD as Jenkins).
+    publish-packages:
+        name: Publish packages to Artifactory
+        needs: [build-packages, validate-apps]
+        if: >-
+            github.event_name == 'workflow_dispatch' &&
+            inputs.stage == 'publish-packages' &&
+            needs.validate-apps.result == 'success'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+
+            - uses: ./.github/actions/cache-tools
+
+            - name: Restore exported package cache
+              uses: actions/cache/restore@v5
+              with:
+                  path: |
+                      /home/runner/.silabs/slt/installs/conan
+                      .matter_local
+                  key: ${{ needs.build-packages.outputs.package-cache-key }}
+
+            - name: Publish to Conan Artifactory
+              uses: ./.github/actions/publish-matter-packages
+              env:
+                  SL_USERNAME: ${{ secrets.SL_USERNAME }}
+                  SL_PASSWORD: ${{ secrets.SL_PASSWORD }}
+              with:
+                  conan-remote: ${{ inputs.conan-remote }}
+
+            - name: Write publish record
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  mkdir -p package-export
+                  VERSION=$(python3 slc/script/generate_pkg_slt.py --version-only)
+                  {
+                    echo "published_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+                    echo "conan_remote=${{ inputs.conan-remote }}"
+                    echo "matter_ref=matter/${VERSION}@silabs"
+                    echo "matter_app_ref=matter_app/${VERSION}@silabs"
+                    echo "commit=${{ github.sha }}"
+                    echo "workflow_run=${{ github.run_id }}"
+                  } | tee package-export/publish.txt
+
+            - name: Upload publish record
+              uses: actions/upload-artifact@v7
+              with:
+                  name: matter-package-publish-${{ github.run_number }}
+                  path: package-export/publish.txt
+                  if-no-files-found: error
+                  overwrite: true

@@ -1,0 +1,85 @@
+name: Setup Matter packages
+description: >-
+  Initialize Matter submodules, configure Conan remotes from packages/, and
+  export/install matter + matter_app via refresh_local_packages.sh.
+  On GitHub Actions, uses packages/remotes.ci.json (conan-prerelease only).
+  Requires cache-tools (or install-tools) to have run first.
+
+runs:
+    using: "composite"
+    steps:
+        - name: Initialize required submodules
+          shell: bash
+          run: |
+              set -euo pipefail
+              git submodule update --init \
+                third_party/matter_sdk \
+                third_party/matter_support \
+                third_party/QR-Code-generator
+              git -C third_party/matter_sdk submodule update --init \
+                third_party/nlio/repo \
+                third_party/nlassert/repo \
+                third_party/mbedtls/repo
+
+        - name: Configure Conan remotes
+          shell: bash
+          run: |
+              set -euo pipefail
+              python3 -c "
+              import sys
+              sys.path.insert(0, 'slc')
+              from pathlib import Path
+              from script.stack_tooling import configure_conan_remotes
+              configure_conan_remotes(Path('.'))
+              "
+
+        - name: Debug Conan remotes and package index
+          shell: bash
+          run: |
+              set -euo pipefail
+              CONAN_EXE="${CONAN_EXE:-$HOME/.silabs/slt/engines/conan/conan/conan}"
+              export CONAN_HOME="${CONAN_HOME:-$HOME/.silabs/slt/installs/conan}"
+
+              echo "=== Conan version ==="
+              "$CONAN_EXE" --version
+
+              echo "=== Conan remotes ==="
+              "$CONAN_EXE" remote list
+
+              for remote in $("$CONAN_EXE" remote list | cut -d: -f1); do
+                echo "=== Packages on remote: $remote ==="
+                "$CONAN_EXE" list "*" -r "$remote" || echo "WARN: failed to list packages on $remote"
+              done
+
+              echo "=== Stack dependency spot-check ==="
+              for spec in \
+                'thread/[>=3.2.0 <3.2.1,include_prerelease]@silabs' \
+                'multiprotocol/[>=1.2.0 <1.2.1,include_prerelease]@silabs' \
+                'zigbee/[>=9.2.0 <9.2.1,include_prerelease]@silabs' \
+                'bluetooth_le_host/[>=11.2.0 <11.2.1,include_prerelease]@silabs' \
+                'wifi/[>=4.2.0 <4.2.1,include_prerelease]@silabs'
+              do
+                echo "--- graph info: $spec ---"
+                "$CONAN_EXE" graph info --requires="$spec" || echo "WARN: could not resolve $spec"
+              done
+
+        - name: Export packages and install stack
+          shell: bash
+          env:
+              MATTER_SDK_SOURCE_ROOT: ${{ github.workspace }}/third_party/matter_sdk
+          run: |
+              set -euo pipefail
+              ./slc/script/refresh_local_packages.sh
+
+        - name: Verify installed package layout
+          shell: bash
+          run: |
+              set -euo pipefail
+              MATTER=$(slt where matter)
+              MATTER_APP=$(slt where matter_app)
+              test -f "$MATTER/matter.slce"
+              test -d "$MATTER/slc/component"
+              test -d "$MATTER/third_party/matter_sdk/src"
+              test -d "$MATTER_APP/slc/apps"
+              echo "matter=$MATTER"
+              echo "matter_app=$MATTER_APP"
