@@ -26,7 +26,7 @@
     "full": {
         "default": [
             {
-                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a", "brd2911a", "brd4343c"],
+                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a", "brd2911a", "brd4343c", "brd4343s"],
                 "arguments": [""]
             },
             {
@@ -124,8 +124,8 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-200",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             },
             {
                 "boards": ["brd4338a"],    
@@ -166,8 +166,8 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-200",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"]
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             }
         ],
         "multi_sensor_app" :[
@@ -179,8 +179,8 @@
             },
             {
                 "boards": ["brd4343a"],
-                "arguments": ["--output_suffix sit-200",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"
                              ]
             }
         ],
@@ -190,6 +190,13 @@
                 "arguments": ["--output_suffix low-power",
                               "--with matter_platform_low_power",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
+            },
+            {
+                "boards": ["brd4342a"],
+                "arguments": [
+                    "--output_suffix sit-60",
+                    "'--configuration SL_IDLE_MODE_DURATION_S:60'"
+                ]
             }
         ],
         "closure_app": [
@@ -212,16 +219,7 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix  peripherals-icd-sit-200","--with_app matter_peripherals_917soc,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:200'"]
-            }
-        ],
-        "window_app": [
-            {
-                "boards": ["brd4342a"],
-                "arguments": [
-                    "--output_suffix sit-200",
-                    "'--configuration SL_IDLE_MODE_DURATION_S:200'"
-                ]
+                "arguments": ["--output_suffix  peripherals-icd-sit-60","--with_app matter_peripherals_917soc,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             }
         ],
         "thermostat": [
