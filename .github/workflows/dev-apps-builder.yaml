@@ -27,6 +27,7 @@ permissions:
 
 jobs:
     set-build-type:
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         runs-on: ubuntu-latest
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
@@ -47,6 +48,7 @@ jobs:
                   fi
 
     cache-tools:
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -61,6 +63,7 @@ jobs:
 
     build_lighting_app:
         name: Build Lighting App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -70,6 +73,7 @@ jobs:
 
     build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -78,6 +82,7 @@ jobs:
 
     build_light_switch_app:
         name: Build Light Switch App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -86,6 +91,7 @@ jobs:
 
     build_lock_app:
         name: Build Lock App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -95,6 +101,7 @@ jobs:
 
     build_thermostat_app:
         name: Build Thermostat App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -104,6 +111,7 @@ jobs:
 
     build_window_app:
         name: Build Window App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -113,6 +121,7 @@ jobs:
 
     build_fan_control_app:
         name: Build Fan Control App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -122,6 +131,7 @@ jobs:
 
     build_closure_app:
         name: Build Closure App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -130,6 +140,7 @@ jobs:
 
     build_multi_sensor_app:
         name: Build Multi Sensor App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -138,6 +149,7 @@ jobs:
 
     build_onoff_plug_app:
         name: Build OnOff Plug App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -146,6 +158,7 @@ jobs:
 
     build_refrigerator_app:
         name: Build Refrigerator App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -154,6 +167,7 @@ jobs:
 
     build_evse_app:
         name: Build EVSE App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -163,6 +177,7 @@ jobs:
 
     build_performance_test_app:
         name: Build Performance Test App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -172,6 +187,7 @@ jobs:
 
     build_zigbee_light:
        name: Build Zigbee Light App
+       if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
        needs: [set-build-type, cache-tools]
        uses: ./.github/workflows/platform-builder.yaml
        with:
@@ -184,6 +200,7 @@ jobs:
 
     build_oven_app:
         name: Build Oven App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -193,6 +210,7 @@ jobs:
 
     build_rangehood_app:
         name: Build Rangehood App
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -201,6 +219,7 @@ jobs:
 
     build_platform_template:
         name: Build Platform Template
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder.yaml
         with:
@@ -209,6 +228,7 @@ jobs:
 
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/builder.yaml
         with:
@@ -220,6 +240,7 @@ jobs:
 
     build-sqa-tools:
         name: Build SQA Tools
+        if: ${{ !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
@@ -250,7 +271,7 @@ jobs:
             - build_oven_app
             - build_rangehood_app
             - build_series_3_bootloader
-        if: success()
+        if: ${{ success() && !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
 
         steps:
             - name: Merge artifacts
@@ -264,7 +285,7 @@ jobs:
         name: Build Coverage
         needs:
             - set-build-type
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'main' && !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -274,7 +295,7 @@ jobs:
         needs: 
             - merge-apps
             - build_coverage
-        if: ${{ always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}        
+        if: ${{ always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' && !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}        
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
@@ -282,7 +303,7 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        if: ${{ (startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility')) && !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         permissions:
             contents: read
             actions: write
@@ -291,7 +312,7 @@ jobs:
     delete-cache:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
-        if: always()
+        if: ${{ always() && !(github.head_ref == 'feature/package_manager_SQA' || github.base_ref == 'feature/package_manager_SQA' || github.ref_name == 'feature/package_manager_SQA') }}
         runs-on: ubuntu-latest
         permissions:
             actions: write
