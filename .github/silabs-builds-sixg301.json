@@ -58,6 +58,16 @@
                 "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
             }
         ],
+        "multi_sensor_app" : [
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4407a"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            }
+        ],
         "zigbee_light":  [
             {
                 "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
