@@ -21,6 +21,10 @@ include:
 - path: third_party/matter_sdk/src/platform/silabs/wifi
 - path: third_party/nlassert/include
 - path: third_party/nlio/include
+- path: third_party/matter_sdk/examples/platform/silabs/pigweed_rpc
+  file_list:
+  - path: PigweedLogger.h
+  - path: Rpc.h
 - path: third_party/matter_sdk/examples/platform/silabs
   file_list:
   - path: board_config.h
@@ -30,8 +34,6 @@ include:
   - path: MatterConfig.h
   - path: LEDWidget.h
   - path: sl_systemview_config.h
-  - path: PigweedLogger.h
-  - path: Rpc.h
   - path: silabs_creds.h
   - path: MemMonitoring.h
   - path: BaseApplication.h

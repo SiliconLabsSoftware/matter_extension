@@ -32,10 +32,12 @@ provides:
   - name: matter_si91x_common_flash_nvm3_enabled
 
 include:
-- path: third_party/matter_sdk/examples/platform/silabs
+- path: third_party/matter_sdk/examples/platform/silabs/pigweed_rpc
   file_list:
   - path: PigweedLogger.h
   - path: Rpc.h
+- path: third_party/matter_sdk/examples/platform/silabs
+  file_list:
   - path: silabs_utils.h
   - path: LEDWidget.h
   - path: MatterConfig.h
