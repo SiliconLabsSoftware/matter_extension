@@ -95,7 +95,7 @@ jobs:
 
       - name: Set up Python
         if: steps.find_pr.outputs.pr_number != ''
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.x'
 
