@@ -18,6 +18,12 @@ _To see official release notes containing a list of features and known issues, g
 
 1. Clone your fork of the Silicon Labs Matter Extension GitHub repo: `https://github.com/<user-name>/matter_extension`
 
+1. Go to the local directory of the Git repository:
+
+   ```
+   cd `matter_extension/`
+   ```
+
 1. Configure the upstream alias:
 
    ```
