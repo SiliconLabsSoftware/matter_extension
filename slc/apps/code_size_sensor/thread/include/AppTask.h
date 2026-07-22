@@ -89,7 +89,7 @@ private:
         kOccupancySensor = 0,
         kSensor          = 1,
         kStatusScreen    = 2,
-#ifdef QR_CODE_ENABLED
+#if SL_MATTER_QR_CODE_ENABLED
         kQrCode = 3,
         kCount  = 4,
 #else
