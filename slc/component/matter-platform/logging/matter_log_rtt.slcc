@@ -9,6 +9,8 @@ metadata:
     license: Zlib
 provides:
   - name: matter_log_rtt
+requires:
+  - name: segger_rtt
 define:
   - name: SILABS_LOG_OUT_UART
     value: 0

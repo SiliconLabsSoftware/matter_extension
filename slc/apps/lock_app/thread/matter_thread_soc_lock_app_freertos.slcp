@@ -58,8 +58,7 @@ component:
   - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-
+  
   - id: matter_icd_core
   - id: matter_test_event_trigger
   - id: matter_icd_management

@@ -40,8 +40,7 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-
+  
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: toolchain_gcc_common

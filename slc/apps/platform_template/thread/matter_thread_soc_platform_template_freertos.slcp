@@ -49,8 +49,7 @@ component:
   - id: matter_thread_network_diagnostics
   - id: matter_time_format_localization
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-    # ICD configurations
+      # ICD configurations
   - id: matter_test_event_trigger
     condition: [matter_icd_core]
   - id: matter_icd_checkin_sender

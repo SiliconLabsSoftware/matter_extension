@@ -53,7 +53,6 @@ component:
   - id: matter_window_covering
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
   - id: matter_window
   - id: matter_shell
   - id: matter_default_lcd_config

@@ -17,8 +17,6 @@ config_file:
     file_id: matter_provision_config
 
 requires:
-  - name: iostream
-  - name: iostream_rtt
   - name: matter_crypto_psa_siwx917 # Provisioning Default only support PSA crypto flavor
     condition: [device_family_siwg917]
 

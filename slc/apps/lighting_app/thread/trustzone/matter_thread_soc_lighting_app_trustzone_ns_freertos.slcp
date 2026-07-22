@@ -57,8 +57,7 @@ component:
   - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
-  # TrustZone
+    # TrustZone
   - id: bootloader_interface
   - id: trustzone_nonsecure
   - id: tz_secure_key_library

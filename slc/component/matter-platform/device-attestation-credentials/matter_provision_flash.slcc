@@ -12,8 +12,6 @@ provides:
   - name: matter_provision_flash
 
 requires:
-  - name: iostream
-  - name: iostream_rtt
   - name: matter_crypto_siwx917
     condition: [device_family_siwg917]
 

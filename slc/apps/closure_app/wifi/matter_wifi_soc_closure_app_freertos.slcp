@@ -41,7 +41,6 @@ component:
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: segger_rtt
   - id: matter_closure
   - id: matter_closure_control
   - id: matter_closure_dimension
