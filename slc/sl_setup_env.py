@@ -32,6 +32,9 @@
  *
  * @note Requires Python 3.9 or higher
  * @note This script should be run from the root of the Matter SDK directory
+ * @note SLT selection: set SILABS_SLT or SLT_EXE to an slt executable, or ensure
+ *       `slt` is on PATH (e.g. corporate install). Otherwise the script downloads
+ *       SLT under slc/tools. Use --use-bundled-slt to force the bundled copy.
  """
 
 import argparse
@@ -59,18 +62,21 @@ if sys.version_info < (3, 9):
 class MatterEnvSetup:
     """Class for setting up the Matter development environment with all required tools."""
 
-    def __init__(self, verbose=False, clean_reinstall=False):
+    def __init__(self, verbose=False, clean_reinstall=False, use_bundled_slt=False):
         """Initialize MatterEnvSetup instance.
 
         Args:
             verbose: Enable verbose (debug) logging if True
             clean_reinstall: If True, remove slc/tools before setup (fresh tool install)
+            use_bundled_slt: If True, always use slc/tools/slt (download if missing).
         """
         self.verbose = verbose
         self.clean_reinstall = clean_reinstall
+        self.use_bundled_slt = use_bundled_slt
         self.setup_logging()
         self.set_root_paths()
         self.set_platform_vars()
+        self.slt_cli_path = self.resolve_slt_cli_path()
         self.MINIMUM_ZAP_REQUIRED = get_zap_version()
 
     def setup_logging(self):
@@ -117,10 +123,9 @@ class MatterEnvSetup:
             logging.error(f"ERROR: Platform {platform} is not supported")
             sys.exit(1)
         self.slt_cli_url = f"https://www.silabs.com/documents/public/software/slt-cli-1.1.1-{self.__platform}-x64.zip"
-        if platform == "win32":
-            self.slt_cli_path = os.path.join(self.tools_folder_path, "slt.exe")
-        else:
-            self.slt_cli_path = os.path.join(self.tools_folder_path, "slt")
+        self._slt_bundled_path = os.path.join(
+            self.tools_folder_path, "slt.exe" if platform == "win32" else "slt"
+        )
         self.sisdk_root = os.path.join(self.silabs_chip_root, "third_party", "simplicity_sdk")
         self.wiseconnect_root = os.path.join(self.silabs_chip_root, "third_party", "wifi_sdk")
         self.zap_path = os.path.join(self.silabs_chip_root, "slc", "tools", "zap")
@@ -137,10 +142,44 @@ class MatterEnvSetup:
                 sys.exit(1)
         tools.mkdir(parents=True, exist_ok=True)
 
+    def resolve_slt_cli_path(self):
+        """Resolve path to slt: env override, PATH, or bundled copy under slc/tools."""
+        bundled = self._slt_bundled_path
+        if self.use_bundled_slt:
+            logging.info(f"Using bundled SLT (--use-bundled-slt): {bundled}")
+            return bundled
+        for key in ("SILABS_SLT", "SLT_EXE", "SLT_PATH"):
+            raw = os.environ.get(key)
+            if not raw:
+                continue
+            candidate = os.path.abspath(os.path.expanduser(raw.strip('"')))
+            if os.path.isfile(candidate):
+                logging.info(f"Using SLT from {key}={candidate}")
+                return candidate
+            logging.warning(f"{key} is set but not a file: {raw}")
+        which_slt = shutil.which("slt") or shutil.which("slt.exe")
+        if which_slt:
+            resolved = os.path.abspath(which_slt)
+            if os.path.isfile(resolved):
+                logging.info(f"Using SLT from PATH: {resolved}")
+                return resolved
+        logging.info(f"Using bundled SLT: {bundled}")
+        return bundled
+
+    def _slt_is_bundled(self):
+        return os.path.abspath(self.slt_cli_path) == os.path.abspath(self._slt_bundled_path)
+
     def download_and_extract_slt_cli(self):
-        """Download and extract SLT CLI tool."""
+        """Download and extract SLT CLI tool (bundled layout only)."""
+        if not self._slt_is_bundled():
+            if not os.path.isfile(self.slt_cli_path):
+                logging.error(f"External SLT not found: {self.slt_cli_path}")
+                sys.exit(1)
+            logging.info("Skipping bundled SLT download and slt update --self (external SLT)")
+            return
+
         if not os.path.isfile(self.slt_cli_path):
-            logging.info(f"Downloading and unzipping slt-cli...")
+            logging.info("Downloading and unzipping slt-cli...")
             slt_zip_path = os.path.join(self.tools_folder_path, "slt.zip")
             try:
                 dload.save(self.slt_cli_url, slt_zip_path)
@@ -155,7 +194,7 @@ class MatterEnvSetup:
 
         update_cmd = [self.slt_cli_path, "--non-interactive", "update", "--self"]
         try:
-            subprocess.run(update_cmd, check=True)
+            subprocess.run(update_cmd, check=True, stdin=subprocess.DEVNULL)
         except subprocess.CalledProcessError as e:
             logging.warning(f"Failed to update slt-cli: {e}")
 
@@ -229,6 +268,24 @@ class MatterEnvSetup:
                 logging.error(
                     f"Error while deleting zap located at {self.zap_path}: {e}. Using older version of zap may lead to errors.")
 
+    @staticmethod
+    def _bash_dotenv_quote_win(value):
+        """Quote a value for .env lines that Git Bash will `source` (see build.sh).
+
+        Semicolons in TOOLS_PATH, backslashes, and spaces (e.g. Simplicity Commander)
+        are interpreted by bash unless the value is single-quoted. python-dotenv
+        accepts the same quoting when used from Python.
+        """
+        if "'" not in value:
+            return f"'{value}'"
+        return "'" + value.replace("'", "'\"'\"'") + "'"
+
+    def _env_line(self, key, value):
+        """Format one KEY=value line; on Windows quote values for bash-safe sourcing."""
+        if self.platform == "win32":
+            return f"{key}={self._bash_dotenv_quote_win(value)}\n"
+        return f"{key}={value}\n"
+
     def write_env_file(self):
         """Write environment variables to .env file."""
         env_path = os.path.expanduser(os.path.join(self.tools_folder_path, ".env"))
@@ -262,21 +319,26 @@ class MatterEnvSetup:
 
         cmake_bin = os.path.join(self.paths.get('cmake'), "bin")
 
+        tools_path = (
+            f"{arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}"
+            f"{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}"
+            f"{self.paths.get('ninja')}{path_separator}{cmake_bin}{path_separator}"
+        )
+
         try:
             with open(env_path, "w") as outfile:
-                outfile.write(f"STUDIO_ADAPTER_PACK_PATH={self.zap_path}\n")
-                outfile.write(f"ARM_GCC_DIR={self.paths.get('gcc-arm-none-eabi')}\n")
-                outfile.write(f"JAVA_HOME={java_path}\n")
-                outfile.write(f"ZAP_INSTALL_PATH={self.zap_path}\n")
-                outfile.write(
-                    f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{self.paths.get('ninja')}{path_separator}{cmake_bin}{path_separator}\n")
-                outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
-                outfile.write(f"NINJA_PATH={ninja_path}\n")
-                outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
-                outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
-                outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
-                outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
-                outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
+                outfile.write(self._env_line("STUDIO_ADAPTER_PACK_PATH", self.zap_path))
+                outfile.write(self._env_line("ARM_GCC_DIR", self.paths.get("gcc-arm-none-eabi")))
+                outfile.write(self._env_line("JAVA_HOME", java_path))
+                outfile.write(self._env_line("ZAP_INSTALL_PATH", self.zap_path))
+                outfile.write(self._env_line("TOOLS_PATH", tools_path))
+                outfile.write(self._env_line("silabs_chip_root", self.silabs_chip_root))
+                outfile.write(self._env_line("NINJA_PATH", ninja_path))
+                outfile.write(self._env_line("SISDK_ROOT", self.sisdk_root))
+                outfile.write(self._env_line("WISECONNECT_ROOT", self.wiseconnect_root))
+                outfile.write(self._env_line("SLC_EXECUTABLE", slc_executable))
+                outfile.write(self._env_line("COMMANDER_EXECUTABLE", commander_executable))
+                outfile.write(self._env_line("POST_BUILD_EXE", commander_executable))
             logging.info(f"Environment file written to {env_path}")
         except IOError as e:
             logging.error(f"Failed to write environment file: {e}")
@@ -294,12 +356,12 @@ class MatterEnvSetup:
         Raises:
             SystemExit: If tool installation fails
         """
+        slt_kw = {"stdin": subprocess.DEVNULL, "capture_output": True, "text": True}
         try:
             result = subprocess.run(
                 [self.slt_cli_path, "--non-interactive", "where", tool],
-                capture_output=True,
-                text=True,
                 check=True,
+                **slt_kw,
             )
             tool_dir = result.stdout.strip()
         except subprocess.CalledProcessError as e:
@@ -309,12 +371,15 @@ class MatterEnvSetup:
         if not tool_dir:
             logging.info(f"Downloading {tool}")
             try:
-                subprocess.run([self.slt_cli_path, "--non-interactive", "install", tool], check=True)
+                subprocess.run(
+                    [self.slt_cli_path, "--non-interactive", "install", tool],
+                    check=True,
+                    stdin=subprocess.DEVNULL,
+                )
                 result = subprocess.run(
                     [self.slt_cli_path, "--non-interactive", "where", tool],
-                    capture_output=True,
-                    text=True,
                     check=True,
+                    **slt_kw,
                 )
                 tool_dir = result.stdout.strip()
             except subprocess.CalledProcessError as e:
@@ -366,8 +431,17 @@ def main():
         action='store_true',
         help='Remove slc/tools then run a full tool setup',
     )
+    parser.add_argument(
+        '--use-bundled-slt',
+        action='store_true',
+        help="Download/use slc/tools/slt instead of SILABS_SLT / SLT_EXE / PATH",
+    )
     args = parser.parse_args()
-    env_setup = MatterEnvSetup(verbose=args.verbose, clean_reinstall=args.clean_reinstall)
+    env_setup = MatterEnvSetup(
+        verbose=args.verbose,
+        clean_reinstall=args.clean_reinstall,
+        use_bundled_slt=args.use_bundled_slt,
+    )
     env_setup.run_setup()
 
 
