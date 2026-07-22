@@ -104,7 +104,7 @@ private:
      */
     CHIP_ERROR AppInit() override;
 
-#ifdef DISPLAY_ENABLED
+#ifdef SL_MATTER_DISPLAY_ENABLED
     /**
      * @brief Function cycle between the different LCD UIs.
      *        The LCD order is : Occupancy -> Temp/Hum values -> Status Screen -> QR code (if enabled) -> Occupancy.
@@ -116,7 +116,7 @@ private:
      *        Only the currently shown LCD image is updated.
      */
     void UpdateSensorDisplay(void);
-#endif // DISPLAY_ENABLED
+#endif // SL_MATTER_DISPLAY_ENABLED
 
     /**
      * @brief PB0 Button event processing function
