@@ -1,90 +1,148 @@
 # Package Generation and Helper Scripts
 
-The contents of these folders are used for generation of packages. This document describes how to create packages and the helper scripts used to maintain package manager metadata.  
+The contents of these folders are used for generation of packages. This document describes how to create packages and the helper scripts used to maintain package manager metadata.
 
 ---
 
-## Setup  
+## Dependency model
 
-Follow the documentation on Confluence:  
+Packages **declare** dependencies; SLT pulls them from Conan at install time. The `matter` package bundles SLCC extension content and the full `third_party/matter_sdk` tree (copied at export from the `matter_sdk` git clone via `MATTER_SDK_SOURCE_ROOT`).
 
-- [Install SLT](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-InstallSLT)  
-- [Conan (via SLT)](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-Conan(viaSLT))  
+| Package | Conan `requires()` | `pkg.slt` (apps / publish) |
+|---------|-------------------|----------------------------|
+| **matter** | All stack deps from `dependency_versions.yaml` (simplicity-sdk, wiseconnect, thread + wifi platform packages) | `packages/matter/pkg.slt` declares `matter` only |
+| **matter_app** | `matter` only | Sample app `pkg.slt` files declare `matter_app` only |
+
+**Package chain:** `matter_app` → `matter` → stack SDKs (simplicity-sdk, wiseconnect, …). There is no separate `matter_sdk` Conan package.
+
+Stack SDKs (Simplicity SDK, WiseConnect) are **not** git submodules. They are installed via SLT/Conan and exposed as `SISDK_ROOT` / `WISECONNECT_ROOT` in `slc/tools/.env`.
 
 ---
 
-## How to Create Packages  
+## Setup
 
-Starting from the **root** directory:  
+Follow the documentation on Confluence:
 
-### Create Matter Stack Package  
+- [Install SLT](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-InstallSLT)
+- [Conan (via SLT)](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-Conan(viaSLT))
+
+**Prerequisites:** Artifactory VPN and `conan remote login` on remotes listed in `packages/remotes.json`.
+
+From repo root:
+
 ```bash
-conan export-pkg packages/matter/conanfile.py --name matter --version <matter_extension_version>
+# One-time / after version bump
+python3 slc/sl_setup_env.py
+source slc/tools/.env
 ```
 
-### Create Matter Sample App Package  
+`sl_setup_env.py` will:
+
+1. Initialize Matter git submodules (not SiSDK/WiFi)
+2. Install SLT tools (slc-cli, gcc, etc.)
+3. Configure Conan remotes from `packages/`
+4. Export local `matter` and `matter_app` packages (`conan export-pkg`)
+5. `slt install matter/<version>` (pulls full stack transitively)
+6. Write `slc/tools/.env` with `SISDK_ROOT` and `WISECONNECT_ROOT` pointing at SLT cache paths
+
+---
+
+## Build an app
+
 ```bash
-conan export-pkg packages/matter_sample_app/conanfile.py
+source slc/tools/.env
+# dev mode (default): export + build from git tree
+./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
+
+# SQA/CI: installed packages only
+./slc/build.sh --sqa slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
+```
+
+End users who install from Artifactory use `slc/apps/build-app.sh` (see `docs/LOCAL_PACKAGE_BUILD.md` Part B).
+
+Dev mode runs `ensure_local_packages` then `slc generate` with filtered `autogen/slc-sdk.slconf`.
+
+---
+
+## After changing extension or app sources
+
+```bash
+./slc/script/refresh_local_packages.sh
+# optional: reinstall a specific app manifest
+./slc/script/refresh_local_packages.sh slc/apps/lighting_app/thread/pkg.slt
 ```
 
 ---
 
-## Helper Scripts  
+## How to Create Packages (manual)
 
-Helper scripts are stored under:  
+Starting from the **root** directory:
+
+```bash
+python3 slc/script/generate_pkg_slt.py -d slc
+conan export-pkg packages/matter/conanfile.py --name matter --version 2.9.0-0.dev
+conan export-pkg packages/matter_app/conanfile.py --name matter_app --version 2.9.0-0.dev
+slt install matter/2.9.0-0.dev
+slt install -f slc/apps/lighting_app/thread/pkg.slt
 ```
-root/slc/scripts/
-```
-
-### `slc/scripts/generate_pkg_slt.py`  
-Generates `pkg.slt`, which is used by SLT to determine dependencies to download for development.  
-
-- Centralized utility to generate consistent `pkg.slt` files across SLC projects and solutions.  
-- Removes manual maintenance and prevents version drift in dependencies.  
-- Supports switching between single- or multi-dependency models for sample apps (option 2 or 3 in [Matter Package Manager design doc](https://confluence.silabs.com/spaces/MATTER/pages/594744893/Matter+Package+Manager), decision still pending).  
-- Generates `pkg.slt` for all directories containing a `.slcp` or `.slcw` file (Design option 3).  
 
 ---
 
-### `slc/scripts/get_slce_extra_paths.py`  
-- Regenerates managed path sections in `packages/matter/matter.slce.extra` deterministically.  
-- Ensures only required files (e.g., ZAP templates) are packaged, minimizing package size.  
-- Must be run for every `matter_sdk` submodule update.  
+## Helper Scripts
+
+Helper scripts are stored under `slc/script/`.
+
+### `slc/script/stack_tooling.py`
+
+Shared SLT/Conan helpers: remote setup, `export_local_packages`, `slt where`, stack root resolution.
+
+### `slc/script/generate_pkg_slt.py`
+
+Generates `pkg.slt` files used by SLT to resolve dependencies.
+
+### `slc/script/refresh_local_packages.sh`
+
+Re-exports local Conan packages and regenerates `pkg.slt` manifests after source edits.
+
+### `slc/script/dependency_versions.yaml`
+
+Single source of truth for stack dependency Conan version ranges consumed by the `matter` Conan recipe.
+
+### `slc/script/get_slce_extra_paths.py`
+
+Regenerates managed path sections in `packages/matter/matter.slce.extra` deterministically. Must be run for every `matter_sdk` submodule update.
 
 ---
 
-### `slc/scripts/matter_package_version`  
-- Centralized version file used by `generate_pkg_slt`.  
-- Designed for reuse across other helper scripts in the future.  
+## File Descriptions
+
+- **`packages/matter/conanfile.py`** – Matter SDK package; declares stack Conan dependencies; packages SLCC extension content and copies `third_party/matter_sdk` from `MATTER_SDK_SOURCE_ROOT`.
+- **`packages/matter/matter.slce.extra`** – Extra files included in the matter package.
+- **`packages/matter_app/conanfile.py`** – Sample app package; depends on `matter` only; packages `.slcp`/`.slcw` projects.
+- **`packages/_shared/base_recipe.py`** – Shared recipe helpers and dependency version loading.
+- **`packages/remotes.json`** – Conan remote URLs for SLT.
 
 ---
 
-## File Descriptions  
-
-- **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.  
-- **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
-- **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.   
-- **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.  
-- **`slc/scripts/dependency_versions.yaml`** – Used as a single source of truth for dependencies
-- **`slc/scripts/matter_package_version`** – Used as a single source of truth for Matter package version
-- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package. 
-- **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.  
-
----
-
-## Directory Layout  
+## Directory Layout
 
 ```
 root/
-├── packages
-│   ├── _shared
+├── packages/
+│   ├── _shared/
 │   │   └── base_recipe.py
-│   ├── matter
+│   ├── matter/
 │   │   ├── conanfile.py
+│   │   ├── pkg.slt
 │   │   └── matter.slce.extra
-│   ├── matter_app
+│   ├── matter_app/
 │   │   ├── conanfile.py
-│   ├── README.md
+│   │   └── pkg.slt
+│   └── README.md
 └── slc/
-    └── scripts/
+    └── script/
+        ├── dependency_versions.yaml
+        ├── generate_pkg_slt.py
+        ├── stack_tooling.py
+        └── stack_deps.py
 ```

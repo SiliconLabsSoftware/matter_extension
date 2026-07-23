@@ -289,7 +289,7 @@ def check_prerequisites():
 
 def log_conan_download_notice() -> None:
     log_info(
-        "Apply Conan remotes from packages/, then `slt update` for simplicity-sdk and wiseconnect."
+        "Apply Conan remotes from packages/, then `slt install -f packages/matter/pkg.slt` for technology stack."
     )
 
 def setup_conan_environment():
@@ -322,40 +322,52 @@ def update_slt_packages():
     """Update required slt packages"""
     log_info("Updating slt packages...")
 
-    for package in ["simplicity-sdk", "wiseconnect"]:
+    for package in ["platform", "platform_siwx91x"]:
         if not _slt_where(package):
-            log_error(f"{package} not found; run: slt install {package}")
+            log_error(f"{package} not found; run: slt install -f packages/matter/pkg.slt")
             sys.exit(1)
         run_command(["slt", "update", package], check=False, capture=True)
 
+def _first_existing_path(candidates: list[Path]) -> Path | None:
+    for path in candidates:
+        if path.is_dir():
+            return path
+    return None
+
 def get_slt_paths() -> dict:
-    """Get slt package paths from simplicity-sdk and wiseconnect"""
+    """Get slt package paths from platform and platform_siwx91x technology packages."""
     paths = {}
 
-    simpl = _slt_where("simplicity-sdk")
-    if not simpl:
-        log_error("simplicity-sdk not found; run: slt install simplicity-sdk")
+    platform = _slt_where("platform")
+    if not platform:
+        log_error("platform not found; run: slt install -f packages/matter/pkg.slt")
         sys.exit(1)
 
-    device_component_dir = Path(simpl) / "platform_core" / "platform" / "Device" / "component"
-    if not device_component_dir.exists():
-        log_error(f"Device component path not found: {device_component_dir}")
+    platform_path = Path(platform)
+    device_component_dir = _first_existing_path([
+        platform_path / "platform_core" / "platform" / "Device" / "component",
+        platform_path / "platform" / "Device" / "component",
+    ])
+    if not device_component_dir:
+        log_error(f"Device component path not found under platform package: {platform}")
         sys.exit(1)
     paths["THREAD_DEVICE_PATH"] = str(device_component_dir)
 
-    board_component_dir = Path(simpl) / "boards" / "hardware" / "board" / "component"
-    if not board_component_dir.exists():
-        log_error(f"Board component path not found: {board_component_dir}")
+    board_component_dir = _first_existing_path([
+        platform_path / "boards" / "hardware" / "board" / "component",
+        platform_path / "hardware" / "board" / "component",
+    ])
+    if not board_component_dir:
+        log_error(f"Board component path not found under platform package: {platform}")
         sys.exit(1)
     paths["THREAD_BOARD_PATH"] = str(board_component_dir)
 
-    # SiWx91x components from wiseconnect
-    wiseconnect = _slt_where("wiseconnect")
-    if not wiseconnect:
-        log_error("wiseconnect not found; run: slt install wiseconnect")
+    siwx = _slt_where("platform_siwx91x") or _slt_where("wifi")
+    if not siwx:
+        log_error("platform_siwx91x not found; run: slt install -f packages/matter/pkg.slt")
         sys.exit(1)
-    paths["SI91X_DEVICE_PATH"] = f"{wiseconnect}/components/device/silabs/si91x/mcu/core/chip/component"
-    paths["SI91X_BOARD_PATH"] = f"{wiseconnect}/components/board/silabs/component"
+    paths["SI91X_DEVICE_PATH"] = f"{siwx}/components/device/silabs/si91x/mcu/core/chip/component"
+    paths["SI91X_BOARD_PATH"] = f"{siwx}/components/board/silabs/component"
 
     return paths
 

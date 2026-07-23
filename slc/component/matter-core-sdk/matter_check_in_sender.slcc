@@ -14,8 +14,6 @@ include:
   - path: third_party/matter_sdk/src
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
-  - path: third_party/nlassert/include
-  - path: third_party/nlio/include
 label: sender
 package: matter
 provides:
@@ -29,5 +27,7 @@ source:
 requires:
   - name: matter_icd_core
 
+  - name: matter_nlassert
+  - name: matter_nlio
 ui_hints:
   visibility: never

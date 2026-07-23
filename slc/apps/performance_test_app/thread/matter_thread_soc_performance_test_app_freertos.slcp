@@ -5,9 +5,22 @@ category: Matter Application
 quality: internal
 package: matter
 
+sdk:
+  id: simplicity_sdk
+  version: "2026.12.0"
+  vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.10.0"
+    vendor: silabs
+  - id: thread
+    version: "3.2.0"
+    vendor: silabs
+  - id: multiprotocol
+    version: "1.2.0"
+    vendor: silabs
+  - id: zigbee
+    version: "9.2.0"
     vendor: silabs
 
 component:

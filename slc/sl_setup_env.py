@@ -47,6 +47,17 @@ from datetime import datetime
 from zipfile import ZipFile
 from pathlib import Path
 from script.get_zap_version import get_zap_version
+from script.stack_deps import load_flattened_stack_deps
+from script.stack_tooling import (
+    assert_no_legacy_sdk_paths,
+    configure_conan_remotes,
+    default_matter_sdk_source_root,
+    export_local_packages,
+    resolve_stack_roots,
+    run_generate_pkg_slt,
+    slt_install_pkg_slt,
+    sync_matter_submodules,
+)
 
 
 
@@ -90,15 +101,36 @@ class MatterEnvSetup:
         os.makedirs(self.tools_folder_path, exist_ok=True)
 
     def sync_submodules(self):
-        """Sync and initialize Git submodules."""
-        logging.info("Syncing and checking out submodules")
+        """Sync extension git submodules and matter_sdk nested nlio/nlassert/mbedtls."""
+        logging.info("Syncing extension submodules")
         try:
-            subprocess.run(["git", "submodule", "sync"], check=True)
-            subprocess.run(["git", "submodule", "update", "--init"], check=True)
+            sync_matter_submodules(Path(self.silabs_chip_root))
         except subprocess.CalledProcessError as e:
             logging.error(f"Cannot checkout submodules: {e}")
             sys.exit(1)
-        logging.info("Submodules checked out successfully")
+        logging.info("Extension submodules checked out successfully")
+
+    def setup_stack_packages(self):
+        """Configure Conan remotes, export matter packages, and install stack via SLT."""
+        repo_root = Path(self.silabs_chip_root)
+        assert_no_legacy_sdk_paths(repo_root)
+        configure_conan_remotes(repo_root)
+        run_generate_pkg_slt(repo_root)
+        os.environ["MATTER_SDK_SOURCE_ROOT"] = self.matter_sdk_source_root
+        export_local_packages(repo_root)
+        slt_install_pkg_slt(
+            self.slt_cli_path,
+            repo_root / "packages" / "matter" / "pkg.slt",
+        )
+        dep_versions = load_flattened_stack_deps(repo_root)
+        roots = resolve_stack_roots(self.slt_cli_path, dep_versions)
+        self.sisdk_root = roots["SISDK_ROOT"]
+        self.wiseconnect_root = roots.get("WISECONNECT_ROOT", "")
+        self.stack_sdk_paths = roots.get("STACK_SDK_PATHS", "")
+        logging.info("SISDK_ROOT (platform)=%s", self.sisdk_root)
+        logging.info("WISECONNECT_ROOT (platform_siwx91x)=%s", self.wiseconnect_root)
+        logging.info("STACK_SDK_PATHS=%s", self.stack_sdk_paths)
+        logging.info("MATTER_SDK_SOURCE_ROOT=%s", self.matter_sdk_source_root)
 
     def set_platform_vars(self):
         """Set platform-specific variables and URLs for tool downloads."""
@@ -121,9 +153,13 @@ class MatterEnvSetup:
             self.slt_cli_path = os.path.join(self.tools_folder_path, "slt.exe")
         else:
             self.slt_cli_path = os.path.join(self.tools_folder_path, "slt")
-        self.sisdk_root = os.path.join(self.silabs_chip_root, "third_party", "simplicity_sdk")
-        self.wiseconnect_root = os.path.join(self.silabs_chip_root, "third_party", "wifi_sdk")
         self.zap_path = os.path.join(self.silabs_chip_root, "slc", "tools", "zap")
+        self.matter_sdk_source_root = str(
+            default_matter_sdk_source_root(Path(self.silabs_chip_root))
+        )
+        self.sisdk_root = ""
+        self.wiseconnect_root = ""
+        self.stack_sdk_paths = ""
 
     def remove_tools_directory(self):
         """Remove slc/tools and recreate an empty directory (cross-platform)."""
@@ -271,9 +307,11 @@ class MatterEnvSetup:
                 outfile.write(
                     f"TOOLS_PATH={arm_gcc_bin}{path_separator}{self.paths.get('slc-cli')}{path_separator}{os.path.join(java_path, 'bin')}{path_separator}{commander_path}{path_separator}{self.paths.get('ninja')}{path_separator}{cmake_bin}{path_separator}\n")
                 outfile.write(f"silabs_chip_root={self.silabs_chip_root}\n")
+                outfile.write(f"MATTER_SDK_SOURCE_ROOT={self.matter_sdk_source_root}\n")
                 outfile.write(f"NINJA_PATH={ninja_path}\n")
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
+                outfile.write(f"STACK_SDK_PATHS={self.stack_sdk_paths}\n")
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
                 outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
                 outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
@@ -353,6 +391,7 @@ class MatterEnvSetup:
             self.remove_tools_directory()
         self.sync_submodules()
         self.download_and_extract_slt_cli()
+        self.setup_stack_packages()
         self.setup_tools()
         self.write_env_file()
         logging.info("\nEnvironment setup completed successfully")

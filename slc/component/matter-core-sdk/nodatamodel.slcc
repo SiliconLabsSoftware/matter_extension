@@ -13,8 +13,6 @@ include:
   - path: third_party/matter_sdk/src
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
-  - path: third_party/nlassert/include
-  - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/controller
     file_list:
       - path: CHIPDeviceControllerFactory.h
@@ -45,6 +43,9 @@ label: nodatamodel
 package: matter
 provides:
   - name: matter_nodatamodel
+requires:
+  - name: matter_nlassert
+  - name: matter_nlio
 quality: production
 metadata:
   sbom:

@@ -5,12 +5,22 @@ category: Matter Application
 quality: production
 package: matter
 
+sdk:
+  id: simplicity_sdk
+  version: "2026.12.0"
+  vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.10.0"
     vendor: silabs
-  - id: wiseconnect3_sdk
-    version: "4.0.1"
+  - id: wifi
+    version: "4.2.0"
+    vendor: silabs
+  - id: platform_siwx91x
+    version: "4.2.0"
+    vendor: silabs
+  - id: bluetooth_le_siwx91x
+    version: "4.2.0"
     vendor: silabs
 
 component:
@@ -49,6 +59,7 @@ component:
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: segger_rtt
+    from: segger
 
   - id: matter_ota_requestor
   - id: matter_ota_support
@@ -62,70 +73,65 @@ component:
   - id: matter_lwip
 
   - id: wifi_resources
+    from: wifi
   - id: sl_si91x_common_flash_nvm3
+    from: platform_nwp_siwx91x
   - id: sl_si91x_wireless
+    from: wifi
   - id: wifi
+    from: wifi
   - id: basic_network_config_manager
+    from: wifi
   - id: si91x_mem_config_3
+    from: platform_siwx91x
   - id: sl_si91x_basic_buffers
+    from: wifi
   - id: sl_si91x_mcu
+    from: platform_siwx91x
   - id: freertos
+    from: freertos
   - id: slist
+    from: platform_core
   - id: sl_assert
+    from: platform_core
   - id: cmsis_rtos2_init
+    from: cmsis
   - id: matter_platform_siwx917
   - id: wiseconnect_common
+    from: wifi
   - id: sl_si91x_soc_soft_reset
+    from: platform_siwx91x
   - id: ble
+    from: bluetooth_le_siwx91x
   - id: sl_si91x_button_917
     instance: [btn0, btn1]
+    from: platform_siwx91x
   - id: sl_si91x_led_917
     instance: [led0]
     condition: [si917_dev_board]
+    from: platform_siwx91x
   - id: sl_si91x_led_917
     instance: [led0, led1]
     condition: [si917_prod_board]
+    from: platform_siwx91x
   - id: sl_si91x_led_917
     instance: [led0, led1]
     condition: [device_is_917_module_dev_kit]
+    from: platform_siwx91x
   - instance: [timer0]
     id: ulp_timers_instance
+    from: platform_siwx91x
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
-    directory: common
-    file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
-
-include:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/include
-    file_list:
-      - path: AppConfig.h
-      - path: AppEvent.h
-      - path: AppTask.h
-      - path: LockManager.h
-      - path: CHIPProjectConfig.h
-    directory: include
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
 
 define:
   - name: CCP_SI917_BRINGUP
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_LOCK
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"

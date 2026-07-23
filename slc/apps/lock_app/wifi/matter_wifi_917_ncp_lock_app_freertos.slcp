@@ -6,12 +6,25 @@ category: Matter Application
 quality: production
 package: matter
 
+sdk:
+  id: simplicity_sdk
+  version: "2026.12.0"
+  vendor: silabs
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.10.0"
     vendor: silabs
-  - id: wiseconnect3_sdk
-    version: "4.0.1"
+  - id: wifi
+    version: "4.2.0"
+    vendor: silabs
+  - id: platform_siwx91x
+    version: "4.2.0"
+    vendor: silabs
+  - id: platform_nwp_siwx91x
+    version: "4.2.0"
+    vendor: silabs
+  - id: bluetooth_le_siwx91x
+    version: "4.2.0"
     vendor: silabs
 
 component:
@@ -83,39 +96,14 @@ component:
 #  - name: matter_default_lcd_config
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
-    directory: common
-    file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
-
-include:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/include
-    file_list:
-      - path: AppConfig.h
-      - path: AppEvent.h
-      - path: AppTask.h
-      - path: LockManager.h
-      - path: CHIPProjectConfig.h
-    directory: include
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/LockManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/lock-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
 
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
-    value: "1"
-  - name: IS_DEMO_LOCK
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"

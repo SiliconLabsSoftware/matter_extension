@@ -103,10 +103,13 @@ class Upgrade:
             self.errors += 1
 
     def upgrade_project(self):
-        # Perform the upgrade as before
-        SimplicitySDKpath = "third_party/simplicity_sdk"
+        sisdk_path = os.getenv("SISDK_ROOT")
+        if not sisdk_path or not os.path.isdir(sisdk_path):
+            logging.error("SISDK_ROOT is not set. Run sl_setup_env.py and source slc/tools/.env")
+            self.errors += 1
+            sys.exit(1)
         upgrade_cmd = [
-            self.app.slc_path, "upgrade", "-s", SimplicitySDKpath, "-p",
+            self.app.slc_path, "upgrade", "-s", sisdk_path, "-p",
             self.reference_project_file, "-extid", f"matter:{self.matter_extension_version}"
         ]
         subprocess.run(upgrade_cmd)
