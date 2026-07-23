@@ -30,6 +30,10 @@ from verify_vendor_silabs import VerifyVendorSilabs
 # Configure logging
 logger = logging.getLogger(__name__)
 
+IGNORED_RELATIVE_PATHS = {
+    "slc/apps/openthread_border_router_doc/matter_thread_host_openthread_border_router_doc.slcp",
+}
+
 def configure_logging(verbose):
     """
     Configure logging level based on the verbose flag.
@@ -107,6 +111,10 @@ def main():
     configure_logging(args.verbose)
 
     directory = args.directory
+    ignored_paths = {
+        os.path.normpath(os.path.join(directory, relative_path))
+        for relative_path in IGNORED_RELATIVE_PATHS
+    }
     extensions = ('.slcc', '.slcp', '.slce', '.slcw')
     files = find_files_with_extension(directory, extensions)
 
@@ -124,6 +132,10 @@ def main():
         # Skip TrustZone secure project
         if re.search(r'/trustzone/.*-s\.slcp$', file_path):
             logger.info(f"Skipping TrustZone secure project: {file_path}")
+            continue
+
+        if os.path.normpath(file_path) in ignored_paths:
+            logger.info(f"Skipping ignored project: {file_path}")
             continue
 
         # Verify 'package: matter' or 'id: matter'
