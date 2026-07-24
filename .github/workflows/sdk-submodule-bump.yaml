@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       sisdk-version:
-        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → release_2.9-1.6)'
+        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → release_2.9-1.6, 2026.12 → release_2.10-1.6.1)'
         required: true
         type: choice
         default: '2026.6'
         options:
           - '2025.12'
           - '2026.6'
+          - '2026.12'
       sisdk-tag:
         description: 'SDK (sisdk-prerelease and wiseconnect-prerelease) tag to bump to (e.g., v2026.6-build.sisdk-2026.6-558 or v2025.12-build.2710)'
         required: true
@@ -35,6 +36,9 @@ jobs:
               ;;
             "2026.6")
               TARGET_BRANCH="release_2.9-1.6"
+              ;;
+            "2026.12")
+              TARGET_BRANCH="release_2.10-1.6.1"
               ;;
           esac
 
