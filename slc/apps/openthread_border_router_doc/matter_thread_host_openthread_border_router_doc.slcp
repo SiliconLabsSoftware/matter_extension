@@ -4,7 +4,6 @@ description: Guides users to main documentation for setting up the OpenThread Bo
 category: Matter Documentation
 quality: production
 package: matter
-vendor: silabs
 
 filter:
   - name: Type

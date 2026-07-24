@@ -126,6 +126,10 @@ def main():
             logger.info(f"Skipping TrustZone secure project: {file_path}")
             continue
 
+        if os.path.basename(file_path) in verifier.ignore_files:
+            logger.info(f"Skipping ignored project: {file_path}")
+            continue
+
         # Verify 'package: matter' or 'id: matter'
         if not verify_package_matter(file_path):
             if file_path.endswith(".slce"):
