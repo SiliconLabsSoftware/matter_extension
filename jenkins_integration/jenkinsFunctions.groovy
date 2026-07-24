@@ -100,15 +100,6 @@ def run_code_size_analysis() {
                     fi
                 }
 
-                determine_compiler() {
-                    local path=$1
-                    if [[ "$path" == *"_solution_llvm"* ]]; then
-                        echo "llvm"
-                    else
-                        echo "gcc"
-                    fi
-                }
-
                 perform_code_analysis() {
                     local map_file_path=$1
 
