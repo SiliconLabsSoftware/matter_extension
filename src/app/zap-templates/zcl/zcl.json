@@ -254,12 +254,6 @@
             "SelectedChime",
             "Enabled"
         ],
-        "Dynamic Lighting": [
-            "ClusterRevision",
-            "FeatureMap",
-            "CurrentEffectID",
-            "CurrentSpeed"
-        ],
         "Commissioner Control": [
             "SupportedDeviceCategories",
             "FeatureMap",
@@ -1115,9 +1109,7 @@
             "ClusterRevision"
         ],
         "Window Covering": [
-            "ClusterRevision",
-            "OperationalStatus",
-            "SafetyStatus"
+            "ClusterRevision"
         ],
         "Zone Management": [
             "MaxUserDefinedZones",
