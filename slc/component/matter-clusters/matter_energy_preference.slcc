@@ -12,10 +12,12 @@ metadata:
 provides:
   - name: matter_energy_preference
 source:
-  - path: third_party/matter_sdk/src/app/clusters/energy-preference-server/energy-preference-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/energy-preference-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
 include:
   - path: third_party/matter_sdk/src/app/clusters/energy-preference-server
     file_list:
+      - path: energy-preference-delegate.h
       - path: energy-preference-server.h
 template_contribution:
   - name: component_catalog
