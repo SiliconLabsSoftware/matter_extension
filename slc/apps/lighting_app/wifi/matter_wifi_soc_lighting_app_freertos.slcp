@@ -7,10 +7,10 @@ package: matter
 
 sdk_extension:
   - id: matter
-    version: "2.8.1"
+    version: "2.9.0"
     vendor: silabs
   - id: wiseconnect3_sdk
-    version: "4.0.1"
+    version: "4.1.0"
     vendor: silabs
 
 component:
@@ -19,7 +19,9 @@ component:
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
 
-  - id: mbedtls_pki_aws
+  - id: mbedtls_x509_use_aws
+    condition: [matter_aws]
+  - id: mbedtls_x509_create_aws
     condition: [matter_aws]
   - id: mbedtls_entropy_default_aws
     condition: [matter_aws]
@@ -58,6 +60,7 @@ component:
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart
+  - id: matter_lwip
 
   - id: matter_lighting
 

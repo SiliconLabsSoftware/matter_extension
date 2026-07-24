@@ -30,8 +30,6 @@ include:
   - path: MatterConfig.h
   - path: LEDWidget.h
   - path: sl_systemview_config.h
-  - path: PigweedLogger.h
-  - path: Rpc.h
   - path: silabs_creds.h
   - path: MemMonitoring.h
   - path: BaseApplication.h
@@ -44,7 +42,6 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/OTAConfig.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/SoftwareFaultReports.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/silabs_utils.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/syscalls_stubs.cpp
 
 define:
   - name: CHIP_ADDRESS_RESOLVE_IMPL_INCLUDE_HEADER

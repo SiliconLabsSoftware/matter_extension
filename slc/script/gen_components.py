@@ -260,7 +260,7 @@ if __name__ == '__main__':
                         if '=' in define: # looks for defines and splits the string to a define, value pair 
                             define, value = define.split('=')
 
-                        if define.startswith(('DISPLAY_ENABLED', 'QR_CODE_ENABLED')):
+                        if define.startswith(('SL_MATTER_DISPLAY_ENABLED', 'SL_MATTER_QR_CODE_ENABLED')):
                             # Skip defines related to LCD
                             continue
                         
@@ -268,7 +268,7 @@ if __name__ == '__main__':
                             # Skip defines related to simplicity SDK and LWIP
                             continue
 
-                        if define.startswith(('DISPLAY_ENABLED', 'EXT_IRQ_COUNT', 'QR_CODE_ENABLED', 'SLI_', 'SI91X_', 'SPI_MULTI', 'SRAM_', 'SYSCALLS_', 'configUSE_', 'SiWG917', 'EXP_BOARD')):
+                        if define.startswith(('SL_MATTER_DISPLAY_ENABLED', 'EXT_IRQ_COUNT', 'SL_MATTER_QR_CODE_ENABLED', 'SLI_', 'SI91X_', 'SPI_MULTI', 'SRAM_', 'SYSCALLS_', 'configUSE_', 'SiWG917', 'EXP_BOARD')):
                             # Blanket skip all defines added by 917, this needs to be fixed in CSA eventually
                             continue
 
