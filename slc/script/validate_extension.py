@@ -13,8 +13,11 @@ Ownership model:
 
 Per section policy:
   Config File on Include Path
-    Path based on the config file path embedded in the finding.
-    MATTER_FAILURE if matter owned, SUBMODULE otherwise.
+    Ownership from the extension/component id in the finding (e.g.
+    %extension-silabs.matter%), not the config header path. Header paths are
+    often under third_party/matter_sdk, which would incorrectly classify as
+    SUBMODULE. MATTER_FAILURE for Matter extension findings, otherwise path
+    based.
 
   Any other section (including SDK warnings, Studio SDK Metadata)
     Fully enforced, path based: SUBMODULE if third_party/, otherwise
@@ -45,6 +48,13 @@ _THIRD_PARTY_ROOT = _REPO_ROOT / "third_party"
 # Finding categories
 MATTER_FAILURE = "matter-failure"
 SUBMODULE = "submodule"
+
+# Matches Matter extension component ids in slc validate findings, e.g.
+#   %extension-silabs.matter%matter_lock
+#   (affects silabs.matter.matter_shell)
+_MATTER_EXTENSION_FINDING = re.compile(
+    r"%extension-silabs\.matter%|\bsilabs\.matter\."
+)
 
 def _parse_sections(output: str) -> Dict[str, List[str]]:
     """
@@ -161,6 +171,14 @@ def _classify_finding(section: str, finding: str, filepath: Optional[str] = None
     filepath: for SDK warnings the path is known separately, pass it explicitly.
               For all other sections it is extracted from the finding string.
     """
+    # Config headers often live under third_party/matter_sdk; attribute ownership
+    # from the extension/component id so Matter findings fail CI.
+    if section == "Config File on Include Path":
+        if _MATTER_EXTENSION_FINDING.search(finding):
+            return MATTER_FAILURE
+        path_str = filepath if filepath is not None else _extract_path_from_finding(finding)
+        return _path_based(path_str)
+
     path_str = filepath if filepath is not None else _extract_path_from_finding(finding)
     return _path_based(path_str)
 
