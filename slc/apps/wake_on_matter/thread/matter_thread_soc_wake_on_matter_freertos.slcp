@@ -73,7 +73,6 @@ component:
       - device_series_3
 
   # Override configuration for JTAG use
-  - id: matter_segger_rtt
   - id: configuration_over_swo
   - id: matter_test_event_trigger
 requires:
