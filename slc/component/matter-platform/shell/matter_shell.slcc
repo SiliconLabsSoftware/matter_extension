@@ -33,7 +33,7 @@ include:
       - path: Help.h
       - path: WiFi.h
         condition: [matter_wifi]
-  - path: third_party/matter_sdk/examples/platform/silabs
+  - path: third_party/matter_sdk/examples/platform/silabs/shell
     file_list:
       - path: MatterShell.h
   - path: third_party/matter_sdk/examples/shell/shell_common/include
@@ -68,7 +68,7 @@ include:
       - path: IMShellCommands.h
 
 source:
-  - path: third_party/matter_sdk/examples/platform/silabs/MatterShell.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/MatterShell.cpp
   - path: third_party/matter_sdk/examples/shell/shell_common/cmd_misc.cpp
   - path: third_party/matter_sdk/examples/shell/shell_common/cmd_otcli.cpp
     condition: [matter_thread]
