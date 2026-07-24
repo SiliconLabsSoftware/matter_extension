@@ -26,6 +26,7 @@ include:
         unless: [matter_code_driven_dm]
       - path: operational-state-cluster-objects.h
       - path: operational-state-server.h
+      - path: OperationalStateCluster.h
       - path: OperationalStateDelegate.h
       - path: OvenCavityOperationalStateCluster.h
       - path: RvcOperationalStateCluster.h
