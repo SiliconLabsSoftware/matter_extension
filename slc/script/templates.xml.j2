@@ -47,6 +47,9 @@
 {%- if example.quality == 'internal' or (templates_hidden is defined and example.name in templates_hidden) %}
     <properties key="core.hidden" value="true"/>
 {%- endif %}
+{%- else %}
+    <properties key="core.hidden" value="true"/>
+{%- endif %}
   </descriptors>
 {%- endfor %}
 </model:MDescriptors>
