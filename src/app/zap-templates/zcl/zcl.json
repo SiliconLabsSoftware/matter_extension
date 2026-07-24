@@ -2,7 +2,7 @@
     "description": "Matter SDK ZCL data",
     "category": "matter",
     "version": 1,
-    "requiredFeatureLevel": 109,
+    "requiredFeatureLevel": 110,
     "xmlRoot": [
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/.",
         "./../../../../third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"
@@ -253,6 +253,12 @@
         "Chime": [
             "SelectedChime",
             "Enabled"
+        ],
+        "Dynamic Lighting": [
+            "ClusterRevision",
+            "FeatureMap",
+            "CurrentEffectID",
+            "CurrentSpeed"
         ],
         "Commissioner Control": [
             "SupportedDeviceCategories",
@@ -1109,7 +1115,9 @@
             "ClusterRevision"
         ],
         "Window Covering": [
-            "ClusterRevision"
+            "ClusterRevision",
+            "OperationalStatus",
+            "SafetyStatus"
         ],
         "Zone Management": [
             "MaxUserDefinedZones",

@@ -181,7 +181,22 @@ jobs:
            mgm24-support: false
            mgm24-internal-support: false
            wifi-soc-support: false
-
+    build_wake_on_matter_app:
+       name: Build Wake on Matter App
+       needs: [set-build-type, cache-tools]
+       uses: ./.github/workflows/platform-builder.yaml
+       with:
+           example-app: "wake_on_matter"
+           build-type: ${{ needs.set-build-type.outputs.build-type }}
+           mgm24-support: false
+           mg24-internal-support: false
+           mg26-internal-support: false
+           mgm26-internal-support: false
+           mgm24-internal-support: false
+           sixg301-support: false
+           trustzone-support: false
+           wifi-soc-support: false       
+ 
     build_oven_app:
         name: Build Oven App
         needs: [set-build-type, cache-tools]
@@ -250,6 +265,7 @@ jobs:
             - build_oven_app
             - build_rangehood_app
             - build_series_3_bootloader
+            - build_wake_on_matter_app
         if: success()
 
         steps:
@@ -264,7 +280,7 @@ jobs:
         name: Build Coverage
         needs:
             - set-build-type
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}

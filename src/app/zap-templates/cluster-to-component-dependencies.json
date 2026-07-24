@@ -204,6 +204,12 @@
     ]
   },
   {
+    "clusterCode": "dynamic lighting-server",
+    "value": [
+      "%extension-matter%matter_dynamic_lighting"
+    ]
+  },
+  {
     "clusterCode": "ecosystem information-server",
     "value": [
       "%extension-matter%matter_ecosystem_information"

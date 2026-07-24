@@ -33,6 +33,13 @@ jobs:
               uses: actions/checkout@v7
               with:
                   submodules: "true"
+                  lfs: true
+
+            - name: Pull LFS objects in submodules
+              run: |
+                  git -C third_party/simplicity_sdk lfs pull
+                  git -C third_party/wifi_sdk lfs pull
+
             - name: Cache tools
               uses: ./.github/actions/cache-tools
             - name: Build ${{ inputs.example-app }}
@@ -65,12 +72,10 @@ jobs:
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'series-3-bootloader' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.out' || '' }}
-                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/debug/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/debug/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/debug/*.map' || '' }}
-                      !out/**/*_bootloader/build/debug/*.map
-                      !out/**/*_bootloader/build/debug/*.out
+                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/**/*.map' || '' }}
+                      !out/**/*_bootloader/build/**/*.map
                       !out/**/*copy-sources/**
                   if-no-files-found: warn
                   overwrite: true
