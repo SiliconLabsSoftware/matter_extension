@@ -271,7 +271,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
             }
             steps {
                 script {
@@ -286,7 +286,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
