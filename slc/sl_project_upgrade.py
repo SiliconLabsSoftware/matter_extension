@@ -21,12 +21,12 @@ import logging
 import os
 import sys
 import subprocess
-from sl_create_new_app import createApp
+from sl_create_new_app import CreateApp
 
 class Upgrade:
     def __init__(self, reference_project_file, verbose=False):
         self.EXAMPLE_USAGE = "python slc/sl_project_upgrade.py <PathToReferenceProjectFile(.slcp)>"
-        self.app = createApp()
+        self.app = CreateApp()
         self.reference_project_file = reference_project_file
         self.verbose = verbose
         self.setup_logging()
