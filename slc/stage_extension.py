@@ -24,13 +24,13 @@ import argparse
 
 # Directories to exclude from copying
 exclude_root_directories = [
-    'matter_extension/out',
-    'matter_extension/slc/tools'
+    'out',
+    'slc/tools'
 ]
 
 # Files to exclude from copying
 exclude_files = [
-    'matter_extension/sonar-project.properties'
+    'sonar-project.properties'
 ]
 
 exclude_submodules = [
@@ -61,7 +61,7 @@ matter_support_includes = [
 ]
 
 
-def should_exclude(root, path):
+def should_exclude(source_directory, root, path):
     """
     Check if any part of the path matches the exclude list.
     """
@@ -70,44 +70,45 @@ def should_exclude(root, path):
         # print(f"Excluding hidden path: {path}")
         return True
 
-    full_path = os.path.join(root, path).replace(os.sep, "/")
+    relative_path = os.path.relpath(
+        os.path.join(root, path), source_directory).replace(os.sep, "/")
 
     # Exclude submodules
-    if "third_party/" in full_path:
-        if any(exclude in full_path for exclude in exclude_submodules):
+    if "third_party/" in relative_path:
+        if any(exclude in relative_path for exclude in exclude_submodules):
             # print(f"Excluding submodule path: {full_path}")
             return True
 
     # Check for matter_support/board-support/ specific includes
-    if "matter_support/board-support/" in full_path or "matter_support/sdk-copies/" in full_path:
-        if not any(include in full_path for include in matter_support_includes):
+    if "matter_support/board-support/" in relative_path or "matter_support/sdk-copies/" in relative_path:
+        if not any(include in relative_path for include in matter_support_includes):
             # print(f"Excluding matter_support path: {full_path}")
             return True
 
     # Check for matter_support specific includes
-    if "matter_support/" in full_path and not ("matter_support/board-support" in full_path or "matter_support/sdk-copies" in full_path):
-        if not any(include in full_path for include in matter_support_includes):
+    if "matter_support/" in relative_path and not ("matter_support/board-support" in relative_path or "matter_support/sdk-copies" in relative_path):
+        if not any(include in relative_path for include in matter_support_includes):
             # print(f"Excluding matter_support_2 path: {full_path}")
             return True
 
     # Exclude matter_sdk directories
-    if "matter_sdk/" in full_path:
-        if any(exclude in full_path for exclude in matter_sdk_exclude):
+    if "matter_sdk/" in relative_path:
+        if any(exclude in relative_path for exclude in matter_sdk_exclude):
             # print(f"Excluding matter_sdk path: {full_path}")
             return True
 
     # Exclude directories listed in exclude_directory
     for exclude in exclude_root_directories:
-        if exclude in full_path:
+        if exclude in relative_path:
             # print(f"Excluding directory from exclude list: {full_path}")
             return True
 
     # Exclude directories if any part of the path matches exclude_directory
-    if any(exclude in full_path.split("/") for exclude in exclude_root_directories):
+    if any(exclude in relative_path.split("/") for exclude in exclude_root_directories):
         # print(f"Excluding directory from split path: {full_path}")
         return True
 
-    if any(full_path.endswith(exclude) for exclude in exclude_files):
+    if any(relative_path.endswith(exclude) for exclude in exclude_files):
         return True
 
     return False
@@ -127,11 +128,11 @@ def copy_directory(source_directory, target_location):
     # Walk through the source directory
     for root, dirs, files in os.walk(source_directory):
         # Skip directories that should be excluded
-        dirs[:] = [d for d in dirs if not should_exclude(root, d)]
+        dirs[:] = [d for d in dirs if not should_exclude(source_directory, root, d)]
 
         # Copy files
         for file in files:
-            if should_exclude(root, file) or file.endswith(".slt"):
+            if should_exclude(source_directory, root, file) or file.endswith(".slt"):
                 continue
             source_file = os.path.join(root, file)
             if not os.path.exists(source_file):
