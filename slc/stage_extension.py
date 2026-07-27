@@ -28,6 +28,11 @@ exclude_root_directories = [
     'matter_extension/slc/tools'
 ]
 
+# Files to exclude from copying
+exclude_files = [
+    'matter_extension/sonar-project.properties'
+]
+
 exclude_submodules = [
     'simplicity_sdk',
     'wifi_sdk',
@@ -65,7 +70,6 @@ def should_exclude(root, path):
         # print(f"Excluding hidden path: {path}")
         return True
 
-    # Normalize separators so exclusion rules (written with '/') work on Windows.
     full_path = os.path.join(root, path).replace(os.sep, "/")
 
     # Exclude submodules
@@ -103,6 +107,9 @@ def should_exclude(root, path):
         # print(f"Excluding directory from split path: {full_path}")
         return True
 
+    if any(full_path.endswith(exclude) for exclude in exclude_files):
+        return True
+
     return False
 
 
@@ -124,11 +131,7 @@ def copy_directory(source_directory, target_location):
 
         # Copy files
         for file in files:
-            # Skip hidden files
-            if file.startswith("."):
-                continue
-            # Skip .slt files
-            if file.endswith(".slt"):
+            if should_exclude(root, file) or file.endswith(".slt"):
                 continue
             source_file = os.path.join(root, file)
             if not os.path.exists(source_file):
