@@ -22,3 +22,12 @@ updates:
     allow:
       - dependency-name: "third_party/matter_support"
     target-branch: "release_2.9-1.6"
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "08:00"
+    allow:
+      - dependency-name: "third_party/matter_support"
+    target-branch: "release_2.10-1.6.1"
