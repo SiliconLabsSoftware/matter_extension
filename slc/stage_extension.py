@@ -97,16 +97,10 @@ def should_exclude(source_directory, root, path):
             # print(f"Excluding matter_sdk path: {full_path}")
             return True
 
-    # Exclude directories listed in exclude_directory
+    # Exclude configured root-relative directories only.
     for exclude in exclude_root_directories:
-        if exclude in relative_path:
-            # print(f"Excluding directory from exclude list: {full_path}")
+        if relative_path == exclude or relative_path.startswith(f"{exclude}/"):
             return True
-
-    # Exclude directories if any part of the path matches exclude_directory
-    if any(exclude in relative_path.split("/") for exclude in exclude_root_directories):
-        # print(f"Excluding directory from split path: {full_path}")
-        return True
 
     if any(relative_path.endswith(exclude) for exclude in exclude_files):
         return True
