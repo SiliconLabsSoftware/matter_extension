@@ -11,31 +11,34 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "zigbee-matter-light": [
+        "zigbee_light": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"]
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
             }
         ],
-        "platform-app": [
+        "platform_template": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
             }
         ]
     },
     "full": {
-
         "default": [
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
@@ -44,46 +47,186 @@
             {
                 "boards": ["brd4186c", "brd4187c", "brd2601b"],
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            }
-        ],
-        "zigbee-matter-light":  [
-            {
-                "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential","'--with matter_zigbee_sequential;matter'"] 
             },
             {
-                "boards": ["brd4186c", "brd4187c", "brd2601b"],
-                "arguments": ["--output_suffix sequential-copy-sources","'--with matter_zigbee_sequential;matter'", "--copy-sources"] 
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-copy-sources","--with toolchain_llvm", "--copy-sources"]
             }
         ],
-        "platform-app": [
+        "lighting_app": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix icd","'--with_app matter_icd_core;matter'"] 
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix multipan","--with_app matter_multipan_internal"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm","--with toolchain_llvm"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-lto", "--with toolchain_llvm_lto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd", "-pids application"]
+            }
+        ],
+        "lock_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            }
+        ],
+        "multi_sensor_app" : [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            }
+        ],
+        "zigbee_light":  [
+            {
+                "boards": ["brd4186c", "brd4187c", "brd2601b"],
+                "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
+            },
+            {
+                "boards": ["brd4186c"],
+                "arguments": ["--output_suffix sequential-copy-sources","--with_app matter_zigbee_sequential", "--copy-sources"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lto", "--with_app matter_no_debug,toolchain_gcc_lto", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix nolto", "--with_app matter_no_debug", "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart", "-pids application"]
+            }
+        ],
+        "platform_template": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd","--with_app matter_icd_core,matter_peripherals"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd-copy-sources","--with_app matter_icd_core,matter_peripherals", "--without_app matter_log_rtt", "--copy-sources"]
             }
         ],
         "thermostat": [
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix cmp-concurrent","'--with_app matter_zigbee_concurrent;matter,matter_zigbee_multiprotocol_common;matter'"]
+                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
         ]
     },
     "custom-sqa": {
-        "lock-app" :[
+        "lock_app" :[
             {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'"]
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
-                "boards": ["brd4186c"],
-                "arguments": ["--output_suffix low-power-async-reports",
-                              "'--with matter_platform_low_power;matter'",
-                              "'--without matter_shell;matter,matter_qr_code;matter,matter_lcd;matter,matter_lcd_917SOC;matter,matter_thread_cli;matter,matter_default_lcd_config;matter,matter_uart;matter,matter_log_uart;matter'",
-                              "--configuration CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED:0"]
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sqa-lto",
+                              "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix wdog",
+                              "--with_app watchdog_manager,matter_tests"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota-enc",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            }
+        ],
+        "lighting_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sqa-lto",
+                              "--with_app toolchain_gcc_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sqa-lto-ota-2", "--with_app toolchain_gcc_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix m-ota-enc",
+                              "--without_app matter_ota_support",
+                              "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-sqa-lto",
+                              "--with toolchain_llvm_lto"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix llvm-sqa-lto-ota-2", "--with toolchain_llvm_lto", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "light_switch_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "platform_template": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "closure_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix ota-2", "-pids application",
+                              "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ]
-    } 
+    }
 }

@@ -1,0 +1,19 @@
+category: Matter|Examples
+package: matter
+description: >
+  Provides example component for a Rangehood application. This component should be 
+  included in all rangehood applications to help resolve SLC dependencies. Only applicable to rangehood applications.
+id: matter_rangehood
+quality: production
+provides:
+  - name: matter_rangehood
+metadata:
+  sbom:
+    license: "Apache 2.0"
+template_file:
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/include/AppTask.h
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/include/AppTaskImpl.h
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/include/RangeHoodConfig.h
+    file_id: rangehood_config

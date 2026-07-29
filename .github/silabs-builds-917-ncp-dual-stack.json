@@ -1,0 +1,10 @@
+{
+    "custom-sqa": {
+        "lock_app": [
+            {
+                "boards": ["brd4120a", "brd4187c"],
+                "arguments": ["--with_app matter_aws,matter_aws_transport_nwp"]
+            }
+        ]
+    }
+}

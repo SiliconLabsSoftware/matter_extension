@@ -14,7 +14,7 @@ workspace_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
 
-from jenkins_integration.github.github_workflow import get_latest_sha, get_workflow_info, wait_for_artifacts
+from jenkins_integration.github.github_workflow import get_workflow_info, wait_for_artifacts
 from jenkins_integration.artifacts.ubai_client import search_file_in_ubai
 from jenkins_integration.artifacts.artifact_processor import download_and_upload_artifacts
 
@@ -28,64 +28,20 @@ def parse_arguments():
     """
     parser = argparse.ArgumentParser(description="Upload build artifacts for Matter project workflows")
     parser.add_argument("--branch_name", required=True, help="Name of the branch or PR (e.g., 'main', 'PR-123')")
+    parser.add_argument("--build_number", required=True, help="Build number from Jenkins (e.g., '1')")
     parser.add_argument("--sqa", required=True, choices=['true', 'false'], help="Boolean flag to indicate SQA builds")
     parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA)")
+    parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA)")
     parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
-    
+
     args = parser.parse_args()
-    args.sqa = args.sqa.lower() == 'true'
+    args.sqa = True if args.sqa == 'true' else False
     return args
 
 
-def determine_workflow_info(args):
+def get_dev_workflow_info(args):
     """
-    Determine workflow information based on build type (SQA vs DEV).
-    
-    Args:
-        args: Parsed command line arguments
-        
-    Returns:
-        dict: Workflow information containing commit_sha, build_number, and workflow_id
-    """
-    if args.sqa:
-        return _get_sqa_workflow_info(args)
-    else:
-        return _get_dev_workflow_info(args)
-
-
-def _get_sqa_workflow_info(args):
-    """
-    Get workflow information for SQA builds.
-    
-    Args:
-        args: Parsed command line arguments
-        
-    Returns:
-        dict: Workflow information for SQA builds
-        
-    Raises:
-        ValueError: If workflow data is invalid or wrong job type is triggered
-        RuntimeError: If API request fails or no matching workflow is found
-    """
-    try:
-        commit_sha = args.commit_sha
-        build_number = args.run_number
-        _, workflow_id = get_workflow_info(args.branch_name, commit_sha, sqa=True)
-        
-        return {
-            'commit_sha': commit_sha,
-            'build_number': build_number,
-            'workflow_id': workflow_id,
-            'branch_name': args.branch_name
-        }
-    except (ValueError, RuntimeError) as e:
-        print(f"Failed to get SQA workflow info for branch '{args.branch_name}': {e}")
-        sys.exit(1)
-
-
-def _get_dev_workflow_info(args):
-    """
-    Get workflow information for regular (non-SQA) builds.
+    Get workflow information for the triggered job.
     
     Args:
         args: Parsed command line arguments
@@ -98,25 +54,19 @@ def _get_dev_workflow_info(args):
         RuntimeError: If GitHub API request fails or workflow info cannot be determined
     """
     try:
-        commit_sha, pr_build_number, head_branch = get_latest_sha(args.branch_name)
-        
-        if pr_build_number is None:
-            run_number, workflow_id = get_workflow_info(args.branch_name, commit_sha)
-            build_number = run_number
-            branch_name = args.branch_name
-        else:
-            run_number, workflow_id = get_workflow_info(pr_build_number, commit_sha, pr=True, head_branch=head_branch)
-            build_number = run_number
-            branch_name = args.branch_name
-        
+        run_number, workflow_id, commit_sha = get_workflow_info(args.branch_name)
+        branch_name = args.branch_name
+        build_number = args.build_number
+
         return {
             'commit_sha': commit_sha,
-            'build_number': build_number,
+            'run_number': run_number,
             'workflow_id': workflow_id,
-            'branch_name': branch_name
+            'branch_name': branch_name,
+            'build_number': build_number
         }
     except (ValueError, RuntimeError) as e:
-        print(f"Failed to get DEV workflow info for branch '{args.branch_name}': {e}")
+        print(f"Failed to get Build Dev apps workflow info for branch '{args.branch_name}': {e}")
         sys.exit(1)
 
 

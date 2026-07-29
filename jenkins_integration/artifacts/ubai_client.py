@@ -11,7 +11,7 @@ import subprocess
 import os
 
 
-def upload_to_ubai(file_path, app_name, target, branch_name, run_number, stack="matter", workflow_id=None):
+def upload_to_ubai(file_path, app_name, target, branch_name, build_number, stack="matter"):
     """
     Helper function to upload a file to UBAI.
     
@@ -20,16 +20,9 @@ def upload_to_ubai(file_path, app_name, target, branch_name, run_number, stack="
         app_name (str): Application name metadata.
         target (str): Target metadata.
         branch_name (str): Branch name metadata.
-        run_number (int): Build number metadata.
+        build_number (int): Build number metadata.
         stack (str): Stack metadata (default: 'matter').
-        workflow_id (int, optional): GitHub workflow ID for formatting build number as workflow_id.run_number.
     """
-    # Format build number as workflow_id.run_number if workflow_id is provided
-    if workflow_id is not None:
-        build_number = f"{workflow_id}.{run_number}"
-    else:
-        build_number = str(run_number)
-    
     print(f"Uploading {file_path} to UBAI with build_number: {build_number}")
     try:
         subprocess.run([
@@ -48,16 +41,16 @@ def upload_to_ubai(file_path, app_name, target, branch_name, run_number, stack="
         print(f"Error uploading {file_path} to UBAI: {e}")
 
 
-def search_file_in_ubai(branch_name, run_number, sqa, workflow_id=None):
+# TODO: Need to change or remove this
+def search_file_in_ubai(branch_name, build_number, sqa):
     """
     Check if the final artifact is already uploaded to UBAI.
     
     Args:
         branch_name (str): Branch name to search for.
-        run_number (int): Build number to search for.
+        build_number (int): Build number to search for.
         sqa (bool): Whether to search for SQA or dev artifacts.
-        workflow_id (int, optional): GitHub workflow ID for formatting build number as workflow_id.run_number.
-        
+
     Returns:
         list or None: List of found artifact lines, or None if not found or error.
     """
@@ -66,12 +59,6 @@ def search_file_in_ubai(branch_name, run_number, sqa, workflow_id=None):
         build_binaries = "sqa-app-standard"
     else:
         build_binaries = "dev-apps-standard"
-    
-    # Format build number as workflow_id.run_number if workflow_id is provided
-    if workflow_id is not None:
-        build_number = f"{workflow_id}.{run_number}"
-    else:
-        build_number = str(run_number)
     
     print(f"Searching for {build_binaries} in UBAI with build_number: {build_number}")
     
