@@ -1,0 +1,273 @@
+#!groovy
+// Matter Conan create-and-publish pipeline (manual trigger only).
+//
+// TEMPORARY: build/export only via developer flow (refresh_local_packages.sh).
+// Old action-based create/publish stages are kept but skipped with
+// when { expression { false } } until GitHub access to
+// SiliconLabsInternal/action-conan-create-publish is available.
+// (Do not comment out blocks that contain """ — Jenkins Groovy fails to parse them.)
+//
+// Jenkins job setup (one-time, after merge):
+//   Create a Pipeline or Multibranch job for matter_extension with
+//   "Pipeline script from SCM" -> Script Path:
+//   jenkins_integration/Jenkinsfile.matter-conan-create-publish
+//   Requires Build-Farm-Large agent, VPN to artifactory-local, and svc_gsdk credentials.
+//   Run via "Build with Parameters" (cron disabled for now).
+//
+// Parameters:
+//   PACKAGE_VERSION — optional MATTER_PACKAGE_VERSION override; empty uses
+//                     slc/script/matter_package_version
+// Publish remote is always matter-conan-dev (when publish stages are restored).
+// Deps remote is always silabs-conan-production.
+
+@Library('gsdk-shared-lib@master')
+
+// Kept for when publish stages are re-enabled (set when expression to true).
+def runCreatePublish(String conanfilePath) {
+    sh """
+        export CONAN_HOME="\${CONAN_HOME:-\$HOME/.silabs/slt/installs/conan}"
+        export MATTER_SDK_SOURCE_ROOT="\${WORKSPACE}/third_party/matter_sdk"
+        if [ -n "\${MATTER_PACKAGE_VERSION:-}" ]; then
+            echo "Using MATTER_PACKAGE_VERSION=\${MATTER_PACKAGE_VERSION}"
+        fi
+        uv run \\
+            --no-dev \\
+            --link-mode=copy \\
+            --project="${env.ACTION_DIR}" \\
+            action-conan-create-publish \\
+            --conanfile-path="${conanfilePath}" \\
+            --remote-username="\$SL_USERNAME" \\
+            --remote-name="${env.PUBLISH_REMOTE_NAME}" \\
+            --remote-url="${env.PUBLISH_REMOTE_URL}" \\
+            --remote-token="\$SL_PASSWORD" \\
+            --stack-name=matter \\
+            --create=true \\
+            --publish=true \\
+            --conan-command-options=export-pkg \\
+            --package-user=silabs \\
+            --jira-project=MATTER
+    """
+}
+
+pipeline {
+    agent {
+        docker {
+            label 'Build-Farm-Large'
+            image 'gsdk-docker-production/gsdk_nomad_containers/slt_build_env:latest'
+            customWorkspace '/mnt/raid/workspaces/matter-conan-create-publish'
+            registryUrl 'https://artifactory-local.silabs.net'
+            registryCredentialsId 'svc_gsdk'
+        }
+    }
+
+    parameters {
+        string(
+            name: 'PACKAGE_VERSION',
+            defaultValue: '',
+            description: 'Optional package version override (e.g. 2.10.0-alpha.5). Empty = use slc/script/matter_package_version'
+        )
+    }
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+        timeout(time: 3, unit: 'HOURS')
+    }
+
+    environment {
+        ACTION_TAG = 'v2.5.5'
+        ACTION_DIR = 'tools/action-conan-create-publish'
+        REPOSITORY_NAME = 'matter_extension'
+        DEPS_REMOTE_NAME = 'silabs-conan-production'
+        DEPS_REMOTE_URL = 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
+        PUBLISH_REMOTE_NAME = 'matter-conan-dev'
+        PUBLISH_REMOTE_URL = 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
+        CONAN_HOME = "${HOME}/.silabs/slt/installs/conan"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    env.COMMIT_HASH = sh(
+                        script: 'git rev-parse HEAD',
+                        returnStdout: true
+                    ).trim()
+                    if (params.PACKAGE_VERSION?.trim()) {
+                        env.MATTER_PACKAGE_VERSION = params.PACKAGE_VERSION.trim()
+                    }
+                    echo "Repository: ${env.REPOSITORY_NAME}, commit: ${env.COMMIT_HASH}, branch: ${env.BRANCH_NAME}"
+                    echo "Mode: temporary build/export only (no upload, no action-conan-create-publish)"
+                    echo "Publish remote (skipped): ${env.PUBLISH_REMOTE_NAME} (${env.PUBLISH_REMOTE_URL})"
+                    echo "Package version: ${env.MATTER_PACKAGE_VERSION ?: '(from slc/script/matter_package_version)'}"
+                }
+            }
+        }
+
+        // TEMPORARY: skipped until GitHub access to action-conan-create-publish is granted.
+        stage('Fetch action-conan-create-publish') {
+            steps {
+                script {
+                    withCredentials([gitUsernamePassword(credentialsId: 'github-app')]) {
+                        sh """
+                            rm -rf "${env.ACTION_DIR}"
+                            git clone --depth 1 --branch "${env.ACTION_TAG}" \\
+                                https://github.com/SiliconLabsInternal/action-conan-create-publish.git \\
+                                "${env.ACTION_DIR}"
+                        """
+                    }
+                    sh 'uv --version'
+                }
+            }
+        }
+
+        stage('Prep Matter packages') {
+            steps {
+                sh '''
+                    git submodule update --init \
+                        third_party/matter_sdk \
+                        third_party/matter_support \
+                        third_party/QR-Code-generator
+                    git -C third_party/matter_sdk submodule update --init \
+                        third_party/nlio/repo \
+                        third_party/nlassert/repo \
+                        third_party/mbedtls/repo
+
+                    export MATTER_SDK_SOURCE_ROOT="${WORKSPACE}/third_party/matter_sdk"
+                    if [ -n "${MATTER_PACKAGE_VERSION:-}" ]; then
+                        echo "MATTER_PACKAGE_VERSION=${MATTER_PACKAGE_VERSION}"
+                    fi
+                    python3 slc/script/generate_pkg_slt.py -d slc
+                    echo "MATTER_SDK_SOURCE_ROOT=${MATTER_SDK_SOURCE_ROOT}"
+                    python3 slc/script/generate_pkg_slt.py --version-only
+                '''
+            }
+        }
+
+        stage('Configure Conan remotes') {
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'svc_gsdk',
+                        passwordVariable: 'SL_PASSWORD',
+                        usernameVariable: 'SL_USERNAME'
+                    )
+                ]) {
+                    sh '''
+                        export CONAN_HOME="${CONAN_HOME:-$HOME/.silabs/slt/installs/conan}"
+                        CONAN_EXE="$HOME/.silabs/slt/engines/conan/conan/conan"
+                        export MATTER_SDK_SOURCE_ROOT="${WORKSPACE}/third_party/matter_sdk"
+
+                        python3 -c "
+import sys
+sys.path.insert(0, 'slc')
+from pathlib import Path
+from script.stack_tooling import configure_conan_remotes
+configure_conan_remotes(Path('.'))
+"
+
+                        "$CONAN_EXE" remote login "${DEPS_REMOTE_NAME}" "$SL_USERNAME" -p "$SL_PASSWORD"
+                        # TEMPORARY: publish remote login skipped (no upload).
+                        # "$CONAN_EXE" remote login "${PUBLISH_REMOTE_NAME}" "$SL_USERNAME" -p "$SL_PASSWORD"
+                        echo "=== Conan remotes ==="
+                        "$CONAN_EXE" remote list
+                    '''
+                }
+            }
+        }
+
+        // TEMPORARY: developer export path (no action-conan-create-publish, no upload).
+        stage('Export packages') {
+            steps {
+                sh '''
+                    export CONAN_HOME="${CONAN_HOME:-$HOME/.silabs/slt/installs/conan}"
+                    export MATTER_SDK_SOURCE_ROOT="${WORKSPACE}/third_party/matter_sdk"
+                    if [ -n "${MATTER_PACKAGE_VERSION:-}" ]; then
+                        echo "Using MATTER_PACKAGE_VERSION=${MATTER_PACKAGE_VERSION}"
+                    fi
+                    ./slc/script/refresh_local_packages.sh
+                '''
+            }
+        }
+
+        stage('Verify packages') {
+            steps {
+                sh '''
+                    export CONAN_HOME="${CONAN_HOME:-$HOME/.silabs/slt/installs/conan}"
+                    CONAN_EXE="$HOME/.silabs/slt/engines/conan/conan/conan"
+                    VERSION=$(python3 slc/script/generate_pkg_slt.py --version-only)
+
+                    MATTER=$(slt where matter)
+                    MATTER_APP=$(slt where matter_app)
+                    test -f "$MATTER/matter.slce"
+                    test -d "$MATTER/slc/component"
+                    test -d "$MATTER/third_party/matter_sdk/src"
+                    test -d "$MATTER_APP/slc/apps"
+
+                    echo "matter=$MATTER"
+                    echo "matter_app=$MATTER_APP"
+                    echo "=== conan list ==="
+                    "$CONAN_EXE" list "matter/${VERSION}@silabs" || true
+                    "$CONAN_EXE" list "matter_app/${VERSION}@silabs" || true
+                '''
+            }
+        }
+
+        // TEMPORARY: skipped — set when { expression { return true } } to restore.
+        stage('Create and publish matter') {
+            when { expression { return false } }
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'svc_gsdk',
+                        passwordVariable: 'SL_PASSWORD',
+                        usernameVariable: 'SL_USERNAME'
+                    )
+                ]) {
+                    runCreatePublish('packages/matter/conanfile.py')
+                }
+            }
+        }
+
+        stage('Create and publish matter_app') {
+            when { expression { return false } }
+            steps {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'svc_gsdk',
+                        passwordVariable: 'SL_PASSWORD',
+                        usernameVariable: 'SL_USERNAME'
+                    )
+                ]) {
+                    runCreatePublish('packages/matter_app/conanfile.py')
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            script {
+                def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
+                slackSend(
+                    channel: 'matter-package-manager-build',
+                    color: 'danger',
+                    message: """Matter Conan package build (export-only) failed
+
+*Repository:* matter_extension
+*Branch:* `${env.BRANCH_NAME}`
+*Build:* #${env.BUILD_NUMBER}
+*Commit:* `${env.COMMIT_HASH ?: 'unknown'}`
+*Publish remote:* `${env.PUBLISH_REMOTE_NAME ?: 'unknown'}`
+*Package version:* `${env.MATTER_PACKAGE_VERSION ?: '(file default)'}`
+*Time:* ${currentTime} UTC
+
+<${env.BUILD_URL}|Jenkins Build> | <${env.BUILD_URL}console|Console Output>"""
+                )
+            }
+        }
+        always {
+            cleanWs()
+        }
+    }
+}

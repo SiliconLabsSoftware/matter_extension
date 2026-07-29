@@ -14,8 +14,6 @@ include:
   - path: third_party/matter_sdk/src
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
-  - path: third_party/nlassert/include
-  - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/lib/address_resolve
     file_list:
       - path: TracingStructs.h
@@ -25,6 +23,9 @@ label: address_resolve_tool
 package: matter
 provides:
   - name: matter_address_resolve_tool
+requires:
+  - name: matter_nlassert
+  - name: matter_nlio
 quality: production
 metadata:
   sbom:

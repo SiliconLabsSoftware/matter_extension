@@ -11,8 +11,6 @@ include:
   - path: third_party/matter_sdk/src
   - path: third_party/matter_sdk/src/include
   - path: third_party/matter_sdk/src/lib
-  - path: third_party/nlassert/include
-  - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/platform
     file_list:
       - path: DeviceSafeQueue.h
@@ -22,6 +20,9 @@ label: libdevicelayer_wifi
 package: matter
 provides:
   - name: matter_libdevicelayer_wifi
+requires:
+  - name: matter_nlassert
+  - name: matter_nlio
 quality: production
 metadata:
   sbom:
