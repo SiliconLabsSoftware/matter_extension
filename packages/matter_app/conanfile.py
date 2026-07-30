@@ -67,7 +67,7 @@ class matter_appRecipe(MatterBaseRecipe):
       "compatibleVersion": "ANY",
       "subPackage": False,
       "releaseNotesUrl": "",
-      "packageType": "software",
+      "packageType": "sdk",
       "sdkLtsTag": ""
     }
 
@@ -158,7 +158,9 @@ class matter_appRecipe(MatterBaseRecipe):
                 pathmapfile.write(mapping + "\n")
 
     def package_info(self):
-        pass
+        self.buildenv_info.append_path(
+            "SLC_SDK_PACKAGE_PATH", self.package_folder
+        )
 
     # --------------------- Helpers ---------------------
     def _resolve_repo_file(self, file: str) -> Path:

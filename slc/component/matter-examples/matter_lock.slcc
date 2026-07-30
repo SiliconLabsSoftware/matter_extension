@@ -35,9 +35,6 @@ config_file:
   - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppTask.h
     directory: include
     file_id: lock_app_task
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/LockManager.h
-    directory: include
-    file_id: lock_manager_header
   - path: third_party/matter_sdk/examples/lock-app/silabs/include/CHIPProjectConfig.h
     directory: include
     file_id: lock_chip_project_config
