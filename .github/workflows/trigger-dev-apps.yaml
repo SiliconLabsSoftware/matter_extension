@@ -61,22 +61,21 @@ jobs:
         run: |
           set -euo pipefail
 
-          # Weekly main: always attempt a full build.
-          # Daily release: only if commits landed in the last 24 hours.
           if [[ "$BRANCH" == "main" ]]; then
-            echo "Branch is main, skipping delta check"
+            since="7 days ago"
+          else
+            since="24 hours ago"
+          fi
+
+          rev_list_args=(--since="$since" HEAD)
+          commit_count=$(git rev-list --count "${rev_list_args[@]}")
+          echo "Commits on $BRANCH since $since: $commit_count"
+          if [[ "$commit_count" -gt 0 ]]; then
+            git log --oneline "${rev_list_args[@]}" | head -10
             has_changes=true
           else
-            commit_count=$(git rev-list --count --since="24 hours ago" HEAD 2>/dev/null || echo "0")
-            echo "Commits in last 24 hours on $BRANCH: $commit_count"
-            if [[ "$commit_count" -gt 0 ]]; then
-              echo "Found $commit_count commit(s) in the last 24 hours."
-              git log --since="24 hours ago" --oneline | head -10
-              has_changes=true
-            else
-              echo "No commits found in the last 24 hours. Skipping build trigger."
-              has_changes=false
-            fi
+            echo "No commits since $since. Skipping build trigger."
+            has_changes=false
           fi
 
           if [[ "$has_changes" != "true" ]]; then
@@ -86,23 +85,20 @@ jobs:
           fi
 
           # Skip if Build Dev apps is already queued or in progress on this branch.
-          in_progress=$(gh run list \
-            --repo "${{ github.repository }}" \
-            --workflow=dev-apps-builder.yaml \
-            --branch "$BRANCH" \
-            --status in_progress \
-            --json databaseId \
-            --jq 'length')
-          queued=$(gh run list \
-            --repo "${{ github.repository }}" \
-            --workflow=dev-apps-builder.yaml \
-            --branch "$BRANCH" \
-            --status queued \
-            --json databaseId \
-            --jq 'length')
+          active=0
+          for status in in_progress queued; do
+            count=$(gh run list \
+              --repo "${{ github.repository }}" \
+              --workflow=dev-apps-builder.yaml \
+              --branch "$BRANCH" \
+              --status "$status" \
+              --json databaseId \
+              --jq 'length')
+            echo "$status=$count on $BRANCH"
+            active=$((active + count))
+          done
 
-          echo "in_progress=$in_progress queued=$queued on $BRANCH"
-          if [[ "$in_progress" -gt 0 || "$queued" -gt 0 ]]; then
+          if [[ "$active" -gt 0 ]]; then
             echo "Build Dev apps already active on $BRANCH, skipping trigger to avoid canceling it."
             echo "should_trigger=false" >> "$GITHUB_OUTPUT"
             echo "reason=busy" >> "$GITHUB_OUTPUT"
