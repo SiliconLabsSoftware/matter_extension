@@ -13,6 +13,16 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
     }
 }
 
+def upload_zephyr_artifacts() {
+    withCredentials([
+    usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
+    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ])
+    {
+        sh "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER}"
+    }
+}
+
 def download_coverage_artifact(workflow_id) {
     withCredentials([
         usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
