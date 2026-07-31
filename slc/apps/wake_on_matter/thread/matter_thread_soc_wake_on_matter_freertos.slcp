@@ -43,7 +43,6 @@ component:
   - id: matter_localization_configuration
   - id: matter_network_commissioning
   - id: matter_operational_credentials
-  #- id: matter_log_uart
   - id: matter_log_rtt
   - id: matter_read_client
   - id: matter_subscription_manager
@@ -56,7 +55,6 @@ component:
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
-  #- id: matter_shell
   - id: matter_provision_default
   - id: app_common
   - id: bootloader_interface
@@ -64,11 +62,6 @@ component:
     condition: [matter_platform_mg, device_series_2]
   - id: bootloader_interface_s3
     condition: [matter_platform_mg, device_series_3]
-
- #mmic testting
-  #- id: iostream_eusart
-  #  instance:
-  #    - vcom
 
   # OT-NCP components
   #- id: ot_rtt_log
@@ -123,7 +116,7 @@ source:
 
 define:
   - name: OPENTHREAD_FULL_LOGS_ENABLE
-    value: 1
+    value: 0
   - name: CHIP_DEVICE_CONFIG_ENABLE_CHIPOBLE
     value: 0
   - name: OPENTHREAD_CONFIG_NCP_HDLC_ENABLE
@@ -141,9 +134,11 @@ define:
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
   - name: OPENTHREAD_CONFIG_MAX_STATECHANGE_HANDLERS
-    value: 3
+    value: 4
   - name: SL_MATTER_LOG_LEVEL
     value: SL_MATTER_LOG_DETAIL
+#  - name: SL_OPENTHREAD_MULTI_PAN_ENABLE
+#    value: 1 
 
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
@@ -172,7 +167,7 @@ configuration:
     value: 1
     condition: [matter_thread_coap_cert_libs]
   - name: SL_STACK_SIZE
-    value: "4608"
+    value: "9216"
   - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
     value: "1536"
     unless: [device_series_3]
@@ -231,7 +226,7 @@ configuration:
 #  - name: OPENTHREAD_CONFIG_MULTIPLE_INSTANCE_ENABLE
 #    value: 1
 #  - name: OPENTHREAD_CONFIG_MULTIPLE_STATIC_INSTANCE_ENABLE
-#    value: 1  
+#    value: 1
 
 # CPC related config
   - name: SL_CPC_RX_PAYLOAD_MAX_LENGTH
