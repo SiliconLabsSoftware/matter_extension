@@ -71,7 +71,7 @@ jobs:
           commit_count=$(git rev-list --count "${rev_list_args[@]}")
           echo "Commits on $BRANCH since $since: $commit_count"
           if [[ "$commit_count" -gt 0 ]]; then
-            git log --oneline "${rev_list_args[@]}" | head -10
+            git log --oneline -n 10 "${rev_list_args[@]}"
             has_changes=true
           else
             echo "No commits since $since. Skipping build trigger."
