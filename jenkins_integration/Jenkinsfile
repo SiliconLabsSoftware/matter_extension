@@ -184,24 +184,6 @@ pipeline
                 }
             }
         }
-        stage('Compare Code Size') {
-            when {
-                expression { isCodeSizeBranch() }
-            }
-            steps {
-                script {
-                    def previousSuccessful = currentBuild.previousSuccessfulBuild
-                    if (previousSuccessful == null) {
-                        echo "No previous successful build found. Skipping code size comparison."
-                        return
-                    }
-
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.compare_code_size_analysis(previousSuccessful.number)
-                    }
-                }
-            }
-        }
         stage('Execute CI Tests')
         {
             steps {
@@ -277,6 +259,24 @@ pipeline
                             sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
+                    }
+                }
+            }
+        }
+        stage('Compare Code Size') {
+            when {
+                expression { isCodeSizeBranch() }
+            }
+            steps {
+                script {
+                    def previousSuccessful = currentBuild.previousSuccessfulBuild
+                    if (previousSuccessful == null) {
+                        echo "No previous successful build found. Skipping code size comparison."
+                        return
+                    }
+
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.compare_code_size_analysis(previousSuccessful.number)
                     }
                 }
             }

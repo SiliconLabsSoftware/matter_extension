@@ -173,16 +173,22 @@ def parse_args() -> argparse.Namespace:
         help="Seconds to wait between current build record retries.",
     )
     parser.add_argument(
-        "--flash-threshold-pct",
-        type=float,
-        default=0.2,
-        help="Allowed flash/code size increase percentage.",
-    )
-    parser.add_argument(
         "--ram-threshold-pct",
         type=float,
         default=1.0,
         help="Allowed RAM size increase percentage.",
+    )
+    parser.add_argument(
+        "--flash-warning-bytes",
+        type=int,
+        default=500,
+        help="Flash/code size increase above which the stage is marked unstable.",
+    )
+    parser.add_argument(
+        "--flash-failure-bytes",
+        type=int,
+        default=1000,
+        help="Flash/code size increase at or above which the stage fails.",
     )
     return parser.parse_args()
 
@@ -453,14 +459,18 @@ def format_delta(current: int, previous: int) -> str:
 def compare_records(
     current: SizeRecord,
     previous: SizeRecord,
-    flash_threshold_pct: float,
     ram_threshold_pct: float,
-) -> bool:
-    code_pct = pct_change(current.code_size, previous.code_size)
+    flash_warning_bytes: int,
+    flash_failure_bytes: int,
+) -> str:
+    code_delta = current.code_size - previous.code_size
     ram_pct = pct_change(current.ram_size, previous.ram_size)
-    code_failed = current.code_size > previous.code_size and code_pct > flash_threshold_pct
-    ram_failed = current.ram_size > previous.ram_size and ram_pct > ram_threshold_pct
-    return code_failed or ram_failed
+    if code_delta >= flash_failure_bytes:
+        return "FAIL"
+
+    code_warning = code_delta > flash_warning_bytes
+    ram_warning = current.ram_size > previous.ram_size and ram_pct > ram_threshold_pct
+    return "WARN" if code_warning or ram_warning else "PASS"
 
 
 def collect_target_data(
@@ -522,8 +532,9 @@ def main() -> int:
     if local_current_outputs:
         print("Local analyzer output is available as a fallback for current build records.")
     print(
-        f"Thresholds: flash/code > {args.flash_threshold_pct:.2f}%, "
-        f"RAM > {args.ram_threshold_pct:.2f}%"
+        f"Thresholds: flash warning > {args.flash_warning_bytes} bytes, "
+        f"flash failure >= {args.flash_failure_bytes} bytes"
+        f", RAM warning > {args.ram_threshold_pct:.2f}%"
     )
 
     target_data = []
@@ -570,11 +581,13 @@ def main() -> int:
     print("-" * 160)
 
     failures = []
+    warnings = []
     missing = []
     compared_count = 0
 
     for target, current, previous in target_data:
         if current is None or previous is None:
+            missing_record = "current" if current is None else "baseline"
             missing.append(
                 (
                     target,
@@ -584,20 +597,24 @@ def main() -> int:
             )
             print(
                 f"{target.application_name:<48} {target.board:<10} {target.target_part:<24} "
-                f"{'N/A':<10} {'MISSING DATA':<28} {'MISSING DATA':<28} {'WARN':<8}"
+                f"{previous.build_number if previous else 'N/A':<10} "
+                f"{f'MISSING {missing_record.upper()}':<28} "
+                f"{f'MISSING {missing_record.upper()}':<28} {'WARN':<8}"
             )
             continue
 
         compared_count += 1
-        failed = compare_records(
+        status = compare_records(
             current,
             previous,
-            args.flash_threshold_pct,
             args.ram_threshold_pct,
+            args.flash_warning_bytes,
+            args.flash_failure_bytes,
         )
-        status = "WARN" if failed else "PASS"
-        if failed:
+        if status == "FAIL":
             failures.append((current, previous))
+        elif status == "WARN":
+            warnings.append((current, previous))
 
         print(
             f"{target.application_name:<48} {target.board:<10} {target.target_part:<24} "
@@ -624,8 +641,12 @@ def main() -> int:
         return 0
 
     if failures:
+        print("ERROR: Flash/code size increase reached the failure threshold.")
+        return 1
+
+    if warnings:
         print("WARNING: Code size increase threshold exceeded.")
-        return 0
+        return 10
 
     print("All available code size results are within thresholds.")
     return 0

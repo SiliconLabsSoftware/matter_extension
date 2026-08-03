@@ -249,8 +249,9 @@ def compare_code_size_analysis(previousBuildNumber) {
         "BRANCH_NAME=${env.BRANCH_NAME}",
         "CURRENT_BUILD_NUMBER=${env.BUILD_NUMBER}",
         "PREVIOUS_BUILD_NUMBER=${previousBuildNumber}",
-        "CODE_SIZE_FLASH_THRESHOLD_PCT=0.2",
         "CODE_SIZE_RAM_THRESHOLD_PCT=1.0",
+        "CODE_SIZE_FLASH_WARNING_BYTES=500",
+        "CODE_SIZE_FLASH_FAILURE_BYTES=1000",
         "CODE_SIZE_INITIAL_WAIT_SECONDS=120",
         "CODE_SIZE_DATA_WAIT_RETRIES=10",
         "CODE_SIZE_DATA_WAIT_SECONDS=60"
@@ -268,13 +269,16 @@ python3 jenkins_integration/code_size/compare_code_size_results.py \
     --current-build "$CURRENT_BUILD_NUMBER" \
     --previous-build "$PREVIOUS_BUILD_NUMBER" \
     --service-url https://code-size-analyzer.silabs.net \
-    --flash-threshold-pct "$CODE_SIZE_FLASH_THRESHOLD_PCT" \
     --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" \
+    --flash-warning-bytes "$CODE_SIZE_FLASH_WARNING_BYTES" \
+    --flash-failure-bytes "$CODE_SIZE_FLASH_FAILURE_BYTES" \
     --data-wait-retries "$CODE_SIZE_DATA_WAIT_RETRIES" \
     --data-wait-seconds "$CODE_SIZE_DATA_WAIT_SECONDS" | tee code_size_compare_report.txt
         ''', returnStatus: true)
         archiveArtifacts artifacts: 'code_size_compare_report.txt', allowEmptyArchive: true
-        if (compareStatus != 0) {
+        if (compareStatus == 10) {
+            unstable("Code size comparison exceeded a warning threshold.")
+        } else if (compareStatus != 0) {
             error("Code size comparison failed. See code_size_compare_report.txt for details.")
         }
     }
