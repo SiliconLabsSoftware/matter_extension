@@ -55,7 +55,7 @@ jobs:
             cache-key: ${{ steps.cache-tools.outputs.cache-key }}
         steps:
             - name: Checkout
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
             - uses: ./.github/actions/cache-tools
               id: cache-tools
 
@@ -298,7 +298,7 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        if: ${{ startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
         permissions:
             contents: read
             actions: write

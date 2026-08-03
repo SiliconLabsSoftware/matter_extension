@@ -17,7 +17,7 @@ jobs:
       - id: branches
         run: |
           if [ "$EVENT_NAME" == "schedule" ]; then
-            echo 'value=["main","release_2.9-1.6"]' >> $GITHUB_OUTPUT
+            echo 'value=["main","release_2.9-1.6","release_2.10-1.6.1"]' >> $GITHUB_OUTPUT
           else
             echo "value=[\"$REF_NAME\"]" >> $GITHUB_OUTPUT
           fi
@@ -33,7 +33,7 @@ jobs:
         target_branch: ${{ fromJson(needs.set_target_branches.outputs.target_branches) }}
     steps:
       - name: Checkout target branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ matrix.target_branch }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -83,7 +83,7 @@ jobs:
 
       - name: Checkout PR branch
         if: steps.find_pr.outputs.pr_number != ''
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ steps.find_pr.outputs.head_ref }}
           token: ${{ steps.app_token.outputs.token }}
@@ -95,7 +95,7 @@ jobs:
 
       - name: Set up Python
         if: steps.find_pr.outputs.pr_number != ''
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: '3.x'
 

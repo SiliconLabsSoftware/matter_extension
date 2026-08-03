@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       sisdk-version:
-        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → release_2.9-1.6)'
+        description: 'SiSDK version (2025.12 → release_2.8, 2026.6 → release_2.9-1.6, 2026.12 → release_2.10-1.6.1)'
         required: true
         type: choice
         default: '2026.6'
         options:
           - '2025.12'
           - '2026.6'
+          - '2026.12'
       sisdk-tag:
         description: 'SDK (sisdk-prerelease and wiseconnect-prerelease) tag to bump to (e.g., v2026.6-build.sisdk-2026.6-558 or v2025.12-build.2710)'
         required: true
@@ -36,6 +37,9 @@ jobs:
             "2026.6")
               TARGET_BRANCH="release_2.9-1.6"
               ;;
+            "2026.12")
+              TARGET_BRANCH="release_2.10-1.6.1"
+              ;;
           esac
 
           PR_BRANCH="automation/update_sdk_submodules_${TARGET_BRANCH}"
@@ -51,7 +55,7 @@ jobs:
           echo "Resolved PR branch: $PR_BRANCH"
 
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           submodules: false
           ref: ${{ steps.resolve_inputs.outputs.target_branch }}
@@ -89,11 +93,45 @@ jobs:
           )
 
           echo "Updating .gitmodules tags..."
-          # Escape dots in the version for the regex, then replace any tag of the
-          # form vSISDK_VERSION-build.<anything> with the new SDK_TAG. This handles
-          # both "v2025.12-build.2710" and "v2026.6-build.sisdk-2026.6-558" formats.
-          SISDK_VERSION_ESCAPED="${SISDK_VERSION//./\\.}"
-          sed -i -E "s#^([[:space:]]*tag = )v${SISDK_VERSION_ESCAPED}-build\\..*\$#\\1${SDK_TAG}#g" .gitmodules
+          # Update the simplicity_sdk and wifi_sdk tag keys regardless of the
+          # previous SiSDK version recorded on the target branch.
+          SDK_TAG="$SDK_TAG" python3 - <<'PY'
+          import os
+          from pathlib import Path
+
+          gitmodules_path = Path(".gitmodules")
+          sdk_tag = os.environ["SDK_TAG"]
+          target_submodules = {
+              "third_party/simplicity_sdk",
+              "third_party/wifi_sdk",
+          }
+
+          lines = gitmodules_path.read_text().splitlines()
+          current_submodule = None
+          updated_submodules = set()
+
+          for index, line in enumerate(lines):
+              stripped_line = line.strip()
+
+              if stripped_line.startswith('[submodule "') and stripped_line.endswith('"]'):
+                  current_submodule = stripped_line[len('[submodule "'):-2]
+                  continue
+
+              if current_submodule not in target_submodules or not stripped_line.startswith("tag = "):
+                  continue
+
+              indentation = line[: line.index("tag = ")]
+              lines[index] = f"{indentation}tag = {sdk_tag}"
+              updated_submodules.add(current_submodule)
+
+          missing_submodules = sorted(target_submodules - updated_submodules)
+          if missing_submodules:
+              raise SystemExit(
+                  "Did not find tag entries for: " + ", ".join(missing_submodules)
+              )
+
+          gitmodules_path.write_text("\n".join(lines) + "\n")
+          PY
 
           echo "Updated .gitmodules:"
           cat .gitmodules

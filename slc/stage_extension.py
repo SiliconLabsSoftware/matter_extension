@@ -40,7 +40,8 @@ matter_sdk_exclude = [
     'matter_sdk/examples/virtual-device-app',
     'matter_sdk/src/controller/java/generated',
     'matter_sdk/examples/chef/devices',
-    'matter_sdk/scripts/py_matter_idl/matter/idl/tests/outputs/large_all_clusters_app'
+    'matter_sdk/scripts/py_matter_idl/matter/idl/tests/outputs/large_all_clusters_app',
+    'matter_sdk/credentials/production'
 ]
 
 # Specific includes for wiseconnect_wifi_bt_sdk

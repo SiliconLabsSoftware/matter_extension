@@ -59,7 +59,7 @@ component:
   - id: matter_default_lcd_config
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
-  - id: matter_segger_rtt
+  - id: segger_rtt
   - id: matter_si70xx_sensor
     condition: [hardware_board_has_si70xx]
   - id: matter_log_uart

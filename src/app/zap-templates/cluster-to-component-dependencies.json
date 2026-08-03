@@ -30,6 +30,12 @@
     ]
   },
   {
+    "clusterCode": "ambient context sensing-server",
+    "value": [
+      "%extension-matter%matter_ambient_context_sensing"
+    ]
+  },
+  {
     "clusterCode": "application basic-server",
     "value": [
       "%extension-matter%matter_application_basic"
@@ -198,6 +204,12 @@
     ]
   },
   {
+    "clusterCode": "dynamic lighting-server",
+    "value": [
+      "%extension-matter%matter_dynamic_lighting"
+    ]
+  },
+  {
     "clusterCode": "ecosystem information-server",
     "value": [
       "%extension-matter%matter_ecosystem_information"
@@ -363,6 +375,12 @@
     "clusterCode": "low power-server",
     "value": [
       "%extension-matter%matter_low_power"
+    ]
+  },
+  {
+    "clusterCode": "media file management-server",
+    "value": [
+      "%extension-matter%matter_media_file_management"
     ]
   },
   {
