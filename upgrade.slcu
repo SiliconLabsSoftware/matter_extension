@@ -192,11 +192,6 @@ upgrade:
       version: "2.4.0"
       
     component:
-      - trigger: matter_uart_wifi_wf200
-        description: Removing the matter_uart_wifi_wf200 component
-        remove: 
-          - matter_uart_wifi_wf200
-
       - trigger: matter_uart_wifi
         description: Removing the matter_uart_wifi component
         remove: 
@@ -253,13 +248,6 @@ upgrade:
         add:
           - rs911x_ncp
       
-      - trigger: wf200_ncp_extension
-        description: Simplify and merge wf200 NCP components
-        remove:
-          - wf200_ncp_extension
-        add:
-          - wf200_ncp
-
       - trigger: efx_ncp_custom_host_mcu
         description: Remove extra NCP component in favor of platform NCP component
         remove:
