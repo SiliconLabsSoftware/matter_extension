@@ -18,8 +18,6 @@ include:
 - path: third_party/matter_sdk/src/include
 - path: third_party/matter_sdk/src/lib
 - path: third_party/matter_sdk/src/platform/silabs/efr32
-- path: third_party/nlassert/include
-- path: third_party/nlio/include
 - path: third_party/matter_sdk/src/include/platform
   file_list:
   - path: RuntimeOptionsProvider.h
@@ -132,7 +130,6 @@ include:
   - path: efr32-psa-crypto-config.h
   - path: efr32-chip-mbedtls-config.h
   - path: BLEChannel.h
-
 - path: third_party/matter_sdk/src/platform/silabs
   file_list:
   - path: OTAImageProcessorImpl.h
