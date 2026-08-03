@@ -58,14 +58,15 @@ component:
   - id: matter_default_lcd_config
   - id: matter_log_uart
   - id: matter_lwip
+  - id: matter_service_http_embedded
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
   - id: segger_rtt
   #  - id: i2cspm
   #    instance: [sensor]
-  
-  - id: wifi_resources  
+
+  - id: wifi_resources
   - id: sl_si91x_common_flash_nvm3
   - id: sl_si91x_wireless
   - id: wifi
