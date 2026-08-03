@@ -1,0 +1,17 @@
+id: matter_services
+package: matter
+description: >
+  Matter services for Wi-Fi platforms.
+label: Matter Services
+category: Matter-WiFi|Services
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_services
+
+define:
+  - name: SLI_MATTER_ENABLE_SERVICES
+    value: "1"
