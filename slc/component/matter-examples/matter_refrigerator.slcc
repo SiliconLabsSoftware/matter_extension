@@ -7,5 +7,37 @@ id: matter_refrigerator
 quality: production
 provides:
   - name: matter_refrigerator
+metadata:
+  sbom:
+    license: "Apache 2.0"
+template_file:
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/include/AppTask.h
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/data_model/refrigerator-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/data_model/refrigerator-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: RefrigeratorManager.h
+      - path: refrigerator-and-temperature-controlled-cabinet-mode.h
+  - path: third_party/matter_sdk/examples/refrigerator-app/refrigerator-common/include
+    file_list:
+      - path: static-supported-temperature-levels.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/RefrigeratorManager.cpp
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/DataModelCallbacks.cpp
+  - path: third_party/matter_sdk/examples/refrigerator-app/silabs/src/refrigerator-and-temperature-controlled-cabinet-mode.cpp
+  - path: third_party/matter_sdk/examples/refrigerator-app/refrigerator-common/src/static-supported-temperature-levels.cpp
 ui_hints:
   visibility: never

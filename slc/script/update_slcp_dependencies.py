@@ -44,6 +44,13 @@ WIFI_NCP_SLCP_EXTENSIONS = (
     "platform_nwp_siwx91x",
     "bluetooth_le_siwx91x",
 )
+# Host BLE comes via matter_ble; bluetooth_le_host.slce uses a prerelease
+# version string, so do not list it in sdk_extension (same as thread apps).
+WIFI_NCP_DUAL_STACK_SLCP_EXTENSIONS = (
+    "wifi",
+    "platform_siwx91x",
+    "platform_nwp_siwx91x",
+)
 
 
 def line_version_from_conan_range(range_str: str) -> str:
@@ -83,9 +90,13 @@ def detect_app_type(slcp_path: Path) -> str:
     if "/thread/" in posix:
         return "thread"
     if "/wifi/" in posix or posix.endswith("/wifi"):
+        if "dual_stack" in name:
+            return "wifi_ncp_dual_stack"
         if "ncp" in name:
             return "wifi_ncp"
         return "wifi_soc"
+    if "dual_stack" in name:
+        return "wifi_ncp_dual_stack"
     if "ncp" in name:
         return "wifi_ncp"
     return "other"
@@ -118,9 +129,13 @@ def build_extensions(
     elif app_type == "wifi_ncp":
         for ext_id in WIFI_NCP_SLCP_EXTENSIONS:
             entries.append((ext_id, extension_version(ext_id, versions)))
-  # bootloader: matter only
+    elif app_type == "wifi_ncp_dual_stack":
+        for ext_id in WIFI_NCP_DUAL_STACK_SLCP_EXTENSIONS:
+            entries.append((ext_id, extension_version(ext_id, versions)))
+    # bootloader: matter only
 
     return entries
+
 
 
 def format_sdk_block(simplicity_version: str) -> str:

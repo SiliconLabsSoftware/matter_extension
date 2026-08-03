@@ -14,5 +14,27 @@ template_file:
   - path: third_party/matter_sdk/examples/air-quality-sensor-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/air-quality-sensor-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/air-quality-sensor-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/air-quality-sensor-app.zap
+    directory: common
+    file_id: zap_config
+include:
+  - path: third_party/matter_sdk/examples/air-quality-sensor-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+  - path: third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/include
+    file_list:
+      - path: air-quality-sensor-manager.h
+      - path: relative-humidity-sensor-manager.h
+      - path: temperature-sensor-manager.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-sensor-manager.cpp
 ui_hints:
   visibility: never

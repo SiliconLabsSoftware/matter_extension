@@ -80,36 +80,17 @@ requires:
       - device_series_3
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-app.zap
-    file_id: zap_config
-    directory: common
-    unless: [matter_icd_core]
-  - path: ../../../../third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-icd-app.zap
-    file_id: zap_config
-    directory: common
-    condition: [matter_icd_core]
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/base-platform-app/silabs/include
+  - path: include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
-    directory: include
-
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
-    file_list:
-      - path: CustomerAppTask.h
-    directory: include
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
 
 define:
   - name: CHIP_CRYPTO_PLATFORM

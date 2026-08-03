@@ -104,39 +104,17 @@ configuration:
     value: "0"
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/air-quality-sensor-app.zap
-    directory: common
-    file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/air-quality-sensor-app/silabs/include
+  - path: include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
-    file_list:
-      - path: CustomerAppTask.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/include/
-    file_list:
-      - path: air-quality-sensor-manager.h
-      - path: relative-humidity-sensor-manager.h
-      - path: temperature-sensor-manager.h
-    directory: include
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/air-quality-sensor-app/air-quality-sensor-common/src/air-quality-sensor-manager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-
 define:
   - name: CCP_SI917_BRINGUP
   - name: CHIP_CRYPTO_PLATFORM

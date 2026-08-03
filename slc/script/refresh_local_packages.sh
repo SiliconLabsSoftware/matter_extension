@@ -32,6 +32,9 @@ fi
 
 python3 slc/script/generate_pkg_slt.py -d slc
 
+# Sync example AppConfig headers into app include/ dirs (see app_include_map.yaml).
+python3 slc/script/sync_app_includes.py --repo-root "$MATTER_ROOT"
+
 MATTER_VERSION=$(python3 slc/script/generate_pkg_slt.py --version-only)
 CONAN_EXE="${CONAN_EXE:-$(python3 -c "
 import sys

@@ -1,0 +1,48 @@
+# Maps matter_app project dirs to matter_sdk example include dirs.
+# Used by packages/_shared/app_include_sync.py to copy *.h into
+# <app_dir>/include/ for package builds (matter_app does not ship matter_sdk).
+#
+# Keys: path relative to matter_extension repo root
+# Values: path relative to matter_sdk root
+#
+# After migration, each mapped app's .slcp should use:
+#   include:
+#     - path: include
+#       file_list: [AppConfig.h, ...]
+# (no directory: — path is already in-project)
+
+slc/apps/air_quality_sensor_app/thread: examples/air-quality-sensor-app/silabs/include
+slc/apps/air_quality_sensor_app/wifi: examples/air-quality-sensor-app/silabs/include
+slc/apps/closure_app/thread: examples/closure-app/silabs/include
+slc/apps/closure_app/wifi: examples/closure-app/silabs/include
+slc/apps/dishwasher_app/thread: examples/dishwasher-app/silabs/include
+slc/apps/dishwasher_app/wifi: examples/dishwasher-app/silabs/include
+slc/apps/evse_app/thread: examples/evse-app/silabs/include
+slc/apps/evse_app/wifi: examples/evse-app/silabs/include
+slc/apps/fan_control_app/thread: examples/fan-control-app/silabs/include
+slc/apps/fan_control_app/wifi: examples/fan-control-app/silabs/include
+slc/apps/light_switch_app/thread: examples/light-switch-app/silabs/include
+slc/apps/light_switch_app/wifi: examples/light-switch-app/silabs/include
+slc/apps/lighting_app/thread: examples/lighting-app/silabs/include
+slc/apps/lighting_app/thread/trustzone: examples/lighting-app/silabs/include
+slc/apps/lighting_app/wifi: examples/lighting-app/silabs/include
+slc/apps/lock_app/wifi: examples/lock-app/silabs/include
+slc/apps/lock_app/thread: examples/lock-app/silabs/include
+slc/apps/multi_sensor_app/thread: examples/multi-sensor-app/silabs/include
+slc/apps/multi_sensor_app/wifi: examples/multi-sensor-app/silabs/include
+slc/apps/onoff_plug_app/thread: examples/onoff-plug-app/silabs/include
+slc/apps/onoff_plug_app/wifi: examples/onoff-plug-app/silabs/include
+slc/apps/oven_app/wifi: examples/oven-app/silabs/include
+slc/apps/performance_test_app/thread: examples/lighting-app/silabs/include
+slc/apps/platform_template/thread: examples/base-platform-app/silabs/include
+slc/apps/platform_template/wifi: examples/base-platform-app/silabs/include
+slc/apps/rangehood_app/thread: examples/rangehood-app/silabs/include
+slc/apps/rangehood_app/wifi: examples/rangehood-app/silabs/include
+slc/apps/refrigerator_app/thread: examples/refrigerator-app/silabs/include
+slc/apps/refrigerator_app/wifi: examples/refrigerator-app/silabs/include
+slc/apps/thermostat/thread: examples/thermostat/silabs/include
+slc/apps/thermostat/wifi: examples/thermostat/silabs/include
+slc/apps/wake_on_matter/thread: examples/wake-on-matter/silabs/include
+slc/apps/window_app/thread: examples/window-app/silabs/include
+slc/apps/window_app/wifi: examples/window-app/silabs/include
+slc/apps/zigbee_light/thread: examples/lighting-app/silabs/include

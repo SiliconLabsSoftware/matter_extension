@@ -63,17 +63,19 @@ def repo_root_from_script(script_file: str | Path) -> Path:
 
 
 def default_matter_sdk_source_root(repo_root: Path) -> Path:
+    """Locate matter_sdk for setup / refresh.
+
+    Order: MATTER_SDK_SOURCE_ROOT, then repo third_party/matter_sdk submodule.
+    """
     env_root = os.environ.get("MATTER_SDK_SOURCE_ROOT", "").strip()
     if env_root:
         return Path(env_root).resolve()
-    sibling = repo_root.parent.parent.parent / "matter_sdk"
-    if sibling.is_dir() and (sibling / "src").is_dir():
-        return sibling.resolve()
     submodule = repo_root / "third_party" / "matter_sdk"
     if submodule.is_dir() and (submodule / "src").is_dir():
         return submodule.resolve()
     raise FileNotFoundError(
-        "matter_sdk sources not found. Set MATTER_SDK_SOURCE_ROOT to a matter_sdk clone."
+        "matter_sdk sources not found. "
+        "Init third_party/matter_sdk or set MATTER_SDK_SOURCE_ROOT."
     )
 
 

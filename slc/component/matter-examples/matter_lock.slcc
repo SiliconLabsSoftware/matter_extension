@@ -1,42 +1,39 @@
 category: Matter|Examples
 package: matter
 description: >
-  Provides example component for a Lock application. This component should be
+  Provides example component for a Lock application. This component should be 
   included in all Lock applications to help resolve SLC dependencies. Only applicable to Lock applications.
 id: matter_lock
 quality: production
+provides:
+  - name: matter_lock
 metadata:
   sbom:
     license: "Apache 2.0"
-
 template_file:
   - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/lock-app/silabs/src/AppTask.cpp
-
-config_file:
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/LockConfig.h
-    file_id: matter_lock_config
-provides:
-  - name: matter_lock
-define:
-  - name: IS_DEMO_LOCK
-    value: "1"
 config_file:
   - path: third_party/matter_sdk/examples/lock-app/silabs/data_model/lock-app.zap
     directory: common
     file_id: zap_config
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppConfig.h
-    directory: include
-    file_id: lock_app_config
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppEvent.h
-    directory: include
-    file_id: lock_app_event
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/AppTask.h
-    directory: include
-    file_id: lock_app_task
-  - path: third_party/matter_sdk/examples/lock-app/silabs/include/CHIPProjectConfig.h
-    directory: include
-    file_id: lock_chip_project_config
+include:
+  - path: third_party/matter_sdk/examples/lock-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: EventHandlerLibShell.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
 source:
-  - path: third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp 
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/lock-app/silabs/src/LockMigration.cpp
+define:
+  - name: IS_DEMO_LOCK
+    value: "1"
+ui_hints:
+  visibility: never

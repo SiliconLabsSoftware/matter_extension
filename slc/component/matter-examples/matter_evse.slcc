@@ -14,6 +14,11 @@ requires:
 provides:
   - name: matter_evse
 include:
+  - path: third_party/matter_sdk/examples/evse-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
   - path: third_party/matter_sdk/examples/evse-app/evse-common/include
     file_list:
       - path: EnergyEvseManager.h
@@ -25,8 +30,13 @@ include:
       - path: EvseTargetsConfig.h
       - path: ChargingTargetsMemMgr.h
       - path: energy-evse-modes.h
-
+config_file:
+  - path: third_party/matter_sdk/examples/evse-app/evse-common/evse-app.zap
+    directory: common
+    file_id: zap_config
 source:
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/evse-app/silabs/src/AppTask.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/EVSEManufacturerImpl.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/EnergyEvseDelegateImpl.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/EnergyEvseEventTriggers.cpp
@@ -35,5 +45,8 @@ source:
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/EnergyEvseTargetsStore.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/ChargingTargetsMemMgr.cpp
   - path: third_party/matter_sdk/examples/evse-app/evse-common/src/energy-evse-mode.cpp
+define:
+  - name: IS_DEMO_EVSE
+    value: "1"
 ui_hints:
   visibility: never

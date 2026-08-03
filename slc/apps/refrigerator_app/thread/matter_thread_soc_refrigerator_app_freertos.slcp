@@ -81,15 +81,13 @@ requires:
       - device_series_3
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/data_model/refrigerator-thread-app.zap
-    file_id: zap_config
-    directory: common
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/include
+  - path: include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -97,24 +95,6 @@ include:
       - path: CHIPProjectConfig.h
       - path: RefrigeratorManager.h
       - path: refrigerator-and-temperature-controlled-cabinet-mode.h
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/refrigerator-common/include
-    file_list:
-      - path: static-supported-temperature-levels.h
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/src/RefrigeratorManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/silabs/src/refrigerator-and-temperature-controlled-cabinet-mode.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/refrigerator-app/refrigerator-common/src/static-supported-temperature-levels.cpp
-    directory: src
-
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"

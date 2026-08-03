@@ -17,5 +17,34 @@ template_file:
   - path: third_party/matter_sdk/examples/thermostat/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/thermostat/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/thermostat/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/thermostat/silabs/include/ThermostatConfig.h
+    file_id: thermostat_config
+  - path: third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+    unless: [matter_zigbee_multiprotocol_common]
+include:
+  - path: third_party/matter_sdk/examples/thermostat/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: ThermostatConfig.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+  - path: third_party/matter_sdk/examples/thermostat/thermostat-common/include
+    file_list:
+      - path: thermostat-delegate-impl.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
 ui_hints:
   visibility: never

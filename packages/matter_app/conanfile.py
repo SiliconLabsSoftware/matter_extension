@@ -24,12 +24,17 @@ from _shared.base_recipe import (
     MatterBaseRecipe,
     is_matter_sdk_package_path,
     matter_sdk_export_stub,
+    resolve_matter_sdk_source_root,
 )
+from _shared.app_include_sync import resolve_sdk_root_for_sync, sync_app_includes
 
 
 class matter_appRecipe(MatterBaseRecipe):
     name = "matter_app"
     description = "matter sample-app package"
+    # Root SLC SDK marker + Studio templates (same pattern as wifi_app.slsdk).
+    slsdk_file = "matter_app.slsdk"
+    templates_file = "matter_templates.xml"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -101,7 +106,10 @@ class matter_appRecipe(MatterBaseRecipe):
         # Define the files to be included in the package
         files_to_package = {"License"}
 
-        
+        # Sync AppConfig headers into the repo tree before gather so .slcp include:
+        # paths resolve (matter_app does not ship third_party/matter_sdk).
+        self._sync_app_includes_into(Path(self.repo_root))
+
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
         files_to_package.update(
@@ -112,6 +120,7 @@ class matter_appRecipe(MatterBaseRecipe):
             )
         )
         files_to_package.update(self._gather_app_support_files())
+        files_to_package.update(self._gather_sdk_root_marker_files())
         files_to_package = self._filter_repo_files(files_to_package)
 
         static_libraries = {file for file in files_to_package if file.endswith(".a")}
@@ -125,6 +134,9 @@ class matter_appRecipe(MatterBaseRecipe):
             dst_folder=os.path.join(self.package_folder, "."),
         )
 
+        # Ensure packaged tree has includes even if gather skipped them.
+        self._sync_app_includes_into(Path(self.package_folder))
+
         if os.path.exists("conan-matter_app.lock"):
             copy(self, pattern="conan-matter_app.lock", src=matter_app_folder, dst=os.path.join(self.package_folder, "."))
 
@@ -137,6 +149,8 @@ class matter_appRecipe(MatterBaseRecipe):
 
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
+        self._sync_app_includes_into(Path(self.repo_root))
+
         with matter_sdk_export_stub(self.repo_root):
             files_to_package.update(
                 self._gather_slc_release_files(
@@ -145,6 +159,7 @@ class matter_appRecipe(MatterBaseRecipe):
                     assistant=silabs_package_assistant,
                 )
             )
+            files_to_package.update(self._gather_sdk_root_marker_files())
             files_to_package = self._filter_repo_files(files_to_package)
 
         if git_extra_files:
@@ -163,6 +178,20 @@ class matter_appRecipe(MatterBaseRecipe):
         )
 
     # --------------------- Helpers ---------------------
+    def _sync_app_includes_into(self, dst_root: Path) -> None:
+        """Copy example AppConfig headers from matter_sdk into app include/ dirs."""
+        try:
+            sdk_root = resolve_matter_sdk_source_root(self.repo_root)
+        except FileNotFoundError:
+            sdk_root = resolve_sdk_root_for_sync(self.repo_root)
+        written = sync_app_includes(dst_root, sdk_root)
+        for path in written:
+            try:
+                rel = path.relative_to(dst_root)
+            except ValueError:
+                rel = path
+            self.output.info(f"Synced app include: {rel}")
+
     def _resolve_repo_file(self, file: str) -> Path:
         path = Path(file)
         if path.is_absolute():
@@ -172,6 +201,16 @@ class matter_appRecipe(MatterBaseRecipe):
     def _file_exists_in_repo(self, file: str) -> bool:
         path = self._resolve_repo_file(file)
         return path.is_file()
+
+    def _gather_sdk_root_marker_files(self) -> set[str]:
+        """Ship SLC SDK root marker + templates so sdk-package-path accepts matter_app."""
+        collected: set[str] = set()
+        for name in (self.slsdk_file, self.templates_file):
+            if (self.repo_root / name).is_file():
+                collected.add(name)
+            else:
+                self.output.warning(f"Missing matter_app SDK root file: {name}")
+        return collected
 
     def _filter_repo_files(self, files: Iterable[str]) -> set[str]:
         return {

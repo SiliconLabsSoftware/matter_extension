@@ -267,6 +267,21 @@ def main() -> int:
     args = parser.parse_args()
 
     repo_root = args.repo_root.resolve()
+
+    # Keep lighting AppConfig include/ dirs in sync for .slcp path: include
+    packages = repo_root / "packages"
+    if packages.is_dir() and str(packages) not in sys.path:
+        sys.path.insert(0, str(packages))
+    try:
+        from _shared.app_include_sync import resolve_sdk_root_for_sync, sync_app_includes
+
+        written = sync_app_includes(repo_root, resolve_sdk_root_for_sync(repo_root))
+        if args.verbose:
+            for path in written:
+                print(f"synced app include: {path.relative_to(repo_root)}")
+    except Exception as exc:
+        print(f"WARNING: app include sync skipped: {exc}", file=sys.stderr)
+
     if args.write_stamps_only:
         write_package_stamps(repo_root)
         return 0

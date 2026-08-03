@@ -26,7 +26,7 @@ Follow the documentation on Confluence:
 - [Install SLT](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-InstallSLT)
 - [Conan (via SLT)](https://confluence.silabs.com/spaces/MATTER/pages/725302792/How+to+work+with+Package+Manager#HowtoworkwithPackageManager-Conan(viaSLT))
 
-**Prerequisites:** Artifactory VPN and `conan remote login` on remotes listed in `packages/remotes.json`.
+**Prerequisites:** Artifactory VPN and `conan remote login` on remotes listed in `packages/remotes.json` (local development). GitHub Actions uses `packages/remotes.ci.json` (`conan-prerelease` only, anonymous read).
 
 From repo root:
 
@@ -120,7 +120,8 @@ Regenerates managed path sections in `packages/matter/matter.slce.extra` determi
 - **`packages/matter/matter.slce.extra`** – Extra files included in the matter package.
 - **`packages/matter_app/conanfile.py`** – Sample app package; depends on `matter` only; packages `.slcp`/`.slcw` projects.
 - **`packages/_shared/base_recipe.py`** – Shared recipe helpers and dependency version loading.
-- **`packages/remotes.json`** – Conan remote URLs for SLT.
+- **`packages/remotes.json`** – Conan remote URLs for SLT (local / VPN).
+- **`packages/remotes.ci.json`** – CI-only remotes (publicly reachable; used when `GITHUB_ACTIONS=true` or `CONAN_REMOTES_PROFILE=ci`).
 
 ---
 

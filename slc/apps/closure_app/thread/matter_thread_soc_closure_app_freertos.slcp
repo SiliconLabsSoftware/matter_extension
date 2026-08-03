@@ -78,40 +78,19 @@ requires:
       - device_series_3
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/data_model/closure-thread-app.zap
-    file_id: zap_config
-    directory: common
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/include
+  - path: include
     file_list:
     - path: AppConfig.h
     - path: CHIPProjectConfig.h
     - path: AppTask.h
     - path: AppEvent.h
     - path: ClosureManager.h
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/include
-    file_list:
-    - path: ClosureControlEndpoint.h
-    - path: ClosureDimensionEndpoint.h
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/silabs/src/ClosureManager.cpp
-    directory: src    
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureControlEndpoint.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureDimensionEndpoint.cpp
-    directory: src
-
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"

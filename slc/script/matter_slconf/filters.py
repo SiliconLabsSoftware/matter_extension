@@ -67,9 +67,13 @@ def detect_app_stack_type(app_dir: Path, slcp_name: str = "") -> str:
     if "/thread/" in posix or posix.endswith("/thread"):
         return "thread"
     if "/wifi/" in posix or posix.endswith("/wifi"):
+        if "dual_stack" in slcp_lower:
+            return "wifi_ncp_dual_stack"
         if "ncp" in slcp_lower:
             return "wifi_ncp"
         return "wifi_soc"
+    if "dual_stack" in slcp_lower:
+        return "wifi_ncp_dual_stack"
     if "ncp" in slcp_lower:
         return "wifi_ncp"
     return "unified"
@@ -82,6 +86,9 @@ def exclude_packages_for_app_type(app_type: str) -> frozenset[str]:
         return WIFI_SOC_EXCLUDE_PACKAGES | WIFI_NCP_ONLY_PACKAGES
     if app_type == "wifi_ncp":
         return WIFI_SOC_EXCLUDE_PACKAGES - WIFI_NCP_ONLY_PACKAGES
+    if app_type == "wifi_ncp_dual_stack":
+        # Host BLE (matter_ble) needs rail_library; keep other wifi exclusions.
+        return (WIFI_SOC_EXCLUDE_PACKAGES - WIFI_NCP_ONLY_PACKAGES) - {"rail_library"}
     return frozenset()
 
 

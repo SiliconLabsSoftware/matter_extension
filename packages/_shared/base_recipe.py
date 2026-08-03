@@ -92,9 +92,10 @@ class MatterBaseRecipe(ConanFile):
         if shared_src.is_dir():
             copy(
                 self,
-                "*.py",
+                "*",
                 src=str(shared_src),
                 dst=os.path.join(self.export_folder, "_shared"),
+                excludes=("__pycache__", "*.pyc"),
             )
         for dep_src in _dependency_versions_candidates(self.repo_root):
             if dep_src.is_file():
@@ -150,18 +151,19 @@ def load_matter_sdk_dependencies(repo_root: Path) -> dict[str, str]:
 
 
 def resolve_matter_sdk_source_root(repo_root: Path) -> Path:
-    """Standalone matter_sdk clone used during matter_app export validation."""
+    """Locate matter_sdk for export / packaging.
+
+    Order: MATTER_SDK_SOURCE_ROOT, then repo third_party/matter_sdk submodule.
+    """
     env_root = os.environ.get("MATTER_SDK_SOURCE_ROOT", "").strip()
     if env_root:
         return Path(env_root).resolve()
-    sibling = repo_root.parent.parent.parent / "matter_sdk"
-    if sibling.is_dir() and (sibling / "src").is_dir():
-        return sibling.resolve()
     submodule = repo_root / "third_party" / "matter_sdk"
     if submodule.is_dir() and (submodule / "src").is_dir():
         return submodule.resolve()
     raise FileNotFoundError(
-        "matter_sdk sources not found for export. Set MATTER_SDK_SOURCE_ROOT."
+        "matter_sdk sources not found for export. "
+        "Init third_party/matter_sdk or set MATTER_SDK_SOURCE_ROOT."
     )
 
 

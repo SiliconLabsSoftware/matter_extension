@@ -93,10 +93,21 @@ config_file:
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
+include:
+  - path: include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: EventHandlerLibShell.h
+
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
   - name: _WANT_REENT_SMALL
+    value: "1"
+  - name: IS_DEMO_LOCK
     value: "1"
   - name: NVM3_DEFAULT_NVM_SIZE
     value: "40960"

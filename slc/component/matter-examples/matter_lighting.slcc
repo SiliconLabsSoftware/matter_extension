@@ -14,6 +14,27 @@ template_file:
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/lighting-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/data_model/lighting-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/data_model/lighting-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/lighting-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
 define:
   - name: IS_DEMO_LIGHT
     value: "1"

@@ -14,5 +14,36 @@ template_file:
   - path: third_party/matter_sdk/examples/base-platform-app/silabs/include/AppTask.h
   - path: third_party/matter_sdk/examples/base-platform-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/base-platform-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-wifi-app.zap
+    file_id: zap_config
+    directory: common
+    unless: [matter_icd_core]
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-wifi-icd-app.zap
+    file_id: zap_config
+    directory: common
+    condition: [matter_icd_core, matter_wifi]
+  - path: third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-app.zap
+    file_id: zap_config
+    directory: common
+    unless: [matter_icd_core]
+    condition: [matter_thread]
+  - path: third_party/matter_sdk/examples/base-platform-app/silabs/data_model/platform-thread-icd-app.zap
+    file_id: zap_config
+    directory: common
+    condition: [matter_icd_core, matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/base-platform-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
 ui_hints:
   visibility: never

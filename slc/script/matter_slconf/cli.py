@@ -145,7 +145,7 @@ def _build_app(app_dir: Path, slcp_name: str, board: str, out_dir: Path) -> int:
         return 1
     make_dir, makefile_name = found
 
-    make_cmd = ["make", "all", "-C", str(make_dir), "-f", makefile_name, "-j"]
+    make_cmd = ["make", "all", "-C", str(make_dir), "-f", makefile_name, "-j4"]
     print("Running:", " ".join(make_cmd))
     if subprocess.run(make_cmd, cwd=app_dir).returncode != 0:
         return 1

@@ -15,5 +15,32 @@ template_file:
   - path: third_party/matter_sdk/examples/rangehood-app/silabs/include/AppTaskImpl.h
   - path: third_party/matter_sdk/examples/rangehood-app/silabs/src/AppTask.cpp
 config_file:
-  - path: third_party/matter_sdk/examples/rangehood-app/silabs/include/RangeHoodConfig.h
-    file_id: rangehood_config
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/data_model/rangehood-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/data_model/rangehood-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/rangehood-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: RangeHoodConfig.h
+  - path: third_party/matter_sdk/examples/rangehood-app/rangehood-app-common/include
+    file_list:
+      - path: ExtractorHoodEndpoint.h
+      - path: LightEndpoint.h
+  - path: third_party/matter_sdk/examples/platform/silabs/customer
+    file_list:
+      - path: CustomerAppTask.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/rangehood-app/rangehood-app-common/src/ExtractorHoodEndpoint.cpp
+  - path: third_party/matter_sdk/examples/rangehood-app/rangehood-app-common/src/LightEndpoint.cpp
+ui_hints:
+  visibility: never

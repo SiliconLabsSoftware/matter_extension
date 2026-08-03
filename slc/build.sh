@@ -733,7 +733,7 @@ if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; the
 			exit 1
 		fi
 		BOOTLOADER_MAKEFILE_NAME=$(basename "$BOOTLOADER_MAKEFILE")
-		if ! make all -C "$OUTPUT_DIR/matter_bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j13; then
+		if ! make all -C "$OUTPUT_DIR/matter_bootloader" -f "$BOOTLOADER_MAKEFILE_NAME" -j8; then
 			echo "ERROR: Failed to build bootloader"
 			exit 1
 		fi
@@ -755,7 +755,7 @@ elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; t
 		fi
 		APP_DIR=$(dirname "$APP_MAKEFILE")
 		APP_MAKEFILE_NAME=$(basename "$APP_MAKEFILE")
-		if ! make all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j13; then
+		if ! make all -C "$APP_DIR" -f "$APP_MAKEFILE_NAME" -j8; then
 			echo "ERROR: Failed to build application"
 			exit 1
 		fi
@@ -771,7 +771,7 @@ else
 			cmake_configure_and_build "$OUTPUT_DIR/cmake_llvm" "application" || exit 1
 		fi
 	else
-		if ! make all -C "$OUTPUT_DIR_ABS" -f "$MAKE_FILE" -j13; then
+		if ! make all -C "$OUTPUT_DIR_ABS" -f "$MAKE_FILE" -j8; then
 			echo "ERROR: Failed to build solution"
 			exit 1
 		fi

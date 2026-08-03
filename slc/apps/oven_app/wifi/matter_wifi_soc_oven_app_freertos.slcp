@@ -98,15 +98,13 @@ configuration:
     value: "0"
 
 config_file:
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/data_model/oven-wifi-app.zap
-    directory: common
-    file_id: zap_config
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/include
+  - path: include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
@@ -115,30 +113,6 @@ include:
       - path: AppSupportedTemperatureLevelsDelegate.h
       - path: OvenBindingHandler.h
       - path: CHIPProjectConfig.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/include
-    file_list:
-    - path: CookEndpoints.h
-    - path: OvenEndpoint.h
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/AppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/OvenManager.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/DataModelCallbacks.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/OvenBindingHandler.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/silabs/src/AppSupportedTemperatureLevelsDelegate.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/CookEndpoints.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/oven-app/oven-app-common/src/OvenEndpoint.cpp
-    directory: src
-
 define:
   - name: CCP_SI917_BRINGUP
   - name: CHIP_CRYPTO_PLATFORM

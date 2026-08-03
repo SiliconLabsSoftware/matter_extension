@@ -111,7 +111,6 @@ include:
 source:
   - path: ./src/AppTask.cpp
   - path: ./src/SensorManager.cpp
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
   - path: ./src/DataModelCallbacks.cpp
 
 define:

@@ -7,5 +7,46 @@ id: matter_dishwasher
 quality: production
 provides:
   - name: matter_dishwasher
+requires:
+  - name: matter_device_energy_management
+metadata:
+  sbom:
+    license: "Apache 2.0"
+template_file:
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/include/AppTask.h
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/data_model/dishwasher-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/data_model/dishwasher-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: DeviceEnergyManager.h
+      - path: DishwasherManager.h
+      - path: operational-state-delegate-impl.h
+  - path: third_party/matter_sdk/examples/energy-management/device-energy-management/include
+    file_list:
+      - path: DeviceEnergyManagementDelegateImpl.h
+      - path: DeviceEnergyManagementManager.h
+      - path: DEMManufacturerDelegate.h
+      - path: device-energy-management-modes.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/src/DishwasherManager.cpp
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/src/operational-state-delegate-impl.cpp
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/src/DataModelCallbacks.cpp
+  - path: third_party/matter_sdk/examples/dishwasher-app/silabs/src/DeviceEnergyManager.cpp
+  - path: third_party/matter_sdk/examples/energy-management/device-energy-management/src/DeviceEnergyManagementDelegateImpl.cpp
+  - path: third_party/matter_sdk/examples/energy-management/device-energy-management/src/DeviceEnergyManagementManager.cpp
+  - path: third_party/matter_sdk/examples/energy-management/device-energy-management/src/device-energy-management-mode.cpp
 ui_hints:
   visibility: never

@@ -7,5 +7,37 @@ id: matter_closure
 quality: production
 provides:
   - name: matter_closure
+metadata:
+  sbom:
+    license: "Apache 2.0"
+template_file:
+  - path: third_party/matter_sdk/examples/closure-app/silabs/include/AppTask.h
+  - path: third_party/matter_sdk/examples/closure-app/silabs/src/AppTask.cpp
+config_file:
+  - path: third_party/matter_sdk/examples/closure-app/silabs/data_model/closure-wifi-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_wifi]
+  - path: third_party/matter_sdk/examples/closure-app/silabs/data_model/closure-thread-app.zap
+    directory: common
+    file_id: zap_config
+    condition: [matter_thread]
+include:
+  - path: third_party/matter_sdk/examples/closure-app/silabs/include
+    file_list:
+      - path: AppConfig.h
+      - path: AppEvent.h
+      - path: CHIPProjectConfig.h
+      - path: ClosureManager.h
+  - path: third_party/matter_sdk/examples/closure-app/closure-common/include
+    file_list:
+      - path: ClosureControlEndpoint.h
+      - path: ClosureDimensionEndpoint.h
+source:
+  - path: third_party/matter_sdk/examples/platform/silabs/main.cpp
+  - path: third_party/matter_sdk/examples/closure-app/silabs/src/ClosureManager.cpp
+  - path: third_party/matter_sdk/examples/closure-app/silabs/src/DataModelCallbacks.cpp
+  - path: third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureControlEndpoint.cpp
+  - path: third_party/matter_sdk/examples/closure-app/closure-common/src/ClosureDimensionEndpoint.cpp
 ui_hints:
   visibility: never

@@ -95,41 +95,18 @@ config_file:
     file_id: zap_config
     directory: common
     condition: [matter_zigbee_multiprotocol_common]
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-thread-app.zap
-    directory: common
-    file_id: zap_config
-    unless: [matter_zigbee_multiprotocol_common]
   - path: ../../../../provision.mattpconf
     directory: provision
     file_id: provision_config
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include/ThermostatConfig.h
-    file_id: thermostat_config
 
+# In-package path (synced from matter_sdk at matter_app package time).
 include:
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
+  - path: include
     file_list:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: CHIPProjectConfig.h
       - path: ThermostatConfig.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
-    file_list:
-      - path: CustomerAppTask.h
-    directory: include
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/include
-    file_list:
-      - path: thermostat-delegate-impl.h
-    directory: include
-
-source:
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
-    directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
-    directory: src
-
 define:
   - name: CHIP_CRYPTO_PLATFORM
     value: "1"
