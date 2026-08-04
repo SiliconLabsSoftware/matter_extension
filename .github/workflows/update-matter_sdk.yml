@@ -39,10 +39,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update matter_sdk submodule
-        uses: SiliconLabsSoftware/matter_update_submodules@main
+        uses: SiliconLabsSoftware/matter_update_submodules@v2
         with:
           target_branch: ${{ matrix.target_branch }}
-          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
   run-slc-scripts:
@@ -59,7 +59,7 @@ jobs:
         id: app_token
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
           private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 
       - name: Find matter_sdk submodule bump PR
