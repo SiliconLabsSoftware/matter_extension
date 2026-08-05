@@ -39,7 +39,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update matter_sdk submodule
-        uses: SiliconLabsSoftware/matter_update_submodules@vmain
+        uses: SiliconLabsSoftware/matter_update_submodules@main
         with:
           target_branch: ${{ matrix.target_branch }}
           client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
