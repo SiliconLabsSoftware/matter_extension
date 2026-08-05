@@ -115,6 +115,12 @@ pipeline
                                 echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
                                 build_description += "\nGitHub Workflow Run Number: ${run_number}"
                                 buildDescription(build_description)
+
+                                try{
+                                    pipelineFunctions.upload_zephyr_artifacts()
+                                } catch (e) {
+                                    unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
+                                }
                             }
                         }
                     }

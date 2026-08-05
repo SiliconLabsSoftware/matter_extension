@@ -19,7 +19,8 @@ def upload_zephyr_artifacts() {
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        sh "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER}"
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER}", returnStdout: true).trim()
+        echo "Output from upload_zephyr_artifacts.py: ${output}"
     }
 }
 
