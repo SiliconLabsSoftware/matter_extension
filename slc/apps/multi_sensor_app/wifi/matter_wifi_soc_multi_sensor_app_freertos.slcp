@@ -138,6 +138,8 @@ define:
     value: "4092"
   - name: SI917_SOC
     value: 1
+  - name: SL_WIFI_LIT_APP
+    value: "1"
 
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
@@ -153,7 +155,7 @@ configuration:
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "5000"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "SL_IDLE_MODE_DURATION_S"
+    value: 1000
   - name: CHIP_CONFIG_ENABLE_ICD_LIT
     value: 1
   - name: CHIP_CONFIG_ENABLE_ICD_CIP
