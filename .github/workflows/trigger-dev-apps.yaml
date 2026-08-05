@@ -1,20 +1,50 @@
-name: Trigger Dev Apps Build on Non-Default Branches
+name: Trigger Dev Apps Build
 
 on:
   schedule:
-    - cron: "5 0 * * *" # 8:05 pm EDT daily
+    # release: 8:05 pm EDT daily
+    - cron: "5 0 * * *"
+    # main: Thursday at 8:05 pm EDT
+    - cron: "5 0 * * 5"
 
 permissions:
   actions: write
   contents: read
 
 jobs:
+  plan:
+    name: Select target branches
+    runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.set.outputs.targets }}
+    steps:
+      - name: Map schedule to branches
+        id: set
+        run: |
+          case "${{ github.event.schedule }}" in
+            "5 0 * * *")
+              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT" # TODO: add release_2.10-1.6.1 when nightlies are wanted for it
+              echo "Daily schedule: release"
+              ;;
+            "5 0 * * 5")
+              echo 'targets=["main"]' >> "$GITHUB_OUTPUT"
+              echo "Weekly schedule: main"
+              ;;
+            *)
+              echo "Unrecognized schedule '${{ github.event.schedule }}'; no targets" >&2
+              echo 'targets=[]' >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
   trigger_dev_apps_build:
-    name: Trigger Daily Dev Apps Build
+    name: Trigger Dev Apps Build (${{ matrix.branch }})
+    needs: plan
+    if: needs.plan.outputs.targets != '[]'
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        branch: [release_2.9-1.6] # TODO: Update this to include release_2.10-1.6.1 when we want nightlies for it
+        branch: ${{ fromJson(needs.plan.outputs.targets) }}
 
     steps:
       - name: Checkout repository
@@ -23,26 +53,63 @@ jobs:
           ref: ${{ matrix.branch }}
           fetch-depth: 0
 
-      - name: Check for recent changes
-        id: check_changes
+      - name: Check whether a build should run
+        id: should_trigger
         env:
           BRANCH: ${{ matrix.branch }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          commit_count=$(git rev-list --count --since="24 hours ago" HEAD 2>/dev/null || echo "0")
+          set -euo pipefail
 
-          echo "Commits in last 24 hours: $commit_count"
-          echo "has_changes=$([ "$commit_count" -gt 0 ] && echo "true" || echo "false")" >> $GITHUB_OUTPUT
-
-          if [ "$commit_count" -gt 0 ]; then
-            echo "Found $commit_count commit(s) in the last 24 hours. Will trigger build."
-            echo "Recent commits:"
-            git log --since="24 hours ago" --oneline | head -10
+          if [[ "$BRANCH" == "main" ]]; then
+            since="7 days ago"
           else
-            echo "No commits found in the last 24 hours. Skipping build trigger."
+            since="24 hours ago"
           fi
 
+          rev_list_args=(--since="$since" HEAD)
+          commit_count=$(git rev-list --count "${rev_list_args[@]}")
+          echo "Commits on $BRANCH since $since: $commit_count"
+          if [[ "$commit_count" -gt 0 ]]; then
+            git log --oneline -n 10 "${rev_list_args[@]}"
+            has_changes=true
+          else
+            echo "No commits since $since. Skipping build trigger."
+            has_changes=false
+          fi
+
+          if [[ "$has_changes" != "true" ]]; then
+            echo "should_trigger=false" >> "$GITHUB_OUTPUT"
+            echo "reason=no_delta" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Skip if Build Dev apps is already queued or in progress on this branch.
+          active=0
+          for status in in_progress queued; do
+            count=$(gh run list \
+              --repo "${{ github.repository }}" \
+              --workflow=dev-apps-builder.yaml \
+              --branch "$BRANCH" \
+              --status "$status" \
+              --json databaseId \
+              --jq 'length')
+            echo "$status=$count on $BRANCH"
+            active=$((active + count))
+          done
+
+          if [[ "$active" -gt 0 ]]; then
+            echo "Build Dev apps already active on $BRANCH, skipping trigger to avoid canceling it."
+            echo "should_trigger=false" >> "$GITHUB_OUTPUT"
+            echo "reason=busy" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          echo "should_trigger=true" >> "$GITHUB_OUTPUT"
+          echo "reason=ok" >> "$GITHUB_OUTPUT"
+
       - name: Trigger Dev Apps Build on ${{ matrix.branch }}
-        if: steps.check_changes.outputs.has_changes == 'true'
+        if: steps.should_trigger.outputs.should_trigger == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ matrix.branch }}
