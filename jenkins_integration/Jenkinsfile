@@ -43,7 +43,6 @@ def sendSlackNotification(String messageType, String status, String summary = ""
     def alertEmoji = status == "PASS" ? "🎉" : "🚨"
     
     def notificationColor = color ?: (status == "PASS" ? "good" : "danger")
-    def reportedCommitSha = env.GIT_COMMIT ?: commitSha
     
     def message = """${alertEmoji} *${messageType.toUpperCase()}* ${alertEmoji}
                     
@@ -55,8 +54,8 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 
 📋 *Details:*"""
     
-    if (reportedCommitSha) {
-        message += "\n• *Commit SHA:* `${reportedCommitSha}`"
+    if (commitSha) {
+        message += "\n• *Commit SHA:* `${commitSha}`"
     }
     if (runNumber) {
         message += "\n• *GitHub Workflow Run:* #${runNumber}"
@@ -73,8 +72,8 @@ def sendSlackNotification(String messageType, String status, String summary = ""
     message += "\n• <${env.BUILD_URL}|Jenkins Build>"
     message += "\n• <${env.BUILD_URL}console|Console Output>"
     
-    if (reportedCommitSha) {
-        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${reportedCommitSha}|GitHub Commit>"
+    if (commitSha) {
+        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${commitSha}|GitHub Commit>"
     }
     
     if (status == "FAIL") {
@@ -96,8 +95,10 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
-                    sisdk_build_number = sh(script: "git config -f .gitmodules --get submodule.third_party/simplicity_sdk.tag | sed 's/.*-//'", returnStdout: true).trim()
-                    wiseconnect_build_number = sh(script: "git config -f .gitmodules --get submodule.third_party/wifi_sdk.tag | sed 's/.*-//'", returnStdout: true).trim()
+                    sh 'git submodule update --init --checkout third_party/simplicity_sdk'
+                    sh 'git submodule update --init --checkout third_party/wifi_sdk'
+                    sisdk_build_number = sh(script: 'cat third_party/simplicity_sdk/.build-number', returnStdout: true).trim()
+                    wiseconnect_build_number = sh(script: 'cat third_party/wifi_sdk/.build-number', returnStdout: true).trim()
                     build_description = "SISDK build number: ${sisdk_build_number}"
                     build_description += "\nWiFi Extension build number: ${wiseconnect_build_number}"
                     buildDescription(build_description)
@@ -183,6 +184,28 @@ pipeline
                 }
             }
         }
+        stage('Compare Code Size') {
+            when {
+                expression { isCodeSizeBranch() }
+            }
+            steps {
+                script {
+                    // last-green is informational only; baseline is newest prior
+                    // build that has code-size data for each application
+                    def previousSuccessful = currentBuild.previousSuccessfulBuild
+                    def previousBuildNumber = previousSuccessful?.number
+                    if (previousBuildNumber == null) {
+                        echo "No previous successful Jenkins build. Comparing against newest prior code-size records if available."
+                    } else {
+                        echo "Jenkins last-green build for reference: ${previousBuildNumber}"
+                    }
+
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.compare_code_size_analysis(previousBuildNumber)
+                    }
+                }
+            }
+        }
         stage('Execute CI Tests')
         {
             steps {
@@ -262,24 +285,6 @@ pipeline
                 }
             }
         }
-        stage('Compare Code Size') {
-            when {
-                expression { isCodeSizeBranch() }
-            }
-            steps {
-                script {
-                    def previousSuccessful = currentBuild.previousSuccessfulBuild
-                    if (previousSuccessful == null) {
-                        echo "No previous successful build found. Skipping code size comparison."
-                        return
-                    }
-
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.compare_code_size_analysis(previousSuccessful.number)
-                    }
-                }
-            }
-        }
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
@@ -293,7 +298,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
             }
             steps {
                 script {
@@ -308,7 +313,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {

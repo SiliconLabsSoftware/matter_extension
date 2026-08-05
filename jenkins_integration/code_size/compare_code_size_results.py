@@ -44,6 +44,8 @@ BOARD_METADATA = {
 
 def normalize_build_number(build_number: str) -> str:
     build_number = str(build_number).strip()
+    if not build_number:
+        return ""
     return build_number if build_number.startswith("b") else f"b{build_number}"
 
 
@@ -133,7 +135,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--branch-name", required=True)
     parser.add_argument("--current-build", required=True)
-    parser.add_argument("--previous-build", required=True)
+    parser.add_argument(
+        "--previous-build",
+        default="",
+        help=(
+            "Optional Jenkins last-green build for logging only. "
+            "Baseline is always the newest prior build that has code-size data "
+            "for the same application."
+        ),
+    )
     parser.add_argument(
         "--service-url",
         default="https://code-size-analyzer.silabs.net",
@@ -395,9 +405,16 @@ def load_local_size_record(
 def select_exact_record(
     target: CodeSizeTarget, records: list[dict[str, Any]], build_number: str
 ) -> SizeRecord | None:
-    matching_records = [
-        record for record in records if record.get("build_number") == build_number
-    ]
+    wanted = build_number_value(build_number)
+    matching_records = []
+    for record in records:
+        record_build_number = record.get("build_number")
+        if wanted is not None:
+            if build_number_value(record_build_number) == wanted:
+                matching_records.append(record)
+        elif record_build_number == build_number:
+            matching_records.append(record)
+
     if not matching_records:
         return None
 
@@ -409,26 +426,26 @@ def select_baseline_record(
     target: CodeSizeTarget,
     records: list[dict[str, Any]],
     current: SizeRecord,
-    preferred_build_number: str,
+    preferred_build_number: str | None = None,
 ) -> SizeRecord | None:
-    exact_baseline = select_exact_record(target, records, preferred_build_number)
-    if exact_baseline is not None:
-        return exact_baseline
+    """Pick the newest prior code-size record for the same application.
 
+    Example for current build N: try N-1, then N-2, ... (whichever has data).
+    No build numbers are hardcoded. Missing baseline is handled by the caller
+    as WARN without failing CI.
+    """
     current_build_value = build_number_value(current.build_number)
+    if current_build_value is None:
+        return None
+
     candidates = []
     for record in records:
-        record_build_number = record.get("build_number")
-        if record_build_number == current.build_number:
+        record_build_value = build_number_value(record.get("build_number"))
+        if record_build_value is None:
             continue
-
-        record_build_value = build_number_value(record_build_number)
-        if (
-            current_build_value is not None
-            and record_build_value is not None
-            and record_build_value < current_build_value
-        ):
-            candidates.append(record)
+        if record_build_value >= current_build_value:
+            continue
+        candidates.append(record)
 
     if not candidates:
         return None
@@ -440,7 +457,24 @@ def select_baseline_record(
             result_timestamp(record),
         ),
     )
-    return record_to_size_record(target, result)
+    baseline = record_to_size_record(target, result)
+
+    if preferred_build_number:
+        preferred_value = build_number_value(preferred_build_number)
+        baseline_value = build_number_value(baseline.build_number)
+        if (
+            preferred_value is not None
+            and baseline_value is not None
+            and preferred_value != baseline_value
+        ):
+            print(
+                f"INFO: {target.application_name}: baseline "
+                f"{baseline.build_number} (newest prior with data); "
+                f"Jenkins last-green was "
+                f"{normalize_build_number(preferred_build_number)}."
+            )
+
+    return baseline
 
 
 def pct_change(current: int, previous: int) -> float:
@@ -478,7 +512,7 @@ def collect_target_data(
     branch_name: str,
     targets: list[CodeSizeTarget],
     current_build: str,
-    previous_build: str,
+    previous_build: str | None,
     local_current_outputs: dict[CodeSizeTarget, Path] | None = None,
 ) -> tuple[list[tuple[CodeSizeTarget, SizeRecord | None, SizeRecord | None]], int]:
     target_data = []
@@ -508,7 +542,9 @@ def collect_target_data(
 def main() -> int:
     args = parse_args()
     current_build = normalize_build_number(args.current_build)
-    previous_build = normalize_build_number(args.previous_build)
+    previous_build = (
+        normalize_build_number(args.previous_build) if args.previous_build.strip() else None
+    )
     code_size_targets, local_current_outputs = load_analysis_manifest(
         args.analysis_manifest
     )
@@ -526,8 +562,11 @@ def main() -> int:
 
     print(
         f"Comparing code size results for branch {args.branch_name}: "
-        f"{current_build} vs preferred baseline {previous_build}"
+        f"{current_build} vs newest prior build with data per application"
     )
+    if previous_build:
+        print(f"Jenkins last-green reference (informational only): {previous_build}")
+
     print(f"Discovered {len(code_size_targets)} code size target(s) from {target_source}")
     if local_current_outputs:
         print("Local analyzer output is available as a fallback for current build records.")

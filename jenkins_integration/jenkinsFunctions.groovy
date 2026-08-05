@@ -260,8 +260,9 @@ def run_code_size_analysis() {
         echo "Code size analysis completed"
     }
 
-def compare_code_size_analysis(previousBuildNumber) {
-    echo "Comparing code size analysis against previous successful build: ${previousBuildNumber}"
+def compare_code_size_analysis(previousBuildNumber = null) {
+    def previousBuildLabel = previousBuildNumber ? "b${previousBuildNumber}" : "none"
+    echo "Comparing code size against newest prior records per app (Jenkins last-green reference: ${previousBuildLabel})"
 
     sh 'python3 -m venv code_size_compare_venv'
     sh '. code_size_compare_venv/bin/activate && python3 -m pip install --upgrade pip'
@@ -270,7 +271,7 @@ def compare_code_size_analysis(previousBuildNumber) {
     withEnv([
         "BRANCH_NAME=${env.BRANCH_NAME}",
         "CURRENT_BUILD_NUMBER=${env.BUILD_NUMBER}",
-        "PREVIOUS_BUILD_NUMBER=${previousBuildNumber}",
+        "PREVIOUS_BUILD_NUMBER=${previousBuildNumber ?: ''}",
         "CODE_SIZE_RAM_THRESHOLD_PCT=1.0",
         "CODE_SIZE_FLASH_WARNING_BYTES=500",
         "CODE_SIZE_FLASH_FAILURE_BYTES=1000",
@@ -286,10 +287,14 @@ if [ "$CODE_SIZE_INITIAL_WAIT_SECONDS" -gt 0 ]; then
     echo "Waiting ${CODE_SIZE_INITIAL_WAIT_SECONDS}s before querying code size analyzer records..."
     sleep "$CODE_SIZE_INITIAL_WAIT_SECONDS"
 fi
+PREVIOUS_BUILD_ARGS=()
+if [ -n "$PREVIOUS_BUILD_NUMBER" ]; then
+    PREVIOUS_BUILD_ARGS+=(--previous-build "$PREVIOUS_BUILD_NUMBER")
+fi
 python3 jenkins_integration/code_size/compare_code_size_results.py \
     --branch-name "$BRANCH_NAME" \
     --current-build "$CURRENT_BUILD_NUMBER" \
-    --previous-build "$PREVIOUS_BUILD_NUMBER" \
+    "${PREVIOUS_BUILD_ARGS[@]}" \
     --service-url https://code-size-analyzer.silabs.net \
     --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" \
     --flash-warning-bytes "$CODE_SIZE_FLASH_WARNING_BYTES" \
