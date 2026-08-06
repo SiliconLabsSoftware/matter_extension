@@ -184,28 +184,6 @@ pipeline
                 }
             }
         }
-        stage('Compare Code Size') {
-            when {
-                expression { isCodeSizeBranch() }
-            }
-            steps {
-                script {
-                    // last-green is informational only; baseline is newest prior
-                    // build that has code-size data for each application
-                    def previousSuccessful = currentBuild.previousSuccessfulBuild
-                    def previousBuildNumber = previousSuccessful?.number
-                    if (previousBuildNumber == null) {
-                        echo "No previous successful Jenkins build. Comparing against newest prior code-size records if available."
-                    } else {
-                        echo "Jenkins last-green build for reference: ${previousBuildNumber}"
-                    }
-
-                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                        pipelineFunctions.compare_code_size_analysis(previousBuildNumber)
-                    }
-                }
-            }
-        }
         stage('Execute CI Tests')
         {
             steps {
@@ -281,6 +259,28 @@ pipeline
                             sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
                         }
+                    }
+                }
+            }
+        }
+        stage('Compare Code Size') {
+            when {
+                expression { isCodeSizeBranch() }
+            }
+            steps {
+                script {
+                    // last-green is informational only; baseline is newest prior
+                    // build that has code-size data for each application
+                    def previousSuccessful = currentBuild.previousSuccessfulBuild
+                    def previousBuildNumber = previousSuccessful?.number
+                    if (previousBuildNumber == null) {
+                        echo "No previous successful Jenkins build. Comparing against newest prior code-size records if available."
+                    } else {
+                        echo "Jenkins last-green build for reference: ${previousBuildNumber}"
+                    }
+
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.compare_code_size_analysis(previousBuildNumber)
                     }
                 }
             }
