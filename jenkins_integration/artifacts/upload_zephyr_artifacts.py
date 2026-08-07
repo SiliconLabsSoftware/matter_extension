@@ -179,7 +179,15 @@ def _upload_binaries(root, branch_name, build_number):
                 failures.append(f"{app_name}/{file_name}")
 
     if uploaded == 0 and not failures:
-        raise RuntimeError(f"No Zephyr binaries found under {root}")
+        listing = []
+        for dirpath, dirnames, filenames in os.walk(root):
+            rel = os.path.relpath(dirpath, root)
+            for name in dirnames + filenames:
+                listing.append(os.path.join(rel, name) if rel != '.' else name)
+        raise RuntimeError(
+            f"No Zephyr binaries found under {root}. "
+            f"Expected app_name/<TARGET>.<ext>. Contents: {listing or '(empty)'}"
+        )
     if failures:
         raise RuntimeError(f"UBAI upload failed: {', '.join(failures)}")
     print(f"Uploaded {uploaded} Zephyr binary(ies) to UBAI")

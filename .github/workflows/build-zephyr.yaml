@@ -81,5 +81,5 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: dev-artifacts-zephyr
-          path: artifacts/lighting-app-zephyr/
+          path: artifacts/
           if-no-files-found: error
