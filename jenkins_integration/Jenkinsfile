@@ -124,15 +124,6 @@ pipeline
                             }
                         }
                     }
-                    try {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            pipelineFunctions.actionWithRetry {
-                                pipelineFunctions.upload_zephyr_artifacts()
-                            }
-                        }
-                    } catch (e) {
-                        unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
-                    }
                 }
             }
         }

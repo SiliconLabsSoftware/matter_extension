@@ -2,7 +2,11 @@
 Download Build Zephyr artifacts from GitHub Actions and upload board binaries to UBAI.
 
 Expects GHA layout (see build-zephyr.yaml):
-    lighting-app-zephyr/<TARGET>.<ext>  -> UBAI app_name=lighting-app-zephyr, target=<TARGET>
+    <app_name>/<TARGET>/<binary_name>.<ext>
+        -> UBAI Name=<binary_name>, app_name=<app_name>, target=<TARGET>
+
+Add another app by exporting under a new <app_name>/ tree in the workflow; no
+uploader changes required.
 
 Usage:
     python upload_zephyr_artifacts.py --branch_name <branch> --build_number <n>
@@ -159,34 +163,37 @@ def _download_zephyr_artifact(workflow_id):
             raise
 
 
-def _upload_binaries(root, branch_name, build_number):
-    failures = []
-    uploaded = 0
-
+def _iter_zephyr_binaries(root):
+    """Yield (app_name, target, file_path) for each <app>/<TARGET>/<file> binary."""
     for app_name in sorted(os.listdir(root)):
         app_dir = os.path.join(root, app_name)
         if not os.path.isdir(app_dir):
             continue
-        for file_name in sorted(os.listdir(app_dir)):
-            file_path = os.path.join(app_dir, file_name)
-            if not os.path.isfile(file_path):
+        for target in sorted(os.listdir(app_dir)):
+            target_dir = os.path.join(app_dir, target)
+            if not os.path.isdir(target_dir):
                 continue
-            target = os.path.splitext(file_name)[0]
-            print(f"Uploading {app_name}/{file_name} to UBAI (target={target})")
-            if upload_to_ubai(file_path, app_name, target, branch_name, build_number):
-                uploaded += 1
-            else:
-                failures.append(f"{app_name}/{file_name}")
+            for file_name in sorted(os.listdir(target_dir)):
+                file_path = os.path.join(target_dir, file_name)
+                if os.path.isfile(file_path):
+                    yield app_name, target, file_path
+
+
+def _upload_binaries(root, branch_name, build_number):
+    failures = []
+    uploaded = 0
+
+    for app_name, target, file_path in _iter_zephyr_binaries(root):
+        file_name = os.path.basename(file_path)
+        print(f"Uploading {app_name}/{target}/{file_name} to UBAI (target={target})")
+        if upload_to_ubai(file_path, app_name, target, branch_name, build_number):
+            uploaded += 1
+        else:
+            failures.append(f"{app_name}/{target}/{file_name}")
 
     if uploaded == 0 and not failures:
-        listing = []
-        for dirpath, dirnames, filenames in os.walk(root):
-            rel = os.path.relpath(dirpath, root)
-            for name in dirnames + filenames:
-                listing.append(os.path.join(rel, name) if rel != '.' else name)
         raise RuntimeError(
-            f"No Zephyr binaries found under {root}. "
-            f"Expected app_name/<TARGET>.<ext>. Contents: {listing or '(empty)'}"
+            f"No Zephyr binaries found under {root}. Expected <app>/<TARGET>/<name>.<ext>"
         )
     if failures:
         raise RuntimeError(f"UBAI upload failed: {', '.join(failures)}")
