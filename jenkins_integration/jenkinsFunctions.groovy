@@ -27,7 +27,7 @@ def run_code_size_analysis() {
 
     sh 'python3 -m venv code_size_analysis_venv'
     sh '. code_size_analysis_venv/bin/activate && python3 -m pip install --upgrade pip'
-    sh '. code_size_analysis_venv/bin/activate && pip3 install code_size_analyzer_client-python>=1.0.1'
+    sh '. code_size_analysis_venv/bin/activate && pip3 install "code_size_analyzer_client-python>=1.2.0"'
 
     echo "Build number: ${env.BUILD_NUMBER}"
     echo "Branch name: ${env.BRANCH_NAME}"
@@ -195,6 +195,9 @@ def run_code_size_analysis() {
                         --verify_ssl False \\
                         --uc_component_branch_name "silabs_slc/$BRANCH_NAME"; then
                         echo "  Analysis completed successfully"
+                        printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n" \\
+                            "$application_name" "$brd" "$target_part" "gcc" "matter" \\
+                            "$output_file" "$map_file_path" >> code_size_analysis_manifest.tsv
                     else
                         echo "  Analysis failed"
                     fi
@@ -202,6 +205,8 @@ def run_code_size_analysis() {
 
                 echo "Cleaning up leftover JSON files"
                 rm -f *.json
+                rm -f code_size_analysis_manifest.tsv
+                printf "application_name\\tboard\\ttarget_part\\tcompiler\\tstack\\toutput_file\\tmap_file\\n" > code_size_analysis_manifest.tsv
 
                 echo "Available map files:"
                 map_files_found=\$(find . -name "*.map" | grep -v "sqa-artifacts" | sort)
@@ -250,9 +255,61 @@ def run_code_size_analysis() {
                 done
             '''
         }
+        archiveArtifacts artifacts: 'code_size_analysis_manifest.tsv,*.json', allowEmptyArchive: true
 
         echo "Code size analysis completed"
     }
+
+def compare_code_size_analysis(previousBuildNumber = null) {
+    def previousBuildLabel = previousBuildNumber ? "b${previousBuildNumber}" : "none"
+    echo "Comparing code size against newest prior records per app (Jenkins last-green reference: ${previousBuildLabel})"
+
+    sh 'python3 -m venv code_size_compare_venv'
+    sh '. code_size_compare_venv/bin/activate && python3 -m pip install --upgrade pip'
+    sh '. code_size_compare_venv/bin/activate && pip3 install "code_size_analyzer_client-python>=1.2.0"'
+
+    withEnv([
+        "BRANCH_NAME=${env.BRANCH_NAME}",
+        "CURRENT_BUILD_NUMBER=${env.BUILD_NUMBER}",
+        "PREVIOUS_BUILD_NUMBER=${previousBuildNumber ?: ''}",
+        "CODE_SIZE_RAM_THRESHOLD_PCT=1.0",
+        "CODE_SIZE_FLASH_WARNING_BYTES=500",
+        "CODE_SIZE_FLASH_FAILURE_BYTES=1000",
+        "CODE_SIZE_INITIAL_WAIT_SECONDS=120",
+        "CODE_SIZE_DATA_WAIT_RETRIES=10",
+        "CODE_SIZE_DATA_WAIT_SECONDS=60"
+    ]) {
+        def compareStatus = sh(script: '''#!/bin/bash
+set -o pipefail
+. code_size_compare_venv/bin/activate
+unset OTEL_EXPORTER_OTLP_ENDPOINT || true
+if [ "$CODE_SIZE_INITIAL_WAIT_SECONDS" -gt 0 ]; then
+    echo "Waiting ${CODE_SIZE_INITIAL_WAIT_SECONDS}s before querying code size analyzer records..."
+    sleep "$CODE_SIZE_INITIAL_WAIT_SECONDS"
+fi
+PREVIOUS_BUILD_ARGS=()
+if [ -n "$PREVIOUS_BUILD_NUMBER" ]; then
+    PREVIOUS_BUILD_ARGS+=(--previous-build "$PREVIOUS_BUILD_NUMBER")
+fi
+python3 jenkins_integration/code_size/compare_code_size_results.py \
+    --branch-name "$BRANCH_NAME" \
+    --current-build "$CURRENT_BUILD_NUMBER" \
+    "${PREVIOUS_BUILD_ARGS[@]}" \
+    --service-url https://code-size-analyzer.silabs.net \
+    --ram-threshold-pct "$CODE_SIZE_RAM_THRESHOLD_PCT" \
+    --flash-warning-bytes "$CODE_SIZE_FLASH_WARNING_BYTES" \
+    --flash-failure-bytes "$CODE_SIZE_FLASH_FAILURE_BYTES" \
+    --data-wait-retries "$CODE_SIZE_DATA_WAIT_RETRIES" \
+    --data-wait-seconds "$CODE_SIZE_DATA_WAIT_SECONDS" | tee code_size_compare_report.txt
+        ''', returnStatus: true)
+        archiveArtifacts artifacts: 'code_size_compare_report.txt', allowEmptyArchive: true
+        if (compareStatus == 10) {
+            unstable("Code size comparison exceeded a warning threshold.")
+        } else if (compareStatus != 0) {
+            error("Code size comparison failed. See code_size_compare_report.txt for details.")
+        }
+    }
+}
 
 def parse_upload_artifacts_output(output) {
         def sha_matcher = output =~ /Commit SHA - (\w+)/
