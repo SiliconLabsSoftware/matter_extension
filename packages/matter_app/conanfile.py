@@ -263,7 +263,6 @@ class matter_appRecipe(MatterBaseRecipe):
         "other_file",
         "readme",
         "post_build",
-        "postbuild",
     )
 
     @classmethod
