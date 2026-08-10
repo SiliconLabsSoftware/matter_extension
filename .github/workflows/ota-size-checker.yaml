@@ -1,6 +1,9 @@
 name: Check OTA Flash Space
 
 on:
+  push:
+    branches:
+      - test-stage
   pull_request:
     branches:
       - main
