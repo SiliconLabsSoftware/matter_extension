@@ -186,3 +186,4 @@ jobs:
             echo "### Result"
             echo "All ${PLATFORM} OTA flash checks **passed**."
           } >> "$GITHUB_STEP_SUMMARY"
+          
