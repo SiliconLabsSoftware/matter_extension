@@ -62,6 +62,9 @@ def _exclusion_reason(path: str) -> Optional[str]:
         return "sample-app content (owned by matter_app package)"
     if path.endswith((".slcp", ".slcw")):
         return "sample project/workspace (owned by matter_app package)"
+    # Internal helper scripts are for checkout use only.
+    if parts[:3] == ["slc", "scripts", "internal"]:
+        return "internal scripts (not packaged)"
     # Exclude hidden directories
     if any(part.startswith(".") for part in parts[:-1]):
         return "hidden directory"
