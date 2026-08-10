@@ -103,7 +103,7 @@ class matterRecipe(MatterBaseRecipe):
     def slt_requirements(self):
         req = {}
         req["zap"] = "~"
-        req["slc_cli"] = "~"
+        req["slc-cli"] = "~"
         return req
 
     def layout(self):
@@ -266,6 +266,8 @@ class matterRecipe(MatterBaseRecipe):
             return "sample-app content (owned by matter_app package)"
         if p.endswith((".slcp", ".slcw")):
             return "sample project/workspace (owned by matter_app package)"
+        if p.startswith("slc/scripts/internal/") or p == "slc/scripts/internal":
+            return "internal scripts (not packaged)"
         return None
 
     def _process_slce_extra(self, filename: str = "matter.slce.extra") -> dict:
