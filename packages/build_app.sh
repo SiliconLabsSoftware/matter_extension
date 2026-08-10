@@ -2,7 +2,7 @@
 # Build a Matter sample from installed Conan/SLT packages (matter + matter_app).
 #
 # Independent of a git checkout: no --export and no submodule updates.
-# Installs SLT tools (conan, slc_cli, zap) and OS packages (make, find) as needed.
+# Installs SLT tools (conan, slc-cli, zap) and OS packages (make, find) as needed.
 #
 # Usage:
 #   ./packages/build_app.sh --slcp matter_wifi_soc_lighting_app_freertos.slcp --board brd4338a
@@ -13,7 +13,7 @@
 #   --slcp NAME              Sample .slcp basename (required)
 #   --board BOARD            Board id, e.g. brd4338a (required)
 #   --version VER            matter_app version to install (default: env MATTER_PACKAGE_VERSION
-#                            or 2.10.0-0.dev)
+#                            or 2.10.0)
 #   -j N                     make -jN (default: 8)
 #   -h, --help               Show this help
 #
@@ -21,27 +21,31 @@
 
 set -euo pipefail
 
-VERSION_DEFAULT="2.10.0-0.dev"
+VERSION_DEFAULT="2.10.0"
 MATTER_PACKAGE_VERSION="${MATTER_PACKAGE_VERSION:-${VERSION_DEFAULT}}"
 SLCP=""
 BOARD=""
 JOBS=8
 
+# Print the header comment block as help text, then exit (arg: exit code).
 usage() {
   sed -n '2,21p' "$0" | sed 's/^# \?//'
   exit "${1:-0}"
 }
 
+# Print an error to stderr and exit with status 1.
 die() {
   echo "error: $*" >&2
   exit 1
 }
 
+# Abort if the named command is not on PATH.
 need_cmd() {
   command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"
 }
 
 # Install an OS package when the command is missing (apt-based systems).
+# Args: command name, optional apt package name (defaults to command name).
 ensure_os_cmd() {
   local cmd="$1"
   local pkg="${2:-$1}"
@@ -105,81 +109,59 @@ echo "MATTER_PACKAGE_VERSION=${MATTER_PACKAGE_VERSION}"
 
 need_cmd slt
 
-# Optional: load tools from a checkout when run as packages/build_app.sh in the repo.
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-CHECKOUT_ROOT=""
-if [[ -f "${SCRIPT_DIR}/../matter.slce" || -d "${SCRIPT_DIR}/../slc/apps" ]]; then
-  # Running from repo: packages/build_app.sh
-  CHECKOUT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-elif [[ -f "${SCRIPT_DIR}/matter.slce" ]]; then
-  CHECKOUT_ROOT="${SCRIPT_DIR}"
-fi
-if [[ -n "${CHECKOUT_ROOT}" ]]; then
-  ENV_FILE="${CHECKOUT_ROOT}/slc/tools/.env"
-  if [[ -f "${ENV_FILE}" ]]; then
-    set -a
-    # shellcheck disable=SC1090
-    source "${ENV_FILE}"
-    set +a
-    if [[ -n "${TOOLS_PATH:-}" ]]; then
-      export PATH="${TOOLS_PATH}:${PATH}"
-    fi
-  fi
-  if [[ -x "${CHECKOUT_ROOT}/slc/tools/slt" ]]; then
-    export PATH="${CHECKOUT_ROOT}/slc/tools:${PATH}"
-  fi
-fi
-
 SLT_HOME="${SLT_HOME:-${HOME}/.silabs/slt}"
 CONAN="${SLT_HOME}/engines/conan/conan/conan"
 export CONAN_HOME="${CONAN_HOME:-${SLT_HOME}/installs/conan}"
 
-echo "Installing SLT tools (conan, slc_cli, zap)..."
+echo "Installing SLT tools (conan, slc-cli, zap)..."
 slt install conan
-slt install slc_cli
+# Matter slt_requirements use package id "slc-cli" (6.0.23+), not legacy "slc_cli" (6.0.9).
+slt install slc-cli
 slt install zap
 [[ -x "${CONAN}" ]] || die "SLT Conan missing after install: ${CONAN}"
 echo "Using CONAN=${CONAN}"
 echo "CONAN_HOME=${CONAN_HOME}"
 
-# SLT does not always put `slc` on PATH in this shell. The executable lives under
-# the slc_cli_base package (…/slc_cli/slc), not always at `slt where slc_cli`.
+# Put a usable `slc` on PATH from SLT installs.
+# Prefers package id "slc-cli" (Matter / 6.0.23+) over legacy "slc_cli" / "slc_cli_base" (6.0.9).
+# Falls back to scanning SLT archive installs if `slt where` does not resolve.
 ensure_slc_on_path() {
-  if command -v slc >/dev/null 2>&1; then
-    return 0
-  fi
-
   local cand dir
   for cand in \
-    "$(slt where slc_cli_base 2>/dev/null || true)" \
-    "$(slt where slc_cli 2>/dev/null || true)"; do
+    "$(slt where slc-cli 2>/dev/null || true)" \
+    "$(slt where slc_cli 2>/dev/null || true)" \
+    "$(slt where slc_cli_base 2>/dev/null || true)"; do
     [[ -n "${cand}" ]] || continue
     for dir in "${cand}" "${cand}/slc_cli" "${cand}/bin"; do
       if [[ -x "${dir}/slc" ]]; then
         export PATH="${dir}:${PATH}"
-        echo "Using slc from ${dir}"
+        echo "Using slc from ${dir} ($("${dir}/slc" -version 2>/dev/null || echo unknown))"
         return 0
       fi
     done
   done
 
-  # Fallback: newest archive install that contains an executable named slc
-  cand="$(find "${SLT_HOME}/installs/archive" -type f -name slc -executable 2>/dev/null | sort -r | head -n1 || true)"
+  # Fallback: prefer archive installs named slc-cli-* (newer) over slc_cli_*
+  cand="$(find "${SLT_HOME}/installs/archive" -type f -path '*/slc-cli-*/slc_cli/slc' -executable 2>/dev/null | sort -r | head -n1 || true)"
+  if [[ -z "${cand}" ]]; then
+    cand="$(find "${SLT_HOME}/installs/archive" -type f -name slc -executable 2>/dev/null | sort -r | head -n1 || true)"
+  fi
   if [[ -n "${cand}" ]]; then
     dir="$(dirname "${cand}")"
     export PATH="${dir}:${PATH}"
-    echo "Using slc from ${dir}"
+    echo "Using slc from ${dir} ($("${dir}/slc" -version 2>/dev/null || echo unknown))"
     return 0
   fi
 
   return 1
 }
 
-ensure_slc_on_path || die "slc not found after slt install slc_cli (check slc_cli_base install)"
 
 echo "Ensuring OS build tools (make, find)..."
 ensure_os_cmd make make
 ensure_os_cmd find findutils
+
+ensure_slc_on_path || die "slc not found after slt install slc-cli"
 
 need_cmd slc
 need_cmd make
@@ -195,14 +177,19 @@ MATTER="$(slt where matter)"
 echo "MATTER_APP=${MATTER_APP}"
 echo "MATTER=${MATTER}"
 
-for f in matter.slsdk src/app/zap-templates/app-templates.json; do
-  if [[ ! -f "${MATTER}/${f}" ]]; then
-    echo "warning: missing in matter package: ${f}" >&2
+print_pkg_meta_version() {
+  local root="$1"
+  local label="$2"
+  local meta="${root}/../d/metadata/package_metadata.yaml"
+  local ver=""
+  if [[ -f "${meta}" ]]; then
+    ver="$(sed -n 's/^version:[[:space:]]*//p' "${meta}" | head -n1)"
   fi
-done
-if [[ ! -f "${MATTER_APP}/matter_app.slsdk" ]]; then
-  echo "warning: missing matter_app.slsdk in matter_app package" >&2
-fi
+  echo "${label} package version=${ver:-unknown}"
+}
+
+print_pkg_meta_version "${MATTER_APP}" "matter_app"
+print_pkg_meta_version "${MATTER}" "matter"
 
 SLCP_PATH="$(find "${MATTER_APP}" -type f -name "${SLCP}" 2>/dev/null | head -n1 || true)"
 [[ -n "${SLCP_PATH}" ]] || die "could not find ${SLCP} under ${MATTER_APP}"
