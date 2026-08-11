@@ -11,7 +11,7 @@ Ownership model:
   SUBMODULE        Files under third_party/ Not Matter extension
                    responsibility, reported as informational only.
   SKIPPED          Findings intentionally not enforced by this script. Logged
-                   only; do not fail CI.
+                   only, do not fail CI.
 
 Per section policy:
   Config File on Include Path
@@ -22,8 +22,9 @@ Per section policy:
     based.
 
   Studio SDK Metadata "No board data found"
-    SKIPPED. Board metadata comes from hw-db-service; demos may reference
-    boards that are not present in the installed hardware DB.
+    SKIPPED. We support internal boards that are not present in the public
+    hardware DB. Skip these to avoid CI failures and keep existing user flows
+    intact.
 
   Any other section (including SDK warnings, other Studio SDK Metadata)
     Fully enforced, path based: SUBMODULE if third_party/, otherwise
@@ -186,7 +187,6 @@ def _classify_finding(section: str, finding: str, filepath: Optional[str] = None
     if section == "Missing Documentation Reference":
         return SKIPPED
 
-    # Board data is owned by hw-db-service, not this extension.
     if section == "Studio SDK Metadata" and _NO_BOARD_DATA_FINDING.search(finding):
         return SKIPPED
 
