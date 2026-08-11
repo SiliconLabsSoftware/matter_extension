@@ -94,3 +94,12 @@ runs:
         ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
         echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
         echo "$ARM_LLVM_DIR/bin" >> $GITHUB_PATH
+
+    - name: install hw-db-service
+      id: install-hw-db-service
+      shell: bash
+      run: |
+        slt install hw-db-service
+        HW_DB_SERVICE_PATH=$(slt where hw-db-service)
+        echo "HW_DB_SERVICE_PATH=$HW_DB_SERVICE_PATH" >> $GITHUB_ENV
+        echo "$HW_DB_SERVICE_PATH" >> $GITHUB_PATH
