@@ -60,6 +60,9 @@ component:
   - id: matter_log_rtt
   - id: matter_lwip
   - id: matter_service_http_embedded
+  - id: matter_service_mqtt
+  - id: paho_mqtt_embedded
+    condition: [matter_service_mqtt]
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -100,6 +103,24 @@ component:
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
     value: "0"
+  - name: SL_MBEDTLS_SSL_IN_CONTENT_LEN
+    value: "6384"
+    condition: [paho_mqtt_embedded]
+  - name: SL_MBEDTLS_SSL_OUT_CONTENT_LEN
+    value: "6384"
+    condition: [paho_mqtt_embedded]
+  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+    value: "1"
+    condition: [paho_mqtt_embedded]
+  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
+    value: "1"
+    condition: [paho_mqtt_embedded]
+  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED
+    value: "1"
+    condition: [paho_mqtt_embedded]
+  - name: MBEDTLS_SSL_CIPHERSUITES
+    value: MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+    condition: [paho_mqtt_embedded]
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-wifi-app.zap
