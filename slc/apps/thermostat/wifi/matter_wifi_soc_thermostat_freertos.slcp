@@ -56,7 +56,8 @@ component:
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
   - id: matter_default_lcd_config
-  - id: matter_log_uart
+  # - id: matter_log_uart
+  - id: matter_log_rtt
   - id: matter_lwip
   - id: matter_service_http_embedded
 
