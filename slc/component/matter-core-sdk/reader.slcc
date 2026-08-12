@@ -4,8 +4,8 @@ define:
     value: "1"
   - name: RADIO_CONFIG_DMP_SUPPORT
     value: "1"
-description: Provides core utility types and helpers used by Matter minimal mDNS functionality.
-id: core
+description: Provides DNS message decoding for Matter DNS-SD. Split from wire/core so write-only users do not pull in the parser.
+id: reader
 include:
   - path: third_party/matter_sdk/examples/platform/silabs
   - path: third_party/matter_sdk/src
@@ -15,25 +15,19 @@ include:
   - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/lib/dnssd/wire
     file_list:
-      - path: DnsHeader.h
-      - path: RecordWriter.h
-      - path: QName.h
-      - path: BytesRange.h
-      - path: FlatAllocatedQName.h
-      - path: Constants.h
-      - path: HeapQName.h
-      - path: QNameString.h
-label: core
+      - path: Parser.h
+      - path: Query.h
+      - path: RecordData.h
+label: reader
 package: matter
 provides:
-  - name: matter_core
+  - name: matter_reader
 quality: production
 metadata:
   sbom:
     license: "Apache 2.0"
 source:
-  - path: third_party/matter_sdk/src/lib/dnssd/wire/QName.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/wire/QNameString.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/wire/RecordWriter.cpp
+  - path: third_party/matter_sdk/src/lib/dnssd/wire/Parser.cpp
+  - path: third_party/matter_sdk/src/lib/dnssd/wire/RecordData.cpp
 ui_hints:
   visibility: never

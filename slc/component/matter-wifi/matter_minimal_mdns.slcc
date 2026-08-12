@@ -12,6 +12,7 @@ provides:
   - name: matter_minimal_mdns
 requires:
   - name: matter_core
+  - name: matter_reader
   - name: matter_default_policy
   - name: matter_records
   - name: matter_responders
@@ -19,7 +20,5 @@ requires:
 include:
   - path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns
 source:
-  - path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns/Parser.cpp
-  - path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns/RecordData.cpp
   - path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns/ResponseSender.cpp
   - path: third_party/matter_sdk/src/lib/dnssd/minimal_mdns/Server.cpp
