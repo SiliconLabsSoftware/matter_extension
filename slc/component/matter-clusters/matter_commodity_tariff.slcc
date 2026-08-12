@@ -20,6 +20,7 @@ include:
       - path: commodity-tariff-server.h
       - path: CommodityTariffAttrsDataMgmt.h
       - path: CommodityTariffConsts.h
+      - path: CommodityTariffContainers.h
       - path: CommodityTariffTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
