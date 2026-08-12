@@ -138,8 +138,6 @@ define:
     value: "4092"
   - name: SI917_SOC
     value: 1
-  - name: SL_WIFI_LIT_APP
-    value: "1"
 
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
@@ -162,6 +160,11 @@ configuration:
     value: 1
   - name: CHIP_CONFIG_ENABLE_ICD_UAT
     value: 1
+  # LwIP deferred configuration
+  - name: SL_INET_CONFIG_UDP_LWIP_QUEUE_UNTIL_NETIF_READY
+    value: 1
+  - name: SL_INET_CONFIG_UDP_LWIP_DEFERRED_SEND_QUEUE_SIZE
+    value: 8
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"
