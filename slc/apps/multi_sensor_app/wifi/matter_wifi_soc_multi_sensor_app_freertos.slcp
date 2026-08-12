@@ -147,7 +147,7 @@ configuration:
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
   - name: SL_IDLE_MODE_DURATION_S
-    value: "600"
+    value: "3600"
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
