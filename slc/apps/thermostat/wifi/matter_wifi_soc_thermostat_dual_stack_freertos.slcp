@@ -57,7 +57,8 @@ component:
   #- id: matter_si70xx_sensor
   - id: matter_default_lcd_config
   - id: matter_log_uart
-  - id: matter_lwip
+  - id: matter_dual_stack
+  - id: matter_service_http_offload
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
