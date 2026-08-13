@@ -19,12 +19,6 @@ try:
         if (_base / "_shared").is_dir() and str(_base) not in sys.path:
             sys.path.insert(0, str(_base))
             break
-    # Prefer recipe dir (Conan cache e/) so exported e/_shared is found; else packages/.
-    _recipe_dir = Path(__file__).resolve().parent
-    for _base in (_recipe_dir, _recipe_dir.parent):
-        if (_base / "_shared").is_dir() and str(_base) not in sys.path:
-            sys.path.insert(0, str(_base))
-            break
 except Exception:
     pass
 from _shared.base_recipe import MatterBaseRecipe
@@ -33,13 +27,7 @@ from _shared.base_recipe import MatterBaseRecipe
 class matter_appRecipe(MatterBaseRecipe):
     name = "matter_app"
     # version set dynamically in MatterBaseRecipe.set_version() from matter.slce + SL_PRERELEASE*
-    # version set dynamically in MatterBaseRecipe.set_version() from matter.slce + SL_PRERELEASE*
     description = "matter sample-app package"
-    # App SDK root marker + Studio templates (same pattern as wifi_app.slsdk).
-    _REQUIRED_ROOT_FILES = (
-        "matter_app.slsdk",
-        "matter_templates.xml",
-    )
     # App SDK root marker + Studio templates (same pattern as wifi_app.slsdk).
     _REQUIRED_ROOT_FILES = (
         "matter_app.slsdk",
@@ -93,15 +81,8 @@ class matter_appRecipe(MatterBaseRecipe):
     @property
     def matter_app_folder(self) -> str:
         return str(self.repo_root)
-    # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
-    # on self.source_folder so repo-relative operations stay consistent.
-    @property
-    def matter_app_folder(self) -> str:
-        return str(self.repo_root)
 
     def requirements(self):
-        # Range on line version.
-        self.requires(f"matter/{self.matter_conan_range}@{self.user}")
         # Range on line version.
         self.requires(f"matter/{self.matter_conan_range}@{self.user}")
 
@@ -113,7 +94,6 @@ class matter_appRecipe(MatterBaseRecipe):
 
     def export(self):
         self.export_shared_recipe_support()
-        self.export_shared_recipe_support()
 
     def package_id(self):
         # Completely clear all the info, resulting ``package_id`` will be the same
@@ -123,16 +103,11 @@ class matter_appRecipe(MatterBaseRecipe):
         # Define the source folder for the matter_app component (property-backed)
         matter_app_folder = self.matter_app_folder
         repo_root = self.repo_root
-        repo_root = self.repo_root
 
         # Define the files to be included in the package
         files_to_package = {"License"}
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
-
-        desired_qualities = ["production", "evaluation"]
-        desired_packages = ["matter"]
 
         desired_qualities = ["production", "evaluation"]
         desired_packages = ["matter"]
@@ -141,25 +116,9 @@ class matter_appRecipe(MatterBaseRecipe):
             self._gather_slc_release_files(
                 desired_qualities=desired_qualities,
                 desired_packages=desired_packages,
-                desired_qualities=desired_qualities,
-                desired_packages=desired_packages,
                 assistant=silabs_package_assistant,
             )
         )
-        files_to_package.update(self._gather_required_root_files())
-        files_to_package.update(
-            self._gather_slcp_external_inputs(
-                desired_qualities=desired_qualities,
-                desired_packages=desired_packages,
-            )
-        )
-
-        # Resolve against repo_root — cwd during export-pkg is not always the repo.
-        files_to_package = self._existing_repo_relative_files(files_to_package)
-
-        # Root metadata uses repo-relative names; re-add after exists-filter, then hard-require.
-        files_to_package.update(self._gather_required_root_files())
-        self._require_root_files(files_to_package)
         files_to_package.update(self._gather_required_root_files())
         files_to_package.update(
             self._gather_slcp_external_inputs(
@@ -203,47 +162,26 @@ class matter_appRecipe(MatterBaseRecipe):
         )
 
         if (repo_root / "conan-matter_app.lock").is_file():
-        # Package-only builder at package root: <pkg>/build_app.sh
-        build_app_src = repo_root / "packages" / "build_app.sh"
-        if not build_app_src.is_file():
-            raise FileNotFoundError(f"missing {build_app_src}")
-        copy(
-            self,
-            pattern="build_app.sh",
-            src=str(build_app_src.parent),
-            dst=os.path.join(self.package_folder, "."),
-        )
-
-        if (repo_root / "conan-matter_app.lock").is_file():
             copy(self, pattern="conan-matter_app.lock", src=matter_app_folder, dst=os.path.join(self.package_folder, "."))
 
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
-
-
     def build(self):
         # Define the source folder for the matter_app component (property-backed)
         matter_app_folder = self.matter_app_folder
-        repo_root = self.repo_root
         repo_root = self.repo_root
 
         # Define the files to be included in the package
         files_to_package = {"License"}
         git_extra_files = []
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
-
-        desired_qualities = ["production", "evaluation"]
-        desired_packages = ["matter"]
 
         desired_qualities = ["production", "evaluation"]
         desired_packages = ["matter"]
 
         files_to_package.update(
             self._gather_slc_release_files(
-                desired_qualities=desired_qualities,
-                desired_packages=desired_packages,
                 desired_qualities=desired_qualities,
                 desired_packages=desired_packages,
                 assistant=silabs_package_assistant,
@@ -264,39 +202,17 @@ class matter_appRecipe(MatterBaseRecipe):
         # Repo source path; packaged as <pkg>/build_app.sh (see package()).
         if (repo_root / "packages" / "build_app.sh").is_file():
             files_to_package.add("packages/build_app.sh")
-        files_to_package.update(self._gather_required_root_files())
-        files_to_package.update(
-            self._gather_slcp_external_inputs(
-                desired_qualities=desired_qualities,
-                desired_packages=desired_packages,
-            )
-        )
-
-        files_to_package = self._existing_repo_relative_files(files_to_package)
-        files_to_package.update(self._gather_required_root_files())
-        self._require_root_files(files_to_package)
-
-        # Repo source path; packaged as <pkg>/build_app.sh (see package()).
-        if (repo_root / "packages" / "build_app.sh").is_file():
-            files_to_package.add("packages/build_app.sh")
 
         if git_extra_files:
           files_to_package.update(git_extra_files)
         with open("matter_app-filter-repo-filelist.txt","w") as filelistfile:
             for file in sorted(files_to_package):
-            for file in sorted(files_to_package):
                 filelistfile.write(file+'\n')
-        # Map repo path → package-root layout for filter-repo consumers.
-        git_path_mapping = ["packages/build_app.sh:build_app.sh"]
         # Map repo path → package-root layout for filter-repo consumers.
         git_path_mapping = ["packages/build_app.sh:build_app.sh"]
         with open("matter_app-filter-repo-pathmap.txt","w") as pathmapfile:
             for mapping in git_path_mapping:
                 pathmapfile.write(mapping+'\n')
-
-
-
-
 
     def package_info(self):
         # Reference: https://confluence.silabs.com/pages/viewpage.action?spaceKey=SWARCH&title=Package+Manager%3A+Conan+Metadata+for+SLT+Integration
@@ -504,4 +420,3 @@ class matter_appRecipe(MatterBaseRecipe):
                 collected.add(rel_path)
                 collected.update(related)
         return collected
-
