@@ -13,5 +13,5 @@ provides:
   - name: matter_services
 
 define:
-  - name: SLI_MATTER_ENABLE_SERVICES
+  - name: SL_MATTER_ENABLE_SERVICES
     value: "1"
