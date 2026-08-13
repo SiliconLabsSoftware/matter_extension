@@ -56,8 +56,7 @@ component:
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
   - id: matter_default_lcd_config
-  # - id: matter_log_uart
-  - id: matter_log_rtt
+  - id: matter_log_uart
   - id: matter_lwip
 
   # Override configuration for JTAG use
@@ -65,8 +64,8 @@ component:
   - id: segger_rtt
   #  - id: i2cspm
   #    instance: [sensor]
-
-  - id: wifi_resources
+  
+  - id: wifi_resources  
   - id: sl_si91x_common_flash_nvm3
   - id: sl_si91x_wireless
   - id: wifi
@@ -99,24 +98,6 @@ component:
 configuration:
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
     value: "0"
-  - name: SL_MBEDTLS_SSL_IN_CONTENT_LEN
-    value: "6384"
-    condition: [paho_mqtt_embedded]
-  - name: SL_MBEDTLS_SSL_OUT_CONTENT_LEN
-    value: "6384"
-    condition: [paho_mqtt_embedded]
-  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
-    value: "1"
-    condition: [paho_mqtt_embedded]
-  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED
-    value: "1"
-    condition: [paho_mqtt_embedded]
-  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED
-    value: "1"
-    condition: [paho_mqtt_embedded]
-  - name: MBEDTLS_SSL_CIPHERSUITES
-    value: MBEDTLS_TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-    condition: [paho_mqtt_embedded]
 
 config_file:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/data_model/thermostat-wifi-app.zap
