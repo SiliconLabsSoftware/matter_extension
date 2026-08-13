@@ -17,8 +17,6 @@ include:
     file_list:
       - path: ListenIterator.h
       - path: ServerIPAddresses.h
-      - path: Query.h
-      - path: Parser.h
       - path: AddressPolicy_DefaultImpl.h
       - path: QueryReplyFilter.h
       - path: Logging.h
@@ -28,7 +26,6 @@ include:
       - path: AddressPolicy.h
       - path: AddressPolicy_LibNlImpl.h
       - path: Server.h
-      - path: RecordData.h
       - path: MinMdnsConfig.h
 label: address_policy
 package: matter

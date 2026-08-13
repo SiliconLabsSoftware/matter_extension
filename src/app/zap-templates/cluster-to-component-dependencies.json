@@ -54,6 +54,12 @@
     ]
   },
   {
+    "clusterCode": "av analysis-server",
+    "value": [
+      "%extension-matter%matter_av_analysis"
+    ]
+  },
+  {
     "clusterCode": "basic information-server",
     "value": [
       "%extension-matter%matter_basic_information"

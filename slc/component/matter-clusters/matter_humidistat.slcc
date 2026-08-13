@@ -21,6 +21,7 @@ include:
       - path: CodegenIntegration.h
         unless: [matter_code_driven_dm]
       - path: HumidistatCluster.h
+      - path: HumidistatTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
     value: matter_humidistat

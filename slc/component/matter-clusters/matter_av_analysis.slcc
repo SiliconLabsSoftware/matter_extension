@@ -1,0 +1,27 @@
+category: Clusters|Cameras
+description: >
+  Implementation of the AV Analysis Server Cluster.
+  The user has to enable the AV Analysis Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+id: matter_av_analysis
+package: matter
+label: AV Analysis Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_av_analysis
+source:
+  - path: third_party/matter_sdk/src/app/clusters/av-analysis-server/AvAnalysisCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/av-analysis-server/AvAnalysisLogic.cpp
+  - path: third_party/matter_sdk/src/app/clusters/av-analysis-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
+include:
+  - path: third_party/matter_sdk/src/app/clusters/av-analysis-server
+    file_list:
+      - path: AvAnalysisCluster.h
+      - path: AvAnalysisLogic.h
+      - path: AvAnalysisStorage.h
+template_contribution:
+  - name: component_catalog
+    value: matter_av_analysis
