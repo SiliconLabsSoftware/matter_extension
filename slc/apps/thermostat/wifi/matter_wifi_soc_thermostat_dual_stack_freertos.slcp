@@ -1,4 +1,4 @@
-project_name: matter_wifi_soc_thermostat_freertos
+project_name: matter_wifi_soc_thermostat_dual_stack_freertos
 label: Matter WiFi - SoC Thermostat FreeRTOS
 description: Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app
 category: Matter Application
@@ -65,8 +65,8 @@ component:
   - id: segger_rtt
   #  - id: i2cspm
   #    instance: [sensor]
-  
-  - id: wifi_resources  
+
+  - id: wifi_resources
   - id: sl_si91x_common_flash_nvm3
   - id: sl_si91x_wireless
   - id: wifi
