@@ -108,7 +108,6 @@ if __name__ == '__main__':
     replace_text(str(ROOT)+"/matter.slce","  *id: simplicity_sdk\n  *version: "+VERSION_REGEX_FORMAT,"  id: simplicity_sdk\n  version: "+SISDK_NEW_VERSION)
 
     # Update matter.slsdk and matter_app.slsdk
-    # Update matter.slsdk and matter_app.slsdk
     #
     # REGEX FORMAT:
     # version=0.0.4
