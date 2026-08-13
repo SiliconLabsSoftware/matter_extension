@@ -1,8 +1,8 @@
-id: matter_service_http_embedded
+id: matter_service_http_offload
 package: matter
 description: >
-  Matter mbedded HTTP service for Wi-Fi platforms.
-label: Matter embedded HTTP Service
+  Matter offload HTTP service for Wi-Fi platforms.
+label: Matter offload HTTP Service
 category: Matter-WiFi|Services|HTTP
 quality: production
 metadata:
@@ -10,7 +10,7 @@ metadata:
     license: Zlib
 
 provides:
-  - name: matter_service_http_embedded
+  - name: matter_service_http_offload
 
 requires:
   - name: matter_services
@@ -26,5 +26,5 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/http_client.c
 
 define:
-  - name: SLI_MATTER_ENABLE_HTTP_SERVICE
+  - name: SL_MATTER_ENABLE_HTTP_SERVICE
     value: "1"
