@@ -26,5 +26,5 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/http_client.c
 
 define:
-  - name: SLI_MATTER_ENABLE_HTTP_SERVICE
+  - name: SL_MATTER_ENABLE_HTTP_SERVICE
     value: "1"
