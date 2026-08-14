@@ -317,6 +317,7 @@ components:
   - naming
   - nodatamodel
   - notifier
+  - reader
   - records
   - responders
   - server_cluster
@@ -791,6 +792,7 @@ extra_files:
   - slc/component/matter-core-sdk/notifier.slcc
   - slc/component/matter-core-sdk/power_save_interface.slcc
   - slc/component/matter-core-sdk/read_client.slcc
+  - slc/component/matter-core-sdk/reader.slcc
   - slc/component/matter-core-sdk/records.slcc
   - slc/component/matter-core-sdk/responders.slcc
   - slc/component/matter-core-sdk/server_cluster.slcc
@@ -3201,7 +3203,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_2.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_4.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_2_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_S_3_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_TBRM_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_TBRM_2_2.yaml
