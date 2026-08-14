@@ -7,15 +7,8 @@
             },
             {
                 "boards": ["brd4187c"],
-                "arguments": ["--output_suffix copy-sources", "--copy-sources"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357a", "--with_app siwx917_ncp_brd4357a"]
-            },
-            {
-                "boards": ["brd4187c"],
-                "arguments": ["--output_suffix brd4357c", "--with_app siwx917_ncp_brd4357c"]
+                "arguments": ["--output_suffix brd4357c-m-ota-enc", "--without_app matter_ota_support",
+                              "--with_app siwx917_ncp_brd4357c,matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             }
         ]
     },

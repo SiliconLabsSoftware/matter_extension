@@ -11,18 +11,13 @@
                 "arguments": ["--output_suffix copy-sources", "--copy-sources"]
             }
         ],
-        "platform_template": [
-            {
+        "lock-app":
+                [
+                    {
                 "boards": ["brd4116a"],
-                "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
+                "arguments": ["--output_suffix peripherals-icd-sit-60","--with_app matter_peripherals,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             }
-        ],
-        "thermostat": [
-            {
-                "boards": ["brd4116a"],
-                "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
-            }
-        ]
+                ]
     },
     "full": {
 

@@ -21,6 +21,13 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix matter_aws_transport_lwip", "--with_app matter_aws,matter_aws_transport_lwip"]
             }
+        ],
+        "lock-app": [
+            {
+                "boards": ["brd4338a"],
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
+            }
         ]
     },
     "full": {
@@ -121,11 +128,6 @@
                 "arguments": ["--output_suffix clock-config-clk-sleep-timer",
                               "--configuration SLEEP_TIMER_CLOCK_SELECTION:ST_RC_KHZ_CLK_SEL",
                               "--with_app sl_si91x_sleep_timer_clock_selection"]
-            },
-            {
-                "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-60",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             },
             {
                 "boards": ["brd4338a"],
