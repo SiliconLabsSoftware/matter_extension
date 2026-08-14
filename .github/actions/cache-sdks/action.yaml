@@ -78,3 +78,8 @@ runs:
           with:
               path: /tmp/silabs-sdks.tar
               key: ${{ steps.compute-cache-key.outputs.cache-key }}
+
+        - name: Remove SDK tarball
+          if: steps.cache.outputs.cache-hit != 'true'
+          shell: bash
+          run: rm -f /tmp/silabs-sdks.tar

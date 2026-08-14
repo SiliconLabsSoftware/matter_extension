@@ -42,7 +42,7 @@ jobs:
                       | awk '{print $2}' \
                       | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
                   )
-                  git submodule update --init -- "${paths[@]}"
+                  git submodule update --init --depth 1 -- "${paths[@]}"
 
             - name: Cache SDKs
               uses: ./.github/actions/cache-sdks
