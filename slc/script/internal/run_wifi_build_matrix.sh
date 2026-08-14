@@ -6,6 +6,7 @@
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite smoke-wifi --version 2.10.0-0.dev
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite smoke-thread --version 2.10.0-alpha.9
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite smoke-cmp --version 2.10.0-0.dev --export
+#   ./slc/script/internal/run_wifi_build_matrix.sh --suite sanity --version 2.10.0-0.dev
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite all --version 2.10.0-0.dev --export --clean
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite all --version 2.10.0-0.dev --dry-run
 #   ./slc/script/internal/run_wifi_build_matrix.sh --suite smoke-wifi --version 2.10.0-0.dev -j 16
@@ -14,7 +15,8 @@
 #   smoke-wifi   Wi-Fi SoC / 917 NCP lock + platform
 #   smoke-thread Thread platform template (non-ICD / ICD)
 #   smoke-cmp    Zigbee concurrent / sequential + thermostat concurrent
-#   all          Run every suite above in order
+#   sanity       917 SoC lighting (brd4338a) + Thread lighting (brd4187c)
+#   all          Run every smoke suite above in order (excludes sanity)
 #
 # Package options (same idea as packages/dev_build_app.sh):
 #   default      Use cached matter/matter_app for --version (no remove, no export-pkg)
@@ -96,7 +98,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-[[ -n "${SUITE}" ]] || die "required: --suite <smoke-wifi|smoke-thread|smoke-cmp|all>"
+[[ -n "${SUITE}" ]] || die "required: --suite <smoke-wifi|smoke-thread|smoke-cmp|sanity|all>"
 [[ -n "${MATTER_PACKAGE_VERSION}" ]] || die "required: --version <ver> (e.g. --version 2.10.0-0.dev)"
 if [[ "${CLEAN}" -eq 1 && "${DO_EXPORT}" -eq 0 ]]; then
   die "--clean only applies with --export"
@@ -133,14 +135,21 @@ MATRIX_SMOKE_CMP=(
   "matter_thread_soc_thermostat_series_3_freertos_full|brd1019a,SIMG301M113WIH|matter_zigbee_concurrent,matter_zigbee_multiprotocol_common|cmp-concurrent|-j8"
 )
 
+# Sanity: 917 SoC lighting + Thread series-2 lighting.
+MATRIX_SANITY=(
+  "matter_wifi_soc_lighting_app_freertos|brd4338a|||-j8"
+  "matter_thread_soc_lighting_app_series_2_freertos_full|brd4187c|||-j8"
+)
+
 select_matrix() {
   local suite="$1"
   case "${suite}" in
     smoke-wifi) MATRIX=("${MATRIX_SMOKE_WIFI[@]}") ;;
     smoke-thread) MATRIX=("${MATRIX_SMOKE_THREAD[@]}") ;;
     smoke-cmp) MATRIX=("${MATRIX_SMOKE_CMP[@]}") ;;
+    sanity) MATRIX=("${MATRIX_SANITY[@]}") ;;
     *)
-      die "unknown suite: ${suite} (expected smoke-wifi|smoke-thread|smoke-cmp|all)"
+      die "unknown suite: ${suite} (expected smoke-wifi|smoke-thread|smoke-cmp|sanity|all)"
       ;;
   esac
 }
@@ -314,6 +323,13 @@ setup_packages() {
   else
     echo "Using cached packages for ${MATTER_PACKAGE_VERSION} (pass --export to rebuild packages)"
   fi
+
+  echo "=== Conan home / local packages (must match export) ==="
+  echo "CONAN=${CONAN}"
+  echo "CONAN_HOME=${CONAN_HOME}"
+  "${CONAN}" config home
+  "${CONAN}" list "matter/${MATTER_PACKAGE_VERSION}@silabs:*"
+  "${CONAN}" list "matter_app/${MATTER_PACKAGE_VERSION}@silabs:*"
 
   echo "Installing ${REF} via SLT..."
   slt install "${REF}" -e conan
