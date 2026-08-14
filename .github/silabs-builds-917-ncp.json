@@ -62,6 +62,11 @@
             },
             {
                 "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sit-60", "-pids application",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
+            },
+            {
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix m-ota",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_custom_processor"]
