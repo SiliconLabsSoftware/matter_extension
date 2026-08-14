@@ -10,7 +10,8 @@ metadata:
 
 provides:
   - name: matter_cpc
-  - name: matter_uart_interface
+# could be used to forward the matter_shell in the future.
+  - name: matter_uart_interface 
 
 conflicts:
   - name: matter_uart
