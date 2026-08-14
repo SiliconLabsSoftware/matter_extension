@@ -69,8 +69,6 @@ jobs:
                   submodules: false
             - uses: ./.github/actions/cache-sdks
               id: cache-sdks
-              with:
-                  checkout-on-miss: false
 
     build_lighting_app:
         name: Build Lighting App

@@ -1,19 +1,11 @@
 name: Cache SDKs
-description: Restore simplicity_sdk and wifi_sdk from the base-branch cache. Saves on main/release_*, or on a PR that updates .gitmodules or those submodule pins.
-
-inputs:
-    checkout-on-miss:
-        description: Checkout and LFS-pull the SDKs when the cache misses (builder jobs). Warm jobs can leave this false; an SDK-pin PR still populates and saves.
-        required: false
-        default: "true"
+description: Restore simplicity_sdk and wifi_sdk from cache. On miss, checkout, LFS-pull, and save so later jobs reuse it.
 
 outputs:
     cache-key:
         value: ${{ steps.compute-cache-key.outputs.cache-key }}
     cache-hit:
         value: ${{ steps.cache.outputs.cache-hit }}
-    sdk-updated:
-        value: ${{ steps.compute-cache-key.outputs.sdk-updated }}
 
 runs:
     using: "composite"
@@ -36,25 +28,8 @@ runs:
 
               CACHE_KEY="silabs-sdks-${{ runner.os }}-${{ runner.arch }}-${SCOPE}-${SISDK_TAG}-${SISDK_SHA:0:12}-${WIFI_SHA:0:12}"
 
-              SDK_UPDATED=true
-              if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-                  SDK_UPDATED=false
-                  BASE_SHA="${{ github.event.pull_request.base.sha }}"
-                  if [[ -n "${BASE_SHA}" ]] && git fetch --depth=1 origin "${BASE_SHA}"; then
-                      if git diff --name-only "${BASE_SHA}" HEAD \
-                          | grep -qxE '\.gitmodules|third_party/simplicity_sdk|third_party/wifi_sdk'; then
-                          SDK_UPDATED=true
-                      fi
-                  else
-                      echo "Could not diff against PR base; treating SDK pins as updated"
-                      SDK_UPDATED=true
-                  fi
-              fi
-
               echo "cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
-              echo "sdk-updated=${SDK_UPDATED}" >> "$GITHUB_OUTPUT"
               echo "SDK cache key: ${CACHE_KEY}"
-              echo "SDK pins updated: ${SDK_UPDATED}"
 
         - name: Restore SDK cache
           id: cache
@@ -75,7 +50,7 @@ runs:
               du -sh third_party/simplicity_sdk third_party/wifi_sdk
 
         - name: Checkout SDKs and pull LFS
-          if: ${{ steps.cache.outputs.cache-hit != 'true' && (inputs.checkout-on-miss == 'true' || steps.compute-cache-key.outputs.sdk-updated == 'true') }}
+          if: steps.cache.outputs.cache-hit != 'true'
           shell: bash
           run: |
               set -euo pipefail
@@ -88,7 +63,7 @@ runs:
               du -sh third_party/simplicity_sdk third_party/wifi_sdk
 
         - name: Pack SDK working trees
-          if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.compute-cache-key.outputs.sdk-updated == 'true' }}
+          if: steps.cache.outputs.cache-hit != 'true'
           shell: bash
           run: |
               set -euo pipefail
@@ -98,7 +73,7 @@ runs:
               ls -lh /tmp/silabs-sdks.tar
 
         - name: Save SDK cache
-          if: ${{ steps.cache.outputs.cache-hit != 'true' && steps.compute-cache-key.outputs.sdk-updated == 'true' }}
+          if: steps.cache.outputs.cache-hit != 'true'
           uses: actions/cache/save@v5
           with:
               path: /tmp/silabs-sdks.tar
