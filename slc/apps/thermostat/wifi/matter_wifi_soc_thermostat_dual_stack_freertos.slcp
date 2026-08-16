@@ -143,6 +143,11 @@ include:
     file_list:
       - path: https_offload_example.h
     directory: include
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
+    condition: [matter_service_mqtt]
+    file_list:
+      - path: mqtt_example.h
+    directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
       - path: CustomerAppTask.h
@@ -153,6 +158,10 @@ include:
     directory: include
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
     condition: [matter_service_http_offload]
+    file_list:
+      - path: cacert.pem.h
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
+    condition: [matter_service_mqtt]
     file_list:
       - path: cacert.pem.h
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/resources
@@ -169,6 +178,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/https_offload_example.cpp
     condition: [matter_service_http_offload]
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_example.cpp
+    condition: [matter_service_mqtt]
 
 define:
   - name: CCP_SI917_BRINGUP
