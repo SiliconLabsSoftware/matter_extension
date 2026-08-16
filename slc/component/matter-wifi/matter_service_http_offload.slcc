@@ -23,7 +23,7 @@ include:
       - path: http_client.h
 
 source:
-  - path: third_party/matter_sdk/src/platform/silabs/services/http_client.c
+  - path: third_party/matter_sdk/src/platform/silabs/services/http_client.cpp
 
 define:
   - name: SL_MATTER_ENABLE_HTTP_SERVICE

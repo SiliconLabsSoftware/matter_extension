@@ -1,12 +1,21 @@
 #!/bin/bash
-set -xe
+set -e
 
-# rm -rf out
+GENERATE=false
 if [ ! -d "out" ]; then
-  ./slc/build.sh ./slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_freertos.slcw "brd4338a" > build.log 2>&1
-else
-  ./slc/build.sh ./slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_freertos.slcw "brd4338a" --skip_gen > build.log 2>&1
+  GENERATE=true
 fi
-commander rps load out/brd4338a/matter_wifi_soc_thermostat_freertos_solution/artifact/matter_wifi_soc_thermostat_freertos.rps
+echo "BUILDING..."
+./slc/build.sh ./slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcw "brd4338a" $([ "$GENERATE" = false ] && echo --skip_gen) 2>&1 > build.log
+tail build.log
+echo "FLASHING..."
+commander rps load out/brd4338a/matter_wifi_soc_thermostat_dual_stack_freertos_solution/artifact/matter_wifi_soc_thermostat_dual_stack_freertos.rps
 sleep 5
-gtimeout 300 commander rtt connect --timestamp > device.log 2>&1
+
+# if darwin, use gtimeout
+TIMEOUT_CMD=timeout
+if [ "$(uname)" == "Darwin" ]; then
+  TIMEOUT_CMD=gtimeout
+fi
+echo "CONNECTING..."
+$TIMEOUT_CMD 180 commander rtt connect 2>&1 |tee device.log
