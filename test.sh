@@ -11,5 +11,11 @@ tail build.log
 echo "FLASHING..."
 commander rps load out/brd4338a/matter_wifi_soc_thermostat_dual_stack_freertos_solution/artifact/matter_wifi_soc_thermostat_dual_stack_freertos.rps
 sleep 5
+
+# if darwin, use gtimeout
+TIMEOUT_CMD=timeout
+if [ "$(uname)" == "Darwin" ]; then
+  TIMEOUT_CMD=gtimeout
+fi
 echo "CONNECTING..."
-gtimeout 180 commander rtt connect 2>&1 |tee device.log
+$TIMEOUT_CMD 180 commander rtt connect 2>&1 |tee device.log
