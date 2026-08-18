@@ -16,8 +16,21 @@ permissions:
     actions: write
 
 jobs:
+    check-branch:
+        name: Require main or release_*
+        runs-on: ubuntu-latest
+        steps:
+            - name: Verify branch
+              run: |
+                  set -euo pipefail
+                  if [[ "${{ github.ref_name }}" != "main" && ! "${{ github.ref_name }}" =~ ^release_ ]]; then
+                      echo "Seed SDK cache can only run on main or release_*. Current ref: ${{ github.ref_name }}"
+                      exit 1
+                  fi
+
     cache-sdks:
         name: Seed simplicity_sdk and wifi_sdk cache
+        needs: check-branch
         runs-on: ubuntu-latest
         outputs:
             cache-key: ${{ steps.cache-sdks.outputs.cache-key }}
