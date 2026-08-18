@@ -34,6 +34,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             cache-key: ${{ steps.cache-sdks.outputs.cache-key }}
+            cache-hit: ${{ steps.cache-sdks.outputs.cache-hit }}
         steps:
             - name: Checkout
               uses: actions/checkout@v7
@@ -55,21 +56,37 @@ jobs:
               env:
                   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SDK_CACHE_KEY: ${{ needs.cache-sdks.outputs.cache-key }}
+                  CACHE_HIT: ${{ needs.cache-sdks.outputs.cache-hit }}
               run: |
                   set -euo pipefail
                   if [[ -z "${SDK_CACHE_KEY}" ]]; then
                       echo "No SDK cache key; skipping"
                       exit 0
                   fi
-                  echo "Keeping new SDK cache key: ${SDK_CACHE_KEY}"
-                  echo "Current ref: ${{ github.ref }}"
-                  gh cache list --repo "${{ github.repository }}" --json id,key,ref --limit 100 \
-                    | jq -c '.[] | select(.key | startswith("silabs-sdks-"))' \
+
+                  CURRENT_REF="${{ github.ref }}"
+                  echo "Seed cache-hit=${CACHE_HIT}"
+                  echo "Required SDK cache key: ${SDK_CACHE_KEY}"
+                  echo "Current ref: ${CURRENT_REF}"
+
+                  CACHES=$(gh cache list --repo "${{ github.repository }}" --json id,key,ref --limit 100)
+                  echo "${CACHES}" | jq -c '.[] | select(.key | startswith("silabs-sdks-"))'
+
+                  persisted=$(echo "${CACHES}" | jq --arg key "${SDK_CACHE_KEY}" --arg ref "${CURRENT_REF}" \
+                    '[.[] | select(.key == $key and .ref == $ref)] | length')
+                  if [[ "${persisted}" -eq 0 ]]; then
+                      echo "New key is not listed on ${CURRENT_REF}."
+                      echo "actions/cache/save can succeed without persisting (soft-lock/reserve failure)."
+                      echo "Keeping previous main/release_* caches."
+                      exit 1
+                  fi
+
+                  echo "${CACHES}" | jq -c '.[] | select(.key | startswith("silabs-sdks-"))' \
                     | while read -r entry; do
                         id=$(echo "${entry}" | jq -r '.id')
                         key=$(echo "${entry}" | jq -r '.key')
                         ref=$(echo "${entry}" | jq -r '.ref')
-                        if [[ "${ref}" == "${{ github.ref }}" && "${key}" != "${SDK_CACHE_KEY}" ]]; then
+                        if [[ "${ref}" == "${CURRENT_REF}" && "${key}" != "${SDK_CACHE_KEY}" ]]; then
                             echo "Deleting previous SDK cache id=${id} ref=${ref} key=${key}"
                             gh cache delete "${id}" --repo "${{ github.repository }}" || echo "Failed to delete ${id}"
                         elif [[ "${ref}" != "refs/heads/main" && ! "${ref}" =~ ^refs/heads/release_ ]]; then
