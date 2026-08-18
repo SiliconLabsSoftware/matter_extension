@@ -52,3 +52,5 @@ define:
     value: 1
   - name: SL_MATTER_ENABLE_DUAL_STACK
     value: "1"
+  - name: SLI_SI91X_ENABLE_IPV6
+    value: "1"
