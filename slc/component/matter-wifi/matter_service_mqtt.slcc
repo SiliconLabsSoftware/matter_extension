@@ -21,7 +21,7 @@ include:
       - path: mqtt_client.h
 
 source:
-  - path: third_party/matter_sdk/src/platform/silabs/services/mqtt_client.c
+  - path: third_party/matter_sdk/src/platform/silabs/services/mqtt_client.cpp
 
 define:
   - name: SLI_PAHO_MQTT_OVER_LWIP
