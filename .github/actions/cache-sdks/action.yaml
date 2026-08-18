@@ -1,6 +1,12 @@
 name: Cache SDKs
 description: Restore simplicity_sdk and wifi_sdk from cache. On miss, checkout, LFS-pull, and save so later jobs reuse it.
 
+inputs:
+    working-directory:
+        description: Repository root that contains .gitmodules and the SDK submodule paths.
+        required: false
+        default: "."
+
 outputs:
     cache-key:
         value: ${{ steps.compute-cache-key.outputs.cache-key }}
@@ -13,6 +19,7 @@ runs:
         - name: Compute SDK cache key
           id: compute-cache-key
           shell: bash
+          working-directory: ${{ inputs.working-directory }}
           run: |
               set -euo pipefail
 
@@ -41,6 +48,7 @@ runs:
         - name: Extract SDKs from cache
           if: steps.cache.outputs.cache-hit == 'true'
           shell: bash
+          working-directory: ${{ inputs.working-directory }}
           run: |
               set -euo pipefail
               rm -rf third_party/simplicity_sdk third_party/wifi_sdk
@@ -52,6 +60,7 @@ runs:
         - name: Checkout SDKs and pull LFS
           if: steps.cache.outputs.cache-hit != 'true'
           shell: bash
+          working-directory: ${{ inputs.working-directory }}
           run: |
               set -euo pipefail
               git lfs install
@@ -65,6 +74,7 @@ runs:
         - name: Pack SDK working trees
           if: steps.cache.outputs.cache-hit != 'true'
           shell: bash
+          working-directory: ${{ inputs.working-directory }}
           run: |
               set -euo pipefail
               tar --exclude='.git' -cf /tmp/silabs-sdks.tar \
