@@ -2,6 +2,7 @@ name: Code Size Check
 permissions:
   contents: read
   pull-requests: read
+  actions: write
 
 on:
   workflow_dispatch:
@@ -57,29 +58,46 @@ jobs:
             - name: Checkout
               uses: actions/checkout@v7
               with:
-                  submodules: "true"
-                  lfs: true
+                  submodules: false
 
-            - name: Pull LFS objects in submodules
+            - name: Initialize non-SDK submodules
               run: |
-                  git -C third_party/simplicity_sdk lfs pull
-                  git -C third_party/wifi_sdk lfs pull
+                  set -euo pipefail
+                  mapfile -t paths < <(
+                    git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
+                      | awk '{print $2}' \
+                      | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
+                  )
+                  git submodule update --init --depth 1 -- "${paths[@]}"
 
-            - name: Install tools
-              uses: ./.github/actions/install-tools
+            - name: Cache SDKs
+              uses: ./.github/actions/cache-sdks
+
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
 
             - name: Checkout baseline for comparison
               uses: actions/checkout@v7
               with:
                   ref: ${{ env.BASELINE }}
                   path: baseline
-                  submodules: "true"  
-                  lfs: true
+                  submodules: false
 
-            - name: Pull LFS objects in submodules
+            - name: Initialize non-SDK submodules (baseline)
+              working-directory: baseline
               run: |
-                  git -C baseline/third_party/simplicity_sdk lfs pull
-                  git -C baseline/third_party/wifi_sdk lfs pull
+                  set -euo pipefail
+                  mapfile -t paths < <(
+                    git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
+                      | awk '{print $2}' \
+                      | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
+                  )
+                  git submodule update --init --depth 1 -- "${paths[@]}"
+
+            - name: Cache SDKs (baseline)
+              uses: ./.github/actions/cache-sdks
+              with:
+                  working-directory: baseline
             - name: Build code-canary app
               uses: SiliconLabsSoftware/matter_build_action@v2
               with:

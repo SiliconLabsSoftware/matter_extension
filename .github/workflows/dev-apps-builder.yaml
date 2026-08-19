@@ -55,9 +55,24 @@ jobs:
             - uses: ./.github/actions/cache-tools
               id: cache-tools
 
+    cache-sdks:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            actions: write
+        outputs:
+            cache-key: ${{ steps.cache-sdks.outputs.cache-key }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+            - uses: ./.github/actions/cache-sdks
+              id: cache-sdks
+
     build_lighting_app:
         name: Build Lighting App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lighting_app"
@@ -66,7 +81,7 @@ jobs:
 
     build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "air_quality_sensor_app"
@@ -74,7 +89,7 @@ jobs:
 
     build_light_switch_app:
         name: Build Light Switch App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "light_switch_app"
@@ -82,7 +97,7 @@ jobs:
 
     build_lock_app:
         name: Build Lock App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "lock_app"
@@ -91,7 +106,7 @@ jobs:
 
     build_thermostat_app:
         name: Build Thermostat App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "thermostat"
@@ -100,7 +115,7 @@ jobs:
 
     build_window_app:
         name: Build Window App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "window_app"
@@ -109,7 +124,7 @@ jobs:
 
     build_fan_control_app:
         name: Build Fan Control App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "fan_control_app"
@@ -118,7 +133,7 @@ jobs:
 
     build_closure_app:
         name: Build Closure App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "closure_app"
@@ -126,7 +141,7 @@ jobs:
 
     build_multi_sensor_app:
         name: Build Multi Sensor App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "multi_sensor_app"
@@ -134,7 +149,7 @@ jobs:
 
     build_onoff_plug_app:
         name: Build OnOff Plug App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "onoff_plug_app"
@@ -142,7 +157,7 @@ jobs:
 
     build_refrigerator_app:
         name: Build Refrigerator App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "refrigerator_app"
@@ -150,7 +165,7 @@ jobs:
 
     build_evse_app:
         name: Build EVSE App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "evse_app"
@@ -159,7 +174,7 @@ jobs:
 
     build_performance_test_app:
         name: Build Performance Test App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance_test_app"
@@ -168,7 +183,7 @@ jobs:
 
     build_zigbee_light:
        name: Build Zigbee Light App
-       needs: [set-build-type, cache-tools]
+       needs: [set-build-type, cache-tools, cache-sdks]
        uses: ./.github/workflows/platform-builder.yaml
        with:
            example-app: "zigbee_light"
@@ -179,7 +194,7 @@ jobs:
            wifi-soc-support: false
     build_wake_on_matter_app:
        name: Build Wake on Matter App
-       needs: [set-build-type, cache-tools]
+       needs: [set-build-type, cache-tools, cache-sdks]
        uses: ./.github/workflows/platform-builder.yaml
        with:
            example-app: "wake_on_matter"
@@ -195,7 +210,7 @@ jobs:
  
     build_oven_app:
         name: Build Oven App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "oven_app"
@@ -204,7 +219,7 @@ jobs:
 
     build_rangehood_app:
         name: Build Rangehood App
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "rangehood_app"
@@ -212,7 +227,7 @@ jobs:
 
     build_platform_template:
         name: Build Platform Template
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "platform_template"
@@ -220,7 +235,7 @@ jobs:
 
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
@@ -231,7 +246,7 @@ jobs:
 
     build-sqa-tools:
         name: Build SQA Tools
-        needs: [set-build-type, cache-tools]
+        needs: [set-build-type, cache-tools, cache-sdks]
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -242,6 +257,7 @@ jobs:
         needs:
             - set-build-type
             - cache-tools
+            - cache-sdks
             - build-sqa-tools
             - build_lighting_app
             - build_air_quality_sensor_app
