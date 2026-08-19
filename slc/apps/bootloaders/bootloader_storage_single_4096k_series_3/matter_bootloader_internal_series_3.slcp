@@ -42,13 +42,13 @@ configuration:
 # The 4MB variant
   - name: SLOT0_SIZE
     value: 1576960
-    unless: [device_has_3904kb_flash]
+    condition: [device_has_3904kb_flash]
   - name: SLOT0_START
     value: 0x011F8000
-    unless: [device_has_3904kb_flash]
+    condition: [device_has_3904kb_flash]
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 0x011F8000
-    unless: [device_has_3904kb_flash]
+    condition: [device_has_3904kb_flash]
 
 # The 8MB variant
   - name: SLOT0_SIZE
