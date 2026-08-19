@@ -1,8 +1,8 @@
 category: Matter|Core
 define: []
-description: Provides stub implementations for system calls required by Matter platform code.
+description: Manages active subscriptions present on devices.
 id: matter_subscription_manager
-label: syscalls_stub
+label: Subscription Manager
 package: matter
 provides:
   - name: matter_subscription_manager
@@ -11,7 +11,7 @@ metadata:
   sbom:
     license: "Apache 2.0"
 include:
-  - path: third_party/matter_sdk/example/platform/silabs
+  - path: third_party/matter_sdk/examples/platform/silabs/subscription
     file_list:
       - path: SubscriptionManager.h
 source:

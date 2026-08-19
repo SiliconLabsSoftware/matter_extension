@@ -11,5 +11,5 @@ provides:
   - name: matter_custom_apptask
 
 define:
-  - name: SL_MATTER_CUSTOM_APPTASK 
+  - name: SL_MATTER_CUSTOM_APPTASK
     value: 1
