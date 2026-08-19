@@ -26,40 +26,40 @@ configuration:
   - name: SLOT0_ENABLE
     value: 1
 
-# The OTA storage slot address and size are set based in the flash size of the Series-3 chip.
+# Slot layout from device_has_<N>kb_flash (host-visible flash, not OPN).
 
-# The 3MB variant 
+# 3MB class (2880 kB host-visible)
   - name: SLOT0_SIZE
     value: 1208320
-    condition: [simg301m113wih]
+    condition: [device_has_2880kb_flash]
   - name: SLOT0_START
     value: 0x01168000
-    condition: [simg301m113wih]
+    condition: [device_has_2880kb_flash]
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 0x01168000
-    condition: [simg301m113wih]
+    condition: [device_has_2880kb_flash]
 
-# The 4MB variant
+# 4MB class (default for other Series 3 sizes until they get a dedicated layout)
   - name: SLOT0_SIZE
     value: 1576960
-    unless: [simg301m113wih, simg301m104xil_8mb]
+    unless: [device_has_2880kb_flash, device_has_8000kb_flash]
   - name: SLOT0_START
     value: 0x011F8000
-    unless: [simg301m113wih, simg301m104xil_8mb]
+    unless: [device_has_2880kb_flash, device_has_8000kb_flash]
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 0x011F8000
-    unless: [simg301m113wih, simg301m104xil_8mb]
+    unless: [device_has_2880kb_flash, device_has_8000kb_flash]
 
-# The 8MB variant
+# 8MB class (e.g. simg301m104xil_8mb)
   - name: SLOT0_SIZE
     value: 2732032
-    condition: [simg301m104xil_8mb]
+    condition: [device_has_8000kb_flash]
   - name: SLOT0_START
     value: 0x01378000
-    condition: [simg301m104xil_8mb]
+    condition: [device_has_8000kb_flash]
   - name: BTL_STORAGE_BASE_ADDRESS
     value: 0x01378000
-    condition: [simg301m104xil_8mb]
+    condition: [device_has_8000kb_flash]
 
 filter:
   - name: Type
