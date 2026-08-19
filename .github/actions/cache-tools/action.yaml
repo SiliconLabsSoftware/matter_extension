@@ -116,10 +116,12 @@ runs:
               MANIFEST="/home/runner/.silabs/slt/.ci-tools-id"
               {
                 echo "zap=$(python3 slc/script/get_zap_version.py --docker)"
-                slt --version 2>/dev/null || true
-                for pkg in slc-cli java21 commander gcc-arm-none-eabi llvm-arm-toolchain-for-embedded hw-db-service; do
-                  echo "${pkg}=$(slt where "${pkg}" 2>/dev/null || true)"
-                done
+                echo "slt=$(slt --version 2>/dev/null || true)"
+                slt locate --json --ignore-slconf \
+                  slc-cli java21 commander gcc-arm-none-eabi \
+                  llvm-arm-toolchain-for-embedded hw-db-service \
+                  2>/dev/null \
+                  | jq -r '(if type == "array" then . else [.] end) | sort_by(.id)[] | "\(.id)=\(.version // "unknown")"'
               } > "${MANIFEST}"
               echo "new-id=$(sha256sum "${MANIFEST}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
               echo "Current tools manifest:"
