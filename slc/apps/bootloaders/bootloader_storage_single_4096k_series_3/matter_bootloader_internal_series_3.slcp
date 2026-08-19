@@ -26,9 +26,9 @@ configuration:
   - name: SLOT0_ENABLE
     value: 1
 
-# Slot layout from device_has_<N>kb_flash (host-visible flash, not OPN).
+# The OTA storage slot address and size are set based in the flash size of the Series-3 chip.
 
-# 3MB class (2880 kB host-visible)
+# The 3MB variant
   - name: SLOT0_SIZE
     value: 1208320
     condition: [device_has_2880kb_flash]
@@ -39,7 +39,7 @@ configuration:
     value: 0x01168000
     condition: [device_has_2880kb_flash]
 
-# 4MB class (default for other Series 3 sizes until they get a dedicated layout)
+# The 4MB variant
   - name: SLOT0_SIZE
     value: 1576960
     unless: [device_has_2880kb_flash, device_has_8000kb_flash]
@@ -50,7 +50,7 @@ configuration:
     value: 0x011F8000
     unless: [device_has_2880kb_flash, device_has_8000kb_flash]
 
-# 8MB class (e.g. simg301m104xil_8mb)
+# The 8MB variant
   - name: SLOT0_SIZE
     value: 2732032
     condition: [device_has_8000kb_flash]
