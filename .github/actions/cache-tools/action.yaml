@@ -1,5 +1,11 @@
 name: Cache tools
-description: Compute cache key, restore cache; on hit set env/PATH, on miss install tools and save cache.
+description: Restore a persistent, branch-independent tools cache. On refresh, re-run install and replace the cache only if tool versions changed.
+
+inputs:
+    refresh:
+        description: After restore, re-run install-tools and replace the cache if versions changed. Use in the warm job only.
+        required: false
+        default: "false"
 
 outputs:
     cache-key:
@@ -29,7 +35,10 @@ runs:
           id: compute-cache-key
           shell: bash
           run: |
-              echo "cache-key=silabs-zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}" >> $GITHUB_OUTPUT
+              set -euo pipefail
+              ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
+              echo "cache-key=silabs-zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${ZAP_VERSION}" >> "$GITHUB_OUTPUT"
+              echo "Tools cache key: silabs-zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${ZAP_VERSION}"
 
         - name: Restore ZAP and SLT tools cache
           id: cache
@@ -60,11 +69,13 @@ runs:
               JAVA_HOME=$(slt where java21)
               COMMANDER_PATH=$(slt where commander)
               ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
+              ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
               HW_DB_SERVICE_PATH=$(slt where hw-db-service)
               echo "SLC_CLI_PATH=$SLC_CLI_PATH" >> $GITHUB_ENV
               echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
               echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
               echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
+              echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
               echo "HW_DB_SERVICE_PATH=$HW_DB_SERVICE_PATH" >> $GITHUB_ENV
               echo "$SLC_CLI_PATH" >> $GITHUB_PATH
               if [ -n "$JAVA_HOME" ]; then
@@ -72,14 +83,68 @@ runs:
               fi
               echo "$COMMANDER_PATH" >> $GITHUB_PATH
               echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+              if [ -n "$ARM_LLVM_DIR" ]; then
+                echo "$ARM_LLVM_DIR/bin" >> $GITHUB_PATH
+              fi
               echo "$HW_DB_SERVICE_PATH" >> $GITHUB_PATH
 
+        - name: Snapshot restored tool versions
+          if: ${{ inputs.refresh == 'true' && steps.cache.outputs.cache-hit == 'true' }}
+          id: previous-manifest
+          shell: bash
+          run: |
+              MANIFEST="/home/runner/.silabs/slt/.ci-tools-id"
+              if [[ -f "${MANIFEST}" ]]; then
+                echo "previous-id=$(sha256sum "${MANIFEST}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+                echo "Restored tools manifest:"
+                cat "${MANIFEST}"
+              else
+                echo "previous-id=" >> "$GITHUB_OUTPUT"
+              fi
+
         - name: Install tools
-          if: steps.cache.outputs.cache-hit != 'true'
+          if: ${{ steps.cache.outputs.cache-hit != 'true' || inputs.refresh == 'true' }}
           uses: ./.github/actions/install-tools
 
+        - name: Record tool versions
+          if: ${{ steps.cache.outputs.cache-hit != 'true' || inputs.refresh == 'true' }}
+          id: new-manifest
+          shell: bash
+          run: |
+              set -euo pipefail
+              mkdir -p /home/runner/.silabs/slt
+              MANIFEST="/home/runner/.silabs/slt/.ci-tools-id"
+              {
+                echo "zap=$(python3 slc/script/get_zap_version.py --docker)"
+                slt --version 2>/dev/null || true
+                for pkg in slc-cli java21 commander gcc-arm-none-eabi llvm-arm-toolchain-for-embedded hw-db-service; do
+                  echo "${pkg}=$(slt where "${pkg}" 2>/dev/null || true)"
+                done
+              } > "${MANIFEST}"
+              echo "new-id=$(sha256sum "${MANIFEST}" | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+              echo "Current tools manifest:"
+              cat "${MANIFEST}"
+
+        - name: Delete stale tools cache for this ref
+          if: ${{ steps.cache.outputs.cache-hit != 'true' || (inputs.refresh == 'true' && steps.previous-manifest.outputs.previous-id != steps.new-manifest.outputs.new-id) }}
+          shell: bash
+          env:
+              GH_TOKEN: ${{ github.token }}
+          run: |
+              set -euo pipefail
+              KEY="${{ steps.compute-cache-key.outputs.cache-key }}"
+              CURRENT_REF="${{ github.ref }}"
+              echo "Replacing tools cache key=${KEY} on ${CURRENT_REF}"
+              gh cache list --repo "${{ github.repository }}" --key "${KEY}" --json id,key,ref --limit 100 \
+                | jq -c --arg ref "${CURRENT_REF}" '.[] | select(.ref == $ref)' \
+                | while read -r entry; do
+                    id=$(echo "${entry}" | jq -r '.id')
+                    echo "Deleting tools cache id=${id}"
+                    gh cache delete "${id}" --repo "${{ github.repository }}" || echo "Failed to delete ${id}"
+                  done
+
         - name: Save ZAP and SLT tools cache
-          if: steps.cache.outputs.cache-hit != 'true'
+          if: ${{ steps.cache.outputs.cache-hit != 'true' || (inputs.refresh == 'true' && steps.previous-manifest.outputs.previous-id != steps.new-manifest.outputs.new-id) }}
           uses: actions/cache/save@v5
           with:
               path: |
@@ -87,3 +152,23 @@ runs:
                   /home/runner/.silabs/slt
                   /home/runner/.local/bin/slt
               key: ${{ steps.compute-cache-key.outputs.cache-key }}
+
+        - name: Sweep leftover SHA-keyed tools caches
+          if: ${{ inputs.refresh == 'true' && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_')) }}
+          shell: bash
+          env:
+              GH_TOKEN: ${{ github.token }}
+          run: |
+              set -euo pipefail
+              KEEP="${{ steps.compute-cache-key.outputs.cache-key }}"
+              echo "Keeping tools cache ${KEEP}"
+              gh cache list --repo "${{ github.repository }}" --json id,key,ref --limit 100 \
+                | jq -c --arg keep "${KEEP}" \
+                  '.[] | select((.key | test("^silabs-zap-slt-tools-[^-]+-[^-]+-[0-9a-f]{40}$")) and .key != $keep)' \
+                | while read -r entry; do
+                    id=$(echo "${entry}" | jq -r '.id')
+                    key=$(echo "${entry}" | jq -r '.key')
+                    ref=$(echo "${entry}" | jq -r '.ref')
+                    echo "Deleting leftover tools cache id=${id} ref=${ref} key=${key}"
+                    gh cache delete "${id}" --repo "${{ github.repository }}" || echo "Failed to delete ${id}"
+                  done
