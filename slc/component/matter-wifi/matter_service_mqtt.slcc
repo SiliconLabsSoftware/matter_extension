@@ -24,8 +24,14 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/mqtt_client.cpp
 
 define:
-  - name: SLI_PAHO_MQTT_OVER_LWIP
-  - name: MQTT_USE_HOST_LWIP_TLS
-    value: "1"
   - name: SL_MATTER_ENABLE_MQTT_SERVICE
     value: "1"
+  - name: SLI_PAHO_MQTT_OVER_LWIP
+    value: "1"
+    condition: [paho_mqtt_embedded]
+  - name: MQTT_USE_HOST_LWIP_TLS
+    value: "1"
+    condition: [paho_mqtt_embedded]
+  - name: SL_MATTER_ENABLE_MQTT_OVER_LWIP_SOCKETS
+    value: "1"
+    condition: [paho_mqtt_embedded]
