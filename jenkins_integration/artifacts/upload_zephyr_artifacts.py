@@ -3,7 +3,7 @@ Download Build Zephyr artifacts from GitHub Actions and upload board binaries to
 
 Expects GHA layout (see build-zephyr.yaml):
     <app_name>/<TARGET>/<binary_name>.<ext>
-        -> UBAI Name=<binary_name>, app_name=<app_name>, target=<TARGET>
+        -> UBAI Name=<binary_name>, app_name="", target=<TARGET>
 
 Add another app by exporting under a new <app_name>/ tree in the workflow; no
 uploader changes required.
@@ -186,7 +186,7 @@ def _upload_binaries(root, branch_name, build_number):
     for app_name, target, file_path in _iter_zephyr_binaries(root):
         file_name = os.path.basename(file_path)
         print(f"Uploading {app_name}/{target}/{file_name} to UBAI (target={target})")
-        if upload_to_ubai(file_path, app_name, target, branch_name, build_number):
+        if upload_to_ubai(file_path, "", target, branch_name, build_number):
             uploaded += 1
         else:
             failures.append(f"{app_name}/{target}/{file_name}")
