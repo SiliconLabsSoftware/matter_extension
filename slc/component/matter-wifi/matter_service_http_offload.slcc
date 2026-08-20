@@ -7,7 +7,7 @@ category: Matter-WiFi|Services|HTTP
 quality: production
 metadata:
   sbom:
-    license: Zlib
+    license: Apache 2.0
 
 provides:
   - name: matter_service_http_offload
