@@ -1,0 +1,354 @@
+name: Create Matter Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch of matter_extension to checkout'
+        required: true
+        type: string
+      package_version:
+        description: 'MATTER_PACKAGE_VERSION'
+        required: false
+        type: string
+        default: '2.10.0-test.0'
+      publish:
+        description: 'Upload packages to conan-open-source.silabs.net?'
+        required: false
+        type: boolean
+        default: false
+      notify:
+        description: 'Send Slack notification when the run finishes?'
+        required: false
+        type: boolean
+        default: true
+      run_sanity:
+        description: 'Run sanity build matrix (917 SoC lighting + Thread lighting)?'
+        required: false
+        type: boolean
+        default: true
+      run_smoke_wifi:
+        description: 'Run smoke-wifi build matrix?'
+        required: false
+        type: boolean
+        default: false
+      run_smoke_thread:
+        description: 'Run smoke-thread build matrix?'
+        required: false
+        type: boolean
+        default: false
+      run_smoke_cmp:
+        description: 'Run smoke-cmp build matrix?'
+        required: false
+        type: boolean
+        default: false
+  pull_request:
+    types: [opened, synchronize, reopened]
+  # schedule:
+  #   # Midnight UTC daily. Scheduled runs checkout branch "main".
+  #   - cron: '0 0 * * *'
+
+concurrency:
+  group: create-matter-packages-${{ github.event.inputs.branch || github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  matter-packages:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'pull_request' &&
+        (
+          github.head_ref == 'feature/package_manager_internal_CI' ||
+          github.base_ref == 'feature/package_manager_internal_CI'
+        )
+      )
+    runs-on: ubuntu-latest
+    outputs:
+      target-branch: ${{ steps.resolve-branch.outputs.branch }}
+      target-sha: ${{ steps.checkout-info.outputs.sha }}
+
+    steps:
+      - name: Resolve target branch
+        id: resolve-branch
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "branch=${{ github.event.inputs.branch }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "branch=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "branch=main" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set Conan remote variables
+        id: set-remote
+        run: |
+          echo "REMOTE_NAME=conan-open-source" >> $GITHUB_ENV
+          echo "REMOTE_URL=https://conan-open-source.silabs.net" >> $GITHUB_ENV
+
+      - name: Checkout matter_extension
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.resolve-branch.outputs.branch }}
+
+      - name: Record checkout commit
+        id: checkout-info
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          SHA=$(git rev-parse HEAD)
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "Checked out ${{ github.repository }}@${{ steps.resolve-branch.outputs.branch }} ($SHA)"
+
+      - name: Resolve submodule cache key
+        id: submodule-key
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          MATTER_SDK=$(git rev-parse :third_party/matter_sdk)
+          MATTER_SUPPORT=$(git rev-parse :third_party/matter_support)
+          QR=$(git rev-parse :third_party/QR-Code-generator)
+          MBEDTLS=$(git rev-parse :third_party/mbedtls)
+          NLIO=$(git rev-parse :third_party/nlio)
+          NLASSERT=$(git rev-parse :third_party/nlassert)
+          echo "cache-key=matter-submodules-${MATTER_SDK}-${MATTER_SUPPORT}-${QR}-${MBEDTLS}-${NLIO}-${NLASSERT}" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Matter submodules
+        id: submodule-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            third_party/matter_sdk
+            third_party/matter_support
+            third_party/QR-Code-generator
+            third_party/mbedtls
+            third_party/nlio
+            third_party/nlassert
+          key: ${{ steps.submodule-key.outputs.cache-key }}
+
+      - name: Init Matter submodules
+        if: steps.submodule-cache.outputs.cache-hit != 'true'
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init --depth 1 --jobs 8 \
+            third_party/matter_sdk \
+            third_party/matter_support \
+            third_party/QR-Code-generator \
+            third_party/mbedtls \
+            third_party/nlio \
+            third_party/nlassert
+
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
+
+      - name: Configure Conan and build tools
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          # Expand leading ~ if present (install-tools may set CONAN_HOME with a literal tilde).
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+
+          slt install conan
+          for t in cmake ninja; do
+            slt install "$t" || true
+          done
+
+          mkdir -p conan-settings
+          printf 'core.download:parallel=6\ncore.upload:parallel=4\n' > conan-settings/global.conf
+          conan config install ./conan-settings --type dir
+          rm -rf conan-settings
+
+          which slt
+          which conan || true
+          which arm-none-eabi-gcc || true
+          conan config home || true
+          conan --version || true
+
+      - name: Setup Conan remotes
+        id: add-conan-remotes
+        working-directory: packages
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+
+          conan remote add conan-prerelease https://conan-prerelease.silabs.net/
+          conan remote list
+
+      - name: Build packages
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          VERSION="${{ github.event.inputs.package_version || '2.10.0-dev.0' }}"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "CONAN_HOME=${CONAN_HOME}"
+          conan config home
+          conan remote list || true
+
+          conan remove "matter/${VERSION}@silabs" -c || true
+          conan remove "matter_app/${VERSION}@silabs" -c || true
+
+          conan export-pkg packages/matter/conanfile.py \
+            --name=matter --version="${VERSION}" --user=silabs
+          conan export-pkg packages/matter_app/conanfile.py \
+            --name=matter_app --version="${VERSION}" --user=silabs
+
+          echo "=== Local packages after export ==="
+          conan list "matter/${VERSION}@silabs:*"
+          conan list "matter_app/${VERSION}@silabs:*"
+
+      - name: Sanity
+        if: github.event.inputs.run_sanity != 'false'
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+          ./slc/script/internal/run_wifi_build_matrix.sh \
+            --suite sanity \
+            --version "${VERSION}"
+
+      - name: Smoke wifi
+        if: github.event.inputs.run_smoke_wifi == 'true'
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+          ./slc/script/internal/run_wifi_build_matrix.sh \
+            --suite smoke-wifi \
+            --version "${VERSION}"
+
+      - name: Smoke thread
+        if: github.event.inputs.run_smoke_thread == 'true'
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+          ./slc/script/internal/run_wifi_build_matrix.sh \
+            --suite smoke-thread \
+            --version "${VERSION}"
+
+      - name: Smoke cmp
+        if: github.event.inputs.run_smoke_cmp == 'true'
+        run: |
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+          ./slc/script/internal/run_wifi_build_matrix.sh \
+            --suite smoke-cmp \
+            --version "${VERSION}"
+
+      - name: Collect smoke binaries
+        if: >-
+          github.event.inputs.run_sanity != 'false' ||
+          github.event.inputs.run_smoke_wifi == 'true' ||
+          github.event.inputs.run_smoke_thread == 'true' ||
+          github.event.inputs.run_smoke_cmp == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          MATTER_APP="$(slt where matter_app)"
+          echo "matter_app root: ${MATTER_APP}"
+          DEST="${GITHUB_WORKSPACE}/smoke-artifacts"
+          mkdir -p "${DEST}"
+          mapfile -d '' -t bins < <(
+            find "${MATTER_APP}" -type f \( -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' \) \
+              -path '*/out/*' \
+              ! -path '*/copy-sources/*' \
+              -print0
+          )
+          echo "Found ${#bins[@]} binary file(s)"
+          for f in "${bins[@]}"; do
+            [[ -n "${f}" ]] || continue
+            rel="${f#"${MATTER_APP}"/}"
+            mkdir -p "${DEST}/$(dirname "${rel}")"
+            cp -a "${f}" "${DEST}/${rel}"
+          done
+          echo "Collected:"
+          find "${DEST}" -type f | sort
+          if [[ "${#bins[@]}" -eq 0 ]]; then
+            echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+          fi
+
+      - name: Upload smoke binaries
+        if: >-
+          github.event.inputs.run_sanity != 'false' ||
+          github.event.inputs.run_smoke_wifi == 'true' ||
+          github.event.inputs.run_smoke_thread == 'true' ||
+          github.event.inputs.run_smoke_cmp == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: package-manager-smoke-binaries-${{ env.VERSION }}
+          path: smoke-artifacts/
+          if-no-files-found: warn
+          overwrite: true
+
+      - name: Publish packages
+        if: github.event.inputs.publish == 'true'
+        env:
+          CONAN_LOGIN_USERNAME: ${{ secrets.SATYA_CONAN_USERNAME }}
+          CONAN_PASSWORD: ${{ secrets.SATYA_CONAN_TOKEN }}
+        run: |
+          set -euo pipefail
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+          export CONAN_HOME
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+          conan config home
+
+          if [ -z "${CONAN_LOGIN_USERNAME:-}" ] || [ -z "${CONAN_PASSWORD:-}" ]; then
+            echo "SATYA_CONAN_USERNAME / SATYA_CONAN_TOKEN secrets are required to publish" >&2
+            exit 1
+          fi
+
+          conan remote add -f "${REMOTE_NAME}" "${REMOTE_URL}"
+          conan remote login "${REMOTE_NAME}" "${CONAN_LOGIN_USERNAME}" -p "${CONAN_PASSWORD}"
+
+          echo "Uploading matter/${VERSION}@silabs to ${REMOTE_NAME}"
+          conan upload "matter/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
+
+          echo "Uploading matter_app/${VERSION}@silabs to ${REMOTE_NAME}"
+          conan upload "matter_app/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
+
+          conan remote list
+
+  # build-sqa-tools:
+  #   name: Build SQA Tools
+  #   if: github.event.inputs.publish == 'true'
+  #   uses: ./.github/workflows/sqa-tools-builder.yaml
+  #   with:
+  #     build-type: standard
+  #     branch: ${{ github.event.inputs.branch || 'main' }}
+
+  notify:
+    needs: [matter-packages]
+    runs-on: ubuntu-latest
+    if: >-
+      always() &&
+      needs.matter-packages.result != 'skipped' &&
+      github.event_name == 'workflow_dispatch' &&
+      github.event.inputs.notify != 'false'
+    steps:
+      - name: Send message to Slack
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+              text: ". Branch: ${{ needs.matter-packages.outputs.target-branch }}\n. Repo: ${{ github.repository }}\n. Workflow: ${{ github.workflow }}\n. Commit: <https://github.com/${{ github.repository }}/commit/${{ needs.matter-packages.outputs.target-sha }}|${{ needs.matter-packages.outputs.target-sha }}>\n. Status: ${{ needs.matter-packages.result }}\n. Triggered by: ${{ github.actor }}"
