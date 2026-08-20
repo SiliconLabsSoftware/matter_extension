@@ -1,6 +1,9 @@
 name: Package Manager CI
 
 on:
+  push:
+    branches:
+      - feature/pkg_manager_public_CI
   workflow_dispatch:
     inputs:
       branch:
