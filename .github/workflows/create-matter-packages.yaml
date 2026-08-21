@@ -58,6 +58,9 @@ jobs:
     #     )
     #   )
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.build-packages.outputs.version }}
+      conan-cache-key: ${{ steps.build-packages.outputs.conan-cache-key }}
 
     steps:
       - name: Set Conan remote variables
@@ -148,13 +151,17 @@ jobs:
           conan remote list
 
       - name: Build packages
+        id: build-packages
         run: |
           export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
           CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
           export CONAN_HOME
           export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
           VERSION="${{ github.event.inputs.package_version || '2.10.0-test.0' }}"
+          CACHE_KEY="matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}"
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
           echo "CONAN_HOME=${CONAN_HOME}"
           conan config home
           conan remote list || true
@@ -170,6 +177,13 @@ jobs:
           echo "=== Local packages after export ==="
           conan list "matter/${VERSION}@silabs:*"
           conan list "matter_app/${VERSION}@silabs:*"
+          conan list "*" -c
+          
+      - name: Save Conan package cache
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.CONAN_HOME }}
+          key: ${{ steps.build-packages.outputs.conan-cache-key }}
 
       - name: Sanity
         if: github.event.inputs.run_sanity != 'false'
@@ -270,7 +284,7 @@ jobs:
 #          overwrite: true
 
       - name: Publish packages
-        # if: github.event.inputs.publish == 'true'
+        if: github.event.inputs.publish == 'true'
         env:
           CONAN_LOGIN_USERNAME: ${{ secrets.MATTER_PUBLIC_CONAN_USERNAME }}
           CONAN_PASSWORD: ${{ secrets.MATTER_PUBLIC_CONAN_TOKEN }}
@@ -301,3 +315,13 @@ jobs:
           conan upload "matter_app/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
 
           conan remote list
+
+  build-dev-apps:
+    name: Build Dev Apps (from package cache)
+    needs: matter-packages
+    uses: ./.github/workflows/dev-apps-builder.yaml
+    with:
+      build-type: standard
+      use-package-cache: true
+      package-version: ${{ needs.matter-packages.outputs.version }}
+      conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
