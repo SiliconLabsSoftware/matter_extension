@@ -63,8 +63,8 @@ jobs:
       - name: Set Conan remote variables
         id: set-remote
         run: |
-          echo "REMOTE_NAME=conan-open-source" >> $GITHUB_ENV
-          echo "REMOTE_URL=https://conan-open-source.silabs.net" >> $GITHUB_ENV
+          echo "REMOTE_NAME=conan-open-source-aus" >> $GITHUB_ENV
+          echo "REMOTE_URL=https://conan-open-source-aus.silabs.net" >> $GITHUB_ENV
 
       - name: Checkout matter_extension
         uses: actions/checkout@v4
@@ -153,7 +153,7 @@ jobs:
           CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
           export CONAN_HOME
           export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          VERSION="${{ github.event.inputs.package_version || '2.10.0-test.0' }}"
+          VERSION="${{ github.event.inputs.package_version || '2.10.0-demo.upload.1' }}"
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
           echo "CONAN_HOME=${CONAN_HOME}"
           conan config home
@@ -294,8 +294,8 @@ jobs:
           conan remote list-users
           conan list "*" -r "${REMOTE_NAME}"
 
-          echo "Uploading matter/${VERSION}@silabs to ${REMOTE_NAME}"
-          conan upload "matter/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
+          #echo "Uploading matter/${VERSION}@silabs to ${REMOTE_NAME}"
+          #conan upload "matter/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
 
           echo "Uploading matter_app/${VERSION}@silabs to ${REMOTE_NAME}"
           conan upload "matter_app/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
