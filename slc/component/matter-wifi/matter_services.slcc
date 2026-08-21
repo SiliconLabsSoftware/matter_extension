@@ -4,7 +4,7 @@ description: >
   Matter services for Wi-Fi platforms.
 label: Matter Services
 category: Matter-WiFi|Services
-quality: production
+quality: experimental
 metadata:
   sbom:
     license: Apache 2.0
