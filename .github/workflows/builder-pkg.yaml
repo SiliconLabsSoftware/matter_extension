@@ -41,15 +41,15 @@ jobs:
             - name: Cache tools
               uses: ./.github/actions/cache-tools
 
-            - name: Configure Conan home
+            - name: Prepare Conan home
               run: |
                   export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
                   CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-                  echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-                  export CONAN_HOME
                   export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
                   slt install conan
-                  conan config home
+                  rm -rf "${CONAN_HOME}"
+                  mkdir -p "${CONAN_HOME}"
+                  echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
 
             - name: Restore Conan package cache
               uses: actions/cache/restore@v4
