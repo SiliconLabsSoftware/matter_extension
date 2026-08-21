@@ -58,6 +58,17 @@ jobs:
                   key: ${{ inputs.conan-cache-key }}
                   fail-on-cache-miss: true
 
+            - name: Disable Conan parallel downloads
+              run: |
+                  export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+                  CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+                  export CONAN_HOME
+                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+                  mkdir -p conan-settings
+                  printf 'core.download:parallel=1\n' > conan-settings/global.conf
+                  conan config install ./conan-settings --type dir
+                  rm -rf conan-settings
+
             - name: Build ${{ inputs.example-app }} from packages
               uses: SiliconLabsSoftware/matter_build_action@v2
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
