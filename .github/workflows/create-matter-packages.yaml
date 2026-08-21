@@ -267,10 +267,10 @@ jobs:
 #          overwrite: true
 
       - name: Publish packages
-        if: github.event.inputs.publish == 'true'
+        # if: github.event.inputs.publish == 'true'
         env:
-          CONAN_LOGIN_USERNAME: ${{ secrets.SATYA_CONAN_USERNAME }}
-          CONAN_PASSWORD: ${{ secrets.SATYA_CONAN_TOKEN }}
+          CONAN_LOGIN_USERNAME: ${{ secrets.MATTER_PUBLIC_CONAN_USERNAME }}
+          CONAN_PASSWORD: ${{ secrets.MATTER_PUBLIC_CONAN_TOKEN }}
         run: |
           set -euo pipefail
           export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
