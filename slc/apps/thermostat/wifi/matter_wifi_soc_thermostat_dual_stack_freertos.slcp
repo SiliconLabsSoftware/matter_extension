@@ -134,11 +134,11 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
     condition: [matter_service_http_offload]
     file_list:
-      - path: cacert.pem.h
+      - path: cacert.h
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/resources
     condition: [matter_service_http_offload]
     file_list:
-      - path: index.html.h
+      - path: index_html.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
