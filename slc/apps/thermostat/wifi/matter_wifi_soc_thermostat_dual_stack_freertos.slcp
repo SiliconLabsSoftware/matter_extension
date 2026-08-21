@@ -56,8 +56,9 @@ component:
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
   - id: matter_default_lcd_config
-  - id: matter_log_uart
-  - id: matter_lwip
+  - id: matter_log_rtt
+  - id: matter_dual_stack
+  - id: matter_service_http_offload
 
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo
@@ -117,6 +118,11 @@ include:
       - path: CHIPProjectConfig.h
       - path: ThermostatConfig.h
     directory: include
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
+    condition: [matter_service_http_offload]
+    file_list:
+      - path: https_offload_example.h
+    directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
       - path: CustomerAppTask.h
@@ -125,6 +131,14 @@ include:
     file_list:
       - path: thermostat-delegate-impl.h
     directory: include
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
+    condition: [matter_service_http_offload]
+    file_list:
+      - path: cacert.h
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/resources
+    condition: [matter_service_http_offload]
+    file_list:
+      - path: index_html.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
@@ -133,6 +147,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/https_offload_example.cpp
+    condition: [matter_service_http_offload]
 
 define:
   - name: CCP_SI917_BRINGUP

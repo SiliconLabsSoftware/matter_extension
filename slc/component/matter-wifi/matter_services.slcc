@@ -1,0 +1,22 @@
+id: matter_services
+package: matter
+description: >
+  Matter services for Wi-Fi platforms.
+label: Matter Services
+category: Matter-WiFi|Services
+quality: production
+metadata:
+  sbom:
+    license: Apache 2.0
+
+provides:
+  - name: matter_services
+
+include:
+  - path: third_party/matter_sdk/src/platform/silabs/services
+    file_list:
+      - path: matter_service.h
+
+define:
+  - name: SL_MATTER_ENABLE_SERVICES
+    value: "1"
