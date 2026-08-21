@@ -3,10 +3,6 @@ name: Create Matter Packages
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch of matter_extension to checkout'
-        required: true
-        type: string
       package_version:
         description: 'MATTER_PACKAGE_VERSION'
         required: false
@@ -17,11 +13,6 @@ on:
         required: false
         type: boolean
         default: false
-      notify:
-        description: 'Send Slack notification when the run finishes?'
-        required: false
-        type: boolean
-        default: true
       run_sanity:
         description: 'Run sanity build matrix (917 SoC lighting + Thread lighting)?'
         required: false
@@ -49,7 +40,7 @@ on:
   #   - cron: '0 0 * * *'
 
 concurrency:
-  group: create-matter-packages-${{ github.event.inputs.branch || github.head_ref || github.ref_name }}
+  group: create-matter-packages-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -64,22 +55,8 @@ jobs:
         )
       )
     runs-on: ubuntu-latest
-    outputs:
-      target-branch: ${{ steps.resolve-branch.outputs.branch }}
-      target-sha: ${{ steps.checkout-info.outputs.sha }}
 
     steps:
-      - name: Resolve target branch
-        id: resolve-branch
-        run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "branch=${{ github.event.inputs.branch }}" >> "$GITHUB_OUTPUT"
-          elif [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "branch=${{ github.head_ref }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "branch=main" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Set Conan remote variables
         id: set-remote
         run: |
@@ -88,16 +65,6 @@ jobs:
 
       - name: Checkout matter_extension
         uses: actions/checkout@v4
-        with:
-          ref: ${{ steps.resolve-branch.outputs.branch }}
-
-      - name: Record checkout commit
-        id: checkout-info
-        run: |
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          SHA=$(git rev-parse HEAD)
-          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-          echo "Checked out ${{ github.repository }}@${{ steps.resolve-branch.outputs.branch }} ($SHA)"
 
       - name: Resolve submodule cache key
         id: submodule-key
@@ -249,55 +216,55 @@ jobs:
             --suite smoke-cmp \
             --version "${VERSION}"
 
-      - name: Collect smoke binaries
-        if: >-
-          github.event.inputs.run_sanity != 'false' ||
-          github.event.inputs.run_smoke_wifi == 'true' ||
-          github.event.inputs.run_smoke_thread == 'true' ||
-          github.event.inputs.run_smoke_cmp == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          MATTER_APP="$(slt where matter_app)"
-          echo "matter_app root: ${MATTER_APP}"
-          DEST="${GITHUB_WORKSPACE}/smoke-artifacts"
-          mkdir -p "${DEST}"
-          mapfile -d '' -t bins < <(
-            find "${MATTER_APP}" -type f \( -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' \) \
-              -path '*/out/*' \
-              ! -path '*/copy-sources/*' \
-              -print0
-          )
-          echo "Found ${#bins[@]} binary file(s)"
-          for f in "${bins[@]}"; do
-            [[ -n "${f}" ]] || continue
-            rel="${f#"${MATTER_APP}"/}"
-            mkdir -p "${DEST}/$(dirname "${rel}")"
-            cp -a "${f}" "${DEST}/${rel}"
-          done
-          echo "Collected:"
-          find "${DEST}" -type f | sort
-          if [[ "${#bins[@]}" -eq 0 ]]; then
-            echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
-            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
-          fi
-
-      - name: Upload smoke binaries
-        if: >-
-          github.event.inputs.run_sanity != 'false' ||
-          github.event.inputs.run_smoke_wifi == 'true' ||
-          github.event.inputs.run_smoke_thread == 'true' ||
-          github.event.inputs.run_smoke_cmp == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: package-manager-smoke-binaries-${{ env.VERSION }}
-          path: smoke-artifacts/
-          if-no-files-found: warn
-          overwrite: true
+#      - name: Collect smoke binaries
+#        if: >-
+#          github.event.inputs.run_sanity != 'false' ||
+#          github.event.inputs.run_smoke_wifi == 'true' ||
+#          github.event.inputs.run_smoke_thread == 'true' ||
+#          github.event.inputs.run_smoke_cmp == 'true'
+#        shell: bash
+#        run: |
+#          set -euo pipefail
+#          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+#          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+#          export CONAN_HOME
+#          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+#          MATTER_APP="$(slt where matter_app)"
+#          echo "matter_app root: ${MATTER_APP}"
+#          DEST="${GITHUB_WORKSPACE}/smoke-artifacts"
+#          mkdir -p "${DEST}"
+#          mapfile -d '' -t bins < <(
+#            find "${MATTER_APP}" -type f \( -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' \) \
+#              -path '*/out/*' \
+#              ! -path '*/copy-sources/*' \
+#              -print0
+#          )
+#          echo "Found ${#bins[@]} binary file(s)"
+#          for f in "${bins[@]}"; do
+#            [[ -n "${f}" ]] || continue
+#            rel="${f#"${MATTER_APP}"/}"
+#            mkdir -p "${DEST}/$(dirname "${rel}")"
+#            cp -a "${f}" "${DEST}/${rel}"
+#          done
+#          echo "Collected:"
+#          find "${DEST}" -type f | sort
+#          if [[ "${#bins[@]}" -eq 0 ]]; then
+#            echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+#            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+#          fi
+#
+#      - name: Upload smoke binaries
+#        if: >-
+#          github.event.inputs.run_sanity != 'false' ||
+#          github.event.inputs.run_smoke_wifi == 'true' ||
+#          github.event.inputs.run_smoke_thread == 'true' ||
+#          github.event.inputs.run_smoke_cmp == 'true'
+#        uses: actions/upload-artifact@v7
+#        with:
+#          name: package-manager-smoke-binaries-${{ env.VERSION }}
+#          path: smoke-artifacts/
+#          if-no-files-found: warn
+#          overwrite: true
 
       - name: Publish packages
         if: github.event.inputs.publish == 'true'
@@ -327,28 +294,3 @@ jobs:
           conan upload "matter_app/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
 
           conan remote list
-
-  # build-sqa-tools:
-  #   name: Build SQA Tools
-  #   if: github.event.inputs.publish == 'true'
-  #   uses: ./.github/workflows/sqa-tools-builder.yaml
-  #   with:
-  #     build-type: standard
-  #     branch: ${{ github.event.inputs.branch || 'main' }}
-
-  notify:
-    needs: [matter-packages]
-    runs-on: ubuntu-latest
-    if: >-
-      always() &&
-      needs.matter-packages.result != 'skipped' &&
-      github.event_name == 'workflow_dispatch' &&
-      github.event.inputs.notify != 'false'
-    steps:
-      - name: Send message to Slack
-        uses: slackapi/slack-github-action@v2.1.1
-        with:
-          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook
-          payload: |
-              text: ". Branch: ${{ needs.matter-packages.outputs.target-branch }}\n. Repo: ${{ github.repository }}\n. Workflow: ${{ github.workflow }}\n. Commit: <https://github.com/${{ github.repository }}/commit/${{ needs.matter-packages.outputs.target-sha }}|${{ needs.matter-packages.outputs.target-sha }}>\n. Status: ${{ needs.matter-packages.result }}\n. Triggered by: ${{ github.actor }}"
