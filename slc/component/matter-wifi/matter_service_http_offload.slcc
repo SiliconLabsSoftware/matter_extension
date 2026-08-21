@@ -1,0 +1,30 @@
+id: matter_service_http_offload
+package: matter
+description: >
+  Matter offload HTTP service for Wi-Fi platforms.
+label: Matter offload HTTP Service
+category: Matter-WiFi|Services|HTTP
+quality: production
+metadata:
+  sbom:
+    license: Apache 2.0
+
+provides:
+  - name: matter_service_http_offload
+
+requires:
+  - name: matter_services
+  - name: matter_dual_stack
+  - name: http_client
+
+include:
+  - path: third_party/matter_sdk/src/platform/silabs/services
+    file_list:
+      - path: http_client.h
+
+source:
+  - path: third_party/matter_sdk/src/platform/silabs/services/http_client.cpp
+
+define:
+  - name: SL_MATTER_ENABLE_HTTP_SERVICE
+    value: "1"
