@@ -33,8 +33,8 @@ on:
         required: false
         type: boolean
         default: false
-  pull_request:
-    types: [opened, synchronize, reopened]
+ # pull_request:
+ #   types: [opened, synchronize, reopened]
   # schedule:
   #   # Midnight UTC daily. Scheduled runs checkout branch "main".
   #   - cron: '0 0 * * *'
@@ -45,15 +45,15 @@ concurrency:
 
 jobs:
   matter-packages:
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (
-        github.event_name == 'pull_request' &&
-        (
-          github.head_ref == 'feature/package_manager_internal_CI' ||
-          github.base_ref == 'feature/package_manager_internal_CI'
-        )
-      )
+    # if: >-
+    #   github.event_name == 'workflow_dispatch' ||
+    #   (
+    #     github.event_name == 'pull_request' &&
+    #     (
+    #       github.head_ref == 'feature/package_manager_internal_CI' ||
+    #       github.base_ref == 'feature/package_manager_internal_CI'
+    #     )
+    #   )
     runs-on: ubuntu-latest
 
     steps:
@@ -150,7 +150,7 @@ jobs:
           CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
           export CONAN_HOME
           export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          VERSION="${{ github.event.inputs.package_version || '2.10.0-dev.0' }}"
+          VERSION="${{ github.event.inputs.package_version || '2.10.0-test.0' }}"
           echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
           echo "CONAN_HOME=${CONAN_HOME}"
           conan config home
@@ -286,6 +286,10 @@ jobs:
 
           conan remote add -f "${REMOTE_NAME}" "${REMOTE_URL}"
           conan remote login "${REMOTE_NAME}" "${CONAN_LOGIN_USERNAME}" -p "${CONAN_PASSWORD}"
+
+          conan remote list
+          conan remote list-users
+          conan list "*" -r "${REMOTE_NAME}"
 
           echo "Uploading matter/${VERSION}@silabs to ${REMOTE_NAME}"
           conan upload "matter/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
