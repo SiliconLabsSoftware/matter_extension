@@ -283,8 +283,17 @@ print_pkg_meta_version() {
 print_pkg_meta_version "${MATTER_APP}" "matter_app"
 print_pkg_meta_version "${MATTER}" "matter"
 
-PROJECT_PATH="$(find "${MATTER_APP}" -type f -name "${PROJECT}" 2>/dev/null | head -n1 || true)"
+# Accept repo-relative paths (matter_build_action / slc/build.sh style) or basenames.
+if [[ -f "${MATTER_APP}/${PROJECT}" ]]; then
+  PROJECT_PATH="${MATTER_APP}/${PROJECT}"
+elif [[ -f "${PROJECT}" ]]; then
+  PROJECT_PATH="${PROJECT}"
+else
+  PROJECT_BASENAME="$(basename "${PROJECT}")"
+  PROJECT_PATH="$(find "${MATTER_APP}" -type f -name "${PROJECT_BASENAME}" 2>/dev/null | head -n1 || true)"
+fi
 [[ -n "${PROJECT_PATH}" ]] || die "could not find ${PROJECT} under ${MATTER_APP}"
+PROJECT="$(basename "${PROJECT_PATH}")"
 
 APP_DIR="$(dirname "${PROJECT_PATH}")"
 if [[ "${PROJECT}" == *.slcw ]]; then
