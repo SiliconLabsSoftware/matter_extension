@@ -177,7 +177,21 @@ jobs:
           echo "=== Local packages after export ==="
           conan list "matter/${VERSION}@silabs:*"
           conan list "matter_app/${VERSION}@silabs:*"
+
           conan list "*" -c
+          echo "=== Removing non-matter packages ==="
+          conan list "*" -c --format=json | python3 -c '
+          import json, sys, subprocess
+          data = json.load(sys.stdin)
+          cache = data.get("Local Cache", data)
+          keep = {"matter", "matter_app"}
+          for ref in cache:
+              if ref.split("/", 1)[0] not in keep:
+                  print("removing", ref)
+                  subprocess.run(["conan", "remove", ref, "-c"], check=False)
+          '
+          conan list "*" -c
+
 
       - name: Save Conan package cache
         uses: actions/cache/save@v4
@@ -186,7 +200,7 @@ jobs:
           key: ${{ steps.build-packages.outputs.conan-cache-key }}
 
       - name: Sanity
-        if: github.event.inputs.run_sanity != 'false'
+        if: github.event.inputs.run_sanity == 'true'
         run: |
           export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
           CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
