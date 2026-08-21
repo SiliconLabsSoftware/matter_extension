@@ -1,6 +1,9 @@
 name: Create Matter Packages
 
 on:
+  push:
+    branches:
+      - feature/package_manager_internal_CI
   workflow_dispatch:
     inputs:
       package_version:
