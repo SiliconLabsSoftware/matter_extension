@@ -1,4 +1,4 @@
-name: Create Matter Packages
+name: Create and Upload Matter Packages
 
 on:
   push:
@@ -144,7 +144,7 @@ jobs:
           export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
           conan config home
 
-          conan remote add conan-prerelease https://conan-prerelease.silabs.net/
+          conan remote add conan-prerelease-aus https://conan-prerelease-aus.silabs.net/
           conan remote list
 
       - name: Build packages
