@@ -178,7 +178,7 @@ jobs:
           conan list "matter/${VERSION}@silabs:*"
           conan list "matter_app/${VERSION}@silabs:*"
           conan list "*" -c
-          
+
       - name: Save Conan package cache
         uses: actions/cache/save@v4
         with:
@@ -319,6 +319,9 @@ jobs:
   build-dev-apps:
     name: Build Dev Apps (from package cache)
     needs: matter-packages
+    permissions:
+      contents: read
+      actions: write
     uses: ./.github/workflows/dev-apps-builder.yaml
     with:
       build-type: standard
