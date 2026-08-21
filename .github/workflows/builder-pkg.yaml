@@ -1,0 +1,73 @@
+name: Common Package Builder
+
+on:
+    workflow_call:
+        inputs:
+            json-file-path:
+                required: true
+                type: string
+            path-to-example-app:
+                required: true
+                type: string
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            platform:
+                required: true
+                type: string
+            package-version:
+                required: true
+                type: string
+            conan-cache-key:
+                required: true
+                type: string
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+    build:
+        name: ${{ inputs.platform }}-package-build-job
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
+
+            - name: Configure Conan home
+              run: |
+                  export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+                  CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+                  echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+                  export CONAN_HOME
+                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+                  slt install conan
+                  conan config home
+
+            - name: Restore Conan package cache
+              uses: actions/cache/restore@v4
+              with:
+                  path: ${{ env.CONAN_HOME }}
+                  key: ${{ inputs.conan-cache-key }}
+                  fail-on-cache-miss: true
+
+            - name: Build ${{ inputs.example-app }} from packages
+              uses: SiliconLabsSoftware/matter_build_action@v2
+              continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+              env:
+                  MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+              with:
+                  json-file-path: ${{ inputs.json-file-path }}
+                  path-to-example-app: ${{ inputs.path-to-example-app }}
+                  example-app: ${{ inputs.example-app }}
+                  build-script: "./packages/build_app.sh"
+                  output-directory: " "
+                  build-type: ${{ inputs.build-type }}
+                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}

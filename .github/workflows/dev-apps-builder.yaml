@@ -1,6 +1,24 @@
 name: Build Dev apps
 
 on:
+    workflow_call:
+        inputs:
+            build-type:
+                required: false
+                type: string
+                default: standard
+            use-package-cache:
+                required: false
+                type: boolean
+                default: false
+            package-version:
+                required: false
+                type: string
+                default: ""
+            conan-cache-key:
+                required: false
+                type: string
+                default: ""
     pull_request:
         branches:
             - main
@@ -34,7 +52,11 @@ jobs:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                  if [[ "${{ inputs.use-package-cache }}" == "true" ]]; then
+                      echo "build-type=${{ inputs.build-type }}" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+                      echo "build-type=${{ inputs.build-type }}" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
                           echo "build-type=full" >> $GITHUB_OUTPUT
                       else
@@ -81,6 +103,9 @@ jobs:
         with:
             example-app: "lighting_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             trustzone-support: true
 
     build_air_quality_sensor_app:
@@ -90,6 +115,9 @@ jobs:
         with:
             example-app: "air_quality_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_light_switch_app:
         name: Build Light Switch App
@@ -98,6 +126,9 @@ jobs:
         with:
             example-app: "light_switch_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_lock_app:
         name: Build Lock App
@@ -106,6 +137,9 @@ jobs:
         with:
             example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
 
     build_thermostat_app:
@@ -115,6 +149,9 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
 
     build_window_app:
@@ -124,6 +161,9 @@ jobs:
         with:
             example-app: "window_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
 
     build_fan_control_app:
@@ -133,6 +173,9 @@ jobs:
         with:
             example-app: "fan_control_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
 
     build_closure_app:
@@ -142,6 +185,9 @@ jobs:
         with:
             example-app: "closure_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_multi_sensor_app:
         name: Build Multi Sensor App
@@ -150,6 +196,9 @@ jobs:
         with:
             example-app: "multi_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_onoff_plug_app:
         name: Build OnOff Plug App
@@ -158,6 +207,9 @@ jobs:
         with:
             example-app: "onoff_plug_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_refrigerator_app:
         name: Build Refrigerator App
@@ -166,6 +218,9 @@ jobs:
         with:
             example-app: "refrigerator_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_evse_app:
         name: Build EVSE App
@@ -174,15 +229,22 @@ jobs:
         with:
             example-app: "evse_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: true
 
     build_performance_test_app:
         name: Build Performance Test App
         needs: [set-build-type, cache-tools, cache-sdks]
+        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance_test_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: false
 
     build_zigbee_light:
@@ -192,6 +254,9 @@ jobs:
        with:
            example-app: "zigbee_light"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
+           use-package-cache: ${{ inputs.use-package-cache }}
+           package-version: ${{ inputs.package-version }}
+           conan-cache-key: ${{ inputs.conan-cache-key }}
            mg24-internal-support: false
            mgm24-support: false
            mgm24-internal-support: false
@@ -203,6 +268,9 @@ jobs:
        with:
            example-app: "wake_on_matter"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
+           use-package-cache: ${{ inputs.use-package-cache }}
+           package-version: ${{ inputs.package-version }}
+           conan-cache-key: ${{ inputs.conan-cache-key }}
            mgm24-support: false
            mg24-internal-support: false
            mg26-internal-support: false
@@ -219,6 +287,9 @@ jobs:
         with:
             example-app: "oven_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             thread-support: false
 
     build_rangehood_app:
@@ -228,6 +299,9 @@ jobs:
         with:
             example-app: "rangehood_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_platform_template:
         name: Build Platform Template
@@ -236,10 +310,14 @@ jobs:
         with:
             example-app: "platform_template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools, cache-sdks]
+        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
@@ -251,6 +329,7 @@ jobs:
     build-sqa-tools:
         name: Build SQA Tools
         needs: [set-build-type, cache-tools, cache-sdks]
+        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -282,7 +361,7 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
-        if: success()
+        if: ${{ !inputs.use-package-cache && success() }}
 
         steps:
             - name: Merge artifacts
@@ -296,7 +375,7 @@ jobs:
         name: Build Coverage
         needs:
             - set-build-type
-        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        if: ${{ !inputs.use-package-cache && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility')) }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -306,7 +385,7 @@ jobs:
         needs: 
             - merge-apps
             - build_coverage
-        if: ${{ always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}        
+        if: ${{ !inputs.use-package-cache && always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
@@ -314,7 +393,7 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        if: ${{ !inputs.use-package-cache && (startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility')) }}
         permissions:
             contents: read
             actions: write
@@ -323,7 +402,7 @@ jobs:
     delete-cache:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
-        if: always()
+        if: ${{ !inputs.use-package-cache && always() }}
         runs-on: ubuntu-latest
         permissions:
             actions: write
