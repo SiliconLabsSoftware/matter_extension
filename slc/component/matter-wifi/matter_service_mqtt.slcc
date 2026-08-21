@@ -4,7 +4,7 @@ description: >
   Matter MQTT service for Wi-Fi platforms.
 label: Matter MQTT Service
 category: Matter-WiFi|Services|MQTT
-quality: production
+quality: experimental
 metadata:
   sbom:
     license: Apache 2.0

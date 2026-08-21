@@ -4,7 +4,7 @@ description: >
   Matter offload HTTP service for Wi-Fi platforms.
 label: Matter offload HTTP Service
 category: Matter-WiFi|Services|HTTP
-quality: production
+quality: experimental
 metadata:
   sbom:
     license: Apache 2.0
