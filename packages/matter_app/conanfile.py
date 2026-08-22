@@ -109,7 +109,7 @@ class matter_appRecipe(MatterBaseRecipe):
 
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(
@@ -177,7 +177,7 @@ class matter_appRecipe(MatterBaseRecipe):
 
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(

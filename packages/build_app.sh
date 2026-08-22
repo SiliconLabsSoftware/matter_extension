@@ -190,6 +190,38 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# LLVM builds require CMake output (same rule as slc/build.sh).
+CONFIG_ARGS="${EXTRA_GENERATE_ARGS[*]:-} ${WITH_APP_COMPONENTS}"
+USE_LLVM=false
+if [[ "${CONFIG_ARGS}" == *toolchain_llvm* ]]; then
+  USE_LLVM=true
+fi
+if [[ "${USE_LLVM}" == true ]]; then
+  OUTPUT_FORMAT="cmake"
+  CMAKE_SUBDIR="cmake_llvm"
+else
+  OUTPUT_FORMAT="makefile"
+  CMAKE_SUBDIR=""
+fi
+
+cmake_configure_and_build() {
+  local src_dir="$1"
+  local label="$2"
+
+  if [[ ! -f "${src_dir}/CMakeLists.txt" ]]; then
+    die "${label} CMakeLists.txt not found at ${src_dir}"
+  fi
+  if [[ ! -f "${src_dir}/CMakePresets.json" ]]; then
+    die "${label} CMakePresets.json not found at ${src_dir}"
+  fi
+  if ! (cd "${src_dir}" && cmake --preset project -DPOST_BUILD_EXE="${POST_BUILD_EXE:-}"); then
+    die "failed to configure ${label}"
+  fi
+  if ! (cd "${src_dir}" && cmake --build --preset default_config -j"${JOBS}"); then
+    die "failed to build ${label}"
+  fi
+}
+
 [[ -n "${PROJECT}" && -n "${BOARD}" ]] || die "need both --project and --board"
 if [[ "${PROJECT}" != *.slcp && "${PROJECT}" != *.slcw ]]; then
   PROJECT="${PROJECT}.slcp"
@@ -252,12 +284,23 @@ ensure_slc_on_path() {
 echo "Ensuring OS build tools (make, find)..."
 ensure_os_cmd make make
 ensure_os_cmd find findutils
+if [[ "${USE_LLVM}" == true ]]; then
+  ensure_os_cmd cmake cmake
+fi
 
 ensure_slc_on_path || die "slc not found after slt install slc-cli"
 
 need_cmd slc
 need_cmd make
 need_cmd find
+if [[ "${USE_LLVM}" == true ]]; then
+  need_cmd cmake
+fi
+
+if [[ -z "${POST_BUILD_EXE:-}" ]]; then
+  POST_BUILD_EXE="$(command -v commander 2>/dev/null || true)"
+fi
+export POST_BUILD_EXE
 
 echo "Installing ${REF} via SLT..."
 slt install "${REF}" -e conan
@@ -345,7 +388,7 @@ run_generate() {
     args+=(-pids "${pid}")
   fi
   args+=("${EXTRA_GENERATE_ARGS[@]}")
-  args+=(--generator-timeout=300 -o makefile)
+  args+=(--generator-timeout=300 -o "${OUTPUT_FORMAT}")
 
   echo "Running slc ${args[*]}"
   slc "${args[@]}"
@@ -355,9 +398,13 @@ if [[ "${PROJECT_FLAG}" == "-p" ]]; then
   if [[ "${SKIP_GEN}" == false ]]; then
     run_generate "" "${WITH_APP_COMPONENTS}" "${WITHOUT_APP_COMPONENTS}"
   fi
-  [[ -f "${OUT_DIR}/${MAKEFILE}" ]] || die "expected ${OUT_DIR}/${MAKEFILE} after generate"
-  echo "Building with make -j${JOBS}..."
-  make -C "${OUT_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
+  if [[ "${USE_LLVM}" == true ]]; then
+    cmake_configure_and_build "${OUT_DIR}/${CMAKE_SUBDIR}" "project"
+  else
+    [[ -f "${OUT_DIR}/${MAKEFILE}" ]] || die "expected ${OUT_DIR}/${MAKEFILE} after generate"
+    echo "Building with make -j${JOBS}..."
+    make -C "${OUT_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
+  fi
 else
   GENERATE_BOOTLOADER=true
   GENERATE_APPLICATION=true
@@ -391,23 +438,38 @@ else
     fi
   fi
 
-  if [[ "${GENERATE_BOOTLOADER}" == true && "${GENERATE_APPLICATION}" == false ]]; then
+  if [[ "${USE_LLVM}" == true ]]; then
+    if [[ "${GENERATE_BOOTLOADER}" == true && "${GENERATE_APPLICATION}" == false ]]; then
+      BUILD_CMAKE_DIR="$(find "${OUT_DIR}/matter_bootloader" -maxdepth 1 -name "${CMAKE_SUBDIR}" -type d -print -quit)"
+      [[ -n "${BUILD_CMAKE_DIR}" ]] || die "bootloader ${CMAKE_SUBDIR} not found under ${OUT_DIR}"
+      cmake_configure_and_build "${BUILD_CMAKE_DIR}" "bootloader"
+    elif [[ "${GENERATE_BOOTLOADER}" == false && "${GENERATE_APPLICATION}" == true ]]; then
+      BUILD_CMAKE_DIR="$(find "${OUT_DIR}" -mindepth 2 -maxdepth 2 -name "${CMAKE_SUBDIR}" -type d ! -path "*matter-bootloader*" -print -quit)"
+      [[ -n "${BUILD_CMAKE_DIR}" ]] || die "application ${CMAKE_SUBDIR} not found under ${OUT_DIR}"
+      cmake_configure_and_build "${BUILD_CMAKE_DIR}" "application"
+    else
+      cmake_configure_and_build "${OUT_DIR}/${CMAKE_SUBDIR}" "solution"
+    fi
+  elif [[ "${GENERATE_BOOTLOADER}" == true && "${GENERATE_APPLICATION}" == false ]]; then
     BUILD_MAKEFILE="$(find "${OUT_DIR}/matter_bootloader" -maxdepth 1 -name "*.Makefile" -print -quit)"
     [[ -n "${BUILD_MAKEFILE}" ]] || die "bootloader Makefile not found under ${OUT_DIR}"
     BUILD_DIR="$(dirname "${BUILD_MAKEFILE}")"
     MAKEFILE="$(basename "${BUILD_MAKEFILE}")"
+    echo "Building with make -j${JOBS}..."
+    make all -C "${BUILD_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
   elif [[ "${GENERATE_BOOTLOADER}" == false && "${GENERATE_APPLICATION}" == true ]]; then
     BUILD_MAKEFILE="$(find "${OUT_DIR}" -mindepth 2 -maxdepth 2 -name "*.Makefile" ! -name "*.solution.Makefile" -print -quit)"
     [[ -n "${BUILD_MAKEFILE}" ]] || die "application Makefile not found under ${OUT_DIR}"
     BUILD_DIR="$(dirname "${BUILD_MAKEFILE}")"
     MAKEFILE="$(basename "${BUILD_MAKEFILE}")"
+    echo "Building with make -j${JOBS}..."
+    make all -C "${BUILD_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
   else
     BUILD_DIR="${OUT_DIR}"
     [[ -f "${BUILD_DIR}/${MAKEFILE}" ]] || die "expected ${BUILD_DIR}/${MAKEFILE} after generate"
+    echo "Building with make -j${JOBS}..."
+    make all -C "${BUILD_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
   fi
-
-  echo "Building with make -j${JOBS}..."
-  make all -C "${BUILD_DIR}" -f "${MAKEFILE}" -j"${JOBS}"
 fi
 
 echo "Done: ${APP_DIR}/${OUT_DIR}"
