@@ -128,7 +128,7 @@ Example (replace with your server values):
 
     ![Flash device](images/flash-device.png)
 
-## What the Customer Needs to Change for Validating the Demo
+## Changes needed for validating the demo
 
 Edit before build. Point defaults at **your** LAN.
 
