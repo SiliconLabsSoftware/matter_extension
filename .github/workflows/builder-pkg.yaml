@@ -45,6 +45,7 @@ jobs:
               uses: ./.github/actions/restore-matter-packages
               with:
                   conan-cache-key: ${{ inputs.conan-cache-key }}
+                  package-version: ${{ inputs.package-version }}
                   fail-on-cache-miss: true
 
             - name: Build ${{ inputs.example-app }} from packages
