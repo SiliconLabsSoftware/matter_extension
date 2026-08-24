@@ -18,12 +18,18 @@ on:
             platform:
                 required: true
                 type: string
+            use-package-cache:
+                required: false
+                type: boolean
+                default: false
             package-version:
-                required: true
+                required: false
                 type: string
+                default: ""
             conan-cache-key:
-                required: true
+                required: false
                 type: string
+                default: ""
 
 permissions:
   contents: read
@@ -37,39 +43,27 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+              with:
+                  submodules: ${{ !inputs.use-package-cache }}
+                  lfs: ${{ !inputs.use-package-cache }}
+
+            - name: Pull LFS objects in submodules
+              if: ${{ !inputs.use-package-cache }}
+              run: |
+                  git -C third_party/simplicity_sdk lfs pull
+                  git -C third_party/wifi_sdk lfs pull
 
             - name: Cache tools
               uses: ./.github/actions/cache-tools
 
-            - name: Prepare Conan home
-              run: |
-                  export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-                  CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
-                  slt install conan
-                  rm -rf "${CONAN_HOME}"
-                  mkdir -p "${CONAN_HOME}"
-                  echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-
-            - name: Restore Conan package cache
-              uses: actions/cache/restore@v4
+            - name: Restore Matter package cache
+              if: ${{ inputs.use-package-cache }}
+              uses: ./.github/actions/restore-matter-packages
               with:
-                  path: ${{ env.CONAN_HOME }}
-                  key: ${{ inputs.conan-cache-key }}
+                  conan-cache-key: ${{ inputs.conan-cache-key }}
                   fail-on-cache-miss: true
 
-            - name: Disable Conan parallel downloads
-              run: |
-                  export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-                  CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-                  export CONAN_HOME
-                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-                  mkdir -p conan-settings
-                  printf 'core.download:parallel=1\n' > conan-settings/global.conf
-                  conan config install ./conan-settings --type dir
-                  rm -rf conan-settings
-
-            - name: Build ${{ inputs.example-app }} from packages
+            - name: Build ${{ inputs.example-app }}
               uses: SiliconLabsSoftware/matter_build_action@v2
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
@@ -78,7 +72,34 @@ jobs:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
                   example-app: ${{ inputs.example-app }}
-                  build-script: "./packages/build_app.sh"
+                  build-script: ${{ inputs.use-package-cache && './packages/build_app.sh' || './slc/build.sh' }}
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
                   continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+
+            - name: Create asset files
+              if: ${{ !inputs.use-package-cache && startsWith(github.ref_name, 'release_') }}
+              run: |
+                  find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do
+                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
+                      echo '<asset/>' >> "${file}.asset"
+                      echo "Created ${file}.asset"
+                  done
+
+            - name: Upload artifacts
+              if: ${{ !inputs.use-package-cache }}
+              uses: actions/upload-artifact@v7
+              with:
+                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
+                  path: |
+                      out/*/*/artifact/**
+                      ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'series-3-bootloader' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/**/*.map' || '' }}
+                      !out/**/*_bootloader/build/**/*.map
+                      !out/**/*copy-sources/**
+                  if-no-files-found: warn
+                  overwrite: true

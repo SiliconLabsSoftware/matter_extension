@@ -1,0 +1,103 @@
+name: Create Matter packages
+description: Export Matter Conan packages and save their isolated cache for downstream jobs.
+
+inputs:
+  package-version:
+    description: Version assigned to matter and matter_app packages.
+    required: true
+  conan-cache-key:
+    description: Optional cache key. A run-scoped key is generated when omitted.
+    required: false
+    default: ""
+  conan-home:
+    description: Conan home directory to package and cache.
+    required: false
+    default: ""
+  prerelease-remote-url:
+    description: Conan prerelease remote URL.
+    required: false
+    default: https://conan-prerelease.silabs.net/
+
+outputs:
+  version:
+    description: Exported package version.
+    value: ${{ steps.create.outputs.version }}
+  conan-cache-key:
+    description: Cache key containing the exported packages.
+    value: ${{ steps.create.outputs.conan-cache-key }}
+  conan-home:
+    description: Absolute Conan home directory saved in the cache.
+    value: ${{ steps.create.outputs.conan-home }}
+
+runs:
+  using: composite
+  steps:
+    - name: Cache tools
+      uses: ./.github/actions/cache-tools
+
+    - name: Configure Conan
+      shell: bash
+      run: |
+        set -euo pipefail
+        CONAN_HOME="${{ inputs.conan-home }}"
+        CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+        echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+        echo "${HOME}/.silabs/slt/engines/conan/conan" >> "$GITHUB_PATH"
+        echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
+        export CONAN_HOME
+        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+
+        slt install conan
+        for tool in cmake ninja; do
+          slt install "${tool}" || true
+        done
+
+        mkdir -p conan-settings
+        printf 'core.download:parallel=6\ncore.upload:parallel=4\n' > conan-settings/global.conf
+        conan config install conan-settings --type dir
+        rm -rf conan-settings
+
+        conan remote add -f conan-prerelease "${{ inputs.prerelease-remote-url }}"
+
+    - name: Export Matter packages
+      id: create
+      shell: bash
+      run: |
+        set -euo pipefail
+        VERSION="${{ inputs.package-version }}"
+        CACHE_KEY="${{ inputs.conan-cache-key }}"
+        CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}}"
+        CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+        export CONAN_HOME
+        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+
+        conan remove "matter/${VERSION}@silabs" -c || true
+        conan remove "matter_app/${VERSION}@silabs" -c || true
+        conan export-pkg packages/matter/conanfile.py --name=matter --version="${VERSION}" --user=silabs
+        conan export-pkg packages/matter_app/conanfile.py --name=matter_app --version="${VERSION}" --user=silabs
+
+        conan list "*" -c --format=json | python3 -c '
+        import json
+        import subprocess
+        import sys
+
+        data = json.load(sys.stdin)
+        cache = data.get("Local Cache", data)
+        for reference in cache:
+            if reference.split("/", 1)[0] not in {"matter", "matter_app"}:
+                subprocess.run(["conan", "remove", reference, "-c"], check=False)
+        '
+
+        conan list "matter/${VERSION}@silabs:*"
+        conan list "matter_app/${VERSION}@silabs:*"
+        echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+        echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
+        echo "conan-home=${CONAN_HOME}" >> "$GITHUB_OUTPUT"
+
+    - name: Save Matter package cache
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ steps.create.outputs.conan-home }}
+        key: ${{ steps.create.outputs.conan-cache-key }}
