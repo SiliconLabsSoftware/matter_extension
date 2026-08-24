@@ -151,7 +151,7 @@ configuration:
     condition: [matter_icd_core]
 
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "1000"
+    value: "600000"
     condition: [matter_icd_core]
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
