@@ -149,17 +149,9 @@ configuration:
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
-    value: "5000"
+    value: "0"
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "600000"
-  - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
-  - name: CHIP_CONFIG_ENABLE_ICD_LIT
-    value: 1
-  - name: CHIP_CONFIG_ENABLE_ICD_CIP
-    value: 1
-  - name: CHIP_CONFIG_ENABLE_ICD_UAT
-    value: 1
   # Wakeup configurations
   - name: SL_ENABLE_GPIO_WAKEUP_SOURCE
     value: "1"
