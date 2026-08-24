@@ -2,6 +2,19 @@ name: Build SQA apps
 
 on:
     workflow_call:
+        inputs:
+            use-package-cache:
+                required: false
+                type: boolean
+                default: false
+            package-version:
+                required: false
+                type: string
+                default: ""
+            conan-cache-key:
+                required: false
+                type: string
+                default: ""
 
 jobs:
     build_lock_app:
@@ -10,6 +23,9 @@ jobs:
         with:
             example-app: "lock_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
             ncp-917-dual-stack-support: true
             mgm24-internal-support: false
@@ -21,6 +37,9 @@ jobs:
         with:
             example-app: "lighting_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-internal-support: false
             mg26-internal-support: false
             mgm24-internal-support: false
@@ -32,6 +51,9 @@ jobs:
         with:
             example-app: "window_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             sixg301-support: false
 
@@ -57,6 +79,9 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: false
             mg24-support: false
             mg24-internal-support: false
@@ -74,6 +99,9 @@ jobs:
         with:
             example-app: "light_switch_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             mgm24-internal-support: false
             mgm26-internal-support: false
@@ -84,6 +112,9 @@ jobs:
         with:
             example-app: "multi_sensor_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-support: false
             mgm24-support: false
             mgm24-internal-support: false
@@ -96,6 +127,9 @@ jobs:
         with:
             example-app: "zigbee_light"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
@@ -108,6 +142,9 @@ jobs:
         with:
             example-app: "closure_app"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             mgm24-internal-support: false
             mgm26-internal-support: false
@@ -118,6 +155,9 @@ jobs:
         with:
             example-app: "platform_template"
             build-type: "custom-sqa"
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
@@ -138,7 +178,7 @@ jobs:
             - build_zigbee_light
             - build_closure_app
             - build_platform_template
-        if: always()
+        if: ${{ !inputs.use-package-cache && always() }}
 
         steps:
             - name: Merge artifacts

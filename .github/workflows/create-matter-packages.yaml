@@ -330,15 +330,14 @@ jobs:
 
           conan remote list
 
-  build-dev-apps:
-    name: Build Dev Apps (from package cache)
+  build-sqa-apps:
+    name: Build SQA Apps (from package cache)
     needs: matter-packages
     permissions:
       contents: read
       actions: write
-    uses: ./.github/workflows/dev-apps-builder.yaml
+    uses: ./.github/workflows/sqa-apps-builder.yaml
     with:
-      build-type: full
       use-package-cache: true
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}

@@ -2,6 +2,7 @@ name: Code Size Check
 permissions:
   contents: read
   pull-requests: read
+  actions: write
 
 on:
   workflow_dispatch:
@@ -50,43 +51,53 @@ env:
   CODE_SIZE_JSON: ${{ (inputs.transport || 'thread') == 'wifi' && (inputs.project-type || 'soc') == 'soc' && '.github/silabs-code-size-wifi.json' || '.github/silabs-code-size.json' }}
 
 jobs:
+    resolve-inputs:
+        runs-on: ubuntu-latest
+        outputs:
+            baseline: ${{ steps.resolve.outputs.baseline }}
+        steps:
+            - id: resolve
+              run: echo "baseline=${BASELINE}" >> "$GITHUB_OUTPUT"
+
+    current-matter-packages:
+        uses: ./.github/workflows/matter-packages.yaml
+        with:
+            package-version: 2.10.0-test.0
+            conan-cache-key: matter-conan-current-${{ github.run_id }}-${{ github.run_attempt }}
+
+    baseline-matter-packages:
+        needs: resolve-inputs
+        uses: ./.github/workflows/matter-packages.yaml
+        with:
+            package-version: 2.10.0-test.0
+            conan-cache-key: matter-conan-baseline-${{ github.run_id }}-${{ github.run_attempt }}
+            checkout-ref: ${{ needs.resolve-inputs.outputs.baseline }}
+
     code-size-check:
+        needs: [current-matter-packages, baseline-matter-packages]
         name: Code Size Check
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v7
+
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
+
+            - name: Restore current Matter package cache
+              uses: ./.github/actions/restore-matter-packages
               with:
-                  submodules: "true"
-                  lfs: true
+                  conan-cache-key: ${{ needs.current-matter-packages.outputs.conan-cache-key }}
 
-            - name: Pull LFS objects in submodules
-              run: |
-                  git -C third_party/simplicity_sdk lfs pull
-                  git -C third_party/wifi_sdk lfs pull
-
-            - name: Install tools
-              uses: ./.github/actions/install-tools
-
-            - name: Checkout baseline for comparison
-              uses: actions/checkout@v7
-              with:
-                  ref: ${{ env.BASELINE }}
-                  path: baseline
-                  submodules: "true"  
-                  lfs: true
-
-            - name: Pull LFS objects in submodules
-              run: |
-                  git -C baseline/third_party/simplicity_sdk lfs pull
-                  git -C baseline/third_party/wifi_sdk lfs pull
             - name: Build code-canary app
               uses: SiliconLabsSoftware/matter_build_action@v2
+              env:
+                  MATTER_PACKAGE_VERSION: ${{ needs.current-matter-packages.outputs.version }}
               with:
                   json-file-path: ${{ env.CODE_SIZE_JSON }}
                   path-to-example-app: "./slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
-                  build-script: "./slc/build.sh"
+                  build-script: "./packages/build_app.sh"
                   output-directory: " "
                   build-type: "standard"
 
@@ -94,17 +105,22 @@ jobs:
               run: |
                   mv ./out ./current
 
+            - name: Restore baseline Matter package cache
+              uses: ./.github/actions/restore-matter-packages
+              with:
+                  conan-cache-key: ${{ needs.baseline-matter-packages.outputs.conan-cache-key }}
+
             - name: Build code-canary app on baseline
               uses: SiliconLabsSoftware/matter_build_action@v2
+              env:
+                  MATTER_PACKAGE_VERSION: ${{ needs.baseline-matter-packages.outputs.version }}
               with:
                   json-file-path: ${{ env.CODE_SIZE_JSON }}
-                  path-to-example-app: "./baseline/slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
+                  path-to-example-app: "./slc/apps/${{ env.EXAMPLE_APP }}/${{ env.TRANSPORT }}/matter_${{env.TRANSPORT}}_${{ env.PROJECT_TYPE }}_${{ env.EXAMPLE_APP }}_freertos.slcp"
                   example-app: code-canary
-                  build-script: "./baseline/slc/build.sh"
+                  build-script: "./packages/build_app.sh"
                   output-directory: " "
                   build-type: "standard"
-              env:
-                MATTER_ROOT: ${{ github.workspace }}/baseline
 
             - name: Generate Code Size Results and Compare (gcc)
               shell: bash
