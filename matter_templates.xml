@@ -997,12 +997,12 @@
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.apps.lock_app.wifi.matter_wifi_soc_lock_app_freertos.slcp"/>
   </descriptors>
-    <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos" label="Matter WiFi - SoC Lock FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi door lock app">
+  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos" label="Matter WiFi - SoC Thermostat FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.lock_app.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
-    <properties key="projectFilePaths" value="slc/apps/lock_app/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
-    <properties key="readmeFiles" value="slc/apps/lock_app/wifi/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.thermostat.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
+    <properties key="projectFilePaths" value="slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
+    <properties key="readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
     <properties key="boardCompatibility" value="brd2605a brd2708a brd2911a brd4338a brd4342a brd4343a brd4343c brd4343s com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*siwg917m100mgtba.* .*siwg917m100xntba.* .*siwg917m111mgtba.* .*siwg917m111xgtba.* .*siwg917y111mgab.* .*siwg917y111mgaba.* .*siwg917y111mgaxa.* .*siwg917y111mgnba.* .*siwg917y111mgnxa.* .*siwg917y121mgaba.* .*siwg917y121mgaxa.* .*siwg917y121mgnb.* .*siwg917y121mgnba.* .*siwg917y121mgnxa.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1013,12 +1013,12 @@
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
-  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos_solution" label="Matter WiFi - SoC Lock FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi door lock app">
+  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos_solution" label="Matter WiFi - SoC Thermostat FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
-    <properties key="solutionReferenceId" value="slc.apps.lock_app.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcw"/>
-    <properties key="projectFilePaths" value="slc/apps/lock_app/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcw"/>
-    <properties key="readmeFiles" value="slc/apps/lock_app/wifi/README.md"/>
+    <properties key="solutionReferenceId" value="slc.apps.thermostat.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcw"/>
+    <properties key="projectFilePaths" value="slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcw"/>
+    <properties key="readmeFiles" value="slc/apps/thermostat/wifi/README.md"/>
     <properties key="boardCompatibility" value="brd2605a brd2708a brd2911a brd4338a brd4342a brd4343a brd4343c brd4343s com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*siwg917m100mgtba.* .*siwg917m100xntba.* .*siwg917m111mgtba.* .*siwg917m111xgtba.* .*siwg917y111mgab.* .*siwg917y111mgaba.* .*siwg917y111mgaxa.* .*siwg917y111mgnba.* .*siwg917y111mgnxa.* .*siwg917y121mgaba.* .*siwg917y121mgaxa.* .*siwg917y121mgnb.* .*siwg917y121mgnba.* .*siwg917y121mgnxa.*"/>
     <properties key="ideCompatibility" value="generic-template makefile-ide simplicity-ide visual-studio-code visual-studio-code-cmake"/>
@@ -1027,7 +1027,7 @@
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <properties key="solutionProjects" value="slc.apps.lock_app.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
+    <properties key="solutionProjects" value="slc.apps.thermostat.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
   </descriptors>
   <descriptors name="matter_thread_soc_multi_sensor_app_freertos" label="Matter Thread - SoC Multi Sensor FreeRTOS" description="Demonstrates a sample implementation of a Matter over Thread multi-sensor app">
     <properties key="namespace" value="template.uc"/>
