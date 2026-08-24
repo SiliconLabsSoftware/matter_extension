@@ -24,7 +24,6 @@
 #   -pids PID                Build application, bootloader, or trustzone solution PIDs
 #   --clean                   Remove the output directory before building
 #   --skip_gen                Skip SLC generation and rebuild existing output
-#   --sisdk PATH              Add a specific SISDK package path
 #   -j N                     make -jN (default: 8)
 #   -h, --help               Show this help
 #
@@ -45,7 +44,6 @@ WITHOUT_BOOTLOADER_COMPONENTS=""
 PIDS=""
 CLEAN=false
 SKIP_GEN=false
-SISDK_ROOT=""
 EXTRA_GENERATE_ARGS=()
 
 # Print the header comment block as help text, then exit (arg: exit code).
@@ -169,11 +167,6 @@ while [[ $# -gt 0 ]]; do
     --skip_gen)
       SKIP_GEN=true
       shift
-      ;;
-    --sisdk)
-      SISDK_ROOT="${2:-}"
-      [[ -n "${SISDK_ROOT}" ]] || die "--sisdk needs a value"
-      shift 2
       ;;
     -j)
       JOBS="${2:-}"
@@ -378,9 +371,6 @@ run_generate() {
     with_value="${with_value},${with_components}"
   fi
   args=(generate -d "${OUT_DIR}" "${PROJECT_FLAG}" "${PROJECT}" --with "${with_value}")
-  if [[ -n "${SISDK_ROOT}" ]]; then
-    args+=(--sdk-package-path "${SISDK_ROOT}")
-  fi
   if [[ -n "${without_components}" ]]; then
     args+=(--without "${without_components}")
   fi
