@@ -1,6 +1,9 @@
 name: Check OTA Flash Space
 
 on:
+  push:
+    branches:
+      - feature/package_manager_internal_CI
   pull_request:
     branches:
       - main
@@ -12,8 +15,14 @@ permissions:
   actions: write
 
 jobs:
+  matter-packages:
+    uses: ./.github/workflows/matter-packages.yaml
+    with:
+      package-version: 2.10.0-test.0
+
   ota-check:
     name: OTA flash check (${{ matrix.display }})
+    needs: matter-packages
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -44,48 +53,51 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
+
+      - name: Restore Matter package cache
+        uses: ./.github/actions/restore-matter-packages
         with:
-          submodules: "true"
-          lfs: true
-
-            - name: Pull LFS objects in submodules
-              run: |
-                  git -C third_party/simplicity_sdk lfs pull
-                  git -C third_party/wifi_sdk lfs pull
-
-      - name: Install tools
-        uses: ./.github/actions/install-tools
+          conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
       - name: Build window-app
         if: matrix.id == 'mg24'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
           example-app: window_app
-          build-script: "./slc/build.sh"
+          build-script: "./packages/build_app.sh"
           output-directory: " "
           build-type: standard
 
       - name: Build lighting-app 
         if: matrix.id == 'mg26'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
           example-app: lighting_app
-          build-script: "./slc/build.sh"
+          build-script: "./packages/build_app.sh"
           output-directory: " "
           build-type: standard
 
       - name: Build zigbee-matter-light
         if: matrix.id == 'mg26' || matrix.id == 'mgm26'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
           example-app: zigbee_light
-          build-script: "./slc/build.sh"
+          build-script: "./packages/build_app.sh"
           output-directory: " "
           build-type: standard
 
