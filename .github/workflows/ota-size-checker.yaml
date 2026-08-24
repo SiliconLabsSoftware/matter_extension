@@ -61,6 +61,7 @@ jobs:
         uses: ./.github/actions/restore-matter-packages
         with:
           conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+          package-version: ${{ needs.matter-packages.outputs.version }}
 
       - name: Build window-app
         if: matrix.id == 'mg24'

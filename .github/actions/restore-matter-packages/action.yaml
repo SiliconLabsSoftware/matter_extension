@@ -5,6 +5,9 @@ inputs:
   conan-cache-key:
     description: Cache key created by the Matter package producer.
     required: true
+  package-version:
+    description: Version of matter_app to install from the restored cache.
+    required: true
   conan-home:
     description: Conan home directory to restore.
     required: false
@@ -62,3 +65,9 @@ runs:
         printf 'core.download:parallel=%s\n' "${{ inputs.download-parallel }}" > conan-settings/global.conf
         conan config install conan-settings --type dir
         rm -rf conan-settings
+
+    - name: Install Matter app package
+      shell: bash
+      run: |
+        set -euo pipefail
+        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan
