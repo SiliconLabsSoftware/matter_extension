@@ -7,7 +7,7 @@ Build a SiWx917 BRD4338A Wi-Fi Thermostat app to evaluate:
 - **Matter thermostat** — BLE commission, control over Wi-Fi
 - **Dual stack** — Matter + MQTTS on host LwIP; HTTPS on NWP
 - **Live MQTT** — stay connected; publish and receive
-- **HTTPS** — GET / PUT / POST of a small file
+- **HTTPS** — GET / PUT / POST operations
 
 This demo uses TLS 1.2 for authentication and FreeRTOS Heap4 for memory management.
 
@@ -169,7 +169,7 @@ Steps to install Mosquitto and set up a local HTTPS server on a Linux machine.
 
 ### Matter commissioning and basic thermostat commands
 
-After flashing the image on the BRD4338A board, run the following from chip-tool:
+After flashing the image on the BRD4338A board, run the following from `chip-tool`:
 
 ```bash
 # Commission device using chip-tool
