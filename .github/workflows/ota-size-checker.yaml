@@ -71,7 +71,7 @@ jobs:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
           example-app: window_app
-          build-script: "./packages/build_app.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
@@ -84,7 +84,7 @@ jobs:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
           example-app: lighting_app
-          build-script: "./packages/build_app.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
@@ -97,7 +97,7 @@ jobs:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
           example-app: zigbee_light
-          build-script: "./packages/build_app.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
@@ -130,12 +130,14 @@ jobs:
             exit 1
           fi
 
-          IMAGES=$(find out -type f -name "*.s37" 2>/dev/null)
+          MATTER_APP="$(slt where matter_app)"
+          IMAGES=$(find "${MATTER_APP}" -type f -name "*.s37" -path "*/out/*" ! -path "*/copy-sources/*" 2>/dev/null)
 
           FAIL=0
 
           for IMAGE in $IMAGES; do
-            board=$(echo "$IMAGE" | cut -d'/' -f2)
+            out_relative="${IMAGE#*/out/}"
+            board="${out_relative%%/*}"
             [[ -z "$board" ]] && continue
 
             echo ""
@@ -144,11 +146,11 @@ jobs:
             app_name="${board}-$(basename "$IMAGE" .s37)"
             pushd /tmp >/dev/null
 
-            commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            commander gbl create "temporary-${app_name}.gbl" --app "$IMAGE" 1>/dev/null
             file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
             rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
 
-            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$IMAGE" 1>/dev/null
             file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
             rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
 

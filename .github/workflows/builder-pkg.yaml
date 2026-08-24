@@ -18,18 +18,12 @@ on:
             platform:
                 required: true
                 type: string
-            use-package-cache:
-                required: false
-                type: boolean
-                default: false
             package-version:
-                required: false
+                required: true
                 type: string
-                default: ""
             conan-cache-key:
-                required: false
+                required: true
                 type: string
-                default: ""
 
 permissions:
   contents: read
@@ -43,27 +37,17 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v7
-              with:
-                  submodules: ${{ !inputs.use-package-cache }}
-                  lfs: ${{ !inputs.use-package-cache }}
-
-            - name: Pull LFS objects in submodules
-              if: ${{ !inputs.use-package-cache }}
-              run: |
-                  git -C third_party/simplicity_sdk lfs pull
-                  git -C third_party/wifi_sdk lfs pull
 
             - name: Cache tools
               uses: ./.github/actions/cache-tools
 
             - name: Restore Matter package cache
-              if: ${{ inputs.use-package-cache }}
               uses: ./.github/actions/restore-matter-packages
               with:
                   conan-cache-key: ${{ inputs.conan-cache-key }}
                   fail-on-cache-miss: true
 
-            - name: Build ${{ inputs.example-app }}
+            - name: Build ${{ inputs.example-app }} from packages
               uses: SiliconLabsSoftware/matter_build_action@v2
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
@@ -72,34 +56,7 @@ jobs:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
                   example-app: ${{ inputs.example-app }}
-                  build-script: ${{ inputs.use-package-cache && './packages/build_app.sh' || './slc/build.sh' }}
+                  build-script: "$(slt where matter_app)/build_app.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
                   continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
-
-            - name: Create asset files
-              if: ${{ !inputs.use-package-cache && startsWith(github.ref_name, 'release_') }}
-              run: |
-                  find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read file; do
-                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
-                      echo '<asset/>' >> "${file}.asset"
-                      echo "Created ${file}.asset"
-                  done
-
-            - name: Upload artifacts
-              if: ${{ !inputs.use-package-cache }}
-              uses: actions/upload-artifact@v7
-              with:
-                  name: ${{ inputs.example-app }}-${{inputs.platform}}-${{ inputs.build-type }}
-                  path: |
-                      out/*/*/artifact/**
-                      ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.platform == 'series-3-bootloader' && 'out/*/*/*/artifact/**' || '' }}
-                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/**/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/**/*.map' || '' }}
-                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/**/*.map' || '' }}
-                      !out/**/*_bootloader/build/**/*.map
-                      !out/**/*copy-sources/**
-                  if-no-files-found: warn
-                  overwrite: true

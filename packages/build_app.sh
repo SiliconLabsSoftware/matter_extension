@@ -160,6 +160,19 @@ while [[ $# -gt 0 ]]; do
       [[ -n "${PIDS}" ]] || die "-pids needs a value"
       shift 2
       ;;
+    -pids\ *)
+      PIDS="${1#-pids }"
+      shift
+      ;;
+    --configuration)
+      [[ -n "${2:-}" ]] || die "--configuration needs a value"
+      EXTRA_GENERATE_ARGS+=(--configuration "$2")
+      shift 2
+      ;;
+    --configuration\ *)
+      EXTRA_GENERATE_ARGS+=(--configuration "${1#--configuration }")
+      shift
+      ;;
     --clean)
       CLEAN=true
       shift

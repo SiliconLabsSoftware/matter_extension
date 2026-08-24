@@ -80,7 +80,7 @@ on:
 
 jobs:
     mg24-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
@@ -88,12 +88,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mg24-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-internal-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
@@ -101,12 +100,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-internal
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mg24-trustzone-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-trustzone.json'
@@ -114,12 +112,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg24-trustzone
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mgm24-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm24-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm24-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24.json'
@@ -127,12 +124,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mgm24-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm24-internal-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24-internal.json'
@@ -140,12 +136,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm24-internal
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mg26-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg26-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
@@ -153,12 +148,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mg26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg26-internal-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26-internal.json'
@@ -166,12 +160,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mg26-internal
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     mgm26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm26-internal-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm26-internal.json'
@@ -179,12 +172,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: mgm26-internal
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     ncp-917-build-job:
-        if: ${{ inputs.ncp-917-support }}
+        if: ${{ inputs.use-package-cache && inputs.ncp-917-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp.json'
@@ -192,12 +184,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     ncp-917-dual-stack-build-job:
-        if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
+        if: ${{ inputs.use-package-cache && inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp-dual-stack.json'
@@ -205,12 +196,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: ncp-917-dual-stack
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     siwx-soc-build-job:
-        if: ${{ inputs.wifi-soc-support }}
+        if: ${{ inputs.use-package-cache && inputs.wifi-soc-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-siwx.json'
@@ -218,12 +208,11 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: siwx-soc
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     sixg301-build-job:
-        if: ${{ inputs.thread-support && inputs.sixg301-support }}
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.sixg301-support }}
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'
@@ -231,6 +220,5 @@ jobs:
             example-app: ${{ inputs.example-app }}
             build-type: ${{ inputs.build-type }}
             platform: sixg301
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
