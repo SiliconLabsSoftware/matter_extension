@@ -215,8 +215,8 @@ jobs:
           export SLT_HOME CONAN_HOME
           export PATH="${CONAN_BIN}:${PATH}"
           slt install conan
-          conan remote add -f silabs-conan-production \
-            https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production
+          conan remote add -f conan-prerelease \
+            http://conan-prerelease.silabs.net/
           conan remote list
 
       - name: Install siwx91x_nwp_interface package
