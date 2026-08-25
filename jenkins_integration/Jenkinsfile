@@ -28,8 +28,14 @@ pipeline
             steps {
                 script {
                     def packageVersion = '2.10.0-test.0'
+                    // Requires Jenkins credential type "Username with password" (not SSH key).
+                    // username=buildengineer, password=<conan token>
                     withCredentials([
-                        string(credentialsId: 'matter-public-conan-buildengineer-token', variable: 'CONAN_PASSWORD')
+                        usernamePassword(
+                            credentialsId: 'matter-public-conan-buildengineer-token',
+                            usernameVariable: 'CONAN_LOGIN_USERNAME',
+                            passwordVariable: 'CONAN_PASSWORD'
+                        )
                     ]) {
                         sh """
                             set -euo pipefail
@@ -92,7 +98,6 @@ pipeline
 
                             REMOTE_NAME=conan-open-source-aus
                             REMOTE_URL=https://conan-open-source-aus.silabs.net
-                            CONAN_LOGIN_USERNAME=buildengineer
 
                             conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
                             conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${CONAN_PASSWORD}"
