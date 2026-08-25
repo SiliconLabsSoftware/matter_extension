@@ -1,8 +1,6 @@
 #!groovy
 @Library('gsdk-shared-lib@master')
 
-properties([])
-
 def build_description = ""
 
 pipeline
