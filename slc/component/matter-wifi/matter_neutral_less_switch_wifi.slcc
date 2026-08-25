@@ -1,0 +1,20 @@
+id: matter_neutral_less_switch_wifi
+package: matter
+label: Neutral-less Matter Switch Wi-Fi
+description: >
+  Enables the Neutral-less Matter switch Wi-Fi application profile on SiWx917.
+category: Matter-WiFi|Features
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_neutral_less_switch_wifi
+
+requires:
+  - name: matter_wifi
+
+define:
+  - name: SL_MATTER_NEUTRAL_LESS_SWITCH_WIFI
+    value: "1"
