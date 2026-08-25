@@ -193,35 +193,69 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-    # copy wifi firmware
+  # Fetch SiWx917 NWP firmware from Conan (replaces third_party/wifi_sdk copy)
   copy-wifi-firmware:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          submodules: false
+      - name: Setup SLT
+        id: setup-slt
+        uses: SiliconLabsSoftware/action-setup-slt@v2
 
-      - name: Mark repository as safe for Git
+      - name: Setup Conan / SLT
         shell: bash
         run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-      
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init third_party/wifi_sdk
+          set -euo pipefail
+          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
+          echo "${{ steps.setup-slt.outputs.conan-path }}" >> "$GITHUB_PATH"
+          SLT_HOME="${HOME}/.silabs/slt"
+          CONAN_HOME="${SLT_HOME}/installs/conan"
+          CONAN_BIN="${SLT_HOME}/engines/conan/conan"
+          echo "SLT_HOME=${SLT_HOME}" >> "$GITHUB_ENV"
+          echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+          export SLT_HOME CONAN_HOME
+          export PATH="${CONAN_BIN}:${PATH}"
+          slt install conan
+          conan remote add -f silabs-conan-production \
+            https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production
+          conan remote list
 
-      - name: Create WiFi firmware directories
+      - name: Install siwx91x_nwp_interface package
         shell: bash
         run: |
-          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          set -euo pipefail
+          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+
+          PKG_DIR="${RUNNER_TEMP:-/tmp}/wifi_nwp_firmware_pkg"
+          mkdir -p "${PKG_DIR}"
+          cat > "${PKG_DIR}/pkg.slt" <<'EOF'
+          version = "0"
+
+          [dependency]
+          siwx91x_nwp_interface = {version = ">=2.17.0 <2.18.0", installer = "conan", user = "silabs", prerelease = true}
+          EOF
+          # Strip YAML-step leading indent from the heredoc body
+          sed -i 's/^[[:space:]]*//' "${PKG_DIR}/pkg.slt"
+
+          (
+            cd "${PKG_DIR}"
+            slt install -e conan
+          )
+
+          WIFI_PKG="$(slt where siwx91x_nwp_interface)"
+          echo "WIFI_PKG=${WIFI_PKG}" >> "$GITHUB_ENV"
+          echo "Resolved: ${WIFI_PKG}"
+          ls -la "${WIFI_PKG}/connectivity_firmware/standard/"
 
       - name: Copy WiFi firmware files
         shell: bash
         run: |
-          cp third_party/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
-          echo "WiFi firmware files copied successfully."
+          set -euo pipefail
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          cp "${WIFI_PKG}"/connectivity_firmware/standard/SiWG917-B.*.rps \
+            sqa-tools/WiFi-Firmware/siwx917/
+          echo "Copied:"
+          ls -la sqa-tools/WiFi-Firmware/siwx917/
 
       - name: Upload WiFi firmware artifacts
         uses: actions/upload-artifact@v7
