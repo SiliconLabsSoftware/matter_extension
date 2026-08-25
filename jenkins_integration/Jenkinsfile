@@ -32,7 +32,7 @@ pipeline
                     // username=buildengineer, password=<conan token>
                     withCredentials([
                         usernamePassword(
-                            credentialsId: 'matter-public-conan-buildengineer-token',
+                            credentialsId: 'matter-conan-dev-sabollim-token',
                             usernameVariable: 'CONAN_LOGIN_USERNAME',
                             passwordVariable: 'CONAN_PASSWORD'
                         )
@@ -97,8 +97,8 @@ pipeline
                             conan export-pkg packages/matter_app/conanfile.py \\
                               --name=matter_app --version="\${VERSION}" --user=silabs
 
-                            REMOTE_NAME=conan-open-source-aus
-                            REMOTE_URL=https://conan-open-source-aus.silabs.net
+                            REMOTE_NAME=matter-conan-dev
+                            REMOTE_URL=https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev
 
                             conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
                             conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${CONAN_PASSWORD}"
