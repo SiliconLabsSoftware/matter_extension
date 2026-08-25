@@ -37,7 +37,8 @@ pipeline
                             passwordVariable: 'CONAN_PASSWORD'
                         )
                     ]) {
-                        sh """
+                        sh("""
+                            #!/usr/bin/env bash
                             set -euo pipefail
 
                             git config --global --add safe.directory "\${WORKSPACE}"
@@ -104,7 +105,7 @@ pipeline
 
                             conan upload "matter/\${VERSION}@silabs" -r "\${REMOTE_NAME}" --confirm
                             conan upload "matter_app/\${VERSION}@silabs" -r "\${REMOTE_NAME}" --confirm
-                        """
+                        """.stripIndent().trim())
                     }
                 }
             }
