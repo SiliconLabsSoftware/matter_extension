@@ -314,7 +314,6 @@ jobs:
     build-sqa-tools:
         name: Build SQA Tools
         needs: [set-build-type, cache-tools]
-        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/sqa-tools-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -345,7 +344,9 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
-        if: ${{ !inputs.use-package-cache && success() }}
+        # !failure()/!cancelled() so package-cache runs continue when optional
+        # jobs (bootloader, performance test) are skipped.
+        if: ${{ !cancelled() && !failure() }}
 
         steps:
             - name: Merge artifacts
@@ -366,10 +367,11 @@ jobs:
 
     wait-for-test-results:
         name: Wait for Test Results
-        needs: 
+        needs:
             - merge-apps
             - build_coverage
-        if: ${{ !inputs.use-package-cache && always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}
+        # build_coverage may be skipped (package-cache); skipped != failure.
+        if: ${{ always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
