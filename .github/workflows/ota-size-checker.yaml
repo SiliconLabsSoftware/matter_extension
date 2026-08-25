@@ -1,9 +1,6 @@
 name: Check OTA Flash Space
 
 on:
-  push:
-    branches:
-      - feature/package_manager_internal_CI
   pull_request:
     branches:
       - main

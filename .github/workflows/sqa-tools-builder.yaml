@@ -216,7 +216,7 @@ jobs:
           export PATH="${CONAN_BIN}:${PATH}"
           slt install conan
           conan remote add -f conan-prerelease \
-            http://conan-prerelease.silabs.net/
+            https://conan-prerelease.silabs.net/
           conan remote list
 
       - name: Install siwx91x_nwp_interface package

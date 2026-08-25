@@ -5,9 +5,6 @@ permissions:
   actions: write
 
 on:
-  push:
-    branches:
-      - feature/package_manager_internal_CI
   workflow_dispatch:
     inputs:
       example-app: 
