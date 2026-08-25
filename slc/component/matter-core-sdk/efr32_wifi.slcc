@@ -132,6 +132,7 @@ include:
 
 - path: third_party/matter_sdk/src/platform/silabs
   file_list:
+  - path: BootloaderError.h
   - path: OTAImageProcessorImpl.h
   - path: InetPlatformConfig.h
   - path: DiagnosticDataProviderImpl.h
