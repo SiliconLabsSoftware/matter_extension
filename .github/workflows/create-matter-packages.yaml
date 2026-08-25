@@ -336,21 +336,22 @@ jobs:
     permissions:
       contents: read
       actions: write
+    secrets: inherit
     uses: ./.github/workflows/dev-apps-builder.yaml
     with:
-      build-type: full
+      build-type: standard
       use-package-cache: true
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
-  build-sqa-apps:
-    name: Build SQA Apps (from package cache)
-    needs: matter-packages
-    permissions:
-      contents: read
-      actions: write
-    uses: ./.github/workflows/sqa-apps-builder.yaml
-    with:
-      use-package-cache: true
-      package-version: ${{ needs.matter-packages.outputs.version }}
-      conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+  # build-sqa-apps:
+  #   name: Build SQA Apps (from package cache)
+  #   needs: matter-packages
+  #   permissions:
+  #     contents: read
+  #     actions: write
+  #   uses: ./.github/workflows/sqa-apps-builder.yaml
+  #   with:
+  #     use-package-cache: true
+  #     package-version: ${{ needs.matter-packages.outputs.version }}
+  #     conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
