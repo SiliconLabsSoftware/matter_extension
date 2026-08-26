@@ -107,10 +107,9 @@ class matter_appRecipe(MatterBaseRecipe):
         # Define the files to be included in the package
         files_to_package = {"License"}
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(
@@ -148,6 +147,9 @@ class matter_appRecipe(MatterBaseRecipe):
             dst_folder=os.path.join(self.package_folder, "."),
         )
 
+        # Conan wifi package id is "wifi"; git/submodule still uses wiseconnect3_sdk.
+        self._rewrite_wifi_extension_ids()
+
         # Package-only builder at package root: <pkg>/build_app.sh
         build_app_src = repo_root / "packages" / "build_app.sh"
         if not build_app_src.is_file():
@@ -164,8 +166,6 @@ class matter_appRecipe(MatterBaseRecipe):
 
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
-
-
     def build(self):
         # Define the source folder for the matter_app component (property-backed)
         matter_app_folder = self.matter_app_folder
@@ -175,10 +175,9 @@ class matter_appRecipe(MatterBaseRecipe):
         files_to_package = {"License"}
         git_extra_files = []
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(
@@ -215,10 +214,6 @@ class matter_appRecipe(MatterBaseRecipe):
             for mapping in git_path_mapping:
                 pathmapfile.write(mapping+'\n')
 
-
-
-
-
     def package_info(self):
         # Reference: https://confluence.silabs.com/pages/viewpage.action?spaceKey=SWARCH&title=Package+Manager%3A+Conan+Metadata+for+SLT+Integration
 
@@ -226,6 +221,28 @@ class matter_appRecipe(MatterBaseRecipe):
         self.buildenv_info.append_path("SLC_SDK_PACKAGE_PATH", self.package_folder)
 
     # --------------------- Helpers ---------------------
+    def _rewrite_wifi_extension_ids(self) -> None:
+        """Rewrite wiseconnect3_sdk -> wifi in packaged .slcp/.slcw only.
+
+        Git tree keeps wiseconnect3_sdk for submodule builds; the Conan wifi
+        package advertises id: wifi, so packaged samples must match that.
+        """
+        root = Path(self.package_folder)
+        old = "id: wiseconnect3_sdk"
+        new = "id: wifi"
+        count = 0
+        for path in root.rglob("*.slc*"):
+            if path.suffix not in (".slcp", ".slcw"):
+                continue
+            text = path.read_text(encoding="utf-8")
+            if old not in text:
+                continue
+            path.write_text(text.replace(old, new), encoding="utf-8")
+            count += 1
+        self.output.info(
+            f"Rewrote wiseconnect3_sdk -> wifi in {count} packaged project file(s)"
+        )
+
     def _existing_repo_relative_files(self, files: set[str]) -> set[str]:
         """Keep existing files as paths relative to repo_root (cwd-independent)."""
         root = self.repo_root.resolve()
@@ -403,4 +420,3 @@ class matter_appRecipe(MatterBaseRecipe):
                 collected.add(rel_path)
                 collected.update(related)
         return collected
-

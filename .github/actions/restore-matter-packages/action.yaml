@@ -1,0 +1,73 @@
+name: Restore Matter packages
+description: Restore an isolated Conan cache containing Matter packages.
+
+inputs:
+  conan-cache-key:
+    description: Cache key created by the Matter package producer.
+    required: true
+  package-version:
+    description: Version of matter_app to install from the restored cache.
+    required: true
+  conan-home:
+    description: Conan home directory to restore.
+    required: false
+    default: ""
+  fail-on-cache-miss:
+    description: Fail when the requested package cache does not exist.
+    required: false
+    default: "true"
+  download-parallel:
+    description: Maximum parallel Conan downloads after restore.
+    required: false
+    default: "1"
+
+outputs:
+  cache-hit:
+    description: Whether the requested Conan cache was restored.
+    value: ${{ steps.restore.outputs.cache-hit }}
+  conan-home:
+    description: Absolute Conan home directory used for the restore.
+    value: ${{ steps.prepare.outputs.conan-home }}
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare Conan home
+      id: prepare
+      shell: bash
+      run: |
+        set -euo pipefail
+        CONAN_HOME="${{ inputs.conan-home }}"
+        CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+        slt install conan
+        rm -rf "${CONAN_HOME}"
+        mkdir -p "${CONAN_HOME}"
+        echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+        echo "conan-home=${CONAN_HOME}" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Matter package cache
+      id: restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ steps.prepare.outputs.conan-home }}
+        key: ${{ inputs.conan-cache-key }}
+        fail-on-cache-miss: ${{ inputs.fail-on-cache-miss }}
+
+    - name: Configure Conan downloads
+      shell: bash
+      run: |
+        set -euo pipefail
+        export CONAN_HOME="${CONAN_HOME}"
+        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+        mkdir -p conan-settings
+        printf 'core.download:parallel=%s\n' "${{ inputs.download-parallel }}" > conan-settings/global.conf
+        conan config install conan-settings --type dir
+        rm -rf conan-settings
+
+    - name: Install Matter app package
+      shell: bash
+      run: |
+        set -euo pipefail
+        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan

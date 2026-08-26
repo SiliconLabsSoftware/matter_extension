@@ -1,0 +1,224 @@
+name: Platform Builder
+
+on:
+    workflow_call:
+        inputs:
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            use-package-cache:
+                required: false
+                type: boolean
+                default: false
+            package-version:
+                required: false
+                type: string
+                default: ""
+            conan-cache-key:
+                required: false
+                type: string
+                default: ""
+            thread-support:
+                required: false
+                type: boolean
+                default: true
+            thread-keyword:
+                required: false
+                type: string
+                default: "-thread"
+            wifi-soc-support:
+                required: false
+                type: boolean
+                default: true
+            ncp-917-support:
+                required: false
+                type: boolean
+                default: false
+            ncp-917-dual-stack-support:
+                required: false
+                type: boolean
+                default: false
+            mg24-support:
+                required: false
+                type: boolean
+                default: true
+            mg24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-support:
+                required: false
+                type: boolean
+                default: true
+            mgm24-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mg26-support:
+                required: false
+                type: boolean
+                default: true
+            mg26-internal-support:
+                required: false
+                type: boolean
+                default: true
+            mgm26-internal-support:
+                required: false
+                type: boolean
+                default: true
+            sixg301-support:
+                required: false
+                type: boolean
+                default: true
+            trustzone-support:
+                required: false
+                type: boolean
+                default: false
+
+jobs:
+    mg24-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mg24-internal-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-internal-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24-internal.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24-internal
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mg24-trustzone-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg24-trustzone.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/trustzone/matter_thread_soc_${{ inputs.example-app }}_trustzone_series_2_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg24-trustzone
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mgm24-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm24-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm24.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm24
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mgm24-internal-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm24-internal-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm24-internal.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm24-internal
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mg26-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg26-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg26.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg26
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mg26-internal-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mg26-internal-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mg26-internal.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mg26-internal
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    mgm26-internal-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.mgm26-internal-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-mgm26-internal.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_2_internal_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: mgm26-internal
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    ncp-917-build-job:
+        if: ${{ inputs.use-package-cache && inputs.ncp-917-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-917-ncp.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-917
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    ncp-917-dual-stack-build-job:
+        if: ${{ inputs.use-package-cache && inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-917-ncp-dual-stack.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_917_ncp_${{ inputs.example-app }}_dual_stack_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: ncp-917-dual-stack
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    siwx-soc-build-job:
+        if: ${{ inputs.use-package-cache && inputs.wifi-soc-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-siwx.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/wifi/matter_wifi_soc_${{ inputs.example-app }}_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: siwx-soc
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
+
+    sixg301-build-job:
+        if: ${{ inputs.use-package-cache && inputs.thread-support && inputs.sixg301-support }}
+        uses: ./.github/workflows/builder-pkg.yaml
+        with:
+            json-file-path: './.github/silabs-builds-sixg301.json'
+            path-to-example-app: slc/apps/${{ inputs.example-app }}/thread/matter_thread_soc_${{ inputs.example-app }}_series_3_freertos.slcw
+            example-app: ${{ inputs.example-app }}
+            build-type: ${{ inputs.build-type }}
+            platform: sixg301
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}

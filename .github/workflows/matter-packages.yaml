@@ -1,0 +1,91 @@
+name: Create Matter Package Cache
+
+on:
+  workflow_call:
+    inputs:
+      package-version:
+        description: Version assigned to matter and matter_app packages.
+        required: true
+        type: string
+      conan-cache-key:
+        description: Optional cache key. A run-scoped key is generated when omitted.
+        required: false
+        type: string
+        default: ""
+      checkout-ref:
+        description: Git ref whose Matter packages should be exported.
+        required: false
+        type: string
+        default: ""
+    outputs:
+      version:
+        description: Exported package version.
+        value: ${{ jobs.create.outputs.version }}
+      conan-cache-key:
+        description: Cache key containing the exported packages.
+        value: ${{ jobs.create.outputs.conan-cache-key }}
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  create:
+    name: Create Matter packages
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.packages.outputs.version }}
+      conan-cache-key: ${{ steps.packages.outputs.conan-cache-key }}
+    steps:
+      - name: Checkout matter_extension
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout-ref || github.sha }}
+
+      - name: Resolve submodule cache key
+        id: submodule-key
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          MATTER_SDK=$(git rev-parse :third_party/matter_sdk)
+          MATTER_SUPPORT=$(git rev-parse :third_party/matter_support)
+          QR=$(git rev-parse :third_party/QR-Code-generator)
+          MBEDTLS=$(git rev-parse :third_party/mbedtls)
+          NLIO=$(git rev-parse :third_party/nlio)
+          NLASSERT=$(git rev-parse :third_party/nlassert)
+          echo "cache-key=matter-submodules-${MATTER_SDK}-${MATTER_SUPPORT}-${QR}-${MBEDTLS}-${NLIO}-${NLASSERT}" >> "$GITHUB_OUTPUT"
+
+      - name: Restore Matter submodules
+        id: submodule-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            third_party/matter_sdk
+            third_party/matter_support
+            third_party/QR-Code-generator
+            third_party/mbedtls
+            third_party/nlio
+            third_party/nlassert
+          key: ${{ steps.submodule-key.outputs.cache-key }}
+
+      - name: Initialize Matter submodules
+        if: steps.submodule-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git submodule update --init --depth 1 --jobs 8 \
+            third_party/matter_sdk \
+            third_party/matter_support \
+            third_party/QR-Code-generator \
+            third_party/mbedtls \
+            third_party/nlio \
+            third_party/nlassert
+
+      - name: Create Matter package cache
+        id: packages
+        uses: ./.github/actions/create-matter-packages
+        with:
+          package-version: ${{ inputs.package-version }}
+          conan-cache-key: ${{ inputs.conan-cache-key }}

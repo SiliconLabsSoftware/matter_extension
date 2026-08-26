@@ -256,6 +256,103 @@ pipeline
                 }
             }
         }
+        stage('Create and Publish Matter Packages') {
+            // TODO: Remove this when the package manager implementation is complete.
+            when { 
+                expression { false }
+            }
+            steps {
+                script {
+                    def packageVersion = '2.10.0-test.0'
+                    def conanCredentialsId = env.BRANCH_NAME == 'release_2.10-1.6.1'
+                        ? 'matter-public-conan-buildengineer-token'
+                        : 'matter-conan-dev-sabollim-token'
+                    def remoteName = env.BRANCH_NAME == 'release_2.10-1.6.1'
+                        ? 'conan-open-source-aus'
+                        : 'matter-conan-dev'
+                    def remoteUrl = env.BRANCH_NAME == 'release_2.10-1.6.1'
+                        ? 'https://conan-open-source-aus.silabs.net'
+                        : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
+
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: conanCredentialsId,
+                            usernameVariable: 'CONAN_LOGIN_USERNAME',
+                            passwordVariable: 'CONAN_PASSWORD'
+                        )
+                    ]) {
+                        sh("""
+                            #!/usr/bin/env bash
+                            set -euo pipefail
+
+                            git config --global --add safe.directory "\${WORKSPACE}"
+                            git submodule update --init --depth 1 --jobs 8 \\
+                              third_party/matter_sdk \\
+                              third_party/matter_support \\
+                              third_party/QR-Code-generator \\
+                              third_party/mbedtls \\
+                              third_party/nlio \\
+                              third_party/nlassert
+
+                            # Setup SLT (mirrors SiliconLabsSoftware/action-setup-slt@v2)
+                            SLT_ARTIFACTORY_URL="\${SLT_ARTIFACTORY_URL:-https://www.silabs.com/documents/public/software}"
+                            SLT_PKG_NAME="\${SLT_PKG_NAME:-slt-cli-1.2.0-linux-x64.zip}"
+                            curl -fsSL "\${SLT_ARTIFACTORY_URL}/\${SLT_PKG_NAME}" --output "/tmp/\${SLT_PKG_NAME}"
+                            mkdir -p "\${HOME}/.local/bin"
+                            unzip -o "/tmp/\${SLT_PKG_NAME}" -d "\${HOME}/.local/bin"
+                            rm -f "/tmp/\${SLT_PKG_NAME}"
+                            export PATH="\${HOME}/.local/bin:\${PATH}"
+                            export SLT_CI=true
+                            slt --version
+                            which slt
+                            slt update --self
+
+                            export CONAN_HOME="\${CONAN_HOME:-\${HOME}/.silabs/slt/installs/conan}"
+                            CONAN_HOME="\${CONAN_HOME/#\\~/\$HOME}"
+                            export CONAN_HOME
+                            export PATH="\${HOME}/.silabs/slt/engines/conan/conan:\${PATH}"
+
+                            slt install conan
+                            CONAN_PATH="\${HOME}/.silabs/slt/engines/conan/conan/conan"
+                            if [ -f "\${CONAN_PATH}" ]; then
+                              ln -fs "\${CONAN_PATH}" "\${HOME}/.local/bin/conan"
+                            else
+                              echo "Error: conan not found at \${CONAN_PATH}" >&2
+                              exit 1
+                            fi
+                            conan --version
+
+                            for t in cmake ninja; do slt install "\$t" || true; done
+
+                            mkdir -p conan-settings
+                            printf 'core.download:parallel=6\\ncore.upload:parallel=4\\n' > conan-settings/global.conf
+                            conan config install ./conan-settings --type dir
+                            rm -rf conan-settings
+
+                            conan remote add -f conan-prerelease https://conan-prerelease.silabs.net/ || true
+
+                            VERSION='${packageVersion}'
+                            conan remove "matter/\${VERSION}@silabs" -c || true
+                            conan remove "matter_app/\${VERSION}@silabs" -c || true
+
+                            conan export-pkg packages/matter/conanfile.py \\
+                              --name=matter --version="\${VERSION}" --user=silabs
+                            conan export-pkg packages/matter_app/conanfile.py \\
+                              --name=matter_app --version="\${VERSION}" --user=silabs
+
+                            REMOTE_NAME='${remoteName}'
+                            REMOTE_URL='${remoteUrl}'
+
+                            conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
+                            conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${CONAN_PASSWORD}"
+
+                            conan upload "matter/\${VERSION}@silabs" -r "\${REMOTE_NAME}" --confirm
+                            conan upload "matter_app/\${VERSION}@silabs" -r "\${REMOTE_NAME}" --confirm
+                        """.stripIndent().trim())
+                    }
+                }
+            }
+        }
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
