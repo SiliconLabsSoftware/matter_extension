@@ -48,15 +48,6 @@ concurrency:
 
 jobs:
   matter-packages:
-    # if: >-
-    #   github.event_name == 'workflow_dispatch' ||
-    #   (
-    #     github.event_name == 'pull_request' &&
-    #     (
-    #       github.head_ref == 'feature/package_manager_internal_CI' ||
-    #       github.base_ref == 'feature/package_manager_internal_CI'
-    #     )
-    #   )
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.build-packages.outputs.version }}
@@ -199,137 +190,6 @@ jobs:
           path: ${{ env.CONAN_HOME }}
           key: ${{ steps.build-packages.outputs.conan-cache-key }}
 
-      - name: Sanity
-        if: github.event.inputs.run_sanity == 'true'
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-          ./slc/script/internal/run_wifi_build_matrix.sh \
-            --suite sanity \
-            --version "${VERSION}"
-
-      - name: Smoke wifi
-        if: github.event.inputs.run_smoke_wifi == 'true'
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-          ./slc/script/internal/run_wifi_build_matrix.sh \
-            --suite smoke-wifi \
-            --version "${VERSION}"
-
-      - name: Smoke thread
-        if: github.event.inputs.run_smoke_thread == 'true'
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-          ./slc/script/internal/run_wifi_build_matrix.sh \
-            --suite smoke-thread \
-            --version "${VERSION}"
-
-      - name: Smoke cmp
-        if: github.event.inputs.run_smoke_cmp == 'true'
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-          ./slc/script/internal/run_wifi_build_matrix.sh \
-            --suite smoke-cmp \
-            --version "${VERSION}"
-
-#      - name: Collect smoke binaries
-#        if: >-
-#          github.event.inputs.run_sanity != 'false' ||
-#          github.event.inputs.run_smoke_wifi == 'true' ||
-#          github.event.inputs.run_smoke_thread == 'true' ||
-#          github.event.inputs.run_smoke_cmp == 'true'
-#        shell: bash
-#        run: |
-#          set -euo pipefail
-#          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-#          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-#          export CONAN_HOME
-#          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-#          MATTER_APP="$(slt where matter_app)"
-#          echo "matter_app root: ${MATTER_APP}"
-#          DEST="${GITHUB_WORKSPACE}/smoke-artifacts"
-#          mkdir -p "${DEST}"
-#          mapfile -d '' -t bins < <(
-#            find "${MATTER_APP}" -type f \( -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' \) \
-#              -path '*/out/*' \
-#              ! -path '*/copy-sources/*' \
-#              -print0
-#          )
-#          echo "Found ${#bins[@]} binary file(s)"
-#          for f in "${bins[@]}"; do
-#            [[ -n "${f}" ]] || continue
-#            rel="${f#"${MATTER_APP}"/}"
-#            mkdir -p "${DEST}/$(dirname "${rel}")"
-#            cp -a "${f}" "${DEST}/${rel}"
-#          done
-#          echo "Collected:"
-#          find "${DEST}" -type f | sort
-#          if [[ "${#bins[@]}" -eq 0 ]]; then
-#            echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
-#            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
-#          fi
-#
-#      - name: Upload smoke binaries
-#        if: >-
-#          github.event.inputs.run_sanity != 'false' ||
-#          github.event.inputs.run_smoke_wifi == 'true' ||
-#          github.event.inputs.run_smoke_thread == 'true' ||
-#          github.event.inputs.run_smoke_cmp == 'true'
-#        uses: actions/upload-artifact@v7
-#        with:
-#          name: package-manager-smoke-binaries-${{ env.VERSION }}
-#          path: smoke-artifacts/
-#          if-no-files-found: warn
-#          overwrite: true
-
-      - name: Publish packages
-        if: github.event.inputs.publish == 'true'
-        env:
-          CONAN_LOGIN_USERNAME: ${{ secrets.MATTER_PUBLIC_CONAN_USERNAME }}
-          CONAN_PASSWORD: ${{ secrets.MATTER_PUBLIC_CONAN_TOKEN }}
-        run: |
-          set -euo pipefail
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-
-          if [ -z "${CONAN_LOGIN_USERNAME:-}" ] || [ -z "${CONAN_PASSWORD:-}" ]; then
-            echo "SATYA_CONAN_USERNAME / SATYA_CONAN_TOKEN secrets are required to publish" >&2
-            exit 1
-          fi
-
-          conan remote add -f "${REMOTE_NAME}" "${REMOTE_URL}"
-          conan remote login "${REMOTE_NAME}" "${CONAN_LOGIN_USERNAME}" -p "${CONAN_PASSWORD}"
-
-          conan remote list
-          conan remote list-users
-          conan list "*" -r "${REMOTE_NAME}"
-
-          echo "Uploading matter/${VERSION}@silabs to ${REMOTE_NAME}"
-          conan upload "matter/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
-
-          echo "Uploading matter_app/${VERSION}@silabs to ${REMOTE_NAME}"
-          conan upload "matter_app/${VERSION}@silabs" -r "${REMOTE_NAME}" --confirm
-
-          conan remote list
-
   build-dev-apps:
     name: Build Dev Apps (from package cache)
     needs: matter-packages
@@ -344,14 +204,3 @@ jobs:
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
-  # build-sqa-apps:
-  #   name: Build SQA Apps (from package cache)
-  #   needs: matter-packages
-  #   permissions:
-  #     contents: read
-  #     actions: write
-  #   uses: ./.github/workflows/sqa-apps-builder.yaml
-  #   with:
-  #     use-package-cache: true
-  #     package-version: ${{ needs.matter-packages.outputs.version }}
-  #     conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
