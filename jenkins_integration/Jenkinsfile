@@ -31,12 +31,6 @@ def combineSlackSummary(String commitSummary, String extra) {
     return c ?: e ?: ''
 }
 
-def isCodeSizeBranch() {
-    return env.BRANCH_NAME == "main" ||
-           env.BRANCH_NAME.startsWith("release_") ||
-           env.BRANCH_NAME == "test_compare_code_size"
-}
-
 def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
     def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
     def statusEmoji = status == "PASS" ? "✅" : "❌"
@@ -128,7 +122,7 @@ pipeline
         }
         stage('Coverage and Code Size') {
             when {
-                expression { isCodeSizeBranch() }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             parallel {
                 stage('Code Coverage & Static Code Analysis') {
@@ -264,7 +258,7 @@ pipeline
         }
         stage('Compare Code Size') {
             when {
-                expression { isCodeSizeBranch() }
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
