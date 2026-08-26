@@ -11,55 +11,23 @@ on:
         required: false
         type: string
         default: '2.10.0-test.0'
-      publish:
-        description: 'Upload packages to conan-open-source.silabs.net?'
-        required: false
-        type: boolean
-        default: false
-      run_sanity:
-        description: 'Run sanity build matrix (917 SoC lighting + Thread lighting)?'
-        required: false
-        type: boolean
-        default: true
-      run_smoke_wifi:
-        description: 'Run smoke-wifi build matrix?'
-        required: false
-        type: boolean
-        default: false
-      run_smoke_thread:
-        description: 'Run smoke-thread build matrix?'
-        required: false
-        type: boolean
-        default: false
-      run_smoke_cmp:
-        description: 'Run smoke-cmp build matrix?'
-        required: false
-        type: boolean
-        default: false
- # pull_request:
- #   types: [opened, synchronize, reopened]
-  # schedule:
-  #   # Midnight UTC daily. Scheduled runs checkout branch "main".
-  #   - cron: '0 0 * * *'
 
 concurrency:
   group: create-matter-packages-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  actions: write
+
 jobs:
   matter-packages:
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.build-packages.outputs.version }}
-      conan-cache-key: ${{ steps.build-packages.outputs.conan-cache-key }}
+      version: ${{ steps.packages.outputs.version }}
+      conan-cache-key: ${{ steps.packages.outputs.conan-cache-key }}
 
     steps:
-      - name: Set Conan remote variables
-        id: set-remote
-        run: |
-          echo "REMOTE_NAME=conan-open-source" >> $GITHUB_ENV
-          echo "REMOTE_URL=https://conan-open-source.silabs.net" >> $GITHUB_ENV
-
       - name: Checkout matter_extension
         uses: actions/checkout@v4
 
@@ -100,95 +68,11 @@ jobs:
             third_party/nlio \
             third_party/nlassert
 
-      - name: Cache tools
-        uses: ./.github/actions/cache-tools
-
-      - name: Configure Conan and build tools
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          # Expand leading ~ if present (install-tools may set CONAN_HOME with a literal tilde).
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
-
-          slt install conan
-          for t in cmake ninja; do
-            slt install "$t" || true
-          done
-
-          mkdir -p conan-settings
-          printf 'core.download:parallel=6\ncore.upload:parallel=4\n' > conan-settings/global.conf
-          conan config install ./conan-settings --type dir
-          rm -rf conan-settings
-
-          which slt
-          which conan || true
-          which arm-none-eabi-gcc || true
-          conan config home || true
-          conan --version || true
-
-      - name: Setup Conan remotes
-        id: add-conan-remotes
-        working-directory: packages
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          conan config home
-
-          conan remote add conan-prerelease https://conan-prerelease.silabs.net/
-          conan remote list
-
-      - name: Build packages
-        id: build-packages
-        run: |
-          export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-          export CONAN_HOME
-          export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
-          VERSION="${{ github.event.inputs.package_version || '2.10.0-test.0' }}"
-          CACHE_KEY="matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}"
-          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
-          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
-          echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
-          echo "CONAN_HOME=${CONAN_HOME}"
-          conan config home
-          conan remote list || true
-
-          conan remove "matter/${VERSION}@silabs" -c || true
-          conan remove "matter_app/${VERSION}@silabs" -c || true
-
-          conan export-pkg packages/matter/conanfile.py \
-            --name=matter --version="${VERSION}" --user=silabs
-          conan export-pkg packages/matter_app/conanfile.py \
-            --name=matter_app --version="${VERSION}" --user=silabs
-
-          echo "=== Local packages after export ==="
-          conan list "matter/${VERSION}@silabs:*"
-          conan list "matter_app/${VERSION}@silabs:*"
-
-          conan list "*" -c
-          echo "=== Removing non-matter packages ==="
-          conan list "*" -c --format=json | python3 -c '
-          import json, sys, subprocess
-          data = json.load(sys.stdin)
-          cache = data.get("Local Cache", data)
-          keep = {"matter", "matter_app"}
-          for ref in cache:
-              if ref.split("/", 1)[0] not in keep:
-                  print("removing", ref)
-                  subprocess.run(["conan", "remove", ref, "-c"], check=False)
-          '
-          conan list "*" -c
-
-
-      - name: Save Conan package cache
-        uses: actions/cache/save@v4
+      - name: Create Matter package cache
+        id: packages
+        uses: ./.github/actions/create-matter-packages
         with:
-          path: ${{ env.CONAN_HOME }}
-          key: ${{ steps.build-packages.outputs.conan-cache-key }}
+          package-version: ${{ github.event.inputs.package_version || '2.10.0-test.0' }}
 
   build-dev-apps:
     name: Build Dev Apps (from package cache)
@@ -203,4 +87,3 @@ jobs:
       use-package-cache: true
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
-
