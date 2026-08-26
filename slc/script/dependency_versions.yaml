@@ -31,5 +31,4 @@ thread:
 
 wifi:
   wifi: "[>=4.2.0 <4.2.1,include_prerelease]"
-  netstack_silabs_lwip: "[>=1.2.0 <1.2.1,include_prerelease]"
   bluetooth_le_siwx91x: "[>=4.2.0 <4.2.1,include_prerelease]"
