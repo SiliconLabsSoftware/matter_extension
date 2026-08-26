@@ -72,7 +72,7 @@ include:
   - path: third_party/matter_sdk/examples/platform/silabs/subscription
     condition: [matter_read_client]
     file_list:
-      - path: SubscriptionManager
+      - path: SubscriptionManager.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/MatterShell.cpp
