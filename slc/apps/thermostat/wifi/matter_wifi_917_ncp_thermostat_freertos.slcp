@@ -127,6 +127,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: SL_MATTER_LOG_LEVEL
+    value: SL_MATTER_LOG_PROGRESS
 configuration:
   - name: SL_SPIDRV_EXP_BITRATE
     value: "10000000"

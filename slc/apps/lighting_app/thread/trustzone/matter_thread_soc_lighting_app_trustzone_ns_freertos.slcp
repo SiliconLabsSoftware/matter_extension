@@ -111,6 +111,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: SL_MATTER_LOG_LEVEL
+    value: SL_MATTER_LOG_PROGRESS
   # FIXME: THIS IS A WALK-AROUND FOR https://jira.silabs.com/browse/PSEC-6862
   - name: PSA_ALG_AES_MMO_ZIGBEE
     value: "((psa_algorithm_t) 0x02000007)"

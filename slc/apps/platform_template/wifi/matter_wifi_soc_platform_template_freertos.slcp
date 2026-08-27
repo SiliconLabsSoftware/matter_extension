@@ -116,6 +116,8 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: SL_MATTER_LOG_LEVEL
+    value: SL_MATTER_LOG_PROGRESS
   - name: SI917_SOC
     value: 1
   - name: CHIP_CONFIG_ICD_OBSERVERS_POOL_SIZE
