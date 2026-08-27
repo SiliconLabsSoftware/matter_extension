@@ -266,7 +266,7 @@ class matterRecipe(MatterBaseRecipe):
             return "sample-app content (owned by matter_app package)"
         if p.endswith((".slcp", ".slcw")):
             return "sample project/workspace (owned by matter_app package)"
-        if p.startswith("slc/scripts/internal/") or p == "slc/scripts/internal":
+        if p.startswith("slc/script/internal/") or p == "slc/script/internal":
             return "internal scripts (not packaged)"
         return None
 

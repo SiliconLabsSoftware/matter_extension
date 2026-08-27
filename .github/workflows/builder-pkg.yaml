@@ -108,8 +108,9 @@ jobs:
                   echo "Staged under workspace out/:"
                   find "${GITHUB_WORKSPACE}/out" -type f 2>/dev/null | sort || true
                   if [[ "${#bins[@]}" -eq 0 ]]; then
-                    echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+                    echo "ERROR: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
                     find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+                    exit 1
                   fi
 
             - name: Upload artifacts

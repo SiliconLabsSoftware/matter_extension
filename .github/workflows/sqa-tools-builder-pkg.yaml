@@ -8,7 +8,7 @@ on:
         type: string
 
 concurrency:
-  group: sqa-tools-builder-${{ github.ref }}
+  group: sqa-tools-builder-pkg-${{ github.ref }}
   cancel-in-progress: true
 
 env:

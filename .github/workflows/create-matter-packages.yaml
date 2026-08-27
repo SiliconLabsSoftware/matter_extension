@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       package_version:
-        description: 'MATTER_PACKAGE_VERSION'
+        description: 'MATTER_PACKAGE_VERSION (empty = slc/script/matter_package_version)'
         required: false
         type: string
-        default: '2.10.0-test.0'
+        default: ''
       build_dev_apps:
         description: 'Build Dev Apps (from package cache)'
         required: false
@@ -36,7 +36,18 @@ jobs:
 
     steps:
       - name: Checkout matter_extension
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
+
+      - name: Resolve package version
+        id: version
+        run: |
+          set -euo pipefail
+          V="${{ inputs.package_version }}"
+          if [[ -z "${V}" ]]; then
+            V="$(tr -d '[:space:]' < slc/script/matter_package_version)"
+          fi
+          echo "package-version=${V}" >> "$GITHUB_OUTPUT"
+          echo "Using package version: ${V}"
 
       - name: Resolve submodule cache key
         id: submodule-key
@@ -79,7 +90,7 @@ jobs:
         id: packages
         uses: ./.github/actions/create-and-cache-matter-packages
         with:
-          package-version: ${{ inputs.package_version || '2.10.0-test.0' }}
+          package-version: ${{ steps.version.outputs.package-version }}
 
   build-dev-apps:
     name: Build Dev Apps (from package cache)
