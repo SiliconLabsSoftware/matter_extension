@@ -52,6 +52,7 @@ component:
   - id: matter_read_client
   - id: matter_subscription_manager
 # Matter Misc
+  - id: libblelayer # temp fix for copy-sources
   - id: matter
   - id: matter_platform_mg
   - id: matter_custom_apptask
