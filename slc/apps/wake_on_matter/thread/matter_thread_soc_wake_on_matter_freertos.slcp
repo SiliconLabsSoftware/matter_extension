@@ -57,7 +57,7 @@ component:
   - id: matter_custom_apptask
   - id: ot_stack_ftd
   - id: matter_cpc
-  - id: matter_mmic
+  #- id: matter_mmic # will be available soon
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
@@ -214,7 +214,7 @@ configuration:
     value: 0
   - name: CHIP_CONFIG_ENABLE_ICD_UAT
     value: 0
-
+    
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
@@ -257,20 +257,8 @@ toolchain_settings:
   - option: optimize
     value: debug
 
-filter:  
-  - name: Type    
-    value: 
-      - SoC Project
-  - name: Difficulty
-    value: 
-      - Advanced
-  - name: Wireless Technology
-    value: 
-      - Matter
-
 tag:
   - hardware:rf:band:2400
-  - hardware:component:button:2+
   - hardware:component:led:2+
   - hwfilter:device:device_supports_bluetooth
   - hwfilter:device:device_supports_thread
