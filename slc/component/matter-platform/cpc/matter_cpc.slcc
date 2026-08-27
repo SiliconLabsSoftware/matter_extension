@@ -27,9 +27,11 @@ include:
     file_list:
       - path: matter_cpc.h
 
+template_contribution:
+  - name: component_catalog
+    value: matter_ncp
+
 define:
   - name: SL_MATTER_CPC_ENABLED
-    value: 1
-  - name: SL_CATALOG_MATTER_NCP_PRESENT # Temp fix, should be generated in sl_catalog
     value: 1
 

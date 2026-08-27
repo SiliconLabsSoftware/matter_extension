@@ -8,7 +8,7 @@ filter:
   - name: Capability
     value:
     - Multiprotocol
-  - name: Device Type
+  - name: Type
     value:
     - NCP
     - RCP 
