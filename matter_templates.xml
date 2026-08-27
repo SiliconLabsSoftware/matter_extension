@@ -997,7 +997,7 @@
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <properties key="solutionProjects" value="slc.apps.lock_app.wifi.matter_wifi_soc_lock_app_freertos.slcp"/>
   </descriptors>
-  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos" label="Matter WiFi - SoC Thermostat FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app">
+  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos" label="Matter WiFi - SoC Thermostat Dual Stack FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat dual stack app">
     <properties key="namespace" value="template.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.thermostat.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcp"/>
@@ -1013,7 +1013,7 @@
     <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
-  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos_solution" label="Matter WiFi - SoC Thermostat FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app">
+  <descriptors name="matter_wifi_soc_thermostat_dual_stack_freertos_solution" label="Matter WiFi - SoC Thermostat Dual Stack FreeRTOS" description="Demonstrates a sample implementation of a Matter over Wi-Fi thermostat dual stack app">
     <properties key="namespace" value="template.solution.uc"/>
     <properties key="keywords" value="Matter"/>
     <properties key="solutionReferenceId" value="slc.apps.thermostat.wifi.matter_wifi_soc_thermostat_dual_stack_freertos.slcw"/>
