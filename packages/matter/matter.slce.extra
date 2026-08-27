@@ -187,7 +187,6 @@ components:
   - matter_low_power
   - matter_lwip
   - matter_lwip_modified
-  - matter_lwip_support
   - matter_media_file_management
   - matter_media_input
   - matter_media_playback
@@ -688,7 +687,6 @@ extra_files:
   - slc/component/matter-wifi/matter_efr32_ncp.slcc
   - slc/component/matter-wifi/matter_lwip.slcc
   - slc/component/matter-wifi/matter_lwip_modified.slcc
-  - slc/component/matter-wifi/matter_lwip_support.slcc
   - slc/component/matter-wifi/matter_minimal_mdns.slcc
   - slc/component/matter-wifi/matter_sleep_manager.slcc
   - slc/component/matter-wifi/matter_wifi.slcc
