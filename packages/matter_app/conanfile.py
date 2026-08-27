@@ -147,9 +147,6 @@ class matter_appRecipe(MatterBaseRecipe):
             dst_folder=os.path.join(self.package_folder, "."),
         )
 
-        # Conan wifi package id is "wifi"; git/submodule still uses wiseconnect3_sdk.
-        self._rewrite_wifi_extension_ids()
-
         # Package-only builder at package root: <pkg>/build_app.sh
         build_app_src = repo_root / "packages" / "build_app.sh"
         if not build_app_src.is_file():
@@ -221,28 +218,6 @@ class matter_appRecipe(MatterBaseRecipe):
         self.buildenv_info.append_path("SLC_SDK_PACKAGE_PATH", self.package_folder)
 
     # --------------------- Helpers ---------------------
-    def _rewrite_wifi_extension_ids(self) -> None:
-        """Rewrite wiseconnect3_sdk -> wifi in packaged .slcp/.slcw only.
-
-        Git tree keeps wiseconnect3_sdk for submodule builds; the Conan wifi
-        package advertises id: wifi, so packaged samples must match that.
-        """
-        root = Path(self.package_folder)
-        old = "id: wiseconnect3_sdk"
-        new = "id: wifi"
-        count = 0
-        for path in root.rglob("*.slc*"):
-            if path.suffix not in (".slcp", ".slcw"):
-                continue
-            text = path.read_text(encoding="utf-8")
-            if old not in text:
-                continue
-            path.write_text(text.replace(old, new), encoding="utf-8")
-            count += 1
-        self.output.info(
-            f"Rewrote wiseconnect3_sdk -> wifi in {count} packaged project file(s)"
-        )
-
     def _existing_repo_relative_files(self, files: set[str]) -> set[str]:
         """Keep existing files as paths relative to repo_root (cwd-independent)."""
         root = self.repo_root.resolve()

@@ -8,6 +8,16 @@ on:
         required: false
         type: string
         default: '2.10.0-test.0'
+      build_dev_apps:
+        description: 'Build Dev Apps (from package cache)'
+        required: false
+        type: boolean
+        default: true
+      ota_size_check:
+        description: 'Run OTA flash size check'
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: create-matter-packages-${{ github.head_ref || github.ref_name }}
@@ -67,20 +77,34 @@ jobs:
 
       - name: Create Matter package cache
         id: packages
-        uses: ./.github/actions/create-matter-packages
+        uses: ./.github/actions/create-and-cache-matter-packages
         with:
-          package-version: ${{ github.event.inputs.package_version || '2.10.0-test.0' }}
+          package-version: ${{ inputs.package_version || '2.10.0-test.0' }}
 
   build-dev-apps:
     name: Build Dev Apps (from package cache)
+    if: ${{ inputs.build_dev_apps }}
     needs: matter-packages
     permissions:
       contents: read
       actions: write
     secrets: inherit
-    uses: ./.github/workflows/dev-apps-builder.yaml
+    uses: ./.github/workflows/dev-apps-builder-pkg.yaml
     with:
       build-type: standard
       use-package-cache: true
+      package-version: ${{ needs.matter-packages.outputs.version }}
+      conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+
+  ota-size-check:
+    name: OTA flash size check
+    if: ${{ inputs.ota_size_check }}
+    needs: matter-packages
+    permissions:
+      contents: read
+      actions: write
+    secrets: inherit
+    uses: ./.github/workflows/ota-size-checker-pkg.yaml
+    with:
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}

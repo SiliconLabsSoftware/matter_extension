@@ -1,5 +1,5 @@
-name: Restore Matter packages
-description: Restore an isolated Conan cache containing Matter packages.
+name: Restore and install Matter packages
+description: Restore an isolated Conan cache containing Matter packages and install matter_app.
 
 inputs:
   conan-cache-key:

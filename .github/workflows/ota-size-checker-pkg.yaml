@@ -1,25 +1,24 @@
 name: Check OTA Flash Space
 
 on:
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - "release_*"
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      package-version:
+        description: Version of matter_app to restore and build.
+        required: true
+        type: string
+      conan-cache-key:
+        description: Cache key created by the Matter package producer.
+        required: true
+        type: string
 
 permissions:
   contents: read
   actions: write
 
 jobs:
-  matter-packages:
-    uses: ./.github/workflows/matter-packages.yaml
-    with:
-      package-version: 2.10.0-test.0
-
   ota-check:
     name: OTA flash check (${{ matrix.display }})
-    needs: matter-packages
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -55,16 +54,16 @@ jobs:
         uses: ./.github/actions/cache-tools
 
       - name: Restore Matter package cache
-        uses: ./.github/actions/restore-matter-packages
+        uses: ./.github/actions/restore-and-install-matter-packages
         with:
-          conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
-          package-version: ${{ needs.matter-packages.outputs.version }}
+          conan-cache-key: ${{ inputs.conan-cache-key }}
+          package-version: ${{ inputs.package-version }}
 
       - name: Build window-app
         if: matrix.id == 'mg24'
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
-          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
@@ -73,11 +72,11 @@ jobs:
           output-directory: " "
           build-type: standard
 
-      - name: Build lighting-app 
+      - name: Build lighting-app
         if: matrix.id == 'mg26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
-          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
@@ -90,7 +89,7 @@ jobs:
         if: matrix.id == 'mg26' || matrix.id == 'mgm26'
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
-          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}

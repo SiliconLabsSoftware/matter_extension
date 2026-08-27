@@ -1,4 +1,4 @@
-name: Create Matter packages
+name: Create and cache Matter packages
 description: Export Matter Conan packages and save their isolated cache for downstream jobs.
 
 inputs:
