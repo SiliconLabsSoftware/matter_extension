@@ -264,14 +264,12 @@ pipeline
             steps {
                 script {
                     def packageVersion = '2.10.0-test.0'
-                    def conanCredentialsId = env.BRANCH_NAME == 'release_2.10-1.6.1'
-                        ? 'matter-public-conan-buildengineer-token'
-                        : 'matter-conan-dev-sabollim-token'
+                    def conanCredentialsId = 'artifactory_token'
                     def remoteName = env.BRANCH_NAME == 'release_2.10-1.6.1'
-                        ? 'conan-open-source-aus'
+                        ? 'silabs-conan-production'
                         : 'matter-conan-dev'
                     def remoteUrl = env.BRANCH_NAME == 'release_2.10-1.6.1'
-                        ? 'https://conan-open-source-aus.silabs.net'
+                        ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
                         : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
 
                     withCredentials([
