@@ -9,6 +9,7 @@ metadata:
     license: Zlib
 provides:
   - name: matter_log_uart
+  - name: ot_platform_defined_logger
 
 requires:
   - name: matter_uart
