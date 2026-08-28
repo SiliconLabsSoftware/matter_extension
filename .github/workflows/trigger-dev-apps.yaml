@@ -2,9 +2,11 @@ name: Trigger Dev Apps Build
 
 on:
   schedule:
-    # release: 8:05 pm EDT daily
+    # release_2.9-1.6: 8:05 pm EDT daily
     - cron: "5 0 * * *"
-    # main: Thursday at 8:05 pm EDT
+    # release_2.10-1.6.1: 8:05 am EDT daily
+    - cron: "5 12 * * *"
+    # main: Thursday at 8:05 pm EDT (biweekly; gated in plan job)
     - cron: "5 0 * * 5"
 
 permissions:
@@ -23,12 +25,22 @@ jobs:
         run: |
           case "${{ github.event.schedule }}" in
             "5 0 * * *")
-              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT" # TODO: add release_2.10-1.6.1 when nightlies are wanted for it
-              echo "Daily schedule: release"
+              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT"
+              echo "Daily schedule: release_2.9-1.6"
+              ;;
+            "5 12 * * *")
+              echo 'targets=["release_2.10-1.6.1"]' >> "$GITHUB_OUTPUT"
+              echo "Daily schedule: release_2.10-1.6.1"
               ;;
             "5 0 * * 5")
-              echo 'targets=["main"]' >> "$GITHUB_OUTPUT"
-              echo "Weekly schedule: main"
+              week=$(date -u +%V)
+              if (( 10#$week % 2 == 0 )); then
+                echo 'targets=["main"]' >> "$GITHUB_OUTPUT"
+                echo "Biweekly schedule: main (week $week)"
+              else
+                echo 'targets=[]' >> "$GITHUB_OUTPUT"
+                echo "Skipping main this week (week $week)"
+              fi
               ;;
             *)
               echo "Unrecognized schedule '${{ github.event.schedule }}'; no targets" >&2
