@@ -8,9 +8,6 @@ description: >
   Requires ICD server support for coordinated Wi-Fi sleep/wake.
 category: Matter-WiFi|Features
 quality: production
-metadata:
-  sbom:
-    license: Zlib
 
 provides:
   - name: matter_neutral_less_switch_wifi
