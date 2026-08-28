@@ -1,0 +1,7 @@
+# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+nwp_firmware_siwx91x = { version = "2.15.0", installer ="conan"}
