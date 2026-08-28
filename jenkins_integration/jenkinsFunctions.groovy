@@ -585,4 +585,25 @@ def buildCommitChangeSummaryForSlack() {
     return summary
 }
 
+// Use build start time in America/New_York: evening nightlies cross midnight
+// before late stages, so wall-clock "today" would skip Thursday pipelines.
+def buildStartedOnWeekday(int calendarDay) {
+    def cal = Calendar.getInstance(TimeZone.getTimeZone('America/New_York'))
+    cal.setTime(new Date(currentBuild.startTimeInMillis))
+    return cal.get(Calendar.DAY_OF_WEEK) == calendarDay
+}
+
+def buildStartedOnThursday() {
+    return buildStartedOnWeekday(Calendar.THURSDAY)
+}
+
+def shouldUploadSqaArtifacts() {
+    return env.BRANCH_NAME.startsWith("SL_compatibility") ||
+        (env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday())
+}
+
+def shouldTriggerSqaRegression() {
+    return env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday()
+}
+
 return this
