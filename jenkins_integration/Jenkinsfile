@@ -269,15 +269,7 @@ pipeline
         }
         stage('Upload SQA Artifacts') {
             when {
-                expression {
-                    // Use build start time in America/New_York: evening nightlies cross midnight
-                    // before this stage, so wall-clock "today" would skip Thursday pipelines.
-                    def cal = Calendar.getInstance(TimeZone.getTimeZone('America/New_York'))
-                    cal.setTime(new Date(currentBuild.startTimeInMillis))
-                    def startedThursday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY
-                    return env.BRANCH_NAME.startsWith("SL_compatibility") ||
-                        (env.BRANCH_NAME.startsWith("release_") && startedThursday)
-                }
+                expression { pipelineFunctions.shouldUploadSqaArtifacts() }
             }
             steps {
                 script {
@@ -292,12 +284,7 @@ pipeline
         stage('Trigger SQA Regression Pipelines')
         {
             when {
-                expression {
-                    def cal = Calendar.getInstance(TimeZone.getTimeZone('America/New_York'))
-                    cal.setTime(new Date(currentBuild.startTimeInMillis))
-                    def startedThursday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.THURSDAY
-                    return env.BRANCH_NAME.startsWith("release_") && startedThursday
-                }
+                expression { pipelineFunctions.shouldTriggerSqaRegression() }
             }
             steps {
                 script {
