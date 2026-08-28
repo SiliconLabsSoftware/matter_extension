@@ -222,7 +222,6 @@ jobs:
     build_performance_test_app:
         name: Build Performance Test App
         needs: [set-build-type, cache-tools]
-        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance_test_app"
@@ -302,7 +301,6 @@ jobs:
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools]
-        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
@@ -344,8 +342,6 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
-        # !failure()/!cancelled() so package-cache runs continue when optional
-        # jobs (bootloader, performance test) are skipped.
         if: ${{ !cancelled() && !failure() }}
 
         steps:
@@ -360,7 +356,7 @@ jobs:
         name: Build Coverage
         needs:
             - set-build-type
-        if: ${{ !inputs.use-package-cache && (github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility')) }}
+        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
         uses: ./.github/workflows/coverage-builder.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -370,8 +366,8 @@ jobs:
         needs:
             - merge-apps
             - build_coverage
-        # build_coverage may be skipped (package-cache); skipped != failure.
-        if: ${{ !inputs.use-package-cache && always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}
+        # build_coverage may be skipped by branch filter; skipped != failure.
+        if: ${{ always() && needs.merge-apps.result == 'success' && needs.build_coverage.result != 'failure' }}
         uses: ./.github/workflows/sqa-sanity-tests.yaml
         secrets:
             SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
@@ -379,7 +375,7 @@ jobs:
     build-sqa-apps:
         name: Build SQA apps
         needs: wait-for-test-results
-        if: ${{ !inputs.use-package-cache && (startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility')) }}
+        if: ${{ startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
         permissions:
             contents: read
             actions: write
@@ -388,7 +384,7 @@ jobs:
     delete-cache:
         name: Delete tools cache
         needs: [build-sqa-apps, cache-tools]
-        if: ${{ !inputs.use-package-cache && always() }}
+        if: ${{ always() }}
         runs-on: ubuntu-latest
         permissions:
             actions: write
