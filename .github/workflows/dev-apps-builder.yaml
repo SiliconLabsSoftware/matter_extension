@@ -30,6 +30,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
+            run-sqa: ${{ steps.set-run-sqa.outputs.run-sqa }}
         steps:
             - name: Set build-type based on event
               id: set-build-type
@@ -45,6 +46,22 @@ jobs:
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
+
+            # Capture weekday at workflow start (America/New_York). Evening crons finish
+            # after midnight, so later jobs must not re-check "today".
+            - name: Decide whether to build SQA apps
+              id: set-run-sqa
+              run: |
+                  day=$(TZ=America/New_York date +%u)  # 1=Mon ... 4=Thu ... 7=Sun
+                  ref="${{ github.ref_name }}"
+                  if [[ "$ref" == SL_compatibility* ]]; then
+                    echo "run-sqa=true" >> "$GITHUB_OUTPUT"
+                  elif [[ "$ref" == release_* && "$day" == "4" ]]; then
+                    echo "run-sqa=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "run-sqa=false" >> "$GITHUB_OUTPUT"
+                  fi
+                  echo "ref=$ref day=$day (America/New_York) run-sqa=$(grep '^run-sqa=' "$GITHUB_OUTPUT" | cut -d= -f2)"
 
     cache-tools:
         runs-on: ubuntu-latest
@@ -313,8 +330,10 @@ jobs:
 
     build-sqa-apps:
         name: Build SQA apps
-        needs: wait-for-test-results
-        if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        needs:
+            - wait-for-test-results
+            - set-build-type
+        if: ${{ needs.set-build-type.outputs.run-sqa == 'true' }}
         permissions:
             contents: read
             actions: write
