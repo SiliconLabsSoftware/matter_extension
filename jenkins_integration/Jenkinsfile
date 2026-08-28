@@ -36,7 +36,14 @@ pipeline
                         ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
                         : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
 
-                    withCredentials([string(credentialsId: 'artifactory_token', variable: 'CONAN_SECRET')]) {
+                    // Requires Jenkins credential type "Username with password" (not SSH key).
+                    withCredentials([
+                        usernamePassword(
+                            credentialsId: 'matter-conan-dev-sabollim-token',
+                            usernameVariable: 'CONAN_LOGIN_USERNAME',
+                            passwordVariable: 'CONAN_PASSWORD'
+                        )
+                    ]) {
                         sh("""
                             #!/usr/bin/env bash
                             set -euo pipefail
@@ -86,8 +93,6 @@ pipeline
                             REMOTE_NAME='${remoteName}'
                             REMOTE_URL='${remoteUrl}'
                             PACKAGE_USER='silabs'
-                            # Artifactory identity: username from env or svc_gsdk; token from artifactory_token
-                            CONAN_USER="\${CONAN_LOGIN_USERNAME:-svc_gsdk}"
 
                             # Prerelease env (mirrors action prerelease.py)
                             export SL_PRERELEASE="\${WORKSPACE}/packages/.prerelease"
@@ -107,7 +112,7 @@ pipeline
 
                             # Auth (mirrors authenticate_remote)
                             conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
-                            conan remote login "\${REMOTE_NAME}" "\${CONAN_USER}" -p "\${CONAN_SECRET}"
+                            conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${CONAN_PASSWORD}"
 
                             # Inspect base version from matter recipe
                             INSPECT_JSON="\$(conan inspect packages/matter/conanfile.py --format=json)"
