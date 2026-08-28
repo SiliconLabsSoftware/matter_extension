@@ -43,7 +43,7 @@ For a full list of software requirements, see [Matter Software Requirements](htt
 This sample app works out of the box with no additional configuration required. To customize the device, see the
 [Custom Matter Device Development](https://docs.silabs.com/matter/2.10.0/matter-references/custom-matter-device#custom-matter-device-development) guide.
 
-**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.10.0/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.1.0-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.10.0/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.2.0-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
 
 ### Steps for Execution
 
