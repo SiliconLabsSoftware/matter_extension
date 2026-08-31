@@ -265,7 +265,6 @@ jobs:
     build_wake_on_matter_app:
        name: Build Wake on Matter App
        needs: [set-build-type, cache-tools]
-       if: ${{ !inputs.use-package-cache }}
        uses: ./.github/workflows/platform-builder.yaml
        with:
            example-app: "wake_on_matter"
@@ -280,7 +279,8 @@ jobs:
            mgm24-internal-support: false
            sixg301-support: false
            trustzone-support: false
-           wifi-soc-support: false       
+           wifi-soc-support: false
+
  
     build_oven_app:
         name: Build Oven App
