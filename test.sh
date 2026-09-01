@@ -7,7 +7,7 @@ if [ ! -d "out" ]; then
 fi
 
 echo "BUILDING..."
-./slc/build.sh ./slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcw "brd4338a" $([ "$GENERATE" = false ] && echo --skip_gen) 2>&1 > build.log
+./slc/build.sh ./slc/apps/thermostat/wifi/matter_wifi_soc_thermostat_dual_stack_freertos.slcw "brd4338a" --copy-sources $([ "$GENERATE" = false ] && echo --skip_gen) 2>&1 > build.log
 tail build.log
 
 echo "SIZE..."
