@@ -58,9 +58,8 @@
         "multi_sensor_app" :[
             {
                 "boards": ["brd4351a"],
-                "arguments": ["--output_suffix sit-200",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:200'"
-                             ]
+                "arguments": ["--output_suffix lit-120",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120'"]
             }
         ]
     }   
