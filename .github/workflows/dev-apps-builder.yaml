@@ -238,7 +238,6 @@ jobs:
     build_performance_test_app:
         name: Build Performance Test App
         needs: [set-build-type, cache-tools]
-        if: ${{ !inputs.use-package-cache }}
         uses: ./.github/workflows/platform-builder.yaml
         with:
             example-app: "performance_test_app"
@@ -319,14 +318,16 @@ jobs:
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools]
-        if: ${{ !inputs.use-package-cache }}
-        uses: ./.github/workflows/builder.yaml
+        if: ${{ inputs.use-package-cache }}
+        uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
             path-to-example-app: slc/apps/bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcw
             example-app: bootloader
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             platform: series-3-bootloader
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build-sqa-tools:
         name: Build SQA Tools
@@ -361,8 +362,8 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
-        # !failure()/!cancelled() so package-cache runs continue when optional
-        # jobs (bootloader, performance test) are skipped.
+        # !failure()/!cancelled() so merge continues when bootloader is skipped
+        # (non-package-cache runs).
         if: ${{ !cancelled() && !failure() }}
 
         steps:

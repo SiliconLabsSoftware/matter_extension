@@ -83,7 +83,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/dev-apps-builder.yaml
     with:
-      build-type: standard
+      build-type: full
       use-package-cache: true
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
