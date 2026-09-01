@@ -1,5 +1,5 @@
 diff --git a/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc b/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
-index 06ea1750..83dc66cc 100644
+index 06ea17506..83dc66cc2 100644
 --- a/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
 +++ b/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
 @@ -11,6 +11,7 @@ metadata:
@@ -22,7 +22,7 @@ index 06ea1750..83dc66cc 100644
 +  - name: sl_si91x_internal_stack
 \ No newline at end of file
 diff --git a/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc b/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
-index 0c0d2c05..651c8393 100644
+index 0c0d2c056..651c83938 100644
 --- a/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
 +++ b/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
 @@ -36,6 +36,9 @@ source:
@@ -36,7 +36,7 @@ index 0c0d2c05..651c8393 100644
    condition:
    - network_manager
 diff --git a/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc b/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
-index bb45628b..e876d63a 100644
+index bb45628b5..e876d63a2 100644
 --- a/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
 +++ b/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
 @@ -29,5 +29,8 @@ define:
@@ -49,7 +49,7 @@ index bb45628b..e876d63a 100644
  - name: log_none
  
 diff --git a/components/service/http_client/http_client.slcc b/components/service/http_client/http_client.slcc
-index f3cdffa2..faa89007 100644
+index f3cdffa2d..faa89007c 100644
 --- a/components/service/http_client/http_client.slcc
 +++ b/components/service/http_client/http_client.slcc
 @@ -14,6 +14,8 @@ provides:
@@ -71,7 +71,7 @@ index f3cdffa2..faa89007 100644
  template_contribution:
  - name: console_headers
 diff --git a/components/service/network_manager/src/sl_net_for_dual_stack.c b/components/service/network_manager/src/sl_net_for_dual_stack.c
-index c9b6d657..3d5707f5 100644
+index c9b6d657d..3d5707f5a 100644
 --- a/components/service/network_manager/src/sl_net_for_dual_stack.c
 +++ b/components/service/network_manager/src/sl_net_for_dual_stack.c
 @@ -161,10 +161,10 @@ static void low_level_input(struct netif *netif, uint8_t *b, uint16_t len)
@@ -109,7 +109,7 @@ index c9b6d657..3d5707f5 100644
    ip_config.type = stored->type;
    status         = sli_net_configure_ip_address(&ip_config, vap_id, timeout);
 diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h b/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
-index 1f2f6230..1528dbd2 100644
+index 1f2f62306..1528dbd2e 100644
 --- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
 +++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
 @@ -19,12 +19,12 @@
@@ -129,7 +129,7 @@ index 1f2f6230..1528dbd2 100644
  
  #define MAX_PACKET_ID        65535
 diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
-index 9175c268..e0c8e3bd 100644
+index 9175c268c..e0c8e3bdf 100644
 --- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
 +++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
 @@ -37,6 +37,7 @@
@@ -231,8 +231,21 @@ index 9175c268..e0c8e3bd 100644
  #endif
    if (rc == -1) {
      SL_DEBUG_LOG_V2(ERROR, "Socket Connect failed with bsd error: %d\r\n", errno);
+diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
+index d077acabc..1aa57af83 100644
+--- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
++++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
+@@ -27,7 +27,7 @@
+ #define MQTT_TLS_ENABLE 1 // Set to 1 to enable TLS support, 0 to disable
+ #endif
+ 
+-#include "sli_mqtt_tls_alpn.h"
++// #include "sli_mqtt_tls_alpn.h"
+ 
+ // mbedTLS includes (only when TLS is enabled)
+ #if MQTT_TLS_ENABLE
 diff --git a/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc b/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
-index f808a20d..0f154344 100644
+index f808a20d5..0f154344b 100644
 --- a/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
 +++ b/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
 @@ -28,12 +28,10 @@ source:
