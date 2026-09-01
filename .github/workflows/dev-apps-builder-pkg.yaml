@@ -23,8 +23,6 @@ on:
     #     branches:
     #         - main
     #         - "release_*"
-    # schedule:
-    #     - cron: "5 0 * * 5" # Thursday at 8:05 PM EDT
     workflow_dispatch:
         inputs:
             build-type:
@@ -62,8 +60,6 @@ jobs:
                       else
                           echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                       fi
-                  elif [[ "${{ github.event_name }}" == "schedule" ]]; then
-                      echo "build-type=full" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
@@ -84,7 +80,7 @@ jobs:
     build_lighting_app:
         name: Build Lighting App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "lighting_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -96,7 +92,7 @@ jobs:
     build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "air_quality_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -107,7 +103,7 @@ jobs:
     build_light_switch_app:
         name: Build Light Switch App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "light_switch_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -118,7 +114,7 @@ jobs:
     build_lock_app:
         name: Build Lock App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -130,7 +126,7 @@ jobs:
     build_thermostat_app:
         name: Build Thermostat App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -142,7 +138,7 @@ jobs:
     build_window_app:
         name: Build Window App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "window_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -154,7 +150,7 @@ jobs:
     build_fan_control_app:
         name: Build Fan Control App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "fan_control_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -166,7 +162,7 @@ jobs:
     build_closure_app:
         name: Build Closure App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "closure_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -177,7 +173,7 @@ jobs:
     build_multi_sensor_app:
         name: Build Multi Sensor App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "multi_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -188,7 +184,7 @@ jobs:
     build_onoff_plug_app:
         name: Build OnOff Plug App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "onoff_plug_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -199,7 +195,7 @@ jobs:
     build_refrigerator_app:
         name: Build Refrigerator App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "refrigerator_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -210,7 +206,7 @@ jobs:
     build_evse_app:
         name: Build EVSE App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "evse_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -222,7 +218,7 @@ jobs:
     build_performance_test_app:
         name: Build Performance Test App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "performance_test_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -234,7 +230,7 @@ jobs:
     build_zigbee_light:
        name: Build Zigbee Light App
        needs: [set-build-type, cache-tools]
-       uses: ./.github/workflows/platform-builder.yaml
+       uses: ./.github/workflows/platform-builder-pkg.yaml
        with:
            example-app: "zigbee_light"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -248,7 +244,7 @@ jobs:
     build_wake_on_matter_app:
        name: Build Wake on Matter App
        needs: [set-build-type, cache-tools]
-       uses: ./.github/workflows/platform-builder.yaml
+       uses: ./.github/workflows/platform-builder-pkg.yaml
        with:
            example-app: "wake_on_matter"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -267,7 +263,7 @@ jobs:
     build_oven_app:
         name: Build Oven App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "oven_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -279,7 +275,7 @@ jobs:
     build_rangehood_app:
         name: Build Rangehood App
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "rangehood_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -290,7 +286,7 @@ jobs:
     build_platform_template:
         name: Build Platform Template
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "platform_template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -379,7 +375,11 @@ jobs:
         permissions:
             contents: read
             actions: write
-        uses: ./.github/workflows/sqa-apps-builder.yaml
+        uses: ./.github/workflows/sqa-apps-builder-pkg.yaml
+        with:
+            use-package-cache: ${{ inputs.use-package-cache }}
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     delete-cache:
         name: Delete tools cache

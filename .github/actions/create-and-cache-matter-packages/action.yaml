@@ -97,7 +97,7 @@ runs:
         echo "conan-home=${CONAN_HOME}" >> "$GITHUB_OUTPUT"
 
     - name: Save Matter package cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v6
       with:
         path: ${{ steps.create.outputs.conan-home }}
         key: ${{ steps.create.outputs.conan-cache-key }}

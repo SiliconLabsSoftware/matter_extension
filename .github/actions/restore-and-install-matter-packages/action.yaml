@@ -49,7 +49,7 @@ runs:
 
     - name: Restore Matter package cache
       id: restore
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v6
       with:
         path: ${{ steps.prepare.outputs.conan-home }}
         key: ${{ inputs.conan-cache-key }}

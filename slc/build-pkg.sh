@@ -551,7 +551,7 @@ fi
 	if [[ "${PROJECT_FILE}" == *.slcw ]]; then
 		if [[ "${PROJECT_FILE}" != *wifi_soc* ]] && [ "$GENERATE_BOOTLOADER" = true ]; then
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
-			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITH_BOOTLOADER_COMPONENTS")
+			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")
 
 			echo "Generating bootloader..."
 			# shellcheck disable=SC2086
