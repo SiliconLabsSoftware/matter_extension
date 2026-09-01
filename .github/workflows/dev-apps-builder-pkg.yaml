@@ -296,14 +296,17 @@ jobs:
 
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
+        if: ${{ inputs.use-package-cache }}
         needs: [set-build-type, cache-tools]
-        uses: ./.github/workflows/builder.yaml
+        uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
             path-to-example-app: slc/apps/bootloaders/bootloader_storage_single_4096k_series_3/matter_bootloader_internal_series_3.slcw
             example-app: bootloader
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             platform: series-3-bootloader
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build-sqa-tools:
         name: Build SQA Tools
