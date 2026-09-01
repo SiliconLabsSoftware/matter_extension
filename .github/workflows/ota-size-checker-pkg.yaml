@@ -130,6 +130,12 @@ jobs:
           MATTER_APP="$(slt where matter_app)"
           IMAGES=$(find "${MATTER_APP}" -type f -name "*.s37" -path "*/out/*" ! -path "*/copy-sources/*" 2>/dev/null)
 
+          if [[ -z "${IMAGES// /}" ]]; then
+            echo "ERROR: no .s37 images found under ${MATTER_APP}/**/out/**" >&2
+            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+            exit 1
+          fi
+
           FAIL=0
 
           for IMAGE in $IMAGES; do

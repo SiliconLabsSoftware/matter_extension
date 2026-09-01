@@ -72,13 +72,20 @@ jobs:
                   MATTER_APP="$(slt where matter_app)"
                   echo "matter_app root: ${MATTER_APP}"
 
+                  # Standalone bootloader builds only produce binaries under matter_bootloader/.
+                  # App solution builds exclude that path so nested bootloaders are not uploaded.
+                  EXCLUDE_NESTED_BTL=()
+                  if [[ "${{ inputs.example-app }}" != "bootloader" ]]; then
+                    EXCLUDE_NESTED_BTL=( ! -path '*/matter_bootloader/*' )
+                  fi
+
                   mapfile -d '' -t bins < <(
                     find "${MATTER_APP}" -type f \( \
                         -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' -o -name '*.map' \
                       \) \
                       -path '*/out/*' \
                       ! -path '*/copy-sources/*' \
-                      ! -path '*/matter_bootloader/*' \
+                      "${EXCLUDE_NESTED_BTL[@]}" \
                       -print0
                   )
                   echo "Found ${#bins[@]} binary/map file(s) under matter_app"
@@ -108,10 +115,18 @@ jobs:
                   echo "Staged under workspace out/:"
                   find "${GITHUB_WORKSPACE}/out" -type f 2>/dev/null | sort || true
                   if [[ "${#bins[@]}" -eq 0 ]]; then
-                    echo "ERROR: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+                    echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
                     find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
-                    exit 1
                   fi
+
+            - name: Create asset files
+              if: startsWith(github.ref_name, 'release_')
+              run: |
+                  find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read -r file; do
+                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
+                      echo '<asset/>' >> "${file}.asset"
+                      echo "Created ${file}.asset"
+                  done
 
             - name: Upload artifacts
               uses: actions/upload-artifact@v7
@@ -121,10 +136,11 @@ jobs:
                       out/*/*/artifact/**
                       ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'series-3-bootloader' && 'out/*/*/*/artifact/**' || '' }}
                       ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/**/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/**/*.map' || '' }}
                       ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/**/*.map' || '' }}
                       !out/**/*_bootloader/build/**/*.map
                       !out/**/*copy-sources/**
-                  if-no-files-found: error
+                  if-no-files-found: warn
                   overwrite: true
