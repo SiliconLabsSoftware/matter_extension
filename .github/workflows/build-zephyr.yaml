@@ -62,8 +62,9 @@ jobs:
       - name: Export SiWx917 Zephyr RPS
         shell: bash
         run: |
-          mkdir -p artifacts
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps artifacts/siwx917_rb4338a-zephyr.rps
+          mkdir -p artifacts/lighting-app-zephyr/BRD4338A
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps \
+             artifacts/lighting-app-zephyr/BRD4338A/matter_wifi_soc_lighting_app_zephyr.rps
 
       - name: Build EFR32xG24 Zephyr Lighting App
         shell: bash
@@ -75,11 +76,13 @@ jobs:
       - name: Export EFR32xG24 Zephyr HEX
         shell: bash
         run: |
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/xg24_rb4187c-zephyr.hex
+          mkdir -p artifacts/lighting-app-zephyr/BRD4187C
+          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
+             artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
 
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: silabs-zephyr-lighting-app-bin
+          name: dev-artifacts-zephyr
           path: artifacts/
           if-no-files-found: error
