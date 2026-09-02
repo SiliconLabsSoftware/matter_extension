@@ -287,7 +287,7 @@ pipeline
                         error('MATTER_PACKAGE_REF is empty; publish stage must set package refs with recipe revisions')
                     }
 
-                    // Clone via Jenkins GitSCM so GitHub App credential is used correctly
+                    // Clone via Jenkins GitSCM (GitHub App), same pattern as checkout_repo(isGitHub=true)
                     def actionDir = "${env.WORKSPACE}/.action-conan-promote"
                     dir(actionDir) {
                         deleteDir()
@@ -296,7 +296,7 @@ pipeline
                             branches: [[name: '*/main']],
                             extensions: [[$class: 'CloneOption', depth: 1, shallow: true, noTags: true]],
                             userRemoteConfigs: [[
-                                credentialsId: 'Matter-Extension-GitHub',
+                                credentialsId: 'github-app-credentials',
                                 url: 'https://github.com/SiliconLabsInternal/action-conan-promote.git'
                             ]]
                         ])
