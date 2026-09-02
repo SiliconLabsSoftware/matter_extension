@@ -296,7 +296,7 @@ pipeline
                             branches: [[name: '*/main']],
                             extensions: [[$class: 'CloneOption', depth: 1, shallow: true, noTags: true]],
                             userRemoteConfigs: [[
-                                credentialsId: 'github-app-credentials',
+                                credentialsId: 'github-app',
                                 url: 'https://github.com/SiliconLabsInternal/action-conan-promote.git'
                             ]]
                         ])
