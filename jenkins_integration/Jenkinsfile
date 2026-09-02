@@ -290,7 +290,7 @@ pipeline
                     withCredentials([
                         string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN'),
                         usernamePassword(
-                            credentialsId: 'github-app',
+                            credentialsId: 'siliconlabsinternal-wifi-repos',
                             usernameVariable: 'GITHUB_APP',
                             passwordVariable: 'GITHUB_ACCESS_TOKEN'
                         )
