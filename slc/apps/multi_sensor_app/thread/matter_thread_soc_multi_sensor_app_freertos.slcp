@@ -172,6 +172,8 @@ configuration:
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "5000"
+  - name: SL_MATTER_SENSOR_TIMER_PERIOD_S
+    value: "1800"
 
   - name: SL_TRANSPORT_IDLE_INTERVAL
     value: "1800000"
