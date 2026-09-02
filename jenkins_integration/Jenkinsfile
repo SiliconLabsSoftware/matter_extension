@@ -287,13 +287,23 @@ pipeline
                         error('MATTER_PACKAGE_REF is empty; publish stage must set package refs with recipe revisions')
                     }
 
+                    // Clone via Jenkins GitSCM so GitHub App credential is used correctly
+                    def actionDir = "${env.WORKSPACE}/.action-conan-promote"
+                    dir(actionDir) {
+                        deleteDir()
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: '*/main']],
+                            extensions: [[$class: 'CloneOption', depth: 1, shallow: true, noTags: true]],
+                            userRemoteConfigs: [[
+                                credentialsId: 'Matter-Extension-GitHub',
+                                url: 'https://github.com/SiliconLabsInternal/action-conan-promote.git'
+                            ]]
+                        ])
+                    }
+
                     withCredentials([
-                        string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN'),
-                        usernamePassword(
-                            credentialsId: 'github-app',
-                            usernameVariable: 'GITHUB_APP',
-                            passwordVariable: 'GITHUB_ACCESS_TOKEN'
-                        )
+                        string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN')
                     ]) {
                         sh("""
                             #!/usr/bin/env bash
@@ -306,12 +316,7 @@ pipeline
                             fi
                             uv --version
 
-                            ACTION_DIR="\${WORKSPACE}/.action-conan-promote"
-                            rm -rf "\${ACTION_DIR}"
-                            git clone --depth 1 \\
-                              "https://x-access-token:\${GITHUB_ACCESS_TOKEN}@github.com/SiliconLabsInternal/action-conan-promote.git" \\
-                              "\${ACTION_DIR}"
-                            cd "\${ACTION_DIR}"
+                            cd '${actionDir}'
 
                             # Hyphenated INPUT_* names cannot be exported in bash; pass via env.
                             echo "Promoting: ${packageRef}"
