@@ -290,7 +290,7 @@ pipeline
                     withCredentials([
                         string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN'),
                         usernamePassword(
-                            credentialsId: 'Matter-Extension-GitHub',
+                            credentialsId: 'github-app',
                             usernameVariable: 'GITHUB_APP',
                             passwordVariable: 'GITHUB_ACCESS_TOKEN'
                         )
