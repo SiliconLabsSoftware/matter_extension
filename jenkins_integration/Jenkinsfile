@@ -237,7 +237,95 @@ pipeline
                             publish_one matter     packages/matter/conanfile.py
                             publish_one matter_app packages/matter_app/conanfile.py
 
-                            echo "Done. matter/\${VERSION}@silabs and matter_app/\${VERSION}@silabs -> \${REMOTE_NAME}"
+                            # Resolve full refs with recipe revision for promote stage
+                            resolve_ref_with_rrev() {
+                              local name="\$1"
+                              local ref="\${name}/\${VERSION}@\${PACKAGE_USER}"
+                              python3 - "\${ref}" <<'PY'
+                    import json, subprocess, sys
+                    ref = sys.argv[1]
+                    raw = subprocess.check_output(
+                        ["conan", "list", f"{ref}#*", "--format=json"],
+                        text=True,
+                    )
+                    data = json.loads(raw)
+                    cache = data.get("Local Cache", data)
+                    info = cache.get(ref) or next(iter(cache.values()), {})
+                    revs = info.get("revisions") or {}
+                    if not revs:
+                        raise SystemExit(f"no recipe revision found for {ref}")
+                    rrev = next(iter(revs))
+                    print(f"{ref}#{rrev}")
+                    PY
+                            }
+
+                            MATTER_REF="\$(resolve_ref_with_rrev matter)"
+                            MATTER_APP_REF="\$(resolve_ref_with_rrev matter_app)"
+                            PACKAGE_REFS="\${MATTER_REF} \${MATTER_APP_REF}"
+                            echo "PACKAGE_REFS=\${PACKAGE_REFS}"
+                            echo "\${PACKAGE_REFS}" > "\${WORKSPACE}/.matter_package_refs"
+                            echo "Done. \${PACKAGE_REFS} -> \${REMOTE_NAME}"
+                        """.stripIndent().trim())
+
+                        env.MATTER_PACKAGE_REF = readFile("${env.WORKSPACE}/.matter_package_refs").trim()
+                        echo "MATTER_PACKAGE_REF=${env.MATTER_PACKAGE_REF}"
+                    }
+                }
+            }
+        }
+        stage('Promote Matter Packages to SQA') {
+            // Runs SiliconLabsInternal/action-conan-promote via uv (same as local README flow)
+            when {
+                expression { env.BRANCH_NAME == 'test/package-upload-jenkins' }
+            }
+            steps {
+                script {
+                    def sourceRemoteUrl = 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
+                    def destRemoteUrl = 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-sqa'
+                    def packageRef = env.MATTER_PACKAGE_REF
+                    if (!packageRef) {
+                        error('MATTER_PACKAGE_REF is empty; publish stage must set package refs with recipe revisions')
+                    }
+
+                    withCredentials([
+                        string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN'),
+                        usernamePassword(
+                            credentialsId: 'Matter-Extension-GitHub',
+                            usernameVariable: 'GITHUB_APP',
+                            passwordVariable: 'GITHUB_ACCESS_TOKEN'
+                        )
+                    ]) {
+                        sh("""
+                            #!/usr/bin/env bash
+                            set -euo pipefail
+
+                            export PATH="\${HOME}/.local/bin:\${PATH}"
+                            if ! command -v uv >/dev/null 2>&1; then
+                              curl -LsSf https://astral.sh/uv/install.sh | sh
+                              export PATH="\${HOME}/.local/bin:\${PATH}"
+                            fi
+                            uv --version
+
+                            ACTION_DIR="\${WORKSPACE}/.action-conan-promote"
+                            rm -rf "\${ACTION_DIR}"
+                            git clone --depth 1 \\
+                              "https://x-access-token:\${GITHUB_ACCESS_TOKEN}@github.com/SiliconLabsInternal/action-conan-promote.git" \\
+                              "\${ACTION_DIR}"
+                            cd "\${ACTION_DIR}"
+
+                            # Hyphenated INPUT_* names cannot be exported in bash; pass via env.
+                            echo "Promoting: ${packageRef}"
+                            echo "From: ${sourceRemoteUrl}"
+                            echo "To:   ${destRemoteUrl}"
+
+                            uv sync
+                            env \\
+                              "INPUT_PACKAGE-REF=${packageRef}" \\
+                              "INPUT_SOURCE-REMOTE-URL=${sourceRemoteUrl}" \\
+                              "INPUT_DESTINATION-REMOTE-URL=${destRemoteUrl}" \\
+                              "INPUT_REMOTE-TOKEN=\${ARTIFACTORY_TOKEN}" \\
+                              "INPUT_LINEARB-ENABLED=false" \\
+                              uv run action-conan-promote
                         """.stripIndent().trim())
                     }
                 }
