@@ -58,10 +58,10 @@ This sample app works out of the box with no additional configuration required. 
 
 | Parameter | Default |
 |-----------|---------|
-| IdleModeDuration | 10 minutes |
+| IdleModeDuration | 30 minutes |
 | ActiveModeDuration | 0 minutes |
 | ActiveModeThreshold | 5 seconds |
-| OpenThread Idle polling interval | 15 minutes |
+| OpenThread Idle polling interval | 30 minutes |
 | OpenThread Active polling interval | 1 second |
 
 ### Steps for Execution
