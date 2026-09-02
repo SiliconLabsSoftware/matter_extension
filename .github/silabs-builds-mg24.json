@@ -217,7 +217,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix lit-120",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120'"]
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "platform_template": [
@@ -229,7 +229,7 @@
             {
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals-icd-lit-120","--with_app matter_peripherals,matter_icd_core",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120'"]
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "closure_app": [

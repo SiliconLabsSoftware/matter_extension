@@ -15,7 +15,7 @@
 // <i> does not always trigger an update to the controller. Should be sync with the Idle interval
 // <i> to maximaze power savings.
 // <d> 600
-#define SL_MATTER_SENSOR_TIMER_PERIOD_S 1800 
+#define SL_MATTER_SENSOR_TIMER_PERIOD_S 600 
 
 // <o SL_MATTER_SENSOR_REPORT_THRESHOLD> Attribute report centi-unit change threshold
 // <0..255:1>
