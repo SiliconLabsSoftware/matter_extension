@@ -36,13 +36,8 @@ pipeline
                         ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
                         : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
 
-                    // Requires Jenkins credential type "Username with password" (not SSH key).
                     withCredentials([
-                        usernamePassword(
-                            credentialsId: 'matter-conan-dev-sabollim-token',
-                            usernameVariable: 'CONAN_LOGIN_USERNAME',
-                            passwordVariable: 'CONAN_PASSWORD'
-                        )
+                        string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN')
                     ]) {
                         sh("""
                             #!/usr/bin/env bash
@@ -111,8 +106,9 @@ pipeline
                             fi
 
                             # Auth (mirrors authenticate_remote)
+                            export CONAN_LOGIN_USERNAME=svc_gsdk
                             conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
-                            conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${CONAN_PASSWORD}"
+                            conan remote login "\${REMOTE_NAME}" "\${CONAN_LOGIN_USERNAME}" -p "\${ARTIFACTORY_TOKEN}"
 
                             # Inspect base version from matter recipe
                             INSPECT_JSON="\$(conan inspect packages/matter/conanfile.py --format=json)"
