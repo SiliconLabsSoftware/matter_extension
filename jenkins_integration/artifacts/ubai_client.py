@@ -22,6 +22,9 @@ def upload_to_ubai(file_path, app_name, target, branch_name, build_number, stack
         branch_name (str): Branch name metadata.
         build_number (int): Build number metadata.
         stack (str): Stack metadata (default: 'matter').
+
+    Returns:
+        bool: True if the upload succeeded, False otherwise.
     """
     print(f"Uploading {file_path} to UBAI with build_number: {build_number}")
     try:
@@ -37,8 +40,10 @@ def upload_to_ubai(file_path, app_name, target, branch_name, build_number, stack
             '--username', os.environ.get("SL_USERNAME"),
             '--password', os.environ.get("SL_PASSWORD")
         ], check=True)
+        return True
     except subprocess.CalledProcessError as e:
         print(f"Error uploading {file_path} to UBAI: {e}")
+        return False
 
 
 # TODO: Need to change or remove this

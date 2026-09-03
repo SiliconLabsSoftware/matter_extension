@@ -346,6 +346,7 @@ extra_files:
   - jenkins_integration/artifacts/download_coverage_artifact.py
   - jenkins_integration/artifacts/ubai_client.py
   - jenkins_integration/artifacts/upload_artifacts.py
+  - jenkins_integration/artifacts/upload_zephyr_artifacts.py
   - jenkins_integration/commit_change_summary.sh
   - jenkins_integration/config.py
   - jenkins_integration/github/github_workflow.py
