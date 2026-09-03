@@ -1,0 +1,146 @@
+name: Common Package Builder
+
+on:
+    workflow_call:
+        inputs:
+            json-file-path:
+                required: true
+                type: string
+            path-to-example-app:
+                required: true
+                type: string
+            example-app:
+                required: true
+                type: string
+            build-type:
+                required: true
+                type: string
+            platform:
+                required: true
+                type: string
+            package-version:
+                required: true
+                type: string
+            conan-cache-key:
+                required: true
+                type: string
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+    build:
+        name: ${{ inputs.platform }}-package-build-job
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+
+            - name: Cache tools
+              uses: ./.github/actions/cache-tools
+
+            - name: Restore Matter package cache
+              uses: ./.github/actions/restore-and-install-matter-packages
+              with:
+                  conan-cache-key: ${{ inputs.conan-cache-key }}
+                  package-version: ${{ inputs.package-version }}
+                  fail-on-cache-miss: true
+
+            - name: Build ${{ inputs.example-app }} from packages
+              uses: SiliconLabsSoftware/matter_build_action@v2
+              continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+              env:
+                  MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+              with:
+                  json-file-path: ${{ inputs.json-file-path }}
+                  path-to-example-app: ${{ inputs.path-to-example-app }}
+                  example-app: ${{ inputs.example-app }}
+                  build-script: "$(slt where matter_app)/build_app.sh"
+                  output-directory: " "
+                  build-type: ${{ inputs.build-type }}
+                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+
+            # Package builds write under $(slt where matter_app)/**/out/**, not workspace out/.
+            # Stage into the classic out/<board>/<app>/artifact/ layout for merge + Jenkins.
+            - name: Collect package build artifacts
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
+                  MATTER_APP="$(slt where matter_app)"
+                  echo "matter_app root: ${MATTER_APP}"
+
+                  # Standalone bootloader builds only produce binaries under matter_bootloader/.
+                  # App solution builds exclude that path so nested bootloaders are not uploaded.
+                  EXCLUDE_NESTED_BTL=()
+                  if [[ "${{ inputs.example-app }}" != "bootloader" ]]; then
+                    EXCLUDE_NESTED_BTL=( ! -path '*/matter_bootloader/*' )
+                  fi
+
+                  mapfile -d '' -t bins < <(
+                    find "${MATTER_APP}" -type f \( \
+                        -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' -o -name '*.map' \
+                      \) \
+                      -path '*/out/*' \
+                      ! -path '*/copy-sources/*' \
+                      "${EXCLUDE_NESTED_BTL[@]}" \
+                      -print0
+                  )
+                  echo "Found ${#bins[@]} binary/map file(s) under matter_app"
+
+                  for f in "${bins[@]}"; do
+                    [[ -n "${f}" ]] || continue
+                    rel_out="${f#*/out/}"
+                    board="${rel_out%%/*}"
+                    rest="${rel_out#*/}"
+                    app_part="${rest%%/*}"
+                    if [[ "${f}" == */artifact/* ]]; then
+                      dest_dir="${GITHUB_WORKSPACE}/out/${board}/${app_part}/artifact"
+                      mkdir -p "${dest_dir}"
+                      cp -a "${f}" "${dest_dir}/"
+                    elif [[ "${f}" == *.map ]]; then
+                      # Preserve relative path under out/ for map uploads.
+                      dest="${GITHUB_WORKSPACE}/out/${rel_out}"
+                      mkdir -p "$(dirname "${dest}")"
+                      cp -a "${f}" "${dest}"
+                    else
+                      dest_dir="${GITHUB_WORKSPACE}/out/${board}/${app_part}/artifact"
+                      mkdir -p "${dest_dir}"
+                      cp -a "${f}" "${dest_dir}/"
+                    fi
+                  done
+
+                  echo "Staged under workspace out/:"
+                  find "${GITHUB_WORKSPACE}/out" -type f 2>/dev/null | sort || true
+                  if [[ "${#bins[@]}" -eq 0 ]]; then
+                    echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+                    find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+                  fi
+
+            - name: Create asset files
+              if: startsWith(github.ref_name, 'release_')
+              run: |
+                  find out -type f \( -name "*.s37" -o -name "*.rps" \) | while read -r file; do
+                      echo '<?xml version="1.0" encoding="UTF-8"?>' > "${file}.asset"
+                      echo '<asset/>' >> "${file}.asset"
+                      echo "Created ${file}.asset"
+                  done
+
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v7
+              with:
+                  name: ${{ inputs.example-app }}-${{ inputs.platform }}-${{ inputs.build-type }}
+                  path: |
+                      out/*/*/artifact/**
+                      ${{ inputs.build-type == 'custom-sqa' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'sixg301' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'series-3-bootloader' && 'out/*/*/*/artifact/**' || '' }}
+                      ${{ inputs.platform == 'sixg301' && inputs.build-type != 'custom-sqa' && 'out/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4187c/**/build/**/*.map' || '' }}
+                      ${{ inputs.build-type != 'custom-sqa' && 'out/brd4338a/**/build/**/*.map' || '' }}
+                      !out/**/*_bootloader/build/**/*.map
+                      !out/**/*copy-sources/**
+                  if-no-files-found: warn
+                  overwrite: true
