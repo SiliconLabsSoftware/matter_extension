@@ -24,7 +24,7 @@ hwfilter:
     - device_family_efm32pg26
 board_allowlist:
     - brd1019a
-    - brd2601d
+    - brd2601b
     - brd2605b
     - brd2608b
     - brd2703a
