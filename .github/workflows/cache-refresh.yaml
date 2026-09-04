@@ -1,15 +1,20 @@
-name: Seed SDK cache
+name: Refresh caches
 
 on:
     push:
         branches:
             - main
             - "release_*"
-        paths:
-            - .gitmodules
-            - third_party/simplicity_sdk
-            - third_party/wifi_sdk
     workflow_dispatch:
+        inputs:
+            refresh-tools:
+                description: Refresh the ZAP/SLT tools cache
+                type: boolean
+                default: true
+            refresh-sdks:
+                description: Seed the simplicity_sdk and wifi_sdk cache
+                type: boolean
+                default: true
 
 permissions:
     contents: read
@@ -24,13 +29,78 @@ jobs:
               run: |
                   set -euo pipefail
                   if [[ "${{ github.ref_name }}" != "main" && ! "${{ github.ref_name }}" =~ ^release_ ]]; then
-                      echo "Seed SDK cache can only run on main or release_*. Current ref: ${{ github.ref_name }}"
+                      echo "Refresh caches can only run on main or release_*. Current ref: ${{ github.ref_name }}"
                       exit 1
                   fi
 
+    plan:
+        name: Decide which caches to refresh
+        needs: check-branch
+        runs-on: ubuntu-latest
+        outputs:
+            tools: ${{ steps.plan.outputs.tools }}
+            sdks: ${{ steps.plan.outputs.sdks }}
+        steps:
+            - name: Checkout
+              if: github.event_name == 'push'
+              uses: actions/checkout@v7
+              with:
+                  fetch-depth: 0
+                  submodules: false
+            - name: Plan
+              id: plan
+              env:
+                  EVENT: ${{ github.event_name }}
+                  BEFORE: ${{ github.event.before }}
+                  AFTER: ${{ github.sha }}
+                  DISPATCH_TOOLS: ${{ inputs.refresh-tools }}
+                  DISPATCH_SDKS: ${{ inputs.refresh-sdks }}
+              run: |
+                  set -euo pipefail
+                  if [[ "${EVENT}" == "workflow_dispatch" ]]; then
+                      echo "tools=${DISPATCH_TOOLS}" >> "${GITHUB_OUTPUT}"
+                      echo "sdks=${DISPATCH_SDKS}" >> "${GITHUB_OUTPUT}"
+                      echo "workflow_dispatch: tools=${DISPATCH_TOOLS} sdks=${DISPATCH_SDKS}"
+                      exit 0
+                  fi
+
+                  # Unpinned slt packages can change without a repo file change.
+                  echo "tools=true" >> "${GITHUB_OUTPUT}"
+
+                  if [[ "${BEFORE}" =~ ^0+$ ]]; then
+                      echo "sdks=true" >> "${GITHUB_OUTPUT}"
+                      echo "New branch; seeding SDK cache"
+                      exit 0
+                  fi
+
+                  changed=$(git diff --name-only "${BEFORE}" "${AFTER}" || true)
+                  if echo "${changed}" | grep -qxE '\.gitmodules|third_party/simplicity_sdk|third_party/wifi_sdk'; then
+                      echo "sdks=true" >> "${GITHUB_OUTPUT}"
+                      echo "SDK pin files changed; seeding SDK cache"
+                  else
+                      echo "sdks=false" >> "${GITHUB_OUTPUT}"
+                      echo "No SDK pin changes; skipping SDK cache"
+                  fi
+
+    cache-tools:
+        name: Refresh ZAP and SLT tools cache
+        needs: plan
+        if: needs.plan.outputs.tools == 'true'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            actions: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+            - uses: ./.github/actions/cache-tools
+              with:
+                  refresh: true
+
     cache-sdks:
         name: Seed simplicity_sdk and wifi_sdk cache
-        needs: check-branch
+        needs: plan
+        if: needs.plan.outputs.sdks == 'true'
         runs-on: ubuntu-latest
         outputs:
             cache-key: ${{ steps.cache-sdks.outputs.cache-key }}
