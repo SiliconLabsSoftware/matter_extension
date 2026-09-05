@@ -122,9 +122,11 @@ components:
   - matter_content_app_observer
   - matter_content_control
   - matter_content_launch
+  - matter_cpc
   - matter_crypto
   - matter_crypto_psa_siwx917
   - matter_crypto_tinycrypt_siwx917
+  - matter_custom_apptask
   - matter_default_lcd_config
   - matter_dem
   - matter_descriptor
@@ -206,6 +208,7 @@ components:
   - matter_multipan_internal
   - matter_network_commissioning
   - matter_network_identity_management
+  - matter_neutral_less_switch_wifi
   - matter_nlassert
   - matter_nlio
   - matter_no_debug
@@ -258,6 +261,7 @@ components:
   - matter_sparkfun_air_quality_sensor
   - matter_stack_monitoring
   - matter_static_generated_zap_content
+  - matter_subscription_manager
   - matter_subscription_persistence
   - matter_switch
   - matter_synchronized_sed
@@ -583,6 +587,7 @@ extra_files:
   - slc/component/matter-core-sdk/siwx917.slcc
   - slc/component/matter-core-sdk/siwx917_common.slcc
   - slc/component/matter-core-sdk/siwx917_tinycrypt.slcc
+  - slc/component/matter-core-sdk/subscription_manager.slcc
   - slc/component/matter-core-sdk/syscalls_stub.slcc
   - slc/component/matter-core-sdk/test_paa_store.slcc
   - slc/component/matter-core-sdk/text_only_logging.slcc
@@ -629,6 +634,7 @@ extra_files:
   - slc/component/matter-platform/bluetooth/matter_wifi_ble.slcc
   - slc/component/matter-platform/buttons/matter_buttons.slcc
   - slc/component/matter-platform/config/matter_includes.slcc
+  - slc/component/matter-platform/cpc/matter_cpc.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_default.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_flash.slcc
@@ -644,6 +650,7 @@ extra_files:
   - slc/component/matter-platform/low-power/matter_icd_core.slcc
   - slc/component/matter-platform/low-power/matter_platform_low_power.slcc
   - slc/component/matter-platform/low-power/matter_subscription_persistence.slcc
+  - slc/component/matter-platform/matter_custom_apptask.slcc
   - slc/component/matter-platform/matter_platform_mg.slcc
   - slc/component/matter-platform/matter_platform_siwx917.slcc
   - slc/component/matter-platform/memory-monitoring/matter_memory_monitoring.slcc
@@ -691,6 +698,7 @@ extra_files:
   - slc/component/matter-wifi/matter_lwip_modified.slcc
   - slc/component/matter-wifi/matter_lwip_support.slcc
   - slc/component/matter-wifi/matter_minimal_mdns.slcc
+  - slc/component/matter-wifi/matter_neutral_less_switch_wifi.slcc
   - slc/component/matter-wifi/matter_sleep_manager.slcc
   - slc/component/matter-wifi/matter_wifi.slcc
   - slc/component/matter-wifi/mbedtls_entropy_default_aws.slcc
@@ -2903,12 +2911,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SC_4_9.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SC_5_3.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SC_6_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_1.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_2.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_3.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_4.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_5.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SMOKECO_2_6.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SU_1_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SU_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_SU_2_2.yaml
