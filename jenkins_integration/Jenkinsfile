@@ -34,7 +34,7 @@ def combineSlackSummary(String commitSummary, String extra) {
 def isCodeSizeBranch() {
     return env.BRANCH_NAME == "main" ||
            env.BRANCH_NAME.startsWith("release_") ||
-           env.BRANCH_NAME == "test_compare_code_size"
+           env.BRANCH_NAME == "test_sqa_tuan"
 }
 
 def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
