@@ -1,6 +1,12 @@
 name: Create Matter Packages
 
 on:
+  push:
+    branches:
+      - feature/package_manager_implementation_phase_2
+  pull_request:
+    branches:
+      - feature/package_manager_implementation_phase_2
   workflow_dispatch:
     inputs:
       package_version:
@@ -94,13 +100,13 @@ jobs:
 
   build-dev-apps:
     name: Build Dev Apps (from package cache)
-    if: ${{ inputs.build_dev_apps }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_dev_apps }}
     needs: matter-packages
     permissions:
       contents: read
       actions: write
     secrets: inherit
-    uses: ./.github/workflows/dev-apps-builder-pkg.yaml
+    uses: ./.github/workflows/dev-apps-builder.yaml
     with:
       build-type: standard
       use-package-cache: true
@@ -109,13 +115,13 @@ jobs:
 
   ota-size-check:
     name: OTA flash size check
-    if: ${{ inputs.ota_size_check }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.ota_size_check }}
     needs: matter-packages
     permissions:
       contents: read
       actions: write
     secrets: inherit
-    uses: ./.github/workflows/ota-size-checker-pkg.yaml
+    uses: ./.github/workflows/ota-size-checker.yaml
     with:
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}

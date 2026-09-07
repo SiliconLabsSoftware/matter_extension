@@ -90,7 +90,7 @@ if __name__ == '__main__':
     slcp_files = [os.path.abspath(f) for f in pathlib.Path(ROOT).glob("slc/**/*.slcp")]
     for file in slcp_files:
         replace_text(file,"sdk_extension:\n *- id: matter\n *version: \""+VERSION_REGEX_FORMAT+"\"", "sdk_extension:\n  - id: matter\n    version: \""+EXTENSION_NEW_VERSION+"\"")
-        replace_text(file,"- id: wiseconnect3_sdk\n *version: \""+VERSION_REGEX_FORMAT+"\"", "- id: wiseconnect3_sdk\n    version: \""+WISECONNECT_NEW_VERSION+"\"", warning_if_unchanged=False)
+        replace_text(file,"- id: wifi\n *version: \""+VERSION_REGEX_FORMAT+"\"", "- id: wifi\n    version: \""+WISECONNECT_NEW_VERSION+"\"", warning_if_unchanged=False)
 
     # Update matter.slce
     #
