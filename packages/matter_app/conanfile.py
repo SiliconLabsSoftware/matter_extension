@@ -107,10 +107,9 @@ class matter_appRecipe(MatterBaseRecipe):
         # Define the files to be included in the package
         files_to_package = {"License"}
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(
@@ -164,8 +163,6 @@ class matter_appRecipe(MatterBaseRecipe):
 
         silabs_package_assistant.generate_metadata(self, files_to_package)
 
-
-
     def build(self):
         # Define the source folder for the matter_app component (property-backed)
         matter_app_folder = self.matter_app_folder
@@ -175,10 +172,9 @@ class matter_appRecipe(MatterBaseRecipe):
         files_to_package = {"License"}
         git_extra_files = []
 
-        
         silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
 
-        desired_qualities = ["production", "evaluation"]
+        desired_qualities = ["production", "evaluation", "experimental"]
         desired_packages = ["matter"]
 
         files_to_package.update(
@@ -214,10 +210,6 @@ class matter_appRecipe(MatterBaseRecipe):
         with open("matter_app-filter-repo-pathmap.txt","w") as pathmapfile:
             for mapping in git_path_mapping:
                 pathmapfile.write(mapping+'\n')
-
-
-
-
 
     def package_info(self):
         # Reference: https://confluence.silabs.com/pages/viewpage.action?spaceKey=SWARCH&title=Package+Manager%3A+Conan+Metadata+for+SLT+Integration
@@ -403,4 +395,3 @@ class matter_appRecipe(MatterBaseRecipe):
                 collected.add(rel_path)
                 collected.update(related)
         return collected
-
