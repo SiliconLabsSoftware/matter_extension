@@ -25,6 +25,8 @@
  * @section options Options
  *   - `--verbose` : Enable verbose (debug) logging output
  *   - `-c` / `--clean-reinstall` : Remove `slc/tools` and reinstall all downloaded tools
+ *   - `--use-package` : Package-manager mode (default): skip SiSDK/Wi-Fi submodules; platforms via SLT
+ *   - `--use-submodules` : Legacy mode: sync third_party SiSDK/Wi-Fi trees for --sdk-package-path builds
  *
  * @section output Output
  *   Generates a `.env` file in `slc/tools/` containing all required environment
@@ -47,6 +49,12 @@ from datetime import datetime
 from zipfile import ZipFile
 from pathlib import Path
 from script.get_zap_version import get_zap_version
+from script.package_build import (
+    ensure_conan_home,
+    read_matter_package_version,
+    submodule_sync_paths,
+    use_package_model,
+)
 
 
 
@@ -59,20 +67,28 @@ if sys.version_info < (3, 9):
 class MatterEnvSetup:
     """Class for setting up the Matter development environment with all required tools."""
 
-    def __init__(self, verbose=False, clean_reinstall=False):
+    def __init__(self, verbose=False, clean_reinstall=False, use_package=None):
         """Initialize MatterEnvSetup instance.
 
         Args:
             verbose: Enable verbose (debug) logging if True
             clean_reinstall: If True, remove slc/tools before setup (fresh tool install)
+            use_package: Package-manager mode when True; submodule SDK trees when False
         """
         self.verbose = verbose
         self.clean_reinstall = clean_reinstall
+        self.use_package = use_package_model(use_package)
         os.environ["SLT_CI"] = "true"
+        os.environ["USE_PACKAGE"] = "1" if self.use_package else "0"
         self.setup_logging()
         self.set_root_paths()
         self.set_platform_vars()
         self.MINIMUM_ZAP_REQUIRED = get_zap_version()
+        try:
+            self.matter_package_version = read_matter_package_version(Path(self.silabs_chip_root))
+        except (OSError, ValueError) as exc:
+            logging.warning("Could not read matter_package_version: %s", exc)
+            self.matter_package_version = ""
 
     def setup_logging(self):
         """Configure logging level and format based on verbosity setting."""
@@ -91,11 +107,13 @@ class MatterEnvSetup:
         os.makedirs(self.tools_folder_path, exist_ok=True)
 
     def sync_submodules(self):
-        """Sync and initialize Git submodules."""
-        logging.info("Syncing and checking out submodules")
+        """Sync and initialize Git submodules needed for the selected build model."""
+        paths = list(submodule_sync_paths(use_package=self.use_package))
+        mode = "package" if self.use_package else "submodule"
+        logging.info("Syncing submodules for %s mode: %s", mode, ", ".join(paths))
         try:
-            subprocess.run(["git", "submodule", "sync"], check=True)
-            subprocess.run(["git", "submodule", "update", "--init"], check=True)
+            subprocess.run(["git", "submodule", "sync", "--"] + paths, check=True)
+            subprocess.run(["git", "submodule", "update", "--init", "--"] + paths, check=True)
         except subprocess.CalledProcessError as e:
             logging.error(f"Cannot checkout submodules: {e}")
             sys.exit(1)
@@ -321,6 +339,10 @@ class MatterEnvSetup:
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
                 outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
                 outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
+                outfile.write(f"USE_PACKAGE={'1' if self.use_package else '0'}\n")
+                outfile.write(f"CONAN_HOME={ensure_conan_home()}\n")
+                if self.matter_package_version:
+                    outfile.write(f"MATTER_PACKAGE_VERSION={self.matter_package_version}\n")
             logging.info(f"Environment file written to {env_path}")
         except IOError as e:
             logging.error(f"Failed to write environment file: {e}")
@@ -380,6 +402,8 @@ class MatterEnvSetup:
     def setup_tools(self):
         """Install and configure all required development tools."""
         tools_list = ["slc-cli", "java21", "gcc-arm-none-eabi", "commander", "ninja", "cmake"]
+        if self.use_package:
+            tools_list.insert(0, "conan")
         self.paths = {}
         self.executables = {}
         for tool in tools_list:
@@ -389,6 +413,9 @@ class MatterEnvSetup:
             self._make_executable(self.executables.get('java21'))
         self.download_and_extract_zap()
         self.check_and_update_zap_version()
+        if self.use_package:
+            ensure_conan_home()
+            logging.info("CONAN_HOME=%s", os.environ["CONAN_HOME"])
 
     def run_setup(self):
         """Execute the complete environment setup process."""
@@ -409,8 +436,25 @@ def main():
         action='store_true',
         help='Remove slc/tools then run a full tool setup',
     )
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
+        '--use-package',
+        action='store_true',
+        default=None,
+        help='Package-manager mode (default): platforms via SLT, skip SiSDK/Wi-Fi submodules',
+    )
+    mode.add_argument(
+        '--use-submodules',
+        action='store_true',
+        help='Legacy mode: sync third_party SiSDK/Wi-Fi for --sdk-package-path builds',
+    )
     args = parser.parse_args()
-    env_setup = MatterEnvSetup(verbose=args.verbose, clean_reinstall=args.clean_reinstall)
+    use_package = False if args.use_submodules else (True if args.use_package else None)
+    env_setup = MatterEnvSetup(
+        verbose=args.verbose,
+        clean_reinstall=args.clean_reinstall,
+        use_package=use_package,
+    )
     env_setup.run_setup()
 
 
