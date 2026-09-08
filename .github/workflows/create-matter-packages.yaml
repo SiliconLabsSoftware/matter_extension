@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feature/package_manager_implementation_phase_2
+      - test/pkg-mgr-phase-2
   pull_request:
     branches:
       - feature/package_manager_implementation_phase_2
