@@ -585,4 +585,225 @@ def buildCommitChangeSummaryForSlack() {
     return summary
 }
 
+// ---------------------------------------------------------------------------
+// Matter Conan package publish / promote helpers
+// ---------------------------------------------------------------------------
+// Note: Jenkins `sh` runs under /bin/sh (dash). Use `bash <<'EOF'` for bash features
+// and `pipefail`.
+
+/**
+ * Checkout a GitHub repo into dirName using the github-app credential.
+ * branchSpec examples: 'refs/tags/v2.5.5', '*\/main'
+ */
+def checkoutGithubActionRepo(String dirName, String repoUrl, String branchSpec) {
+    dir(dirName) {
+        checkout([
+            $class: 'GitSCM',
+            branches: [[name: branchSpec]],
+            extensions: [[$class: 'CloneOption', depth: 1, shallow: true, noTags: false]],
+            userRemoteConfigs: [[
+                url: repoUrl,
+                credentialsId: 'github-app'
+            ]]
+        ])
+        sh 'ls -la'
+        sh 'find . -maxdepth 2 -type d | sort'
+    }
+}
+
+/** Init Matter package-related git submodules (shallow). */
+def initMatterPackageSubmodules() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+git config --global --add safe.directory "${WORKSPACE}"
+git submodule update --init --depth 1 --jobs 8 \
+  third_party/matter_sdk \
+  third_party/matter_support \
+  third_party/QR-Code-generator \
+  third_party/mbedtls \
+  third_party/nlio \
+  third_party/nlassert
+EOF
+    '''
+}
+
+/** Install uv into ~/.local/bin if missing. */
+def setupUv() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+export PATH="${HOME}/.local/bin:${PATH}"
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="${HOME}/.local/bin:${PATH}"
+fi
+uv --version
+EOF
+    '''
+}
+
+/** Install SLT CLI and Conan engine; puts conan on PATH via ~/.local/bin. */
+def setupSltAndConan() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+export PATH="${HOME}/.local/bin:${PATH}"
+
+SLT_ARTIFACTORY_URL="${SLT_ARTIFACTORY_URL:-https://www.silabs.com/documents/public/software}"
+SLT_PKG_NAME="${SLT_PKG_NAME:-slt-cli-1.2.0-linux-x64.zip}"
+curl -fsSL "${SLT_ARTIFACTORY_URL}/${SLT_PKG_NAME}" --output "/tmp/${SLT_PKG_NAME}"
+mkdir -p "${HOME}/.local/bin"
+unzip -o "/tmp/${SLT_PKG_NAME}" -d "${HOME}/.local/bin"
+rm -f "/tmp/${SLT_PKG_NAME}"
+export SLT_CI=true
+slt update --self
+slt --version
+
+export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+CONAN_HOME="${CONAN_HOME/#\\~/$HOME}"
+export CONAN_HOME
+export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+
+slt install conan
+CONAN_BIN="${HOME}/.silabs/slt/engines/conan/conan/conan"
+if [ ! -f "${CONAN_BIN}" ]; then
+  echo "Error: conan not found at ${CONAN_BIN}" >&2
+  exit 1
+fi
+ln -fs "${CONAN_BIN}" "${HOME}/.local/bin/conan"
+conan --version
+
+conan remote add -f silabs-conan-production \
+  https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production
+conan remote list
+EOF
+    '''
+    // Persist for later sh steps (exports inside bash do not carry across Jenkins sh steps)
+    env.CONAN_HOME = "${env.HOME}/.silabs/slt/installs/conan"
+    echo "CONAN_HOME=${env.CONAN_HOME}"
+}
+
+/**
+ * Write prerelease qualifier to a workspace file and set SL_PRERELEASE to that path.
+ * Returns the absolute path of the label file.
+ */
+def writePrereleaseLabel(String qualifier) {
+    def labelPath = "${env.WORKSPACE}/.sl_prerelease_label"
+    writeFile file: '.sl_prerelease_label', text: "${qualifier}\n"
+    env.SL_PRERELEASE = labelPath
+    echo "SL_PRERELEASE=${env.SL_PRERELEASE} (qualifier=${qualifier})"
+    return labelPath
+}
+
+/**
+ * Read conan_package_output.json written by action-conan-create-publish@v2.5.4
+ * (set_script_output / _create_json_output). File is created in the process cwd.
+ * Returns a Map with keys like full_package_ref, package_ref, prerelease_number, ...
+ */
+def readConanPackageOutputJson(String jsonPath = null) {
+    def path = jsonPath ?: "${env.WORKSPACE}/conan_package_output.json"
+    if (!fileExists(path)) {
+        error("conan_package_output.json not found at ${path}")
+    }
+    def data = readJSON file: path
+    echo "Read conan_package_output.json: ${data}"
+    return data
+}
+
+/**
+ * Run action-conan-create-publish for one recipe (create + publish).
+ * Requires ARTIFACTORY_TOKEN in the environment (use withCredentials).
+ * Runs from WORKSPACE so v2.5.4 writes conan_package_output.json there.
+ */
+def runActionConanCreatePublish(String name, String conanfile, String remoteName, String remoteUrl, String actionDir) {
+    sh("""
+        bash <<'EOF'
+set -euo pipefail
+cd "\${WORKSPACE}"
+export PATH="\${HOME}/.local/bin:\${PATH}"
+export CONAN_HOME="\${CONAN_HOME:-\${HOME}/.silabs/slt/installs/conan}"
+export CONAN_HOME
+echo "CONAN_HOME=\${CONAN_HOME}"
+conan remote list
+echo "Running action-conan-create-publish for ${name} (${conanfile})"
+rm -f "\${WORKSPACE}/conan_package_output.json"
+env \\
+  "CONAN_HOME=\${CONAN_HOME}" \\
+  "INPUT_CONANFILE_PATH=${conanfile}" \\
+  "INPUT_REMOTE_USERNAME=svc_gsdk" \\
+  "INPUT_REMOTE_NAME=${remoteName}" \\
+  "INPUT_REMOTE_URL=${remoteUrl}" \\
+  "INPUT_REMOTE_TOKEN=\${ARTIFACTORY_TOKEN}" \\
+  "INPUT_STACK_NAME=matter" \\
+  "INPUT_CREATE=true" \\
+  "INPUT_PUBLISH=true" \\
+  "INPUT_CONAN_COMMAND_OPTIONS=export-pkg" \\
+  "INPUT_PACKAGE_USER=silabs" \\
+  "INPUT_JIRA_PROJECT=MATTER" \\
+  uv run --project "${actionDir}" action-conan-create-publish
+test -f "\${WORKSPACE}/conan_package_output.json"
+echo "Wrote \${WORKSPACE}/conan_package_output.json"
+cat "\${WORKSPACE}/conan_package_output.json"
+EOF
+    """.stripIndent().trim())
+}
+
+/**
+ * Promote each package ref via action-conan-promote@v2 (uv + JFrog CLI).
+ * Requires ARTIFACTORY_TOKEN in the environment.
+ * v2 reads PACKAGE_REF / SOURCE_REMOTE_URL / DESTINATION_REMOTE_URL.
+ */
+def runActionConanPromote(String packageRefs, String sourceRemoteUrl, String destRemoteUrl, String actionDir) {
+    def jfUrl = sourceRemoteUrl.replaceAll(/^(https?:\/\/[^\/]+).*/, '$1')
+
+    sh("""
+        bash <<'EOF'
+set -euo pipefail
+export PATH="\${HOME}/.local/bin:\${PATH}"
+
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="\${HOME}/.local/bin:\${PATH}"
+fi
+uv --version
+
+# JFrog CLI (v2 action uses jfrog/setup-jfrog-cli)
+if ! command -v jf >/dev/null 2>&1; then
+  curl -fL https://install-cli.jfrog.io | sh
+  if [ -x ./jf ]; then
+    mkdir -p "\${HOME}/.local/bin"
+    mv ./jf "\${HOME}/.local/bin/jf"
+  fi
+  export PATH="\${HOME}/.local/bin:\${PATH}"
+fi
+jf --version
+
+export JF_URL='${jfUrl}'
+export JF_ACCESS_TOKEN="\${ARTIFACTORY_TOKEN}"
+
+# setup-jfrog-cli configures a server; plain env vars are not enough for jf rt cp
+jf config add matter-promote \\
+  --url="\${JF_URL}" \\
+  --access-token="\${JF_ACCESS_TOKEN}" \\
+  --interactive=false \\
+  --overwrite=true
+jf config use matter-promote
+
+for ref in ${packageRefs}; do
+  echo "Promoting: \${ref}"
+  echo "From: ${sourceRemoteUrl}"
+  echo "To:   ${destRemoteUrl}"
+  env \\
+    "PACKAGE_REF=\${ref}" \\
+    "SOURCE_REMOTE_URL=${sourceRemoteUrl}" \\
+    "DESTINATION_REMOTE_URL=${destRemoteUrl}" \\
+    "JF_URL=\${JF_URL}" \\
+    "JF_ACCESS_TOKEN=\${JF_ACCESS_TOKEN}" \\
+    uv run --no-dev --project "${actionDir}" action-conan-promote
+done
+EOF
+    """.stripIndent().trim())
+}
+
 return this
