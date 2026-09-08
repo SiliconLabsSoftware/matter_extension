@@ -37,6 +37,7 @@ component:
   - id: matter_codegen_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning
+  - id: matter_alarm_base
   - id: matter_basic_information
   - id: matter_descriptor
   - id: matter_temperature_control
