@@ -28,28 +28,25 @@ import subprocess
 import sys
 import shutil
 from dotenv import load_dotenv
-from script.package_build import prepare_package_generate, sdk_package_path_args, use_package_model
 
 class CreateApp:
     """Class for creating new Matter applications from reference projects."""
 
-    def __init__(self, build_type="cmake", use_package=None):
+    def __init__(self, build_type="cmake"):
         """Initialize CreateApp instance.
 
         Args:
             build_type: Build system type to generate (makefile, cmake, vscode)
-            use_package: Package-manager mode when True; submodule SDK paths when False
         """
         self.EXAMPLE_USAGE = (
             "python slc/sl_create_new_app.py "
             "--new_app_name <NewAppName> "
             "--reference_project_file <PathToReferenceProjectFile(.slcp or .slcw)> "
             "--silabs_board <SilabsBoard> "
-            "[--build_type <makefile|cmake|vscode>] [--use-package|--use-submodules]"
+            "[--build_type <makefile|cmake|vscode>]"
         )
         # Supported build types: makefile, cmake, vscode
         self.build_type = build_type
-        self.use_package = use_package_model(use_package)
         self.get_environment()
 
     def print_usage_and_exit(self):
@@ -176,8 +173,6 @@ class CreateApp:
             self.sisdk_root = os.getenv("SISDK_ROOT")
             self.wiseconnect_root = os.getenv("WISECONNECT_ROOT")
             self.arm_toolchain_path = os.path.join(os.getenv("ARM_GCC_DIR"))
-            if "USE_PACKAGE" in os.environ:
-                self.use_package = use_package_model()
 
         except (TypeError, AttributeError) as e:
             logging.error(f"Could not load the .env file: {e}. Run sl_setup_env.py to generate .env file")
@@ -202,33 +197,16 @@ class CreateApp:
             "vscode": "vscode",
         }
         output_type = output_map.get(self.build_type, "cmake")
-        project_dir = os.path.dirname(os.path.abspath(self.reference_project_file)) or "."
-
-        if self.use_package:
-            try:
-                prepare_package_generate(project_dir, self.silabs_chip_root)
-            except (FileNotFoundError, RuntimeError, subprocess.CalledProcessError) as e:
-                logging.error(f"Package-model prepare failed: {e}")
-                sys.exit(1)
-
         # Run slc generate to create copy of sample app at the 'new_app_name' location
         try:
             cmd = [self.slc_path, "generate"]
             cmd += ["-d", self.new_app_name, project_flag, self.reference_project_file]
-            cmd += sdk_package_path_args(
-                self.sisdk_root,
-                self.wiseconnect_root,
-                self.silabs_chip_root,
-                use_package=self.use_package,
-            )
+            cmd += ["--sdk-package-path", self.sisdk_root, "--sdk-package-path", self.wiseconnect_root, "--sdk-package-path", self.silabs_chip_root]
             cmd += ["--with", self.silabs_board, "--new-project", "--generator-timeout=180", "-o", output_type]
             logging.info(f"Running command: {' '.join(cmd)}")
             subprocess.run(cmd, check=True)
         except subprocess.CalledProcessError as e:
             logging.error(f"Error running 'slc generate': {e}")
-            sys.exit(1)
-        except ValueError as e:
-            logging.error(str(e))
             sys.exit(1)
 
 def main():
@@ -238,9 +216,6 @@ def main():
     parser.add_argument("-b", "--silabs_board", dest="silabs_board", required=False, help="Silabs board name")
     parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose (debug) logging")
     parser.add_argument("-t", "--build_type", dest="build_type", choices=["makefile", "cmake", "vscode"], default="cmake", help="Build system type to generate (makefile, cmake, vscode)")
-    mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--use-package", action="store_true", default=None, help="Use SLT packages for platform SDKs (default)")
-    mode.add_argument("--use-submodules", action="store_true", help="Use third_party SiSDK/Wi-Fi trees via --sdk-package-path")
     
     ## Deprecated
     # Accept positional arguments for backward compatibility
@@ -269,8 +244,7 @@ def main():
     # Patch sys.argv for legacy code
     sys.argv = [sys.argv[0], args.new_app_name, args.reference_project_file, args.silabs_board]
 
-    use_package = False if args.use_submodules else (True if args.use_package else None)
-    app = CreateApp(build_type=args.build_type, use_package=use_package)
+    app = CreateApp(build_type=args.build_type)
     app.validate_arguments()
     app.generate()
 

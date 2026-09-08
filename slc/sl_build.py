@@ -30,7 +30,6 @@ from pathlib import Path
 import shutil
 
 from sl_create_new_app import CreateApp
-from script.package_build import prepare_package_generate, sdk_package_path_args
 
 
 def parse_project_file(reference_project_file):
@@ -84,26 +83,10 @@ def run_slc_generate(app, slc_path, output_dir, project_flag, reference_project_
         silabs_board: Silicon Labs board name
     """
     logging.info("Generating project files with SLC...")
-    project_dir = os.path.dirname(os.path.abspath(reference_project_file)) or "."
-    if app.use_package:
-        try:
-            prepare_package_generate(project_dir, app.silabs_chip_root)
-        except (FileNotFoundError, RuntimeError, subprocess.CalledProcessError) as e:
-            logging.error(f"Package-model prepare failed: {e}")
-            sys.exit(2)
-
     cmd = [slc_path, "generate"]
     cmd += ["-d", output_dir, project_flag, reference_project_file]
-    try:
-        cmd += sdk_package_path_args(
-            app.sisdk_root,
-            app.wiseconnect_root,
-            app.silabs_chip_root,
-            use_package=app.use_package,
-        )
-    except ValueError as e:
-        logging.error(str(e))
-        sys.exit(2)
+    cmd += ["--sdk-package-path", app.sisdk_root, "--sdk-package-path", app.wiseconnect_root, 
+            "--sdk-package-path", app.silabs_chip_root]
     cmd += ["--with", silabs_board, "--generator-timeout=180", "-o", build_type]
     
     logging.info(f"Running command: {' '.join(cmd)}")
@@ -164,11 +147,6 @@ def main():
                         help="Enable verbose (debug) logging")
     parser.add_argument("-s", "--skip_gen", action="store_true",
                         help="Skip SLC project generation step and use existing build artifacts")
-    mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--use-package", action="store_true", default=None,
-                      help="Use SLT packages for platform SDKs (default)")
-    mode.add_argument("--use-submodules", action="store_true",
-                      help="Use third_party SiSDK/Wi-Fi trees via --sdk-package-path")
     # Deprecated positional arguments for backward compatibility
     parser.add_argument("args", nargs="*", help=argparse.SUPPRESS)
     args = parser.parse_args()
@@ -194,7 +172,6 @@ def main():
     silabs_board = args.silabs_board.lower()
     jobs = args.jobs if args.jobs else 13
     skip_gen = args.skip_gen
-    use_package = False if args.use_submodules else (True if args.use_package else None)
 
     # Validate reference project file exists
     if not os.path.exists(reference_project_file):
@@ -203,7 +180,7 @@ def main():
 
     # Initialize app instance for environment and board validation
     try:
-        app = CreateApp(use_package=use_package)
+        app = CreateApp()
     except SystemExit:
         logging.error("Failed to initialize application environment")
         sys.exit(1)
