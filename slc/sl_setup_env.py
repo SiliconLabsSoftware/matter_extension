@@ -28,6 +28,8 @@
  *   - `--use-package` : Package-manager mode (default): skip SiSDK/Wi-Fi submodules; platforms via SLT
  *   - `--use-submodules` : Legacy mode: sync third_party SiSDK/Wi-Fi trees for --sdk-package-path builds
  *
+ * In package mode, also exports local `matter` / `matter_app` Conan packages from `packages/`
+ * and runs `slt install matter_app/<version>@silabs` so app `pkg.slt` resolution can succeed.
  * @section output Output
  *   Generates a `.env` file in `slc/tools/` containing all required environment
  *   variables for the build system and tool configuration.
@@ -51,6 +53,7 @@ from pathlib import Path
 from script.get_zap_version import get_zap_version
 from script.package_build import (
     ensure_conan_home,
+    ensure_local_matter_packages,
     read_matter_package_version,
     submodule_sync_paths,
     use_package_model,
@@ -418,6 +421,16 @@ class MatterEnvSetup:
         if self.use_package:
             ensure_conan_home()
             logging.info("CONAN_HOME=%s", os.environ["CONAN_HOME"])
+            os.environ["SLT_EXECUTABLE"] = self.slt_cli_path
+            try:
+                self.matter_package_version = ensure_local_matter_packages(
+                    root=Path(self.silabs_chip_root),
+                    version=self.matter_package_version or None,
+                    slt=self.slt_cli_path,
+                )
+            except (FileNotFoundError, ValueError, subprocess.CalledProcessError) as e:
+                logging.error("Failed to export/install local Matter packages: %s", e)
+                sys.exit(1)
 
     def run_setup(self):
         """Execute the complete environment setup process."""

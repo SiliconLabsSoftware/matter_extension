@@ -81,6 +81,134 @@ def ensure_conan_home() -> str:
     return home
 
 
+def resolve_conan_executable() -> str:
+    """Locate the Conan CLI (env, PATH, or SLT engine install)."""
+    slt_home = Path(os.environ.get("SLT_HOME", Path.home() / ".silabs" / "slt")).expanduser()
+    engine = slt_home / "engines" / "conan" / "conan" / ("conan.exe" if os.name == "nt" else "conan")
+    candidates = [
+        os.environ.get("CONAN_EXECUTABLE", "").strip(),
+        shutil.which("conan") or "",
+        str(engine),
+    ]
+    for candidate in candidates:
+        if candidate and (os.path.isfile(candidate) or shutil.which(candidate)):
+            return candidate
+    raise FileNotFoundError(
+        "conan not found. Run slc/sl_setup_env.py (slt install conan) "
+        "or add conan to PATH / set CONAN_EXECUTABLE."
+    )
+
+
+DEFAULT_CONAN_PRERELEASE_REMOTE = "https://conan-prerelease.silabs.net/"
+
+
+def configure_conan_remotes(
+    root: Optional[Path] = None,
+    *,
+    conan: Optional[str] = None,
+    prerelease_url: str = DEFAULT_CONAN_PRERELEASE_REMOTE,
+) -> None:
+    """Apply packages/ remotes and ensure the Silabs prerelease remote exists."""
+    root = root or repo_root_from_here()
+    conan_exe = conan or resolve_conan_executable()
+    packages_dir = root / "packages"
+    if packages_dir.is_dir():
+        logging.info("Configuring Conan remotes from %s", packages_dir)
+        subprocess.run(
+            [conan_exe, "config", "install", str(packages_dir)],
+            check=True,
+        )
+    if prerelease_url:
+        logging.info("Ensuring Conan remote conan-prerelease=%s", prerelease_url)
+        subprocess.run(
+            [conan_exe, "remote", "add", "-f", "conan-prerelease", prerelease_url],
+            check=True,
+        )
+
+
+def export_matter_packages(
+    version: str,
+    root: Optional[Path] = None,
+    *,
+    conan: Optional[str] = None,
+) -> None:
+    """Export local matter and matter_app recipes into the Conan cache."""
+    root = root or repo_root_from_here()
+    conan_exe = conan or resolve_conan_executable()
+    os.environ["MATTER_PACKAGE_VERSION"] = version
+    ensure_conan_home()
+
+    for name in ("matter", "matter_app"):
+        recipe = root / "packages" / name / "conanfile.py"
+        if not recipe.is_file():
+            raise FileNotFoundError(f"Missing Conan recipe: {recipe}")
+        # Best-effort cleanup so re-exports replace prior content.
+        subprocess.run(
+            [conan_exe, "remove", f"{name}/{version}@silabs", "-c"],
+            check=False,
+        )
+        logging.info("Exporting %s/%s@silabs from %s", name, version, recipe)
+        subprocess.run(
+            [
+                conan_exe,
+                "export-pkg",
+                str(recipe),
+                f"--name={name}",
+                f"--version={version}",
+                "--user=silabs",
+            ],
+            check=True,
+            cwd=str(root),
+        )
+
+
+def install_matter_app_package(
+    version: str,
+    *,
+    slt: Optional[str] = None,
+) -> None:
+    """Install matter_app (and transitive matter / platform deps) via SLT."""
+    slt_exe = slt or resolve_slt_executable()
+    ref = f"matter_app/{version}@silabs"
+    os.environ["MATTER_PACKAGE_VERSION"] = version
+    ensure_conan_home()
+    logging.info("Installing %s via SLT", ref)
+    subprocess.run([slt_exe, "install", ref, "-e", "conan"], check=True)
+
+
+def ensure_local_matter_packages(
+    root: Optional[Path] = None,
+    version: Optional[str] = None,
+    *,
+    slt: Optional[str] = None,
+    conan: Optional[str] = None,
+) -> str:
+    """Export local matter/matter_app packages then install matter_app via SLT.
+
+    Mirrors slc/build-pkg.sh --create-package-version for package-model setup.
+    Returns the package version used.
+    """
+    root = Path(root) if root else repo_root_from_here()
+    version = (
+        version
+        or os.environ.get("MATTER_PACKAGE_VERSION", "").strip()
+        or read_matter_package_version(root)
+    ).strip()
+    if not version:
+        raise ValueError("MATTER_PACKAGE_VERSION is empty")
+
+    ensure_conan_home()
+    os.environ["MATTER_PACKAGE_VERSION"] = version
+    conan_exe = conan or resolve_conan_executable()
+    slt_exe = slt or resolve_slt_executable()
+
+    configure_conan_remotes(root, conan=conan_exe)
+    export_matter_packages(version, root=root, conan=conan_exe)
+    install_matter_app_package(version, slt=slt_exe)
+    logging.info("Local Matter packages ready: matter_app/%s@silabs", version)
+    return version
+
+
 def slt_install(project_dir: str | Path) -> None:
     """Run `slt install` so platform SDK paths land in autogen/pkg.slconf."""
     project_dir = Path(project_dir)
