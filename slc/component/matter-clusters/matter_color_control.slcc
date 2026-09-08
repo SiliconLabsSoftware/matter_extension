@@ -20,6 +20,9 @@ include:
     file_list:
       - path: codegen/color-control-server.h
       - path: color-control-server.h
+      - path: ColorControlCluster.h
+      - path: ColorControlColorState.h
+      - path: ColorControlDelegate.h
 template_contribution:
   - name: component_catalog
     value: matter_color_control

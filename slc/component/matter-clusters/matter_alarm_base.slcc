@@ -1,0 +1,24 @@
+category: Clusters|General
+description: >
+  Implementation of the Alarm Base Server Cluster.
+  The user has to enable the Alarm Base Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+id: matter_alarm_base
+package: matter
+label: Alarm Base Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_alarm_base
+source:
+  - path: third_party/matter_sdk/src/app/clusters/alarm-base-server/AlarmBaseCluster.cpp
+include:
+  - path: third_party/matter_sdk/src/app/clusters/alarm-base-server
+    file_list:
+      - path: alarm-base-cluster-objects.h
+      - path: AlarmBaseCluster.h
+      - path: Delegate.h
+template_contribution:
+  - name: component_catalog
+    value: matter_alarm_base
