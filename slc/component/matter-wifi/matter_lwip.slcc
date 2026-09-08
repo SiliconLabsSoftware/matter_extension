@@ -14,7 +14,7 @@ provides:
   - name: matter_lwip
   - name: lwip
   - name: lwip_port_freertos
-  - name: netstack_silabs_lwip_port_freertos
+  - name: silabs_lwip_port_freertos
   - name: sl_si91x_errno
 
 requires:
