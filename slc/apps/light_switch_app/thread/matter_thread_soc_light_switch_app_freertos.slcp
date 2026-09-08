@@ -33,6 +33,7 @@ component:
   - id: matter_gatt_static
   - id: matter_provision_default
   - id: matter_read_client
+  - id: matter_subscription_manager
 
   - id: matter_light_switch
   - id: app_common

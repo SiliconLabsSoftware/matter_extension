@@ -35,6 +35,7 @@ component:
   - id: matter_operational_credentials
   - id: matter_log_uart
   - id: matter_read_client
+  - id: matter_subscription_manager
 
   - id: matter
   - id: matter_platform_mg
