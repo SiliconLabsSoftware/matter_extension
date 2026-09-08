@@ -315,6 +315,7 @@ class MatterEnvSetup:
 
         cmake_bin = os.path.join(self.paths.get('cmake'), "bin")
         tools_path_entries = [
+            self.tools_folder_path,
             arm_gcc_bin,
             os.path.dirname(slc_executable),
             os.path.join(java_path, 'bin'),
@@ -337,6 +338,7 @@ class MatterEnvSetup:
                 outfile.write(f"SISDK_ROOT={self.sisdk_root}\n")
                 outfile.write(f"WISECONNECT_ROOT={self.wiseconnect_root}\n")
                 outfile.write(f"SLC_EXECUTABLE={slc_executable}\n")
+                outfile.write(f"SLT_EXECUTABLE={self.slt_cli_path}\n")
                 outfile.write(f"COMMANDER_EXECUTABLE={commander_executable}\n")
                 outfile.write(f"POST_BUILD_EXE={commander_executable}\n")
                 outfile.write(f"USE_PACKAGE={'1' if self.use_package else '0'}\n")

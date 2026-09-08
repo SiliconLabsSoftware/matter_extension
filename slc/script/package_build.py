@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Iterable, List, Optional
@@ -18,6 +19,22 @@ from typing import Iterable, List, Optional
 
 def repo_root_from_here() -> Path:
     return Path(__file__).resolve().parents[2]
+
+
+def resolve_slt_executable() -> str:
+    """Locate the SLT CLI (env, PATH, or slc/tools fallback)."""
+    candidates = [
+        os.environ.get("SLT_EXECUTABLE", "").strip(),
+        shutil.which("slt") or "",
+        str(repo_root_from_here() / "slc" / "tools" / ("slt.exe" if os.name == "nt" else "slt")),
+    ]
+    for candidate in candidates:
+        if candidate and (os.path.isfile(candidate) or shutil.which(candidate)):
+            return candidate
+    raise FileNotFoundError(
+        "slt not found. Run slc/sl_setup_env.py (installs slc/tools/slt) "
+        "or add slt to PATH / set SLT_EXECUTABLE."
+    )
 
 
 def read_matter_package_version(root: Optional[Path] = None) -> str:
@@ -72,8 +89,9 @@ def slt_install(project_dir: str | Path) -> None:
         raise FileNotFoundError(
             f"pkg.slt not found in {project_dir}. Package-model builds require pkg.slt."
         )
+    slt = resolve_slt_executable()
     logging.info("Running slt install in %s", project_dir)
-    subprocess.run(["slt", "install"], cwd=str(project_dir), check=True)
+    subprocess.run([slt, "install"], cwd=str(project_dir), check=True)
 
 
 def prepend_matter_root_to_slconf(project_dir: str | Path, matter_root: str | Path) -> None:

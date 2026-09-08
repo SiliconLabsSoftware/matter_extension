@@ -213,7 +213,7 @@ def main():
         sys.exit(1)
 
     # Validate required tools are available
-    CreateApp.validate_tools()
+    CreateApp.validate_tools(app.use_package)
 
     # Parse project file configuration
     project_flag, silabs_app, output_dir, project_path, build_type = parse_project_file(reference_project_file)

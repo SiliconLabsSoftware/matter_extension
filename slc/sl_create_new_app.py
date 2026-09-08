@@ -28,7 +28,12 @@ import subprocess
 import sys
 import shutil
 from dotenv import load_dotenv
-from script.package_build import prepare_package_generate, sdk_package_path_args, use_package_model
+from script.package_build import (
+    prepare_package_generate,
+    resolve_slt_executable,
+    sdk_package_path_args,
+    use_package_model,
+)
 
 class CreateApp:
     """Class for creating new Matter applications from reference projects."""
@@ -63,7 +68,7 @@ class CreateApp:
         return bool(tool) and (os.path.isfile(tool) or shutil.which(tool) is not None)
 
     @staticmethod
-    def validate_tools():
+    def validate_tools(use_package=None):
         """Validate that all required build tools are available on the system.
         
         This validates all tools installed by sl_setup_env.py:
@@ -72,6 +77,7 @@ class CreateApp:
         - ninja (Ninja build system)
         - commander (Simplicity Commander)
         - java (Java Runtime Environment)
+        - slt (when package model is enabled)
         
         Raises:
             SystemExit: If any required tool is not found
@@ -87,6 +93,16 @@ class CreateApp:
             (commander_exe, "commander not detected on host. Please run slc/sl_setup_env.py to install Simplicity Commander."),
             ("java", "java not detected on host. Please run slc/sl_setup_env.py to install java21.")
         ]
+
+        if use_package_model(use_package):
+            try:
+                tools.append((
+                    resolve_slt_executable(),
+                    "slt not detected on host. Please run slc/sl_setup_env.py to install slt.",
+                ))
+            except FileNotFoundError as e:
+                logging.error(str(e))
+                sys.exit(1)
         
         missing_tools = []
         for tool, error_msg in tools:
@@ -192,7 +208,7 @@ class CreateApp:
             SystemExit: If generation fails
         """
         # Validate required tools are available
-        self.validate_tools()
+        self.validate_tools(self.use_package)
         # Use appropriate build flag for sample-app/solutions
         project_flag = "-p" if self.reference_project_file.endswith('.slcp') else "-w"
         # Map build_type to slc output option
