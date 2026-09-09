@@ -28,27 +28,8 @@ jobs:
           submodules: false
 
       - name: Validate .gitmodules branch entries
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            target_branch="${{ github.base_ref }}"
-          else
-            target_branch="${{ github.ref_name }}"
-          fi
-
-          failed=0
-          for submodule in third_party/matter_sdk third_party/matter_support; do
-            branch=$(git config -f .gitmodules --get "submodule.${submodule}.branch" || true)
-            if [ -z "$branch" ]; then
-              echo "${submodule}: missing branch entry in .gitmodules"
-              failed=1
-            elif [ "$branch" != "$target_branch" ]; then
-              echo "${submodule}: branch is '${branch}', expected '${target_branch}'"
-              failed=1
-            fi
-          done
-
-          if [ "$failed" -ne 0 ]; then
-            echo "gitmodules branch validation failed"
-            exit 1
-          fi
-          echo "gitmodules branch validation passed for target branch '${target_branch}'"
+        uses: SiliconLabsSoftware/matter_build_action/.github/workflows/validate-gitmodules-branches.yaml@shared_gitmodules_action # TODO: update to tagged version after testing
+        with:
+          submodules: |
+            third_party/matter_sdk
+            third_party/matter_support
