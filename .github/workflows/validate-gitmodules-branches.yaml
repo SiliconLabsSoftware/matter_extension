@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   validate-gitmodules-branches:
-    uses: SiliconLabsSoftware/matter_build_action/.github/workflows/validate-gitmodules-branches.yaml@shared_gitmodules_action # TODO: update to tagged version after testing
+    uses: SiliconLabsSoftware/matter_build_action/.github/workflows/validate-gitmodules-branches.yml@shared_gitmodules_action # TODO: update to tagged version after testing
     with:
       submodules: |
         third_party/matter_sdk
