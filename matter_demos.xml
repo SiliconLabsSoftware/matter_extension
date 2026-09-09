@@ -220,6 +220,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_air_quality_sensor_app_series_3_freertos" label="Matter Thread - SoC Air Quality Sensor with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread air quality sensor app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Air Quality Sensor with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_air_quality_sensor_app_series_3_freertos_solution/artifact/matter_thread_soc_air_quality_sensor_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/air_quality_sensor_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_air_quality_sensor_app_freertos" label="Matter WiFi - SoC Air Quality Sensor FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi air quality sensor app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Air Quality Sensor FreeRTOS app"/>
@@ -516,6 +526,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_closure_app_series_3_freertos_solution/artifact/matter_thread_soc_closure_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/closure_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_closure_app_series_3_freertos" label="Matter Thread - SoC Closure with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread closure app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Closure with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_closure_app_series_3_freertos_solution/artifact/matter_thread_soc_closure_app_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/closure_app/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -820,6 +840,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_evse_app_series_3_freertos" label="Matter Thread - SoC EVSE with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread EVSE app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC EVSE with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_evse_app_series_3_freertos_solution/artifact/matter_thread_soc_evse_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/evse_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_evse_app_freertos" label="Matter WiFi - SoC EVSE FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi EVSE app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC EVSE FreeRTOS app"/>
@@ -1116,6 +1146,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_fan_control_app_series_3_freertos_solution/artifact/matter_thread_soc_fan_control_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/fan_control_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_fan_control_app_series_3_freertos" label="Matter Thread - SoC Fan Control with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread fan control app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Fan Control with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_fan_control_app_series_3_freertos_solution/artifact/matter_thread_soc_fan_control_app_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/fan_control_app/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -1480,6 +1520,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_light_switch_app_series_3_freertos" label="Matter Thread - SoC Light Switch with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread light switch app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Light Switch with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_light_switch_app_series_3_freertos_solution/artifact/matter_thread_soc_light_switch_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/light_switch_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_light_switch_app_freertos" label="Matter WiFi - SoC Light Switch FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi light switch app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Light Switch FreeRTOS app"/>
@@ -1790,6 +1840,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_lighting_app_series_3_freertos" label="Matter Thread - SoC Lighting with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread lighting app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Lighting with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_lighting_app_series_3_freertos_solution/artifact/matter_thread_soc_lighting_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/lighting_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd4187c.demo.matter_thread_soc_lighting_app_trustzone_series_2_freertos" label="Matter Thread - SoC Lighting TrustZone with external Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Thread lighting app with TrustZone and external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Lighting TrustZone with external Bootloader FreeRTOS app"/>
@@ -2096,6 +2156,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_lock_app_series_3_freertos_solution/artifact/matter_thread_soc_lock_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/lock_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_lock_app_series_3_freertos" label="Matter Thread - SoC Lock with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread door lock app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Lock with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_lock_app_series_3_freertos_solution/artifact/matter_thread_soc_lock_app_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/lock_app/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -2460,6 +2530,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_multi_sensor_app_series_3_freertos" label="Matter Thread - SoC Multi Sensor with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread multi-sensor app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Multi Sensor with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_multi_sensor_app_series_3_freertos_solution/artifact/matter_thread_soc_multi_sensor_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/multi_sensor_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_multi_sensor_app_freertos" label="Matter WiFi - SoC Multi Sensor FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi multi-sensor app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Multi Sensor FreeRTOS app"/>
@@ -2756,6 +2836,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_onoff_plug_app_series_3_freertos_solution/artifact/matter_thread_soc_onoff_plug_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/onoff_plug_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_onoff_plug_app_series_3_freertos" label="Matter Thread - SoC Onoff Plug with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread on/off plug app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Onoff Plug with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_onoff_plug_app_series_3_freertos_solution/artifact/matter_thread_soc_onoff_plug_app_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/onoff_plug_app/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -3140,6 +3230,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_platform_template_series_3_freertos" label="Matter Thread - SoC Platform Template with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread platform template app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Platform Template with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_platform_template_series_3_freertos_solution/artifact/matter_thread_soc_platform_template_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/platform_template/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_platform_template_freertos" label="Matter WiFi - SoC Platform Template FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi platform template app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Platform Template FreeRTOS app"/>
@@ -3440,6 +3540,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_rangehood_app_series_3_freertos" label="Matter Thread - SoC Rangehood with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread rangehood app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Rangehood with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_rangehood_app_series_3_freertos_solution/artifact/matter_thread_soc_rangehood_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/rangehood_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2605b.demo.matter_wifi_soc_rangehood_app_freertos" label="Matter WiFi - SoC Rangehood FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Wi-Fi rangehood app</model:description>
     <property key="demos.blurb" value="Matter WiFi - SoC Rangehood FreeRTOS app"/>
@@ -3736,6 +3846,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_refrigerator_app_series_3_freertos_solution/artifact/matter_thread_soc_refrigerator_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/refrigerator_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_refrigerator_app_series_3_freertos" label="Matter Thread - SoC Refrigerator with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread refrigerator app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Refrigerator with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_refrigerator_app_series_3_freertos_solution/artifact/matter_thread_soc_refrigerator_app_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/refrigerator_app/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -4060,6 +4180,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_thermostat_series_3_freertos_concurrent" label="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS Concurrent">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread thermostat app with internal bootloader Concurrent</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS Concurrent app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_thermostat_series_3_freertos_solution_cmp-concurrent/artifact/matter_thread_soc_thermostat_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd1019a.demo.matter_thread_soc_thermostat_series_3_freertos" label="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Thread thermostat app with internal bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS app"/>
@@ -4086,6 +4216,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_thermostat_series_3_freertos_solution/artifact/matter_thread_soc_thermostat_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_thermostat_series_3_freertos" label="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread thermostat app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Thermostat with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_thermostat_series_3_freertos_solution/artifact/matter_thread_soc_thermostat_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/thermostat/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
@@ -4540,6 +4680,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_window_app_series_3_freertos" label="Matter Thread - SoC Window App with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter over Thread window covering app with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Window App with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_window_app_series_3_freertos_solution/artifact/matter_thread_soc_window_app_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/window_app/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd4186c.demo.matter_wifi_917_ncp_window_app_freertos_brd4357a" label="Matter WiFi - 917 NCP Window App FreeRTOS brd4357a">
     <model:description>Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi window covering app with internal bootloader</model:description>
     <property key="demos.blurb" value="Matter WiFi - 917 NCP Window App FreeRTOS app"/>
@@ -4990,6 +5140,16 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_zigbee_light_series_3_freertos_sequential" label="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS Sequential">
+    <model:description>Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread with internal bootloader Sequential</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS Sequential app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_zigbee_light_series_3_freertos_solution_sequential/artifact/matter_thread_soc_zigbee_light_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/zigbee_light/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd1019a.demo.matter_thread_soc_zigbee_light_series_3_freertos" label="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread with internal bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS app"/>
@@ -5016,6 +5176,16 @@
     <property key="core.partCompatibility" value=".*"/>
     <property key="core.boardCompatibility" value="brd4407a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4407a/matter_thread_soc_zigbee_light_series_3_freertos_solution/artifact/matter_thread_soc_zigbee_light_series_3_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/zigbee_light/thread/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_thread_soc_zigbee_light_series_3_freertos" label="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS">
+    <model:description>Demonstrates a sample implementation of a Matter and Zigbee multiprotocol lighting app over Thread with internal bootloader</model:description>
+    <property key="demos.blurb" value="Matter Thread - SoC Zigbee Light with internal Bootloader FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.9.2/demos/brd4408a/matter_thread_soc_zigbee_light_series_3_freertos_solution/artifact/matter_thread_soc_zigbee_light_series_3_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/zigbee_light/thread/README.md"/>
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
