@@ -18,6 +18,8 @@ requires:
     condition: [matter_thread]
   - name: matter_zigbee_debug
     condition: [matter_zigbee_multiprotocol_common]
+  - name: matter_subscription_manager
+    condition: [matter_read_client]
 
 include:
   - path: third_party/matter_sdk/src/lib/shell

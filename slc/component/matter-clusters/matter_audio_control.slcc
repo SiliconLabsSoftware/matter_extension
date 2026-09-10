@@ -1,0 +1,27 @@
+category: Clusters|Media
+description: >
+  Implementation of the Audio Control Server Cluster.
+  The user has to enable the Audio Control Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+id: matter_audio_control
+package: matter
+label: Audio Control Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_audio_control
+source:
+  - path: third_party/matter_sdk/src/app/clusters/audio-control-server/AudioControlCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/audio-control-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
+include:
+  - path: third_party/matter_sdk/src/app/clusters/audio-control-server
+    file_list:
+      - path: AudioControlCluster.h
+      - path: AudioControlDelegate.h
+      - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
+template_contribution:
+  - name: component_catalog
+    value: matter_audio_control

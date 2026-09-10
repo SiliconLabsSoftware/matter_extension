@@ -30,6 +30,12 @@
     ]
   },
   {
+    "clusterCode": "alarm base-server",
+    "value": [
+      "%extension-matter%matter_alarm_base"
+    ]
+  },
+  {
     "clusterCode": "ambient context sensing-server",
     "value": [
       "%extension-matter%matter_ambient_context_sensing"
@@ -45,6 +51,12 @@
     "clusterCode": "application launcher-server",
     "value": [
       "%extension-matter%matter_application_launcher"
+    ]
+  },
+  {
+    "clusterCode": "audio control-server",
+    "value": [
+      "%extension-matter%matter_audio_control"
     ]
   },
   {
@@ -138,6 +150,12 @@
     ]
   },
   {
+    "clusterCode": "commissioning proxy-server",
+    "value": [
+      "%extension-matter%matter_commissioning_proxy"
+    ]
+  },
+  {
     "clusterCode": "commodity metering-server",
     "value": [
       "%extension-matter%matter_commodity_metering"
@@ -222,6 +240,18 @@
     ]
   },
   {
+    "clusterCode": "electrical alarm-server",
+    "value": [
+      "%extension-matter%matter_electrical_alarm"
+    ]
+  },
+  {
+    "clusterCode": "electrical distribution-server",
+    "value": [
+      "%extension-matter%matter_electrical_distribution"
+    ]
+  },
+  {
     "clusterCode": "electrical energy measurement-server",
     "value": [
       "%extension-matter%matter_electrical_energy_measurement"
@@ -237,6 +267,12 @@
     "clusterCode": "electrical power measurement-server",
     "value": [
       "%extension-matter%matter_electrical_power_measurement"
+    ]
+  },
+  {
+    "clusterCode": "electrical protection alarm-server",
+    "value": [
+      "%extension-matter%matter_electrical_protection_alarm"
     ]
   },
   {
@@ -600,7 +636,7 @@
     ]
   },
   {
-    "clusterCode": "unit testing-server",
+    "clusterCode": "test hidden manufacturer specific-server",
     "value": [
       "%extension-matter%matter_test_cluster"
     ]

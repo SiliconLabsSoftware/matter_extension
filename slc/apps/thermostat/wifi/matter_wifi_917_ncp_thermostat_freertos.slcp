@@ -25,6 +25,7 @@ component:
   - id: matter_ota_support
   - id: matter_crypto
   - id: matter_read_client
+  - id: matter_subscription_manager
 
   - id: matter_efr32_ncp
   - id: matter_wifi
@@ -106,6 +107,11 @@ include:
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/include
     file_list:
       - path: thermostat-delegate-impl.h
+      - path: thermostat-hold-delegate-impl.h
+      - path: thermostat-occupancy-delegate-impl.h
+      - path: thermostat-presets-delegate-impl.h
+      - path: thermostat-setpoints-delegate-impl.h
+      - path: thermostat-suggestions-delegate-impl.h
     directory: include
 
 source:
@@ -114,6 +120,16 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-hold-delegate-impl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-occupancy-delegate-impl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-presets-delegate-impl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-setpoints-delegate-impl.cpp
+    directory: src
+  - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-suggestions-delegate-impl.cpp
     directory: src
 
 define:

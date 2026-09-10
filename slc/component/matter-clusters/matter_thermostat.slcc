@@ -12,20 +12,36 @@ metadata:
 provides:
   - name: matter_thermostat
 source:
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/AttributeAccessorShim.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/Setpoint.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/SetpointAttributes.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/Setpoints.cpp
-  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatCluster.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterAtomic.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterAttributes.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterBase.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterCoolingSetpoints.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterEvents.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterHeatingSetpoints.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterHold.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterOccupancy.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterPresets.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterRead.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSetpoints.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSetpointsBase.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSuggestions.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterWrite.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatDelegate.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server
     file_list:
+      - path: AttributeAccessorShim.h
+      - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
+      - path: DelegateResolution.h
       - path: PresetStructWithOwnedMembers.h
       - path: Setpoint.h
       - path: SetpointAttributes.h
@@ -34,9 +50,17 @@ include:
       - path: Setpoints.h
       - path: Temperature.h
       - path: ThermostatCluster.h
-      - path: ThermostatClusterEvents.h
+      - path: ThermostatClusterAtomic.h
+      - path: ThermostatClusterAttributes.h
+      - path: ThermostatClusterBase.h
+      - path: ThermostatClusterCoolingSetpoints.h
+      - path: ThermostatClusterHeatingSetpoints.h
+      - path: ThermostatClusterHold.h
+      - path: ThermostatClusterOccupancy.h
       - path: ThermostatClusterPresets.h
       - path: ThermostatClusterSetpoints.h
+      - path: ThermostatClusterSetpointsBase.h
+      - path: ThermostatClusterSuggestions.h
       - path: ThermostatDelegate.h
       - path: ThermostatSuggestionStructWithOwnedMembers.h
 template_contribution:

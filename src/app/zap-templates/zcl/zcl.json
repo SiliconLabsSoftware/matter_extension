@@ -88,7 +88,6 @@
         "joint-fabric-datastore-cluster.xml",
         "joint-fabric-administrator-cluster.xml",
         "keypad-input-cluster.xml",
-        "laundry-washer-controls-cluster.xml",
         "laundry-washer-mode-cluster.xml",
         "laundry-dryer-controls-cluster.xml",
         "level-control-cluster.xml",
@@ -208,6 +207,29 @@
             "HoldTimeLimits",
             "ObjectCountConfig"
         ],
+        "Audio Control": [
+            "ClusterRevision",
+            "FeatureMap",
+            "SoftMuted",
+            "PhysicallyMuted",
+            "Volume",
+            "MinDeviceVolume",
+            "MaxDeviceVolume",
+            "MaxDeviceVolumeDB",
+            "MaxUserVolume",
+            "DefaultStepSize",
+            "SetVolumeUnmutePolicy",
+            "IncreaseVolumeUnmutePolicy",
+            "IncreaseVolumeUnmuteVolume",
+            "DecreaseVolumeUnmutePolicy",
+            "StartUpMuted",
+            "StartUpVolume",
+            "Bass",
+            "Mid",
+            "Treble",
+            "MinCorrection",
+            "MaxCorrection"
+        ],
         "Basic Information": [
             "FeatureMap",
             "ClusterRevision",
@@ -306,7 +328,8 @@
             "Currency",
             "CurrentPrice",
             "PriceForecast",
-            "FeatureMap"
+            "FeatureMap",
+            "ClusterRevision"
         ],
         "Commodity Tariff": [
             "TariffInfo",
@@ -468,6 +491,11 @@
         "Joint Fabric Datastore": [
             "Status"
         ],
+        "Laundry Dryer Controls": [
+            "ClusterRevision",
+            "SelectedDrynessLevel",
+            "FeatureMap"
+        ],
         "Laundry Washer Controls": [
             "ClusterRevision",
             "SpinSpeeds",
@@ -516,7 +544,8 @@
             "CommissionedFabrics",
             "CurrentFabricIndex",
             "FeatureMap",
-            "ClusterRevision"
+            "ClusterRevision",
+            "PQCDeviceAttestationProfile"
         ],
         "OTA Software Update Requestor": [
             "UpdatePossible",
@@ -684,6 +713,9 @@
             "SupportedTemperatureLevels",
             "ClusterRevision"
         ],
+        "Dishwasher Alarm": [
+            "ClusterRevision"
+        ],
         "Dishwasher Mode": [
             "SupportedModes",
             "CurrentMode",
@@ -693,6 +725,13 @@
             "SupportedModes",
             "CurrentMode",
             "FeatureMap"
+        ],
+        "Mode Select": [
+            "ClusterRevision",
+            "SupportedModes",
+            "CurrentMode",
+            "StartUpMode",
+            "OnMode"
         ],
         "Microwave Oven Control": [
             "CookTime",
@@ -716,6 +755,9 @@
             "SupportedModes",
             "CurrentMode",
             "FeatureMap"
+        ],
+        "Refrigerator Alarm": [
+            "ClusterRevision"
         ],
         "Refrigerator And Temperature Controlled Cabinet Mode": [
             "SupportedModes",
