@@ -47,7 +47,9 @@ jobs:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+                  # Reusable callers still expose the parent event (push/PR/dispatch),
+                  # not "workflow_call". Prefer an explicit input when present.
+                  if [[ -n "${{ inputs.build-type }}" ]]; then
                       echo "build-type=${{ inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
@@ -56,6 +58,8 @@ jobs:
                           echo "build-type=${{ github.event.inputs.build-type }}" >> $GITHUB_OUTPUT
                       fi
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
+                  else
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
 
