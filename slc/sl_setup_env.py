@@ -38,11 +38,11 @@ import argparse
 import logging
 import os
 import sys
-import dload
 import stat
 import subprocess
 import shutil
 import re
+import urllib.request
 from datetime import datetime
 from zipfile import ZipFile
 from pathlib import Path
@@ -138,13 +138,38 @@ class MatterEnvSetup:
                 sys.exit(1)
         tools.mkdir(parents=True, exist_ok=True)
 
+    def _download_file(self, url, destination):
+        """Download *url* to *destination* using only the standard library."""
+        with urllib.request.urlopen(url) as response, open(destination, "wb") as output:
+            shutil.copyfileobj(response, output)
+
+    def _download_and_extract_zip(self, url, destination):
+        """Download a ZIP archive and safely extract it into *destination*."""
+        destination = Path(destination)
+        destination.mkdir(parents=True, exist_ok=True)
+        zip_path = destination.with_suffix(".zip")
+
+        try:
+            self._download_file(url, zip_path)
+            destination_root = destination.resolve()
+            with ZipFile(zip_path, "r") as archive:
+                for item in archive.infolist():
+                    target = (destination_root / item.filename).resolve()
+                    if not target.is_relative_to(destination_root):
+                        raise RuntimeError(
+                            f"Unsafe path in downloaded ZIP archive: {item.filename}"
+                        )
+                archive.extractall(destination_root)
+        finally:
+            zip_path.unlink(missing_ok=True)
+
     def download_and_extract_slt_cli(self):
         """Download and extract SLT CLI tool."""
         if not os.path.isfile(self.slt_cli_path):
             logging.info(f"Downloading and unzipping slt-cli...")
             slt_zip_path = os.path.join(self.tools_folder_path, "slt.zip")
             try:
-                dload.save(self.slt_cli_url, slt_zip_path)
+                self._download_file(self.slt_cli_url, slt_zip_path)
                 with ZipFile(slt_zip_path, 'r') as zObject:
                     zObject.extractall(path=self.tools_folder_path)
                 os.remove(slt_zip_path)
@@ -176,18 +201,18 @@ class MatterEnvSetup:
             try:
                 if self.platform == "darwin":
                     zap_zip = self.zap_path + ".zip"
-                    dload.save(zap_url, zap_zip)
+                    self._download_file(zap_url, zap_zip)
                     subprocess.run(["unzip", zap_zip, "-d", self.zap_path], check=True)
                     os.remove(zap_zip)
                     self._make_executable(zap_cli_path)
                     zap_root = os.path.join(self.zap_path, "zap.app", "Contents", "MacOS", "zap")
                     self._make_executable(zap_root)
                 elif self.platform == "linux":
-                    dload.save_unzip(zap_url, os.path.join(self.tools_folder_path, "zap"), delete_after=True)
+                    self._download_and_extract_zip(zap_url, self.zap_path)
                     self._make_executable(zap_cli_path)
                     self._make_executable(os.path.join(self.tools_folder_path, "zap", "zap"))
                 elif self.platform == "win32":
-                    dload.save_unzip(zap_url, os.path.join(self.tools_folder_path, "zap"), delete_after=True)
+                    self._download_and_extract_zip(zap_url, self.zap_path)
             except Exception as e:
                 logging.error(f"Failed to download/extract zap: {e}")
                 sys.exit(1)
