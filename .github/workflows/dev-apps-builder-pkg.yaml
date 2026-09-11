@@ -7,10 +7,6 @@ on:
                 required: false
                 type: string
                 default: standard
-            use-package-cache:
-                required: false
-                type: boolean
-                default: false
             package-version:
                 required: false
                 type: string
@@ -46,13 +42,14 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
             build-type: ${{ steps.set-build-type.outputs.build-type }}
+            run-sqa: ${{ steps.set-run-sqa.outputs.run-sqa }}
         steps:
             - name: Set build-type based on event
               id: set-build-type
               run: |
-                  if [[ "${{ inputs.use-package-cache }}" == "true" ]]; then
-                      echo "build-type=${{ inputs.build-type }}" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.event_name }}" == "workflow_call" ]]; then
+                  # Reusable callers still expose the parent event (push/PR/dispatch),
+                  # not "workflow_call". Prefer an explicit input when present.
+                  if [[ -n "${{ inputs.build-type }}" ]]; then
                       echo "build-type=${{ inputs.build-type }}" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
                       if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" =~ ^release_ ]]; then
@@ -62,7 +59,25 @@ jobs:
                       fi
                   elif [[ "${{ github.event_name }}" == "pull_request" ]]; then
                       echo "build-type=standard" >> $GITHUB_OUTPUT
+                  else
+                      echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
+
+            # Capture weekday at workflow start (America/New_York). Evening crons finish
+            # after midnight, so later jobs must not re-check "today".
+            - name: Decide whether to build SQA apps
+              id: set-run-sqa
+              run: |
+                  day=$(TZ=America/New_York date +%u)  # 1=Mon ... 4=Thu ... 7=Sun
+                  ref="${{ github.ref_name }}"
+                  if [[ "$ref" == SL_compatibility* ]]; then
+                    echo "run-sqa=true" >> "$GITHUB_OUTPUT"
+                  elif [[ "$ref" == release_* && "$day" == "4" ]]; then
+                    echo "run-sqa=true" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "run-sqa=false" >> "$GITHUB_OUTPUT"
+                  fi
+                  echo "ref=$ref day=$day (America/New_York) run-sqa=$(grep '^run-sqa=' "$GITHUB_OUTPUT" | cut -d= -f2)"
 
     cache-tools:
         runs-on: ubuntu-latest
@@ -84,7 +99,6 @@ jobs:
         with:
             example-app: "lighting_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             trustzone-support: true
@@ -96,7 +110,6 @@ jobs:
         with:
             example-app: "air_quality_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -107,7 +120,6 @@ jobs:
         with:
             example-app: "light_switch_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -118,7 +130,6 @@ jobs:
         with:
             example-app: "lock_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
@@ -130,7 +141,6 @@ jobs:
         with:
             example-app: "thermostat"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
@@ -142,7 +152,6 @@ jobs:
         with:
             example-app: "window_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
@@ -154,7 +163,6 @@ jobs:
         with:
             example-app: "fan_control_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
@@ -166,7 +174,6 @@ jobs:
         with:
             example-app: "closure_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -177,7 +184,6 @@ jobs:
         with:
             example-app: "multi_sensor_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -188,7 +194,6 @@ jobs:
         with:
             example-app: "onoff_plug_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -199,7 +204,6 @@ jobs:
         with:
             example-app: "refrigerator_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -210,7 +214,6 @@ jobs:
         with:
             example-app: "evse_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: true
@@ -222,7 +225,6 @@ jobs:
         with:
             example-app: "performance_test_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: false
@@ -234,7 +236,6 @@ jobs:
        with:
            example-app: "zigbee_light"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
-           use-package-cache: ${{ inputs.use-package-cache }}
            package-version: ${{ inputs.package-version }}
            conan-cache-key: ${{ inputs.conan-cache-key }}
            mg24-internal-support: false
@@ -248,7 +249,6 @@ jobs:
        with:
            example-app: "wake_on_matter"
            build-type: ${{ needs.set-build-type.outputs.build-type }}
-           use-package-cache: ${{ inputs.use-package-cache }}
            package-version: ${{ inputs.package-version }}
            conan-cache-key: ${{ inputs.conan-cache-key }}
            mgm24-support: false
@@ -267,7 +267,6 @@ jobs:
         with:
             example-app: "oven_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
             thread-support: false
@@ -279,7 +278,6 @@ jobs:
         with:
             example-app: "rangehood_app"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
@@ -290,13 +288,11 @@ jobs:
         with:
             example-app: "platform_template"
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
-        if: ${{ inputs.use-package-cache }}
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/builder-pkg.yaml
         with:
@@ -373,14 +369,15 @@ jobs:
 
     build-sqa-apps:
         name: Build SQA apps
-        needs: wait-for-test-results
-        if: ${{ startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
+        needs:
+            - wait-for-test-results
+            - set-build-type
+        if: ${{ needs.set-build-type.outputs.run-sqa == 'true' }}
         permissions:
             contents: read
             actions: write
         uses: ./.github/workflows/sqa-apps-builder-pkg.yaml
         with:
-            use-package-cache: ${{ inputs.use-package-cache }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
 

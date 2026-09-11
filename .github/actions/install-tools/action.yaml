@@ -7,7 +7,9 @@ runs:
     - name: Set CONAN_HOME
       shell: bash
       run: |
-        echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
+        CONAN_HOME="${HOME}/.silabs/slt/installs/conan"
+        echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+        mkdir -p "${CONAN_HOME}"
 
     - name: Install ZAP
       shell: bash
@@ -29,11 +31,19 @@ runs:
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.conan-path }}" >> $GITHUB_PATH
+        echo "${HOME}/.silabs/slt/engines/conan/conan" >> $GITHUB_PATH
     
     - name: Update SLT
       shell: bash
       run: |
         slt update --self
+
+    - name: Install Conan
+      shell: bash
+      run: |
+        set -euo pipefail
+        export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+        slt install conan
     
     - name: Install slc-cli
       shell: bash
