@@ -117,7 +117,7 @@ class MatterEnvSetup:
             self._platform = self.platform
             self.__platform = self.platform
         else:
-            logging.error(f"ERROR: Platform {platform} is not supported")
+            logging.error(f"ERROR: Platform {self.platform} is not supported")
             sys.exit(1)
         self.slt_cli_url = f"https://www.silabs.com/documents/public/software/slt-cli-1.2.2-{self.__platform}-{self.host_arch}.zip"
         if self.platform == "win32":
@@ -169,7 +169,7 @@ class MatterEnvSetup:
             install_without_checking: Force download even if tool exists
         """
         # Using Non-SLT zap as we often need newer zap than the one from SLT
-        zap_url = f"https://github.com/project-chip/zap/releases/download/{self.MINIMUM_ZAP_REQUIRED}/zap-{self._platform}-x64.zip"
+        zap_url = f"https://github.com/project-chip/zap/releases/download/{self.MINIMUM_ZAP_REQUIRED}/zap-{self._platform}-{self.host_arch}.zip"
         zap_cli_path = os.path.join(self.zap_path, "zap-cli")
         zap_exe_path = os.path.join(self.zap_path, "zap.exe")
 
