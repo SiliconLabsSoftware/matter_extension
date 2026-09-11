@@ -266,6 +266,7 @@ components:
   - matter_sparkfun_air_quality_sensor
   - matter_stack_monitoring
   - matter_static_generated_zap_content
+  - matter_subscription_manager
   - matter_subscription_persistence
   - matter_switch
   - matter_synchronized_sed
@@ -812,6 +813,7 @@ extra_files:
   - slc/component/matter-core-sdk/siwx917.slcc
   - slc/component/matter-core-sdk/siwx917_common.slcc
   - slc/component/matter-core-sdk/siwx917_tinycrypt.slcc
+  - slc/component/matter-core-sdk/subscription_manager.slcc
   - slc/component/matter-core-sdk/syscalls_stub.slcc
   - slc/component/matter-core-sdk/test_paa_store.slcc
   - slc/component/matter-core-sdk/text_only_logging.slcc
