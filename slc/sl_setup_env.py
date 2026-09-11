@@ -120,7 +120,7 @@ class MatterEnvSetup:
             logging.error(f"ERROR: Platform {platform} is not supported")
             sys.exit(1)
         self.slt_cli_url = f"https://www.silabs.com/documents/public/software/slt-cli-1.2.2-{self.__platform}-{self.host_arch}.zip"
-        if platform == "win32":
+        if self.platform == "win32":
             self.slt_cli_path = os.path.join(self.tools_folder_path, "slt.exe")
         else:
             self.slt_cli_path = os.path.join(self.tools_folder_path, "slt")
