@@ -787,6 +787,9 @@ extra_files:
   - tools/pymattertool/src/utils.py
   - upgrade.slcu
   # matter_sdk paths
+  - third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/gatt_configuration.btconf
+  - third_party/matter_sdk/src/platform/silabs/efr32/BLEChannelImpl.h
+  - third_party/matter_sdk/src/platform/silabs/efr32/BLEChannelImpl.cpp
   - third_party/matter_sdk/src/app/AppConfig.h
   - third_party/matter_sdk/src/app/AttributeAccessInterface.h
   - third_party/matter_sdk/src/app/AttributeAccessInterfaceCache.h
