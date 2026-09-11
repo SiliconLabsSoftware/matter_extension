@@ -252,6 +252,28 @@ pipeline
                 }
             }
         }
+        stage('Compare Code Size') {
+            when {
+                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+            }
+            steps {
+                script {
+                    // last-green is informational only; baseline is newest prior
+                    // build that has code-size data for each application
+                    def previousSuccessful = currentBuild.previousSuccessfulBuild
+                    def previousBuildNumber = previousSuccessful?.number
+                    if (previousBuildNumber == null) {
+                        echo "No previous successful Jenkins build. Comparing against newest prior code-size records if available."
+                    } else {
+                        echo "Jenkins last-green build for reference: ${previousBuildNumber}"
+                    }
+
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                        pipelineFunctions.compare_code_size_analysis(previousBuildNumber)
+                    }
+                }
+            }
+        }
         stage('Trigger SQA Smoke Pipeline')
         {
             when {
