@@ -104,17 +104,16 @@ class MatterEnvSetup:
 
     def set_platform_vars(self):
         """Set platform-specific variables and URLs for tool downloads."""
-        platform = sys.platform
-        self.platform = platform
+        self.platform = sys.platform
         self.host_arch = "x64"
-        if platform == "win32":
+        if self.platform == "win32":
             self._platform = "win"
             self.__platform = "windows"
-        elif platform == "darwin":
+        elif self.platform == "darwin":
             self._platform = "mac"
             self.__platform = "mac"
             self.host_arch = "arm64" if machine() == "arm64" else "x64"
-        elif platform == "linux":
+        elif self.platform == "linux":
             self._platform = platform
             self.__platform = platform
         else:
