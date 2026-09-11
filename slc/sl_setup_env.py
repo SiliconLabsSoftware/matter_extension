@@ -114,8 +114,8 @@ class MatterEnvSetup:
             self.__platform = "mac"
             self.host_arch = "arm64" if machine() == "arm64" else "x64"
         elif self.platform == "linux":
-            self._platform = platform
-            self.__platform = platform
+            self._platform = self.platform
+            self.__platform = self.platform
         else:
             logging.error(f"ERROR: Platform {platform} is not supported")
             sys.exit(1)
