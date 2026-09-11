@@ -1,29 +1,24 @@
 name: Check OTA Flash Space
 
 on:
-  pull_request:
-    branches:
-      - main
-      - "release_*"
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      package-version:
+        description: Version of matter_app to restore and build.
+        required: true
+        type: string
+      conan-cache-key:
+        description: Cache key created by the Matter package producer.
+        required: true
+        type: string
 
 permissions:
   contents: read
   actions: write
 
 jobs:
-  cache-sdks:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v7
-        with:
-          submodules: false
-      - uses: ./.github/actions/cache-sdks
-
   ota-check:
     name: OTA flash check (${{ matrix.display }})
-    needs: cache-sdks
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -54,55 +49,52 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-        with:
-          submodules: false
-
-      - name: Initialize non-SDK submodules
-        run: |
-          set -euo pipefail
-          mapfile -t paths < <(
-            git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
-              | awk '{print $2}' \
-              | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
-          )
-          git submodule update --init --depth 1 -- "${paths[@]}"
-
-      - name: Cache SDKs
-        uses: ./.github/actions/cache-sdks
 
       - name: Cache tools
         uses: ./.github/actions/cache-tools
 
+      - name: Restore Matter package cache
+        uses: ./.github/actions/restore-and-install-matter-packages
+        with:
+          conan-cache-key: ${{ inputs.conan-cache-key }}
+          package-version: ${{ inputs.package-version }}
+
       - name: Build window-app
         if: matrix.id == 'mg24'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
           example-app: window_app
-          build-script: "./slc/build.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
-      - name: Build lighting-app 
+      - name: Build lighting-app
         if: matrix.id == 'mg26'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
           example-app: lighting_app
-          build-script: "./slc/build.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
       - name: Build zigbee-matter-light
         if: matrix.id == 'mg26' || matrix.id == 'mgm26'
         uses: SiliconLabsSoftware/matter_build_action@v2
+        env:
+          MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
           example-app: zigbee_light
-          build-script: "./slc/build.sh"
+          build-script: "$(slt where matter_app)/build_app.sh"
           output-directory: " "
           build-type: standard
 
@@ -135,12 +127,20 @@ jobs:
             exit 1
           fi
 
-          IMAGES=$(find out -type f -name "*.s37" 2>/dev/null)
+          MATTER_APP="$(slt where matter_app)"
+          IMAGES=$(find "${MATTER_APP}" -type f -name "*.s37" -path "*/out/*" ! -path "*/copy-sources/*" 2>/dev/null)
+
+          if [[ -z "${IMAGES// /}" ]]; then
+            echo "ERROR: no .s37 images found under ${MATTER_APP}/**/out/**" >&2
+            find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+            exit 1
+          fi
 
           FAIL=0
 
           for IMAGE in $IMAGES; do
-            board=$(echo "$IMAGE" | cut -d'/' -f2)
+            out_relative="${IMAGE#*/out/}"
+            board="${out_relative%%/*}"
             [[ -z "$board" ]] && continue
 
             echo ""
@@ -149,11 +149,11 @@ jobs:
             app_name="${board}-$(basename "$IMAGE" .s37)"
             pushd /tmp >/dev/null
 
-            commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            commander gbl create "temporary-${app_name}.gbl" --app "$IMAGE" 1>/dev/null
             file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
             rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
 
-            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
+            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$IMAGE" 1>/dev/null
             file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
             rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
 

@@ -2,14 +2,25 @@ name: Build SQA apps
 
 on:
     workflow_call:
+        inputs:
+            package-version:
+                required: false
+                type: string
+                default: ""
+            conan-cache-key:
+                required: false
+                type: string
+                default: ""
 
 jobs:
     build_lock_app:
         name: Build Lock App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "lock_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: true
             ncp-917-dual-stack-support: true
             mgm24-internal-support: false
@@ -17,10 +28,12 @@ jobs:
 
     build_lighting_app:
         name: Build Lighting App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "lighting_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-internal-support: false
             mg26-internal-support: false
             mgm24-internal-support: false
@@ -28,16 +41,18 @@ jobs:
 
     build_window_app:
         name: Build Window App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "window_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             sixg301-support: false
 
   #  build_dishwasher_app:
   #      name: Build Dishwasher App
-  #      uses: ./.github/workflows/platform-builder.yaml
+  #      uses: ./.github/workflows/platform-builder-pkg.yaml
   #      with:
   #          example-app: "dishwasher_app"
   #          build-type: "custom-sqa"
@@ -53,10 +68,12 @@ jobs:
 
     build_thermostat_app:
         name: Build Thermostat App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "thermostat"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             ncp-917-support: false
             mg24-support: false
             mg24-internal-support: false
@@ -70,20 +87,24 @@ jobs:
 
     build_light_switch_app:
         name: Build Light Switch App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "light_switch_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             mgm24-internal-support: false
             mgm26-internal-support: false
 
     build_multi_sensor_app:
         name: Build Multi Sensor App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "multi_sensor_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-support: false
             mgm24-support: false
             mgm24-internal-support: false
@@ -92,10 +113,12 @@ jobs:
 
     build_zigbee_light:
         name: Build Zigbee Light
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "zigbee_light"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-support: false
             mg24-internal-support: false
             mgm24-support: false
@@ -104,20 +127,24 @@ jobs:
 
     build_closure_app:
         name: Build Closure App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "closure_app"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mgm24-support: false
             mgm24-internal-support: false
             mgm26-internal-support: false
 
     build_platform_template:
         name: Build Platform App
-        uses: ./.github/workflows/platform-builder.yaml
+        uses: ./.github/workflows/platform-builder-pkg.yaml
         with:
             example-app: "platform_template"
             build-type: "custom-sqa"
+            package-version: ${{ inputs.package-version }}
+            conan-cache-key: ${{ inputs.conan-cache-key }}
             mg24-internal-support: false
             mgm24-support: false
             mgm24-internal-support: false
@@ -138,7 +165,8 @@ jobs:
             - build_zigbee_light
             - build_closure_app
             - build_platform_template
-        if: always()
+        # Skipped deps (if any) must not block merge on the package path.
+        if: ${{ always() && !cancelled() && !failure() }}
 
         steps:
             - name: Merge artifacts

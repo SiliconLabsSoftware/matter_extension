@@ -8,7 +8,7 @@ on:
         type: string
 
 concurrency:
-  group: sqa-tools-builder-${{ github.ref }}
+  group: sqa-tools-builder-pkg-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -193,7 +193,7 @@ jobs:
           if-no-files-found: error
           overwrite: true
 
-    # copy wifi firmware
+  # Fetch SiWx917 NWP firmware from Conan (replaces third_party/wifi_sdk copy)
   copy-wifi-firmware:
     runs-on: ubuntu-latest
     steps:
@@ -202,26 +202,37 @@ jobs:
         with:
           submodules: false
 
-      - name: Mark repository as safe for Git
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/matter_extension/matter_extension
-      
-      - name: Initialize required submodules
-        shell: bash
-        run: |
-          git submodule update --init third_party/wifi_sdk
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
 
-      - name: Create WiFi firmware directories
+      - name: Configure Conan remote
         shell: bash
         run: |
-          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          set -euo pipefail
+          conan remote add -f conan-prerelease \
+            https://conan-prerelease.silabs.net/
+          conan remote list
+
+      - name: Install siwx91x_nwp_interface package
+        shell: bash
+        run: |
+          set -euo pipefail
+          slt install siwx91x_nwp_interface -e conan
+
+          WIFI_PKG="$(slt where siwx91x_nwp_interface)"
+          echo "WIFI_PKG=${WIFI_PKG}" >> "$GITHUB_ENV"
+          echo "Resolved: ${WIFI_PKG}"
+          ls -la "${WIFI_PKG}/connectivity_firmware/standard/"
 
       - name: Copy WiFi firmware files
         shell: bash
         run: |
-          cp third_party/wifi_sdk/connectivity_firmware/standard/SiWG917-B.*.rps sqa-tools/WiFi-Firmware/siwx917/
-          echo "WiFi firmware files copied successfully."
+          set -euo pipefail
+          mkdir -p sqa-tools/WiFi-Firmware/siwx917
+          cp "${WIFI_PKG}"/connectivity_firmware/standard/SiWG917-B.*.rps \
+            sqa-tools/WiFi-Firmware/siwx917/
+          echo "Copied:"
+          ls -la sqa-tools/WiFi-Firmware/siwx917/
 
       - name: Upload WiFi firmware artifacts
         uses: actions/upload-artifact@v7
