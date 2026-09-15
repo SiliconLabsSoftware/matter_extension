@@ -394,7 +394,7 @@ if __name__ == "__main__":
                             define, value = define.split("=")
 
                         if define.startswith(
-                            ("DISPLAY_ENABLED", "SL_MATTER_QR_CODE_ENABLED")
+                            ("SL_MATTER_DISPLAY_ENABLED", "SL_MATTER_QR_CODE_ENABLED")
                         ):
                             # Skip defines related to LCD
                             continue
@@ -455,7 +455,7 @@ if __name__ == "__main__":
 
                         if define.startswith(
                             (
-                                "DISPLAY_ENABLED",
+                                "SL_MATTER_DISPLAY_ENABLED",
                                 "EXT_IRQ_COUNT",
                                 "SL_MATTER_QR_CODE_ENABLED",
                                 "SLI_",
