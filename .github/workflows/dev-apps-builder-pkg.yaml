@@ -15,19 +15,6 @@ on:
                 required: false
                 type: string
                 default: ""
-    # pull_request:
-    #     branches:
-    #         - main
-    #         - "release_*"
-    workflow_dispatch:
-        inputs:
-            build-type:
-                description: "The build type to use"
-                required: true
-                type: choice
-                options:
-                    - standard
-                    - full
 
 concurrency:
     group: dev-build-examples-pkg-${{ github.ref }}
@@ -218,7 +205,7 @@ jobs:
             conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: true
 
-    # TODO: Remove the false condition once the build_performance_test_app build issue is fixed (Needs new package)
+    # TODO: Remove the false condition once the build_performance_test_app build issue is fixed (See MATTER-7059)
     build_performance_test_app:
         if: false
         name: Build Performance Test App

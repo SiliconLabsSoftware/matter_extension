@@ -277,6 +277,24 @@ pipeline
                         ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
                         : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
 
+                    // Non-release: same PR vs branch convention as artifact/upload + Execute CI Tests.
+                    // Multibranch sets BRANCH_NAME=PR-<n> for PRs; otherwise the git branch name.
+                    // Release branches keep remote prerelease increment (packages/.prerelease).
+                    def versionSuffix = ''
+                    if (!isRelease) {
+                        def isPr = (env.CHANGE_ID?.trim()) || (env.BRANCH_NAME ==~ /^PR-\d+$/)
+                        if (isPr) {
+                            def prNum = env.CHANGE_ID?.trim() ?: env.BRANCH_NAME.replaceFirst(/^PR-/, '')
+                            versionSuffix = "pr.${prNum}"
+                        } else {
+                            // Conan refs use '/' as delimiter (name/version@user); sanitize branch chars.
+                            versionSuffix = (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9._-]/, '-')
+                        }
+                        echo "Package version suffix=${versionSuffix} (BRANCH_NAME=${env.BRANCH_NAME}, CHANGE_ID=${env.CHANGE_ID})"
+                    } else {
+                        echo "Release branch ${env.BRANCH_NAME}: using .prerelease + remote increment"
+                    }
+
                     withCredentials([string(credentialsId: 'artifactory_token', variable: 'CONAN_SECRET')]) {
                         sh("""
                             #!/usr/bin/env bash
@@ -327,10 +345,12 @@ pipeline
                             REMOTE_NAME='${remoteName}'
                             REMOTE_URL='${remoteUrl}'
                             PACKAGE_USER='silabs'
+                            IS_RELEASE='${isRelease}'
+                            VERSION_SUFFIX='${versionSuffix}'
                             # Artifactory identity: username from env or svc_gsdk; token from artifactory_token
                             CONAN_USER="\${CONAN_LOGIN_USERNAME:-svc_gsdk}"
 
-                            # Prerelease env (mirrors action prerelease.py)
+                            # Prerelease env (mirrors action prerelease.py) — used on release_ branches
                             export SL_PRERELEASE="\${WORKSPACE}/packages/.prerelease"
                             QUALIFIER="\$(tr -d '[:space:]' < "\${SL_PRERELEASE}" 2>/dev/null || true)"
                             echo "SL_PRERELEASE qualifier=\${QUALIFIER:-(empty)}"
@@ -340,33 +360,26 @@ pipeline
                               export SL_PRERELEASE_NUMBER=0
                             fi
 
-                            # Optional one-off override (MatterBaseRecipe.set_version)
-                            if [[ -n "\${MATTER_PACKAGE_VERSION:-}" ]]; then
-                              export MATTER_PACKAGE_VERSION
-                              echo "MATTER_PACKAGE_VERSION=\${MATTER_PACKAGE_VERSION}"
-                            fi
-
                             # Auth (mirrors authenticate_remote)
                             conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
                             conan remote login "\${REMOTE_NAME}" "\${CONAN_USER}" -p "\${CONAN_SECRET}"
 
                             # Inspect base version from matter recipe
                             INSPECT_JSON="\$(conan inspect packages/matter/conanfile.py --format=json)"
-                            BASE_VERSION="\$(python3 -c "
-                    import json,sys
-                    d=json.loads(sys.argv[1])
-                    v=d.get('version') or ''
-                    print(v.split('-')[0])
-                    " "\${INSPECT_JSON}")"
+                            BASE_VERSION="\$(python3 -c 'import json,sys; d=json.loads(sys.argv[1]); v=d.get(\"version\") or \"\"; print(v.split(\"-\")[0])' "\${INSPECT_JSON}")"
+                            if [[ -z "\${BASE_VERSION}" ]]; then
+                              BASE_VERSION="\$(awk '/^version:/{print \$2; exit}' matter.slce | tr -d '\"[:space:]')"
+                            fi
                             [[ -n "\${BASE_VERSION}" ]] || { echo "could not resolve base version" >&2; exit 1; }
                             echo "BASE_VERSION=\${BASE_VERSION}"
 
-                            # Next SL_PRERELEASE_NUMBER from remote (mirrors generate_prerelease_number)
-                            if [[ -n "\${QUALIFIER}" ]]; then
-                              if [[ "\${SL_PRERELEASE_NUMBER}" == "0" || -z "\${SL_PRERELEASE_NUMBER:-}" ]]; then
-                                PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@\${PACKAGE_USER}"
-                                LIST_JSON="\$(conan list "\${PATTERN}" -r "\${REMOTE_NAME}" --format=json 2>/dev/null || echo '{}')"
-                                NEXT_N="\$(python3 -c "
+                            if [[ "\${IS_RELEASE}" == "true" ]]; then
+                              # Release: next SL_PRERELEASE_NUMBER from remote (mirrors generate_prerelease_number)
+                              if [[ -n "\${QUALIFIER}" ]]; then
+                                if [[ "\${SL_PRERELEASE_NUMBER}" == "0" || -z "\${SL_PRERELEASE_NUMBER:-}" ]]; then
+                                  PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@\${PACKAGE_USER}"
+                                  LIST_JSON="\$(conan list "\${PATTERN}" -r "\${REMOTE_NAME}" --format=json 2>/dev/null || echo '{}')"
+                                  NEXT_N="\$(python3 -c "
                     import json,re,sys
                     data=json.loads(sys.argv[1])
                     remote=sys.argv[2]
@@ -382,13 +395,19 @@ pipeline
                             nums.append(int(m.group(1)))
                     print(max(nums, default=0)+1)
                     " "\${LIST_JSON}" "\${REMOTE_NAME}" "\${BASE_VERSION}" "\${QUALIFIER}")"
-                                export SL_PRERELEASE_NUMBER="\${NEXT_N}"
+                                  export SL_PRERELEASE_NUMBER="\${NEXT_N}"
+                                fi
+                                VERSION="\${BASE_VERSION}-\${QUALIFIER}.\${SL_PRERELEASE_NUMBER}"
+                              else
+                                VERSION="\${MATTER_PACKAGE_VERSION:-\${BASE_VERSION}}"
                               fi
-                              VERSION="\${BASE_VERSION}-\${QUALIFIER}.\${SL_PRERELEASE_NUMBER}"
+                              echo "Publishing VERSION=\${VERSION} SL_PRERELEASE_NUMBER=\${SL_PRERELEASE_NUMBER:-} (release path)"
                             else
-                              VERSION="\${MATTER_PACKAGE_VERSION:-\${BASE_VERSION}}"
+                              # PR / feature / main: 2.10.0-pr.101 or 2.10.0-feature-xyz
+                              VERSION="\${BASE_VERSION}-\${VERSION_SUFFIX}"
+                              export MATTER_PACKAGE_VERSION="\${VERSION}"
+                              echo "Publishing VERSION=\${VERSION} (branch/PR path)"
                             fi
-                            echo "Publishing VERSION=\${VERSION} SL_PRERELEASE_NUMBER=\${SL_PRERELEASE_NUMBER:-}"
 
                             write_package_info() {
                               local name="\$1"
@@ -473,7 +492,7 @@ pipeline
                               echo "Uploaded \${ref}"
                             }
 
-                            # Shared VERSION / SL_PRERELEASE_NUMBER for both packages
+                            # Shared VERSION for both packages
                             publish_one matter     packages/matter/conanfile.py
                             publish_one matter_app packages/matter_app/conanfile.py
 
