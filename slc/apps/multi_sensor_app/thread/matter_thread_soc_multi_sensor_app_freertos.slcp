@@ -192,6 +192,11 @@ configuration:
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
 
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "SL_IDLE_MODE_DURATION_S + 1"
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: SL_IDLE_MODE_DURATION_S
+
 toolchain_settings:
   - option: cxx_standard
     value: gnu++17
