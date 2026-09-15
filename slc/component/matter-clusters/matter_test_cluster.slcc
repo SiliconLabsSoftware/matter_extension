@@ -1,10 +1,10 @@
 category: Clusters|CHIP
 description: >
-  Implementation of the Unit Testing Server Cluster.
-  The user has to enable the Unit Testing Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+  Implementation of the Test Hidden Manufacturer Specific Server Cluster.
+  The user has to enable the Test Hidden Manufacturer Specific Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
 id: matter_test_cluster
 package: matter
-label: Unit Testing Server Cluster
+label: Test Hidden Manufacturer Specific Server Cluster
 quality: production
 metadata:
   sbom:
