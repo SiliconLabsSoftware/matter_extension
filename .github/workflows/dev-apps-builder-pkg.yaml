@@ -218,7 +218,9 @@ jobs:
             conan-cache-key: ${{ inputs.conan-cache-key }}
             wifi-soc-support: true
 
+    # TODO: Remove the false condition once the build_performance_test_app build issue is fixed (Needs new package)
     build_performance_test_app:
+        if: false
         name: Build Performance Test App
         needs: [set-build-type, cache-tools]
         uses: ./.github/workflows/platform-builder-pkg.yaml
