@@ -37,11 +37,14 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        CONAN_HOME="${{ inputs.conan-home }}"
-        CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
-        slt install conan
+        INPUT_HOME="${{ inputs.conan-home }}"
+        if [[ -n "${INPUT_HOME}" ]]; then
+          CONAN_HOME="${INPUT_HOME/#\~/${HOME}}"
+        elif [[ -n "${CONAN_HOME:-}" ]]; then
+          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
+        else
+          CONAN_HOME="${HOME}/.silabs/slt/installs/conan"
+        fi
         rm -rf "${CONAN_HOME}"
         mkdir -p "${CONAN_HOME}"
         echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
@@ -59,8 +62,6 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        export CONAN_HOME="${CONAN_HOME}"
-        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
         mkdir -p conan-settings
         printf 'core.download:parallel=%s\n' "${{ inputs.download-parallel }}" > conan-settings/global.conf
         conan config install conan-settings --type dir

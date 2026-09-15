@@ -66,7 +66,7 @@ def get_dev_workflow_info(args):
             'build_number': build_number
         }
     except (ValueError, RuntimeError) as e:
-        print(f"Failed to get Build Dev apps workflow info for branch '{args.branch_name}': {e}")
+        print(f"Failed to get Matter Packages Validation workflow info for branch '{args.branch_name}': {e}")
         sys.exit(1)
 
 

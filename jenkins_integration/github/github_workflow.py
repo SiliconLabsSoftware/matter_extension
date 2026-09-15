@@ -186,9 +186,9 @@ def _find_branch_workflow(workflow_runs, branch_name):
         ValueError: If wrong job type is triggered (PR found in branch workflow)
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
-    # Prefer Create Matter Packages (caller) so artifact download uses the
+    # Prefer Matter Packages Validation (caller) so artifact download uses the
     # parent run id; reusable nested runs keep artifacts on the caller.
-    workflow_names = ("Create Matter Packages", "Build Dev apps")
+    workflow_names = ("Matter Packages Validation", "Build Dev apps")
     for workflow_name in workflow_names:
         for workflow in workflow_runs:
             if _matches_branch_workflow(workflow, branch_name, workflow_name):
@@ -213,7 +213,7 @@ def _find_pr_workflow(workflow_runs, pr_number):
     Raises:
         RuntimeError: If no matching workflow is found or workflow data is invalid
     """
-    workflow_names = ("Create Matter Packages", "Build Dev apps")
+    workflow_names = ("Matter Packages Validation", "Build Dev apps")
     for workflow_name in workflow_names:
         for workflow in workflow_runs:
             if _matches_pr_workflow(workflow, pr_number, workflow_name):
@@ -311,7 +311,7 @@ def _get_wait_config(sqa):
     if sqa:
         job_names = ["Build SQA apps / Merge SQA App Artifacts"]
     else:
-        # Direct "Build Dev apps" vs nested call from create-matter-packages.
+        # Direct "Build Dev apps" vs nested call from Matter Packages Validation.
         job_names = [
             "Merge App Artifacts",
             "Build Dev Apps (from package cache) / Merge App Artifacts",
