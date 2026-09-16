@@ -449,55 +449,6 @@ def parse_test_results_failures(output) {
     return [failedTests: failedTests, failedCount: failedCount]
 }
 
-def trigger_sqa_pipelines(pipeline_type)
-{
-    if(sqaFunctions.isProductionJenkinsServer())
-    {
-        def smoke_list = ['smoke-thread', 'smoke-wifi', 'smoke-cmp']
-        def regression_list = ['feature-thread', 'feature-wifi', 'feature-cmp', 'regression-thread', 'regression-wifi', 'regression-cmp',
-                               'regression-ota-thread', 'regression-ota-wifi', 'regression-ota-cmp', 'regression-metrics',
-                               'ext-regression-thread', 'ext-regression-wifi', 'ext-regression-cmp',
-                               'ext-smoke-thread', 'ext-smoke-wifi', 'ext-smoke-cmp',
-                               'endurance-thread', 'endurance-wifi', 'endurance-cmp']
-        def errorOccurred = false
-        try{
-            sshagent(['svc_gsdk-ssh']) {
-                if (!fileExists('sqa-pipelines')) {
-                    sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
-                }
-                if(pipeline_type == "smoke") {
-                        smoke_list.each { smoke_type ->
-                        dir('sqa-pipelines') {
-                            try{
-                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
-                            } catch (e) {
-                                unstable("Error when triggering ${smoke_type}: ${e.message}")
-                                errorOccurred = true
-                            }
-                        }
-                    }
-                } else {
-                    regression_list.each { regression_type ->
-                        dir('sqa-pipelines') {
-                            try{
-                                sqaFunctions.commitToMatterSqaPipelines(regression_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
-                            } catch (e) {
-                                unstable("Error when triggering ${regression_type}: ${e.message}")
-                                errorOccurred = true
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (e) {
-            unstable("Error when triggering SQA pipelines: ${e.message}")
-            errorOccurred = true
-        }
-        if (errorOccurred) {
-            currentBuild.result = 'UNSTABLE'
-        }
-    }
-}
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
@@ -594,27 +545,6 @@ def buildCommitChangeSummaryForSlack() {
         summary = summary.substring(0, 3500) + '\n...(truncated)'
     }
     return summary
-}
-
-// Use build start time in America/New_York: evening nightlies cross midnight
-// before late stages, so wall-clock "today" would skip Thursday pipelines.
-def buildStartedOnWeekday(int calendarDay) {
-    def cal = Calendar.getInstance(TimeZone.getTimeZone('America/New_York'))
-    cal.setTime(new Date(currentBuild.startTimeInMillis))
-    return cal.get(Calendar.DAY_OF_WEEK) == calendarDay
-}
-
-def buildStartedOnThursday() {
-    return buildStartedOnWeekday(Calendar.THURSDAY)
-}
-
-def shouldUploadSqaArtifacts() {
-    return env.BRANCH_NAME.startsWith("SL_compatibility") ||
-        (env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday())
-}
-
-def shouldTriggerSqaRegression() {
-    return env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday()
 }
 
 return this

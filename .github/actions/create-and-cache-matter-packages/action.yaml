@@ -39,26 +39,17 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        CONAN_HOME="${{ inputs.conan-home }}"
-        CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-        echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-        echo "${HOME}/.silabs/slt/engines/conan/conan" >> "$GITHUB_PATH"
-        echo "${HOME}/.local/bin" >> "$GITHUB_PATH"
-        export CONAN_HOME
-        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
-
-        slt install conan
-        for tool in cmake ninja; do
-          slt install "${tool}" || true
-        done
-
+        # CONAN_HOME is set globally by cache-tools / install-tools.
         mkdir -p conan-settings
         printf 'core.download:parallel=6\ncore.upload:parallel=4\n' > conan-settings/global.conf
         conan config install conan-settings --type dir
         rm -rf conan-settings
 
         conan remote add -f conan-prerelease "${{ inputs.prerelease-remote-url }}"
+
+        for tool in cmake ninja; do
+          slt install "${tool}" || true
+        done
 
     - name: Export Matter packages
       id: create
@@ -69,9 +60,6 @@ runs:
         CACHE_KEY="${{ inputs.conan-cache-key }}"
         CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}}"
         CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
-        CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-        export CONAN_HOME
-        export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
 
         conan remove "matter/${VERSION}@silabs" -c || true
         conan remove "matter_app/${VERSION}@silabs" -c || true

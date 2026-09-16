@@ -68,7 +68,6 @@ jobs:
               shell: bash
               run: |
                   set -euo pipefail
-                  export PATH="${HOME}/.silabs/slt/engines/conan/conan:${HOME}/.local/bin:${PATH}"
                   MATTER_APP="$(slt where matter_app)"
                   echo "matter_app root: ${MATTER_APP}"
 
