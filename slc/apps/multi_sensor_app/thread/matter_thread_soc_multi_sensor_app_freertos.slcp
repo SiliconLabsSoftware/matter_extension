@@ -124,10 +124,11 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  // Align OT child timeouts with SL_IDLE_MODE_DURATION_S
   - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "3601"   # 1800 * 2 + 1
+    value: "3601"   # 2 * SL_IDLE_MODE_DURATION_S + 1
   - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: "1800"
+    value: "1800"   # SL_IDLE_MODE_DURATION_S
 
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
