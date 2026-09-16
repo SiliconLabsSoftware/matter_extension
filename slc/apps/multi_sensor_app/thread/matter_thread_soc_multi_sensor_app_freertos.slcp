@@ -124,6 +124,10 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "3601"   # 1800 * 2 + 1
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: "1800"
 
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
@@ -191,11 +195,6 @@ configuration:
     value: "1"
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
-
-  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "SL_IDLE_MODE_DURATION_S + 1"
-  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: SL_IDLE_MODE_DURATION_S
 
 toolchain_settings:
   - option: cxx_standard
