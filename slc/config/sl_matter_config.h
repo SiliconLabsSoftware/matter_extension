@@ -20,7 +20,7 @@
 // <i> Default: SL_MATTER_LOG_PROGRESS
 // <i> Sets the verbosity of Matter stack logging output
 #ifndef SL_MATTER_LOG_LEVEL
-#define SL_MATTER_LOG_LEVEL SL_MATTER_LOG_PROGRESS
+#define SL_MATTER_LOG_LEVEL SL_MATTER_LOG_DETAIL
 #endif
 
 // <q SILABS_LOG_ENABLED> Enable Silabs specific log used in matter

@@ -21,7 +21,6 @@ $ARM_GCC_DIR/bin/arm-none-eabi-size -A "${OUT_APP}" | tee -a build.log
 
 echo "FLASHING..."
 commander rps load ${OUT_DIR}/artifact/${APP_NAME}.rps
-sleep 5
 
 # if darwin, use gtimeout
 TIMEOUT_CMD=timeout
@@ -29,4 +28,5 @@ if [ "$(uname)" == "Darwin" ]; then
   TIMEOUT_CMD=gtimeout
 fi
 echo "CONNECTING..."
-$TIMEOUT_CMD 120 commander vcom connect 2>&1 |tee device.log
+# $TIMEOUT_CMD 120 sleep 5 && \
+commander rtt connect 2>&1 |tee device.log
