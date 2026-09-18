@@ -15,9 +15,7 @@ requires:
   - name: matter_scenes_support
 source:
   - path: third_party/matter_sdk/src/app/clusters/groups-server/CodegenIntegration.cpp
-    #unless: [matter_code_driven_dm]
-  # Groupcast supersedes the Groups cluster commands, so it selects the
-  # compatibility-only stub instead of the full implementation.
+    unless: [matter_code_driven_dm]
   - path: third_party/matter_sdk/src/app/clusters/groups-server/GroupsClusterImpl.cpp
     unless: [matter_groupcast]
   - path: third_party/matter_sdk/src/app/clusters/groups-server/StubbedGroupsCluster.cpp
@@ -34,9 +32,3 @@ include:
 template_contribution:
   - name: component_catalog
     value: matter_groups
-define:
-  # Keeps the implementation GroupsCluster.h aliases in sync with the source
-  # compiled above. Mirrors chip_config_use_stubbed_groups_cluster in GN.
-  - name: CHIP_CONFIG_USE_STUBBED_GROUPS_CLUSTER
-    value: 1
-    condition: [matter_groupcast]
