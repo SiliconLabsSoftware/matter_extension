@@ -17,6 +17,7 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyBgScanRegistry.cpp
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyBleTransport.cpp
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyPafTransport.cpp
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyScanAggregator.cpp
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxyScanCache.cpp
   - path: third_party/matter_sdk/src/app/clusters/commissioning-proxy-server/CommissioningProxySessionManager.cpp
@@ -29,6 +30,8 @@ include:
       - path: CommissioningProxyBleAdapter.h
       - path: CommissioningProxyBleTransport.h
       - path: CommissioningProxyCluster.h
+      - path: CommissioningProxyPafAdapter.h
+      - path: CommissioningProxyPafTransport.h
       - path: CommissioningProxyScanAggregator.h
       - path: CommissioningProxyScanCache.h
       - path: CommissioningProxySessionManager.h
