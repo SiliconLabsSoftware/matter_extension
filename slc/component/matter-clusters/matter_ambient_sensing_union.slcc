@@ -1,0 +1,27 @@
+category: Clusters|Measurement
+description: >
+  Implementation of the Ambient Sensing Union Server Cluster.
+  The user has to enable the Ambient Sensing Union Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
+id: matter_ambient_sensing_union
+package: matter
+label: Ambient Sensing Union Server Cluster
+quality: production
+metadata:
+  sbom:
+    license: "Apache 2.0"
+provides:
+  - name: matter_ambient_sensing_union
+source:
+  - path: third_party/matter_sdk/src/app/clusters/ambient-sensing-union-server/AmbientSensingUnionCluster.cpp
+  - path: third_party/matter_sdk/src/app/clusters/ambient-sensing-union-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
+include:
+  - path: third_party/matter_sdk/src/app/clusters/ambient-sensing-union-server
+    file_list:
+      - path: AmbientSensingUnionCluster.h
+      - path: AmbientSensingUnionDelegate.h
+      - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
+template_contribution:
+  - name: component_catalog
+    value: matter_ambient_sensing_union
