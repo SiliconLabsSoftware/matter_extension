@@ -61,6 +61,16 @@
 // <i> This feature is used to reduce power consumption in devices that support both DTIM and Long Interval based sleep modes.
 #define SL_ICD_ENABLE_SELECTIVE_SLEEP 1
 
+// <o OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT>  OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+// <i> The default child timeout value (in seconds).
+// <i> Default: 3601
+#define OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT 2 * SL_IDLE_MODE_DURATION_S + 1
+
+// <o OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT>  OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+// <i> The default child supervision check timeout value (in seconds).
+// <i> Default: 1800
+#define OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT SL_IDLE_MODE_DURATION_S
+
 // <<< end of configuration section >>>
 
 #endif // SL_MATTER_ICD_CONFIG_H

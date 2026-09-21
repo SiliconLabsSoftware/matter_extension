@@ -110,13 +110,6 @@ define:
   - name: CHIP_CONFIG_ICD_OBSERVERS_POOL_SIZE
     value: 4
     condition: [matter_icd_core]
-  # Align OT child timeouts with ICD idle / transport poll
-  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "3601"   # 2 * (SL_TRANSPORT_IDLE_INTERVAL/1000) + 1
-    condition: [matter_icd_core]
-  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: "1800"   # SL_IDLE_MODE_DURATION_S
-    condition: [matter_icd_core]
 
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
@@ -187,6 +180,14 @@ configuration:
     condition: [matter_icd_core]
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
+    condition: [matter_icd_core]
+
+  # Align OT child timeouts with SL_IDLE_MODE_DURATION_S
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "3601" # 2 * SL_IDLE_MODE_DURATION_S + 1
+    condition: [matter_icd_core]
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: "1800" # SL_IDLE_MODE_DURATION_S
     condition: [matter_icd_core]
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED

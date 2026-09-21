@@ -114,11 +114,6 @@ define:
     value: "40960"
   - name: NVM3_DEFAULT_MAX_OBJECT_SIZE
     value: "4092"
-  # Align OT child timeouts with ICD idle / transport poll
-  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "240"    # poll_s < 120 → floor
-  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: "600"    # SL_IDLE_MODE_DURATION_S
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
     value: 2
@@ -172,6 +167,12 @@ configuration:
     value: "5000"
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "500"
+
+  # Align OT child timeouts with SL_IDLE_MODE_DURATION_S
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "240" # poll_s < 120 → floor
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: "600" # SL_IDLE_MODE_DURATION_S
 
   - name: CHIP_CONFIG_SYNCHRONOUS_REPORTS_ENABLED
     value: "1"
