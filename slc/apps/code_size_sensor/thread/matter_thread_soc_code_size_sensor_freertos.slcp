@@ -120,6 +120,11 @@ define:
     value: "OT_LOG_LEVEL_NONE"
   - name: OPENTHREAD_CONFIG_LOG_LEVEL
     value: "OPENTHREAD_CONFIG_LOG_OUTPUT_NONE"
+  # Align OT child timeouts with ICD idle / transport poll
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "3601"   # 2 * (SL_TRANSPORT_IDLE_INTERVAL/1000) + 1
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: "1800"   # SL_IDLE_MODE_DURATION_S
 
 configuration:
   - name: SL_BT_CONFIG_USER_ADVERTISERS
