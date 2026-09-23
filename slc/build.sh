@@ -57,12 +57,6 @@
 #   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids application
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
-#   --cmake option : Generate and build with CMake (GCC toolchain) instead of makefile.
-#                    LLVM builds (toolchain_llvm) always use CMake and do not need this flag.
-#   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --cmake
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
-#
 
 # Helper functions to build component arguments
 build_with_arg() {
@@ -169,6 +163,8 @@ if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
 	MAKE_FILE=$SILABS_APP.solution.Makefile
 	PROJECT_FLAG="-w"
 	OUTPUT_DIR="out/$BRD_ONLY/${SILABS_APP}_solution"
+	# CMake subdir under OUTPUT_DIR for solution (only used when USE_LLVM=true).
+	CMAKE_SUBDIR="cmake_llvm"
 	USE_SOLUTION=true
 
 elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
@@ -176,6 +172,7 @@ elif [[ "$SILABS_APP_PATH" == *.slcp ]]; then
 	PROJECT_FLAG="-p"
 	OUTPUT_DIR="out/$BRD_ONLY/$SILABS_APP"
 	MAKE_FILE=$SILABS_APP.Makefile
+	CMAKE_SUBDIR="cmake_llvm"
 	USE_SOLUTION=false
 else
 	echo "ERROR: Did not provide a valid path for a .slcw or .slcp project file."
@@ -186,7 +183,6 @@ fi
 shift
 shift
 skip_gen=false
-USE_CMAKE=false
 WITH_APP_COMPONENTS=""
 WITHOUT_APP_COMPONENTS=""
 WITH_BOOTLOADER_COMPONENTS=""
@@ -203,10 +199,6 @@ while [ $# -gt 0 ]; do
 		;;
 	--skip_gen)
 		skip_gen=true
-		shift
-		;;
-	--cmake)
-		USE_CMAKE=true
 		shift
 		;;
 	--sisdk)
@@ -290,23 +282,15 @@ done
 USE_LLVM=false
 if [[ "$CONFIG_ARGS" == *toolchain_llvm* ]]; then
 	USE_LLVM=true
-	USE_CMAKE=true
 fi
 
-# CMake subdir name depends on the selected toolchain (GCC by default).
 if [ "$USE_LLVM" = true ]; then
-	CMAKE_SUBDIR="cmake_llvm"
-else
-	CMAKE_SUBDIR="cmake_gcc"
-fi
-
-if [ "$USE_CMAKE" = true ]; then
 	OUTPUT_FORMAT="cmake"
 else
 	OUTPUT_FORMAT="makefile"
 fi
 
-# Helper to build with CMake.
+# Helper to build with CMake (Required for LLVM toolchain).
 # Args: <source_dir> <Label (App vs bootloader vs solution)>
 cmake_configure_and_build() {
 	local src_dir="$1"
@@ -425,10 +409,10 @@ fi
 # Build the project
 if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; then
 	echo "Building bootloader only..."
-	if [ "$USE_CMAKE" = true ]; then
-		BOOTLOADER_CMAKE_DIR=$(find "$OUTPUT_DIR/matter_bootloader" -maxdepth 1 -name "$CMAKE_SUBDIR" -type d | head -1)
+	if [ "$USE_LLVM" = true ]; then
+		BOOTLOADER_CMAKE_DIR=$(find "$OUTPUT_DIR/matter_bootloader" -maxdepth 1 -name "cmake_llvm" -type d | head -1)
 		if [ -z "$BOOTLOADER_CMAKE_DIR" ]; then
-			echo "ERROR: No bootloader $CMAKE_SUBDIR dir found in $OUTPUT_DIR/matter_bootloader"
+			echo "ERROR: No bootloader cmake_llvm dir found in $OUTPUT_DIR/matter_bootloader"
 			exit 1
 		fi
 		cmake_configure_and_build "$BOOTLOADER_CMAKE_DIR" "bootloader" || exit 1
@@ -446,10 +430,10 @@ if [ "$GENERATE_BOOTLOADER" = true ] && [ "$GENERATE_APPLICATION" = false ]; the
 	fi
 elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; then
 	echo "Building application only..."
-	if [ "$USE_CMAKE" = true ]; then
-		APP_CMAKE_DIR=$(find "$OUTPUT_DIR" -mindepth 2 -maxdepth 2 -name "$CMAKE_SUBDIR" -type d ! -path "*matter-bootloader*" | head -1)
+	if [ "$USE_LLVM" = true ]; then
+		APP_CMAKE_DIR=$(find "$OUTPUT_DIR" -mindepth 2 -maxdepth 2 -name "cmake_llvm" -type d ! -path "*matter-bootloader*" | head -1)
 		if [ -z "$APP_CMAKE_DIR" ]; then
-			echo "ERROR: No application $CMAKE_SUBDIR dir found in $OUTPUT_DIR"
+			echo "ERROR: No application cmake_llvm dir found in $OUTPUT_DIR"
 			exit 1
 		fi
 		cmake_configure_and_build "$APP_CMAKE_DIR" "application" || exit 1
@@ -468,7 +452,7 @@ elif [ "$GENERATE_BOOTLOADER" = false ] && [ "$GENERATE_APPLICATION" = true ]; t
 	fi
 else
 	echo "Building solution..."
-	if [ "$USE_CMAKE" = true ]; then
+	if [ "$USE_LLVM" = true ]; then
 		cmake_configure_and_build "$OUTPUT_DIR/$CMAKE_SUBDIR" "solution" || exit 1
 	else
 		if ! make all -C "$OUTPUT_DIR" -f "$MAKE_FILE" -j13; then
