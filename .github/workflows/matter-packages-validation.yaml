@@ -1,10 +1,14 @@
 name: Matter Packages Validation
 
 on:
+  push:
+    branches:
+      - test/pkg-mgr-phase-2
   pull_request:
-        branches:
-            - main
-            - "release_*"
+    branches:
+      - main
+      - "release_*"
+      - test/pkg-mgr-phase-2
   workflow_dispatch:
     inputs:
       package_version:
@@ -107,7 +111,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/dev-apps-builder-pkg.yaml
     with:
-      build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
+      build-type: full
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
