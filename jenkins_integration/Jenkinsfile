@@ -102,7 +102,7 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
-                    // Resolve outside ubai docker: release path needs SLT/Conan for remote +1.
+                    // Resolve outside ubai docker: SLT/Conan list+1 for shared package version (.N).
                     def packageVersion = pipelineFunctions.resolvePackageVersion()
                     build_description += "\nPackage version: ${packageVersion}"
                     buildDescription(build_description)

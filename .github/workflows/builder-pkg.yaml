@@ -63,7 +63,8 @@ jobs:
                   continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
 
             # Package builds write under $(slt where matter_app)/**/out/**, not workspace out/.
-            # Stage into the classic out/<board>/<app>/artifact/ layout for merge + Jenkins.
+            # Stage curated artifact/ outputs + maps, preserving path under out/ so upload
+            # globs (out/*/*/artifact/**, out/*/*/*/artifact/**, **/build/**/*.map) match.
             - name: Collect package build artifacts
               shell: bash
               run: |
@@ -89,32 +90,24 @@ jobs:
                   )
                   echo "Found ${#bins[@]} binary/map file(s) under matter_app"
 
+                  staged=0
                   for f in "${bins[@]}"; do
                     [[ -n "${f}" ]] || continue
-                    rel_out="${f#*/out/}"
-                    board="${rel_out%%/*}"
-                    rest="${rel_out#*/}"
-                    app_part="${rest%%/*}"
-                    if [[ "${f}" == */artifact/* ]]; then
-                      dest_dir="${GITHUB_WORKSPACE}/out/${board}/${app_part}/artifact"
-                      mkdir -p "${dest_dir}"
-                      cp -a "${f}" "${dest_dir}/"
-                    elif [[ "${f}" == *.map ]]; then
-                      # Preserve relative path under out/ for map uploads.
-                      dest="${GITHUB_WORKSPACE}/out/${rel_out}"
-                      mkdir -p "$(dirname "${dest}")"
-                      cp -a "${f}" "${dest}"
-                    else
-                      dest_dir="${GITHUB_WORKSPACE}/out/${board}/${app_part}/artifact"
-                      mkdir -p "${dest_dir}"
-                      cp -a "${f}" "${dest_dir}/"
+                    # Skip build/debug intermediates; only curated artifact/ + maps.
+                    if [[ "${f}" != */artifact/* && "${f}" != *.map ]]; then
+                      continue
                     fi
+                    rel_out="${f#*/out/}"
+                    dest="${GITHUB_WORKSPACE}/out/${rel_out}"
+                    mkdir -p "$(dirname "${dest}")"
+                    cp -a "${f}" "${dest}"
+                    staged=$((staged + 1))
                   done
 
-                  echo "Staged under workspace out/:"
+                  echo "Staged ${staged} file(s) under workspace out/:"
                   find "${GITHUB_WORKSPACE}/out" -type f 2>/dev/null | sort || true
-                  if [[ "${#bins[@]}" -eq 0 ]]; then
-                    echo "WARNING: no flashable binaries under ${MATTER_APP}/**/out/**" >&2
+                  if [[ "${staged}" -eq 0 ]]; then
+                    echo "WARNING: no artifact/ or map files under ${MATTER_APP}/**/out/**" >&2
                     find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
                   fi
 
