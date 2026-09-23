@@ -161,12 +161,6 @@ configuration:
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "500"
 
-  # Align OT child timeouts with SL_IDLE_MODE_DURATION_S
-  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "240" # poll_s < 120 → floor
-  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: "600" # SL_IDLE_MODE_DURATION_S
-
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
   - name: SL_MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS

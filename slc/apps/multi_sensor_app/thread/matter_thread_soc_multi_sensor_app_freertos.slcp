@@ -179,12 +179,6 @@ configuration:
     value: "1800000"
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
-  
-  # Align OT child timeouts with SL_IDLE_MODE_DURATION_S
-  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
-    value: "3601" # 2 * SL_IDLE_MODE_DURATION_S + 1
-  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
-    value: "1800" # SL_IDLE_MODE_DURATION_S
 
   - name: CHIP_CONFIG_ENABLE_ICD_LIT
     value: 1
