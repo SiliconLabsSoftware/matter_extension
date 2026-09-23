@@ -310,6 +310,13 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                                         branches                         : [[name: 'release_2.9-1.6']],
                                         browser                          : [$class: 'GithubWeb',
                                         repoUrl: 'https://github.com/SiliconLabsInternal/utf_app_matter'],
+                                        extensions                       : [
+                                            [$class: 'SubmoduleOption',
+                                                disableSubmodules: true,
+                                                parentCredentials: true,
+                                                recursiveSubmodules: false],
+                                            [$class: 'CleanBeforeCheckout',
+                                                deleteUntrackedNestedRepositories: true]],
                                         userRemoteConfigs                : [[credentialsId: 'github-app',
                                                         url: 'https://github.com/SiliconLabsInternal/utf_app_matter.git']]]
 
