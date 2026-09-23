@@ -15,7 +15,7 @@
 // <i> A shorter idle mode duration when a LIT capable device is operating as a SIT
 // <i> Default value is to use the same value as SL_IDLE_MODE_DURATION_S
 // <i> Default: 600 (10 minutes)
-#define SL_SHORT_IDLE_MODE_DURATION_S 600
+#define SL_SHORT_IDLE_MODE_DURATION_S SL_IDLE_MODE_DURATION_S
 
 // <o SL_ACTIVE_MODE_DURATION_MS>  Active Mode Duration (ms)
 // <i> Duration the ICD device remains in active mode to process messages
@@ -62,16 +62,15 @@
 // <i> This feature is used to reduce power consumption in devices that support both DTIM and Long Interval based sleep modes.
 #define SL_ICD_ENABLE_SELECTIVE_SLEEP 1
 
-// <o OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT>  OpenThread MLE Child Timeout (sec)
-// <i> The default child timeout value (in seconds).
-// <i> Default: 1201
-#define OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT 1201
-
-// <o OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT>  OpenThread Child Supervision Check Timeout (sec)
-// <i> The default child supervision check timeout value (in seconds).
-// <i> Default: 600
-#define OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT 600
-
 // <<< end of configuration section >>>
+
+// OpenThread overrides to align child timeouts with the Matter ICD idle duration.
+// Included by OpenThread through SL_OPENTHREAD_APPLICATION_CONFIG_FILE.
+
+// MLE child timeout (sec): two missed idle periods plus one second.
+#define OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT ((SL_IDLE_MODE_DURATION_S * 2) + 1)
+
+// Child supervision check timeout (sec): one idle period, so it cannot wake the device mid-idle.
+#define OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT SL_IDLE_MODE_DURATION_S
 
 #endif // SL_MATTER_ICD_CONFIG_H
