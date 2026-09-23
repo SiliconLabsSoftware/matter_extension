@@ -77,7 +77,7 @@ def _generate_artifactory_artifact_name(original_name):
         return original_name
 
 
-def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=False):
+def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=False, package_version=None):
     """
     Download artifacts from GitHub Actions and upload them to UBAI and Artifactory.
     
@@ -86,27 +86,39 @@ def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=Fa
         branch_name (str): Branch name for artifacts.
         build_number (int): Build number for artifacts.
         sqa (bool): Whether to upload SQA artifacts (default: False).
+        package_version (str): Matter package version used as UBAI target metadata.
         
     Raises:
         ValueError: If parameters are invalid
         RuntimeError: If downloading or uploading fails
     """
+    if not package_version or not str(package_version).strip():
+        raise ValueError("package_version cannot be empty")
     _validate_artifact_parameters(workflow_id, branch_name, build_number)
     print(f"Starting artifact download and upload process for workflow {workflow_id}")
+    print(f"Using package_version (UBAI target): {package_version}")
     try:
         artifact_info = _download_and_extract_artifacts(workflow_id, sqa)
         print("Uploading individual artifacts to UBAI.")
-        _upload_individual_artifacts(artifact_info['extracted_folder'], branch_name, build_number)
+        _upload_individual_artifacts(
+            artifact_info['extracted_folder'], branch_name, build_number, package_version
+        )
         print("Uploading merged artifacts to UBAI and Artifactory.")
-        _upload_merged_artifacts(artifact_info['artifact_file'], artifact_info['artifact_name'], 
-                               branch_name, build_number, sqa)
+        _upload_merged_artifacts(
+            artifact_info['artifact_file'],
+            artifact_info['artifact_name'],
+            branch_name,
+            build_number,
+            sqa,
+            package_version,
+        )
         print("Artifact download and upload process completed successfully.")
     except Exception as e:
         print(f"Error during artifact processing: {e}")
         raise RuntimeError(f"Failed to process artifacts: {e}")
 
 
-def upload_binaries_individually_to_ubai(binaries_folder, branch_name, build_number):
+def upload_binaries_individually_to_ubai(binaries_folder, branch_name, build_number, package_version):
     """
     Upload individual binary files from the extracted artifact folder to UBAI.
     
@@ -114,6 +126,7 @@ def upload_binaries_individually_to_ubai(binaries_folder, branch_name, build_num
         binaries_folder (str): Path to the folder containing binaries.
         branch_name (str): Branch name for the upload.
         build_number (int): Build number for the upload.
+        package_version (str): Matter package version used as UBAI target for non-board artifacts.
     Raises:
         ValueError: If parameters are invalid
         RuntimeError: If upload fails
@@ -125,7 +138,9 @@ def upload_binaries_individually_to_ubai(binaries_folder, branch_name, build_num
         for artifact in os.listdir(binaries_folder):
             artifact_path = os.path.join(binaries_folder, artifact)
             print(f"Processing artifact: {artifact}")
-            _process_individual_artifact(artifact, artifact_path, branch_name, build_number)
+            _process_individual_artifact(
+                artifact, artifact_path, branch_name, build_number, package_version
+            )
         print("Individual binary uploads completed successfully.")
     except Exception as e:
         error_msg = f"Failed to upload individual binaries: {e}"
@@ -273,7 +288,7 @@ def _extract_artifact(artifact_file):
         raise RuntimeError(f"Failed to extract {artifact_name}: {e}")
 
 
-def _upload_individual_artifacts(extracted_folder, branch_name, build_number):
+def _upload_individual_artifacts(extracted_folder, branch_name, build_number, package_version):
     """
     Upload individual binary artifacts to UBAI.
     
@@ -281,11 +296,14 @@ def _upload_individual_artifacts(extracted_folder, branch_name, build_number):
         extracted_folder (str): Path to the extracted artifacts folder
         branch_name (str): Branch name for the upload
         build_number (int): Build number for the upload
+        package_version (str): Matter package version used as UBAI target for non-board artifacts.
     Raises:
         RuntimeError: If upload fails
     """
     try:
-        upload_binaries_individually_to_ubai(extracted_folder, branch_name, build_number)
+        upload_binaries_individually_to_ubai(
+            extracted_folder, branch_name, build_number, package_version
+        )
     except Exception as e:
         raise RuntimeError(f"Failed to upload individual artifacts: {e}")
 
@@ -344,7 +362,7 @@ def _create_filtered_artifact(artifact_file, artifact_name):
         raise RuntimeError(f"Failed to create filtered artifact: {e}")
 
 
-def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_number, sqa=False):
+def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_number, sqa=False, package_version=None):
     """
     Upload the merged artifact to UBAI and Artifactory.
     Also creates and uploads a filtered version (containing only .s37, .asset, and .rps files) to Artifactory only.
@@ -354,6 +372,8 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
         artifact_name (str): Name of the artifact
         branch_name (str): Branch name for the upload
         build_number (int): Build number for the upload
+        sqa (bool): Whether this is an SQA upload
+        package_version (str): Matter package version used as UBAI target
 
     Raises:
         RuntimeError: If upload fails
@@ -364,7 +384,7 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
             file_path=artifact_file,
             app_name="matter",
             stack="matter",
-            target="matter",
+            target=package_version,
             branch_name=branch_name,
             build_number=build_number
         )
@@ -404,7 +424,7 @@ def _validate_binaries_upload_parameters(binaries_folder, branch_name, build_num
         raise ValueError("Run number must be a positive integer")
 
 
-def _process_individual_artifact(artifact_name, artifact_path, branch_name, build_number):
+def _process_individual_artifact(artifact_name, artifact_path, branch_name, build_number, package_version):
     """
     Process an individual artifact based on its type.
     
@@ -413,15 +433,16 @@ def _process_individual_artifact(artifact_name, artifact_path, branch_name, buil
         artifact_path (str): Path to the artifact
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
+        package_version (str): Matter package version used as UBAI target for non-board artifacts
     """
     if artifact_name == "chip-tool":
-        _upload_chip_tool(artifact_path, branch_name, build_number)
+        _upload_chip_tool(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "chip-ota-provider-app":
-        _upload_chip_ota_provider(artifact_path, branch_name, build_number)
+        _upload_chip_ota_provider(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "provision.zip":
-        _upload_provision_zip(artifact_path, branch_name, build_number)
+        _upload_provision_zip(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "ota-scripts.zip":
-        _upload_ota_scripts(artifact_path, branch_name, build_number)
+        _upload_ota_scripts(artifact_path, branch_name, build_number, package_version)
     elif os.path.isdir(artifact_path):
         if artifact_name == "WiFi-Firmware":
             _upload_wifi_firmware(artifact_path, branch_name, build_number)
@@ -429,28 +450,28 @@ def _process_individual_artifact(artifact_name, artifact_path, branch_name, buil
             _upload_board_artifacts(artifact_name, artifact_path, branch_name, build_number)
 
 
-def _upload_chip_tool(artifact_path, branch_name, build_number):
+def _upload_chip_tool(artifact_path, branch_name, build_number, package_version):
     """Upload chip-tool artifact to UBAI."""
     print("Uploading chip-tool to UBAI.")
-    upload_to_ubai(artifact_path, "Chiptool", "linux-arm64-ipv6only-clang", branch_name, build_number)
+    upload_to_ubai(artifact_path, "Chiptool", package_version, branch_name, build_number)
 
 
-def _upload_chip_ota_provider(artifact_path, branch_name, build_number):
+def _upload_chip_ota_provider(artifact_path, branch_name, build_number, package_version):
     """Upload chip-ota-provider-app artifact to UBAI."""
     print("Uploading chip-ota-provider-app to UBAI.")
-    upload_to_ubai(artifact_path, "OTA", "linux-arm64-ipv6only-clang", branch_name, build_number)
+    upload_to_ubai(artifact_path, "OTA", package_version, branch_name, build_number)
 
 
-def _upload_provision_zip(artifact_path, branch_name, build_number):
+def _upload_provision_zip(artifact_path, branch_name, build_number, package_version):
     """Upload provision.zip artifact to UBAI."""
     print("Uploading provision to UBAI.")
-    upload_to_ubai(artifact_path, "matter_provision", "matter", branch_name, build_number)
+    upload_to_ubai(artifact_path, "matter_provision", package_version, branch_name, build_number)
 
 
-def _upload_ota_scripts(artifact_path, branch_name, build_number):
+def _upload_ota_scripts(artifact_path, branch_name, build_number, package_version):
     """Upload ota-scripts.zip artifact to UBAI."""
     print("Uploading ota-scripts to UBAI.")
-    upload_to_ubai(artifact_path, "matter", "matter", branch_name, build_number)
+    upload_to_ubai(artifact_path, "matter", package_version, branch_name, build_number)
 
 
 def _upload_wifi_firmware(wifi_firmware_path, branch_name, build_number):

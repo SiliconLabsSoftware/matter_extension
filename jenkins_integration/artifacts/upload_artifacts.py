@@ -10,7 +10,7 @@ It interacts with GitHub Actions, UBAI, and Artifactory to:
 
 Usage:
     python upload_artifacts.py --branch_name <branch> --build_number <build_number> --sqa <true|false> --commit_sha <sha>
-    --workflow_id <workflow_id> --run_number <number>
+    --workflow_id <workflow_id> --run_number <number> --package_version <version>
 
 Arguments:
     --branch_name   Name of the branch or PR (e.g., 'main', 'PR-123').
@@ -19,6 +19,7 @@ Arguments:
     --commit_sha    Commit SHA to use (required for SQA).
     --workflow_id   Workflow id of the run (e.g. 19287668054).
     --run_number    Workflow run number (required for SQA).
+    --package_version  Matter package version used as UBAI target (from Jenkins).
 
 Environment Variables:
     SL_USERNAME     Username for authentication with Artifactory/UBAI.
@@ -56,6 +57,7 @@ def main():
             'workflow_id': args.workflow_id,
             'branch_name': args.branch_name,
             'build_number': args.build_number,
+            'package_version': args.package_version,
         }
     if artifacts_already_uploaded(workflow_info, args.sqa):
         print("Merged artifacts file present in UBAI. Do not download and upload artifacts.")

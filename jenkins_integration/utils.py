@@ -33,6 +33,11 @@ def parse_arguments():
     parser.add_argument("--commit_sha", required=True, help="Commit SHA to use (required for SQA)")
     parser.add_argument("--workflow_id", required=True, help="Workflow ID (required for SQA)")
     parser.add_argument("--run_number", required=True, help="Workflow run number (required for SQA)")
+    parser.add_argument(
+        "--package_version",
+        required=True,
+        help="Matter package version used as UBAI target (resolved in Jenkins)",
+    )
 
     args = parser.parse_args()
     args.sqa = True if args.sqa == 'true' else False
@@ -63,7 +68,8 @@ def get_dev_workflow_info(args):
             'run_number': run_number,
             'workflow_id': workflow_id,
             'branch_name': branch_name,
-            'build_number': build_number
+            'build_number': build_number,
+            'package_version': args.package_version,
         }
     except (ValueError, RuntimeError) as e:
         print(f"Failed to get Matter Packages Validation workflow info for branch '{args.branch_name}': {e}")
@@ -81,7 +87,12 @@ def artifacts_already_uploaded(workflow_info, sqa):
     Returns:
         bool: True if artifacts are already uploaded, False otherwise
     """
-    ubai_artifact = search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa)
+    ubai_artifact = search_file_in_ubai(
+        workflow_info['branch_name'],
+        workflow_info['build_number'],
+        sqa,
+        target=workflow_info.get('package_version', 'matter'),
+    )
     return True if len(ubai_artifact) > 0 else False
 
 def process_artifacts(workflow_info, sqa):
@@ -98,5 +109,6 @@ def process_artifacts(workflow_info, sqa):
         workflow_info['workflow_id'],
         workflow_info['branch_name'],
         workflow_info['build_number'],
-        sqa
+        sqa,
+        package_version=workflow_info['package_version'],
     ) 

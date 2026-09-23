@@ -1,10 +1,14 @@
 def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
+    def packageVersion = env.MATTER_PACKAGE_VERSION?.trim()
+    if (!packageVersion) {
+        error('MATTER_PACKAGE_VERSION unset; call resolvePackageVersion() before upload_artifacts()')
+    }
     withCredentials([
     usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
     usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
+        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} --package_version ${packageVersion}", returnStdout: true).trim()
         echo "Output from upload_artifacts.py: ${output}"
         if(!sqa){
             result = parse_upload_artifacts_output(output)
@@ -545,6 +549,353 @@ def buildCommitChangeSummaryForSlack() {
         summary = summary.substring(0, 3500) + '\n...(truncated)'
     }
     return summary
+}
+
+// ---------------------------------------------------------------------------
+// Matter Conan package publish / promote helpers
+// ---------------------------------------------------------------------------
+// Note: Jenkins `sh` runs under /bin/sh (dash). Use `bash <<'EOF'` for bash features
+// and `pipefail`.
+
+/**
+ * Checkout a GitHub repo into dirName using the github-app credential.
+ * branchSpec examples: 'refs/tags/v2.5.5', '*\/main'
+ */
+def checkoutGithubActionRepo(String dirName, String repoUrl, String branchSpec) {
+    dir(dirName) {
+        checkout([
+            $class: 'GitSCM',
+            branches: [[name: branchSpec]],
+            extensions: [[$class: 'CloneOption', depth: 1, shallow: true, noTags: false]],
+            userRemoteConfigs: [[
+                url: repoUrl,
+                credentialsId: 'github-app'
+            ]]
+        ])
+        sh 'ls -la'
+        sh 'find . -maxdepth 2 -type d | sort'
+    }
+}
+
+/** Init Matter package-related git submodules (shallow). */
+def initMatterPackageSubmodules() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+git config --global --add safe.directory "${WORKSPACE}"
+git submodule update --init --depth 1 --jobs 8 \
+  third_party/matter_sdk \
+  third_party/matter_support \
+  third_party/QR-Code-generator \
+  third_party/mbedtls \
+  third_party/nlio \
+  third_party/nlassert
+EOF
+    '''
+}
+
+/** Install uv into ~/.local/bin if missing. */
+def setupUv() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+export PATH="${HOME}/.local/bin:${PATH}"
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="${HOME}/.local/bin:${PATH}"
+fi
+uv --version
+EOF
+    '''
+}
+
+/** Install SLT CLI and Conan engine; puts conan on PATH via ~/.local/bin. */
+def setupSltAndConan() {
+    sh '''
+        bash <<'EOF'
+set -euo pipefail
+export PATH="${HOME}/.local/bin:${PATH}"
+
+SLT_ARTIFACTORY_URL="${SLT_ARTIFACTORY_URL:-https://www.silabs.com/documents/public/software}"
+SLT_PKG_NAME="${SLT_PKG_NAME:-slt-cli-1.2.0-linux-x64.zip}"
+curl -fsSL "${SLT_ARTIFACTORY_URL}/${SLT_PKG_NAME}" --output "/tmp/${SLT_PKG_NAME}"
+mkdir -p "${HOME}/.local/bin"
+unzip -o "/tmp/${SLT_PKG_NAME}" -d "${HOME}/.local/bin"
+rm -f "/tmp/${SLT_PKG_NAME}"
+export SLT_CI=true
+slt update --self
+slt --version
+
+export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+CONAN_HOME="${CONAN_HOME/#\\~/$HOME}"
+export CONAN_HOME
+export PATH="${HOME}/.silabs/slt/engines/conan/conan:${PATH}"
+
+slt install conan
+CONAN_BIN="${HOME}/.silabs/slt/engines/conan/conan/conan"
+if [ ! -f "${CONAN_BIN}" ]; then
+  echo "Error: conan not found at ${CONAN_BIN}" >&2
+  exit 1
+fi
+ln -fs "${CONAN_BIN}" "${HOME}/.local/bin/conan"
+conan --version
+
+conan remote add -f silabs-conan-production \
+  https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production
+conan remote list
+EOF
+    '''
+    // Persist for later sh steps (exports inside bash do not carry across Jenkins sh steps)
+    env.CONAN_HOME = "${env.HOME}/.silabs/slt/installs/conan"
+    echo "CONAN_HOME=${env.CONAN_HOME}"
+}
+
+/**
+ * Prerelease qualifier from the build context, matching the artifact upload and
+ * CI test naming convention. Multibranch sets BRANCH_NAME=PR-<n> for PRs.
+ * Returns '' on release_ branches, which keep the checked-in packages/.prerelease.
+ */
+def resolvePrereleaseQualifier() {
+    if (env.BRANCH_NAME?.startsWith('release_')) {
+        return ''
+    }
+    def isPr = (env.CHANGE_ID?.trim()) || (env.BRANCH_NAME ==~ /^PR-\d+$/)
+    if (isPr) {
+        def prNum = env.CHANGE_ID?.trim() ?: env.BRANCH_NAME.replaceFirst(/^PR-/, '')
+        return "pr.${prNum}"
+    }
+    // Conan refs use '/' as delimiter (name/version@user); sanitize branch chars.
+    return (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9._-]/, '-')
+}
+
+/**
+ * Point SL_PRERELEASE at the qualifier to publish with.
+ * Without an explicit qualifier, PR / feature / main builds get a generated one
+ * (pr.<n> or sanitized branch) and release_ branches keep packages/.prerelease.
+ * Returns the absolute path of the label file.
+ */
+def writePrereleaseLabel(String qualifier = null) {
+    def label = qualifier?.trim() ?: resolvePrereleaseQualifier()
+    if (!label) {
+        env.SL_PRERELEASE = "${env.WORKSPACE}/packages/.prerelease"
+        echo "SL_PRERELEASE=${env.SL_PRERELEASE} (release branch ${env.BRANCH_NAME}: using packages/.prerelease)"
+        return env.SL_PRERELEASE
+    }
+    def labelPath = "${env.WORKSPACE}/.sl_prerelease_label"
+    writeFile file: '.sl_prerelease_label', text: "${label}\n"
+    env.SL_PRERELEASE = labelPath
+    echo "SL_PRERELEASE=${env.SL_PRERELEASE} (qualifier=${label}, BRANCH_NAME=${env.BRANCH_NAME}, CHANGE_ID=${env.CHANGE_ID})"
+    return labelPath
+}
+
+/** Base version from matter.slce (e.g. 2.10.0). */
+def readMatterBaseVersion() {
+    def base = sh(
+        script: "awk '/^version:/{print \$2; exit}' matter.slce | tr -d '\"[:space:]'",
+        returnStdout: true
+    ).trim()
+    if (!base) {
+        error('could not resolve base version from matter.slce')
+    }
+    return base
+}
+
+/**
+ * Resolve full Matter package version for this build and set env.MATTER_PACKAGE_VERSION.
+ * Non-release: <base>-<pr.N|sanitized-branch>
+ * Release: <base>-<qualifier>.<N> where N is next from Conan remote list (+1).
+ * Also sets SL_PRERELEASE_NUMBER on release so create-publish reuses the same N.
+ * Must run on the agent (not inside the ubai docker) so SLT/Conan are available.
+ */
+def resolvePackageVersion() {
+    if (env.MATTER_PACKAGE_VERSION?.trim()) {
+        echo "MATTER_PACKAGE_VERSION already set: ${env.MATTER_PACKAGE_VERSION}"
+        return env.MATTER_PACKAGE_VERSION
+    }
+
+    def base = readMatterBaseVersion()
+    def isRelease = env.BRANCH_NAME?.startsWith('release_')
+
+    if (!isRelease) {
+        def qualifier = resolvePrereleaseQualifier()
+        def version = qualifier ? "${base}-${qualifier}" : base
+        env.MATTER_PACKAGE_VERSION = version
+        echo "MATTER_PACKAGE_VERSION=${version} (branch/PR path)"
+        return version
+    }
+
+    writePrereleaseLabel()
+    def qualifier = sh(
+        script: "tr -d '[:space:]' < \"${env.WORKSPACE}/packages/.prerelease\"",
+        returnStdout: true
+    ).trim()
+    if (!qualifier) {
+        env.MATTER_PACKAGE_VERSION = base
+        echo "MATTER_PACKAGE_VERSION=${base} (release, empty .prerelease)"
+        return base
+    }
+
+    def remoteName = 'silabs-conan-production'
+    def remoteUrl = 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
+
+    withCredentials([string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN')]) {
+        setupSltAndConan()
+        def nextN = sh(script: """
+            bash <<'EOF'
+set -euo pipefail
+export PATH="\${HOME}/.local/bin:\${PATH}"
+export CONAN_HOME="\${CONAN_HOME:-\${HOME}/.silabs/slt/installs/conan}"
+export CONAN_HOME
+CONAN_USER="\${CONAN_LOGIN_USERNAME:-svc_gsdk}"
+REMOTE_NAME='${remoteName}'
+REMOTE_URL='${remoteUrl}'
+BASE_VERSION='${base}'
+QUALIFIER='${qualifier}'
+conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
+conan remote login "\${REMOTE_NAME}" "\${CONAN_USER}" -p "\${ARTIFACTORY_TOKEN}"
+PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@silabs"
+LIST_JSON="\$(conan list "\${PATTERN}" -r "\${REMOTE_NAME}" --format=json 2>/dev/null || echo '{}')"
+python3 -c "
+import json,re,sys
+data=json.loads(sys.argv[1])
+remote=sys.argv[2]
+base=sys.argv[3]
+qual=sys.argv[4]
+name='matter'
+pkgs=data.get(remote, data)
+nums=[]
+pat=re.compile(rf'{re.escape(name)}/{re.escape(base)}-{re.escape(qual)}\\\\.(\\\\d+)@')
+for ref in pkgs:
+    m=pat.search(ref)
+    if m:
+        nums.append(int(m.group(1)))
+print(max(nums, default=0)+1)
+" "\${LIST_JSON}" "\${REMOTE_NAME}" "\${BASE_VERSION}" "\${QUALIFIER}"
+EOF
+        """.stripIndent().trim(), returnStdout: true).trim()
+
+        // conan may print to stdout; keep the last integer-only line
+        def numberLines = nextN.readLines().findAll { it ==~ /^\d+$/ }
+        if (!numberLines) {
+            error("Failed to resolve next prerelease number from Conan remote (got: '${nextN}')")
+        }
+        nextN = numberLines.last()
+        env.SL_PRERELEASE_NUMBER = nextN
+        def version = "${base}-${qualifier}.${nextN}"
+        env.MATTER_PACKAGE_VERSION = version
+        echo "MATTER_PACKAGE_VERSION=${version} SL_PRERELEASE_NUMBER=${nextN} (release path)"
+        return version
+    }
+}
+
+/**
+ * Read conan_package_output.json written by action-conan-create-publish@v2.5.4
+ * (set_script_output / _create_json_output). File is created in the process cwd.
+ * Returns a Map with keys like full_package_ref, package_ref, prerelease_number, ...
+ */
+def readConanPackageOutputJson(String jsonPath = null) {
+    def path = jsonPath ?: "${env.WORKSPACE}/conan_package_output.json"
+    if (!fileExists(path)) {
+        error("conan_package_output.json not found at ${path}")
+    }
+    def data = readJSON file: path
+    echo "Read conan_package_output.json: ${data}"
+    return data
+}
+
+/**
+ * Run action-conan-create-publish for one recipe (create + publish).
+ * Requires ARTIFACTORY_TOKEN in the environment (use withCredentials).
+ * Runs from WORKSPACE so v2.5.4 writes conan_package_output.json there.
+ */
+def runActionConanCreatePublish(String name, String conanfile, String remoteName, String remoteUrl, String actionDir) {
+    sh("""
+        bash <<'EOF'
+set -euo pipefail
+cd "\${WORKSPACE}"
+export PATH="\${HOME}/.local/bin:\${PATH}"
+export CONAN_HOME="\${CONAN_HOME:-\${HOME}/.silabs/slt/installs/conan}"
+export CONAN_HOME
+echo "CONAN_HOME=\${CONAN_HOME}"
+conan remote list
+echo "Running action-conan-create-publish for ${name} (${conanfile})"
+rm -f "\${WORKSPACE}/conan_package_output.json"
+env \\
+  "CONAN_HOME=\${CONAN_HOME}" \\
+  "INPUT_CONANFILE_PATH=${conanfile}" \\
+  "INPUT_REMOTE_USERNAME=svc_gsdk" \\
+  "INPUT_REMOTE_NAME=${remoteName}" \\
+  "INPUT_REMOTE_URL=${remoteUrl}" \\
+  "INPUT_REMOTE_TOKEN=\${ARTIFACTORY_TOKEN}" \\
+  "INPUT_STACK_NAME=matter" \\
+  "INPUT_CREATE=true" \\
+  "INPUT_PUBLISH=true" \\
+  "INPUT_CONAN_COMMAND_OPTIONS=export-pkg" \\
+  "INPUT_PACKAGE_USER=silabs" \\
+  "INPUT_JIRA_PROJECT=MATTER" \\
+  uv run --project "${actionDir}" action-conan-create-publish
+test -f "\${WORKSPACE}/conan_package_output.json"
+echo "Wrote \${WORKSPACE}/conan_package_output.json"
+cat "\${WORKSPACE}/conan_package_output.json"
+EOF
+    """.stripIndent().trim())
+}
+
+/**
+ * Promote each package ref via action-conan-promote@v2 (uv + JFrog CLI).
+ * Requires ARTIFACTORY_TOKEN in the environment.
+ * v2 reads PACKAGE_REF / SOURCE_REMOTE_URL / DESTINATION_REMOTE_URL.
+ */
+def runActionConanPromote(String packageRefs, String sourceRemoteUrl, String destRemoteUrl, String actionDir) {
+    def jfUrl = sourceRemoteUrl.replaceAll(/^(https?:\/\/[^\/]+).*/, '$1')
+
+    sh("""
+        bash <<'EOF'
+set -euo pipefail
+export PATH="\${HOME}/.local/bin:\${PATH}"
+
+if ! command -v uv >/dev/null 2>&1; then
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  export PATH="\${HOME}/.local/bin:\${PATH}"
+fi
+uv --version
+
+# JFrog CLI (v2 action uses jfrog/setup-jfrog-cli)
+if ! command -v jf >/dev/null 2>&1; then
+  curl -fL https://install-cli.jfrog.io | sh
+  if [ -x ./jf ]; then
+    mkdir -p "\${HOME}/.local/bin"
+    mv ./jf "\${HOME}/.local/bin/jf"
+  fi
+  export PATH="\${HOME}/.local/bin:\${PATH}"
+fi
+jf --version
+
+export JF_URL='${jfUrl}'
+export JF_ACCESS_TOKEN="\${ARTIFACTORY_TOKEN}"
+
+# setup-jfrog-cli configures a server; plain env vars are not enough for jf rt cp
+jf config add matter-promote \\
+  --url="\${JF_URL}" \\
+  --access-token="\${JF_ACCESS_TOKEN}" \\
+  --interactive=false \\
+  --overwrite=true
+jf config use matter-promote
+
+for ref in ${packageRefs}; do
+  echo "Promoting: \${ref}"
+  echo "From: ${sourceRemoteUrl}"
+  echo "To:   ${destRemoteUrl}"
+  env \\
+    "PACKAGE_REF=\${ref}" \\
+    "SOURCE_REMOTE_URL=${sourceRemoteUrl}" \\
+    "DESTINATION_REMOTE_URL=${destRemoteUrl}" \\
+    "JF_URL=\${JF_URL}" \\
+    "JF_ACCESS_TOKEN=\${JF_ACCESS_TOKEN}" \\
+    uv run --no-dev --project "${actionDir}" action-conan-promote
+done
+EOF
+    """.stripIndent().trim())
 }
 
 return this
