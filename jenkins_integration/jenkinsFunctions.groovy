@@ -307,11 +307,11 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                     def commanderDir = ""
                     sshagent(['svc_gsdk-ssh']) {
                         checkout scm: [$class                            : 'GitSCM',
-                                        branches                         : [[name: 'main']],
-                                        browser                          : [$class: 'Stash',
-                                        repoUrl: 'https://stash.silabs.com/scm/utf/utf_app_matter.git/'],
-                                        userRemoteConfigs                : [[credentialsId: 'svc_gsdk-ssh',
-                                                        url: 'ssh://git@stash.silabs.com/utf/utf_app_matter.git']]]
+                                        branches                         : [[name: 'release_2.9-1.6']],
+                                        browser                          : [$class: 'GithubWeb',
+                                        repoUrl: 'https://github.com/SiliconLabsInternal/utf_app_matter'],
+                                        userRemoteConfigs                : [[credentialsId: 'github-app',
+                                                        url: 'https://github.com/SiliconLabsInternal/utf_app_matter.git']]]
 
                         sh ''' git submodule sync --recursive
                             git submodule update --init --recursive -q '''
