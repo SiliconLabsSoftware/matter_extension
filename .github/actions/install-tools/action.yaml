@@ -12,6 +12,8 @@ runs:
     - name: Install ZAP
       shell: bash
       run: |
+        # get_zap_version.py reads zap.version from matter_sdk; CI checkouts often omit submodules.
+        git submodule update --init --depth 1 third_party/matter_sdk
         ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
         wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
         unzip zap-linux-x64.zip -d /tmp/zap-linux-x64

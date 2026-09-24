@@ -42,6 +42,11 @@ def get_zap_version():
         logging.info(f"Using SILABS_MATTER_ROOT: {silabs_chip_root}")
 
     zap_version_path = silabs_chip_root / "third_party" / "matter_sdk" / "scripts" / "setup" / "zap.version"
+    if not zap_version_path.is_file():
+        raise FileNotFoundError(
+            f"ZAP version file not found at {zap_version_path}. "
+            "Initialize the matter_sdk submodule or set SIMPLICITY_STUDIO_ZAP_VERSION."
+        )
     with open(zap_version_path, 'r') as f:
         zap_version = f.read().strip()
     return zap_version
