@@ -57,8 +57,7 @@ component:
   - id: matter_platform_mg
   - id: matter_custom_apptask
   - id: ot_stack_ftd
-  - id: matter_cpc
-  #- id: matter_mmic # will be available soon
+  - id: matter_mmic
   - id: matter_thread
   - id: rail_util_pti
   - id: matter_crypto
@@ -120,6 +119,7 @@ include:
       - path: AppConfig.h
       - path: AppEvent.h
       - path: AppTask.h
+      - path: WakeUpMgr.h
       - path: CHIPProjectConfig.h
     directory: include
 
@@ -128,6 +128,8 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/main.cpp
     directory: src
+  - path: ../../../../third_party/matter_sdk/examples/wake-on-matter/silabs/src/WakeUpMgr.cpp
+    directory: src  
 
 define:
   - name: OPENTHREAD_FULL_LOGS_ENABLE
