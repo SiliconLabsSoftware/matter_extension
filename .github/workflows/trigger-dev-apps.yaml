@@ -96,22 +96,30 @@ jobs:
             exit 0
           fi
 
-          # Skip if Build Dev apps is already queued or in progress on this branch.
+          # Skip if the target workflow is already queued or in progress on this branch.
+          if [[ "$BRANCH" == "release_2.10-1.6.1" ]]; then
+            busy_workflow="matter-packages-validation.yaml"
+            busy_label="Matter Packages Validation"
+          else
+            busy_workflow="dev-apps-builder.yaml"
+            busy_label="Build Dev apps"
+          fi
+
           active=0
           for status in in_progress queued; do
             count=$(gh run list \
               --repo "${{ github.repository }}" \
-              --workflow=dev-apps-builder.yaml \
+              --workflow="$busy_workflow" \
               --branch "$BRANCH" \
               --status "$status" \
               --json databaseId \
               --jq 'length')
-            echo "$status=$count on $BRANCH"
+            echo "$busy_workflow $status=$count on $BRANCH"
             active=$((active + count))
           done
 
           if [[ "$active" -gt 0 ]]; then
-            echo "Build Dev apps already active on $BRANCH, skipping trigger to avoid canceling it."
+            echo "$busy_label already active on $BRANCH, skipping trigger to avoid canceling it."
             echo "should_trigger=false" >> "$GITHUB_OUTPUT"
             echo "reason=busy" >> "$GITHUB_OUTPUT"
             exit 0
