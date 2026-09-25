@@ -48,8 +48,9 @@ def stage(kind, bundle, staging):
         copy_tree(os.path.join(bundle, "renode"), os.path.join(staging, "renode"))
         for name in ("linux-booted-thread.save", "runtime-manifest.json"):
             src = os.path.join(bundle, name)
-            if os.path.isfile(src):
-                shutil.copy2(src, os.path.join(staging, name))
+            if not os.path.isfile(src) or os.path.getsize(src) == 0:
+                common.die(f"runtime bundle missing {name}")
+            shutil.copy2(src, os.path.join(staging, name))
         return
     common.die(f"unknown kind: {kind}")
 

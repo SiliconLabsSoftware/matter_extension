@@ -73,24 +73,30 @@ class RenodeHarness:
     def monitor_command(self, command: str, timeout_s: float = 120.0) -> str:
         self._wait_for_port(self.monitor_port, timeout_s)
         with closing(socket.create_connection(("127.0.0.1", self.monitor_port), timeout=timeout_s)) as sock:
-            sock.settimeout(timeout_s)
-            self._read_until_prompt(sock)
+            self._read_until_prompt(sock, timeout_s)
             sock.sendall((command + "\n").encode())
-            return self._read_until_prompt(sock)
+            return self._read_until_prompt(sock, timeout_s)
 
-    def _read_until_prompt(self, sock: socket.socket) -> str:
-        chunks = []
-        while True:
+    def _read_until_prompt(self, sock: socket.socket, timeout_s: float) -> str:
+        chunks: list[str] = []
+        deadline = time.time() + timeout_s
+        while time.time() < deadline:
+            sock.settimeout(max(deadline - time.time(), 0.1))
             try:
                 data = sock.recv(4096)
             except socket.timeout:
                 break
             if not data:
-                break
+                raise RuntimeError(
+                    "monitor connection closed before prompt\n" + "".join(chunks)[-2000:]
+                )
             chunks.append(data.decode(errors="replace"))
-            if _MONITOR_PROMPT.search("".join(chunks)):
-                break
-        return "".join(chunks)
+            text = "".join(chunks)
+            if _MONITOR_PROMPT.search(text):
+                return text
+        raise TimeoutError(
+            f"timed out waiting for monitor prompt after {timeout_s}s\n" + "".join(chunks)[-2000:]
+        )
 
     def hub_console_session(self, timeout_s: float = 600.0):
         self._wait_for_port(self.hub_console_port, timeout_s)
