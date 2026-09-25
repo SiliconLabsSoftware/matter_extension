@@ -1,6 +1,10 @@
-name: Create Matter Packages
+name: Matter Packages Validation
 
 on:
+  pull_request:
+        branches:
+            - main
+            - "release_*"
   workflow_dispatch:
     inputs:
       package_version:
@@ -29,6 +33,7 @@ permissions:
 
 jobs:
   matter-packages:
+    name: Create Matter Packages
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.packages.outputs.version }}
@@ -94,7 +99,7 @@ jobs:
 
   build-dev-apps:
     name: Build Dev Apps (from package cache)
-    if: ${{ inputs.build_dev_apps }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_dev_apps }}
     needs: matter-packages
     permissions:
       contents: read
@@ -102,14 +107,13 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/dev-apps-builder-pkg.yaml
     with:
-      build-type: standard
-      use-package-cache: true
+      build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
   ota-size-check:
     name: OTA flash size check
-    if: ${{ inputs.ota_size_check }}
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.ota_size_check }}
     needs: matter-packages
     permissions:
       contents: read

@@ -1,10 +1,6 @@
 name: Check OTA Flash Space
 
 on:
-  pull_request:
-    branches:
-      - main
-      - "release_*"
   workflow_dispatch:
 
 permissions:

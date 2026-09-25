@@ -45,12 +45,22 @@ runs:
           if: steps.cache.outputs.cache-hit == 'true'
           shell: bash
           run: |
-              echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
-              echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
-              echo "SLT_PATH=/home/runner/.local/bin/slt" >> $GITHUB_ENV
-              echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
-              echo "/home/runner/.silabs/slt/bin" >> $GITHUB_PATH
-              echo "/home/runner/.local/bin" >> $GITHUB_PATH
+              CONAN_HOME="${HOME}/.silabs/slt/installs/conan"
+              echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
+              echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> "$GITHUB_ENV"
+              echo "SLT_PATH=/home/runner/.local/bin/slt" >> "$GITHUB_ENV"
+              echo "/tmp/zap-linux-x64" >> "$GITHUB_PATH"
+              echo "/home/runner/.silabs/slt/bin" >> "$GITHUB_PATH"
+              echo "/home/runner/.local/bin" >> "$GITHUB_PATH"
+              echo "${HOME}/.silabs/slt/engines/conan/conan" >> "$GITHUB_PATH"
+
+        - name: Install Conan (cached tools)
+          if: steps.cache.outputs.cache-hit == 'true'
+          shell: bash
+          run: |
+              set -euo pipefail
+              export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
+              slt install conan
 
         - name: Set tool paths from cache
           if: steps.cache.outputs.cache-hit == 'true'
