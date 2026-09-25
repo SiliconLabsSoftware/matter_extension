@@ -167,14 +167,16 @@ configuration:
 
   # Default ICD configurations
   - name: SL_IDLE_MODE_DURATION_S
-    value: "600"
+    value: "1800"
   - name: SL_ACTIVE_MODE_DURATION_MS
     value: "0"
   - name: SL_ACTIVE_MODE_THRESHOLD
     value: "5000"
+  - name: SL_MATTER_SENSOR_TIMER_PERIOD_S
+    value: "1800"
 
   - name: SL_TRANSPORT_IDLE_INTERVAL
-    value: "600000"
+    value: "1800000"
   - name: SL_TRANSPORT_ACTIVE_INTERVAL
     value: "1000"
 
@@ -189,6 +191,11 @@ configuration:
     value: "1"
   - name: CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION
     value: "0"
+
+  - name: OPENTHREAD_CONFIG_MLE_CHILD_TIMEOUT_DEFAULT
+    value: "SL_IDLE_MODE_DURATION_S + 1"
+  - name: OPENTHREAD_CONFIG_CHILD_SUPERVISION_CHECK_TIMEOUT
+    value: SL_IDLE_MODE_DURATION_S
 
 toolchain_settings:
   - option: cxx_standard

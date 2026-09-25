@@ -1,0 +1,33 @@
+name: Validate Gitmodules Branches
+
+on:
+  push:
+    branches:
+      - main
+      - "release_*"
+  pull_request:
+    branches:
+      - main
+      - "release_*"
+
+concurrency:
+  group: validate-gitmodules-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-gitmodules-branches:
+    name: Validate submodule branch entries
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Validate Gitmodules Branches
+        uses: SiliconLabsSoftware/action-gitmodule-validation@v1
+        with:
+          submodules: third_party/matter_sdk third_party/matter_support

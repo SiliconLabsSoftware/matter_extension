@@ -166,6 +166,11 @@
                 "arguments": ["--output_suffix m-ota-enc",
                               "--without_app matter_ota_support",
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             }
         ],
         "lighting_app": [
@@ -212,6 +217,11 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix lit-120",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "platform_template": [
@@ -219,6 +229,11 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix peripherals-icd-lit-120","--with_app matter_peripherals,matter_icd_core",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "closure_app": [
@@ -226,6 +241,13 @@
                 "boards": ["brd4187c"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
+            }
+        ],
+        "window_app": [
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--output_suffix sit-60",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
             }
         ]
     }

@@ -24,6 +24,7 @@ component_path:
   - path: slc/component/matter-platform/logging
   - path: slc/component/matter-platform/cpc
   - path: slc/component/matter-platform/crypto
+  - path: slc/component/matter-platform/mmic
   - path: slc/component/matter-platform/ota
   - path: slc/component/matter-platform/segger
   - path: slc/component/matter-platform/shell
