@@ -30,7 +30,7 @@
     "full": {
         "default": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": [""]
             },
             {
@@ -70,7 +70,7 @@
         ],
         "zigbee_light":  [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix sequential","--with_app matter_zigbee_sequential"]
             },
             {
@@ -88,21 +88,17 @@
         ],
         "thermostat": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common"]
-            },
-            {
-                "boards": ["brd4408a"],
-                "arguments": ["--output_suffix cmp-concurrent-copy-sources","--with_app matter_zigbee_concurrent,matter_zigbee_multiprotocol_common", "--copy-sources"]
             }
         ],
         "platform_template": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals","--with_app matter_peripherals"]
             },
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix peripherals-icd","--with_app matter_peripherals,matter_icd_core"]
             },
             {
@@ -136,7 +132,7 @@
         ],
         "lock_app": [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix ota-2", "-pids application",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -175,21 +171,16 @@
                 "boards": ["brd4407a"],
                 "arguments": ["--output_suffix lit-120",
                               "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
-            },
-            {
-                "boards": ["brd4408a"],
-                "arguments": ["--output_suffix lit-120",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "zigbee_light":  [
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd4407a"],
                 "arguments": ["--output_suffix sequential-ota-2","--with_app matter_zigbee_sequential", "-pids application",
                             "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
-                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a", "brd4408a"],
+                "boards": ["brd1019a,SIMG301M113WIH", "brd2719a", "brd4407a"],
                 "arguments": ["--output_suffix cmp-concurrent-ota-2","--with_app matter_zigbee_concurrent", "-pids application",
                             "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
