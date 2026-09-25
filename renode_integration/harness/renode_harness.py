@@ -128,6 +128,10 @@ class _ConsoleSession:
                 line, self.buffer = self.buffer.split("\n", 1)
                 if regex.search(line):
                     return line
+            if regex.search(self.buffer):
+                match = self.buffer
+                self.buffer = ""
+                return match
             self._read_more()
             time.sleep(0.1)
         raise TimeoutError(f"timed out waiting for /{pattern}/ in console output")

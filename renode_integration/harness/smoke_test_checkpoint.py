@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import select
 import subprocess
 import sys
 import time
@@ -50,14 +51,15 @@ def main() -> int:
             if proc.poll() is not None:
                 output = "".join(output_lines)
                 raise RuntimeError(f"Renode exited with code {proc.returncode}\n{output}")
-            line = proc.stdout.readline()
-            if line:
-                output_lines.append(line)
-                if re.search(r"Starting emulation", line):
-                    print(f"Checkpoint loaded: {checkpoint}")
-                    return 0
-            else:
-                time.sleep(0.1)
+            timeout = max(0, deadline - time.time())
+            ready, _, _ = select.select([proc.stdout], [], [], min(timeout, 0.1))
+            if ready:
+                line = proc.stdout.readline()
+                if line:
+                    output_lines.append(line)
+                    if re.search(r"Starting emulation", line):
+                        print(f"Checkpoint loaded: {checkpoint}")
+                        return 0
         raise TimeoutError("checkpoint load did not complete within 180s")
     finally:
         proc.terminate()
