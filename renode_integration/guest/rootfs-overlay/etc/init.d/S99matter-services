@@ -1,0 +1,121 @@
+#!/bin/sh
+# Start the simulated Matter controller services in the ZynqMP Buildroot guest.
+# This runs from /etc/init.d after the kernel has created the tools disk and eth0.
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+
+TOOLS=/root/matter-tools
+LOADER="$TOOLS/lib/ld-linux-aarch64.so.1"
+LIBS="$TOOLS/usr/lib/aarch64-linux-gnu:$TOOLS/lib"
+OT="$TOOLS/guest-bin/ot-ctl"
+STATE=/tmp/matter-services.status
+
+log()
+{
+    echo "matter-services: $*" | tee -a "$STATE" > /dev/console
+}
+
+start_background()
+{
+    name="$1"
+    shift
+    "$@" >"/tmp/$name.log" 2>&1 &
+}
+
+wait_for()
+{
+    description="$1"
+    attempts="$2"
+    shift 2
+
+    while [ "$attempts" -gt 0 ]; do
+        if "$@" >/dev/null 2>&1; then
+            return 0
+        fi
+        attempts=$((attempts - 1))
+        sleep 1
+    done
+
+    log "ERROR: timed out waiting for $description; see /tmp/*.log"
+    return 1
+}
+
+ot()
+{
+    "$LOADER" --library-path "$LIBS" "$OT" "$@"
+}
+
+start()
+{
+    : > "$STATE"
+    log "starting"
+
+    # The stock Antmicro rootfs mounts its first virtio disk at /docker from
+    # /etc/fstab.  Accept that location when it contains our tools image.  A
+    # newly patched rootfs removes that legacy mount and uses /root/matter-tools.
+    if mountpoint -q /docker && [ -x /docker/guest-bin/ot-ctl ]; then
+        TOOLS=/docker
+        LOADER="$TOOLS/lib/ld-linux-aarch64.so.1"
+        LIBS="$TOOLS/usr/lib/aarch64-linux-gnu:$TOOLS/lib"
+        OT="$TOOLS/guest-bin/ot-ctl"
+        log "using pre-mounted tools image at /docker"
+    fi
+
+    mkdir -p "$TOOLS"
+    if ! mountpoint -q "$TOOLS"; then
+        # With the legacy Docker disk present, matter-tools is vdb.  Without
+        # it (the preferred configuration), it is vda.
+        for dev in /dev/vdb /dev/vda; do
+            [ -b "$dev" ] || continue
+            mount -o ro "$dev" "$TOOLS" && break
+        done
+        if ! mountpoint -q "$TOOLS"; then
+            log "ERROR: cannot mount matter-tools from /dev/vda or /dev/vdb"
+            return 1
+        fi
+    fi
+
+    if [ ! -x "$LOADER" ] || [ ! -x "$OT" ]; then
+        log "ERROR: matter-tools image is missing required executables"
+        return 1
+    fi
+
+    ip link set eth0 up || {
+        log "ERROR: cannot bring eth0 up"
+        return 1
+    }
+    wait_for "eth0 carrier" 10 sh -c 'ip link show eth0 | grep -q LOWER_UP' || return 1
+
+    grep -q '^messagebus:' /etc/passwd || echo 'messagebus:x:81:81::/run/dbus:/bin/false' >> /etc/passwd
+    grep -q '^messagebus:' /etc/group || echo 'messagebus:x:81:' >> /etc/group
+    mkdir -p /run/dbus /etc/dbus-1/system.d /usr/share/dbus-1
+    printf '%s\n' 0123456789abcdef0123456789abcdef > /etc/machine-id
+    cp "$TOOLS/usr/share/dbus-1/system.conf" /usr/share/dbus-1/system.conf
+    cp "$TOOLS/etc/dbus-1/system.d/otbr-agent.conf" /etc/dbus-1/system.d/otbr-agent.conf
+    cp "$TOOLS/etc/dbus-1/system.d/bluetooth.conf" /etc/dbus-1/system.d/bluetooth.conf
+
+    start_background dbus "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/dbus-daemon" \
+        --system --nofork --nopidfile --address=unix:path=/run/dbus/system_bus_socket
+    wait_for "D-Bus" 10 test -S /run/dbus/system_bus_socket || return 1
+
+    stty -F /dev/ttyPS3 raw -echo -echoe -echok 115200
+    start_background btattach "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/btattach" \
+        -B /dev/ttyPS3 -S 115200 -P h4 -N
+    wait_for "Bluetooth HCI controller" 15 "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/btmgmt" info || return 1
+    "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/btmgmt" --index 0 power on >> /tmp/btattach.log 2>&1 || return 1
+    start_background bluetoothd "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/bluetoothd" -n
+
+    stty -F /dev/ttyPS0 raw -echo -echoe -echok 460800
+    start_background otbr "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/otbr-agent" \
+        -I wpan0 -B eth0 -s --auto-attach=0 spinel+hdlc+uart:///dev/ttyPS0
+    wait_for "OTBR" 20 ot state || return 1
+
+    log "READY"
+    log "Run matter-thread-init to create and start a Thread network"
+}
+
+case "${1:-start}" in
+    start) start ;;
+    *) echo "Usage: $0 start" >&2; exit 2 ;;
+esac

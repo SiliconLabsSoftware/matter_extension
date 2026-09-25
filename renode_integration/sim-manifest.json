@@ -1,0 +1,47 @@
+{
+  "renode": {
+    "repo": "https://github.com/SiliconLabsSoftware/renode.git",
+    "commit": "e3f79c5f869546d6ca65e233fb74bb5f67208e8b"
+  },
+  "base_rootfs": {
+    "url": "https://dl.antmicro.com/projects/renode/rootfs.ext2-s_62914560-a92499f1e488a57b212b6e6cb3c8869911feecb3",
+    "sha256": "e7ef47fda7788b708ad49960192203ce2f194f2f08de04c2009d9c0fccc436f7"
+  },
+  "ot_br_posix": {
+    "repo": "https://github.com/openthread/ot-br-posix.git",
+    "commit": "d8800de2778afb31969c3a2f1fd75913dff7d987",
+    "cmake_args": [
+      "-DOTBR_DBUS=ON",
+      "-DOTBR_REST=ON",
+      "-DOTBR_TELEMETRY_DATA_API=ON"
+    ]
+  },
+  "tools_image": {
+    "ubuntu_version": "24.04"
+  },
+  "rcps": [
+    {
+      "slcp": "thread_app/ot-ncp/ot/ot-rcp.slcp",
+      "board": "brd4186c",
+      "output": "ot-rcp.out",
+      "configuration": [
+        "SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE:usartHwFlowControlNone",
+        "SL_IOSTREAM_USART_VCOM_RX_BUFFER_SIZE:1024"
+      ]
+    },
+    {
+      "slcp": "bluetooth_le_app/example/bt_rcp/bt_rcp_freertos.slcp",
+      "board": "brd4186c",
+      "output": "bt_rcp_freertos.out",
+      "configuration": [
+        "SL_UARTDRV_USART_VCOM_FLOW_CONTROL_TYPE:uartdrvFlowControlNone"
+      ]
+    }
+  ],
+  "macos": {
+    "deployment_target": "26.0"
+  },
+  "ghcr": {
+    "package": "ghcr.io/siliconlabssoftware/matter-renode-sim"
+  }
+}
