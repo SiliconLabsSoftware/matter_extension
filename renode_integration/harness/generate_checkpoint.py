@@ -67,8 +67,8 @@ def main() -> int:
         console.login_root()
         console.run_and_wait("matter-thread-init", r"matter-thread-init: READY", timeout_s=180)
         harness.monitor_command("pause")
-        harness.monitor_command(f"Save @{checkpoint}")
-        if not checkpoint.exists():
+        harness.monitor_command(f"Save @{checkpoint}", timeout_s=600)
+        if not checkpoint.is_file() or checkpoint.stat().st_size == 0:
             raise RuntimeError(f"checkpoint file was not created: {checkpoint}")
         print(f"Saved checkpoint: {checkpoint}")
 
