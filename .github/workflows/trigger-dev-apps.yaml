@@ -96,22 +96,30 @@ jobs:
             exit 0
           fi
 
-          # Skip if Build Dev apps is already queued or in progress on this branch.
+          # Skip if the target workflow is already queued or in progress on this branch.
+          if [[ "$BRANCH" == "release_2.10-1.6.1" ]]; then
+            busy_workflow="matter-packages-validation.yaml"
+            busy_label="Matter Packages Validation"
+          else
+            busy_workflow="dev-apps-builder.yaml"
+            busy_label="Build Dev apps"
+          fi
+
           active=0
           for status in in_progress queued; do
             count=$(gh run list \
               --repo "${{ github.repository }}" \
-              --workflow=dev-apps-builder.yaml \
+              --workflow="$busy_workflow" \
               --branch "$BRANCH" \
               --status "$status" \
               --json databaseId \
               --jq 'length')
-            echo "$status=$count on $BRANCH"
+            echo "$busy_workflow $status=$count on $BRANCH"
             active=$((active + count))
           done
 
           if [[ "$active" -gt 0 ]]; then
-            echo "Build Dev apps already active on $BRANCH, skipping trigger to avoid canceling it."
+            echo "$busy_label already active on $BRANCH, skipping trigger to avoid canceling it."
             echo "should_trigger=false" >> "$GITHUB_OUTPUT"
             echo "reason=busy" >> "$GITHUB_OUTPUT"
             exit 0
@@ -121,7 +129,7 @@ jobs:
           echo "reason=ok" >> "$GITHUB_OUTPUT"
 
       - name: Trigger Dev Apps Build on ${{ matrix.branch }}
-        if: steps.should_trigger.outputs.should_trigger == 'true'
+        if: steps.should_trigger.outputs.should_trigger == 'true' && matrix.branch != 'release_2.10-1.6.1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: ${{ matrix.branch }}
@@ -142,6 +150,33 @@ jobs:
           if [ "$http_code" = "204" ]; then
             echo "Successfully triggered dev-apps-builder.yaml on $BRANCH"
             echo "Build type: $BUILD_TYPE"
+            echo "Timestamp: $(date -u)"
+          else
+            echo "Failed to trigger workflow. HTTP code: $http_code"
+            echo "Response: $response_body"
+            exit 1
+          fi
+
+      - name: Trigger Matter Packages Validation on ${{ matrix.branch }}
+        if: steps.should_trigger.outputs.should_trigger == 'true' && matrix.branch == 'release_2.10-1.6.1'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ matrix.branch }}
+        run: |
+          echo "Triggering matter-packages-validation.yaml on branch $BRANCH"
+
+          response=$(curl -s -w "%{http_code}" -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${{ github.repository }}/actions/workflows/matter-packages-validation.yaml/dispatches" \
+            -d "{\"ref\":\"$BRANCH\",\"inputs\":{\"build_dev_apps\":true,\"ota_size_check\":true}}")
+
+          http_code="${response: -3}"
+          response_body="${response%???}"
+
+          if [ "$http_code" = "204" ]; then
+            echo "Successfully triggered matter-packages-validation.yaml on $BRANCH"
             echo "Timestamp: $(date -u)"
           else
             echo "Failed to trigger workflow. HTTP code: $http_code"
