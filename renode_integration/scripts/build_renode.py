@@ -14,7 +14,12 @@ def version_gt(left, right):
     def parts(value):
         return tuple(int(piece) for piece in value.split("."))
 
-    return parts(left) > parts(right)
+    left_parts = parts(left)
+    right_parts = parts(right)
+    width = max(len(left_parts), len(right_parts))
+    left_parts += (0,) * (width - len(left_parts))
+    right_parts += (0,) * (width - len(right_parts))
+    return left_parts > right_parts
 
 
 def renode_version(renode_bin):
