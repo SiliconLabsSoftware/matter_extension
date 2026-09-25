@@ -50,7 +50,7 @@
         },
         {
             "name": "accessor_default_type",
-            "path": "../../zap-templates/partials/accessor-default-type.zapt"
+            "path": "../../../third_party/matter_sdk/src/app/zap-templates/partials/accessor-default-type.zapt"
         }
     ],
     "templates": [
