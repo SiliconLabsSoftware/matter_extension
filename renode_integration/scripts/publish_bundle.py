@@ -46,10 +46,13 @@ def stage(kind, bundle, staging):
         return
     if kind == "runtime":
         copy_tree(os.path.join(bundle, "renode"), os.path.join(staging, "renode"))
-        for name in ("linux-booted-thread.save", "runtime-manifest.json"):
-            src = os.path.join(bundle, name)
-            if os.path.isfile(src):
-                shutil.copy2(src, os.path.join(staging, name))
+        checkpoint_src = os.path.join(bundle, "linux-booted-thread.save")
+        if not os.path.isfile(checkpoint_src):
+            common.die("linux-booted-thread.save is required for runtime bundle")
+        shutil.copy2(checkpoint_src, os.path.join(staging, "linux-booted-thread.save"))
+        manifest_src = os.path.join(bundle, "runtime-manifest.json")
+        if os.path.isfile(manifest_src):
+            shutil.copy2(manifest_src, os.path.join(staging, "runtime-manifest.json"))
         return
     common.die(f"unknown kind: {kind}")
 

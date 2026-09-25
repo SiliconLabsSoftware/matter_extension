@@ -84,6 +84,9 @@ class RenodeHarness:
             try:
                 data = sock.recv(4096)
             except socket.timeout:
+                combined = "".join(chunks)
+                if not _MONITOR_PROMPT.search(combined):
+                    raise TimeoutError("monitor prompt not received before timeout")
                 break
             if not data:
                 break
