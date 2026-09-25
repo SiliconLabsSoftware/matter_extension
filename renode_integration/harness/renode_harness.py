@@ -124,10 +124,11 @@ class _ConsoleSession:
         regex = re.compile(pattern)
         deadline = time.time() + (timeout_s or self.timeout_s)
         while time.time() < deadline:
-            while "\n" in self.buffer:
-                line, self.buffer = self.buffer.split("\n", 1)
-                if regex.search(line):
-                    return line
+            match = regex.search(self.buffer)
+            if match:
+                matched = self.buffer[: match.end()]
+                self.buffer = self.buffer[match.end() :]
+                return matched
             self._read_more()
             time.sleep(0.1)
         raise TimeoutError(f"timed out waiting for /{pattern}/ in console output")
@@ -138,7 +139,7 @@ class _ConsoleSession:
     def login_root(self) -> None:
         self.wait_for_line(r"buildroot login:", timeout_s=300)
         self.send_line("root")
-        self.wait_for_line(r"#", timeout_s=30)
+        self.wait_for_line(r"#\s*$", timeout_s=30)
 
     def run_and_wait(self, command: str, ready_pattern: str, timeout_s: Optional[float] = None) -> str:
         self.send_line(command)
