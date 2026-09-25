@@ -4,7 +4,8 @@
 from __future__ import annotations
 
 import argparse
-import re
+import os
+import select
 import subprocess
 import sys
 import time
@@ -41,24 +42,25 @@ def main() -> int:
         cwd=bundle_dir,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        text=True,
     )
     try:
         deadline = time.time() + 180
-        output_lines = []
+        output = ""
         while time.time() < deadline:
-            if proc.poll() is not None:
-                output = "".join(output_lines)
+            remaining = deadline - time.time()
+            ready, _, _ = select.select([proc.stdout], [], [], min(0.5, remaining))
+            if proc.poll() is not None and not ready:
                 raise RuntimeError(f"Renode exited with code {proc.returncode}\n{output}")
-            line = proc.stdout.readline()
-            if line:
-                output_lines.append(line)
-                if re.search(r"Starting emulation", line):
-                    print(f"Checkpoint loaded: {checkpoint}")
-                    return 0
-            else:
-                time.sleep(0.1)
-        raise TimeoutError("checkpoint load did not complete within 180s")
+            if not ready:
+                continue
+            chunk = os.read(proc.stdout.fileno(), 4096)
+            if not chunk:
+                continue
+            output += chunk.decode(errors="replace")
+            if "Starting emulation" in output:
+                print(f"Checkpoint loaded: {checkpoint}")
+                return 0
+        raise TimeoutError(f"checkpoint load did not complete within 180s\n{output}")
     finally:
         proc.terminate()
         try:
