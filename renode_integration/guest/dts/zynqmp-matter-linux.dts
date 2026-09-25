@@ -1276,17 +1276,17 @@
 			phandle = <0x6d>;
 		};
 
-		uart2: serial@ff080000 {
-			compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
-			status = "okay";
-			interrupt-parent = <0x05>;
-			interrupts = <0x00 0x30 0x04>;
-			reg = <0x00 0xff080000 0x00 0x1000>;
-			clock-names = "uart_clk", "pclk";
-			power-domains = <0x11 0x21>;
-			clocks = <0x04 0x38 0x04 0x1f>;
-			phandle = <0xf0>;
-		};
+	uart2: serial@ff080000 {
+		compatible = "xlnx,zynqmp-uart", "cdns,uart-r1p12";
+		status = "okay";
+		interrupt-parent = <0x05>;
+		interrupts = <0x00 0x25 0x04>;
+		reg = <0x00 0xff080000 0x00 0x1000>;
+		clock-names = "uart_clk", "pclk";
+		power-domains = <0x11 0x21>;
+		clocks = <0x04 0x38 0x04 0x1f>;
+		phandle = <0xf0>;
+	};
 
 		usb0: usb@ff9d0000 {
 			#address-cells = <0x02>;
