@@ -14,7 +14,8 @@ runs:
       run: |
         ZAP_VERSION=$(python3 slc/script/get_zap_version.py --docker)
         wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
-        unzip zap-linux-x64.zip -d /tmp/zap-linux-x64
+        rm -rf /tmp/zap-linux-x64
+        unzip -q zap-linux-x64.zip -d /tmp/zap-linux-x64
         rm zap-linux-x64.zip
     
     - name: Setup SLT
@@ -80,7 +81,7 @@ runs:
     - name: install gcc-arm-none-eabi
       shell: bash
       run: |
-        conan remote add silabs-conan-prerelease https://conan-prerelease.silabs.net
+        conan remote add --force silabs-conan-prerelease https://conan-prerelease.silabs.net
         slt install gcc-arm-none-eabi/14.2.rel1
         ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
         echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
