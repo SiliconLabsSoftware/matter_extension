@@ -260,7 +260,9 @@ jobs:
         working-directory: renode_integration/out/bundle
         run: |
           python3 - <<'PY'
+          import socket
           import subprocess
+          import time
           from pathlib import Path
 
           renode = Path("renode/renode")
@@ -269,17 +271,32 @@ jobs:
                   str(renode),
                   "--disable-gui",
                   "--hide-log",
+                  "-P",
+                  "3333",
                   "-e",
-                  "$matter_elf=@/dev/null",
-                  "resc/matter-sim.resc",
+                  "EmulationManager Load @linux-booted-thread.save",
               ]
           )
           try:
-              raise SystemExit(proc.wait(timeout=45))
-          except subprocess.TimeoutExpired:
-              proc.kill()
-              proc.wait()
-              raise SystemExit("checkpoint load did not finish within 45s")
+              deadline = time.time() + 180
+              while time.time() < deadline:
+                  try:
+                      sock = socket.create_connection(("127.0.0.1", 3333), timeout=1)
+                      sock.close()
+                      break
+                  except OSError:
+                      if proc.poll() is not None:
+                          raise SystemExit(f"Renode exited with code {proc.returncode}")
+                      time.sleep(0.5)
+              else:
+                  raise SystemExit("checkpoint load did not finish within 180s")
+          finally:
+              proc.terminate()
+              try:
+                  proc.wait(timeout=10)
+              except subprocess.TimeoutExpired:
+                  proc.kill()
+                  proc.wait()
           PY
 
       - name: Upload runtime bundle

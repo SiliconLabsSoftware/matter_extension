@@ -43,9 +43,8 @@ class RenodeHarness:
             cmd,
             cwd=str(self.bundle_dir),
             env=env,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
         )
 
     def stop(self) -> None:
@@ -67,37 +66,40 @@ class RenodeHarness:
                     return
             except OSError:
                 if self.process and self.process.poll() is not None:
-                    output = self.process.stdout.read() if self.process.stdout else ""
-                    raise RuntimeError(f"Renode exited early:\n{output}")
+                    raise RuntimeError(f"Renode exited early with code {self.process.returncode}")
                 time.sleep(0.5)
         raise TimeoutError(f"port {port} not ready within {timeout_s}s")
 
-    def monitor_command(self, command: str, timeout_s: float = 60.0) -> str:
+    def monitor_command(self, command: str, timeout_s: float = 120.0) -> str:
         self._wait_for_port(self.monitor_port, timeout_s)
         with closing(socket.create_connection(("127.0.0.1", self.monitor_port), timeout=timeout_s)) as sock:
             sock.settimeout(timeout_s)
-            sock_file = sock.makefile("rwb", buffering=0)
-            sock_file.write((command + "\n").encode())
-            sock_file.flush()
-            chunks = []
-            deadline = time.time() + timeout_s
-            while time.time() < deadline:
-                try:
-                    data = sock.recv(4096)
-                except socket.timeout:
-                    break
-                if not data:
-                    break
-                chunks.append(data.decode(errors="replace"))
-                if "\n" in chunks[-1]:
-                    break
-            return "".join(chunks)
+            self._read_until_prompt(sock)
+            sock.sendall((command + "\n").encode())
+            return self._read_until_prompt(sock)
+
+    def _read_until_prompt(self, sock: socket.socket) -> str:
+        chunks = []
+        while True:
+            try:
+                data = sock.recv(4096)
+            except socket.timeout:
+                break
+            if not data:
+                break
+            chunks.append(data.decode(errors="replace"))
+            if _MONITOR_PROMPT.search("".join(chunks)):
+                break
+        return "".join(chunks)
 
     def hub_console_session(self, timeout_s: float = 600.0):
         self._wait_for_port(self.hub_console_port, timeout_s)
         sock = socket.create_connection(("127.0.0.1", self.hub_console_port), timeout=timeout_s)
         sock.settimeout(1.0)
         return _ConsoleSession(sock, timeout_s)
+
+
+_MONITOR_PROMPT = re.compile(r"\([^)\r\n]+\)\s*$")
 
 
 class _ConsoleSession:
@@ -136,6 +138,7 @@ class _ConsoleSession:
     def login_root(self) -> None:
         self.wait_for_line(r"buildroot login:", timeout_s=300)
         self.send_line("root")
+        self.wait_for_line(r"#", timeout_s=30)
 
     def run_and_wait(self, command: str, ready_pattern: str, timeout_s: Optional[float] = None) -> str:
         self.send_line(command)

@@ -68,6 +68,8 @@ def main() -> int:
         console.run_and_wait("matter-thread-init", r"matter-thread-init: READY", timeout_s=180)
         harness.monitor_command("pause")
         harness.monitor_command(f"Save @{checkpoint}")
+        if not checkpoint.exists():
+            raise RuntimeError(f"checkpoint file was not created: {checkpoint}")
         print(f"Saved checkpoint: {checkpoint}")
 
         runtime_manifest = bundle_dir / "runtime-manifest.json"
