@@ -1,0 +1,321 @@
+name: Renode Sim Artifacts
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish artifacts to GHCR"
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: renode-sim-artifacts
+  cancel-in-progress: false
+
+jobs:
+  build-rcps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Initialize Simplicity SDK
+        run: git submodule update --init third_party/simplicity_sdk
+
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
+      - name: Build RCPs
+        run: python3 renode_integration/scripts/build_rcps.py
+
+      - name: Upload RCP artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-rcps
+          path: renode_integration/out/rcp/*.out
+          if-no-files-found: error
+
+  build-rootfs-dtb:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends e2fsprogs device-tree-compiler curl
+
+      - name: Build rootfs and DTB
+        run: |
+          python3 renode_integration/scripts/build_rootfs_image.py
+          mkdir -p renode_integration/out/guest-rootfs
+          dtc -I dts -O dtb \
+            -o renode_integration/out/guest-rootfs/zynqmp-matter-linux.dtb \
+            renode_integration/guest/dts/zynqmp-matter-linux.dts
+
+      - name: Upload guest images
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-guest-rootfs
+          path: |
+            renode_integration/out/guest-rootfs/matter-rootfs.ext2
+            renode_integration/out/guest-rootfs/zynqmp-matter-linux.dtb
+          if-no-files-found: error
+
+  build-tools-image:
+    runs-on: ubuntu-24.04-arm
+    env:
+      CHIP_TOOL: ${{ github.workspace }}/third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Initialize matter_sdk
+        run: git submodule update --init third_party/matter_sdk
+
+      - name: Checkout matter_sdk submodules
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --platform linux
+
+      - name: Bootstrap Matter build env
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
+
+      - name: Build chip-tool
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/run_in_build_env.sh \
+            "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
+
+      - name: Build tools image
+        run: python3 renode_integration/scripts/build_tools_image.py
+
+      - name: Upload tools image
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-tools-image
+          path: renode_integration/out/guest-rootfs/matter-tools.ext2
+          if-no-files-found: error
+
+  assemble-common:
+    runs-on: ubuntu-latest
+    needs:
+      - build-rcps
+      - build-rootfs-dtb
+      - build-tools-image
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download RCP artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-rcps
+          path: renode_integration/out/rcp
+
+      - name: Download guest rootfs artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-guest-rootfs
+          path: renode_integration/out/guest-rootfs
+
+      - name: Download tools image
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-tools-image
+          path: renode_integration/out/guest-rootfs
+
+      - name: Assemble common bundle
+        run: python3 renode_integration/scripts/assemble_bundle.py
+
+      - name: Upload common bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-common-bundle
+          path: renode_integration/out/bundle
+          if-no-files-found: error
+
+  publish-common:
+    needs: assemble-common
+    if: inputs.publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download common bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-common-bundle
+          path: renode_integration/out/bundle
+
+      - name: Resolve bundle version
+        id: bundle
+        run: echo "version=$(python3 renode_integration/scripts/common.py bundle-version)" >> "${GITHUB_OUTPUT}"
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Publish common to GHCR
+        env:
+          BUNDLE_VERSION: ${{ steps.bundle.outputs.version }}
+          BUNDLE_DIR: ${{ github.workspace }}/renode_integration/out/bundle
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+          python3 renode_integration/scripts/publish_bundle.py common
+
+  build-runtime:
+    needs: assemble-common
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: linux-x64
+            runner: ubuntu-latest
+          - host: osx-arm64
+            runner: macos-26
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download common bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-common-bundle
+          path: renode_integration/out/bundle
+
+      - name: Build Renode
+        env:
+          HOST: ${{ matrix.host }}
+        run: |
+          python3 renode_integration/scripts/build_renode.py
+          python3 renode_integration/scripts/assemble_bundle.py
+
+      - name: Generate checkpoint
+        env:
+          HOST: ${{ matrix.host }}
+          PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
+        run: python3 renode_integration/harness/generate_checkpoint.py --bundle-dir renode_integration/out/bundle
+
+      # Test checkpoint load on macOS to verify that the bundle is working
+      # Not needed on Linux (will be tested in CI commissioning tests)
+      - name: Smoke test checkpoint load
+        if: matrix.host == 'osx-arm64'
+        env:
+          HOST: ${{ matrix.host }}
+          PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
+        run: python3 renode_integration/harness/smoke_test_checkpoint.py --bundle-dir renode_integration/out/bundle
+
+      - name: Upload runtime bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-runtime-${{ matrix.host }}
+          path: |
+            renode_integration/out/bundle/renode
+            renode_integration/out/bundle/linux-booted-thread.save
+            renode_integration/out/bundle/runtime-manifest.json
+          if-no-files-found: error
+
+  publish-runtime:
+    needs: build-runtime
+    if: inputs.publish
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: linux-x64
+            runner: ubuntu-latest
+          - host: osx-arm64
+            runner: macos-26
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download runtime bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-runtime-${{ matrix.host }}
+          path: renode_integration/out/bundle
+
+      - name: Resolve bundle version
+        id: bundle
+        run: echo "version=$(python3 renode_integration/scripts/common.py bundle-version)" >> "${GITHUB_OUTPUT}"
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Publish runtime to GHCR
+        env:
+          HOST: ${{ matrix.host }}
+          BUNDLE_VERSION: ${{ steps.bundle.outputs.version }}
+          BUNDLE_DIR: ${{ github.workspace }}/renode_integration/out/bundle
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+          python3 renode_integration/scripts/publish_bundle.py runtime
