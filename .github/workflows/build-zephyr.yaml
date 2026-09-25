@@ -70,12 +70,12 @@ jobs:
         run: |
           cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
              "cd /opt/silabs/zephyr-silabs \
-              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+              && west build -b xg24_rb4187c --sysbuild -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr -- -DCONFIG_CHIP_FACTORY_DATA=y"
 
       - name: Export EFR32xG24 Zephyr HEX
         shell: bash
         run: |
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex artifacts/xg24_rb4187c-zephyr.hex
+          cp /opt/silabs/zephyr-silabs/build/merged_xg24_rb4187c_efr32mg24b220f1536im48.hex artifacts/xg24_rb4187c-zephyr.hex
 
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
