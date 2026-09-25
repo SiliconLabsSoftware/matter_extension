@@ -1,0 +1,31 @@
+:name: MATTER_FROM_CHECKPOINT
+:description: Pre-booted Matter Hub and RCPs with Thread network formed. The Matter SoC is created from $matter_elf after the checkpoint loads.
+
+$root ?= $ORIGIN/..
+$checkpoint ?= $root/linux-booted-thread.save
+EmulationManager Load $checkpoint
+
+$matter_elf ?= $root/matter.out
+
+logLevel 3
+
+$matter_hub_console_port ?= 4540
+$matter_cli_port ?= 3452
+
+mach set "matter_hub"
+emulation CreateServerSocketTerminal $matter_hub_console_port "matter_hub_console" false
+connector Connect sysbus.uart1 matter_hub_console
+
+mach create "matter_soc"
+using sysbus
+machine LoadPlatformDescription @platforms/boards/silabs/brd4186c.repl
+sysbus LoadELF $matter_elf
+cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`
+cpu PerformanceInMips 50
+connector Connect sysbus.radio wireless
+connector Connect sysbus.radio ble
+emulation CreateServerSocketTerminal $matter_cli_port "matter_cli" false
+connector Connect sysbus.eusart0 matter_cli
+
+mach set "matter_hub"
+start
