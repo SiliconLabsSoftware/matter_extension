@@ -4,7 +4,7 @@ import os
 import subprocess
 import argparse
 import logging
-from sl_create_new_app import createApp
+from sl_create_new_app import CreateApp
 
 EXAMPLE_USAGE = "python slc/sl_run_zaptool.py <PathToReferenceZapFile(.zap)>"
 
@@ -22,7 +22,7 @@ def main():
     reference_zap_file = os.path.join("..", "..", reference_zap_file)
     logging.debug(f"Reference zap file: {reference_zap_file}")
 
-    App = createApp()
+    App = CreateApp()
     matter_sdk_path = os.path.join(os.getcwd(), "third_party/matter_sdk")
     logging.debug(f"Changing directory to: {matter_sdk_path}")
     os.chdir(matter_sdk_path)
