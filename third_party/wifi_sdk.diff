@@ -1,0 +1,389 @@
+diff --git a/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc b/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
+index 06ea17506..83dc66cc2 100644
+--- a/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
++++ b/components/device/silabs/si91x/wireless/sl_si91x_network_dual_stack.slcc
+@@ -11,6 +11,7 @@ metadata:
+ component_root_path: ./components/device/silabs/si91x/wireless
+ provides:
+ - name: sl_si91x_network_dual_stack
++- name: sl_si91x_network_stack
+ source:
+ - path: sl_net/src/sl_si91x_net_internal_stack.c
+ - path: icmp/sl_net_ping.c
+@@ -61,4 +62,7 @@ requires:
+   - name: log_none
+   - name: netstack_silabs_lwip_port_freertos
+   - name: netstack_silabs_lwip_api
+-  - name: netstack_silabs_lwip_netif_ethernet
+\ No newline at end of file
++  - name: netstack_silabs_lwip_netif_ethernet
++conflicts:
++  - name: sl_si91x_lwip_stack
++  - name: sl_si91x_internal_stack
+\ No newline at end of file
+diff --git a/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc b/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
+index 0c0d2c056..651c83938 100644
+--- a/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
++++ b/components/device/silabs/si91x/wireless/sl_si91x_wireless.slcc
+@@ -36,6 +36,9 @@ source:
+ - path: sl_net/src/sli_net_si91x_utility.c
+   condition:
+   - sl_si91x_lwip_stack
++- path: sl_net/src/sli_net_si91x_utility.c
++  condition:
++  - sl_si91x_network_dual_stack
+ - path: sl_net/src/sl_net_si91x_callback_framework.c
+   condition:
+   - network_manager
+diff --git a/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc b/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
+index bb45628b5..e876d63a2 100644
+--- a/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
++++ b/components/device/silabs/si91x/wireless/socket/sl_si91x_socket.slcc
+@@ -29,5 +29,8 @@ define:
+ requires:
+ - name: sl_si91x_wireless
+ - name: sl_si91x_internal_stack
++  unless:
++    - sl_si91x_network_dual_stack
++    - sl_si91x_lwip_stack
+ - name: log_none
+ 
+diff --git a/components/service/http_client/http_client.slcc b/components/service/http_client/http_client.slcc
+index f3cdffa2d..faa89007c 100644
+--- a/components/service/http_client/http_client.slcc
++++ b/components/service/http_client/http_client.slcc
+@@ -14,6 +14,8 @@ provides:
+ source:
+ - path: si91x_socket/sl_http_client.c
+   condition: ["sl_si91x_internal_stack"]
++- path: si91x_socket/sl_http_client.c
++  condition: ["sl_si91x_network_dual_stack"]
+ include:
+ - path: inc
+ - path: inc
+@@ -25,7 +27,7 @@ define:
+ 
+ requires:
+ - name: sl_si91x_socket
+-
++  condition: ["sl_si91x_internal_stack"]
+ 
+ template_contribution:
+ - name: console_headers
+diff --git a/components/service/network_manager/src/sl_net_for_dual_stack.c b/components/service/network_manager/src/sl_net_for_dual_stack.c
+index c9b6d657d..3d5707f5a 100644
+--- a/components/service/network_manager/src/sl_net_for_dual_stack.c
++++ b/components/service/network_manager/src/sl_net_for_dual_stack.c
+@@ -161,10 +161,10 @@ static void low_level_input(struct netif *netif, uint8_t *b, uint16_t len)
+     len = LWIP_FRAME_ALIGNMENT;
+   }
+   // Drop packets originated from the same interface and is not destined for the said interface
++  #if LWIP_IPV6
+   const uint8_t *src_mac = b + netif->hwaddr_len;
+   const uint8_t *dst_mac = b;
+ 
+-#if LWIP_IPV6
+   if (!(ip6_addr_ispreferred(netif_ip6_addr_state(netif, 0)))
+       && (memcmp(netif->hwaddr, src_mac, netif->hwaddr_len) == 0)
+       && (memcmp(netif->hwaddr, dst_mac, netif->hwaddr_len) != 0)) {
+@@ -1308,8 +1308,10 @@ sl_status_t sl_net_get_ip_address(sl_net_interface_t interface, sl_net_ip_addres
+     return SL_STATUS_INVALID_CONFIGURATION;
+   }
+ 
+-  // Return stored type and IP address for AP (only static) and STA (only static).
+-  if (SL_NET_WIFI_AP_INTERFACE == SL_NET_INTERFACE_TYPE(interface) || stored->mode == SL_IP_MANAGEMENT_STATIC_IP) {
++  // For AP interface (always static IP), return the stored IP configuration
++  // directly. Calling sli_net_configure_ip_address() for AP would either
++  // attempt a DHCP client request (wrong) or reconfigure with zero IPs (destructive).
++  if (SL_NET_WIFI_AP_INTERFACE == SL_NET_INTERFACE_TYPE(interface)) {
+     ip_address->type = stored->type;
+     if (stored->type & SL_IPV4) {
+       memcpy(ip_address->v4.ip_address.bytes, stored->ip.v4.ip_address.bytes, sizeof(sl_ipv4_address_t));
+@@ -1326,7 +1328,7 @@ sl_status_t sl_net_get_ip_address(sl_net_interface_t interface, sl_net_ip_addres
+     return SL_STATUS_OK;
+   }
+ 
+-  // For STA Interface, query firmware for the current IP (handles DHCP renewals)
++  // For STA interface, query firmware for the current IP (handles DHCP renewals)
+   ip_config.mode = stored->mode;
+   ip_config.type = stored->type;
+   status         = sli_net_configure_ip_address(&ip_config, vap_id, timeout);
+diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h b/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
+index 1f2f62306..1528dbd2e 100644
+--- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
++++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/MQTTClient.h
+@@ -19,12 +19,12 @@
+ 
+ #include "MQTTPacket.h"
+ 
+-#if defined(SLI_SI91X_NETWORK_DUAL_STACK) || defined(sl_si91x_network_dual_stack)
++#if defined(SLI_PAHO_MQTT_OVER_LWIP) || defined(SLI_SI91X_LWIP_HOSTED_NETWORK_STACK) || defined(sl_si91x_lwip_stack)
++#include "MQTTSi91x_lwip.h" //Platform specific implementation header file
++#elif defined(SLI_SI91X_NETWORK_DUAL_STACK) || defined(sl_si91x_network_dual_stack)
+ #include "MQTTSi91x_dual_stack.h" //Platform specific implementation for dual stack
+ #elif defined(SLI_SI91X_OFFLOAD_NETWORK_STACK) || defined(sl_si91x_internal_stack)
+ #include "MQTTSi91x.h" //Platform specific implementation header file
+-#elif defined(SLI_SI91X_LWIP_HOSTED_NETWORK_STACK) || defined(sl_si91x_lwip_stack)
+-#include "MQTTSi91x_lwip.h" //Platform specific implementation header file
+ #endif
+ 
+ #define MAX_PACKET_ID        65535
+diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
+index 9175c268c..e0c8e3bdf 100644
+--- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
++++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
+@@ -37,6 +37,7 @@
+ #include "mbedtls/debug.h"
+ 
+ #include "sl_constants.h"
++#include "sl_ip_types.h"
+ // LwIP socket includes (for LwIP stack)
+ #include "lwip/sockets.h"
+ #include "lwip/netdb.h"
+@@ -270,17 +271,6 @@ static int mqtt_tls_init(mqtt_tls_context_t *tls_ctx, int socket_fd, const char
+   // Configure RNG
+   mbedtls_ssl_conf_rng(&tls_ctx->conf, mbedtls_ctr_drbg_random, &tls_ctx->ctr_drbg);
+ 
+-#if MQTT_TLS_ALPN_ENABLED && defined(MBEDTLS_SSL_ALPN)
+-  {
+-    const char *alpn_protocols[] = { MQTT_TLS_ALPN_PROTOCOL, NULL };
+-    ret                          = mbedtls_ssl_conf_set_alpn_protocols(&tls_ctx->conf, alpn_protocols);
+-    if (ret != 0) {
+-      SL_DEBUG_LOG_V2(ERROR, "mbedtls_ssl_conf_set_alpn_protocols failed: -0x%04x\r\n", (unsigned int)(-ret));
+-      return ret;
+-    }
+-  }
+-#endif
+-
+   // Note: Optional SSL feature configuration calls removed due to SiSDK mbedTLS limitations
+   // These were used to disable features for memory optimization:
+   // - DTLS handshake timeout configuration (requires MBEDTLS_SSL_PROTO_DTLS support)
+@@ -514,26 +504,42 @@ static int mqtt_tcpconnection_handler(Network *n,
+   int rc   = -1;
+ 
+ #ifdef SLI_SI91X_ENABLE_IPV6
+-  struct sockaddr_in6 server_address_v6 = { 0 };
+-  socklen_t socket_length_v6            = sizeof(struct sockaddr_in6);
+-#else
+-  struct sockaddr_in server_address = { 0 };
+-  socklen_t socket_length           = sizeof(struct sockaddr_in);
+-#endif
++  sl_ip_address_t *server_ip = (sl_ip_address_t *)addr;
+ 
+-#ifdef SLI_SI91X_ENABLE_IPV6
+-  server_address_v6.sin6_family = AF_INET6;
+-  server_address_v6.sin6_port   = htons(dst_port);
++  if ((server_ip->type & SL_IPV4) == SL_IPV4) {
++    struct sockaddr_in server_address = { 0 };
+ 
+-  memcpy(&server_address_v6.sin6_addr.un.u8_addr, addr, SL_IPV6_ADDRESS_LENGTH);
++    server_address.sin_family = AF_INET;
++    server_address.sin_port   = htons(dst_port);
++    memcpy(&server_address.sin_addr.s_addr, &server_ip->ip.v4.bytes, SL_IPV4_ADDRESS_LENGTH);
+ 
+-  n->socket = socket(AF_INET6, type, IPPROTO_TCP);
+-  if (n->socket < 0) {
+-    SL_DEBUG_LOG_V2(ERROR, "Socket creation failed with bsd error: %d\r\n", errno);
+-    return -1;
+-  }
++    n->socket = socket(AF_INET, type, IPPROTO_TCP);
++    if (n->socket < 0) {
++      SL_DEBUG_LOG_V2(ERROR, "Socket creation failed with bsd error: %d\r\n", errno);
++      return -1;
++    }
++
++    SL_DEBUG_LOG_V2(INFO, "[LwIP] BSD connect() triggered: socket=%d, port=%lu, family=IPv4\r\n", n->socket, (unsigned long)dst_port);
++    rc = connect(n->socket, (struct sockaddr *)&server_address, sizeof(server_address));
++  } else {
++    struct sockaddr_in6 server_address_v6 = { 0 };
++
++    server_address_v6.sin6_family = AF_INET6;
++    server_address_v6.sin6_port   = htons(dst_port);
++    memcpy(&server_address_v6.sin6_addr, &server_ip->ip.v6.bytes, SL_IPV6_ADDRESS_LENGTH);
++
++    n->socket = socket(AF_INET6, type, IPPROTO_TCP);
++    if (n->socket < 0) {
++      SL_DEBUG_LOG_V2(ERROR, "Socket creation failed with bsd error: %d\r\n", errno);
++      return -1;
++    }
+ 
++    SL_DEBUG_LOG_V2(INFO, "[LwIP] BSD connect() triggered: socket=%d, port=%lu, family=IPv6\r\n", n->socket, (unsigned long)dst_port);
++    rc = connect(n->socket, (struct sockaddr *)&server_address_v6, sizeof(server_address_v6));
++  }
+ #else
++  struct sockaddr_in server_address = { 0 };
++
+   //! Set family type
+   server_address.sin_family = AF_INET;
+   //! Set local port number
+@@ -547,12 +553,9 @@ static int mqtt_tcpconnection_handler(Network *n,
+     SL_DEBUG_LOG_V2(ERROR, "Socket creation failed with bsd error: %d\r\n", errno);
+     return -1;
+   }
+-#endif
+ 
+-#ifdef SLI_SI91X_ENABLE_IPV6
+-  rc = connect(n->socket, (struct sockaddr *)&server_address_v6, socket_length_v6);
+-#else
+-  rc = connect(n->socket, (struct sockaddr *)&server_address, socket_length);
++  SL_DEBUG_LOG_V2(INFO, "[LwIP] BSD connect() triggered: socket=%d, port=%lu, family=IPv4\r\n", n->socket, (unsigned long)dst_port);
++  rc = connect(n->socket, (struct sockaddr *)&server_address, sizeof(server_address));
+ #endif
+   if (rc == -1) {
+     SL_DEBUG_LOG_V2(ERROR, "Socket Connect failed with bsd error: %d\r\n", errno);
+diff --git a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
+index d077acabc..1aa57af83 100644
+--- a/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
++++ b/third_party/paho_mqtt_embedded/MQTTClient-C/src/Si91x/MQTTSi91x_lwip.h
+@@ -27,7 +27,7 @@
+ #define MQTT_TLS_ENABLE 1 // Set to 1 to enable TLS support, 0 to disable
+ #endif
+ 
+-#include "sli_mqtt_tls_alpn.h"
++// #include "sli_mqtt_tls_alpn.h"
+ 
+ // mbedTLS includes (only when TLS is enabled)
+ #if MQTT_TLS_ENABLE
+diff --git a/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc b/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
+index f808a20d5..0f154344b 100644
+--- a/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
++++ b/third_party/paho_mqtt_embedded/paho_mqtt_embedded.slcc
+@@ -28,12 +28,10 @@ source:
+ - path: MQTTPacket/src/MQTTUnsubscribeClient.c
+ - path: MQTTClient-C/src/Si91x/MQTTSi91x.c
+   condition: ["sl_si91x_internal_stack"]
+-- path: MQTTClient-C/src/Si91x/sli_mqtt_tls_alpn.c
+-  condition: ["sl_si91x_internal_stack"]
+ - path: MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
+   condition: ["sl_si91x_lwip_stack"]
+-
+-
++- path: MQTTClient-C/src/Si91x/MQTTSi91x_lwip.c
++  condition: ["sl_si91x_network_dual_stack"]
+ 
+ include:
+ - path: MQTTClient-C/src
+@@ -50,15 +48,15 @@ include:
+        condition: ["sl_si91x_lwip_stack"]
+      - path: sli_lwip_mqtt_mbedtls_config.h
+        condition: ["sl_si91x_lwip_stack"]
+-     - path: sli_mqtt_tls_alpn.h
+-       condition: ["sl_si91x_lwip_stack"]
++     - path: MQTTSi91x_lwip.h
++       condition: ["sl_si91x_network_dual_stack"]
++     - path: sli_lwip_mqtt_mbedtls_config.h
++       condition: ["sl_si91x_network_dual_stack"]
+ 
+ - path: MQTTClient-C/src/Si91x
+   file_list:
+      - path: MQTTSi91x.h
+        condition: ["sl_si91x_internal_stack"]
+-     - path: sli_mqtt_tls_alpn.h
+-       condition: ["sl_si91x_internal_stack"]
+ 
+ - path: MQTTPacket/src/
+   file_list:
+@@ -80,55 +78,97 @@ requires:
+   condition: ["sl_si91x_internal_stack"]
+ - name: mbedtls_random
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_random
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_tls
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_tls
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_x509
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_x509
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_source
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_source
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_oid
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_oid
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_asn1
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_asn1
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_rsa
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_rsa
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: psa_crypto_tls12_prf
+   condition: ["sl_si91x_lwip_stack"]
++- name: psa_crypto_tls12_prf
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_cipher
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_cipher
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_cipher_cbc
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_cipher_cbc
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_ecc
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_ecc
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_ecdsa
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_ecdsa
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_ccm
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_ccm
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_gcm
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_gcm
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_aes
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_aes
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_hash
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_hash
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_md5
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_md5
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_cmac
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_cmac
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_ecdh
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_ecdh
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_sha512
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_sha512
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_sha256
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_sha256
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_debug
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_debug
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_ecdhe_key_exchange
+   condition: ["sl_si91x_lwip_stack"]
++- name: mbedtls_ecdhe_key_exchange
++  condition: ["sl_si91x_network_dual_stack"]
+ - name: mbedtls_config
+   condition: ["sl_si91x_lwip_stack"]
+-
+-define:
+-- name: MQTT_TLS_ALPN_ENABLED
+-  value: '0'
+-- name: SLI_MQTT_TLS_ALPN_USE_BSD
+-  value: '1'
++- name: mbedtls_config
++  condition: ["sl_si91x_network_dual_stack"]
