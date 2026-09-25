@@ -17,6 +17,23 @@ os.chdir(root)
 cluster_dir_path = "third_party/matter_sdk/src/app/clusters"
 cluster_xml_path = ["third_party/matter_sdk/src/app/zap-templates/zcl/data-model/chip"] 
 
+# Exceptions for components whose generated label, description or cluster mapping is wrong,
+# Keyed by cluster name (component id without the "matter_" prefix).
+component_overrides = {
+    "resource_monitoring": {
+        "label": "Resource Monitoring Server Cluster",
+        "description": [
+            "Implementation of the Resource Monitoring Server Cluster, used via aliases for HEPA Filter, Activated Carbon Filter, and Water Tank Level Monitoring.",
+            "The user has to enable one or more of these aliased clusters in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.",
+        ],
+        "cluster_codes": [
+            "water tank level monitoring-server",
+            "activated carbon filter monitoring-server",
+            "hepa filter monitoring-server",
+        ],
+    },
+}
+
 # Create a dictionary of all the clusters from Cluster_Dir_Path with the headers, source files,
 # and if it is a server cluster or not
 cluster_data = {}
@@ -178,9 +195,13 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if "ota" in clustername:
         name = name.replace('Ota', 'OTA')
     
-    label = "{}{} Cluster".format(name, cluster_data[clustercomponentname]['clientOrServer'])
-    description = "description: >\n  Implementation of the {}.".format(label)
-    description += f"\n  The user has to enable the {label} in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality."
+    override = component_overrides.get(clustername, {})
+    label = override.get("label", "{}{} Cluster".format(name, cluster_data[clustercomponentname]['clientOrServer']))
+    if "description" in override:
+        description = "description: >\n" + "\n".join("  " + line for line in override["description"])
+    else:
+        description = "description: >\n  Implementation of the {}.".format(label)
+        description += f"\n  The user has to enable the {label} in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality."
     filedata.append(description)
     
     if cluster_data[clustercomponentname]['clientOrServer'] == " Client":
@@ -332,11 +353,9 @@ lst = []
 
 # Iterate over each cluster component name in the cluster_data dictionary
 for clustercomponentname in sorted(cluster_data.keys()):
-    # Initialize an empty dictionary to store the dependencies for the current cluster component
-    dependanciesDic = {}
-    
     # Get the cluster name for the current cluster component
     clustername = cluster_data[clustercomponentname]["clustername"]
+    override = component_overrides.get(clustername, {})
     
     try:
         # Try to get the cluster code by converting the name to lowercase
@@ -360,13 +379,9 @@ for clustercomponentname in sorted(cluster_data.keys()):
     if "matter_ota_requestor" in value_str:
         clusterCode = clusterCode.replace("provider", "requestor")
     
-    # Add the cluster code and value to the dependencies dictionary
-    dependanciesDic["clusterCode"] = clusterCode
-    value = [value_str]
-    dependanciesDic["value"] = value
-    
-    # Append the dependencies dictionary to the list
-    lst.append(dependanciesDic)
+    # Add one entry per cluster code, a component can serve several aliased clusters
+    for code in override.get("cluster_codes", [clusterCode]):
+        lst.append({"clusterCode": code, "value": [value_str]})
 
 # Convert the list of dependencies to a JSON object with indentation for readability
 json_object = json.dumps(lst, indent=2)
