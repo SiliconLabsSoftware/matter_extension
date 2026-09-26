@@ -16,6 +16,7 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/CodegenIntegration.cpp
     unless: [matter_code_driven_dm]
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/PresetStructWithOwnedMembers.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/SensorScheduleTransitionStructWithOwnedMembers.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/Setpoint.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/SetpointAttributes.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/Setpoints.cpp
@@ -29,11 +30,13 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterOccupancy.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterPresets.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterRead.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSensors.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSetpoints.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSetpointsBase.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterSuggestions.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatClusterWrite.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatDelegate.cpp
+  - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSensorStructWithOwnedMembers.cpp
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server/ThermostatSuggestionStructWithOwnedMembers.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/thermostat-server
@@ -43,6 +46,7 @@ include:
         unless: [matter_code_driven_dm]
       - path: DelegateResolution.h
       - path: PresetStructWithOwnedMembers.h
+      - path: SensorScheduleTransitionStructWithOwnedMembers.h
       - path: Setpoint.h
       - path: SetpointAttributes.h
       - path: SetpointLimits.h
@@ -58,10 +62,12 @@ include:
       - path: ThermostatClusterHold.h
       - path: ThermostatClusterOccupancy.h
       - path: ThermostatClusterPresets.h
+      - path: ThermostatClusterSensors.h
       - path: ThermostatClusterSetpoints.h
       - path: ThermostatClusterSetpointsBase.h
       - path: ThermostatClusterSuggestions.h
       - path: ThermostatDelegate.h
+      - path: ThermostatSensorStructWithOwnedMembers.h
       - path: ThermostatSuggestionStructWithOwnedMembers.h
 template_contribution:
   - name: component_catalog
