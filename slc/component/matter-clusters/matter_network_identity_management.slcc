@@ -26,10 +26,10 @@ include:
       - path: CodegenIntegration.h
         unless: [matter_code_driven_dm]
       - path: DefaultNetworkIdentityStorage.h
-      - path: Logging.h
       - path: NetworkAdministratorSecret.h
       - path: NetworkIdentityKeystore.h
       - path: NetworkIdentityManagementCluster.h
+      - path: NetworkIdentityManagementTestEventTriggerHandler.h
       - path: NetworkIdentityStorage.h
       - path: RawKeyNetworkIdentityKeystore.h
 template_contribution:
