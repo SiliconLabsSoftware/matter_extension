@@ -24,12 +24,6 @@ enabled_variants:
     blurb_suffix: ""
     description_suffix: ""
 
-  multipan:
-    demo_suffix: "_multipan"
-    label_suffix: " Multipan"
-    blurb_suffix: ""
-    description_suffix: ""
-
 # Apps that should appear in demos xml but not in templates xml
 templates_exclude:
   - matter_thread_soc_zigbee_light_series_2_freertos
