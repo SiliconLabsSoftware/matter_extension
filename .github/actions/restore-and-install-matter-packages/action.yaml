@@ -8,10 +8,6 @@ inputs:
   package-version:
     description: Version of matter_app to install from the restored cache.
     required: true
-  conan-home:
-    description: Conan home directory to restore.
-    required: false
-    default: ""
   fail-on-cache-miss:
     description: Fail when the requested package cache does not exist.
     required: false
@@ -37,10 +33,7 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        INPUT_HOME="${{ inputs.conan-home }}"
-        if [[ -n "${INPUT_HOME}" ]]; then
-          CONAN_HOME="${INPUT_HOME/#\~/${HOME}}"
-        elif [[ -n "${CONAN_HOME:-}" ]]; then
+        if [[ -n "${CONAN_HOME:-}" ]]; then
           CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
         else
           CONAN_HOME="${HOME}/.silabs/slt/installs/conan"

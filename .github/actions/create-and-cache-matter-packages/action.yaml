@@ -9,10 +9,6 @@ inputs:
     description: Optional cache key. A run-scoped key is generated when omitted.
     required: false
     default: ""
-  conan-home:
-    description: Conan home directory to package and cache.
-    required: false
-    default: ""
   prerelease-remote-url:
     description: Conan prerelease remote URL.
     required: false
@@ -39,7 +35,6 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        # CONAN_HOME is set globally by cache-tools / install-tools.
         mkdir -p conan-settings
         printf 'core.download:parallel=6\ncore.upload:parallel=4\n' > conan-settings/global.conf
         conan config install conan-settings --type dir
@@ -47,9 +42,8 @@ runs:
 
         conan remote add -f conan-prerelease "${{ inputs.prerelease-remote-url }}"
 
-        for tool in cmake ninja; do
-          slt install "${tool}" || true
-        done
+        slt install cmake || true
+        slt install ninja || true
 
     - name: Export Matter packages
       id: create
