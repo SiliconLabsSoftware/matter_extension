@@ -198,6 +198,7 @@ components:
   - matter_meter_identification
   - matter_microwave_oven_control
   - matter_minimal_mdns
+  - matter_mmic
   - matter_mode_base
   - matter_mode_select
   - matter_multi_image_custom_processor
@@ -656,6 +657,7 @@ extra_files:
   - slc/component/matter-platform/matter_platform_mg.slcc
   - slc/component/matter-platform/matter_platform_siwx917.slcc
   - slc/component/matter-platform/memory-monitoring/matter_memory_monitoring.slcc
+  - slc/component/matter-platform/mmic/matter_ncp.slcc
   - slc/component/matter-platform/ota/matter_multi_image_custom_processor.slcc
   - slc/component/matter-platform/ota/matter_multi_image_ota.slcc
   - slc/component/matter-platform/ota/matter_multi_image_ota_encryption.slcc
@@ -2503,6 +2505,7 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/TestEventPathParams.cpp
   - third_party/matter_sdk/src/app/tests/TestExtensionFieldSets.cpp
   - third_party/matter_sdk/src/app/tests/TestFabricScopedEventLogging.cpp
+  - third_party/matter_sdk/src/app/tests/TestFabricSensitiveAttributeRead.cpp
   - third_party/matter_sdk/src/app/tests/TestFailSafeContext.cpp
   - third_party/matter_sdk/src/app/tests/TestInteractionModelEngine.cpp
   - third_party/matter_sdk/src/app/tests/TestMessageDef.cpp
