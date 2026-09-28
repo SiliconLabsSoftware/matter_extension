@@ -9,7 +9,6 @@ description: >-
   device-unique seed in non-volatile storage.
 category: Platform|Security|Mbed TLS|Randomness
 quality: production
-component_root_path: platform/security
 provides:
   - name: mbedtls_entropy_default
     condition: [matter_aws]

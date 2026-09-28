@@ -20,8 +20,6 @@ requires:
   - name: matter_siwx917_common
   - name: sl_si91x_trng
   - name: nvm3_default
-  - name: memory_manager
-  - name: memory_manager_pool
   - name: freertos_heap_4
   - name: sl_si91x_memory_manager
   - name: psram_core
