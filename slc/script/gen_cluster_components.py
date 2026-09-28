@@ -32,6 +32,17 @@ component_overrides = {
             "hepa filter monitoring-server",
         ],
     },
+    # Use test hidden manufacturer specific-server instead of test-server.
+    "test_cluster": {
+        "label": "Test Hidden Manufacturer Specific Server Cluster",
+        "description": [
+            "Implementation of the Test Hidden Manufacturer Specific Server Cluster.",
+            "The user has to enable the Test Hidden Manufacturer Specific Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.",
+        ],
+        "cluster_codes": [
+            "test hidden manufacturer specific-server",
+        ],
+    },
 }
 
 # Create a dictionary of all the clusters from Cluster_Dir_Path with the headers, source files,
