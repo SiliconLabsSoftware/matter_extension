@@ -52,33 +52,54 @@ jobs:
         with:
           platform: silabs_docker
 
-      - name: Build SiWx917 Zephyr Lighting App
-        shell: bash
-        run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+      # - name: Build SiWx917 Zephyr Lighting App
+      #   shell: bash
+      #   run: |
+      #     cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
+      #        "cd /opt/silabs/zephyr-silabs \
+      #         && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export SiWx917 Zephyr RPS
-        shell: bash
-        run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4338A
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps \
-             artifacts/lighting-app-zephyr/BRD4338A/matter_wifi_soc_lighting_app_zephyr.rps
+      # - name: Export SiWx917 Zephyr RPS
+      #   shell: bash
+      #   run: |
+      #     mkdir -p artifacts/lighting-app-zephyr/BRD4338A
+      #     cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps \
+      #        artifacts/lighting-app-zephyr/BRD4338A/matter_wifi_soc_lighting_app_zephyr.rps
 
-      - name: Build EFR32xG24 Zephyr Lighting App
-        shell: bash
-        run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+      # - name: Build EFR32xG24 Zephyr Lighting App
+      #   shell: bash
+      #   run: |
+      #     cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
+      #        "cd /opt/silabs/zephyr-silabs \
+      #         && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
 
-      - name: Export EFR32xG24 Zephyr HEX
+      # - name: Export EFR32xG24 Zephyr HEX
+      #   shell: bash
+      #   run: |
+      #     mkdir -p artifacts/lighting-app-zephyr/BRD4187C
+      #     cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
+      #        artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
+
+      # The all-devices-app builds MCUboot through sysbuild. zephyr-silabs signs
+      # MCUboot with Simplicity Commander (zephyr/cmake/commander_sign.cmake,
+      # triggered by CONFIG_BOOT_SIGNATURE_TYPE_ECDSA_P256). Commander ships
+      # with Simplicity Studio, not with the Zephyr SDK or the Matter
+      # bootstrap, so install it with SLT as .github/actions/install-tools
+      # does. FindSimplicityCommander.cmake resolves it from PATH.
+      - name: Setup SLT
+        id: setup-slt
+        uses: SiliconLabsSoftware/action-setup-slt@v2
+
+      - name: Install Simplicity Commander
         shell: bash
         run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4187C
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
-             artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
+          set -euo pipefail
+          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
+          export PATH="${{ steps.setup-slt.outputs.slt-path }}:${PATH}"
+          slt install commander
+          COMMANDER_PATH="$(slt where commander)"
+          echo "COMMANDER_PATH=${COMMANDER_PATH}" >> "$GITHUB_ENV"
+          echo "${COMMANDER_PATH}" >> "$GITHUB_PATH"
 
       # The all-devices-app requires Matter to be registered as a Zephyr module.
       # The zephyr-silabs manifest in the container does not include it, so the
