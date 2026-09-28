@@ -42,6 +42,12 @@
     ]
   },
   {
+    "clusterCode": "ambient sensing union-server",
+    "value": [
+      "%extension-matter%matter_ambient_sensing_union"
+    ]
+  },
+  {
     "clusterCode": "application basic-server",
     "value": [
       "%extension-matter%matter_application_basic"
@@ -636,7 +642,7 @@
     ]
   },
   {
-    "clusterCode": "test hidden manufacturer specific-server",
+    "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"
     ]

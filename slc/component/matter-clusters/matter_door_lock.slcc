@@ -13,7 +13,7 @@ provides:
   - name: matter_door_lock
 source:
   - path: third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server-callback.cpp
-  - path: third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/door-lock-server/DoorLockCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/door-lock-server
     file_list:
