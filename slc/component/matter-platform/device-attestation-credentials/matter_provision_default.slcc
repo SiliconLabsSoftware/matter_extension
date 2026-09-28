@@ -41,6 +41,7 @@ include:
       - path: SilabsTestEventTriggerDelegate.h
 
 source:
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCommon.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageDefault.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
 
