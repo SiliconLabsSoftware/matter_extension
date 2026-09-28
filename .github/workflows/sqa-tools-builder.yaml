@@ -176,6 +176,14 @@ jobs:
           cd third_party/matter_sdk
           ./scripts/run_in_build_env.sh "./scripts/build/build_examples.py --target linux-arm64-all-clusters-clang build"
 
+      # Builds mmic host (no part of package manager)
+      - name: Build mmic host
+        shell: bash
+        run: |
+          cd third_party/matter_sdk/examples/platform/silabs/mmic
+          cmake -S . -B build -DMMIC_USE_CPC=ON
+          cmake --build build"
+
       # Copy Artifacts at on location
       - name: Copy Build Artifacts to output directory
         shell: bash
@@ -184,6 +192,7 @@ jobs:
           cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
+          cp third_party/matter_sdk/examples/platform/silabs/mmic/build/mmic_host sqa-tools/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7
