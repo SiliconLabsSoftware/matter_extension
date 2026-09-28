@@ -1560,16 +1560,6 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
-  <demo name="brd4187c.demo.matter_thread_soc_lighting_app_series_2_freertos_multipan" label="Matter Thread - SoC Lighting with external Bootloader FreeRTOS Multipan">
-    <model:description>Demonstrates a sample implementation of a Matter over Thread lighting app with external bootloader</model:description>
-    <property key="demos.blurb" value="Matter Thread - SoC Lighting with external Bootloader FreeRTOS app"/>
-    <property key="core.partCompatibility" value=".*"/>
-    <property key="core.boardCompatibility" value="brd4187c"/>
-    <property key="demos.imageFile" value="asset://extension.matter_2.9.0/demos/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution_multipan/artifact/matter_thread_soc_lighting_app_series_2_freertos_full.s37"/>
-    <property key="core.readmeFiles" value="slc/apps/lighting_app/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
-    <property key="core.quality" value="PRODUCTION"/>
-  </demo>
   <demo name="brd2601b.demo.matter_thread_soc_lighting_app_series_2_freertos" label="Matter Thread - SoC Lighting with external Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Thread lighting app with external bootloader</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Lighting with external Bootloader FreeRTOS app"/>
