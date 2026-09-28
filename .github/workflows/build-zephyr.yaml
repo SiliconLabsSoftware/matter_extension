@@ -80,6 +80,36 @@ jobs:
           cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
              artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
 
+      # The all-devices-app requires Matter to be registered as a Zephyr module.
+      # The zephyr-silabs manifest in the container does not include it, so the
+      # local matter_sdk checkout is passed as an extra module. The "zephyr_"
+      # prefix scopes the variable to the sysbuild application image, which is
+      # named after the app directory (examples/all-devices-app/zephyr).
+      - name: Build EFR32xG26 Zephyr All-Devices App
+        shell: bash
+        run: |
+          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
+             "cd /opt/silabs/zephyr-silabs \
+              && west build -b xg26_rb4118a -p always --sysbuild \
+                   ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/all-devices-app/zephyr \
+                   -d /opt/silabs/zephyr-silabs/build-all-devices-xg26 \
+                   -- -DUSE_CCACHE=0 \
+                      -Dzephyr_EXTRA_ZEPHYR_MODULES=${GITHUB_WORKSPACE}/third_party/matter_sdk"
+
+      - name: Export EFR32xG26 Zephyr All-Devices HEX
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/all-devices-app-zephyr/BRD4118A
+          # sysbuild merges MCUboot and the signed app into merged_<board_target>.hex
+          merged=(/opt/silabs/zephyr-silabs/build-all-devices-xg26/merged_*.hex)
+          if [ ${#merged[@]} -ne 1 ]; then
+            echo "Expected exactly one merged hex, found: ${merged[*]}" >&2
+            exit 1
+          fi
+          cp "${merged[0]}" \
+             artifacts/all-devices-app-zephyr/BRD4118A/matter_thread_soc_all_devices_app_series_2_zephyr_full.hex
+
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
         with:
