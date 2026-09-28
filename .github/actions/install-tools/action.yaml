@@ -22,6 +22,8 @@ runs:
     - name: Setup SLT
       id: setup-action
       uses: SiliconLabsSoftware/action-setup-slt@v2
+      with:
+        install-conan: true
     
     - name: Set Environment Variables
       shell: bash
@@ -31,17 +33,12 @@ runs:
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.conan-path }}" >> $GITHUB_PATH
-        echo "${HOME}/.silabs/slt/engines/conan/conan" >> $GITHUB_PATH
     
     - name: Update SLT
       shell: bash
       run: |
         slt update --self
-
-    - name: Install Conan
-      shell: bash
-      run: |
-        set -euo pipefail
+        # Re-install after self-update in case the update refreshes the toolchain layout.
         export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
         slt install conan
     

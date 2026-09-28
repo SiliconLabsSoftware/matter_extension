@@ -3,10 +3,18 @@
 # This script updates Matter extension version in our various files.
 # Example usage:
 # ./slc/script/update_version.py 2.2.0-1.2 4.4.0 4.0.0 readme=True/False
-# param 1: New version for sdk_extension
+# param 1: New version for sdk_extension (X.Y.Z or X.Y.Z-A.B(.C))
 # param 2: New version for simplicity_sdk
 # param 3: New version for wiseconnect (Wi-Fi SDK)
 # param 4: Choose to update/not update the readme files with "param 1"
+#
+# Auxiliary suffix (AUX_VERSION):
+#   When param 1 includes a hyphenated suffix (e.g. 2.10.0-1.6.1), the part after
+#   the hyphen is AUX_VERSION. It is used for full release-style identifiers such as
+#   matter.slsdk / matter_app.slsdk prop.subLabel and matter_package_version.
+#   Examples for matter_package_version:
+#     with AUX   -> 2.10.0-1.6.1
+#     without    -> 2.10.0-0.dev
 
 import os
 import sys
