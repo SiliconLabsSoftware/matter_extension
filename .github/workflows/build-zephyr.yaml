@@ -84,22 +84,42 @@ jobs:
       # MCUboot with Simplicity Commander (zephyr/cmake/commander_sign.cmake,
       # triggered by CONFIG_BOOT_SIGNATURE_TYPE_ECDSA_P256). Commander ships
       # with Simplicity Studio, not with the Zephyr SDK or the Matter
-      # bootstrap, so install it with SLT as .github/actions/install-tools
-      # does. FindSimplicityCommander.cmake resolves it from PATH.
-      - name: Setup SLT
-        id: setup-slt
-        uses: SiliconLabsSoftware/action-setup-slt@v2
-
+      # bootstrap, so it has to be installed here.
+      # FindSimplicityCommander.cmake resolves it from PATH.
+      #
+      # TEMPORARY: SiliconLabsSoftware/action-setup-slt is unavailable, so the
+      # SLT CLI is downloaded directly, as zephyr-silabs' own CI does in
+      # .github/actions/action-slt-setup. Restore the commented-out steps below
+      # (matching .github/actions/install-tools) once the action is back.
       - name: Install Simplicity Commander
         shell: bash
         run: |
           set -euo pipefail
-          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
-          export PATH="${{ steps.setup-slt.outputs.slt-path }}:${PATH}"
+          wget -q https://www.silabs.com/documents/public/software/slt-cli-1.0.0-linux-x64.zip -O /tmp/slt.zip
+          unzip -q /tmp/slt.zip -d /opt/slt
+          chmod +x /opt/slt/slt
+          rm /tmp/slt.zip
+          echo /opt/slt >> "$GITHUB_PATH"
+          export PATH="/opt/slt:${PATH}"
           slt install commander
           COMMANDER_PATH="$(slt where commander)"
           echo "COMMANDER_PATH=${COMMANDER_PATH}" >> "$GITHUB_ENV"
           echo "${COMMANDER_PATH}" >> "$GITHUB_PATH"
+
+      # - name: Setup SLT
+      #   id: setup-slt
+      #   uses: SiliconLabsSoftware/action-setup-slt@v2
+
+      # - name: Install Simplicity Commander
+      #   shell: bash
+      #   run: |
+      #     set -euo pipefail
+      #     echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
+      #     export PATH="${{ steps.setup-slt.outputs.slt-path }}:${PATH}"
+      #     slt install commander
+      #     COMMANDER_PATH="$(slt where commander)"
+      #     echo "COMMANDER_PATH=${COMMANDER_PATH}" >> "$GITHUB_ENV"
+      #     echo "${COMMANDER_PATH}" >> "$GITHUB_PATH"
 
       # The all-devices-app requires Matter to be registered as a Zephyr module.
       # The zephyr-silabs manifest in the container does not include it, so the
