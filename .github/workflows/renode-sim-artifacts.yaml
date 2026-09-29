@@ -255,6 +255,9 @@ jobs:
           python3 renode_integration/scripts/build_renode.py
           python3 renode_integration/scripts/assemble_bundle.py
 
+      - name: Install harness dependencies
+        run: python3 -m pip install -r renode_integration/harness/requirements.txt
+
       - name: Generate checkpoint
         env:
           HOST: ${{ matrix.host }}
