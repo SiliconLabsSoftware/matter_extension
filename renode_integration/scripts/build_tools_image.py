@@ -117,7 +117,8 @@ def build(chip_tool):
         subprocess.run(["./script/bootstrap"], cwd=otbr_src, env=env, check=True)
         env["OTBR_BUILD_DIR"] = str(otbr_build)
         env["OTBR_TARGET"] = "otbr-agent"
-        cmake_args = common.manifest_lookup("ot_br_posix.cmake_args")
+        cmake_args = list(common.manifest_lookup("ot_br_posix.cmake_args"))
+        cmake_args.append("-DProtobuf_PROTOC_EXECUTABLE=/usr/bin/protoc")
         subprocess.run(["./script/cmake-build", *cmake_args], cwd=otbr_src, env=env, check=True)
 
         guest_bin = staging / "guest-bin"
