@@ -93,7 +93,7 @@ jobs:
               && west build -b xg26_rb4118a -p always \
                    ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/all-devices-app/zephyr \
                    -d /opt/silabs/zephyr-silabs/build-all-devices-xg26 \
-                   -- -Dzephyr_EXTRA_ZEPHYR_MODULES=${GITHUB_WORKSPACE}/third_party/matter_sdk"
+                   -- -DEXTRA_ZEPHYR_MODULES=${GITHUB_WORKSPACE}/third_party/matter_sdk"
 
       - name: Export EFR32xG26 Zephyr All-Devices HEX
         shell: bash
