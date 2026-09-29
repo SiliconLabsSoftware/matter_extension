@@ -1,9 +1,6 @@
 name: Packages Validation
 
 on:
-  push:
-    branches:
-      - test/pkg-mgr-phase-2
   pull_request:
     branches:
       - main
