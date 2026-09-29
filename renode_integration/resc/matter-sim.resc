@@ -18,7 +18,7 @@ connector Connect sysbus.uart1 matter_hub_console
 
 mach create "matter_soc"
 using sysbus
-machine LoadPlatformDescription @platforms/boards/silabs/brd4186c.repl
+machine LoadPlatformDescription @platforms/boards/silabs/brd4187c.repl
 sysbus LoadELF $matter_elf
 cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`
 cpu PerformanceInMips 50
