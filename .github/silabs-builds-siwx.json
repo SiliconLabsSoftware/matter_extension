@@ -72,7 +72,7 @@
     "custom-sqa": {
         "lighting_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -101,7 +101,7 @@
         ],
         "lock_app" :[
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -161,7 +161,7 @@
         ],
         "light_switch_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -203,14 +203,14 @@
         ],
         "closure_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform_template": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals_917soc", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
