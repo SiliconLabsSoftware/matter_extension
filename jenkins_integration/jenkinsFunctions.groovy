@@ -616,8 +616,8 @@ def setupSltAndConan() {
 set -euo pipefail
 export PATH="${HOME}/.local/bin:${PATH}"
 
-SLT_ARTIFACTORY_URL="${SLT_ARTIFACTORY_URL:-https://www.silabs.com/documents/public/software}"
-SLT_PKG_NAME="${SLT_PKG_NAME:-slt-cli-1.2.0-linux-x64.zip}"
+SLT_ARTIFACTORY_URL="${SLT_ARTIFACTORY_URL:-https://updates.silabs.com/studio/v6/updates/tools/slt}"
+SLT_PKG_NAME="${SLT_PKG_NAME:-slt-cli_linux_amd64.zip}"
 curl -fsSL "${SLT_ARTIFACTORY_URL}/${SLT_PKG_NAME}" --output "/tmp/${SLT_PKG_NAME}"
 mkdir -p "${HOME}/.local/bin"
 unzip -o "/tmp/${SLT_PKG_NAME}" -d "${HOME}/.local/bin"
