@@ -22,7 +22,7 @@ The simulation models:
 | `guest/dts/` | ZynqMP device tree source |
 | `guest/rootfs-overlay/` | Matter-specific files injected into the boot rootfs |
 | `scripts/` | Python scripts that build, assemble, fetch, and publish the bundle |
-| `harness/` | Checkpoint generation harness |
+| `harness/` | pyrenode3 harness (`MatterSim`) for checkpoint generation and the macOS smoke test |
 | `out/bundle/` | Assembled artifact tree (gitignored) |
 
 ## Common vs runtime artifacts
@@ -126,7 +126,7 @@ The future Matter commissioning CI job will:
 
 1. `python3 scripts/fetch_bundle.py` (linux-x64 runtime)
 2. Download a Matter ELF from dev-apps-builder
-3. Run `out/bundle/renode/renode` with `resc/matter-sim.resc` and drive tests via the harness
+3. Run `out/bundle/renode/renode` with `resc/matter-sim.resc` and drive tests via the pyrenode3 harness
 
 ## Updating the bundle
 
@@ -159,5 +159,5 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 
   The guest is Buildroot, so `S99matter-services` runs these binaries through the bundled loader
   and copies the D-Bus configs into place at boot.
-- **Checkpoint:** Boots `matter-sim-full.resc`, waits for `matter-services: READY`, runs `matter-thread-init`, saves `linux-booted-thread.save`.
+- **Checkpoint:** `harness/generate_checkpoint.py` drives Renode through pyrenode3 (`MatterSim`). It includes `matter-sim-full.resc`, waits for `matter-services: READY`, logs in, runs `matter-thread-init`, and saves `linux-booted-thread.save`. The macOS smoke test loads that checkpoint with the same harness. Dependencies are pinned in `harness/requirements.txt`.
 - **Storage:** ORAS artifacts on `ghcr.io/siliconlabssoftware/matter-renode-sim`.
