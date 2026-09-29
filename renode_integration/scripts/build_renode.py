@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 import common
@@ -50,6 +51,45 @@ def verify_macos_libs(renode_dir, deployment_target):
             common.die(f"library {lib} requires macOS {minos}")
 
 
+def portable_artifact(src_dir):
+    packages = src_dir / "output" / "packages"
+    found = sorted(packages.glob("*portable*.tar.gz")) + sorted(packages.glob("*portable*.dmg"))
+    if len(found) != 1:
+        names = " ".join(path.name for path in found) or "(none)"
+        common.die(f"expected one portable package in {packages}, found: {names}")
+    return found[0]
+
+
+def install_portable(artifact, out_dir):
+    with tempfile.TemporaryDirectory() as tmp:
+        staging = Path(tmp)
+        if artifact.name.endswith(".tar.gz"):
+            subprocess.run(["tar", "-xzf", str(artifact), "-C", str(staging)], check=True)
+            roots = [path for path in staging.iterdir() if path.is_dir()]
+            if len(roots) != 1:
+                common.die(f"unexpected layout in {artifact.name}")
+            tree = roots[0]
+        else:
+            mount = staging / "mnt"
+            mount.mkdir()
+            subprocess.run(
+                ["hdiutil", "attach", "-nobrowse", "-readonly", "-mountpoint", str(mount), str(artifact)],
+                check=True,
+            )
+            try:
+                macos_dirs = list(mount.glob("*.app/Contents/MacOS"))
+                if len(macos_dirs) != 1:
+                    common.die(f"unexpected layout in {artifact.name}")
+                tree = staging / "renode"
+                shutil.copytree(macos_dirs[0], tree, symlinks=True)
+            finally:
+                subprocess.run(["hdiutil", "detach", str(mount)], check=False)
+        if not (tree / "renode").is_file():
+            common.die(f"renode binary not found in {artifact.name}")
+        shutil.rmtree(out_dir, ignore_errors=True)
+        shutil.copytree(tree, out_dir, symlinks=True)
+
+
 def main():
     host = common.detect_host()
     out_dir = Path(common.RENODE_INTEGRATION_DIR) / "out" / "renode" / host
@@ -65,22 +105,15 @@ def main():
         subprocess.run(["git", "-C", str(src_dir), "fetch", "--unshallow"], check=False)
     subprocess.run(["git", "-C", str(src_dir), "checkout", commit], check=True)
 
-    build_args = ["-p"]
+    build_args = ["-t"]
     env = os.environ.copy()
     if host == "osx-arm64":
         env["MACOSX_DEPLOYMENT_TARGET"] = str(common.manifest_lookup("macos.deployment_target"))
-        build_args = ["-p", "--host-arch", "arm64"]
+        build_args = ["-t", "--host-arch", "arm64"]
 
     print(f"Building Renode for {host} at {commit}...")
     subprocess.run(["./build.sh", *build_args], cwd=src_dir, env=env, check=True)
-
-    matches = list(src_dir.glob("renode-portable-*")) + list(src_dir.glob("*/renode-portable-*"))
-    built = next((path for path in matches if path.is_dir()), None)
-    if built is None:
-        common.die("renode-portable directory not found after build")
-
-    shutil.rmtree(out_dir, ignore_errors=True)
-    shutil.copytree(built, out_dir, symlinks=True)
+    install_portable(portable_artifact(src_dir), out_dir)
     for link in out_dir.rglob("libgdiplus.dylib"):
         if link.is_symlink():
             link.unlink()
