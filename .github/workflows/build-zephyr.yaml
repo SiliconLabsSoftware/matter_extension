@@ -87,24 +87,24 @@ jobs:
       # bootstrap, so it has to be installed here.
       # FindSimplicityCommander.cmake resolves it from PATH.
       #
-      # TEMPORARY: SiliconLabsSoftware/action-setup-slt is unavailable, so the
-      # SLT CLI is downloaded directly, as zephyr-silabs' own CI does in
-      # .github/actions/action-slt-setup. Restore the commented-out steps below
-      # (matching .github/actions/install-tools) once the action is back.
+      # TEMPORARY: SLT (SiliconLabsSoftware/action-setup-slt and the slt-cli
+      # zips) is unavailable, so Commander is downloaded directly, as
+      # zephyr-silabs documents in doc/getting-started-linux.md. Restore the
+      # commented-out SLT steps below (matching
+      # .github/actions/install-tools) once SLT is back.
       - name: Install Simplicity Commander
         shell: bash
         run: |
           set -euo pipefail
-          wget -q https://www.silabs.com/documents/public/software/slt-cli-1.0.0-linux-x64.zip -O /tmp/slt.zip
-          unzip -q /tmp/slt.zip -d /opt/slt
-          chmod +x /opt/slt/slt
-          rm /tmp/slt.zip
-          echo /opt/slt >> "$GITHUB_PATH"
-          export PATH="/opt/slt:${PATH}"
-          slt install commander
-          COMMANDER_PATH="$(slt where commander)"
-          echo "COMMANDER_PATH=${COMMANDER_PATH}" >> "$GITHUB_ENV"
-          echo "${COMMANDER_PATH}" >> "$GITHUB_PATH"
+          wget -q https://www.silabs.com/documents/login/software/SimplicityCommander-Linux.zip -O /tmp/commander.zip
+          unzip -q /tmp/commander.zip -d /tmp
+          # Unpacks to /opt/commander/commander. The full Commander is needed:
+          # commander_sign.cmake calls "convert --secureboot --keyfile".
+          tar -C /opt -xf /tmp/SimplicityCommander-Linux/Commander_linux_x86_64_*.tar.bz
+          rm -rf /tmp/commander.zip /tmp/SimplicityCommander-Linux
+          echo /opt/commander >> "$GITHUB_PATH"
+          echo "COMMANDER_PATH=/opt/commander" >> "$GITHUB_ENV"
+          /opt/commander/commander --version
 
       # - name: Setup SLT
       #   id: setup-slt
