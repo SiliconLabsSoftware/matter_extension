@@ -110,7 +110,7 @@ class Console:
         from pyrenode3.wrappers import TerminalTester
 
         limit = self._timeout_s if timeout_s is None else timeout_s
-        result = self._tester.WaitFor(pattern, TerminalTester.to_interval(limit), True, True)
+        result = self._tester.WaitFor(pattern, TerminalTester.to_interval(limit), True, True, False, False)
         if result is None:
             report = str(self._tester.GetReport())
             raise TimeoutError(f"timed out waiting for /{pattern}/\n{report[-2000:]}")
