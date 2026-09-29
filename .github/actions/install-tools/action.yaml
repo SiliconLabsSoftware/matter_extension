@@ -19,7 +19,24 @@ runs:
     
     - name: Setup SLT
       id: setup-action
-      uses: SiliconLabsSoftware/action-setup-slt@v2
+      shell: bash
+      env:
+        SLT_IMAGE: ghcr.io/siliconlabssoftware/slt_cli:1.2.2
+      run: |
+        INSTALL_PATH="$HOME/.local/bin"
+        mkdir -p "$INSTALL_PATH"
+        cid=$(docker create "$SLT_IMAGE")
+        docker cp "$cid:/opt/silabs/slt/slt" "$INSTALL_PATH/slt"
+        docker rm "$cid"
+        chmod +x "$INSTALL_PATH/slt"
+        echo "$INSTALL_PATH" >> $GITHUB_PATH
+        echo "SLT_CI=true" >> $GITHUB_ENV
+
+        "$INSTALL_PATH/slt" install conan
+        ln -fs "$HOME/.silabs/slt/engines/conan/conan_engine" "$INSTALL_PATH/conan_engine"
+        ln -fs "$HOME/.silabs/slt/engines/conan/conan/conan" "$INSTALL_PATH/conan"
+        echo "slt-path=$INSTALL_PATH/slt" >> $GITHUB_OUTPUT
+        echo "conan-path=$INSTALL_PATH/conan" >> $GITHUB_OUTPUT
     
     - name: Set Environment Variables
       shell: bash
