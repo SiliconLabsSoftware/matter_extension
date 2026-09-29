@@ -39,7 +39,6 @@ runs:
       run: |
         slt update --self
         # Re-install after self-update in case the update refreshes the toolchain layout.
-        export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
         slt install conan
     
     - name: Install slc-cli

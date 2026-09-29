@@ -59,7 +59,6 @@ runs:
           shell: bash
           run: |
               set -euo pipefail
-              export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
               slt install conan
 
         - name: Set tool paths from cache

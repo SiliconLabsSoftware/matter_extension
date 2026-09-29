@@ -21,33 +21,23 @@ outputs:
   cache-hit:
     description: Whether the requested Conan cache was restored.
     value: ${{ steps.restore.outputs.cache-hit }}
-  conan-home:
-    description: Absolute Conan home directory used for the restore.
-    value: ${{ steps.prepare.outputs.conan-home }}
 
 runs:
   using: composite
   steps:
     - name: Prepare Conan home
-      id: prepare
       shell: bash
       run: |
         set -euo pipefail
-        if [[ -n "${CONAN_HOME:-}" ]]; then
-          CONAN_HOME="${CONAN_HOME/#\~/${HOME}}"
-        else
-          CONAN_HOME="${HOME}/.silabs/slt/installs/conan"
-        fi
+        : "${CONAN_HOME:?CONAN_HOME must be set (run cache-tools first)}"
         rm -rf "${CONAN_HOME}"
         mkdir -p "${CONAN_HOME}"
-        echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-        echo "conan-home=${CONAN_HOME}" >> "$GITHUB_OUTPUT"
 
     - name: Restore Matter package cache
       id: restore
       uses: actions/cache/restore@v6
       with:
-        path: ${{ steps.prepare.outputs.conan-home }}
+        path: ${{ env.CONAN_HOME }}
         key: ${{ inputs.conan-cache-key }}
         fail-on-cache-miss: ${{ inputs.fail-on-cache-miss }}
 
