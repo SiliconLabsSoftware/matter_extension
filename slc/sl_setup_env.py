@@ -146,7 +146,7 @@ class MatterEnvSetup:
             logging.info(f"Downloading and unzipping slt-cli...")
             slt_zip_path = os.path.join(self.tools_folder_path, "slt.zip")
             try:
-                dload.save(self.slt_cli_url, slt_zip_path)
+                subprocess.run(["curl", "-fsSL", self.slt_cli_url, "-o", slt_zip_path], check=True)
                 with ZipFile(slt_zip_path, 'r') as zObject:
                     zObject.extractall(path=self.tools_folder_path)
                 os.remove(slt_zip_path)
