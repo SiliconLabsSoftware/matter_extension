@@ -21,6 +21,7 @@ requires:
   - name: psa_crypto_ecc
   - name: psa_crypto_cipher_ctr
     condition: [matter_multi_image_ota_encryption]
+  - name: mbedtls_key_exchange_ecjpake
 
   # Mbedtls components
   - name: mbedtls_x509
