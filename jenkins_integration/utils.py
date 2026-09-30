@@ -72,7 +72,7 @@ def get_dev_workflow_info(args):
             'package_version': args.package_version,
         }
     except (ValueError, RuntimeError) as e:
-        print(f"Failed to get Matter Packages Validation workflow info for branch '{args.branch_name}': {e}")
+        print(f"Failed to get Packages Validation workflow info for branch '{args.branch_name}': {e}")
         sys.exit(1)
 
 
