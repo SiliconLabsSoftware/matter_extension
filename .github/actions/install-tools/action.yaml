@@ -22,6 +22,7 @@ runs:
       shell: bash
       env:
         SLT_IMAGE: ghcr.io/siliconlabssoftware/slt-cli:1.2.2
+        SLT_CI: "true"
       run: |
         INSTALL_PATH="$HOME/.local/bin"
         mkdir -p "$INSTALL_PATH"
