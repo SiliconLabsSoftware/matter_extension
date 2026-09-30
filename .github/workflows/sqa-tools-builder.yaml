@@ -134,12 +134,25 @@ jobs:
             software-properties-common \
             libgirepository-1.0-1 libgirepository1.0-dev \
             libglib2.0-dev libglib2.0-dev-bin \
-            libevent-dev
+            libevent-dev libmbedtls-dev
 
       - name: Mark repository as safe for Git
         shell: bash
         run: |
           git config --global --add safe.directory /__w/matter_extension/matter_extension
+
+      # For mmic host
+      - name: Clone CPC
+        shell: bash
+        run: |
+          git clone https://github.com/SiliconLabs/cpc-daemon.git
+          cd ./cpc-daemon
+          mkdir build
+          cd build
+          cmake ../
+          make
+          sudo make install
+          sudo ldconfig
 
       - name: Initialize required submodules
         shell: bash
@@ -154,6 +167,14 @@ jobs:
 
       - name: Run bootstrap action
         uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
+
+      # Builds mmic host (no part of package manager)
+      - name: Build mmic host
+        shell: bash
+        run: |
+          cd third_party/matter_sdk/examples/platform/silabs/mmic
+          cmake -S . -B build -DMMIC_USE_CPC=ON
+          cmake --build build
 
       # Builds chip-tool
       - name: Build chip-tool
@@ -184,6 +205,7 @@ jobs:
           cp third_party/matter_sdk/out/linux-arm64-chip-tool-ipv6only-clang/chip-tool sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-ota-provider-ipv6only-clang/chip-ota-provider-app sqa-tools/
           cp third_party/matter_sdk/out/linux-arm64-all-clusters-clang/chip-all-clusters-app sqa-tools/
+          cp third_party/matter_sdk/examples/platform/silabs/mmic/build/mmic_host sqa-tools/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7

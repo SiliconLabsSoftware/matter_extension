@@ -53,6 +53,8 @@ jobs:
         with:
           commit-message: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
           title: "Update version to ${{ inputs.extension_version }} ${{ inputs.sdk_version }}"
+          author: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          committer: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
           body: |
             This PR updates the Matter Extension and SDK versions based on the workflow inputs.
             Ran the following command to update the version:
