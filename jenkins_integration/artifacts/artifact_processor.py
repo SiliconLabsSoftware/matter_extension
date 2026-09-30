@@ -442,7 +442,7 @@ def _process_individual_artifact(artifact_name, artifact_path, branch_name, buil
     elif artifact_name == "provision.zip":
         _upload_provision_zip(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "ota-scripts.zip":
-        _upload_ota_scripts(artifact_path, branch_name, build_number)
+        _upload_ota_scripts(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "mmic_host":
         _upload_mmic_host(artifact_path, branch_name, build_number)
     elif os.path.isdir(artifact_path):
