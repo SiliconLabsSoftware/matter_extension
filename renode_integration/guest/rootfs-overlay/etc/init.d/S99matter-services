@@ -43,7 +43,19 @@ wait_for()
 
 ot()
 {
-    "$LOADER" --library-path "$LIBS" "$OT" "$@"
+    "$LOADER" --library-path "$LIBS" "$OT" "$@" &
+    ot_pid=$!
+    (
+        sleep 10
+        printf 'ot-ctl probe timed out after 10 seconds\n' >&2
+        kill "$ot_pid" 2>/dev/null
+    ) &
+    watchdog_pid=$!
+    wait "$ot_pid"
+    ot_rc=$?
+    kill "$watchdog_pid" 2>/dev/null
+    wait "$watchdog_pid" 2>/dev/null
+    return "$ot_rc"
 }
 
 start()
@@ -108,8 +120,10 @@ start()
 
     stty -F /dev/ttyPS0 raw -echo -echoe -echok 460800
     start_background otbr "$LOADER" --library-path "$LIBS" "$TOOLS/guest-bin/otbr-agent" \
-        -I wpan0 -B eth0 -s --auto-attach=0 spinel+hdlc+uart:///dev/ttyPS0
-    wait_for "OTBR" 20 ot state || return 1
+        -I wpan0 -B eth0 -s --auto-attach=0 \
+        --vendor-name "Silicon Labs" --model-name "Matter Renode Simulator" \
+        spinel+hdlc+uart:///dev/ttyPS0
+    wait_for "OTBR" 6 ot state || return 1
 
     log "READY"
     log "Run matter-thread-init to create and start a Thread network"
