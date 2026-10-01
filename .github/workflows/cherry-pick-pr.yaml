@@ -1,0 +1,445 @@
+name: Cherry-pick PR
+
+# Three ways to run:
+#
+# 1. Label a merged PR with cherry-pick-to-<branch> (e.g. cherry-pick-to-release_2.10-1.6.1).
+#
+# 2. Push a list file to a release branch. Add PR numbers (one per line, # comments
+#    allowed) to .github/cherry-pick-prs.txt on the TARGET branch (e.g. release_2.10-1.6.1)
+#    and push/merge it. Only PR numbers added in that push are processed. The listed PRs
+#    must have been merged into the source branch, which defaults to release_2.9-1.6 and
+#    can be overridden with a "source: <branch>" line in the file.
+#
+# 3. Run manually (workflow_dispatch) with a single pr_number, or with pr_list_file to
+#    process every PR in a file from the current branch.
+#
+# Open (unmerged) PRs are only accepted via workflow_dispatch with a single pr_number.
+
+on:
+  pull_request_target:
+    types: [closed, labeled]
+  push:
+    branches:
+      - "release_*"
+    paths:
+      - ".github/cherry-pick-prs.txt"
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "Single PR number to cherry-pick. Leave empty when using pr_list_file."
+        required: false
+        type: string
+      pr_list_file:
+        description: "Repo path to a file of PR numbers, one per line (e.g. .github/cherry-pick-prs.txt)"
+        required: false
+        type: string
+      source_branch:
+        description: "Branch the listed PRs were merged into (file mode only). Defaults to the file's source: line, else release_2.9-1.6"
+        required: false
+        type: string
+      target_branch:
+        description: "Target branch (e.g. release_2.10-1.6.1)"
+        required: true
+        type: string
+        default: "release_2.10-1.6.1"
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  cherry-pick:
+    name: Cherry-pick PR
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'push' ||
+      (github.event.pull_request.merged == true &&
+       (github.event.action == 'closed' ||
+        (github.event.action == 'labeled' &&
+         startsWith(github.event.label.name, 'cherry-pick-to-'))))
+    runs-on: ubuntu-latest
+    concurrency:
+      group: cherry-pick-${{ github.event.pull_request.number || inputs.pr_list_file || inputs.pr_number || github.ref_name }}
+      cancel-in-progress: false
+    steps:
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Mask generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Cherry-pick and open PR
+        env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          EVENT_LABEL: ${{ github.event.label.name }}
+          EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_NUMBER_INPUT: ${{ inputs.pr_number }}
+          PR_LIST_FILE: ${{ inputs.pr_list_file }}
+          SOURCE_BRANCH_INPUT: ${{ inputs.source_branch }}
+          TARGET_BRANCH_INPUT: ${{ inputs.target_branch }}
+          PUSH_REF_NAME: ${{ github.ref_name }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_AFTER: ${{ github.sha }}
+          DEFAULT_LIST_FILE: .github/cherry-pick-prs.txt
+          DEFAULT_SOURCE_BRANCH: release_2.9-1.6
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "silabs-matter-ci-bot[bot]"
+          git config user.email "silabs-matter-ci-bot[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+
+          is_safe_ref() {
+            [[ "$1" =~ ^[A-Za-z0-9._/-]+$ ]]
+          }
+
+          is_safe_path() {
+            [[ "$1" =~ ^[A-Za-z0-9._/-]+$ ]] && [[ "$1" != /* ]] && [[ "$1" != *..* ]]
+          }
+
+          parent_count() {
+            local parents
+            parents=$(git rev-list --parents -n 1 "$1")
+            echo $(($(wc -w <<<"$parents") - 1))
+          }
+
+          comment_on_pr() {
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$1"
+          }
+
+          # process_pr <pr-number> [force-target] [expected-source]
+          process_pr() {
+            local PR_NUMBER="$1"
+            local force_target="${2:-}"
+            local expected_source="${3:-}"
+            local failed=0
+            local PR_JSON PR_TITLE PR_BODY PR_URL PR_MERGED_AT PR_BASE MERGE_SHA
+            local -a TARGETS=()
+            local -a COMMIT_SHAS=()
+            local PICK_MERGE_MAINLINE=0
+            local TARGET NEW_BRANCH EXISTING_URL PICK_OK SHA SHAS_FMT MAINLINE_HINT NEW_TITLE NEW_URL
+
+            if [[ ! "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+              echo "Invalid PR number: ${PR_NUMBER}"
+              return 1
+            fi
+
+            if ! PR_JSON=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json number,title,body,url,state,mergedAt,mergeCommit,baseRefName,headRefName,labels); then
+              echo "Failed to load PR #${PR_NUMBER}"
+              return 1
+            fi
+            PR_TITLE=$(jq -r '.title' <<<"$PR_JSON")
+            PR_BODY=$(jq -r '.body // ""' <<<"$PR_JSON")
+            PR_URL=$(jq -r '.url' <<<"$PR_JSON")
+            PR_MERGED_AT=$(jq -r '.mergedAt // ""' <<<"$PR_JSON")
+            PR_BASE=$(jq -r '.baseRefName' <<<"$PR_JSON")
+            MERGE_SHA=$(jq -r '.mergeCommit.oid // ""' <<<"$PR_JSON")
+
+            if [ -n "$expected_source" ]; then
+              if [ -z "$PR_MERGED_AT" ]; then
+                echo "PR #${PR_NUMBER} is not merged."
+                comment_on_pr "Cherry-pick skipped: PR is not merged (expected base \`${expected_source}\`)."
+                return 1
+              fi
+              if [ "$PR_BASE" != "$expected_source" ]; then
+                echo "PR #${PR_NUMBER} base is ${PR_BASE}, expected ${expected_source}."
+                comment_on_pr "Cherry-pick skipped: base is \`${PR_BASE}\`, expected \`${expected_source}\`."
+                return 1
+              fi
+            fi
+
+            if [ -n "$force_target" ]; then
+              TARGETS+=("$force_target")
+            elif [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+              TARGETS+=("${TARGET_BRANCH_INPUT}")
+            elif [ "$EVENT_ACTION" = "labeled" ]; then
+              TARGETS+=("${EVENT_LABEL#cherry-pick-to-}")
+            else
+              while IFS= read -r label; do
+                [ -z "$label" ] && continue
+                TARGETS+=("${label#cherry-pick-to-}")
+              done < <(jq -r '.labels[].name | select(startswith("cherry-pick-to-"))' <<<"$PR_JSON")
+            fi
+
+            if [ "${#TARGETS[@]}" -eq 0 ]; then
+              echo "No cherry-pick targets found for PR #${PR_NUMBER}."
+              return 0
+            fi
+
+            if [ "$EVENT_NAME" != "workflow_dispatch" ] && [ -z "$PR_MERGED_AT" ]; then
+              echo "Label trigger requires a merged PR."
+              return 0
+            fi
+
+            if ! is_safe_ref "$PR_BASE"; then
+              echo "Refusing unsafe source base branch name: ${PR_BASE}"
+              return 1
+            fi
+            git fetch --no-tags origin "$PR_BASE" "pull/${PR_NUMBER}/head"
+
+            if [ -n "$PR_MERGED_AT" ] && [ -n "$MERGE_SHA" ]; then
+              if ! git cat-file -e "${MERGE_SHA}^{commit}" 2>/dev/null; then
+                git fetch --no-tags origin "$MERGE_SHA"
+              fi
+              COMMIT_SHAS+=("$MERGE_SHA")
+              if [ "$(parent_count "$MERGE_SHA")" -ge 2 ]; then
+                PICK_MERGE_MAINLINE=1
+              fi
+            else
+              while IFS= read -r sha; do
+                [ -z "$sha" ] && continue
+                COMMIT_SHAS+=("$sha")
+              done < <(gh api --paginate "repos/${REPO}/pulls/${PR_NUMBER}/commits" --jq '.[].sha')
+              if [ "${#COMMIT_SHAS[@]}" -eq 0 ]; then
+                echo "PR #${PR_NUMBER} has no commits to cherry-pick."
+                return 1
+              fi
+            fi
+
+            for TARGET in "${TARGETS[@]}"; do
+              if ! is_safe_ref "$TARGET"; then
+                echo "Refusing unsafe target branch name: ${TARGET}"
+                comment_on_pr "Cherry-pick skipped: \`${TARGET}\` is not a valid branch name."
+                failed=1
+                continue
+              fi
+
+              if [ "$TARGET" = "$PR_BASE" ]; then
+                echo "Skipping ${TARGET} (same as source PR base)."
+                continue
+              fi
+
+              NEW_BRANCH="cherry-pick/pr-${PR_NUMBER}-to-${TARGET}"
+              echo "Cherry-picking PR #${PR_NUMBER} onto ${TARGET} (${NEW_BRANCH})"
+
+              if ! git fetch --no-tags origin "$TARGET"; then
+                comment_on_pr "Cherry-pick to \`${TARGET}\` failed: branch does not exist or could not be fetched."
+                failed=1
+                continue
+              fi
+
+              EXISTING_URL=$(gh pr list --repo "$REPO" --base "$TARGET" --head "$NEW_BRANCH" --state open --json url --jq '.[0].url // empty')
+              if [ -n "$EXISTING_URL" ]; then
+                echo "Open cherry-pick PR already exists: ${EXISTING_URL}"
+                comment_on_pr "Cherry-pick PR for \`${TARGET}\` already exists: ${EXISTING_URL}"
+                continue
+              fi
+
+              git checkout -B "$NEW_BRANCH" "origin/${TARGET}"
+
+              PICK_OK=1
+              for SHA in "${COMMIT_SHAS[@]}"; do
+                local -a PICK_ARGS=(-x)
+                if [ "$PICK_MERGE_MAINLINE" = "1" ] || [ "$(parent_count "$SHA")" -ge 2 ]; then
+                  PICK_ARGS+=(-m 1)
+                fi
+
+                if ! git cherry-pick "${PICK_ARGS[@]}" "$SHA"; then
+                  PICK_OK=0
+                  git cherry-pick --abort >/dev/null 2>&1 || true
+                  break
+                fi
+              done
+
+              if [ "$PICK_OK" != "1" ]; then
+                SHAS_FMT=$(printf '%s ' "${COMMIT_SHAS[@]}")
+                MAINLINE_HINT=""
+                if [ "$PICK_MERGE_MAINLINE" = "1" ]; then
+                  MAINLINE_HINT=" -m 1"
+                fi
+                {
+                  echo "Cherry-pick of ${PR_URL} onto \`${TARGET}\` hit conflicts."
+                  echo
+                  echo "Resolve locally:"
+                  echo
+                  echo '```bash'
+                  echo "git fetch origin"
+                  echo "git checkout -B ${NEW_BRANCH} origin/${TARGET}"
+                  echo "git cherry-pick -x${MAINLINE_HINT} ${SHAS_FMT}"
+                  echo "# resolve conflicts, then:"
+                  echo "git push -u origin ${NEW_BRANCH}"
+                  echo "gh pr create --base ${TARGET} --head ${NEW_BRANCH} --title \"[cherry-pick to ${TARGET}] ${PR_TITLE}\""
+                  echo '```'
+                } > /tmp/cherry-pick-conflict.md
+                comment_on_pr "$(cat /tmp/cherry-pick-conflict.md)"
+                failed=1
+                continue
+              fi
+
+              if git diff --quiet "origin/${TARGET}"...HEAD; then
+                echo "No changes vs ${TARGET}; skipping PR creation."
+                comment_on_pr "Cherry-pick of ${PR_URL} onto \`${TARGET}\` produced no changes (already present)."
+                continue
+              fi
+
+              git push --force origin "HEAD:refs/heads/${NEW_BRANCH}"
+
+              {
+                echo "Cherry-picked from ${PR_URL} onto \`${TARGET}\`."
+                echo
+                echo "${PR_BODY}"
+              } > /tmp/cherry-pick-pr-body.md
+
+              NEW_TITLE="[cherry-pick to ${TARGET}] ${PR_TITLE}"
+              if [ "${#NEW_TITLE}" -gt 256 ]; then
+                NEW_TITLE="${NEW_TITLE:0:253}..."
+              fi
+
+              NEW_URL=$(gh pr create --repo "$REPO" --base "$TARGET" --head "$NEW_BRANCH" --title "$NEW_TITLE" --body-file /tmp/cherry-pick-pr-body.md)
+              comment_on_pr "Opened cherry-pick PR for \`${TARGET}\`: ${NEW_URL}"
+            done
+
+            if [ "$failed" -ne 0 ]; then
+              return 1
+            fi
+          }
+
+          # Run process_pr in a subshell so set -e stays in effect. Calling it
+          # from if/|| would ignore errexit for the whole function.
+          run_process_pr() {
+            (
+              set -euo pipefail
+              process_pr "$@"
+            )
+          }
+
+          # parse_list_lines: stdin -> PR numbers on stdout; sets LIST_SOURCE_BRANCH
+          # when a "source: <branch>" line is seen. Strips comments and whitespace.
+          parse_list_lines() {
+            local line
+            while IFS= read -r line || [ -n "$line" ]; do
+              line="${line//$'\r'/}"
+              line="${line%%#*}"
+              line="${line//[[:space:]]/}"
+              [ -z "$line" ] && continue
+              if [[ "$line" =~ ^source[:=](.+)$ ]]; then
+                LIST_SOURCE_BRANCH="${BASH_REMATCH[1]}"
+                continue
+              fi
+              echo "$line"
+            done
+          }
+
+          FAILED=0
+          FILE_MODE=0
+          LIST_FILE=""
+          LIST_TARGET=""
+          LIST_SOURCE_BRANCH=""
+          PR_NUMBERS=()
+
+          if [ "$EVENT_NAME" = "push" ]; then
+            FILE_MODE=1
+            LIST_FILE="${DEFAULT_LIST_FILE}"
+            LIST_TARGET="${PUSH_REF_NAME}"
+            if [ ! -f "$LIST_FILE" ]; then
+              echo "${LIST_FILE} was removed; nothing to do."
+              exit 0
+            fi
+
+            # Only PR numbers added in this push. Fall back to the whole file if
+            # the previous commit is unknown (branch creation, force push).
+            if [[ "$PUSH_BEFORE" =~ ^0+$ ]] || ! git cat-file -e "${PUSH_BEFORE}^{commit}" 2>/dev/null; then
+              echo "Previous commit unavailable; processing entire ${LIST_FILE}."
+              while IFS= read -r n; do PR_NUMBERS+=("$n"); done < <(parse_list_lines < "$LIST_FILE")
+            else
+              # Read source directive from the full file, numbers only from added lines.
+              parse_list_lines < "$LIST_FILE" >/dev/null
+              while IFS= read -r n; do PR_NUMBERS+=("$n"); done < <(
+                git diff --no-color --unified=0 "$PUSH_BEFORE" "$PUSH_AFTER" -- "$LIST_FILE" \
+                  | grep -E '^\+[^+]' | sed 's/^+//' | parse_list_lines
+              )
+            fi
+            if [ -z "$LIST_SOURCE_BRANCH" ]; then
+              LIST_SOURCE_BRANCH="${DEFAULT_SOURCE_BRANCH}"
+            fi
+          elif [ "$EVENT_NAME" = "workflow_dispatch" ] && [ -n "${PR_LIST_FILE}" ]; then
+            FILE_MODE=1
+            if [ -n "${PR_NUMBER_INPUT}" ]; then
+              echo "Provide either pr_number or pr_list_file, not both."
+              exit 1
+            fi
+            if ! is_safe_path "$PR_LIST_FILE"; then
+              echo "Refusing unsafe PR list path: ${PR_LIST_FILE}"
+              exit 1
+            fi
+            if [ ! -f "$PR_LIST_FILE" ]; then
+              echo "PR list file not found: ${PR_LIST_FILE}"
+              exit 1
+            fi
+            LIST_FILE="${PR_LIST_FILE}"
+            LIST_TARGET="${TARGET_BRANCH_INPUT}"
+            while IFS= read -r n; do PR_NUMBERS+=("$n"); done < <(parse_list_lines < "$LIST_FILE")
+            # Explicit input wins over a source: line in the file.
+            if [ -n "${SOURCE_BRANCH_INPUT}" ]; then
+              LIST_SOURCE_BRANCH="${SOURCE_BRANCH_INPUT}"
+            elif [ -z "$LIST_SOURCE_BRANCH" ]; then
+              LIST_SOURCE_BRANCH="${DEFAULT_SOURCE_BRANCH}"
+            fi
+          fi
+
+          if [ "$FILE_MODE" = "1" ]; then
+            if [ -z "$LIST_TARGET" ] || ! is_safe_ref "$LIST_TARGET" || ! is_safe_ref "$LIST_SOURCE_BRANCH"; then
+              echo "Invalid source (${LIST_SOURCE_BRANCH}) or target (${LIST_TARGET}) branch."
+              exit 1
+            fi
+            if [ "$LIST_TARGET" = "$LIST_SOURCE_BRANCH" ]; then
+              echo "Source and target branch are both ${LIST_TARGET}; nothing to do."
+              exit 1
+            fi
+            if [ "${#PR_NUMBERS[@]}" -eq 0 ]; then
+              echo "No new PR numbers in ${LIST_FILE}."
+              exit 0
+            fi
+
+            echo "Cherry-picking ${#PR_NUMBERS[@]} PR(s) from ${LIST_SOURCE_BRANCH} onto ${LIST_TARGET}: ${PR_NUMBERS[*]}"
+            for pr in "${PR_NUMBERS[@]}"; do
+              set +e
+              run_process_pr "$pr" "$LIST_TARGET" "$LIST_SOURCE_BRANCH"
+              status=$?
+              set -euo pipefail
+              if [ "$status" -ne 0 ]; then
+                FAILED=1
+              fi
+            done
+          else
+            if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+              if [ -z "${PR_NUMBER_INPUT}" ]; then
+                echo "Provide pr_number or pr_list_file."
+                exit 1
+              fi
+              if [ -z "${TARGET_BRANCH_INPUT}" ]; then
+                echo "target_branch is required."
+                exit 1
+              fi
+              PR_NUMBER="${PR_NUMBER_INPUT}"
+            else
+              PR_NUMBER="${EVENT_PR_NUMBER}"
+            fi
+            set +e
+            run_process_pr "$PR_NUMBER"
+            status=$?
+            set -euo pipefail
+            if [ "$status" -ne 0 ]; then
+              FAILED=1
+            fi
+          fi
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo "One or more cherry-picks failed."
+            exit 1
+          fi
