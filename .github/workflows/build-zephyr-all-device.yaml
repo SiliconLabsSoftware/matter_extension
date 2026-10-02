@@ -70,29 +70,27 @@ jobs:
           set -euxo pipefail
           sudo -n apt-get update
           sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
-          git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs /tmp/zephyrproject/zephyr-silabs
+            git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs "$GITHUB_WORKSPACE/zephyrproject/zephyr-silabs"
 
       - name: Install Simplicity Commander
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           archive="$RUNNER_TEMP/Commander_linux_x86_64_1v25p0b1995.tar.bz"
-          curl --fail --location --retry 3 \
+          curl --fail --location --retry 3 --silent --show-error \
             https://updates.silabs.com/studio/v6/updates/update_site/archives/commander/1.25.0/Commander_linux_x86_64_1v25p0b1995.tar.bz \
             --output "$archive"
           printf '%s  %s\n' 956ae8e9e1600e492e1c4e57d271941ebf83bde6bfe23530a4e09ea300fdea32 "$archive" | sha256sum --check --strict
           tar -xjf "$archive" -C "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/commander" >> "$GITHUB_PATH"
-          "$RUNNER_TEMP/commander/commander" --version
-          "$RUNNER_TEMP/commander/commander" convert --help
 
       - name: Set up Zephyr workspace and SDK
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: zephyrproject-rtos/action-zephyr-setup@be8136a8bba01580485d98b7ad2d32477c36a49a # v1.0.15
         with:
           app-path: zephyr-silabs
-          base-path: /tmp/zephyrproject
+          base-path: zephyrproject
           sdk-version: "1.0.1"
           toolchains: arm-zephyr-eabi
           enable-ccache: "true"
@@ -103,7 +101,7 @@ jobs:
       - name: Configure Zephyr workspace and Matter submodules
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
-        working-directory: /tmp/zephyrproject
+        working-directory: zephyrproject
         run: |
           set -euxo pipefail
           west zephyr-export
@@ -121,7 +119,7 @@ jobs:
       - name: Install GN from Matter's pinned CIPD version
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
-        working-directory: /tmp/zephyrproject
+        working-directory: zephyrproject
         run: |
           set -euxo pipefail
           git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$RUNNER_TEMP/depot_tools"
@@ -143,10 +141,10 @@ jobs:
       - name: Build All-Devices App
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
-        working-directory: /tmp/zephyrproject
+        working-directory: zephyrproject
         env:
           ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
-          ZEPHYR_SDK_INSTALL_DIR: /tmp/zephyrproject/zephyr-sdk
+          ZEPHYR_SDK_INSTALL_DIR: ${{ github.workspace }}/zephyrproject/zephyr-sdk
         run: |
           set -euxo pipefail
           command -v ccache
@@ -181,7 +179,7 @@ jobs:
           set -euxo pipefail
           artifact_dir="artifacts/all-devices-app-zephyr/${{ matrix.board }}"
           mkdir -p "$artifact_dir"
-          cp "/tmp/zephyrproject/build/${{ matrix.build_dir }}/zephyr/zephyr/zephyr.hex" \
+            cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.build_dir }}/zephyr/zephyr/zephyr.hex" \
               "$artifact_dir/zephyr.hex"
 
       - name: Upload Zephyr binary artifacts
