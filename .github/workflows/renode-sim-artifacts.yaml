@@ -297,7 +297,13 @@ jobs:
     needs:
       - build-runtime
       - publish-common
-    if: inputs.publish
+    if: >-
+      ${{
+        inputs.publish &&
+        !cancelled() &&
+        needs.build-runtime.result == 'success' &&
+        needs.publish-common.result == 'success'
+      }}
     strategy:
       fail-fast: false
       matrix:
