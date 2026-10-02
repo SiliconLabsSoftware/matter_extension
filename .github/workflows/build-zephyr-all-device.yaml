@@ -1,0 +1,227 @@
+name: Build Zephyr All-Devices App
+
+on:
+  push:
+    branches:
+      - main
+      - "release_*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CHIP_LOG_TIMESTAMPS: false
+  CCACHE_SLOPPINESS: time_macros
+
+jobs:
+  zephyr:
+    name: all-devices-app (${{ matrix.board }} ${{ matrix.nickname }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board: xg26_rb4121a
+            nickname: on-off-app
+            toolchain: zephyr # gcc
+            in_artifact: merged_xg26_rb4121a_efr32mg26b420f3200im68.hex
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
+            main_release_only: true
+          - board: xg26_rb4121a
+            nickname: on-off-ota
+            toolchain: zephyr
+            in_artifact: zephyr/zephyr/matter.ota
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
+            main_release_only: true
+          - board: mgm260p_rb4351a
+            nickname: on-off-app
+            toolchain: zephyr
+            in_artifact: merged_mgm260p_rb4351a_mgm260pd32vna.hex
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
+            main_release_only: true
+          - board: mgm260p_rb4351a
+            nickname: on-off-ota
+            toolchain: zephyr
+            in_artifact: zephyr/zephyr/matter.ota
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
+            main_release_only: true
+          - board: xg24_rb4187c
+            nickname: on-off-app
+            toolchain: zephyr
+            in_artifact: merged_xg24_rb4187c_efr32mg24b220f1536im48.hex
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
+            main_release_only: false
+          - board: xg24_rb4187c
+            nickname: on-off-ota
+            toolchain: zephyr
+            in_artifact: zephyr/zephyr/matter.ota
+            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
+            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
+            main_release_only: false
+
+    steps:
+      - name: Resolve pinned Matter SDK revision
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        id: sdk
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const { data } = await github.rest.repos.getContent({
+              ...context.repo,
+              path: 'third_party/matter_sdk',
+              ref: context.sha,
+            });
+            if (Array.isArray(data) || !data.submodule_git_url) {
+              throw new Error('Expected matter_sdk to be a submodule');
+            }
+            core.setOutput('sha', data.sha);
+
+      - name: Checkout Matter SDK
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: actions/checkout@v7
+        with:
+          repository: SiliconLabsSoftware/matter_sdk
+          ref: ${{ steps.sdk.outputs.sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install host dependencies and clone Zephyr manifest
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        # Instead of main, replace with the official 4.5 tag once created.
+        run: |
+          set -euxo pipefail
+          sudo -n apt-get update
+          sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
+            git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs "$GITHUB_WORKSPACE/zephyrproject/zephyr-silabs"
+
+      - name: Install Simplicity Commander
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="$RUNNER_TEMP/Commander_linux_x86_64_1v25p0b1995.tar.bz"
+          curl --fail --location --retry 3 --silent --show-error \
+            https://updates.silabs.com/studio/v6/updates/update_site/archives/commander/1.25.0/Commander_linux_x86_64_1v25p0b1995.tar.bz \
+            --output "$archive"
+          printf '%s  %s\n' 956ae8e9e1600e492e1c4e57d271941ebf83bde6bfe23530a4e09ea300fdea32 "$archive" | sha256sum --check --strict
+          tar -xjf "$archive" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/commander" >> "$GITHUB_PATH"
+
+      - name: Set up Zephyr workspace and SDK
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: zephyrproject-rtos/action-zephyr-setup@v1.0.15
+        with:
+          app-path: zephyr-silabs
+          base-path: zephyrproject
+          sdk-version: "1.0.1"
+          toolchains: arm-zephyr-eabi
+          enable-ccache: "true"
+          ccache-cache-key: all-devices-ubuntu-24.04-${{ matrix.board }}-${{ matrix.toolchain }}
+          ccache-max-size: 2G
+          west-project-filter: "-matter"
+
+      - name: Configure Zephyr workspace and Matter submodules
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        working-directory: zephyrproject
+        run: |
+          set -euxo pipefail
+          west zephyr-export
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git -C "$GITHUB_WORKSPACE" submodule update --init --depth 1 --jobs 4 -- \
+              third_party/editline/repo \
+              third_party/jsoncpp/repo \
+              third_party/nlassert/repo \
+              third_party/nlio/repo \
+              third_party/uriparser/repo \
+              third_party/pigweed/repo \
+              third_party/silabs/matter_support
+          : > "$GITHUB_WORKSPACE/build_overrides/pigweed_environment.gni"
+          west blobs fetch
+
+      - name: Install GN from Matter's pinned CIPD version
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        working-directory: zephyrproject
+        run: |
+          set -euxo pipefail
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$RUNNER_TEMP/depot_tools"
+          gn_version="$(python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          config = Path(os.environ["GITHUB_WORKSPACE"]) / "third_party/pigweed/repo/pw_env_setup/py/pw_env_setup/cipd_setup/pigweed.json"
+          packages = json.loads(config.read_text())["packages"]
+          gn = next(package for package in packages if package["path"] == "gn/gn/${platform}")
+          print(gn["tags"][0])
+          PY
+          )"
+          "$RUNNER_TEMP/depot_tools/cipd" install gn/gn/linux-amd64 "$gn_version" -root "$RUNNER_TEMP/gn"
+          echo "$RUNNER_TEMP/gn" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/gn/gn" --version
+
+      - name: Build All-Devices App
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        working-directory: zephyrproject
+        env:
+          ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
+          ZEPHYR_SDK_INSTALL_DIR: ${{ github.workspace }}/zephyrproject/zephyr-sdk
+        run: |
+          set -euxo pipefail
+          command -v ccache
+          west build -p always -b "${{ matrix.board }}" --sysbuild --cmake-only \
+            "${GITHUB_WORKSPACE}/examples/all-devices-app/zephyr" \
+            -d "build/${{ matrix.board }}" \
+            -- \
+            -DZEPHYR_TOOLCHAIN_VARIANT="${ZEPHYR_TOOLCHAIN_VARIANT}" \
+            -DZEPHYR_EXTRA_MODULES="${GITHUB_WORKSPACE}" \
+            -DUSE_CCACHE=1 \
+            ${{ matrix.extra_args }}
+
+          mapfile -t gn_args_files < <(find "build/${{ matrix.board }}" -type f -path '*/modules/connectedhomeip/args.tmp')
+          test "${#gn_args_files[@]}" -gt 0
+          for gn_args_file in "${gn_args_files[@]}"; do
+            printf '%s\n' --arg-string pw_command_launcher ccache >> "$gn_args_file"
+          done
+          west build -d "build/${{ matrix.board }}"
+
+      - name: Show ccache statistics
+        if: ${{ always() && (!matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_')) }}
+        shell: bash
+        run: |
+          if command -v ccache >/dev/null 2>&1; then
+            ccache --show-stats
+          fi
+
+      - name: Export Zephyr artifacts
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        run: |
+          set -euxo pipefail
+          artifact_dir="artifacts/all-devices-app-zephyr/${{ matrix.board }}"
+          mkdir -p "$artifact_dir"
+          cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.board }}/${{ matrix.in_artifact }}" \
+              "$artifact_dir/${{ matrix.out_artifact }}"
+
+      - name: Upload Zephyr binary artifacts
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: dev-artifacts-zephyr-${{ matrix.board }}-${{ matrix.toolchain }}-${{ matrix.out_artifact }}
+          path: artifacts/
+          if-no-files-found: error
