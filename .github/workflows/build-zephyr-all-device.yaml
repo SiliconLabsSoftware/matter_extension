@@ -185,7 +185,7 @@ jobs:
             -DZEPHYR_TOOLCHAIN_VARIANT="${ZEPHYR_TOOLCHAIN_VARIANT}" \
             -DZEPHYR_EXTRA_MODULES="${GITHUB_WORKSPACE}" \
             -DUSE_CCACHE=1 \
-            "${{ matrix.extra_args }}"
+            ${{ matrix.extra_args }}
 
           mapfile -t gn_args_files < <(find "build/${{ matrix.board }}" -type f -path '*/modules/connectedhomeip/args.tmp')
           test "${#gn_args_files[@]}" -gt 0
@@ -202,20 +202,20 @@ jobs:
             ccache --show-stats
           fi
 
-      - name: Export Zephyr HEX
+      - name: Export Zephyr artifacts
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         run: |
           set -euxo pipefail
           artifact_dir="artifacts/all-devices-app-zephyr/${{ matrix.board }}"
           mkdir -p "$artifact_dir"
-            cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.board }}/{{matrix.in_artifact}}" \
-              "$artifact_dir/${{ martix.out_artifact}}"
+          cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.board }}/${{ matrix.in_artifact }}" \
+              "$artifact_dir/${{ matrix.out_artifact }}"
 
       - name: Upload Zephyr binary artifacts
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: actions/upload-artifact@v7
         with:
-          name: dev-artifacts-zephyr-${{ matrix.board }}-${{ matrix.toolchain }}
+          name: dev-artifacts-zephyr-${{ matrix.board }}-${{ matrix.toolchain }}-${{ matrix.out_artifact }}
           path: artifacts/
           if-no-files-found: error
