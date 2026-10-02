@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
@@ -45,15 +44,6 @@ def main() -> int:
         sim.save(checkpoint)
         print(f"Saved checkpoint: {checkpoint}")
 
-        runtime_manifest = bundle_dir / "runtime-manifest.json"
-        manifest = {
-            "checkpoint": str(checkpoint.name),
-            "renode": str(renode_bin),
-        }
-        renode_manifest = bundle_dir / "renode" / "manifest.json"
-        if renode_manifest.exists():
-            manifest["renode_build"] = json.loads(renode_manifest.read_text(encoding="utf-8"))
-        runtime_manifest.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
         return 0
     finally:
         sim.close()
