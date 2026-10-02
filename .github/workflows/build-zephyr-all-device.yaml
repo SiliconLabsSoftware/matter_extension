@@ -15,16 +15,24 @@ env:
   CHIP_LOG_TIMESTAMPS: false
 
 jobs:
-  setup:
-    name: Prepare Zephyr workspace
+  zephyr:
+    name: all-devices-app (${{ matrix.board }}, ${{ matrix.toolchain }})
     runs-on: ubuntu-latest
     if: github.actor != 'restyled-io[bot]'
-    container:
-      image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.4
-      options: --user root
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board: xg26_rb4118a
+            toolchain: zephyr
+            build_dir: all-devices-zephyr-xg26-gcc
+            extra_args: -DFILE_SUFFIX=debug
+            main_release_only: false
+          # Add the other board entries here.
 
     steps:
       - name: Resolve pinned Matter SDK revision
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         id: sdk
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
@@ -40,21 +48,46 @@ jobs:
             core.setOutput('sha', data.sha);
 
       - name: Checkout Matter SDK
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: SiliconLabsSoftware/matter_sdk
           ref: ${{ steps.sdk.outputs.sha }}
           persist-credentials: false
 
-      - name: Set up Zephyr workspace
+      - name: Set up Python
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+
+      - name: Install host dependencies and clone Zephyr manifest
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         # Instead of main, replace with the official 4.5 tag once created.
         run: |
           set -euxo pipefail
-          west init -m https://github.com/SiliconLabsSoftware/zephyr-silabs --mr main /tmp/zephyrproject
-          cd /tmp/zephyrproject
-          west update
-          west packages pip --install
+          sudo -n apt-get update
+          sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler
+          git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs /tmp/zephyrproject/zephyr-silabs
+
+      - name: Set up Zephyr workspace and SDK
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        uses: zephyrproject-rtos/action-zephyr-setup@be8136a8bba01580485d98b7ad2d32477c36a49a # v1.0.15
+        with:
+          app-path: zephyr-silabs
+          base-path: /tmp/zephyrproject
+          sdk-version: '1.0.1'
+          toolchains: arm-zephyr-eabi
+          enable-ccache: 'false'
+          west-project-filter: '-matter'
+
+      - name: Configure Zephyr workspace and Matter submodules
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
+        shell: bash
+        working-directory: /tmp/zephyrproject
+        run: |
+          set -euxo pipefail
           west zephyr-export
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" submodule update --init --depth 1 --jobs 4 -- \
@@ -68,11 +101,12 @@ jobs:
           west blobs fetch
 
       - name: Install GN from Matter's pinned CIPD version
+        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         working-directory: /tmp/zephyrproject
         run: |
           set -euxo pipefail
-          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git /opt/depot_tools
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$RUNNER_TEMP/depot_tools"
           gn_version="$(python3 - <<'PY'
           import json
           import os
@@ -84,64 +118,9 @@ jobs:
           print(gn["tags"][0])
           PY
           )"
-          /opt/depot_tools/cipd install gn/gn/linux-amd64 "$gn_version" -root /opt/gn
-          /opt/gn/gn --version
-
-      - name: Archive prepared workspaces
-        shell: bash
-        run: |
-          set -euxo pipefail
-          mkdir -p /tmp/ci-transfer
-          tar -C "$GITHUB_WORKSPACE" -czf /tmp/ci-transfer/matter.tar.gz .
-          tar -C /tmp -czf /tmp/ci-transfer/zephyrproject.tar.gz zephyrproject
-          tar -C /opt -czf /tmp/ci-transfer/gn.tar.gz gn
-
-      - name: Upload prepared workspaces
-        uses: actions/upload-artifact@v7
-        with:
-          name: zephyr-prepared-workspaces
-          path: /tmp/ci-transfer/*.tar.gz
-          if-no-files-found: error
-          compression-level: 0
-          retention-days: 1
-
-  zephyr:
-    name: all-devices-app (${{ matrix.board }}, ${{ matrix.toolchain }})
-    needs: setup
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - board: xg26_rb4118a
-            toolchain: zephyr
-            build_dir: all-devices-zephyr-xg26-gcc
-            extra_args: -DFILE_SUFFIX=debug
-            main_release_only: false
-          # Add the other board entries here.
-    container:
-      image: ghcr.io/zephyrproject-rtos/zephyr-build:v0.29.4
-      options: --user root
-
-    steps:
-      - name: Download prepared workspaces
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
-        uses: actions/download-artifact@v7
-        with:
-          name: zephyr-prepared-workspaces
-          path: /tmp/ci-transfer
-
-      - name: Restore prepared workspaces
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
-        shell: bash
-        run: |
-          set -euxo pipefail
-          mkdir -p /tmp/zephyrproject /opt/gn "$GITHUB_WORKSPACE"
-          tar -C "$GITHUB_WORKSPACE" -xzf /tmp/ci-transfer/matter.tar.gz
-          tar -C /tmp -xzf /tmp/ci-transfer/zephyrproject.tar.gz
-          tar -C /opt -xzf /tmp/ci-transfer/gn.tar.gz
-          git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          echo '/opt/gn' >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/depot_tools/cipd" install gn/gn/linux-amd64 "$gn_version" -root "$RUNNER_TEMP/gn"
+          echo "$RUNNER_TEMP/gn" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/gn/gn" --version
 
       - name: Build All-Devices App
         if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
@@ -149,7 +128,7 @@ jobs:
         working-directory: /tmp/zephyrproject
         env:
           ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
-          ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains/zephyr-sdk-1.0.1
+          ZEPHYR_SDK_INSTALL_DIR: /tmp/zephyrproject/zephyr-sdk
         run: |
           west build -p always -b "${{ matrix.board }}" --sysbuild \
             "${GITHUB_WORKSPACE}/examples/all-devices-app/zephyr" \
@@ -157,6 +136,7 @@ jobs:
             -- \
             -DZEPHYR_TOOLCHAIN_VARIANT="${ZEPHYR_TOOLCHAIN_VARIANT}" \
             -DZEPHYR_EXTRA_MODULES="${GITHUB_WORKSPACE}" \
+            -DUSE_CCACHE=0 \
             "${{ matrix.extra_args }}"
 
       - name: Export Zephyr HEX
