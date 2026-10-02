@@ -216,7 +216,15 @@ jobs:
           python3 renode_integration/scripts/publish_bundle.py common
 
   build-runtime:
-    needs: assemble-common
+    needs:
+      - assemble-common
+      - publish-common
+    if: >-
+      ${{
+        !cancelled() &&
+        needs.assemble-common.result == 'success' &&
+        (needs.publish-common.result == 'success' || needs.publish-common.result == 'skipped')
+      }}
     strategy:
       fail-fast: false
       matrix:
@@ -284,7 +292,9 @@ jobs:
           if-no-files-found: error
 
   publish-runtime:
-    needs: build-runtime
+    needs:
+      - build-runtime
+      - publish-common
     if: inputs.publish
     strategy:
       fail-fast: false
