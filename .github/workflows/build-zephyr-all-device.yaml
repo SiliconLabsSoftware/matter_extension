@@ -30,28 +30,28 @@ jobs:
             in_artifact: merged_xg26_rb4121a_efr32mg26b420f3200im68.hex
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
             extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
-            main_release_only: false
+            main_release_only: true
           - board: xg26_rb4121a
             nickname: on-off-ota
             toolchain: zephyr
             in_artifact: zephyr/zephyr/matter.ota
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
             extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
-            main_release_only: false
+            main_release_only: true
           - board: mgm260p_rb4351a
             nickname: on-off-app
             toolchain: zephyr
             in_artifact: merged_mgm260p_rb4351a_mgm260pd32vna.hex
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
             extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
-            main_release_only: false
+            main_release_only: true
           - board: mgm260p_rb4351a
             nickname: on-off-ota
             toolchain: zephyr
             in_artifact: zephyr/zephyr/matter.ota
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
             extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
-            main_release_only: false
+            main_release_only: true
           - board: xg24_rb4187c
             nickname: on-off-app
             toolchain: zephyr
