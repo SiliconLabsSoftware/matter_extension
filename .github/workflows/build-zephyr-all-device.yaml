@@ -148,7 +148,8 @@ jobs:
               third_party/nlassert/repo \
               third_party/nlio/repo \
               third_party/uriparser/repo \
-              third_party/pigweed/repo
+              third_party/pigweed/repo \
+              third_party/silabs/matter_support
           : > "$GITHUB_WORKSPACE/build_overrides/pigweed_environment.gni"
           west blobs fetch
 
