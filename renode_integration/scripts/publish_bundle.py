@@ -1,88 +1,64 @@
 #!/usr/bin/env python3
-"""Push a common or runtime bundle directory to GHCR with ORAS."""
+"""Package a common or runtime bundle and push it to GHCR with ORAS."""
 
-import hashlib
-import json
 import os
 import shutil
 import subprocess
 import sys
-import time
+import tarfile
 
 import common
 
 SOURCE_ANNOTATION = "https://github.com/SiliconLabsSoftware/matter_extension"
 
 
-def copy_tree(src, dest):
-    if not os.path.isdir(src):
-        common.die(f"missing {src}")
-    shutil.copytree(src, dest)
-
-
-def file_manifest(staging, version, kind):
-    files = {}
-    for root, _, names in os.walk(staging):
-        for name in names:
-            if name == "manifest.json":
-                continue
-            full = os.path.join(root, name)
-            rel = os.path.relpath(full, staging)
-            with open(full, "rb") as handle:
-                digest = hashlib.sha256(handle.read()).hexdigest()
-            files[rel] = {"sha256": digest, "size": os.path.getsize(full)}
-    return {
-        "version": version,
-        "kind": kind,
-        "created_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "files": files,
-    }
-
-
-def stage(kind, bundle, staging):
+def bundle_contents(bundle, kind):
     if kind == "common":
-        for item in ("guest-rootfs", "rcp", "resc"):
-            copy_tree(os.path.join(bundle, item), os.path.join(staging, item))
-        return
-    if kind == "runtime":
-        copy_tree(os.path.join(bundle, "renode"), os.path.join(staging, "renode"))
-        for name in ("linux-booted-thread.save", "runtime-manifest.json"):
-            src = os.path.join(bundle, name)
-            if not os.path.isfile(src) or os.path.getsize(src) == 0:
-                common.die(f"runtime bundle missing {name}")
-            shutil.copy2(src, os.path.join(staging, name))
-        return
-    common.die(f"unknown kind: {kind}")
-
-
-def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in ("common", "runtime"):
-        common.die("usage: publish_bundle.py common|runtime")
-    kind = sys.argv[1]
-    oras = common.require_cmd("oras")
-    version = common.bundle_version()
-    package = common.manifest_lookup("ghcr.package")
-    if kind == "runtime":
-        tag = f"{version}-runtime-{common.detect_host()}"
+        directories = ("guest-rootfs", "rcp", "resc")
+        filenames = ()
+    elif kind == "runtime":
+        directories = ("renode",)
+        filenames = ("linux-booted-thread.save",)
     else:
-        tag = f"{version}-{kind}"
+        common.die(f"unknown kind: {kind}")
+    for name in directories:
+        if not os.path.isdir(os.path.join(bundle, name)):
+            common.die(f"bundle missing {name}")
+    for name in filenames:
+        path = os.path.join(bundle, name)
+        if not os.path.isfile(path) or os.path.getsize(path) == 0:
+            common.die(f"bundle missing {name}")
+    if kind == "runtime" and not os.access(os.path.join(bundle, "renode", "renode"), os.X_OK):
+        common.die("runtime bundle contains a non-executable Renode launcher")
+    return directories + filenames
 
-    staging = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "publish", kind)
+
+def archive_path(kind):
+    return os.path.join(common.RENODE_INTEGRATION_DIR, "out", "publish", kind, f"{kind}.tar")
+
+
+def prepare(kind):
+    bundle = common.bundle_dir()
+    names = bundle_contents(bundle, kind)
+    path = archive_path(kind)
+    staging = os.path.dirname(path)
     shutil.rmtree(staging, ignore_errors=True)
     os.makedirs(staging)
-    stage(kind, common.bundle_dir(), staging)
 
-    manifest_path = os.path.join(staging, "manifest.json")
-    with open(manifest_path, "w", encoding="utf-8") as handle:
-        json.dump(file_manifest(staging, version, kind), handle, indent=2)
-        handle.write("\n")
-
-    push_args = []
-    for root, _, names in os.walk(staging):
+    with tarfile.open(path, "w") as archive:
         for name in names:
-            full = os.path.join(root, name)
-            rel = os.path.relpath(full, staging).replace(os.sep, "/")
-            push_args.append(f"{rel}:application/octet-stream")
+            archive.add(os.path.join(bundle, name), arcname=name)
+    print(f"Prepared {path}")
+
+
+def push(kind):
+    path = archive_path(kind)
+    if not os.path.isfile(path):
+        common.die(f"bundle archive missing {path}; run prepare first")
+    oras = common.require_cmd("oras")
+    package = common.manifest_lookup("ghcr.package")
+    version = common.bundle_version()
+    tag = f"{version}-runtime-{common.detect_host()}" if kind == "runtime" else f"{version}-{kind}"
 
     print(f"Publishing {package}:{tag}")
     subprocess.run(
@@ -92,12 +68,28 @@ def main():
             f"{package}:{tag}",
             "--annotation",
             f"org.opencontainers.image.source={SOURCE_ANNOTATION}",
-            *push_args,
+            f"{os.path.basename(path)}:application/vnd.oci.image.layer.v1.tar",
         ],
-        cwd=staging,
+        cwd=os.path.dirname(path),
         check=True,
     )
     print(f"Published {package}:{tag}")
+
+
+def main():
+    usage = "usage: publish_bundle.py [prepare|push] common|runtime"
+    if len(sys.argv) == 2:
+        action, kind = "both", sys.argv[1]
+    elif len(sys.argv) == 3:
+        action, kind = sys.argv[1:]
+    else:
+        common.die(usage)
+    if action not in ("both", "prepare", "push") or kind not in ("common", "runtime"):
+        common.die(usage)
+    if action in ("both", "prepare"):
+        prepare(kind)
+    if action in ("both", "push"):
+        push(kind)
 
 
 if __name__ == "__main__":
