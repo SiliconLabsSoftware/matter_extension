@@ -281,14 +281,16 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
         run: python3 renode_integration/harness/smoke_test_checkpoint.py --bundle-dir renode_integration/out/bundle
 
+      - name: Package runtime bundle
+        env:
+          HOST: ${{ matrix.host }}
+        run: python3 renode_integration/scripts/publish_bundle.py prepare runtime
+
       - name: Upload runtime bundle
         uses: actions/upload-artifact@v7
         with:
           name: renode-runtime-${{ matrix.host }}
-          path: |
-            renode_integration/out/bundle/renode
-            renode_integration/out/bundle/linux-booted-thread.save
-            renode_integration/out/bundle/runtime-manifest.json
+          path: renode_integration/out/publish/runtime/runtime.tar
           if-no-files-found: error
 
   publish-runtime:
@@ -323,7 +325,7 @@ jobs:
         uses: actions/download-artifact@v7
         with:
           name: renode-runtime-${{ matrix.host }}
-          path: renode_integration/out/bundle
+          path: renode_integration/out/publish/runtime
 
       - name: Resolve bundle version
         id: bundle
@@ -336,7 +338,6 @@ jobs:
         env:
           HOST: ${{ matrix.host }}
           BUNDLE_VERSION: ${{ steps.bundle.outputs.version }}
-          BUNDLE_DIR: ${{ github.workspace }}/renode_integration/out/bundle
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          python3 renode_integration/scripts/publish_bundle.py runtime
+          python3 renode_integration/scripts/publish_bundle.py push runtime
