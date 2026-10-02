@@ -19,7 +19,6 @@ jobs:
   zephyr:
     name: all-devices-app (${{ matrix.board }} ${{ matrix.nickname }})
     runs-on: ubuntu-24.04
-    if: github.actor != 'restyled-io[bot]'
     strategy:
       fail-fast: false
       matrix:
