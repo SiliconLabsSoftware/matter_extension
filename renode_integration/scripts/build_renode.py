@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Build the pinned Renode fork for this host."""
 
-import json
 import os
 import shutil
 import subprocess
@@ -21,13 +20,6 @@ def version_gt(left, right):
     left_parts += (0,) * (width - len(left_parts))
     right_parts += (0,) * (width - len(right_parts))
     return left_parts > right_parts
-
-
-def renode_version(renode_bin):
-    result = subprocess.run([renode_bin, "-v"], capture_output=True, text=True)
-    if result.returncode == 0 and result.stdout.strip():
-        return result.stdout.splitlines()[0]
-    return "unknown"
 
 
 def verify_macos_libs(renode_dir, deployment_target):
@@ -121,13 +113,6 @@ def main():
     renode_bin = out_dir / "renode"
     if not os.access(renode_bin, os.X_OK):
         common.die(f"renode binary not found at {renode_bin}")
-
-    manifest = {
-        "host": host,
-        "renode_commit": commit,
-        "renode_version": renode_version(str(renode_bin)),
-    }
-    (out_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
     if host == "osx-arm64":
         verify_macos_libs(out_dir, str(common.manifest_lookup("macos.deployment_target")))
