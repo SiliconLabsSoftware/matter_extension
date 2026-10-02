@@ -53,8 +53,6 @@ jobs:
           set -euxo pipefail
           west init -m https://github.com/SiliconLabsSoftware/zephyr-silabs --mr main /tmp/zephyrproject
           cd /tmp/zephyrproject
-          west config manifest.project-filter -- \
-              '-.*,+hal_silabs,+picolibc,+mbedtls,+cmsis_6,+tf-psa-crypto,+openthread,+mcuboot,+zephyr-hal-silabs-extra'
           west update
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git -C "$GITHUB_WORKSPACE" submodule update --init --depth 1 --jobs 4 -- \
@@ -65,7 +63,7 @@ jobs:
               third_party/uriparser/repo \
               third_party/pigweed/repo
           : > "$GITHUB_WORKSPACE/build_overrides/pigweed_environment.gni"
-          west blobs fetch
+          west blobs fetch hal_silabs
 
       - name: Install GN from Matter's pinned CIPD version
         shell: bash
