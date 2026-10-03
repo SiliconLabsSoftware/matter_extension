@@ -2697,6 +2697,26 @@ include:
   - path: third_party/matter_sdk/zzz_generated/app-common
     unless: [matter_zap_custom_generation]
     file_list:
+      - path: clusters/ThermostatMode/AttributeIds.h
+      - path: clusters/ThermostatMode/Attributes.h
+      - path: clusters/ThermostatMode/Attributes.ipp
+      - path: clusters/ThermostatMode/ClusterId.h
+      - path: clusters/ThermostatMode/CommandIds.h
+      - path: clusters/ThermostatMode/Commands.h
+      - path: clusters/ThermostatMode/Commands.ipp
+      - path: clusters/ThermostatMode/Enums.h
+      - path: clusters/ThermostatMode/EnumsCheck.h
+      - path: clusters/ThermostatMode/EventIds.h
+      - path: clusters/ThermostatMode/Events.h
+      - path: clusters/ThermostatMode/Events.ipp
+      - path: clusters/ThermostatMode/Ids.h
+      - path: clusters/ThermostatMode/Metadata.h
+      - path: clusters/ThermostatMode/MetadataProvider.h
+      - path: clusters/ThermostatMode/Structs.h
+      - path: clusters/ThermostatMode/Structs.ipp
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    unless: [matter_zap_custom_generation]
+    file_list:
       - path: clusters/ThermostatUserInterfaceConfiguration/AttributeIds.h
       - path: clusters/ThermostatUserInterfaceConfiguration/Attributes.h
       - path: clusters/ThermostatUserInterfaceConfiguration/Attributes.ipp
