@@ -142,6 +142,7 @@
         "test-cluster.xml",
         "test-hidden-manufacturer-specific-cluster.xml",
         "thermostat-cluster.xml",
+        "thermostat-mode-cluster.xml",
         "thermostat-user-interface-configuration-cluster.xml",
         "thread-border-router-management-cluster.xml",
         "thread-network-diagnostics-cluster.xml",
@@ -197,6 +198,19 @@
             "AccessControlEntriesPerFabric",
             "FeatureMap"
         ],
+        "Actions": [
+            "ActionList",
+            "EndpointLists",
+            {
+                "name": "SetupURL",
+                "keepDefault": true
+            },
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
+            "ClusterRevision"
+        ],
         "Administrator Commissioning": [
             "ClusterRevision",
             "WindowStatus",
@@ -206,6 +220,10 @@
         "Ambient Context Sensing": [
             "HoldTimeLimits",
             "ObjectCountConfig"
+        ],
+        "Ambient Sensing Union": [
+            "UnionName",
+            "UnionHealth"
         ],
         "Audio Control": [
             "ClusterRevision",
@@ -714,6 +732,26 @@
             "ClusterRevision"
         ],
         "Dishwasher Alarm": [
+            {
+                "name": "Mask",
+                "keepDefault": true
+            },
+            {
+                "name": "Latch",
+                "keepDefault": true
+            },
+            {
+                "name": "State",
+                "keepDefault": true
+            },
+            {
+                "name": "Supported",
+                "keepDefault": true
+            },
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
             "ClusterRevision"
         ],
         "Dishwasher Mode": [
@@ -757,6 +795,22 @@
             "FeatureMap"
         ],
         "Refrigerator Alarm": [
+            {
+                "name": "Mask",
+                "keepDefault": true
+            },
+            {
+                "name": "State",
+                "keepDefault": true
+            },
+            {
+                "name": "Supported",
+                "keepDefault": true
+            },
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
             "ClusterRevision"
         ],
         "Refrigerator And Temperature Controlled Cabinet Mode": [
@@ -1029,13 +1083,32 @@
         ],
         "Valve Configuration and Control": [
             "OpenDuration",
+            {
+                "name": "DefaultOpenDuration",
+                "keepDefault": true
+            },
             "AutoCloseTime",
             "RemainingDuration",
             "CurrentState",
             "TargetState",
             "CurrentLevel",
             "TargetLevel",
-            "ValveFault",
+            {
+                "name": "DefaultOpenLevel",
+                "keepDefault": true
+            },
+            {
+                "name": "ValveFault",
+                "keepDefault": true
+            },
+            {
+                "name": "LevelStep",
+                "keepDefault": true
+            },
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
             "ClusterRevision"
         ],
         "Boolean State Configuration": [
@@ -1140,8 +1213,58 @@
             "TemperatureUnit"
         ],
         "Localization Configuration": [
-            "ClusterRevision",
-            "SupportedLocales"
+            {
+                "name": "ActiveLocale",
+                "keepDefault": true
+            },
+            "SupportedLocales",
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
+            "ClusterRevision"
+        ],
+        "Smoke CO Alarm": [
+            "ExpressedState",
+            "SmokeState",
+            "COState",
+            "BatteryAlert",
+            "DeviceMuted",
+            {
+                "name": "TestInProgress",
+                "keepDefault": true
+            },
+            "HardwareFaultAlert",
+            "EndOfServiceAlert",
+            {
+                "name": "InterconnectSmokeAlarm",
+                "keepDefault": true
+            },
+            {
+                "name": "InterconnectCOAlarm",
+                "keepDefault": true
+            },
+            {
+                "name": "ContaminationState",
+                "keepDefault": true
+            },
+            {
+                "name": "SmokeSensitivityLevel",
+                "keepDefault": true
+            },
+            {
+                "name": "ExpiryDate",
+                "keepDefault": true
+            },
+            {
+                "name": "Unmounted",
+                "keepDefault": true
+            },
+            {
+                "name": "FeatureMap",
+                "keepDefault": true
+            },
+            "ClusterRevision"
         ],
         "TLS Certificate Management": [
             "ClusterRevision",
@@ -1157,6 +1280,10 @@
             "CurrentThermostatSuggestion",
             "ThermostatSuggestionNotFollowingReason",
             "ClusterRevision"
+        ],
+        "Thermostat User Interface Configuration": [
+            "ClusterRevision",
+            "FeatureMap"
         ],
         "Time Format Localization": [
             "ClusterRevision"
