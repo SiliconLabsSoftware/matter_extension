@@ -50,8 +50,8 @@ pipeline
 
                         def refs = []
                         [
-                            [name: 'matter',     recipe: "${env.WORKSPACE}/packages/matter/conanfile.py"],
                             [name: 'matter_app', recipe: "${env.WORKSPACE}/packages/matter_app/conanfile.py"],
+                            [name: 'matter',     recipe: "${env.WORKSPACE}/packages/matter/conanfile.py"],
                         ].each { pkg ->
                             pipelineFunctions.runActionConanCreatePublish(
                                 pkg.name, pkg.recipe, remoteName, remoteUrl, actionDir
