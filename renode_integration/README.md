@@ -70,7 +70,8 @@ nc localhost 4540
 nc localhost 3452
 ```
 
-After restoring a checkpoint, commission with:
+`matter-sim.resc` starts from a checkpoint with booted Linux machine and pre-initialized 
+Thread network. On the simulated Matter Hub you can commission with: 
 
 ```sh
 chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3840
@@ -116,13 +117,13 @@ build-tools-image ──────┘         │
 
 The future Matter commissioning CI job will:
 
-1. `python3 scripts/fetch_bundle.py` (linux-x64 runtime)
+1. `python3 scripts/fetch_bundle.py`
 2. Download a Matter ELF from dev-apps-builder
 3. Run `out/bundle/renode/renode` with `resc/matter-sim.resc` and drive tests via the pyrenode3 harness
 
 ## Updating the bundle
 
-1. Edit `sim-manifest.json`, overlays, or resc files (or bump submodules).
+1. Edit `sim-manifest.json`, overlays, or resc files.
 2. Validate with a CI run or targeted script changes on the appropriate runner
 3. Bump `BUNDLE_VERSION` in `scripts/common.py` when publishing a new GHCR tag.
 4. Dispatch `renode-sim-artifacts` with `publish=true`.
