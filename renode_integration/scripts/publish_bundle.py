@@ -57,8 +57,7 @@ def push(kind):
         common.die(f"bundle archive missing {path}; run prepare first")
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
-    version = common.BUNDLE_VERSION
-    tag = f"{version}-runtime-{common.detect_host()}" if kind == "runtime" else f"{version}-{kind}"
+    tag = common.artifact_tag(kind)
 
     print(f"Publishing {package}:{tag}")
     subprocess.run(
