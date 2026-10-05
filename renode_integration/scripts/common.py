@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Shared paths, manifest lookup, and host detection for the Renode bundle scripts."""
 
 import hashlib
@@ -43,6 +42,14 @@ def manifest_lookup(path):
     return cur
 
 
+def artifact_tag(kind, host=None):
+    if kind == "common":
+        return f"{BUNDLE_VERSION}-common"
+    if kind == "runtime":
+        return f"{BUNDLE_VERSION}-runtime-{host or detect_host()}"
+    die(f"unknown bundle kind: {kind}")
+
+
 def detect_host():
     system = os.uname().sysname
     machine = os.uname().machine
@@ -83,29 +90,3 @@ def find_debugfs():
         if os.access(candidate, os.X_OK):
             return candidate
     die("debugfs not found (install e2fsprogs)")
-
-
-def main():
-    if len(sys.argv) < 2:
-        die("usage: common.py get|list|host|bundle-version <dotted.path>")
-    command = sys.argv[1]
-    if command == "host":
-        print(detect_host())
-        return
-    if command == "bundle-version":
-        print(BUNDLE_VERSION)
-        return
-    if len(sys.argv) != 3 or command not in ("get", "list"):
-        die("usage: common.py get|list <dotted.path>")
-    value = manifest_lookup(sys.argv[2])
-    if command == "list":
-        print("\n".join(value))
-        return
-    if isinstance(value, (dict, list)):
-        print(json.dumps(value))
-    else:
-        print(value)
-
-
-if __name__ == "__main__":
-    main()

@@ -88,7 +88,6 @@ def main():
     src_dir = Path(common.RENODE_INTEGRATION_DIR) / "renode-src"
     commit = common.manifest_lookup("renode.commit")
     repo_url = common.manifest_lookup("renode.repo")
-    Path(common.CACHE_DIR).mkdir(parents=True, exist_ok=True)
 
     if not (src_dir / ".git").is_dir():
         subprocess.run(["git", "clone", repo_url, str(src_dir)], check=True)

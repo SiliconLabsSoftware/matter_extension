@@ -31,14 +31,15 @@ def main():
     url = common.manifest_lookup("base_rootfs.url")
     expected_sha = common.manifest_lookup("base_rootfs.sha256")
 
-    if not os.path.isfile(base_cache) or common.sha256_file(base_cache) != expected_sha:
+    cached_sha = common.sha256_file(base_cache) if os.path.isfile(base_cache) else None
+    if cached_sha != expected_sha:
         print("Downloading base rootfs...")
         partial = base_cache + ".partial"
         urllib.request.urlretrieve(url, partial)
         os.replace(partial, base_cache)
-    actual_sha = common.sha256_file(base_cache)
-    if actual_sha != expected_sha:
-        common.die(f"base rootfs sha256 {actual_sha} != {expected_sha}")
+        cached_sha = common.sha256_file(base_cache)
+    if cached_sha != expected_sha:
+        common.die(f"base rootfs sha256 {cached_sha} != {expected_sha}")
 
     shutil.copyfile(base_cache, output)
 
