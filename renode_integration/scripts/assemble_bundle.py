@@ -40,12 +40,6 @@ def main():
         shutil.rmtree(renode_dest, ignore_errors=True)
         shutil.copytree(built, renode_dest)
 
-    checkpoint = os.path.join(bundle, "linux-booted-thread.save")
-    cached = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "linux-booted-thread.save")
-    if not os.path.isfile(checkpoint) and os.path.isfile(cached):
-        shutil.copy2(cached, checkpoint)
-
-    os.makedirs(renode_dest, exist_ok=True)
     print(f"Assembled bundle at {bundle}")
 
 
