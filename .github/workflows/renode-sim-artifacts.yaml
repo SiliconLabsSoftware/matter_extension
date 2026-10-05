@@ -204,8 +204,6 @@ jobs:
         uses: oras-project/setup-oras@v2
 
       - name: Publish common to GHCR
-        env:
-          BUNDLE_DIR: ${{ github.workspace }}/renode_integration/out/bundle
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
           python3 renode_integration/scripts/publish_bundle.py common
@@ -262,7 +260,7 @@ jobs:
       - name: Generate checkpoint
         env:
           PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
-        run: python3 renode_integration/harness/generate_checkpoint.py --bundle-dir renode_integration/out/bundle
+        run: python3 renode_integration/harness/generate_checkpoint.py
 
       # Test checkpoint load on macOS to verify that the bundle is working
       # Not needed on Linux (will be tested in CI commissioning tests)
@@ -270,7 +268,7 @@ jobs:
         if: matrix.host == 'osx-arm64'
         env:
           PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
-        run: python3 renode_integration/harness/smoke_test_checkpoint.py --bundle-dir renode_integration/out/bundle
+        run: python3 renode_integration/harness/smoke_test_checkpoint.py
 
       - name: Package runtime bundle
         run: python3 renode_integration/scripts/publish_bundle.py prepare runtime

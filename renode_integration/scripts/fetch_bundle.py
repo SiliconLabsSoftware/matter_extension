@@ -40,17 +40,16 @@ def pull_bundle(oras, package, tag, bundle, kind):
 
 def main():
     oras = common.require_cmd("oras")
-    version = common.BUNDLE_VERSION
     host = common.detect_host()
     package = common.manifest_lookup("ghcr.package")
     bundle = common.bundle_dir()
     os.makedirs(bundle, exist_ok=True)
 
-    common_tag = f"{version}-common"
+    common_tag = common.artifact_tag("common")
     print(f"Fetching {package}:{common_tag} -> {bundle}")
     pull_bundle(oras, package, common_tag, bundle, "common")
 
-    runtime_tag = f"{version}-runtime-{host}"
+    runtime_tag = common.artifact_tag("runtime", host)
     fetched = subprocess.run(
         [oras, "manifest", "fetch", f"{package}:{runtime_tag}"],
         capture_output=True,
