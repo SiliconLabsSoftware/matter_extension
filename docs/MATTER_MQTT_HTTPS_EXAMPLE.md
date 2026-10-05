@@ -1,4 +1,4 @@
-## Phase 1 Demo — SiWx917 Dual-Stack Thermostat (Matter + MQTT + HTTPS)
+## Phase 2 Demo — SiWx917 Dual-Stack Thermostat (Matter + MQTT + HTTPS)
 
 ### Description
 
@@ -38,9 +38,63 @@ This demo uses TLS 1.2 for authentication and FreeRTOS Heap4 for memory manageme
    ![Matter source path](images/matter-source-path.png)
 
 6. Apply the changes below in:
+   - `third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_example.cpp`
    - `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h`
    - `third_party/matter_sdk/examples/thermostat/silabs/include/https_offload_example.h`
    - `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h`
+
+### Changes for `OnPlatform` events based on the `CHIPDeviceEvent.h`
+
+Event types come from `third_party/matter_sdk/src/include/platform/CHIPDeviceEvent.h` (`DeviceEventType`). The MQTT demo registers `OnPlatformEvent` with `PlatformMgr().AddEventHandler` in `mqtt_example.cpp` (from `mqtt_client_demo_start`, once when the client is not yet initialized).
+
+| Event (`DeviceEventType`)   | Condition / payload                                          | Demo log                             |
+| --------------------------- | ------------------------------------------------------------ | ------------------------------------ |
+| `kWiFiConnectivityChange`   | `Result == kConnectivity_Established`                        | `MQTT demo: WiFi Connected`          |
+| `kWiFiConnectivityChange`   | `Result == kConnectivity_Lost`                               | `MQTT demo: WiFi Disconnected`       |
+| `kCommissioningComplete`    | Commissioning finished                                       | `MQTT demo: Commissioning Complete`  |
+| `kSecureSessionEstablished` | Secure session up (logged as commissioning start in the demo) | `MQTT demo: Commissioning Started`  |
+
+Example handler (already in the demo source):
+
+```cpp
+void OnPlatformEvent(const ChipDeviceEvent * event, intptr_t /* arg */)
+{
+    VerifyOrReturn(event != nullptr);
+
+    switch (event->Type)
+    {
+    case DeviceEventType::kWiFiConnectivityChange:
+        if (event->WiFiConnectivityChange.Result == kConnectivity_Established)
+        {
+            ChipLogProgress(DeviceLayer, "MQTT demo: WiFi Connected");
+        }
+        else if (event->WiFiConnectivityChange.Result == kConnectivity_Lost)
+        {
+            ChipLogProgress(DeviceLayer, "MQTT demo: WiFi Disconnected");
+        }
+        break;
+
+    case DeviceEventType::kCommissioningComplete:
+        ChipLogProgress(DeviceLayer, "MQTT demo: Commissioning Complete");
+        break;
+
+    case DeviceEventType::kSecureSessionEstablished:
+        ChipLogProgress(DeviceLayer, "MQTT demo: Commissioning Started");
+        break;
+
+    default:
+        break;
+    }
+}
+```
+
+Registration:
+
+```cpp
+err = PlatformMgr().AddEventHandler(OnPlatformEvent, 0);
+```
+
+These prints are for observing connectivity and commissioning while MQTT/HTTPS run. Starting and stopping the services on IP/Wi-Fi changes is handled separately by `MatterServicesEventHandler` in `AppTask.cpp` (`kInternetConnectivityChange` / `kWiFiConnectivityChange`).
 
 ### MQTTS changes (`mqtt_example.h`)
 
