@@ -40,7 +40,7 @@ def pull_bundle(oras, package, tag, bundle, kind):
 
 def main():
     oras = common.require_cmd("oras")
-    version = common.bundle_version()
+    version = common.BUNDLE_VERSION
     host = common.detect_host()
     package = common.manifest_lookup("ghcr.package")
     bundle = common.bundle_dir()
