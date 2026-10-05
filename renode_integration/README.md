@@ -58,7 +58,7 @@ gh auth login
 python3 scripts/fetch_bundle.py
 cp /path/to/matter/app/binaries/<app>.out out/bundle/matter.out
 cd out/bundle
-./renode/renode --disable-gui -e '$matter_elf=@'"$(pwd)"'/matter.out' resc/matter-sim.resc
+./renode/renode -e '$matter_elf=@'"$(pwd)"'/matter.out' resc/matter-sim.resc
 ```
 
 Connect to the hub console and the Matter app CLI.
