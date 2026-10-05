@@ -44,9 +44,6 @@ def manifest_lookup(path):
 
 
 def detect_host():
-    override = os.environ.get("HOST")
-    if override:
-        return override
     system = os.uname().sysname
     machine = os.uname().machine
     if system == "Linux":
@@ -88,10 +85,6 @@ def find_debugfs():
     die("debugfs not found (install e2fsprogs)")
 
 
-def bundle_version():
-    return os.environ.get("BUNDLE_VERSION", BUNDLE_VERSION)
-
-
 def main():
     if len(sys.argv) < 2:
         die("usage: common.py get|list|host|bundle-version <dotted.path>")
@@ -100,7 +93,7 @@ def main():
         print(detect_host())
         return
     if command == "bundle-version":
-        print(bundle_version())
+        print(BUNDLE_VERSION)
         return
     if len(sys.argv) != 3 or command not in ("get", "list"):
         die("usage: common.py get|list <dotted.path>")
