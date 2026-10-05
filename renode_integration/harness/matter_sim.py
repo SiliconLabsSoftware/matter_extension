@@ -5,35 +5,14 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-INTEGRATION_DIR = SCRIPT_DIR.parent
-
-
 def resolve_renode(bundle_dir: Path) -> Path:
-    """Return the Renode binary for this host.
-
-    ``RENODE`` overrides discovery. Otherwise look in the bundle, then in the
-    per-host build output.
-    """
-    override = os.environ.get("RENODE")
-    if override:
-        return Path(override)
-    host = os.environ.get("HOST")
-    if not host:
-        uname = os.uname()
-        if uname.sysname == "Darwin" and uname.machine == "arm64":
-            host = "osx-arm64"
-        elif uname.sysname == "Linux" and uname.machine in ("x86_64", "amd64"):
-            host = "linux-x64"
-        else:
-            host = f"{uname.sysname.lower()}-{uname.machine}"
-    candidate = bundle_dir / "renode" / "renode"
-    if candidate.exists():
+    """Return the Renode binary from the assembled bundle."""
+    candidate = bundle_dir.resolve() / "renode" / "renode"
+    if candidate.is_file():
         return candidate
-    built = INTEGRATION_DIR / "out" / "renode" / host / "renode"
-    if built.exists():
-        return built
-    raise FileNotFoundError("renode binary not found, run scripts/build_renode.py or set RENODE=")
+    raise FileNotFoundError(
+        f"renode binary not found at {candidate}, run scripts/fetch_bundle.py or scripts/assemble_bundle.py"
+    )
 
 
 class MatterSim:

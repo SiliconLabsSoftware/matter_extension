@@ -78,17 +78,9 @@ chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3
 
 To form a new Thread network instead, run `matter-thread-init --force` on the hub console.
 
-### Overrides
-
-| Variable | Effect |
-|----------|--------|
-| `RENODE=/path/to/renode` | Use an existing Renode binary |
-| `BUNDLE_VERSION=v1` | Fetch or publish a specific bundle version |
-| `HOST=linux-x64` | Force host runtime selection |
-
 If no runtime exists for your host on GHCR, `scripts/fetch_bundle.py` downloads the common
-artifact only. Dispatch `renode-sim-artifacts` to publish a runtime, or build Renode on
-that host only when developing the pipeline itself.
+artifact only. Dispatch `renode-sim-artifacts` to publish a runtime, or rebuild on that host
+when developing the pipeline (`build_renode.py`, then `assemble_bundle.py`).
 
 ### Rebuilding artifacts (maintainers)
 
@@ -101,7 +93,7 @@ are for CI and pipeline development; `build_tools_image.py` requires the
 
 ```sh
 cd renode_integration/out/bundle
-./renode/renode --disable-gui resc/matter-sim-full.resc
+./renode/renode resc/matter-sim-full.resc
 ```
 
 ## CI
