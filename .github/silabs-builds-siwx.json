@@ -72,7 +72,7 @@
     "custom-sqa": {
         "lighting_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b", "brd4343s", "brd4343c"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -101,7 +101,7 @@
         ],
         "lock_app" :[
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b", "brd4343s", "brd4343c"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
