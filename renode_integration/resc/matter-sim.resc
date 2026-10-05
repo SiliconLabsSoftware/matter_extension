@@ -1,11 +1,10 @@
 :name: MATTER_FROM_CHECKPOINT
 :description: Pre-booted Matter Hub and RCPs with Thread network formed. The Matter SoC is created from $matter_elf after the checkpoint loads.
 
-$root ?= $ORIGIN/..
-$checkpoint ?= $root/linux-booted-thread.save
+$checkpoint ?= $ORIGIN/../linux-booted-thread.save
 EmulationManager Load $checkpoint
 
-$matter_elf ?= $root/matter.out
+$matter_elf ?= $ORIGIN/../matter.out
 
 logLevel 3
 
