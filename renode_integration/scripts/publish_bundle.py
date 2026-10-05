@@ -45,7 +45,7 @@ def prepare(kind):
     shutil.rmtree(staging, ignore_errors=True)
     os.makedirs(staging)
 
-    with tarfile.open(path, "w") as archive:
+    with tarfile.open(path, "w", dereference=True) as archive:
         for name in names:
             archive.add(os.path.join(bundle, name), arcname=name)
     print(f"Prepared {path}")
