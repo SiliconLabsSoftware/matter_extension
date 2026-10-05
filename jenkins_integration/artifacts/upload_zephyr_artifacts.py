@@ -205,6 +205,15 @@ def main():
     workflow_id = _find_zephyr_workflow(args.branch_name)
     extracted = _download_zephyr_artifact(workflow_id)
     _upload_binaries(extracted, args.branch_name, args.build_number)
+    artifact_file = os.path.join('.', ARTIFACT_NAME + '.zip')
+    if not upload_to_ubai(
+        file_path=artifact_file,
+        app_name="matter",
+        target="matter",
+        branch_name=args.branch_name,
+        build_number=args.build_number,
+    ):
+        raise RuntimeError(f"UBAI upload failed: {artifact_file}")
 
 
 if __name__ == '__main__':

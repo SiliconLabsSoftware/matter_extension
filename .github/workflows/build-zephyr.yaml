@@ -20,7 +20,6 @@ jobs:
     name: Lighting App
 
     runs-on: ubuntu-latest
-    if: github.actor != 'restyled-io[bot]'
 
     container:
       image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
@@ -92,7 +91,6 @@ jobs:
 
   zephyr-all-devices:
     name: all-devices-app (${{ matrix.board }} ${{ matrix.nickname }})
-    if: github.actor != 'restyled-io[bot]'
     runs-on: ubuntu-24.04
     env:
       CCACHE_SLOPPINESS: time_macros
@@ -314,7 +312,7 @@ jobs:
   package-zephyr:
     name: Package Zephyr artifacts
     needs: [zephyr-lighting-app, zephyr-all-devices]
-    if: ${{ !cancelled() && github.actor != 'restyled-io[bot]' }}
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-24.04
     steps:
       - name: Download successful Zephyr artifacts
