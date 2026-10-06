@@ -275,6 +275,10 @@ jobs:
     renode-commissioning-tests:
         name: Renode commissioning tests
         needs: [set-build-type, build_lighting_app]
+        permissions:
+            contents: read
+            packages: read
+            actions: read
         uses: ./.github/workflows/renode-commissioning-tests.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
