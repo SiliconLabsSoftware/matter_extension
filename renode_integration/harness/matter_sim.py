@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import os
 import re
+import re
 from pathlib import Path
 
 DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
