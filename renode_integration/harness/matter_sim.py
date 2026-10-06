@@ -61,6 +61,18 @@ class MatterSim:
         tester = self._terminal_tester(machine.sysbus.uart1, timeout_s)
         return Console(tester, timeout_s)
 
+    def soc_console(self, timeout_s: float = 600) -> Console:
+        """Attach a tester to matter_soc eusart0.
+
+        The resc script also connects this UART to a socket. The tester records
+        the lighting app console from the moment it is attached.
+        """
+        machine = self._emulation.get_mach("matter_soc")
+        if machine is None:
+            raise RuntimeError("matter_soc machine not found")
+        tester = self._terminal_tester(machine.sysbus.eusart0, timeout_s)
+        return Console(tester, timeout_s)
+
     def save(self, path: Path) -> None:
         """Pause the emulation and write a checkpoint."""
         destination = path.resolve()
