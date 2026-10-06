@@ -24,6 +24,29 @@ jobs:
               with:
                   submodules: false
 
+            - name: Download lighting app ELF
+              uses: actions/download-artifact@v7
+              with:
+                  name: renode-commissioning-${{ inputs.build-type }}-lighting-mg24
+                  path: matter-elf
+
+            - name: Locate Matter ELF
+              id: elf
+              run: |
+                  set -euo pipefail
+                  elf="matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build/debug/matter_thread_soc_lighting_app_freertos.out"
+                  if [ ! -f "$elf" ]; then
+                    elf=$(find matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build \
+                      -name matter_thread_soc_lighting_app_freertos.out -type f | head -1)
+                  fi
+                  if [ -z "$elf" ] || [ ! -f "$elf" ]; then
+                    echo "Base lighting app ELF not found under matter_thread_soc_lighting_app_series_2_freertos_solution"
+                    find matter-elf -name 'matter_thread_soc_lighting_app_freertos.out' || true
+                    exit 1
+                  fi
+                  echo "path=$elf" >> "$GITHUB_OUTPUT"
+                  echo "Using ELF: $elf"
+
             - name: Set up Python
               uses: actions/setup-python@v7
               with:
@@ -45,29 +68,6 @@ jobs:
 
             - name: Fetch Renode bundle
               run: python3 renode_integration/scripts/fetch_bundle.py
-
-            - name: Download lighting app ELF
-              uses: actions/download-artifact@v7
-              with:
-                  name: lighting_app-mg24-${{ inputs.build-type }}
-                  path: matter-elf
-
-            - name: Locate Matter ELF
-              id: elf
-              run: |
-                  set -euo pipefail
-                  elf="matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build/debug/matter_thread_soc_lighting_app_freertos.out"
-                  if [ ! -f "$elf" ]; then
-                    elf=$(find matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build \
-                      -name matter_thread_soc_lighting_app_freertos.out -type f | head -1)
-                  fi
-                  if [ -z "$elf" ] || [ ! -f "$elf" ]; then
-                    echo "Base lighting app ELF not found under matter_thread_soc_lighting_app_series_2_freertos_solution"
-                    find matter-elf -name 'matter_thread_soc_lighting_app_freertos.out' || true
-                    exit 1
-                  fi
-                  echo "path=$elf" >> "$GITHUB_OUTPUT"
-                  echo "Using ELF: $elf"
 
             - name: Run commissioning test
               env:
