@@ -73,7 +73,7 @@ jobs:
             # Need separate upload step for Renode ELF files to run commissioning test in parallel
             # Merge artifacts step deletes ELF files
             - name: Upload Renode commissioning ELF
-              if: inputs.example-app == 'lighting_app' && inputs.platform == 'mg24'
+              if: inputs.example-app == 'lighting_app' && inputs.platform == 'mg24' && inputs.build-type != 'custom-sqa'
               uses: actions/upload-artifact@v7
               with:
                   name: renode-commissioning-${{ inputs.build-type }}-lighting-mg24
