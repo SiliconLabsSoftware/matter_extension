@@ -7,16 +7,6 @@ on:
                 description: "Dev-apps build type"
                 required: true
                 type: string
-    workflow_dispatch:
-        inputs:
-            build-type:
-                description: "Lighting app artifact suffix when run manually"
-                required: false
-                type: choice
-                default: standard
-                options:
-                    - standard
-                    - full
 
 permissions:
     contents: read
