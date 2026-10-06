@@ -115,11 +115,16 @@ build-tools-image ──────┘         │
                           publish-runtime (optional)
 ```
 
-The future Matter commissioning CI job will:
+### CI commissioning test
 
-1. `python3 scripts/fetch_bundle.py`
-2. Download a Matter ELF from dev-apps-builder
-3. Run `out/bundle/renode/renode` with `resc/matter-sim.resc` and drive tests via the pyrenode3 harness
+Workflow [`.github/workflows/renode-commissioning-tests.yaml`](../.github/workflows/renode-commissioning-tests.yaml) runs from [dev-apps-builder](../.github/workflows/dev-apps-builder.yaml) after the mg24 lighting app build. It fetches the published Renode bundle from GHCR, loads the PR lighting app ELF (`brd4187c`), and runs:
+
+```sh
+chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3840
+chip-tool onoff toggle 101 1
+```
+
+The job is non-blocking (`continue-on-error`) during the pilot.
 
 ## Updating the bundle
 

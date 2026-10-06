@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 def resolve_renode(bundle_dir: Path) -> Path:
@@ -105,3 +106,17 @@ class Console:
         self.wait_for(r"buildroot login:")
         self.write_line("root")
         self.wait_for(r"#\s*$")
+
+    def get_report(self) -> str:
+        """Return the full UART transcript from the tester."""
+        return str(self._tester.GetReport())
+
+    def run(self, cmd: str, timeout_s: float | None = None) -> tuple[int, str]:
+        """Run a shell command on the guest and return its exit code and UART transcript."""
+        self.write_line(f'{cmd}; echo "__RC=$?"')
+        matched = self.wait_for(r"__RC=(\d+)", timeout_s=timeout_s)
+        report = self.get_report()
+        match = re.search(r"__RC=(\d+)", matched) or re.search(r"__RC=(\d+)", report)
+        if match is None:
+            raise RuntimeError(f"could not parse exit code from console output\n{report[-2000:]}")
+        return int(match.group(1)), report
