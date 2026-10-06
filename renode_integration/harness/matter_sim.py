@@ -116,7 +116,10 @@ class Console:
         self.write_line(f'{cmd}; echo "__RC=$?"')
         matched = self.wait_for(r"__RC=(\d+)", timeout_s=timeout_s)
         report = self.get_report()
-        match = re.search(r"__RC=(\d+)", matched) or re.search(r"__RC=(\d+)", report)
-        if match is None:
+        line_match = re.search(r"__RC=(\d+)", matched) if matched else None
+        if line_match is not None:
+            return int(line_match.group(1)), report
+        rc_matches = re.findall(r"__RC=(\d+)", report)
+        if not rc_matches:
             raise RuntimeError(f"could not parse exit code from console output\n{report[-2000:]}")
-        return int(match.group(1)), report
+        return int(rc_matches[-1]), report
