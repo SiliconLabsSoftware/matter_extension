@@ -310,6 +310,7 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
+            - renode-commissioning-tests
         if: success()
 
         steps:
