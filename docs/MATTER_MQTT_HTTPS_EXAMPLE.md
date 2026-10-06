@@ -47,12 +47,13 @@ This demo uses TLS 1.2 for authentication and FreeRTOS Heap4 for memory manageme
 
 Event types come from `third_party/matter_sdk/src/include/platform/CHIPDeviceEvent.h` (`DeviceEventType`). The MQTT demo registers `OnPlatformEvent` with `PlatformMgr().AddEventHandler` in `mqtt_example.cpp` (from `mqtt_client_demo_start`, once when the client is not yet initialized).
 
-| Event (`DeviceEventType`)   | Condition / payload                                          | Demo log                             |
-| --------------------------- | ------------------------------------------------------------ | ------------------------------------ |
-| `kWiFiConnectivityChange`   | `Result == kConnectivity_Established`                        | `MQTT demo: WiFi Connected`          |
-| `kWiFiConnectivityChange`   | `Result == kConnectivity_Lost`                               | `MQTT demo: WiFi Disconnected`       |
-| `kCommissioningComplete`    | Commissioning finished                                       | `MQTT demo: Commissioning Complete`  |
-| `kSecureSessionEstablished` | Secure session up (logged as commissioning start in the demo) | `MQTT demo: Commissioning Started`  |
+| Event (`DeviceEventType`)            | Condition / payload                   | Demo log                            |
+| ------------------------------------ | ------------------------------------- | ----------------------------------- |
+| `kWiFiConnectivityChange`            | `Result == kConnectivity_Established` | `MQTT demo: WiFi Connected`         |
+| `kWiFiConnectivityChange`            | `Result == kConnectivity_Lost`        | `MQTT demo: WiFi Disconnected`      |
+| `kCommissioningComplete`             | Commissioning finished                | `MQTT demo: Commissioning Complete` |
+| `kSLSystemEventCommissioningStarted` | Commissioning started                 | `MQTT demo: Commissioning Started`  |
+| `kSLSystemEventCommissioningFailed`  | Commissioning failed                  | `MQTT demo: Commissioning Failed`   |
 
 Example handler (already in the demo source):
 
@@ -78,8 +79,12 @@ void OnPlatformEvent(const ChipDeviceEvent * event, intptr_t /* arg */)
         ChipLogProgress(DeviceLayer, "MQTT demo: Commissioning Complete");
         break;
 
-    case DeviceEventType::kSecureSessionEstablished:
+    case DeviceEventType::kSLSystemEventCommissioningStarted:
         ChipLogProgress(DeviceLayer, "MQTT demo: Commissioning Started");
+        break;
+
+   case DeviceEventType::kSLSystemEventCommissioningFailed:
+        ChipLogProgress(DeviceLayer, "MQTT demo: Commissioning Failed");
         break;
 
     default:
