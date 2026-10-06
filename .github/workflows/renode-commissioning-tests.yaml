@@ -34,14 +34,9 @@ jobs:
               id: elf
               run: |
                   set -euo pipefail
-                  elf="matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build/debug/matter_thread_soc_lighting_app_freertos.out"
-                  if [ ! -f "$elf" ]; then
-                    elf=$(find matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build \
-                      -name matter_thread_soc_lighting_app_freertos.out -type f | head -1)
-                  fi
+                  elf=$(find matter-elf -name matter_thread_soc_lighting_app_freertos.out -type f ! -path '*copy-sources*' | head -1)
                   if [ -z "$elf" ] || [ ! -f "$elf" ]; then
-                    echo "Base lighting app ELF not found under matter_thread_soc_lighting_app_series_2_freertos_solution"
-                    find matter-elf -name 'matter_thread_soc_lighting_app_freertos.out' || true
+                    echo "matter_thread_soc_lighting_app_freertos.out not found under matter-elf"
                     exit 1
                   fi
                   echo "path=$elf" >> "$GITHUB_OUTPUT"
