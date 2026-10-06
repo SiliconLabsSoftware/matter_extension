@@ -1,0 +1,96 @@
+name: Renode Commissioning Tests
+
+on:
+    workflow_call:
+        inputs:
+            build-type:
+                description: "Dev-apps build type"
+                required: true
+                type: string
+    workflow_dispatch:
+        inputs:
+            build-type:
+                description: "Lighting app artifact suffix when run manually"
+                required: false
+                type: choice
+                default: standard
+                options:
+                    - standard
+                    - full
+
+permissions:
+    contents: read
+    packages: read
+
+jobs:
+    renode-commissioning:
+        name: Renode commissioning smoke test
+        runs-on: ubuntu-latest
+        timeout-minutes: 45
+        continue-on-error: true
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+
+            - name: Set up Python
+              uses: actions/setup-python@v7
+              with:
+                  python-version: "3.11"
+
+            - name: Setup .NET SDK
+              uses: actions/setup-dotnet@v6
+              with:
+                  dotnet-version: "8.0.x"
+
+            - name: Install harness dependencies
+              run: python3 -m pip install -r renode_integration/harness/requirements.txt
+
+            - name: Install ORAS
+              uses: oras-project/setup-oras@v2
+
+            - name: Log in to GHCR
+              run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+            - name: Fetch Renode bundle
+              run: python3 renode_integration/scripts/fetch_bundle.py
+
+            - name: Download lighting app ELF
+              uses: actions/download-artifact@v7
+              with:
+                  name: lighting_app-mg24-${{ inputs.build-type }}
+                  path: matter-elf
+
+            - name: Locate Matter ELF
+              id: elf
+              run: |
+                  set -euo pipefail
+                  elf="matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build/debug/matter_thread_soc_lighting_app_freertos.out"
+                  if [ ! -f "$elf" ]; then
+                    elf=$(find matter-elf/out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/lighting_app/build \
+                      -name matter_thread_soc_lighting_app_freertos.out -type f | head -1)
+                  fi
+                  if [ -z "$elf" ] || [ ! -f "$elf" ]; then
+                    echo "Base lighting app ELF not found under matter_thread_soc_lighting_app_series_2_freertos_solution"
+                    find matter-elf -name 'matter_thread_soc_lighting_app_freertos.out' || true
+                    exit 1
+                  fi
+                  echo "path=$elf" >> "$GITHUB_OUTPUT"
+                  echo "Using ELF: $elf"
+
+            - name: Run commissioning test
+              env:
+                  PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
+              run: |
+                  python3 renode_integration/harness/commissioning_test.py \
+                    --matter-elf "${{ steps.elf.outputs.path }}" \
+                    --log-dir renode-commissioning-logs
+
+            - name: Upload test logs
+              if: always()
+              uses: actions/upload-artifact@v7
+              with:
+                  name: renode-commissioning-logs
+                  path: renode-commissioning-logs
+                  if-no-files-found: ignore
