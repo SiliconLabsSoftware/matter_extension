@@ -100,7 +100,7 @@ jobs:
         include:
           - board: xg26_rb4121a
             target: BRD4121A
-            nickname: on-off-app
+            nickname: on-off-light
             toolchain: zephyr # gcc
             in_artifact: merged_xg26_rb4121a_efr32mg26b420f3200im68.hex
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
@@ -108,7 +108,7 @@ jobs:
             main_release_only: true
           - board: xg26_rb4121a
             target: BRD4121A
-            nickname: on-off-ota
+            nickname: on-off-light-ota
             toolchain: zephyr
             in_artifact: zephyr/zephyr/matter.ota
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
@@ -116,7 +116,7 @@ jobs:
             main_release_only: true
           - board: mgm260p_rb4351a
             target: BRD4351A
-            nickname: on-off-app
+            nickname: on-off-light
             toolchain: zephyr
             in_artifact: merged_mgm260p_rb4351a_mgm260pd32vna.hex
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
@@ -124,7 +124,7 @@ jobs:
             main_release_only: true
           - board: mgm260p_rb4351a
             target: BRD4351A
-            nickname: on-off-ota
+            nickname: on-off-light-ota
             toolchain: zephyr
             in_artifact: zephyr/zephyr/matter.ota
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
@@ -132,7 +132,7 @@ jobs:
             main_release_only: true
           - board: xg24_rb4187c
             target: BRD4187C
-            nickname: on-off-app
+            nickname: on-off-light
             toolchain: zephyr
             in_artifact: merged_xg24_rb4187c_efr32mg24b220f1536im48.hex
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
@@ -140,7 +140,7 @@ jobs:
             main_release_only: false
           - board: xg24_rb4187c
             target: BRD4187C
-            nickname: on-off-ota
+            nickname: on-off-light-ota
             toolchain: zephyr
             in_artifact: zephyr/zephyr/matter.ota
             out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
@@ -210,8 +210,8 @@ jobs:
           sdk-version: "1.0.1"
           toolchains: arm-zephyr-eabi
           enable-ccache: "true"
-          ccache-cache-key: all-devices-ubuntu-24.04-${{ matrix.board }}-${{ matrix.toolchain }}
-          ccache-max-size: 2G
+          ccache-cache-key: zephyr-all-devices-${{ matrix.board }}-${{ matrix.nickname }}
+          ccache-max-size: 0.5G
           west-project-filter: "-matter"
 
       - name: Configure Zephyr workspace and Matter submodules
