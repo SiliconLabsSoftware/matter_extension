@@ -1,11 +1,16 @@
 def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_number="null") {
     withCredentials([
-    usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
-    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number}", returnStdout: true).trim()
-        echo "Output from upload_artifacts.py: ${output}"
+        def logFile = "upload_artifacts_${env.BUILD_NUMBER}.log"
+        sh(script: """
+            #!/usr/bin/env bash
+            set -euo pipefail
+            python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} 2>&1 | tee '${logFile}'
+        """)
+        def output = readFile(logFile).trim()
         if(!sqa){
             result = parse_upload_artifacts_output(output)
             return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id, bypass_results: result.bypass_send_results_gh, pr_number: result.pr_number]
@@ -15,12 +20,16 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
 
 def upload_zephyr_artifacts() {
     withCredentials([
-    usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
-    usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+        usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
     ])
     {
-        def output = sh(script: "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER}", returnStdout: true).trim()
-        echo "Output from upload_zephyr_artifacts.py: ${output}"
+        def logFile = "upload_zephyr_artifacts_${env.BUILD_NUMBER}.log"
+        sh(script: """
+            #!/usr/bin/env bash
+            set -euo pipefail
+            python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} 2>&1 | tee '${logFile}'
+        """)
     }
 }
 
