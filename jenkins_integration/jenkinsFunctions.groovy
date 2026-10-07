@@ -609,8 +609,15 @@ def buildCommitChangeSummaryForSlack() {
         prev = (env.GIT_PREVIOUS_COMMIT ?: '').trim()
     }
     def summary = ''
+    def logFile = "commit_change_summary_${env.BUILD_NUMBER}.log"
+    echo "Building commit change summary for Slack (baseline: ${prev ?: 'none'})..."
     withEnv(["PREV_BASELINE=${prev}"]) {
-        summary = sh(script: 'bash jenkins_integration/commit_change_summary.sh', returnStdout: true).trim()
+        sh(script: """
+            #!/usr/bin/env bash
+            set -euo pipefail
+            bash jenkins_integration/commit_change_summary.sh 2>&1 | tee '${logFile}'
+        """)
+        summary = readFile(logFile).trim()
     }
     if (summary.length() > 3500) {
         summary = summary.substring(0, 3500) + '\n...(truncated)'
