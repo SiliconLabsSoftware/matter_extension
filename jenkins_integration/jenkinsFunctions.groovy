@@ -6,9 +6,7 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
     {
         def logFile = "upload_artifacts_${env.BUILD_NUMBER}.log"
         sh(script: """
-            #!/usr/bin/env bash
-            set -euo pipefail
-            python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} 2>&1 | tee '${logFile}'
+            bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} 2>&1 | tee '${logFile}'"
         """)
         def output = readFile(logFile).trim()
         if(!sqa){
@@ -26,9 +24,7 @@ def upload_zephyr_artifacts() {
     {
         def logFile = "upload_zephyr_artifacts_${env.BUILD_NUMBER}.log"
         sh(script: """
-            #!/usr/bin/env bash
-            set -euo pipefail
-            python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} 2>&1 | tee '${logFile}'
+            bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} 2>&1 | tee '${logFile}'"
         """)
     }
 }
@@ -613,9 +609,7 @@ def buildCommitChangeSummaryForSlack() {
     echo "Building commit change summary for Slack (baseline: ${prev ?: 'none'})..."
     withEnv(["PREV_BASELINE=${prev}"]) {
         sh(script: """
-            #!/usr/bin/env bash
-            set -euo pipefail
-            bash jenkins_integration/commit_change_summary.sh 2>&1 | tee '${logFile}'
+            bash -eo pipefail -c "bash jenkins_integration/commit_change_summary.sh 2>&1 | tee '${logFile}'"
         """)
         summary = readFile(logFile).trim()
     }
