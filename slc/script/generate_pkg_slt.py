@@ -185,7 +185,8 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     Priority:
       1. --matter-version CLI argument if provided
-      2. Version field from matter.slce file in the extension root
+      2. slc/script/matter_package_version
+      3. Version field from matter.slce (+ "-0.dev")
     Exits with error if neither source provides a version.
     """
     if cli_version:
@@ -194,7 +195,20 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     logger.debug("Script directory: %s", script_dir)
-    
+
+    version_file = os.path.join(script_dir, "matter_package_version")
+    try:
+        with open(version_file, "r", encoding="utf-8") as vf:
+            version = vf.read().strip()
+            if version:
+                logger.debug("Matter version read from matter_package_version: %s", version)
+                return version
+            logger.warning("Version file %s is empty", version_file)
+    except FileNotFoundError:
+        logger.debug("matter_package_version file %s not found", version_file)
+    except Exception as e:
+        logger.warning("Failed to read matter_package_version file %s: %s", version_file, e)
+
     # Try matter.slce file
     slce_file = os.path.join(script_dir, "..", "..", "matter.slce")
     try:
@@ -213,7 +227,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
     except Exception as e:
         logger.warning("Failed to parse matter.slce file %s: %s", slce_file, e)
 
-    logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter.slce has a valid version field.")
+    logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter_package_version / matter.slce has a valid version.")
     sys.exit(1)
 
 def generate_pkg_slt(verbose, pkg_slt_path, stack, matter_version, exclude_patterns):

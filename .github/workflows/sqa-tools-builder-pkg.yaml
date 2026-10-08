@@ -197,24 +197,18 @@ jobs:
   copy-wifi-firmware:
     runs-on: ubuntu-latest
     steps:
-      - name: Setup SLT
-        id: setup-slt
-        uses: SiliconLabsSoftware/action-setup-slt@v2
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          submodules: false
 
-      - name: Setup Conan / SLT
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
+
+      - name: Configure Conan remote
         shell: bash
         run: |
           set -euo pipefail
-          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
-          echo "${{ steps.setup-slt.outputs.conan-path }}" >> "$GITHUB_PATH"
-          SLT_HOME="${HOME}/.silabs/slt"
-          CONAN_HOME="${SLT_HOME}/installs/conan"
-          CONAN_BIN="${SLT_HOME}/engines/conan/conan"
-          echo "SLT_HOME=${SLT_HOME}" >> "$GITHUB_ENV"
-          echo "CONAN_HOME=${CONAN_HOME}" >> "$GITHUB_ENV"
-          export SLT_HOME CONAN_HOME
-          export PATH="${CONAN_BIN}:${PATH}"
-          slt install conan
           conan remote add -f conan-prerelease \
             https://conan-prerelease.silabs.net/
           conan remote list
