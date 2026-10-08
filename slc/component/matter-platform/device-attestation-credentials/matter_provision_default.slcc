@@ -38,6 +38,13 @@ include:
     file_list:
       - path: provision/ProvisionCrypto.h
       - path: provision/ProvisionStorageReader.h
+  # Temp workaround for ungated multi-otainclude in
+  # default/ProvisionStorageWriter.cpp and default/ProvisionStorageReader.cpp files.
+  # Remove once it is fixed in Matter SDK(CSA->Matter-SDK Main).
+  - path: third_party/matter_sdk/src/platform/silabs/multi-ota
+    file_list:
+      - path: OtaTlvEncryptionKey.h
+      - path: OTATlvProcessor.h
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageReader.cpp
