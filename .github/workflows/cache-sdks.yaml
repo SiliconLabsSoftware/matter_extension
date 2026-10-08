@@ -1,0 +1,98 @@
+name: Seed SDK cache
+
+on:
+    push:
+        branches:
+            - main
+            - "release_*"
+        paths:
+            - .gitmodules
+            - third_party/simplicity_sdk
+            - third_party/wifi_sdk
+    workflow_dispatch:
+
+permissions:
+    contents: read
+    actions: write
+
+jobs:
+    check-branch:
+        name: Require main or release_*
+        runs-on: ubuntu-latest
+        steps:
+            - name: Verify branch
+              run: |
+                  set -euo pipefail
+                  if [[ "${{ github.ref_name }}" != "main" && ! "${{ github.ref_name }}" =~ ^release_ ]]; then
+                      echo "Seed SDK cache can only run on main or release_*. Current ref: ${{ github.ref_name }}"
+                      exit 1
+                  fi
+
+    cache-sdks:
+        name: Seed simplicity_sdk and wifi_sdk cache
+        needs: check-branch
+        runs-on: ubuntu-latest
+        outputs:
+            cache-key: ${{ steps.cache-sdks.outputs.cache-key }}
+            cache-hit: ${{ steps.cache-sdks.outputs.cache-hit }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v7
+              with:
+                  submodules: false
+            - name: Cache SDKs
+              id: cache-sdks
+              uses: ./.github/actions/cache-sdks
+
+    delete-previous-sdk-cache:
+        name: Delete previous SDK cache
+        needs: cache-sdks
+        if: always() && needs.cache-sdks.result == 'success'
+        runs-on: ubuntu-latest
+        permissions:
+            actions: write
+        steps:
+            - name: Delete old branch cache and PR SDK caches
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SDK_CACHE_KEY: ${{ needs.cache-sdks.outputs.cache-key }}
+                  CACHE_HIT: ${{ needs.cache-sdks.outputs.cache-hit }}
+              run: |
+                  set -euo pipefail
+                  if [[ -z "${SDK_CACHE_KEY}" ]]; then
+                      echo "No SDK cache key; skipping"
+                      exit 0
+                  fi
+
+                  CURRENT_REF="${{ github.ref }}"
+                  echo "Seed cache-hit=${CACHE_HIT}"
+                  echo "Required SDK cache key: ${SDK_CACHE_KEY}"
+                  echo "Current ref: ${CURRENT_REF}"
+
+                  CACHES=$(gh cache list --repo "${{ github.repository }}" --json id,key,ref --limit 100)
+                  echo "${CACHES}" | jq -c '.[] | select(.key | startswith("silabs-sdks-"))'
+
+                  persisted=$(echo "${CACHES}" | jq --arg key "${SDK_CACHE_KEY}" --arg ref "${CURRENT_REF}" \
+                    '[.[] | select(.key == $key and .ref == $ref)] | length')
+                  if [[ "${persisted}" -eq 0 ]]; then
+                      echo "New key is not listed on ${CURRENT_REF}."
+                      echo "actions/cache/save can succeed without persisting (soft-lock/reserve failure)."
+                      echo "Keeping previous main/release_* caches."
+                      exit 1
+                  fi
+
+                  echo "${CACHES}" | jq -c '.[] | select(.key | startswith("silabs-sdks-"))' \
+                    | while read -r entry; do
+                        id=$(echo "${entry}" | jq -r '.id')
+                        key=$(echo "${entry}" | jq -r '.key')
+                        ref=$(echo "${entry}" | jq -r '.ref')
+                        if [[ "${ref}" == "${CURRENT_REF}" && "${key}" != "${SDK_CACHE_KEY}" ]]; then
+                            echo "Deleting previous SDK cache id=${id} ref=${ref} key=${key}"
+                            gh cache delete "${id}" --repo "${{ github.repository }}" || echo "Failed to delete ${id}"
+                        elif [[ "${ref}" != "refs/heads/main" && ! "${ref}" =~ ^refs/heads/release_ ]]; then
+                            echo "Deleting PR SDK cache id=${id} ref=${ref} key=${key}"
+                            gh cache delete "${id}" --repo "${{ github.repository }}" || echo "Failed to delete ${id}"
+                        else
+                            echo "Keeping SDK cache id=${id} ref=${ref} key=${key}"
+                        fi
+                      done

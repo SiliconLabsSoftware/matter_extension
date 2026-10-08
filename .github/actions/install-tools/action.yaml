@@ -19,7 +19,25 @@ runs:
     
     - name: Setup SLT
       id: setup-action
-      uses: SiliconLabsSoftware/action-setup-slt@v2
+      shell: bash
+      env:
+        SLT_IMAGE: ghcr.io/siliconlabssoftware/slt-cli:1.2.2
+        SLT_CI: "true"
+      run: |
+        INSTALL_PATH="$HOME/.local/bin"
+        mkdir -p "$INSTALL_PATH"
+        cid=$(docker create "$SLT_IMAGE")
+        docker cp "$cid:/opt/silabs/slt/slt" "$INSTALL_PATH/slt"
+        docker rm "$cid"
+        chmod +x "$INSTALL_PATH/slt"
+        echo "$INSTALL_PATH" >> $GITHUB_PATH
+        echo "SLT_CI=true" >> $GITHUB_ENV
+
+        "$INSTALL_PATH/slt" install conan
+        ln -fs "$HOME/.silabs/slt/engines/conan/conan_engine" "$INSTALL_PATH/conan_engine"
+        ln -fs "$HOME/.silabs/slt/engines/conan/conan/conan" "$INSTALL_PATH/conan"
+        echo "slt-path=$INSTALL_PATH/slt" >> $GITHUB_OUTPUT
+        echo "conan-path=$INSTALL_PATH/conan" >> $GITHUB_OUTPUT
     
     - name: Set Environment Variables
       shell: bash
@@ -94,3 +112,12 @@ runs:
         ARM_LLVM_DIR=$(slt where llvm-arm-toolchain-for-embedded)
         echo "ARM_LLVM_DIR=$ARM_LLVM_DIR" >> $GITHUB_ENV
         echo "$ARM_LLVM_DIR/bin" >> $GITHUB_PATH
+
+    - name: install hw-db-service
+      id: install-hw-db-service
+      shell: bash
+      run: |
+        slt install hw-db-service
+        HW_DB_SERVICE_PATH=$(slt where hw-db-service)
+        echo "HW_DB_SERVICE_PATH=$HW_DB_SERVICE_PATH" >> $GITHUB_ENV
+        echo "$HW_DB_SERVICE_PATH" >> $GITHUB_PATH

@@ -12,8 +12,18 @@ permissions:
   actions: write
 
 jobs:
+  cache-sdks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+      - uses: ./.github/actions/cache-sdks
+
   ota-check:
     name: OTA flash check (${{ matrix.display }})
+    needs: cache-sdks
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -45,16 +55,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          submodules: "true"
-          lfs: true
+          submodules: false
 
-      - name: Pull LFS objects in submodules
+      - name: Initialize non-SDK submodules
         run: |
-            git -C third_party/simplicity_sdk lfs pull
-            git -C third_party/wifi_sdk lfs pull
+          set -euo pipefail
+          mapfile -t paths < <(
+            git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
+              | awk '{print $2}' \
+              | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
+          )
+          git submodule update --init --depth 1 -- "${paths[@]}"
 
-      - name: Install tools
-        uses: ./.github/actions/install-tools
+      - name: Cache SDKs
+        uses: ./.github/actions/cache-sdks
+
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
 
       - name: Build window-app
         if: matrix.id == 'mg24'

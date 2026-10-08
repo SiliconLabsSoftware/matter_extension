@@ -39,6 +39,8 @@ runs:
                   /tmp/zap-linux-x64
                   /home/runner/.silabs/slt
                   /home/runner/.local/bin/slt
+                  /home/runner/.local/bin/conan
+                  /home/runner/.local/bin/conan_engine
               key: ${{ steps.compute-cache-key.outputs.cache-key }}
 
         - name: Set env and paths from cache
@@ -48,6 +50,7 @@ runs:
               echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
               echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
               echo "SLT_PATH=/home/runner/.local/bin/slt" >> $GITHUB_ENV
+              echo "SLT_CI=true" >> $GITHUB_ENV
               echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
               echo "/home/runner/.silabs/slt/bin" >> $GITHUB_PATH
               echo "/home/runner/.local/bin" >> $GITHUB_PATH
@@ -60,16 +63,19 @@ runs:
               JAVA_HOME=$(slt where java21)
               COMMANDER_PATH=$(slt where commander)
               ARM_GCC_DIR=$(slt where gcc-arm-none-eabi)
+              HW_DB_SERVICE_PATH=$(slt where hw-db-service)
               echo "SLC_CLI_PATH=$SLC_CLI_PATH" >> $GITHUB_ENV
               echo "JAVA_HOME=$JAVA_HOME" >> $GITHUB_ENV
               echo "COMMANDER_PATH=$COMMANDER_PATH" >> $GITHUB_ENV
               echo "ARM_GCC_DIR=$ARM_GCC_DIR" >> $GITHUB_ENV
+              echo "HW_DB_SERVICE_PATH=$HW_DB_SERVICE_PATH" >> $GITHUB_ENV
               echo "$SLC_CLI_PATH" >> $GITHUB_PATH
               if [ -n "$JAVA_HOME" ]; then
                 echo "$JAVA_HOME/jre/bin" >> $GITHUB_PATH
               fi
               echo "$COMMANDER_PATH" >> $GITHUB_PATH
               echo "$ARM_GCC_DIR/bin" >> $GITHUB_PATH
+              echo "$HW_DB_SERVICE_PATH" >> $GITHUB_PATH
 
         - name: Install tools
           if: steps.cache.outputs.cache-hit != 'true'
@@ -83,4 +89,6 @@ runs:
                   /tmp/zap-linux-x64
                   /home/runner/.silabs/slt
                   /home/runner/.local/bin/slt
+                  /home/runner/.local/bin/conan
+                  /home/runner/.local/bin/conan_engine
               key: ${{ steps.compute-cache-key.outputs.cache-key }}

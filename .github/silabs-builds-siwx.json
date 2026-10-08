@@ -2,7 +2,7 @@
     "standard": {
         "default": [
             {
-                "boards": ["brd4338a", "brd2605a"],
+                "boards": ["brd4338a", "brd2605a", "brd2605b"],
                 "arguments": [""]
             },
             {
@@ -26,7 +26,7 @@
     "full": {
         "default": [
             {
-                "boards": ["brd4338a", "brd2605a", "brd4343a", "brd4342a", "brd2708a", "brd2911a", "brd4343c", "brd4343s"],
+                "boards": ["brd4338a", "brd2605a", "brd2605b", "brd4343a", "brd4342a", "brd2708a", "brd2911a", "brd4343c", "brd4343s", "brd9084b"],
                 "arguments": [""]
             },
             {
@@ -56,11 +56,11 @@
         ],
         "platform_template": [
             {
-                "boards": ["brd4338a", "brd4343a", "brd4342a"],
+                "boards": ["brd4338a", "brd4343a", "brd4342a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix  peripherals","--with_app matter_peripherals_917soc"]
             },
             {
-                "boards": ["brd4338a", "brd4343a", "brd4342a"],
+                "boards": ["brd4338a", "brd4343a", "brd4342a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix  peripherals-icd","--with_app matter_peripherals_917soc,matter_icd_core"]
             },
             {
@@ -72,7 +72,7 @@
     "custom-sqa": {
         "lighting_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b", "brd4343s", "brd4343c"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -89,7 +89,7 @@
                               "--with_app matter_multi_image_ota,matter_multi_image_ota_encryption,matter_multi_image_custom_processor"]
             },
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
             },
@@ -101,12 +101,12 @@
         ],
         "lock_app" :[
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd2605b", "brd9084b", "brd4343s", "brd4343c"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix sqa-lto",
                               "--with_app toolchain_gcc_lto"]
             },
@@ -161,14 +161,14 @@
         ],
         "light_switch_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix sit-60",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"]
+                "arguments": ["--output_suffix lit-120",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "multi_sensor_app" :[
@@ -180,10 +180,9 @@
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
-                "boards": ["brd4343a"],
-                "arguments": ["--output_suffix sit-60",
-                              "'--configuration SL_IDLE_MODE_DURATION_S:60'"
-                             ]
+                "boards": ["brd4343a", "brd4343c", "brd4343s"],
+                "arguments": ["--output_suffix lit-120",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "window_app" :[
@@ -204,14 +203,14 @@
         ],
         "closure_app": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix ota-2",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             }
         ],
         "platform_template": [
             {
-                "boards": ["brd4338a", "brd4342a", "brd4343a"],
+                "boards": ["brd4338a", "brd4342a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix peripherals-ota-2","--with_app matter_peripherals_917soc", "--without_app matter_log_rtt",
                               "'--configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:2,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"2\"'"]
             },
@@ -222,7 +221,8 @@
             },
             {
                 "boards": ["brd4338a"],
-                "arguments": ["--output_suffix  peripherals-icd-sit-60","--with_app matter_peripherals_917soc,matter_icd_core","'--configuration SL_IDLE_MODE_DURATION_S:60'"]
+                "arguments": ["--output_suffix peripherals-icd-lit-120","--with_app matter_peripherals_917soc,matter_icd_core",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
         ],
         "thermostat": [
