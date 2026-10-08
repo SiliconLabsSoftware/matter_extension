@@ -576,6 +576,18 @@
     ]
   },
   {
+    "clusterCode": "activated carbon filter monitoring-server",
+    "value": [
+      "%extension-matter%matter_resource_monitoring"
+    ]
+  },
+  {
+    "clusterCode": "hepa filter monitoring-server",
+    "value": [
+      "%extension-matter%matter_resource_monitoring"
+    ]
+  },
+  {
     "clusterCode": "sample mei-server",
     "value": [
       "%extension-matter%matter_sample_mei"

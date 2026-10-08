@@ -153,6 +153,8 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           branch: ${{ steps.resolve_inputs.outputs.pr_branch }}
+          author: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          committer: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
           base: ${{ steps.resolve_inputs.outputs.target_branch }}
           title: "Update SDK submodules to ${{ steps.resolve_inputs.outputs.sdk_tag }} on ${{ steps.resolve_inputs.outputs.target_branch }}"
           commit-message: "Update SDK submodules to ${{ steps.resolve_inputs.outputs.sdk_tag }}"
