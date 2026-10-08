@@ -119,6 +119,8 @@ configuration:
     value: 0
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
     value: OPENTHREAD_CONFIG_LOG_OUTPUT_APP
+  - name: SL_MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
+    value: 1
   - name: SL_MBEDTLS_KEY_EXCHANGE_PSK_ENABLED
     value: 1
     condition: [ot_coap_cert_libs]
