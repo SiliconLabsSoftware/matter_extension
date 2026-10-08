@@ -273,8 +273,8 @@ pipeline
                     def isRelease = env.BRANCH_NAME.startsWith('release_')
                     def remoteName = isRelease ? 'silabs-conan-production' : 'matter-conan-dev'
                     def remoteUrl = isRelease
-                        ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
-                        : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
+                        ? 'https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production'
+                        : 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
                     def actionDir = "${env.WORKSPACE}/action-conan-create-publish"
 
                     pipelineFunctions.checkoutGithubActionRepo(
