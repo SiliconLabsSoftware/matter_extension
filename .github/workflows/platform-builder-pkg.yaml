@@ -17,6 +17,11 @@ on:
                 required: false
                 type: string
                 default: ""
+            use-lockfile:
+                description: If true, install CI lockfile and disable slt update checks
+                required: false
+                type: boolean
+                default: true
             thread-support:
                 required: false
                 type: boolean
@@ -86,6 +91,8 @@ jobs:
             platform: mg24
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mg24-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
@@ -98,6 +105,8 @@ jobs:
             platform: mg24-internal
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mg24-trustzone-build-job:
         if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
@@ -110,6 +119,8 @@ jobs:
             platform: mg24-trustzone
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mgm24-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-support }}
@@ -122,6 +133,8 @@ jobs:
             platform: mgm24
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mgm24-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
@@ -134,6 +147,8 @@ jobs:
             platform: mgm24-internal
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mg26-build-job:
         if: ${{ inputs.thread-support && inputs.mg26-support }}
@@ -146,6 +161,8 @@ jobs:
             platform: mg26
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mg26-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
@@ -158,6 +175,8 @@ jobs:
             platform: mg26-internal
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     mgm26-internal-build-job:
         if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
@@ -170,6 +189,8 @@ jobs:
             platform: mgm26-internal
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     ncp-917-build-job:
         if: ${{ inputs.ncp-917-support }}
@@ -182,6 +203,8 @@ jobs:
             platform: ncp-917
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     ncp-917-dual-stack-build-job:
         if: ${{ inputs.ncp-917-dual-stack-support && inputs.build-type == 'custom-sqa' }}
@@ -194,6 +217,8 @@ jobs:
             platform: ncp-917-dual-stack
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     siwx-soc-build-job:
         if: ${{ inputs.wifi-soc-support }}
@@ -206,6 +231,8 @@ jobs:
             platform: siwx-soc
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit
 
     sixg301-build-job:
         if: ${{ inputs.thread-support && inputs.sixg301-support }}
@@ -218,3 +245,5 @@ jobs:
             platform: sixg301
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
+            use-lockfile: ${{ inputs.use-lockfile }}
+        secrets: inherit

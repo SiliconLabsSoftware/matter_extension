@@ -11,6 +11,11 @@ on:
         description: Cache key created by the Matter package producer.
         required: true
         type: string
+      use-lockfile:
+        description: If true, install CI lockfile and disable slt update checks
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -58,12 +63,14 @@ jobs:
         with:
           conan-cache-key: ${{ inputs.conan-cache-key }}
           package-version: ${{ inputs.package-version }}
+          use-lockfile: ${{ inputs.use-lockfile }}
 
       - name: Build window-app
         if: matrix.id == 'mg24'
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
@@ -77,6 +84,7 @@ jobs:
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
@@ -90,6 +98,7 @@ jobs:
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}

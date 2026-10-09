@@ -24,8 +24,14 @@
 #   -pids PID                Build application, bootloader, or trustzone solution PIDs
 #   --clean                   Remove the output directory before building
 #   --skip_gen                Skip SLC generation and rebuild existing output
+#   --check-updates true|false  Pass to project slt install (default: true)
+#   --pkg-lock PATH          Copy this SLT pkg.lock into the app dir before install
 #   -j N                     make -jN (default: 8)
 #   -h, --help               Show this help
+#
+# Env:
+#   CHECK_UPDATES            Default for --check-updates (CI locked builds use false)
+#   CI_PKG_LOCK              Same as --pkg-lock when the flag is omitted
 #
 # Prerequisites: `slt` on PATH. Uses SLT Conan engine (~/.silabs/slt/engines/conan).
 
@@ -44,6 +50,9 @@ WITHOUT_BOOTLOADER_COMPONENTS=""
 PIDS=""
 CLEAN=false
 SKIP_GEN=false
+# Env CHECK_UPDATES can pre-set the default (CI uses false with locked manifests).
+CHECK_UPDATES="${CHECK_UPDATES:-true}"
+PKG_LOCK="${CI_PKG_LOCK:-}"
 EXTRA_GENERATE_ARGS=()
 
 # Print the header comment block as help text, then exit (arg: exit code).
@@ -180,6 +189,17 @@ while [[ $# -gt 0 ]]; do
     --skip_gen)
       SKIP_GEN=true
       shift
+      ;;
+    --check-updates)
+      CHECK_UPDATES="${2:-}"
+      [[ "${CHECK_UPDATES}" == "true" || "${CHECK_UPDATES}" == "false" ]] \
+        || die "--check-updates needs true or false"
+      shift 2
+      ;;
+    --pkg-lock)
+      PKG_LOCK="${2:-}"
+      [[ -n "${PKG_LOCK}" ]] || die "--pkg-lock needs a path"
+      shift 2
       ;;
     -j)
       JOBS="${2:-}"
@@ -370,8 +390,32 @@ echo "Project: ${PROJECT}  board: ${BOARD}  out: ${OUT_DIR}"
 
 cd "${APP_DIR}"
 
-echo "Running slt install (project pkg.slt / pkg.slconf)..."
-slt install
+if [[ -n "${PKG_LOCK}" ]]; then
+  [[ -f "${PKG_LOCK}" ]] || die "pkg.lock not found: ${PKG_LOCK}"
+  echo "Applying CI pkg.lock from ${PKG_LOCK}"
+  # Keep local Matter package version from this build; pin everything else.
+  python3 - "${PKG_LOCK}" "${APP_DIR}/pkg.lock" "${MATTER_PACKAGE_VERSION}" <<'PY'
+import re
+import sys
+
+src, dst, matter_ver = sys.argv[1], sys.argv[2], sys.argv[3]
+text = open(src, encoding="utf-8").read()
+for name in ("matter", "matter_app"):
+    def repl(match, n=name, v=matter_ver):
+        body = match.group(2)
+        body = re.sub(r'version\s*=\s*"[^"]*"', f'version = "{v}"', body, count=1)
+        # Drop recipe revision so locally export-pkg'd packages can resolve.
+        body = re.sub(rf'ref\s*=\s*"{n}/[^"]*"', f'ref = "{n}/{v}@silabs"', body, count=1)
+        return match.group(1) + body + match.group(3)
+
+    text = re.sub(rf'^(\s*{name}\s*=\s*\[)([^\]]*)(\])', repl, text, count=1, flags=re.M)
+open(dst, "w", encoding="utf-8").write(text)
+print(f"Wrote {dst} (matter/matter_app -> {matter_ver})")
+PY
+fi
+
+echo "Running slt install (project pkg.slt / pkg.slconf, --check-updates=${CHECK_UPDATES})..."
+slt install --check-updates="${CHECK_UPDATES}"
 
 run_generate() {
   local pid="$1"
