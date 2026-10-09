@@ -5,6 +5,7 @@ on:
         branches:
             - main
             - "release_*"
+            - feature/package_manager_implementation_phase_2
   workflow_dispatch:
     inputs:
       package_version:
@@ -123,3 +124,71 @@ jobs:
     with:
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+      use-lockfile: ${{ needs.resolve-deps-mode.outputs.use-lockfile == 'true' }}
+
+  update-ci-lockfile:
+    name: Update CI pkg.lock and conan.lock
+    if: ${{ always() && needs.resolve-deps-mode.outputs.use-lockfile == 'false' && needs.build-dev-apps.result == 'success' && (needs.ota-size-check.result == 'success' || needs.ota-size-check.result == 'skipped') }}
+    needs: [resolve-deps-mode, matter-packages, build-dev-apps, ota-size-check]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
+
+      - name: Install Matter packages (no CI lock)
+        uses: ./.github/actions/install-pkg-manifest
+        with:
+          conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+          package-version: ${{ needs.matter-packages.outputs.version }}
+          use-lockfile: "false"
+
+      - name: Resolve pkg.lock and convert to conan.lock
+        env:
+          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+        run: |
+          set -euo pipefail
+          APP_DIR="slc/apps/lock_app/wifi"
+          LOCK_DIR=".github/pkg-manifest"
+          [[ -f "${APP_DIR}/pkg.slt" ]] || python3 slc/script/generate_pkg_slt.py -d slc
+
+          # Fresh resolve: remove old lock so slt install floats.
+          rm -f "${APP_DIR}/pkg.lock"
+          (
+            cd "${APP_DIR}"
+            echo "Running unlocked slt install in ${APP_DIR}"
+            slt install --check-updates=true
+          )
+          [[ -f "${APP_DIR}/pkg.lock" ]] || {
+            echo "slt install did not produce ${APP_DIR}/pkg.lock"
+            exit 1
+          }
+
+          mkdir -p "${LOCK_DIR}"
+          cp -f "${APP_DIR}/pkg.lock" "${LOCK_DIR}/pkg.lock"
+          python3 slc/script/pkg_lock_to_conan_lock.py \
+            --input "${LOCK_DIR}/pkg.lock" \
+            --output "${LOCK_DIR}/conan.lock" \
+            --conanfile "${LOCK_DIR}/conanfile.txt"
+          echo "Updated ${LOCK_DIR}/pkg.lock and ${LOCK_DIR}/conan.lock"
+          wc -l "${LOCK_DIR}/pkg.lock" "${LOCK_DIR}/conan.lock"
+
+      - name: Commit updated lockfiles
+        run: |
+          set -euo pipefail
+          git config user.name "matter-ci-bot"
+          git config user.email "matter-ci-bot@users.noreply.github.com"
+          git add .github/pkg-manifest/pkg.lock \
+                  .github/pkg-manifest/conan.lock \
+                  .github/pkg-manifest/conanfile.txt
+          if git diff --staged --quiet; then
+            echo "No lockfile changes"
+            exit 0
+          fi
+          git commit -m "NOJIRA: Refresh CI pkg-manifest locks from nightly slt resolve"
+          git push
