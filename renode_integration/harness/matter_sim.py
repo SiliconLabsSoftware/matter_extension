@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import re
 from pathlib import Path
 
 def resolve_renode(bundle_dir: Path) -> Path:
@@ -60,6 +61,18 @@ class MatterSim:
         tester = self._terminal_tester(machine.sysbus.uart1, timeout_s)
         return Console(tester, timeout_s)
 
+    def soc_console(self, timeout_s: float = 600) -> Console:
+        """Attach a tester to matter_soc eusart0.
+
+        The resc script also connects this UART to a socket. The tester records
+        the lighting app console from the moment it is attached.
+        """
+        machine = self._emulation.get_mach("matter_soc")
+        if machine is None:
+            raise RuntimeError("matter_soc machine not found")
+        tester = self._terminal_tester(machine.sysbus.eusart0, timeout_s)
+        return Console(tester, timeout_s)
+
     def save(self, path: Path) -> None:
         """Pause the emulation and write a checkpoint."""
         destination = path.resolve()
@@ -105,3 +118,20 @@ class Console:
         self.wait_for(r"buildroot login:")
         self.write_line("root")
         self.wait_for(r"#\s*$")
+
+    def get_report(self) -> str:
+        """Return the full UART transcript from the tester."""
+        return str(self._tester.GetReport())
+
+    def run(self, cmd: str, timeout_s: float | None = None) -> tuple[int, str]:
+        """Run a shell command on the guest and return its exit code and UART transcript."""
+        self.write_line(f'{cmd}; echo "__RC=$?"')
+        matched = self.wait_for(r"__RC=(\d+)", timeout_s=timeout_s)
+        report = self.get_report()
+        line_match = re.search(r"__RC=(\d+)", matched) if matched else None
+        if line_match is not None:
+            return int(line_match.group(1)), report
+        rc_matches = re.findall(r"__RC=(\d+)", report)
+        if not rc_matches:
+            raise RuntimeError(f"could not parse exit code from console output\n{report[-2000:]}")
+        return int(rc_matches[-1]), report
