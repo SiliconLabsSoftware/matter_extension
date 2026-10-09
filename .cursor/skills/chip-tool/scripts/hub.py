@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import random
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -94,12 +95,6 @@ def run_ssh(
     )
 
 
-def hub_is_valid(host: str) -> bool:
-    """True if SSH works and the prebuilt chip-tool binary exists on the hub."""
-    proc = run_ssh(host, ["test", "-x", CHIP_TOOL])
-    return proc.returncode == 0
-
-
 def print_proc(proc: subprocess.CompletedProcess[str]) -> int:
     if proc.stdout:
         sys.stdout.write(proc.stdout)
@@ -122,20 +117,10 @@ def auth_failed(proc: subprocess.CompletedProcess[str]) -> bool:
 
 
 def require_host() -> str:
-    """Load host from JSON and verify reachability. Exit with setup help on failure."""
+    """Load host from JSON. Exit with setup help if config is missing."""
     host = load_saved_host()
     if not host:
         print_user_setup("No Matter Hub host in ~/.silabs/matter-hub.json.")
-        sys.exit(1)
-    if not hub_is_valid(host):
-        print(
-            f"Hub at {host} (from ~/.silabs/matter-hub.json) is unreachable or chip-tool is missing.",
-            file=sys.stderr,
-        )
-        print(
-            f"User must fix connectivity or update config: {HUB_SCRIPT} discover --host HOST",
-            file=sys.stderr,
-        )
         sys.exit(1)
     return host
 
@@ -191,9 +176,14 @@ def cmd_dataset(args: argparse.Namespace) -> int:
         return 1
     if proc.returncode != 0:
         return print_proc(proc)
-    line = (proc.stdout or "").strip().splitlines()
-    if line:
-        print(line[0].strip())
+    lines = (proc.stdout or "").strip().splitlines()
+    if not lines:
+        return 0
+    first = lines[0].strip()
+    if first.startswith("Error"):
+        print("No Thread dataset. Run dataset or start-thread first.", file=sys.stderr)
+        return 1
+    print(first)
     return 0
 
 
@@ -217,7 +207,7 @@ def cmd_start_thread(args: argparse.Namespace) -> int:
     host = require_host()
     proc = run_ssh(
         host,
-        ["bash", "-lc", START_THREAD_SCRIPT],
+        [f"sh -c {shlex.quote(START_THREAD_SCRIPT.strip())}"],
         timeout=120,
     )
     if auth_failed(proc):
@@ -233,13 +223,18 @@ def read_dataset(host: str, explicit: Optional[str]) -> Optional[str]:
     if proc.returncode != 0:
         return None
     lines = (proc.stdout or "").strip().splitlines()
-    return lines[0].strip() if lines else None
+    if not lines:
+        return None
+    first = lines[0].strip()
+    if first.startswith("Error"):
+        return None
+    return first
 
 
 def write_last_node_id(host: str, node_id: int) -> None:
     """Remember commissioned node id on the hub for ``show-node-id`` / later ``run``."""
     remote = f"echo {node_id} > {LAST_NODE_ID_REMOTE}"
-    run_ssh(host, ["bash", "-lc", remote])
+    run_ssh(host, [f"sh -c {shlex.quote(remote)}"])
 
 
 def cmd_show_node_id(args: argparse.Namespace) -> int:
