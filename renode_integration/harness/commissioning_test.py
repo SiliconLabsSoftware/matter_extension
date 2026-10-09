@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import shutil
 import sys
 from pathlib import Path
 
@@ -50,7 +51,8 @@ def main() -> int:
     console = None
     soc = None
     try:
-        sim.load("matter-sim.resc", {"matter_elf": str(matter_elf)})
+        shutil.copyfile(matter_elf, bundle_dir / "matter.out")
+        sim.load("matter-sim.resc")
         soc = sim.soc_console()
         console = sim.hub_console()
         console.write_line("")
