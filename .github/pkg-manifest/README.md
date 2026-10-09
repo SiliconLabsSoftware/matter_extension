@@ -63,6 +63,9 @@ What the converter does:
 - By default **omits** `matter` and `matter_app` so CI can install PR-built
   Matter packages on top of the locked third-party set.
 - Prefers each entry’s `ref = "name/version@silabs#revision"` when present.
+- Adds Silabs recipe `python_requires` (default
+  `silabs_package_assistant/1.8.0@silabs#...`) — required by Conan 2 lock
+  installs; not present in SLT `pkg.lock`.
 - Writes a minimal `conanfile.txt` with exact `name/version@silabs` requires
   (revision stripped in the requires list; revisions stay in `conan.lock`).
 
@@ -91,10 +94,10 @@ Flow (via `.github/actions/install-pkg-manifest` + `packages/build_app.sh`):
      -r conan-prerelease
    ```
 
-4. Install the PR Matter app package:
+4. Install the PR Matter app package (no float after the lock install):
 
    ```bash
-   slt install "matter_app/<PR_VERSION>@silabs" -e conan
+   slt install "matter_app/<PR_VERSION>@silabs" -e conan --check-updates=false
    ```
 
 5. Export `CI_PKG_LOCK` to the absolute path of `pkg.lock`.

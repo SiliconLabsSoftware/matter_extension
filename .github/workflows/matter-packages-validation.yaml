@@ -23,6 +23,11 @@ on:
         required: false
         type: boolean
         default: true
+      use_lockfile:
+        description: 'true = PR/stable locked deps; false = nightly resolve + refresh lock'
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: create-matter-packages-${{ github.head_ref || github.ref_name }}
@@ -33,8 +38,26 @@ permissions:
   actions: write
 
 jobs:
+  resolve-deps-mode:
+    name: Resolve dependency mode
+    runs-on: ubuntu-latest
+    outputs:
+      use-lockfile: ${{ steps.mode.outputs.use-lockfile }}
+    steps:
+      - name: Select lockfile mode
+        id: mode
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "use-lockfile=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "use-lockfile=${{ inputs.use_lockfile }}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "use-lockfile=$(grep '^use-lockfile=' "$GITHUB_OUTPUT" | cut -d= -f2)"
+
   matter-packages:
     name: Create Matter Packages
+    needs: resolve-deps-mode
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.packages.outputs.version }}
@@ -101,7 +124,7 @@ jobs:
   build-dev-apps:
     name: Build Dev Apps
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_dev_apps }}
-    needs: matter-packages
+    needs: [resolve-deps-mode, matter-packages]
     permissions:
       contents: read
       actions: write
@@ -111,11 +134,12 @@ jobs:
       build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+      use-lockfile: ${{ needs.resolve-deps-mode.outputs.use-lockfile == 'true' }}
 
   ota-size-check:
     name: OTA flash size check
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.ota_size_check }}
-    needs: matter-packages
+    needs: [resolve-deps-mode, matter-packages]
     permissions:
       contents: read
       actions: write

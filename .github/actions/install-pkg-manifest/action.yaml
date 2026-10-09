@@ -100,4 +100,11 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan
+        # Locked CI: do not re-float deps after conan --lockfile install.
+        # Nightly (use-lockfile=false): allow normal resolve.
+        CHECK_UPDATES="true"
+        if [[ "${{ inputs.use-lockfile }}" == "true" ]]; then
+          CHECK_UPDATES="false"
+        fi
+        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan \
+          --check-updates="${CHECK_UPDATES}"

@@ -24,6 +24,11 @@ on:
             conan-cache-key:
                 required: true
                 type: string
+            use-lockfile:
+                description: If true, install CI lockfile and disable slt update checks
+                required: false
+                type: boolean
+                default: true
 
 permissions:
   contents: read
@@ -46,6 +51,7 @@ jobs:
               with:
                   conan-cache-key: ${{ inputs.conan-cache-key }}
                   package-version: ${{ inputs.package-version }}
+                  use-lockfile: ${{ inputs.use-lockfile && 'true' || 'false' }}
                   fail-on-cache-miss: true
 
             - name: Build ${{ inputs.example-app }} from packages
@@ -53,6 +59,8 @@ jobs:
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
                   MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+                  # PR/stable: lockfile + no updates. Nightly resolve: allow slt to float.
+                  CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
