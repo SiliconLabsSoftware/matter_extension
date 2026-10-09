@@ -17,7 +17,8 @@ config_file:
     file_id: matter_provision_config
 
 requires:
-  - name: matter_crypto_psa_siwx917 # Provisioning Default only support PSA crypto flavor
+  # Provisioning Default only support PSA crypto flavor
+  - name: matter_crypto_psa_siwx917
     condition: [device_family_siwg917]
 
 conflicts:
