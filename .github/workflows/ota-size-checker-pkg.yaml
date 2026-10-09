@@ -53,8 +53,8 @@ jobs:
       - name: Cache tools
         uses: ./.github/actions/cache-tools
 
-      - name: Restore Matter package cache
-        uses: ./.github/actions/restore-and-install-matter-packages
+      - name: Install Matter packages and CI lockfile
+        uses: ./.github/actions/install-pkg-manifest
         with:
           conan-cache-key: ${{ inputs.conan-cache-key }}
           package-version: ${{ inputs.package-version }}
