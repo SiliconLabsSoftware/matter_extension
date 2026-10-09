@@ -1,8 +1,8 @@
 workspace_name: matter_wifi_soc_thermostat_dual_stack_freertos
-label: Matter WiFi - SoC Thermostat FreeRTOS
+label: Matter WiFi - SoC Thermostat Dual Stack FreeRTOS
 quality: production
 package: matter
-description: Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app
+description: Demonstrates a sample implementation of a Matter over Wi-Fi thermostat app with Dual Stack (IPV6 on LwIP, IPV4 on NWP)
 project:
   - path: ./matter_wifi_soc_thermostat_dual_stack_freertos.slcp
     id: application
