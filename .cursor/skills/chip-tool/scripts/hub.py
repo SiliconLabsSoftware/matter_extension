@@ -116,6 +116,18 @@ def auth_failed(proc: subprocess.CompletedProcess[str]) -> bool:
     )
 
 
+def ssh_conn_failed(proc: subprocess.CompletedProcess[str]) -> bool:
+    """Check if SSH failed due to connection issues (timeout, refused, bad host)."""
+    stderr = proc.stderr or ""
+    return proc.returncode != 0 and (
+        "Connection timed out" in stderr
+        or "Connection refused" in stderr
+        or "Could not resolve hostname" in stderr
+        or "No route to host" in stderr
+        or "Network is unreachable" in stderr
+    )
+
+
 def require_host() -> str:
     """Load host from JSON. Exit with setup help if config is missing."""
     host = load_saved_host()
@@ -133,6 +145,9 @@ def cmd_discover(args: argparse.Namespace) -> int:
         if auth_failed(proc):
             print_user_setup("SSH key auth failed.")
             return 1
+        if ssh_conn_failed(proc):
+            print(f"SSH connection to {host} failed.", file=sys.stderr)
+            return print_proc(proc) or 1
         if proc.returncode != 0:
             print(f"{host} is not a Matter Hub (chip-tool missing).", file=sys.stderr)
             return 1
@@ -155,6 +170,9 @@ def cmd_check(args: argparse.Namespace) -> int:
     if auth_failed(proc):
         print_user_setup("SSH key auth failed.")
         return 1
+    if ssh_conn_failed(proc):
+        print(f"SSH connection to {host} failed.", file=sys.stderr)
+        return print_proc(proc) or 1
     if proc.returncode != 0:
         print(f"chip-tool not found at {CHIP_TOOL}", file=sys.stderr)
         return 1
@@ -240,6 +258,9 @@ def write_last_node_id(host: str, node_id: int) -> None:
 def cmd_show_node_id(args: argparse.Namespace) -> int:
     host = require_host()
     proc = run_ssh(host, ["cat", LAST_NODE_ID_REMOTE])
+    if ssh_conn_failed(proc):
+        print(f"SSH connection to {host} failed.", file=sys.stderr)
+        return print_proc(proc) or 1
     if proc.returncode != 0:
         print("No last node id on hub.", file=sys.stderr)
         return 1
