@@ -18,6 +18,10 @@ requires:
 conflicts:
   - name: matter_provision_default
 
+define:
+  - name: SL_MATTER_USE_FLASH_STORE
+    value: 1
+
 config_file:
   - path: slc/config/sl_matter_provision_config.h
     file_id: matter_provision_config
