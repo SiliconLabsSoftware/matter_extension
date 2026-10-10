@@ -46,6 +46,15 @@
 // <i> Human-readable software version string
 #define CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING "1"
 
+/// SL-TEMP until upstream implementation includes sl_matter_provision_config.h on non-GN builds
+// <q SL_MATTER_ENABLE_EXAMPLE_CREDENTIALS> Enable example credentials
+// <i> Default: 1
+// <i> Enables example credentials (DAC, PAI, etc.) statically stored in the device as used as fallback when no credentials are
+// found in the storage partition.
+#ifndef SL_MATTER_ENABLE_EXAMPLE_CREDENTIALS
+#define SL_MATTER_ENABLE_EXAMPLE_CREDENTIALS 1
+#endif
+
 // <o CHIP_DEVICE_CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION> Device hardware version
 // <i> Default: 1
 #define CHIP_DEVICE_CONFIG_DEFAULT_DEVICE_HARDWARE_VERSION 1
