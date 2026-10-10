@@ -16,6 +16,10 @@ config_file:
   - path: slc/config/sl_matter_provision_config.h
     file_id: matter_provision_config
 
+define:
+  - name: SL_MATTER_USE_FLASH_STORE
+    value: 0
+
 requires:
   # Provisioning Default only support PSA crypto flavor
   - name: matter_crypto_psa_siwx917
