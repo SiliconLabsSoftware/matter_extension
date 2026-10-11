@@ -2837,6 +2837,7 @@ extra_files:
   - third_party/matter_sdk/src/app/icd/server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/icd/server/tests/ICDConfigurationDataTestAccess.h
   - third_party/matter_sdk/src/app/icd/server/tests/TestDefaultICDCheckInBackOffStrategy.cpp
+  - third_party/matter_sdk/src/app/icd/server/tests/TestICDCheckInSender.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDConfigurationData.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDManager.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDMonitoringTable.cpp
