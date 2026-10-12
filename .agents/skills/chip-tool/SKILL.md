@@ -54,7 +54,7 @@ End-device UART logs stay on the kit via the SDM skill.
 Run from the workspace root with **Python 3**. Use `python3` on Linux/macOS or `python` on Windows if that is how Python 3 is installed:
 
 ```bash
-python3 .cursor/skills/chip-tool/scripts/hub.py <subcommand> [args]
+python3 .agents/skills/chip-tool/scripts/hub.py <subcommand> [args]
 ```
 
 `hub.py` uses the system `ssh` client. Stdlib only. SSH targets the LAN. If the sandbox blocks the Pi, rerun with unrestricted network permissions.
@@ -78,7 +78,7 @@ Matter Hub one-time setup (run in your terminal):
        Linux/macOS: ssh-copy-id ubuntu@HOST
        Windows (OpenSSH): ssh-copy-id ubuntu@HOST if available, or add your
        public key to ~ubuntu/.ssh/authorized_keys on the Pi
-  3. python3 .cursor/skills/chip-tool/scripts/hub.py discover --host HOST
+  3. python3 .agents/skills/chip-tool/scripts/hub.py discover --host HOST
      (use python instead of python3 on Windows if needed)
 
 HOST = Pi IP
@@ -114,7 +114,7 @@ Uses dataset from `--dataset`, else `dataset` subcommand output. Blocks until ch
 Forwards argv to chip-tool. Example:
 
 ```bash
-python3 .cursor/skills/chip-tool/scripts/hub.py run onoff on 1 1
+python3 .agents/skills/chip-tool/scripts/hub.py run onoff on 1 1
 ```
 
 If the user omits node id, read last id from the Pi with `hub.py show-node-id` or reuse the node id from `commission-thread`.
