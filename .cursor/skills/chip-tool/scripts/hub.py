@@ -206,6 +206,7 @@ def cmd_dataset(args: argparse.Namespace) -> int:
 
 
 START_THREAD_SCRIPT = """
+set -e
 sudo -n ot-ctl factoryreset
 sleep 3
 sudo -n ot-ctl srp server disable
@@ -270,7 +271,8 @@ def cmd_show_node_id(args: argparse.Namespace) -> int:
 
 def chip_tool_argv(extra: Sequence[str]) -> List[str]:
     """Build remote argv for a single chip-tool invocation."""
-    return [CHIP_TOOL, *extra]
+    quoted_args = [shlex.quote(arg) for arg in [CHIP_TOOL, *extra]]
+    return [f"sh -c {shlex.quote(' '.join(quoted_args))}"]
 
 
 def cmd_commission_thread(args: argparse.Namespace) -> int:
