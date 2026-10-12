@@ -1,7 +1,8 @@
 # Version defaults to "0" if not defined
-version = "0"
-
-
+version = 1
+release-stream = "2026-12"
+ 
+ 
 [dependency]
 # Get a specific version of the package
-matter_app = {version = ">=2.10.0 <2.10.1", installer = "conan", user="silabs", prerelease = true}
+matter = { version = ">=2.10.0 <2.10.1", prerelease=true }
