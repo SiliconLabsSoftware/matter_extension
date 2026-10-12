@@ -68,11 +68,18 @@ class matter_appRecipe(MatterBaseRecipe):
       "sdkLtsTag": ""
     }
 
-        # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
-        # on self.source_folder so repo-relative operations stay consistent.
-        @property
-        def matter_app_folder(self) -> str:
-                return str(self.repo_root)
+    # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
+    # on self.source_folder so repo-relative operations stay consistent.
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+
+    @property
+    def matter_app_folder(self) -> str:
+        return str(self.repo_root)
+
+    def set_version(self):
+        silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
+        if not self.channel:
+            self.channel = silabs_package_assistant.get_channel(self)
 
     def requirements(self):
         pass
