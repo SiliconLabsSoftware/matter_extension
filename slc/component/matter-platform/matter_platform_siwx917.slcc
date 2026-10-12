@@ -54,8 +54,10 @@ define:
     value: 1
   - name: CHIP_9117
     value: 1
+  # Let si91x_debug define DEBUG_UART unless sl_ulp_uart (Matter shell owns ULP UART).
   - name: DEBUG_UART
     value: "1"
+    unless: [sl_ulp_uart]
   - name: SL_MATTER_SIWX_WIFI_ENABLE
   - name: SL_SI91x_DUAL_INTERRUPTS_ERRATA
   - name: NVM3_LOCK_OVERRIDE

@@ -15,6 +15,10 @@ requires:
   - name: si91x_debug
     condition:
       - matter_platform_siwx917
+  # Official SL ULP UART driver (sl_si91x_usart_* async/DMA APIs) for SiWx917 shell/console.
+  - name: sl_ulp_uart
+    condition:
+      - matter_platform_siwx917
 
 provides:
   - name: matter_uart
@@ -47,3 +51,15 @@ define:
   - name: SLI_SI91X_MCU_INTR_BASED_RX_ON_UART
     value: 1
     condition: [matter_platform_siwx917]
+
+# Matter owns ULP_UART via sl_si91x_usart_*. Pulling in sl_ulp_uart disables
+# DEBUG_UART in si91x_debug (SDK unless: [sl_ulp_uart]), so Board_Debug_Init never
+# runs. uartEarlyInit() is also invoked from uartConsoleInit() when this hook is absent.
+template_contribution:
+  - name: event_handler
+    condition: [matter_platform_siwx917]
+    priority: -9993
+    value:
+      event: platform_init
+      include: uart.h
+      handler: uartEarlyInit

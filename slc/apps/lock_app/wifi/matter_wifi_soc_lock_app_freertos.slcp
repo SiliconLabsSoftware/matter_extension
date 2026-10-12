@@ -135,8 +135,10 @@ define:
     value: 1
 
 configuration:
+  # Matter owns ULP UART; SDK printf is off. Enable ULP UDMA for block TX.
+  # TX/RX DMA buffers live in ULP SRAM (see uart.cpp).
   - name: SL_ULPUART_DMA_CONFIG_ENABLE
-    value: "0"
+    value: "1"
   # Default ICD configurations
   - name: SL_IDLE_MODE_DURATION_S
     value: "600"
