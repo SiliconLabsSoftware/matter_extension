@@ -30,7 +30,7 @@ COMMISSION_TIMEOUT_S = 180
 DEFAULT_PIN = "20202021"
 DEFAULT_DISCRIMINATOR = "3840"
 
-HUB_SCRIPT = "python3 .cursor/skills/chip-tool/scripts/hub.py"
+HUB_SCRIPT = "python3 .agents/skills/chip-tool/scripts/hub.py"
 
 # Shown when config is missing or SSH key auth fails
 HUB_SETUP_STEPS = f"""\
