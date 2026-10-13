@@ -124,7 +124,8 @@ chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3
 chip-tool onoff toggle 101 1
 ```
 
-The job is non-blocking (`continue-on-error`) during the pilot.
+The job is non-blocking (`continue-on-error`) during the pilot. Hub and SoC UART
+output is streamed to the job log via Renode `test_lib`.
 
 ## Updating the bundle
 
