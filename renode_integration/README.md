@@ -87,7 +87,7 @@ Thread network. On the simulated Matter Hub you can commission with:
 chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3840
 ```
 
-Then you can control the device through chip-tool. For to toggle a lighting app:
+Then you can control the device through chip-tool. For example, to toggle a lighting app:
 ```sh
 chip-tool onoff toggle 101 1
 ```
