@@ -52,9 +52,6 @@ jobs:
               with:
                   dotnet-version: "8.0.x"
 
-            - name: Install harness dependencies
-              run: python3 -m pip install -r renode_integration/harness/requirements.txt
-
             - name: Install ORAS
               uses: oras-project/setup-oras@v2
 
@@ -64,18 +61,14 @@ jobs:
             - name: Fetch Renode bundle
               run: python3 renode_integration/scripts/fetch_bundle.py
 
+            - name: Install harness dependencies
+              run: |
+                  python3 -m pip install -r renode_integration/harness/requirements.txt
+                  python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
+
             - name: Run commissioning test
               env:
                   PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
               run: |
                   python3 renode_integration/harness/commissioning_test.py \
-                    --matter-elf "${{ steps.elf.outputs.path }}" \
-                    --log-dir renode-commissioning-logs
-
-            - name: Upload test logs
-              if: always()
-              uses: actions/upload-artifact@v7
-              with:
-                  name: renode-commissioning-logs
-                  path: renode-commissioning-logs
-                  if-no-files-found: ignore
+                    --matter-elf "${{ steps.elf.outputs.path }}"
