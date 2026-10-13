@@ -42,6 +42,27 @@ _bootstrap_default_renode_env()
 import test_lib
 
 
+def configure_renode_env(bundle_dir: Path) -> None:
+    """Point pyrenode3 and test_lib at the portable Renode tree under ``bundle_dir/renode``."""
+    bundle_dir = bundle_dir.resolve()
+    renode_root = bundle_dir / "renode"
+    os.environ["PYRENODE_PATH"] = str(resolve_renode(bundle_dir))
+    os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
+
+
+def _bootstrap_default_renode_env() -> None:
+    if os.environ.get("PYRENODE_PATH"):
+        return
+    renode_bin = DEFAULT_BUNDLE / "renode" / "renode"
+    if renode_bin.is_file():
+        configure_renode_env(DEFAULT_BUNDLE)
+
+
+_bootstrap_default_renode_env()
+
+import test_lib
+
+
 def _register_uart_tester(
     emulation: object,
     machine_name: str,
@@ -95,6 +116,7 @@ class MatterSim:
 
     def __init__(self, bundle_dir: Path) -> None:
         self.bundle_dir = bundle_dir.resolve()
+        configure_renode_env(self.bundle_dir)
         configure_renode_env(self.bundle_dir)
         from pyrenode3.wrappers import Emulation, Monitor
 

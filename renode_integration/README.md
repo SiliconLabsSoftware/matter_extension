@@ -22,7 +22,7 @@ The simulation models:
 | `guest/dts/` | ZynqMP device tree source |
 | `guest/rootfs-overlay/` | Matter-specific files injected into the boot rootfs |
 | `scripts/` | Python scripts that build, assemble, fetch, and publish the bundle |
-| `harness/` | pyrenode3 harness (`MatterSim`) for checkpoint generation and the macOS smoke test |
+| `harness/` | pyrenode3 harness (`MatterSim`), commissioning smoke test, checkpoint generation |
 | `out/bundle/` | Assembled artifact tree (gitignored) |
 
 ## Common vs runtime artifacts
@@ -47,9 +47,9 @@ rootfs, tools image, RCPs, or Renode locally. The **common** bundle includes
 
 ### Prerequisites
 
-- Python 3, `oras`, `gh auth login`
+- Python 3.11+, `.NET` 8 SDK (for pyrenode3 / commissioning harness), `oras`, `gh auth login`
 
-### Quickstart
+Fetch the bundle once before either workflow below:
 
 ```sh
 cd renode_integration
@@ -57,11 +57,21 @@ brew install oras    # macOS
 gh auth login
 python3 scripts/fetch_bundle.py
 cp /path/to/matter/app/binaries/<app>.out out/bundle/matter.out
-cd out/bundle
+```
+
+The lighting ELF must match the SoC platform loaded in `resc/matter-sim.resc` (default `brd4187c`). For another board, change
+the `LoadPlatformDescription` line in that resc file locally and use the matching app binary.
+Only **MG24**, **MG26**, and **SixG301** have been tested in this simulation so far.
+
+### Manual test with Renode CLI (resc)
+
+```sh
+cd renode_integration/out/bundle
 ./renode/renode -e '$matter_elf=@'"$(pwd)"'/matter.out' resc/matter-sim.resc
 ```
 
 Connect to the hub console and the Matter app CLI.
+
 ```sh
 # Matter Hub
 nc localhost 4540
@@ -70,18 +80,38 @@ nc localhost 4540
 nc localhost 3452
 ```
 
-`matter-sim.resc` starts from a checkpoint with booted Linux machine and pre-initialized 
-Thread network. On the simulated Matter Hub you can commission with: 
+`matter-sim.resc` starts from a checkpoint with booted Linux machine and pre-initialized
+Thread network. On the simulated Matter Hub you can commission with:
 
 ```sh
 chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3840
 ```
 
+Then you can control the device through chip-tool. For to toggle a lighting app:
+```sh
+chip-tool onoff toggle 101 1
+```
+
 To form a new Thread network instead, run `matter-thread-init --force` on the hub console.
 
-If no runtime exists for your host on GHCR, `scripts/fetch_bundle.py` downloads the common
-artifact only. Dispatch `renode-sim-artifacts` to publish a runtime, or rebuild on that host
-when developing the pipeline (`build_renode.py`, then `assemble_bundle.py`).
+### Manual commissioning test (pyrenode3 harness)
+
+Same simulation as `matter-sim.resc`, driven in-process by `harness/commissioning_test.py`
+(pairing + on/off toggle). UART output is printed with `test_lib` tags (`[matter_hub]:[CLI]:`,
+`[matter_soc]:[CLI]:`, `[SND]:`, `[EXP]:`).
+
+From the repository root (after `fetch_bundle.py`):
+
+```sh
+python3 -m pip install -r renode_integration/harness/requirements.txt
+python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
+
+python3 renode_integration/harness/commissioning_test.py \
+  --matter-elf /path/to/matter_thread_soc_lighting_app_freertos.out
+```
+
+`--bundle-dir` defaults to `renode_integration/out/bundle`. Exit code `0` means commissioning and
+toggle succeeded. Device logs are on stdout from `test_lib`.
 
 ### Rebuilding artifacts (maintainers)
 
