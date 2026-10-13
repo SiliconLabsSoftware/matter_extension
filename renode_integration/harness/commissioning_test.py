@@ -8,8 +8,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from generate_checkpoint import DEFAULT_BUNDLE
-from matter_sim import MatterSim
+from matter_sim import DEFAULT_BUNDLE, MatterSim
 
 NODE_ID = 101
 ENDPOINT = 1

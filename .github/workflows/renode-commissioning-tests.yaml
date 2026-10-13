@@ -67,8 +67,6 @@ jobs:
                   python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
 
             - name: Run commissioning test
-              env:
-                  PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
               run: |
                   python3 renode_integration/harness/commissioning_test.py \
                     --matter-elf "${{ steps.elf.outputs.path }}"
