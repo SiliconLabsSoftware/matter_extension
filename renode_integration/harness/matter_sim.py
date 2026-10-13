@@ -20,8 +20,9 @@ class MatterSim:
 
     def __init__(self, bundle_dir: Path) -> None:
         self.bundle_dir = bundle_dir.resolve()
-        # pyrenode3 reads PYRENODE_PATH at import time.
+        renode_root = self.bundle_dir / "renode"
         os.environ["PYRENODE_PATH"] = str(resolve_renode(self.bundle_dir))
+        os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
         from pyrenode3.wrappers import Emulation, Monitor, TerminalTester
 
         self._terminal_tester = TerminalTester
