@@ -6,6 +6,9 @@ import os
 import re
 from pathlib import Path
 
+import test_lib
+
+
 def resolve_renode(bundle_dir: Path) -> Path:
     """Return the Renode binary from the assembled bundle."""
     candidate = bundle_dir.resolve() / "renode" / "renode"
@@ -16,6 +19,33 @@ def resolve_renode(bundle_dir: Path) -> Path:
     )
 
 
+def _register_uart_tester(
+    emulation: object,
+    machine_name: str,
+    uart_peripheral: object,
+    timeout_s: float,
+) -> object:
+    """Attach a TerminalTester and register it with test_lib for I/O and CLI logging."""
+    from pyrenode3.wrappers import TerminalTester
+
+    machine = emulation.get_mach(machine_name)
+    if machine is None:
+        raise RuntimeError(f"{machine_name} machine not found")
+    tester = TerminalTester(uart_peripheral, timeout_s)
+    test_lib._machine_name_to_machine_mapping[machine_name] = machine
+    test_lib._tester_to_machine_mapping[tester] = machine
+    test_lib._tester_to_uart_mapping[tester] = uart_peripheral.internal
+    test_lib.enable_cli_logging(tester, True)
+    return tester
+
+
+def _unregister_uart_tester(tester: object, machine_name: str) -> None:
+    test_lib.enable_cli_logging(tester, False)
+    test_lib._tester_to_machine_mapping.pop(tester, None)
+    test_lib._tester_to_uart_mapping.pop(tester, None)
+    test_lib._machine_name_to_machine_mapping.pop(machine_name, None)
+
+
 class MatterSim:
     """In-process Renode session for one bundle directory."""
 
@@ -24,11 +54,13 @@ class MatterSim:
         renode_root = self.bundle_dir / "renode"
         os.environ["PYRENODE_PATH"] = str(resolve_renode(self.bundle_dir))
         os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
-        from pyrenode3.wrappers import Emulation, Monitor, TerminalTester
+        from pyrenode3.wrappers import Emulation, Monitor
 
-        self._terminal_tester = TerminalTester
         self._emulation = Emulation()
         self._monitor = Monitor()
+        test_lib._e = self._emulation
+        test_lib._m = self._monitor
+        self._consoles: list[tuple[Console, str]] = []
 
     def load(self, resc: str, variables: dict[str, str] | None = None) -> None:
         """Set monitor variables, then include ``resc/<resc>`` from the bundle."""
@@ -43,12 +75,8 @@ class MatterSim:
         Raises:
             RuntimeError: The monitor reported an error.
         """
-        contents, error = self._monitor.execute(cmd)
-        output = "" if contents is None else str(contents)
-        error_text = "" if error is None else str(error)
-        if error_text.strip():
-            raise RuntimeError(f"monitor command failed: {cmd}\n{error_text}\n{output}")
-        return output
+        output = test_lib.execute_monitor_command(cmd)
+        return "" if output is None else str(output)
 
     def hub_console(self, timeout_s: float = 600) -> Console:
         """Attach a tester to matter_hub uart1.
@@ -59,8 +87,10 @@ class MatterSim:
         machine = self._emulation.get_mach("matter_hub")
         if machine is None:
             raise RuntimeError("matter_hub machine not found")
-        tester = self._terminal_tester(machine.sysbus.uart1, timeout_s)
-        return Console(tester, timeout_s)
+        tester = _register_uart_tester(self._emulation, "matter_hub", machine.sysbus.uart1, timeout_s)
+        console = Console(tester, timeout_s)
+        self._consoles.append((console, "matter_hub"))
+        return console
 
     def soc_console(self, timeout_s: float = 600) -> Console:
         """Attach a tester to matter_soc eusart0.
@@ -71,8 +101,10 @@ class MatterSim:
         machine = self._emulation.get_mach("matter_soc")
         if machine is None:
             raise RuntimeError("matter_soc machine not found")
-        tester = self._terminal_tester(machine.sysbus.eusart0, timeout_s)
-        return Console(tester, timeout_s)
+        tester = _register_uart_tester(self._emulation, "matter_soc", machine.sysbus.eusart0, timeout_s)
+        console = Console(tester, timeout_s)
+        self._consoles.append((console, "matter_soc"))
+        return console
 
     def save(self, path: Path) -> None:
         """Pause the emulation and write a checkpoint."""
@@ -84,11 +116,14 @@ class MatterSim:
 
     def close(self) -> None:
         """Drop the current emulation."""
+        for console, machine_name in self._consoles:
+            _unregister_uart_tester(console._tester, machine_name)
+        self._consoles.clear()
         self._emulation.clear()
 
 
 class Console:
-    """UART session backed by Renode's TerminalTester."""
+    """UART session backed by Renode's TerminalTester and test_lib I/O helpers."""
 
     def __init__(self, tester: object, timeout_s: float) -> None:
         self._tester = tester
@@ -98,21 +133,14 @@ class Console:
         """Wait until ``pattern`` matches UART text, including a partial line.
 
         Raises:
-            TimeoutError: The pattern was not seen before the timeout.
+            RuntimeError: The pattern was not seen before the timeout.
         """
-        from pyrenode3.wrappers import TerminalTester
-
         limit = self._timeout_s if timeout_s is None else timeout_s
-        result = self._tester.WaitFor(pattern, TerminalTester.to_interval(limit), True, True, False, False)
-        if result is None:
-            report = str(self._tester.GetReport())
-            raise TimeoutError(f"timed out waiting for /{pattern}/\n{report[-2000:]}")
-        line = result.Line
-        return "" if line is None else str(line)
+        return test_lib.wait_for(self._tester, pattern, timeout=limit)
 
     def write_line(self, text: str) -> None:
         """Send ``text`` and a carriage return to the UART."""
-        self._tester.WriteLine(text)
+        test_lib.write_line(self._tester, text)
 
     def login_root(self) -> None:
         """Log in to the Buildroot console as root."""
