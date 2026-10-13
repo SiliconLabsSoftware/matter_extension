@@ -146,8 +146,10 @@ class MatterSim:
         machine = self._emulation.get_mach("matter_soc")
         if machine is None:
             raise RuntimeError("matter_soc machine not found")
-        tester = self._terminal_tester(machine.sysbus.eusart0, timeout_s)
-        return Console(tester, timeout_s)
+        tester = _register_uart_tester(self._emulation, "matter_soc", machine.sysbus.eusart0, timeout_s)
+        console = Console(tester, timeout_s)
+        self._consoles.append((console, "matter_soc"))
+        return console
 
     def save(self, path: Path) -> None:
         """Pause the emulation and write a checkpoint."""
