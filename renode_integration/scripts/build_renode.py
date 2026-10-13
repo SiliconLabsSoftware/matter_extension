@@ -85,16 +85,9 @@ def install_portable(artifact, out_dir):
 def main():
     host = common.detect_host()
     out_dir = Path(common.RENODE_INTEGRATION_DIR) / "out" / "renode" / host
-    src_dir = Path(common.RENODE_INTEGRATION_DIR) / "renode-src"
+    common.ensure_renode_source_tree()
+    src_dir = Path(common.RENODE_SRC_DIR)
     commit = common.manifest_lookup("renode.commit")
-    repo_url = common.manifest_lookup("renode.repo")
-
-    if not (src_dir / ".git").is_dir():
-        subprocess.run(["git", "clone", repo_url, str(src_dir)], check=True)
-    fetched = subprocess.run(["git", "-C", str(src_dir), "fetch", "origin", commit, "--depth", "1"])
-    if fetched.returncode != 0:
-        subprocess.run(["git", "-C", str(src_dir), "fetch", "--unshallow"], check=False)
-    subprocess.run(["git", "-C", str(src_dir), "checkout", commit], check=True)
 
     build_args = ["-t"]
     env = os.environ.copy()

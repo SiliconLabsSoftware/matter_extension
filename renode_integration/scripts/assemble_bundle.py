@@ -7,6 +7,19 @@ import shutil
 
 import common
 
+_TEST_LIB_IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache")
+
+
+def copy_test_lib(bundle):
+    dest = os.path.join(bundle, "test_lib")
+    if os.path.isfile(os.path.join(dest, "pyproject.toml")):
+        return
+    common.ensure_renode_source_tree()
+    src = common.test_lib_source_dir()
+    if not os.path.isdir(src):
+        common.die(f"Renode test_lib not found at {src}")
+    shutil.copytree(src, dest, dirs_exist_ok=True, ignore=_TEST_LIB_IGNORE)
+
 
 def copy_if_exists(src, dest_dir):
     if os.path.isfile(src):
@@ -16,6 +29,8 @@ def copy_if_exists(src, dest_dir):
 
 def main():
     bundle = common.bundle_dir()
+    os.makedirs(bundle, exist_ok=True)
+    copy_test_lib(bundle)
     guest_out = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "guest-rootfs")
     guest_dest = os.path.join(bundle, "guest-rootfs")
     for name in ("matter-rootfs.ext2", "matter-tools.ext2", "zynqmp-matter-linux.dtb"):
