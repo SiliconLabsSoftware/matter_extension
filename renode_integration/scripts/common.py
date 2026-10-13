@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import shutil
+import subprocess
 import sys
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +17,27 @@ BUNDLE_VERSION = "v0"
 
 def bundle_dir():
     return os.environ.get("BUNDLE_DIR", os.path.join(RENODE_INTEGRATION_DIR, "out", "bundle"))
+
+
+RENODE_SRC_DIR = os.path.join(RENODE_INTEGRATION_DIR, "renode-src")
+
+
+def ensure_renode_source_tree():
+    """Clone and check out the Renode commit pinned in sim-manifest.json."""
+    src_dir = RENODE_SRC_DIR
+    commit = manifest_lookup("renode.commit")
+    repo_url = manifest_lookup("renode.repo")
+
+    if not os.path.isdir(os.path.join(src_dir, ".git")):
+        subprocess.run(["git", "clone", repo_url, src_dir], check=True)
+    fetched = subprocess.run(["git", "-C", src_dir, "fetch", "origin", commit, "--depth", "1"])
+    if fetched.returncode != 0:
+        subprocess.run(["git", "-C", src_dir, "fetch", "--unshallow"], check=False)
+    subprocess.run(["git", "-C", src_dir, "checkout", commit], check=True)
+
+
+def test_lib_source_dir():
+    return os.path.join(RENODE_SRC_DIR, "tests", "test_lib")
 
 
 def die(message):
