@@ -6,7 +6,7 @@ import os
 import re
 from pathlib import Path
 
-import test_lib
+DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
 
 
 def resolve_renode(bundle_dir: Path) -> Path:
@@ -17,6 +17,27 @@ def resolve_renode(bundle_dir: Path) -> Path:
     raise FileNotFoundError(
         f"renode binary not found at {candidate}, run scripts/fetch_bundle.py or scripts/assemble_bundle.py"
     )
+
+
+def configure_renode_env(bundle_dir: Path) -> None:
+    """Point pyrenode3 and test_lib at the portable Renode tree under ``bundle_dir/renode``."""
+    bundle_dir = bundle_dir.resolve()
+    renode_root = bundle_dir / "renode"
+    os.environ["PYRENODE_PATH"] = str(resolve_renode(bundle_dir))
+    os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
+
+
+def _bootstrap_default_renode_env() -> None:
+    if os.environ.get("PYRENODE_PATH"):
+        return
+    renode_bin = DEFAULT_BUNDLE / "renode" / "renode"
+    if renode_bin.is_file():
+        configure_renode_env(DEFAULT_BUNDLE)
+
+
+_bootstrap_default_renode_env()
+
+import test_lib
 
 
 def _register_uart_tester(
@@ -51,9 +72,7 @@ class MatterSim:
 
     def __init__(self, bundle_dir: Path) -> None:
         self.bundle_dir = bundle_dir.resolve()
-        renode_root = self.bundle_dir / "renode"
-        os.environ["PYRENODE_PATH"] = str(resolve_renode(self.bundle_dir))
-        os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
+        configure_renode_env(self.bundle_dir)
         from pyrenode3.wrappers import Emulation, Monitor
 
         self._emulation = Emulation()

@@ -7,11 +7,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from matter_sim import MatterSim, resolve_renode
-
-SCRIPT_DIR = Path(__file__).resolve().parent
-INTEGRATION_DIR = SCRIPT_DIR.parent
-DEFAULT_BUNDLE = INTEGRATION_DIR / "out" / "bundle"
+from matter_sim import DEFAULT_BUNDLE, MatterSim, resolve_renode
 
 
 def main() -> int:

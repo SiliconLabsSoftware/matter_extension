@@ -8,8 +8,7 @@ import sys
 import time
 from pathlib import Path
 
-from generate_checkpoint import DEFAULT_BUNDLE
-from matter_sim import MatterSim
+from matter_sim import DEFAULT_BUNDLE, MatterSim
 
 LOAD_TIMEOUT_S = 180
 
