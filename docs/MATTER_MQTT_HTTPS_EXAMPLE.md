@@ -10,6 +10,7 @@ Build a SiWx917 BRD4338A Wi-Fi Thermostat app to evaluate:
 - **HTTPS** — GET / PUT / POST via Matter shell after client init
 
 This demo uses TLS 1.2 for authentication and FreeRTOS Heap4 for memory management.
+TLS 1.3 is only supported for the HTTPs client, but not on the MQTTs client.
 
 **Project name:** `matter_wifi_soc_thermostat_dual_stack_freertos`
 
@@ -130,8 +131,7 @@ Inbound publishes are delivered through `MqttClient::SetSubscriptionCallback` (`
 
 ### Certificates (`certs/cacert.h`)
 
-- `kCaCertExample[]` — Trusted CA used to verify the broker TLS cert. Fill with PEM of the CA that signed the broker cert (same format as the sample: `-----BEGIN CERTIFICATE-----` …). The sample CA will not work with your broker.
-- `kCaCertExample[]` — Trusted CA used to verify the HTTPS server cert. Same file as MQTTS. Fill with PEM of the CA that signed the HTTPS server cert.
+- `kCaCertExample[]` — Trusted CA used to verify the CA cert. Fill with PEM of the CA that signed the cert (same format as the sample: `-----BEGIN CERTIFICATE-----` …). The sample CA will not work with your server.
 - If MQTTS and HTTPS use different CAs, use the CA for the demo you are running (or split into two cert files).
 
 ### HTTPS changes (`https_offload_example.h`)
@@ -245,7 +245,7 @@ chip-tool thermostat read occupied-cooling-setpoint 1 1
 
 ### Matter shell (required for MQTT / HTTPS demos)
 
-Open a serial terminal to the device console (Matter shell is enabled for this dual-stack thermostat build). After Wi-Fi / internet is up, wait for service start logs, then run demos from the shell.
+Open a serial terminal to the device console (Matter shell is enabled for this dual-stack thermostat build). After Wi-Fi / internet is up, wait for service start logs, then run demos from the shell. This shell runs over UART, meanwhile logs are directed to JLink RTT.
 
 Help:
 
@@ -278,7 +278,7 @@ Posting MQTT connect/subscribe/publish to AppTask
 Posting HTTPS PUT/GET/POST to AppTask
 ```
 
-Do not run these from the shell thread expectation of blocking completion — the shell only queues AppTask work.
+Do not run these from the shell thread expectation of blocking completion — the shell only queues AppTask work. This is a trigger based operation, shell will say success once the operation is queued. Then the scheduler is responsible for execution of the task, and corresponding output will be shown.
 
 ### MQTT
 
