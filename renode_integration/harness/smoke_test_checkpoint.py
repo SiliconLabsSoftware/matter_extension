@@ -8,15 +8,15 @@ import sys
 import time
 from pathlib import Path
 
-from generate_checkpoint import DEFAULT_BUNDLE
-from matter_sim import MatterSim
+from matter_sim import DEFAULT_BUNDLE, MatterSim
+
+import test_lib
 
 LOAD_TIMEOUT_S = 180
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Smoke test a Matter Renode checkpoint load")
-    parser.add_argument("--bundle-dir", type=Path, default=DEFAULT_BUNDLE)
     parser.add_argument(
         "--checkpoint",
         type=Path,
@@ -25,7 +25,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    bundle_dir = args.bundle_dir.resolve()
+    bundle_dir = DEFAULT_BUNDLE.resolve()
     checkpoint = (args.checkpoint or (bundle_dir / "linux-booted-thread.save")).resolve()
     if not checkpoint.is_file():
         raise FileNotFoundError(checkpoint)
@@ -33,14 +33,14 @@ def main() -> int:
     started = time.monotonic()
     sim = MatterSim(bundle_dir)
     try:
-        sim.execute(f"EmulationManager Load @{checkpoint}")
-        sim.execute("start")
+        test_lib.execute_monitor_command(f"EmulationManager Load @{checkpoint}")
+        test_lib.execute_monitor_command("start")
         remaining = LOAD_TIMEOUT_S - (time.monotonic() - started)
         if remaining <= 0:
             raise TimeoutError(f"checkpoint load did not complete within {LOAD_TIMEOUT_S}s")
-        console = sim.hub_console(timeout_s=remaining)
-        console.write_line("")
-        console.wait_for(r"#\s*$", timeout_s=remaining)
+        hub = sim.hub_uart(timeout_s=remaining)
+        test_lib.write_line(hub, "")
+        test_lib.wait_for(hub, r"#\s*$", timeout=remaining)
         print(f"Checkpoint loaded: {checkpoint}")
         return 0
     finally:
