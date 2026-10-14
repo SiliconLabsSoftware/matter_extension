@@ -4,11 +4,9 @@ from __future__ import annotations
 
 import os
 import re
-import re
 from pathlib import Path
 
 DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
-DEFAULT_UART_TIMEOUT_S = 600
 DEFAULT_UART_TIMEOUT_S = 600
 
 
@@ -20,27 +18,6 @@ def resolve_renode(bundle_dir: Path) -> Path:
     raise FileNotFoundError(
         f"renode binary not found at {candidate}, run scripts/fetch_bundle.py or scripts/assemble_bundle.py"
     )
-
-
-def configure_renode_env(bundle_dir: Path) -> None:
-    """Point pyrenode3 and test_lib at the portable Renode tree under ``bundle_dir/renode``."""
-    bundle_dir = bundle_dir.resolve()
-    renode_root = bundle_dir / "renode"
-    os.environ["PYRENODE_PATH"] = str(resolve_renode(bundle_dir))
-    os.environ["RENODE_BASE_PATH"] = str(renode_root) + os.sep
-
-
-def _bootstrap_default_renode_env() -> None:
-    if os.environ.get("PYRENODE_PATH"):
-        return
-    renode_bin = DEFAULT_BUNDLE / "renode" / "renode"
-    if renode_bin.is_file():
-        configure_renode_env(DEFAULT_BUNDLE)
-
-
-_bootstrap_default_renode_env()
-
-import test_lib
 
 
 def configure_renode_env(bundle_dir: Path) -> None:
@@ -112,33 +89,11 @@ def run_shell(tester: object, cmd: str, timeout_s: float = DEFAULT_UART_TIMEOUT_
     return int(rc_matches[-1]), report
 
 
-def login_root(tester: object, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> None:
-    """Log in to the Buildroot console as root."""
-    test_lib.wait_for(tester, r"buildroot login:", timeout=timeout_s)
-    test_lib.write_line(tester, "root")
-    test_lib.wait_for(tester, r"#\s*$", timeout=timeout_s)
-
-
-def run_shell(tester: object, cmd: str, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> tuple[int, str]:
-    """Run a shell command on the guest and return its exit code and UART transcript."""
-    test_lib.write_line(tester, f'{cmd}; echo "__RC=$?"')
-    matched = test_lib.wait_for(tester, r"__RC=(\d+)", timeout=timeout_s)
-    report = str(tester.GetReport())
-    line_match = re.search(r"__RC=(\d+)", matched) if matched else None
-    if line_match is not None:
-        return int(line_match.group(1)), report
-    rc_matches = re.findall(r"__RC=(\d+)", report)
-    if not rc_matches:
-        raise RuntimeError(f"could not parse exit code from console output\n{report[-2000:]}")
-    return int(rc_matches[-1]), report
-
-
 class MatterSim:
     """In-process Renode session for one bundle directory."""
 
     def __init__(self, bundle_dir: Path) -> None:
         self.bundle_dir = bundle_dir.resolve()
-        configure_renode_env(self.bundle_dir)
         configure_renode_env(self.bundle_dir)
         from pyrenode3.wrappers import Emulation, Monitor
 
@@ -147,18 +102,14 @@ class MatterSim:
         test_lib._e = self._emulation
         test_lib._m = self._monitor
         self._uart_testers: list[tuple[object, str]] = []
-        self._uart_testers: list[tuple[object, str]] = []
 
     def load(self, resc: str, variables: dict[str, str] | None = None) -> None:
         """Set monitor variables, then include ``resc/<resc>`` from the bundle."""
         for key, value in (variables or {}).items():
             test_lib.execute_monitor_command(f"${key} = @{value}")
-            test_lib.execute_monitor_command(f"${key} = @{value}")
         resc_path = self.bundle_dir / "resc" / resc
         test_lib.execute_monitor_command(f"include @{resc_path}")
-        test_lib.execute_monitor_command(f"include @{resc_path}")
 
-    def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.
 
@@ -185,24 +136,9 @@ class MatterSim:
         self._uart_testers.append((tester, "matter_soc"))
         return tester
 
-    def soc_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
-        """Attach a tester to matter_soc eusart0.
-
-        The resc script also connects this UART to a socket. The tester records
-        the lighting app console from the moment it is attached.
-        """
-        machine = self._emulation.get_mach("matter_soc")
-        if machine is None:
-            raise RuntimeError("matter_soc machine not found")
-        tester = _register_uart_tester(self._emulation, "matter_soc", machine.sysbus.eusart0, timeout_s)
-        self._uart_testers.append((tester, "matter_soc"))
-        return tester
-
     def save(self, path: Path) -> None:
         """Pause the emulation and write a checkpoint."""
         destination = path.resolve()
-        test_lib.execute_monitor_command("pause")
-        test_lib.execute_monitor_command(f"Save @{destination}")
         test_lib.execute_monitor_command("pause")
         test_lib.execute_monitor_command(f"Save @{destination}")
         if not destination.is_file() or destination.stat().st_size == 0:
@@ -210,9 +146,6 @@ class MatterSim:
 
     def close(self) -> None:
         """Drop the current emulation."""
-        for tester, machine_name in self._uart_testers:
-            _unregister_uart_tester(tester, machine_name)
-        self._uart_testers.clear()
         for tester, machine_name in self._uart_testers:
             _unregister_uart_tester(tester, machine_name)
         self._uart_testers.clear()
