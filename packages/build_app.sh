@@ -364,7 +364,7 @@ fi
 [[ -n "${PROJECT_PATH}" ]] || die "could not find ${PROJECT} under ${MATTER_APP}"
 PROJECT="$(basename "${PROJECT_PATH}")"
 
-APP_DIR="$(dirname "${PROJECT_PATH}")"
+APP_DIR="$(cd "$(dirname "${PROJECT_PATH}")" && pwd)"
 if [[ "${PROJECT}" == *.slcw ]]; then
   PROJECT_BASE="${PROJECT%.slcw}"
   PROJECT_FLAG="-w"
@@ -388,10 +388,14 @@ fi
 echo "App dir: ${APP_DIR}"
 echo "Project: ${PROJECT}  board: ${BOARD}  out: ${OUT_DIR}"
 
+if [[ -n "${PKG_LOCK}" ]]; then
+  [[ -f "${PKG_LOCK}" ]] || die "pkg.lock not found: ${PKG_LOCK}"
+  PKG_LOCK="$(cd "$(dirname "${PKG_LOCK}")" && pwd)/$(basename "${PKG_LOCK}")"
+fi
+
 cd "${APP_DIR}"
 
 if [[ -n "${PKG_LOCK}" ]]; then
-  [[ -f "${PKG_LOCK}" ]] || die "pkg.lock not found: ${PKG_LOCK}"
   echo "Applying CI pkg.lock from ${PKG_LOCK}"
   # Keep local Matter package version from this build; pin everything else.
   python3 - "${PKG_LOCK}" "${APP_DIR}/pkg.lock" "${MATTER_PACKAGE_VERSION}" <<'PY'
