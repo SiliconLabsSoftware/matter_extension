@@ -110,7 +110,7 @@ python3 renode_integration/harness/commissioning_test.py \
   --matter-elf /path/to/matter_thread_soc_lighting_app_freertos.out
 ```
 
-`--bundle-dir` defaults to `renode_integration/out/bundle`. Exit code `0` means commissioning and
+The harness uses the assembled bundle at `renode_integration/out/bundle`. Exit code `0` means commissioning and
 toggle succeeded. Device logs are on stdout from `test_lib`.
 
 ### Rebuilding artifacts (maintainers)
