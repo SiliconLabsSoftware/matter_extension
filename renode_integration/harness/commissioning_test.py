@@ -8,7 +8,9 @@ import shutil
 import sys
 from pathlib import Path
 
-from matter_sim import DEFAULT_BUNDLE, MatterSim
+from matter_sim import DEFAULT_BUNDLE, DEFAULT_UART_TIMEOUT_S, MatterSim, run_shell
+
+import test_lib
 
 NODE_ID = 101
 ENDPOINT = 1
@@ -32,24 +34,24 @@ def main() -> int:
     try:
         shutil.copyfile(matter_elf, bundle_dir / "matter.out")
         sim.load("matter-sim.resc")
-        sim.soc_console()
-        console = sim.hub_console()
-        console.write_line("")
-        console.wait_for(r"#\s*$")
+        sim.soc_uart()
+        hub = sim.hub_uart()
+        test_lib.write_line(hub, "")
+        test_lib.wait_for(hub, r"#\s*$", timeout=DEFAULT_UART_TIMEOUT_S)
 
         pair_cmd = (
             f'chip-tool pairing ble-thread {NODE_ID} '
             f'"hex:$(cat /tmp/thread-dataset.hex)" {PASSCODE} {DISCRIMINATOR}'
         )
         print(f"Running: {pair_cmd}")
-        pair_rc, _pair_out = console.run(pair_cmd, timeout_s=COMMISSION_TIMEOUT_S)
+        pair_rc, _pair_out = run_shell(hub, pair_cmd, timeout_s=COMMISSION_TIMEOUT_S)
         if pair_rc != 0:
             print(f"commissioning failed with exit code {pair_rc}", file=sys.stderr)
             return pair_rc
 
         toggle_cmd = f"chip-tool onoff toggle {NODE_ID} {ENDPOINT}"
         print(f"Running: {toggle_cmd}")
-        toggle_rc, _toggle_out = console.run(toggle_cmd, timeout_s=TOGGLE_TIMEOUT_S)
+        toggle_rc, _toggle_out = run_shell(hub, toggle_cmd, timeout_s=TOGGLE_TIMEOUT_S)
         if toggle_rc != 0:
             print(f"toggle failed with exit code {toggle_rc}", file=sys.stderr)
             return toggle_rc
