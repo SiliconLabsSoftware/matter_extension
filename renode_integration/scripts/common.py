@@ -12,7 +12,7 @@ RENODE_INTEGRATION_DIR = os.path.dirname(SCRIPT_DIR)
 REPO_ROOT = os.path.dirname(RENODE_INTEGRATION_DIR)
 MANIFEST_PATH = os.path.join(RENODE_INTEGRATION_DIR, "sim-manifest.json")
 CACHE_DIR = os.path.join(RENODE_INTEGRATION_DIR, ".cache")
-BUNDLE_VERSION = "v0"
+BUNDLE_VERSION = "v1"
 
 
 def bundle_dir():
