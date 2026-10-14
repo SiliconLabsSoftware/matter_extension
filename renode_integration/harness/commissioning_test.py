@@ -20,11 +20,10 @@ TOGGLE_TIMEOUT_S = 300
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Matter Renode commissioning smoke test")
-    parser.add_argument("--bundle-dir", type=Path, default=DEFAULT_BUNDLE)
     parser.add_argument("--matter-elf", type=Path, required=True)
     args = parser.parse_args()
 
-    bundle_dir = args.bundle_dir.resolve()
+    bundle_dir = DEFAULT_BUNDLE.resolve()
     matter_elf = args.matter_elf.resolve()
     if not matter_elf.is_file():
         raise FileNotFoundError(matter_elf)
