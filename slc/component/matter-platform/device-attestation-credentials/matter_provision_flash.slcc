@@ -42,6 +42,7 @@ include:
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageFlash.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCommon.cpp
 
 library:
   - path: third_party/matter_support/provision/libs/libProvisionFlash-efr32mg24.a

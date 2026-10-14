@@ -87,13 +87,8 @@ def artifacts_already_uploaded(workflow_info, sqa):
     Returns:
         bool: True if artifacts are already uploaded, False otherwise
     """
-    ubai_artifact = search_file_in_ubai(
-        workflow_info['branch_name'],
-        workflow_info['build_number'],
-        sqa,
-        target=workflow_info.get('package_version', 'matter'),
-    )
-    return True if len(ubai_artifact) > 0 else False
+    ubai_artifact = search_file_in_ubai(workflow_info['branch_name'], workflow_info['build_number'], sqa, target=workflow_info.get('package_version', 'matter'))
+    return bool(ubai_artifact)
 
 def process_artifacts(workflow_info, sqa):
     """
