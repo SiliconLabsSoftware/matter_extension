@@ -631,11 +631,6 @@ def buildStartedOnThursday() {
     return buildStartedOnWeekday(Calendar.THURSDAY)
 }
 
-def shouldUploadSqaArtifacts() {
-    return env.BRANCH_NAME.startsWith("SL_compatibility") ||
-        (env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday())
-}
-
 def shouldTriggerSqaRegression() {
     return env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday()
 }
