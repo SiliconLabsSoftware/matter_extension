@@ -56,7 +56,6 @@ cd renode_integration
 brew install oras    # macOS
 gh auth login
 python3 scripts/fetch_bundle.py
-cp /path/to/matter/app/binaries/<app>.out out/bundle/matter.out
 ```
 
 The lighting ELF must match the SoC platform loaded in `resc/matter-sim.resc` (default `brd4187c`). For another board, change
@@ -65,8 +64,11 @@ Only **MG24**, **MG26**, and **SixG301** have been tested in this simulation so 
 
 ### Manual test with Renode CLI (resc)
 
+Copy your app binary into the bundle as `matter.out`, then start Renode:
+
 ```sh
-cd renode_integration/out/bundle
+cp /path/to/matter/app/binaries/<app>.out out/bundle/matter.out
+cd out/bundle
 ./renode/renode -e '$matter_elf=@'"$(pwd)"'/matter.out' resc/matter-sim.resc
 ```
 
