@@ -7,16 +7,13 @@ import argparse
 import sys
 from pathlib import Path
 
-from matter_sim import MatterSim, resolve_renode
+from matter_sim import DEFAULT_BUNDLE, DEFAULT_UART_TIMEOUT_S, MatterSim, login_root, resolve_renode
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-INTEGRATION_DIR = SCRIPT_DIR.parent
-DEFAULT_BUNDLE = INTEGRATION_DIR / "out" / "bundle"
+import test_lib
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Generate Matter Renode checkpoint")
-    parser.add_argument("--bundle-dir", type=Path, default=DEFAULT_BUNDLE)
     parser.add_argument(
         "--output",
         type=Path,
@@ -25,7 +22,7 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    bundle_dir = args.bundle_dir.resolve()
+    bundle_dir = DEFAULT_BUNDLE.resolve()
     checkpoint = args.output or (bundle_dir / "linux-booted-thread.save")
     resc = bundle_dir / "resc" / "matter-sim-full.resc"
     if not resc.is_file():
@@ -36,11 +33,11 @@ def main() -> int:
     sim = MatterSim(bundle_dir)
     try:
         sim.load("matter-sim-full.resc")
-        console = sim.hub_console()
-        console.wait_for(r"matter-services: READY")
-        console.login_root()
-        console.write_line("matter-thread-init")
-        console.wait_for(r"matter-thread-init: READY", timeout_s=180)
+        hub = sim.hub_uart()
+        test_lib.wait_for(hub, r"matter-services: READY", timeout=DEFAULT_UART_TIMEOUT_S)
+        login_root(hub)
+        test_lib.write_line(hub, "matter-thread-init")
+        test_lib.wait_for(hub, r"matter-thread-init: READY", timeout=180)
         sim.save(checkpoint)
         print(f"Saved checkpoint: {checkpoint}")
 
