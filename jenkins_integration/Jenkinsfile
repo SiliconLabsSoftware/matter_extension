@@ -325,7 +325,10 @@ pipeline
         stage('Promote Matter Packages to SQA') {
             // SiliconLabsInternal/action-conan-promote@v2 via uv + JFrog CLI
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression {
+                    env.BRANCH_NAME.startsWith("SL_compatibility") ||
+                    env.BRANCH_NAME.startsWith("release_")
+                }
             }
             steps {
                 script {
