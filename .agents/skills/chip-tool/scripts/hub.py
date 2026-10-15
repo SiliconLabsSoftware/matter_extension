@@ -34,14 +34,27 @@ HUB_SCRIPT = "python3 .agents/skills/chip-tool/scripts/hub.py"
 
 # Shown when config is missing or SSH key auth fails
 HUB_SETUP_STEPS = f"""\
-One-time setup (user runs in a terminal, agent must not):
-  1. ssh ubuntu@HOST
-  2. Install your SSH public key on the hub (same HOST):
-       Linux/macOS: ssh-copy-id ubuntu@HOST
-       Windows (OpenSSH): ssh-copy-id ubuntu@HOST if available, else append your
-       public key to ~ubuntu/.ssh/authorized_keys on the Pi
-  3. {HUB_SCRIPT} discover --host HOST
+One-time setup (user runs in a terminal, agent must not). Use a hub-only key, not a default key used for other purposes.
+
+  1. ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_matter_hub -C matter-hub
+     If the key has a passphrase: ssh-add ~/.ssh/id_ed25519_matter_hub
+
+  2. Add to ~/.ssh/config (HOST = Matter Hub IP):
+       Host HOST
+         User ubuntu
+         IdentityFile ~/.ssh/id_ed25519_matter_hub
+         IdentitiesOnly yes
+
+  3. Install your SSH public key on the hub (same HOST): 
+        Linux/macOS: ssh-copy-id -i ~/.ssh/id_ed25519_matter_hub.pub ubuntu@HOST
+        Windows: same if available, or append the .pub line to ~ubuntu/.ssh/authorized_keys on the Pi.
+  
+  4. Confirm SSH key login works (shouldn't ask for a password):
+        ssh ubuntu@HOST exit
+
+  5. {HUB_SCRIPT} discover --host HOST
      (on Windows, use python instead of python3 if needed)
+    
 Replace HOST with the Matter Hub IP.
 """
 
