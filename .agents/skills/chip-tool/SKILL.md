@@ -21,7 +21,7 @@ Matter Hub access is a **one-time manual setup by the user**. The agent does **n
 Before commissioning or `run`, call `hub.py check` once. If it fails (non-zero exit) with messages such as `No Matter Hub host in ~/.silabs/matter-hub.json` or `Permission denied`:
 
 1. Stop the chip-tool workflow (no commission, no `run`, no retries with network tools).
-2. Give the user the [one-time setup](#one-time-hub-setup-user-not-agent) block below. Do not improvise discovery.
+2. Give the user the [one-time setup](#one-time-hub-setup-user-not-agent) steps verbatim. Do not improvise discovery or guess HOST.
 3. Wait until the user confirms setup is done, then run `check` again.
 
 Only the **user** writes the hub config: `hub.py discover --host HOST` after SSH key setup. The agent sends the user **HOST** only inside the setup instructions, it does not run `discover` itself.
@@ -68,23 +68,13 @@ Hub address: sole source is `matter-hub.json` under the Silabs config directory 
 
 ## One-time hub setup (user, not agent)
 
-Copy this block to the user when `hub.py` reports the hub is not configured or auth fails:
+Canonical step text is `HUB_SETUP_STEPS` in [scripts/hub.py](scripts/hub.py). The agent must **not** paraphrase it or paste Python source (no `f"""`, `{HUB_SCRIPT}`, or escapes).
 
-```text
-Matter Hub one-time setup (run in your terminal):
+**How to give setup steps to the user:** Run `hub.py check` (or any hub command that fails for missing config or SSH auth). Send the setup section from **stderr** verbatim (after the one-line reason). `print_user_setup` in `hub.py` emits the same text as `HUB_SETUP_STEPS`.
 
-  1. ssh ubuntu@HOST
-  2. Install your SSH public key on the hub (same HOST), for example:
-       Linux/macOS: ssh-copy-id ubuntu@HOST
-       Windows (OpenSSH): ssh-copy-id ubuntu@HOST if available, or add your
-       public key to ~ubuntu/.ssh/authorized_keys on the Pi
-  3. python3 .agents/skills/chip-tool/scripts/hub.py discover --host HOST
-     (use python instead of python3 on Windows if needed)
+The user replaces `HOST` with their Matter Hub IP. The agent does **not** run `discover` or choose HOST.
 
-HOST = Pi IP
-```
-
-The agent never types the hub password (`BatchMode=yes`). On `Permission denied`, send the block above and stop. No `sshpass`, no password in chat.
+Dedicated SSH key for the hub only (not GitHub/corporate defaults). `hub.py` uses `BatchMode=yes` (no password prompts). On `Permission denied`, stop after sending setup text. No `sshpass`, no password in chat.
 
 `discover` without `--host` only prints the saved host from JSON (user convenience). It does not update the file.
 
@@ -128,7 +118,7 @@ If the user omits node id, read last id from the Pi with `hub.py show-node-id` o
 
 After the Matter app is built, flashed, and advertising:
 
-1. `check` (if it fails, send one-time setup block and stop)
+1. `check` (if it fails, send stderr setup text verbatim and stop)
 2. `dataset` (or `start-thread` only if requested)
 3. `commission-thread` with credentials from device logs if not defaults
 4. `run` for cluster commands
