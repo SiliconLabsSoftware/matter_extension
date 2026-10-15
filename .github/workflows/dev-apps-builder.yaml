@@ -1,6 +1,10 @@
 name: Build Dev apps
 
 on:
+    pull_request:
+        branches:
+            - main
+            - "release_*"
     workflow_dispatch:
         inputs:
             build-type:
