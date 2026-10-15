@@ -112,8 +112,14 @@ test comes from the PR.
 
 ## Nightly CI (resolve + refresh)
 
-Triggered by `.github/workflows/trigger-matter-packages-validation.yaml` with
-`use_lockfile=false`.
+Lock refresh runs only on `release_2.10-1.6.1`:
+
+- Nightly dispatch from `.github/workflows/trigger-matter-packages-validation.yaml`
+  with `use_lockfile=false`.
+- A push to `release_2.10-1.6.1`.
+
+Pushes to other branches (including test branches) install the existing locks
+and do not open a refresh pull request.
 
 Flow:
 
@@ -126,8 +132,9 @@ Flow:
    - Copies the produced `pkg.lock` to `.github/pkg-manifest/pkg.lock`.
    - Runs `pkg_lock_to_conan_lock.py` to refresh `conan.lock` and
      `conanfile.txt`.
-   - Commits and pushes the three files on the branch that was dispatched
-     (for example `release_2.10-1.6.1`).
+   - Opens a pull request (via `silabs-matter-ci-bot`) with the three files
+     against the dispatched branch (for example `release_2.10-1.6.1`).
+     Reuses `automation/pkg-manifest-lock-<branch>` if a refresh PR is already open.
 
 If nightly fails, the previous committed locks are left unchanged, so PRs keep
 using the last green pin set.
@@ -163,7 +170,7 @@ Always convert after editing or replacing `pkg.lock`. Never hand-edit
 
 | Name | Purpose |
 | --- | --- |
-| Job `contents: write` + `GITHUB_TOKEN` | Nightly commit/push of refreshed locks (branch protection may require a bot PAT). |
+| `SILABSSW_MATTER_CI_BOT_APP_ID` / `SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY` | Nightly lock refresh PR (`silabs-matter-ci-bot`), same as SDK submodule bump. |
 
 Remote used by CI (same as `create-and-cache-matter-packages` / `install-tools`; no Artifactory login):
 

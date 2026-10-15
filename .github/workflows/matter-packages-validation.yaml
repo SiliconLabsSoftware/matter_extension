@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - release_2.10-1.6.1
-      - feature/package_manager_implementation_phase_2
+      - feature/package_manager_implementation_phase_2_lock
   workflow_dispatch:
     inputs:
       package_version:
@@ -48,10 +48,16 @@ jobs:
         id: mode
         run: |
           set -euo pipefail
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "use-lockfile=true" >> "$GITHUB_OUTPUT"
+          # Refresh (unlocked) only for release_2.10-1.6.1:
+          # push on that branch, or nightly/manual dispatch with use_lockfile=false.
+          ref="${{ github.ref_name }}"
+          event="${{ github.event_name }}"
+          if [[ "$ref" == "release_2.10-1.6.1" && "$event" == "push" ]]; then
+            echo "use-lockfile=false" >> "$GITHUB_OUTPUT"
+          elif [[ "$ref" == "release_2.10-1.6.1" && "$event" == "workflow_dispatch" && "${{ inputs.use_lockfile }}" == "false" ]]; then
+            echo "use-lockfile=false" >> "$GITHUB_OUTPUT"
           else
-            echo "use-lockfile=${{ inputs.use_lockfile }}" >> "$GITHUB_OUTPUT"
+            echo "use-lockfile=true" >> "$GITHUB_OUTPUT"
           fi
           echo "use-lockfile=$(grep '^use-lockfile=' "$GITHUB_OUTPUT" | cut -d= -f2)"
 
@@ -152,11 +158,12 @@ jobs:
 
   update-ci-lockfile:
     name: Update CI pkg.lock and conan.lock
-    if: ${{ always() && needs.resolve-deps-mode.outputs.use-lockfile == 'false' && needs.build-dev-apps.result == 'success' && (needs.ota-size-check.result == 'success' || needs.ota-size-check.result == 'skipped') }}
+    if: ${{ always() && github.ref_name == 'release_2.10-1.6.1' && needs.resolve-deps-mode.outputs.use-lockfile == 'false' && needs.build-dev-apps.result == 'success' && (needs.ota-size-check.result == 'success' || needs.ota-size-check.result == 'skipped') }}
     needs: [resolve-deps-mode, matter-packages, build-dev-apps, ota-size-check]
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
       actions: write
     steps:
       - name: Checkout
@@ -202,17 +209,38 @@ jobs:
           echo "Updated ${LOCK_DIR}/pkg.lock and ${LOCK_DIR}/conan.lock"
           wc -l "${LOCK_DIR}/pkg.lock" "${LOCK_DIR}/conan.lock"
 
-      - name: Commit updated lockfiles
-        run: |
-          set -euo pipefail
-          git config user.name "matter-ci-bot"
-          git config user.email "matter-ci-bot@users.noreply.github.com"
-          git add .github/pkg-manifest/pkg.lock \
-                  .github/pkg-manifest/conan.lock \
-                  .github/pkg-manifest/conanfile.txt
-          if git diff --staged --quiet; then
-            echo "No lockfile changes"
-            exit 0
-          fi
-          git commit -m "NOJIRA: Refresh CI pkg-manifest locks from nightly slt resolve"
-          git push
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Mask the generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+
+      - name: Create lock refresh pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          branch: automation/pkg-manifest-lock-${{ github.ref_name }}
+          base: ${{ github.ref_name }}
+          delete-branch: true
+          title: "NOJIRA: Refresh CI pkg-manifest locks"
+          commit-message: "NOJIRA: Refresh CI pkg-manifest locks from nightly slt resolve"
+          author: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          committer: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          add-paths: |
+            .github/pkg-manifest/pkg.lock
+            .github/pkg-manifest/conan.lock
+            .github/pkg-manifest/conanfile.txt
+          body: |
+            Auto-generated after successful unlocked Packages Validation.
+
+            - Source run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            - Mode: `use_lockfile=false` (nightly resolve)
+
+            Updates:
+            - `.github/pkg-manifest/pkg.lock`
+            - `.github/pkg-manifest/conan.lock`
+            - `.github/pkg-manifest/conanfile.txt`
