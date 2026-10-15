@@ -1,0 +1,110 @@
+name: Install package manifest
+description: >
+  Restore Matter packages. In locked mode, install CI Conan lock derived from
+  SLT pkg.lock, then install local matter_app. Also exports CI_PKG_LOCK for
+  build_app.sh (slt --check-updates=false).
+
+inputs:
+  package-version:
+    description: Version of matter_app to install from the restored Matter cache
+    required: true
+  conan-cache-key:
+    description: Cache key created by the Matter package producer
+    required: true
+  use-lockfile:
+    description: If true, conan install --lockfile + export CI_PKG_LOCK
+    required: false
+    default: "true"
+  fail-on-cache-miss:
+    description: Fail when the Matter package cache does not exist
+    required: false
+    default: "true"
+  download-parallel:
+    description: Maximum parallel Conan downloads after restore
+    required: false
+    default: "1"
+  lockfile-dir:
+    description: Directory with pkg.lock, conan.lock, conanfile.txt
+    required: false
+    default: .github/pkg-manifest
+  prerelease-remote-url:
+    description: Conan prerelease remote URL
+    required: false
+    default: https://conan-prerelease.silabs.net/
+
+outputs:
+  cache-hit:
+    description: Whether the Matter package cache was restored
+    value: ${{ steps.restore.outputs.cache-hit }}
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare Conan home
+      shell: bash
+      run: |
+        set -euo pipefail
+        : "${CONAN_HOME:?CONAN_HOME must be set (run cache-tools first)}"
+        rm -rf "${CONAN_HOME}"
+        mkdir -p "${CONAN_HOME}"
+
+    - name: Restore Matter package cache
+      id: restore
+      uses: actions/cache/restore@v6
+      with:
+        path: ${{ env.CONAN_HOME }}
+        key: ${{ inputs.conan-cache-key }}
+        fail-on-cache-miss: ${{ inputs.fail-on-cache-miss }}
+
+    - name: Configure Conan
+      shell: bash
+      run: |
+        set -euo pipefail
+        mkdir -p conan-settings
+        printf 'core.download:parallel=%s\n' "${{ inputs.download-parallel }}" > conan-settings/global.conf
+        conan config install conan-settings --type dir
+        rm -rf conan-settings
+
+        conan remote add -f conan-prerelease "${{ inputs.prerelease-remote-url }}"
+        conan remote list
+
+    - name: Install CI Conan lockfile
+      if: ${{ inputs.use-lockfile == 'true' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        LOCK_DIR="${{ inputs.lockfile-dir }}"
+        [[ -f "${LOCK_DIR}/conan.lock" ]] || {
+          echo "Missing ${LOCK_DIR}/conan.lock (generate from pkg.lock)"
+          exit 1
+        }
+        [[ -f "${LOCK_DIR}/conanfile.txt" ]] || {
+          echo "Missing ${LOCK_DIR}/conanfile.txt"
+          exit 1
+        }
+        [[ -f "${LOCK_DIR}/pkg.lock" ]] || {
+          echo "Missing ${LOCK_DIR}/pkg.lock"
+          exit 1
+        }
+
+        echo "Installing locked packages from ${LOCK_DIR}/conan.lock"
+        conan install "${LOCK_DIR}" \
+          --lockfile="${LOCK_DIR}/conan.lock" \
+          -r conan-prerelease
+
+        ABS_PKG_LOCK="$(cd "${LOCK_DIR}" && pwd)/pkg.lock"
+        echo "CI_PKG_LOCK=${ABS_PKG_LOCK}" >> "${GITHUB_ENV}"
+        echo "Using CI pkg.lock for slt: ${ABS_PKG_LOCK}"
+
+    - name: Install Matter app package
+      shell: bash
+      run: |
+        set -euo pipefail
+        # Locked CI: do not re-float deps after conan --lockfile install.
+        # Nightly (use-lockfile=false): allow normal resolve.
+        CHECK_UPDATES="true"
+        if [[ "${{ inputs.use-lockfile }}" == "true" ]]; then
+          CHECK_UPDATES="false"
+        fi
+        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan \
+          --check-updates="${CHECK_UPDATES}"
