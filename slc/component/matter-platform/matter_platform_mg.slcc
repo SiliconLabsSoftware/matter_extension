@@ -70,3 +70,21 @@ requires:
     condition: [device_series_3]
   - name: hal_emu
     condition: [device_series_3]
+
+# MATTER-7181: concurrent SixG301 GCC uses the Matter RAIL archive.
+# Other configurations keep the SiSDK rail_lib_multiprotocol component.
+recommends:
+  - id: matter_rail_lib_multiprotocol_sixg301
+    vendor: silabs
+    condition: [matter_zigbee_concurrent, device_generic_family_sixx301]
+    unless: [device_is_module]
+  - id: rail_lib_multiprotocol
+    vendor: silabs
+    unless: [matter_zigbee_concurrent]
+  - id: rail_lib_multiprotocol
+    vendor: silabs
+    condition: [matter_zigbee_concurrent]
+    unless: [device_generic_family_sixx301]
+  - id: rail_lib_multiprotocol
+    vendor: silabs
+    condition: [matter_zigbee_concurrent, device_generic_family_sixx301, toolchain_gcc, device_is_module]
