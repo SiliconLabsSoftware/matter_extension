@@ -5,68 +5,9 @@ def commit_sha = ""
 def run_number = ""
 def workflow_id = ""
 def build_description = ""
-def commit_change_summary = ""
 
 // svc_matter credential ID.
 def sonarqubeTokenCredentialId = 'sonarqube_token'
-
-def combineSlackSummary(String commitSummary, String extra) {
-    def c = commitSummary?.trim() ?: ''
-    def e = extra?.trim() ?: ''
-    if (c && e) {
-        return "${c}\n\n---\n\n${e}"
-    }
-    return c ?: e ?: ''
-}
-
-def sendSlackNotification(String messageType, String status, String summary = "", String color = "", String commitSha = "", String runNumber = "", String workflowId = "") {
-    def currentTime = new Date().format("yyyy-MM-dd HH:mm:ss", TimeZone.getTimeZone('UTC'))
-    def statusEmoji = status == "PASS" ? "✅" : "❌"
-    def alertEmoji = status == "PASS" ? "🎉" : "🚨"
-    
-    def notificationColor = color ?: (status == "PASS" ? "good" : "danger")
-    def reportedCommitSha = env.GIT_COMMIT ?: commitSha
-    
-    def message = """${alertEmoji} *${messageType.toUpperCase()}* ${alertEmoji}
-                    
-*Repository:* Matter Extension
-*Branch:* `${env.BRANCH_NAME}`
-*Build Number:* #${env.BUILD_NUMBER}
-*Status:* ${statusEmoji} ${status}
-*Timestamp:* ${currentTime} UTC
-
-📋 *Details:*"""
-    
-    if (reportedCommitSha) {
-        message += "\n• *Commit SHA:* `${reportedCommitSha}`"
-    }
-    if (runNumber) {
-        message += "\n• *GitHub Workflow Run:* #${runNumber}"
-    }
-    if (workflowId) {
-        message += "\n• *Workflow ID:* ${workflowId}"
-    }
-    
-    if (summary && summary.trim()) {
-        message += "\n\n📊 *Summary:*\n${summary}"
-    }
-    
-    message += "\n\n🔗 *Links:*"
-    message += "\n• <${env.BUILD_URL}|Jenkins Build>"
-    message += "\n• <${env.BUILD_URL}console|Console Output>"
-    
-    if (reportedCommitSha) {
-        message += "\n• <https://github.com/SiliconLabsSoftware/matter_extension/commit/${reportedCommitSha}|GitHub Commit>"
-    }
-    
-    if (status == "FAIL") {
-        message += "\n\n⚠️ *Action Required:* Please investigate and resolve the issue."
-    }
-    
-    slackSend(channel: 'matter-release-build-notifications',
-              color: notificationColor,
-              message: message)
-}
 
 pipeline
 {
@@ -78,7 +19,6 @@ pipeline
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
-                    commit_change_summary = pipelineFunctions.buildCommitChangeSummaryForSlack()
 
                     // Coverage-only path: wait for GHA "Build Dev apps" / Build Coverage
                     // artifact (lcov-report-*-coverage). No app binaries / UBAI upload.
@@ -117,6 +57,18 @@ pipeline
                         '''
                         archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: false, fingerprint: false
                     }
+
+                    // sonar.sources points at third_party/matter_sdk/{src,examples}; submodule
+                    // must be present in the workspace for sonar-scanner.
+                    withCredentials([usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')]) {
+                        sh '''
+                            git -c credential.helper='!f() { [ -n "$GITHUB_ACCESS_TOKEN" ] && { echo "username=x-access-token"; echo "password=$GITHUB_ACCESS_TOKEN"; }; }; f' \
+                                submodule update --init third_party/matter_sdk
+                            test -d third_party/matter_sdk/src
+                            test -d third_party/matter_sdk/examples
+                        '''
+                    }
+
                     withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
                         sh '''
                             docker run --rm \
@@ -128,15 +80,6 @@ pipeline
                                 -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
                         '''
                     }
-                }
-            }
-        }
-    }
-    post {
-        failure {
-            script {
-                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("test/"))) {
-                    sendSlackNotification("Pipeline Failure", "FAIL", combineSlackSummary(commit_change_summary, "Pipeline execution failed. Please check the console output for details."), "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
                 }
             }
         }

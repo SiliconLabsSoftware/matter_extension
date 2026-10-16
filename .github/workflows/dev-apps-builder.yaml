@@ -1,9 +1,6 @@
 name: Build Dev apps
 
 on:
-    push:
-        branches:
-            - test/sonarqube-upload
     pull_request:
         branches:
             - main
