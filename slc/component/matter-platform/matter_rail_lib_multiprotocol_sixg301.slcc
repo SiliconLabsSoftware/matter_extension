@@ -23,8 +23,6 @@ requires:
 recommends:
 - id: rail_lib_multiprotocol_alpha_chips
   vendor: silabs
-- id: rail_lib_multiprotocol_internal_chips
-  vendor: silabs
 define:
 - name: SL_RAIL_LIB_MULTIPROTOCOL_SUPPORT
   value: '1'
