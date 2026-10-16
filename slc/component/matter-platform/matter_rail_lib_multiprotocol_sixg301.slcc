@@ -32,14 +32,11 @@ library:
   - device_generic_family_sixx301
   - matter_zigbee_concurrent
   unless:
-  - device_is_module
   - toolchain_llvm
 - path: slc/component/sdk-content/simplicity-sdk/rail_library/autogen/librail_release/librail_multiprotocol_sixg301_llvm_release.a
   condition:
   - toolchain_llvm
   - device_generic_family_sixx301
   - matter_zigbee_concurrent
-  unless:
-  - device_is_module
 ui_hints:
   visibility: never
