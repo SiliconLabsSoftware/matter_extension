@@ -1,6 +1,9 @@
 name: Trigger Matter Packages Validation on Non-Default Branches
 
 on:
+  push:
+    branches:
+      - test/feature/package_manager_implementation_phase_2_branch_run
   schedule:
     - cron: "5 0 * * *" # 8:05 pm EDT daily
 
@@ -9,12 +12,29 @@ permissions:
   contents: read
 
 jobs:
+  resolve-branches:
+    name: Resolve target branches
+    runs-on: ubuntu-latest
+    outputs:
+      branches: ${{ steps.set.outputs.branches }}
+    steps:
+      - name: Set branches for event
+        id: set
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo 'branches=["${{ github.ref_name }}"]' >> "$GITHUB_OUTPUT"
+          else
+            echo 'branches=["release_2.10-1.6.1"]' >> "$GITHUB_OUTPUT"
+          fi
+
   trigger_matter_packages_validation:
-    name: Trigger Daily Matter Packages Validation
+    name: Trigger Matter Packages Validation
+    needs: resolve-branches
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        branch: [release_2.10-1.6.1]
+        branch: ${{ fromJSON(needs.resolve-branches.outputs.branches) }}
 
     steps:
       - name: Checkout repository
@@ -27,11 +47,18 @@ jobs:
         id: check_changes
         env:
           BRANCH: ${{ matrix.branch }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
+          if [[ "$EVENT_NAME" == "push" ]]; then
+            echo "Push event — always trigger."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           commit_count=$(git rev-list --count --since="24 hours ago" HEAD 2>/dev/null || echo "0")
 
           echo "Commits in last 24 hours: $commit_count"
-          echo "has_changes=$([ "$commit_count" -gt 0 ] && echo "true" || echo "false")" >> $GITHUB_OUTPUT
+          echo "has_changes=$([ "$commit_count" -gt 0 ] && echo "true" || echo "false")" >> "$GITHUB_OUTPUT"
 
           if [ "$commit_count" -gt 0 ]; then
             echo "Found $commit_count commit(s) in the last 24 hours. Will trigger build."

@@ -107,7 +107,8 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/dev-apps-builder-pkg.yaml
     with:
-      build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
+      # full: release branch + phase-2 package-manager test branch
+      build-type: ${{ (github.ref_name == 'release_2.10-1.6.1' || github.ref_name == 'test/feature/package_manager_implementation_phase_2_branch_run') && 'full' || 'standard' }}
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
