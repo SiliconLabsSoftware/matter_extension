@@ -4,11 +4,6 @@ description: Install required tools and set environment variables.
 runs:
   using: "composite"
   steps:
-    - name: Set CONAN_HOME
-      shell: bash
-      run: |
-        echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
-
     - name: Install ZAP
       shell: bash
       run: |
@@ -16,11 +11,13 @@ runs:
         wget "https://github.com/project-chip/zap/releases/download/${ZAP_VERSION}/zap-linux-x64.zip"
         unzip zap-linux-x64.zip -d /tmp/zap-linux-x64
         rm zap-linux-x64.zip
-    
+
     - name: Setup SLT
       id: setup-action
       uses: SiliconLabsSoftware/action-setup-slt@v2
-    
+      with:
+        install-conan: true
+
     - name: Set Environment Variables
       shell: bash
       run: |
@@ -29,12 +26,12 @@ runs:
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.conan-path }}" >> $GITHUB_PATH
-    
+
     - name: Update SLT
       shell: bash
       run: |
         slt update --self
-    
+
     - name: Install slc-cli
       shell: bash
       run: |
