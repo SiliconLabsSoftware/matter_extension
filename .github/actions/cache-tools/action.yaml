@@ -39,6 +39,8 @@ runs:
                   /tmp/zap-linux-x64
                   /home/runner/.silabs/slt
                   /home/runner/.local/bin/slt
+                  /home/runner/.local/bin/conan
+                  /home/runner/.local/bin/conan_engine
               key: ${{ steps.compute-cache-key.outputs.cache-key }}
 
         - name: Set env and paths from cache
@@ -48,6 +50,7 @@ runs:
               echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
               echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
               echo "SLT_PATH=/home/runner/.local/bin/slt" >> $GITHUB_ENV
+              echo "SLT_CI=true" >> $GITHUB_ENV
               echo "/tmp/zap-linux-x64" >> $GITHUB_PATH
               echo "/home/runner/.silabs/slt/bin" >> $GITHUB_PATH
               echo "/home/runner/.local/bin" >> $GITHUB_PATH
@@ -83,4 +86,6 @@ runs:
                   /tmp/zap-linux-x64
                   /home/runner/.silabs/slt
                   /home/runner/.local/bin/slt
+                  /home/runner/.local/bin/conan
+                  /home/runner/.local/bin/conan_engine
               key: ${{ steps.compute-cache-key.outputs.cache-key }}
