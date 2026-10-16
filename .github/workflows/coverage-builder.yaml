@@ -113,8 +113,7 @@ jobs:
                       --include=src/ \
                       --gcov-ignore-parse-errors \
                       --merge-mode-functions=merge-use-line-min \
-                      --sonarqube=sonarqube-coverage.xml \
-                      --sonarqube-metric=line
+                      --sonarqube=sonarqube-coverage.xml
 
             - name: Stage coverage artifact
               shell: bash
