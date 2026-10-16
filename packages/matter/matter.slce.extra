@@ -236,6 +236,7 @@ components:
   - matter_power_source_configuration
   - matter_power_topology
   - matter_pressure_measurement
+  - matter_provision_channel
   - matter_provision_default
   - matter_provision_flash
   - matter_proximity_ranging
@@ -639,6 +640,7 @@ extra_files:
   - slc/component/matter-platform/config/matter_includes.slcc
   - slc/component/matter-platform/cpc/matter_cpc.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
+  - slc/component/matter-platform/device-attestation-credentials/matter_provision_channel.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_default.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_flash.slcc
   - slc/component/matter-platform/display/matter_default_lcd_config.slcc
