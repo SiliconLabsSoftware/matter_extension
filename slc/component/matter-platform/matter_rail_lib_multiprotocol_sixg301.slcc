@@ -1,8 +1,8 @@
 id: matter_rail_lib_multiprotocol_sixg301
 label: Matter RAIL Multiprotocol Library, SixG301
 description: >
-  SixG301 GCC multiprotocol RAIL library for concurrent Matter and Zigbee.
-  Provides rail_lib_multiprotocol so this archive is linked instead of the
+  SixG301 GCC and LLVM multiprotocol RAIL libraries for concurrent Matter and Zigbee.
+  Provides rail_lib_multiprotocol so these archives are linked instead of the
   SiSDK rail_lib_multiprotocol library. Temporary override for MATTER-7181.
 package: matter
 category: Platform|Radio
@@ -36,5 +36,12 @@ library:
   unless:
   - device_is_module
   - toolchain_llvm
+- path: slc/component/sdk-content/simplicity-sdk/rail_library/autogen/librail_release/librail_multiprotocol_sixg301_llvm_release.a
+  condition:
+  - toolchain_llvm
+  - device_generic_family_sixx301
+  - matter_zigbee_concurrent
+  unless:
+  - device_is_module
 ui_hints:
   visibility: never

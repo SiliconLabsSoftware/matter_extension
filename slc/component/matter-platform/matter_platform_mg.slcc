@@ -77,7 +77,7 @@ recommends:
   - id: matter_rail_lib_multiprotocol_sixg301
     vendor: silabs
     condition: [matter_zigbee_concurrent, device_series_3]
-    unless: [device_is_module, toolchain_llvm]
+    unless: [device_is_module]
   - id: rail_lib_multiprotocol
     vendor: silabs
     unless: [matter_zigbee_concurrent]
@@ -88,6 +88,3 @@ recommends:
   - id: rail_lib_multiprotocol
     vendor: silabs
     condition: [matter_zigbee_concurrent, device_series_3, device_is_module]
-  - id: rail_lib_multiprotocol
-    vendor: silabs
-    condition: [matter_zigbee_concurrent, device_series_3, toolchain_llvm]
