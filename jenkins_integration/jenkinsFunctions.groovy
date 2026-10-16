@@ -38,6 +38,21 @@ def download_coverage_artifact(workflow_id) {
     }
 }
 
+def resolve_coverage_workflow() {
+    withCredentials([
+        usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
+    ])
+    {
+        def logFile = "resolve_coverage_${env.BUILD_NUMBER}.log"
+        sh(script: """
+            bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/resolve_coverage_workflow.py --branch_name ${env.BRANCH_NAME} 2>&1 | tee '${logFile}'"
+        """)
+        def output = readFile(logFile).trim()
+        def result = parse_upload_artifacts_output(output)
+        return [commit_sha: result.commit_sha, run_number: result.run_number, workflow_id: result.workflow_id]
+    }
+}
+
 def run_code_size_analysis() {
     echo "Starting code size analysis for branch: ${env.BRANCH_NAME}"
 

@@ -4,8 +4,6 @@
 def commit_sha = ""
 def run_number = ""
 def workflow_id = ""
-def pr_number = ""
-def bypass_send_results_gh = ""
 def build_description = ""
 def commit_change_summary = ""
 
@@ -75,216 +73,61 @@ pipeline
     agent { node { label 'Build-Farm-Large' } }
     options { buildDiscarder(logRotator(artifactNumToKeepStr: '10')) }
     stages {
-        stage('Initialize') {
+        stage('Resolve Coverage Workflow') {
             steps {
                 script {
                     pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
                     echo "pipelineFunctions loaded: ${pipelineFunctions != null}"
-                    sisdk_build_number = sh(script: "git config -f .gitmodules --get submodule.third_party/simplicity_sdk.tag | sed 's/.*-//'", returnStdout: true).trim()
-                    wiseconnect_build_number = sh(script: "git config -f .gitmodules --get submodule.third_party/wifi_sdk.tag | sed 's/.*-//'", returnStdout: true).trim()
-                    build_description = "SISDK build number: ${sisdk_build_number}"
-                    build_description += "\nWiFi Extension build number: ${wiseconnect_build_number}"
-                    buildDescription(build_description)
                     commit_change_summary = pipelineFunctions.buildCommitChangeSummaryForSlack()
-                                    }
-            }
-        }
-        stage('Upload Artifacts') {
-            steps {
-                script {
-                    retry(9) {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            pipelineFunctions.actionWithRetry {
-                                def result = pipelineFunctions.upload_artifacts()
-                                commit_sha = result.commit_sha
-                                run_number = result.run_number
-                                workflow_id = result.workflow_id
-                                bypass_send_results_gh = result.bypass_send_results
-                                pr_number = result.pr_number
-                                echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
-                                build_description += "\nGitHub Workflow Run Number: ${run_number}"
-                                buildDescription(build_description)
 
-                                try{
-                                    pipelineFunctions.upload_zephyr_artifacts()
-                                } catch (e) {
-                                    unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
-                                }
-                            }
-                        }
-                    }
+                    // Coverage-only path: wait for GHA "Build Dev apps" / Build Coverage
+                    // artifact (lcov-report-*-coverage). No app binaries / UBAI upload.
+                    def result = pipelineFunctions.resolve_coverage_workflow()
+                    commit_sha = result.commit_sha
+                    run_number = result.run_number
+                    workflow_id = result.workflow_id
+                    echo "commit_sha: ${commit_sha}, run_number: ${run_number}, workflow_id: ${workflow_id}"
+                    build_description = "GitHub Workflow Run Number: ${run_number}\nWorkflow ID: ${workflow_id}"
+                    buildDescription(build_description)
                 }
             }
         }
-        stage('Coverage and Code Size') {
-            when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-            }
-            parallel {
-                stage('Code Coverage & Static Code Analysis') {
-                    when {
-                        expression { env.BRANCH_NAME == "main" }
-                    }
-                    steps {
-                        script {
-                            withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                                pipelineFunctions.actionWithRetry {
-                                    pipelineFunctions.download_coverage_artifact(workflow_id)
-                                }
-                                sh '''
-                                    if [ -f coverage/coverage.info ]; then
-                                        echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
-                                        ls -la coverage/
-                                        if [ -f coverage/sonarqube-coverage.xml ]; then
-                                            echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
-                                        else
-                                            echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
-                                        fi
-                                    fi
-                                '''
-                                archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
-                            }
-                            if (fileExists('coverage/sonarqube-coverage.xml')) {
-                                withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
-                                    sh '''
-                                        docker run --rm \
-                                            -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
-                                            -e SONAR_TOKEN="$SONAR_TOKEN" \
-                                            -v "$WORKSPACE:/usr/src" \
-                                            sonarsource/sonar-scanner-cli:11 \
-                                            -Dsonar.scm.disabled=true \
-                                            -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
-                                    '''
-                                }
-                            } else {
-                                echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
-                            }
-                        }
-                    }
-                }
-                stage('Code Size Analysis') {
-                    steps {
-                        script {
-                            withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                                pipelineFunctions.run_code_size_analysis()
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        stage('Execute CI Tests')
-        {
+        stage('Code Coverage & Static Code Analysis') {
             steps {
                 script {
-                    def parallelNodes = [:]
-                    if (pr_number != null) {
-                        branch_name = "PR-${pr_number}"
-                    } else {
-                        branch_name = env.BRANCH_NAME
-                    }
-                    parallelNodes['MG24 Lighting-App'] = {
+                    withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
                         pipelineFunctions.actionWithRetry {
-                            failed_tests_mg24 = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-thread-4187c-ci',
-                                '3251', 'lighting-app','thread','BRD4187C',"",
-                                branch_name, env.BUILD_NUMBER)
+                            pipelineFunctions.download_coverage_artifact(workflow_id)
                         }
+                        sh '''
+                            if [ -f coverage/coverage.info ]; then
+                                echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
+                                ls -la coverage/
+                            else
+                                echo "[ERROR] coverage.info missing after download" >&2
+                                ls -la coverage/ || true
+                                exit 1
+                            fi
+                            if [ -f coverage/sonarqube-coverage.xml ]; then
+                                echo "[SUCCESS] sonarqube-coverage.xml present"
+                            else
+                                echo "[ERROR] sonarqube-coverage.xml missing" >&2
+                                exit 1
+                            fi
+                        '''
+                        archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: false, fingerprint: false
                     }
-                    parallelNodes['SIWX Lighting-App'] = {
-                        pipelineFunctions.actionWithRetry {
-                            failed_tests_917 = pipelineFunctions.execute_sanity_tests(
-                                'gsdkMontrealNode','utf-matter-wifi-917soc-4338a-ci', '3249',
-                                'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
-                        }
+                    withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                        sh '''
+                            docker run --rm \
+                                -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
+                                -e SONAR_TOKEN="$SONAR_TOKEN" \
+                                -v "$WORKSPACE:/usr/src" \
+                                sonarsource/sonar-scanner-cli:11 \
+                                -Dsonar.scm.disabled=true \
+                                -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
+                        '''
                     }
-//                     Temp comment out due to SQA setup issues
-//                     parallelNodes['SiMG301 Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-//                                 '4878', 'lighting-app','thread','BRD4407A',"",
-//                                 branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
-
-                    parallelNodes.failFast = false
-                    parallel parallelNodes
-
-                    def totalFailedTests = 0
-                    def failedTestsSummary = []
-
-                    if (failed_tests_mg24 && failed_tests_mg24.failedCount > 0) {
-                        totalFailedTests += failed_tests_mg24.failedCount
-                        failedTestsSummary << "MG24: ${failed_tests_mg24.failedCount} failed tests - ${failed_tests_mg24.failedTests.join(', ')}"
-                    }
-
-                    if (failed_tests_917 && failed_tests_917.failedCount > 0) {
-                        totalFailedTests += failed_tests_917.failedCount
-                        failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
-                    }
-
-//                     Temp comment out due to SQA setup issues
-//                     if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
-//                         totalFailedTests += failed_tests_4407a.failedCount
-//                         failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
-//                     }
-
-                    def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
-                    def sqa_tests_summary = failedTestsSummary.isEmpty() ? "All tests passed successfully." : failedTestsSummary.join('\n')
-
-                    echo "SQA Tests Result: ${sqa_tests_result}"
-                    echo "SQA Tests Summary:\n${sqa_tests_summary}"
-
-                    echo "commit_sha: ${commit_sha}"
-                    if (!bypass_send_results_gh){
-                        pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
-                    }
-                    if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
-                        if (sqa_tests_result == "FAIL") {
-                            sendSlackNotification("SQA Tests Failed", "FAIL", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
-                            error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
-                        } else {
-                            sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
-                            echo "All tests passed successfully."
-                        }
-                    }
-                }
-            }
-        }
-        stage('Trigger SQA Smoke Pipeline')
-        {
-            when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
-            }
-            steps {
-                script {
-                    pipelineFunctions.trigger_sqa_pipelines("smoke")
-                }
-            }
-        }
-        stage('Upload SQA Artifacts') {
-            when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("SL_compatibility")}
-            }
-            steps {
-                script {
-                    retry(15) {
-                        withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                            def result = pipelineFunctions.upload_artifacts(sqa=true, commit_sha=commit_sha, workflow_id=workflow_id)
-                        }
-                    }
-                }
-            }
-        }
-        stage('Trigger SQA Regression Pipelines')
-        {
-            when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
-            }
-            steps {
-                script {
-                    pipelineFunctions.trigger_sqa_pipelines("regression")
                 }
             }
         }
@@ -292,7 +135,7 @@ pipeline
     post {
         failure {
             script {
-                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_"))) {
+                if ((env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME.startsWith("test/"))) {
                     sendSlackNotification("Pipeline Failure", "FAIL", combineSlackSummary(commit_change_summary, "Pipeline execution failed. Please check the console output for details."), "", "${commit_sha ?: ''}", "${run_number ?: ''}", "${workflow_id ?: ''}")
                 }
             }
