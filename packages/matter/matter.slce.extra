@@ -241,6 +241,7 @@ components:
   - matter_power_source_configuration
   - matter_power_topology
   - matter_pressure_measurement
+  - matter_provision_channel
   - matter_provision_default
   - matter_provision_flash
   - matter_proximity_ranging
@@ -378,8 +379,6 @@ extra_files:
   - packages/matter_app/pkg.slt
   - packages/remotes.json
   - provision.mattpconf
-  - provision/support/JLinkDevices.xml
-  - provision/support/efr32mg26/EFR32XG26.JLinkScript
   - requirements.txt
   - slc/apps/air_quality_sensor_app/thread/README.md
   - slc/apps/air_quality_sensor_app/thread/matter_thread_soc_air_quality_sensor_app_freertos.slcp
@@ -863,6 +862,7 @@ extra_files:
   - slc/component/matter-platform/buttons/matter_buttons.slcc
   - slc/component/matter-platform/config/matter_includes.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
+  - slc/component/matter-platform/device-attestation-credentials/matter_provision_channel.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_default.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_flash.slcc
   - slc/component/matter-platform/display/matter_default_lcd_config.slcc
@@ -1688,6 +1688,8 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-delegate.h
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server-callback.cpp
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server.h
+  - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/TestDoorLockLocalBufferCopy.cpp
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/CodegenIntegration.h
@@ -2837,6 +2839,7 @@ extra_files:
   - third_party/matter_sdk/src/app/icd/server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/icd/server/tests/ICDConfigurationDataTestAccess.h
   - third_party/matter_sdk/src/app/icd/server/tests/TestDefaultICDCheckInBackOffStrategy.cpp
+  - third_party/matter_sdk/src/app/icd/server/tests/TestICDCheckInSender.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDConfigurationData.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDManager.cpp
   - third_party/matter_sdk/src/app/icd/server/tests/TestICDMonitoringTable.cpp
@@ -3270,7 +3273,6 @@ extra_files:
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DISHALM_3_4.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DISHALM_3_5.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DISHALM_3_6.yaml
-  - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DLOG_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DRLK_2_1.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DRLK_2_10.yaml
   - third_party/matter_sdk/src/app/tests/suites/certification/Test_TC_DRLK_2_11.yaml
