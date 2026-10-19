@@ -31,7 +31,7 @@ runs:
           run: |
               echo "cache-key=silabs-zap-slt-tools-${{ runner.os }}-${{ runner.arch }}-${{ github.sha }}" >> $GITHUB_OUTPUT
 
-        - name: Restore ZAP and SLT tools cache
+        - name: Restore ZAP, SLT and Tools cache
           id: cache
           uses: actions/cache/restore@v5
           with:
@@ -47,7 +47,7 @@ runs:
           if: steps.cache.outputs.cache-hit == 'true'
           shell: bash
           run: |
-              echo "CONAN_HOME=~/.silabs/slt/installs/conan" >> $GITHUB_ENV
+              echo "CONAN_HOME=/home/runner/.silabs/slt/installs/conan" >> $GITHUB_ENV
               echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
               echo "SLT_PATH=/home/runner/.local/bin/slt" >> $GITHUB_ENV
               echo "SLT_CI=true" >> $GITHUB_ENV
@@ -78,7 +78,7 @@ runs:
           if: steps.cache.outputs.cache-hit != 'true'
           uses: ./.github/actions/install-tools
 
-        - name: Save ZAP and SLT tools cache
+        - name: Save ZAP, SLT and Tools cache
           if: steps.cache.outputs.cache-hit != 'true'
           uses: actions/cache/save@v5
           with:
