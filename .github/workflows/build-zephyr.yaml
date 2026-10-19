@@ -16,140 +16,44 @@ env:
   CHIP_LOG_TIMESTAMPS: false
 
 jobs:
-  zephyr-lighting-app:
-    name: Lighting App
-
-    runs-on: ubuntu-latest
-
-    container:
-      image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
-    env:
-      PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
+  prepare:
+    name: Prepare Zephyr builds
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      sdk-sha: ${{ steps.sdk.outputs.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           submodules: false
+          persist-credentials: false
 
-      - name: Mark repository as safe for Git
+      - name: Generate build matrix
+        id: matrix
         shell: bash
+        env:
+          BUILD_TYPE: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_')) && 'full' || 'standard' }}
         run: |
-          git config --global --add safe.directory '*'
+          set -euo pipefail
+          matrix="$(jq -ce --arg build_type "$BUILD_TYPE" '
+            .defaults as $defaults
+            | (.standard.default + (if $build_type == "full" then .full.default else [] end))
+            | map(. + {
+                id: (.board + "-" + .device + "-" + .variant),
+                toolchain: $defaults.toolchain,
+                arguments: ($defaults.arguments + .arguments)
+              })
+            | if length == 0
+                or length != (unique_by(.id) | length)
+                or length != (unique_by([.target, .out_artifact]) | length)
+              then error("Empty matrix or duplicate build/artifact")
+              else {include: .}
+              end
+          ' .github/silabs-builds-zephyr.json)"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
-      - name: Initialize matter_sdk submodule
-        shell: bash
-        run: |
-          git submodule update --init third_party/matter_sdk
-
-      - name: Checkout matter_sdk silabs submodules
-        shell: bash
-        run: |
-          cd third_party/matter_sdk
-          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
-
-      - name: Bootstrap
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
-        with:
-          platform: silabs_docker
-
-      - name: Build SiWx917 Zephyr Lighting App
-        shell: bash
-        run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
-
-      - name: Export SiWx917 Zephyr RPS
-        shell: bash
-        run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4338A
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps \
-             artifacts/lighting-app-zephyr/BRD4338A/matter_wifi_soc_lighting_app_zephyr.rps
-
-      - name: Build EFR32xG24 Zephyr Lighting App
-        shell: bash
-        run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
-
-      - name: Export EFR32xG24 Zephyr HEX
-        shell: bash
-        run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4187C
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
-             artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
-
-      - name: Upload Zephyr binary artifacts
-        uses: actions/upload-artifact@v7
-        with:
-          name: dev-artifacts-zephyr-lighting
-          path: artifacts/
-          if-no-files-found: error
-          overwrite: true
-          retention-days: 1
-
-  zephyr-all-devices:
-    name: all-devices-app (${{ matrix.board }} ${{ matrix.nickname }})
-    runs-on: ubuntu-24.04
-    env:
-      CCACHE_SLOPPINESS: time_macros
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - board: xg26_rb4121a
-            target: BRD4121A
-            nickname: on-off-light
-            toolchain: zephyr # gcc
-            in_artifact: merged_xg26_rb4121a_efr32mg26b420f3200im68.hex
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
-            main_release_only: true
-          - board: xg26_rb4121a
-            target: BRD4121A
-            nickname: on-off-light-ota
-            toolchain: zephyr
-            in_artifact: zephyr/zephyr/matter.ota
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
-            main_release_only: true
-          - board: mgm260p_rb4351a
-            target: BRD4351A
-            nickname: on-off-light
-            toolchain: zephyr
-            in_artifact: merged_mgm260p_rb4351a_mgm260pd32vna.hex
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
-            main_release_only: true
-          - board: mgm260p_rb4351a
-            target: BRD4351A
-            nickname: on-off-light-ota
-            toolchain: zephyr
-            in_artifact: zephyr/zephyr/matter.ota
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
-            main_release_only: true
-          - board: xg24_rb4187c
-            target: BRD4187C
-            nickname: on-off-light
-            toolchain: zephyr
-            in_artifact: merged_xg24_rb4187c_efr32mg24b220f1536im48.hex
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"1.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"1.0.0+0"'
-            main_release_only: false
-          - board: xg24_rb4187c
-            target: BRD4187C
-            nickname: on-off-light-ota
-            toolchain: zephyr
-            in_artifact: zephyr/zephyr/matter.ota
-            out_artifact: matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota
-            extra_args: -DALL_DEVICES_ENABLED_DEVICES="on-off-light" -DCONFIG_CHIP_FACTORY_DATA=y -DCONFIG_CHIP_OTA_REQUESTOR=y -DCONFIG_CHIP_OTA_IMAGE_BUILD=y -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2 -DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING='"2.0"' -DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION='"2.0.0+0"'
-            main_release_only: false
-
-    steps:
       - name: Resolve pinned Matter SDK revision
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         id: sdk
         uses: actions/github-script@v8
         with:
@@ -164,32 +68,38 @@ jobs:
             }
             core.setOutput('sha', data.sha);
 
+  zephyr-all-devices:
+    name: all-devices-app (${{ matrix.id }})
+    needs: prepare
+    runs-on: ubuntu-24.04
+    env:
+      CCACHE_SLOPPINESS: time_macros
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
       - name: Checkout Matter SDK
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: actions/checkout@v7
         with:
           repository: SiliconLabsSoftware/matter_sdk
-          ref: ${{ steps.sdk.outputs.sha }}
+          ref: ${{ needs.prepare.outputs.sdk-sha }}
           persist-credentials: false
 
       - name: Set up Python
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
       - name: Install host dependencies and clone Zephyr manifest
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         # Instead of main, replace with the official 4.5 tag once created.
         run: |
           set -euxo pipefail
           sudo -n apt-get update
           sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
-            git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs "$GITHUB_WORKSPACE/zephyrproject/zephyr-silabs"
+          git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs "$GITHUB_WORKSPACE/zephyrproject/zephyr-silabs"
 
       - name: Install Simplicity Commander
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         run: |
           set -euo pipefail
@@ -202,7 +112,6 @@ jobs:
           echo "$RUNNER_TEMP/commander" >> "$GITHUB_PATH"
 
       - name: Set up Zephyr workspace and SDK
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: zephyrproject-rtos/action-zephyr-setup@v1.0.15
         with:
           app-path: zephyr-silabs
@@ -210,12 +119,11 @@ jobs:
           sdk-version: "1.0.1"
           toolchains: arm-zephyr-eabi
           enable-ccache: "true"
-          ccache-cache-key: zephyr-all-devices-${{ matrix.board }}-${{ matrix.nickname }}
+          ccache-cache-key: zephyr-all-devices-${{ matrix.id }}-${{ matrix.toolchain }}
           ccache-max-size: 0.5G
           west-project-filter: "-matter"
 
       - name: Configure Zephyr workspace and Matter submodules
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         working-directory: zephyrproject
         run: |
@@ -234,7 +142,6 @@ jobs:
           west blobs fetch
 
       - name: Install GN from Matter's pinned CIPD version
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         working-directory: zephyrproject
         run: |
@@ -256,15 +163,16 @@ jobs:
           "$RUNNER_TEMP/gn/gn" --version
 
       - name: Build All-Devices App
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         working-directory: zephyrproject
         env:
+          BUILD_ARGUMENTS: ${{ toJSON(matrix.arguments) }}
           ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
           ZEPHYR_SDK_INSTALL_DIR: ${{ github.workspace }}/zephyrproject/zephyr-sdk
         run: |
           set -euxo pipefail
           command -v ccache
+          mapfile -t build_arguments < <(jq -r '.[]' <<< "$BUILD_ARGUMENTS")
           west build -p always -b "${{ matrix.board }}" --sysbuild --cmake-only \
             "${GITHUB_WORKSPACE}/examples/all-devices-app/zephyr" \
             -d "build/${{ matrix.board }}" \
@@ -272,7 +180,7 @@ jobs:
             -DZEPHYR_TOOLCHAIN_VARIANT="${ZEPHYR_TOOLCHAIN_VARIANT}" \
             -DZEPHYR_EXTRA_MODULES="${GITHUB_WORKSPACE}" \
             -DUSE_CCACHE=1 \
-            ${{ matrix.extra_args }}
+            "${build_arguments[@]}"
 
           mapfile -t gn_args_files < <(find "build/${{ matrix.board }}" -type f -path '*/modules/connectedhomeip/args.tmp')
           test "${#gn_args_files[@]}" -gt 0
@@ -282,7 +190,7 @@ jobs:
           west build -d "build/${{ matrix.board }}"
 
       - name: Show ccache statistics
-        if: ${{ always() && (!matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_')) }}
+        if: ${{ always() }}
         shell: bash
         run: |
           if command -v ccache >/dev/null 2>&1; then
@@ -290,7 +198,6 @@ jobs:
           fi
 
       - name: Export Zephyr artifacts
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         shell: bash
         run: |
           set -euxo pipefail
@@ -300,7 +207,6 @@ jobs:
               "$artifact_dir/${{ matrix.out_artifact }}"
 
       - name: Upload Zephyr binary artifacts
-        if: ${{ !matrix.main_release_only || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_') }}
         uses: actions/upload-artifact@v7
         with:
           name: dev-artifacts-zephyr-${{ matrix.board }}-${{ matrix.toolchain }}-${{ matrix.out_artifact }}
@@ -311,8 +217,8 @@ jobs:
 
   package-zephyr:
     name: Package Zephyr artifacts
-    needs: [zephyr-lighting-app, zephyr-all-devices]
-    if: ${{ !cancelled() }}
+    needs: [prepare, zephyr-all-devices]
+    if: ${{ !cancelled() && needs.prepare.result == 'success' }}
     runs-on: ubuntu-24.04
     steps:
       - name: Download successful Zephyr artifacts

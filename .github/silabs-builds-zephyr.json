@@ -1,0 +1,160 @@
+{
+    "defaults": {
+        "toolchain": "zephyr",
+        "arguments": [
+            "-DCONFIG_CHIP_FACTORY_DATA=y",
+            "-DCONFIG_CHIP_OTA_REQUESTOR=y"
+        ]
+    },
+    "standard": {
+        "default": [
+            {
+                "board": "xg24_rb4187c",
+                "target": "BRD4187C",
+                "device": "on-off-light",
+                "variant": "firmware",
+                "in_artifact": "merged_xg24_rb4187c_efr32mg24b220f1536im48.hex",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"1.0.0+0\""
+                ]
+            },
+            {
+                "board": "xg24_rb4187c",
+                "target": "BRD4187C",
+                "device": "on-off-light",
+                "variant": "ota",
+                "in_artifact": "zephyr/zephyr/matter.ota",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"2.0.0+0\""
+                ]
+            },
+            {
+                "board": "siwx917_rb4338a",
+                "target": "BRD4338A",
+                "device": "dishwasher",
+                "variant": "firmware",
+                "in_artifact": "zephyr/zephyr/zephyr.rps",
+                "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.rps",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\""
+                ]
+            },
+            {
+                "board": "siwx917_rb4338a",
+                "target": "BRD4338A",
+                "device": "dishwasher",
+                "variant": "ota",
+                "in_artifact": "zephyr/zephyr/matter.ota",
+                "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.ota",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
+                ]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "board": "xg26_rb4121a",
+                "target": "BRD4121A",
+                "device": "on-off-light",
+                "variant": "firmware",
+                "in_artifact": "merged_xg26_rb4121a_efr32mg26b420f3200im68.hex",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"1.0.0+0\""
+                ]
+            },
+            {
+                "board": "xg26_rb4121a",
+                "target": "BRD4121A",
+                "device": "on-off-light",
+                "variant": "ota",
+                "in_artifact": "zephyr/zephyr/matter.ota",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"2.0.0+0\""
+                ]
+            },
+            {
+                "board": "mgm260p_rb4351a",
+                "target": "BRD4351A",
+                "device": "on-off-light",
+                "variant": "firmware",
+                "in_artifact": "merged_mgm260p_rb4351a_mgm260pd32vna.hex",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"1.0.0+0\""
+                ]
+            },
+            {
+                "board": "mgm260p_rb4351a",
+                "target": "BRD4351A",
+                "device": "on-off-light",
+                "variant": "ota",
+                "in_artifact": "zephyr/zephyr/matter.ota",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\"",
+                    "-DCONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION=\"2.0.0+0\""
+                ]
+            },
+            {
+                "board": "siwx917_rb4338a",
+                "target": "BRD4338A",
+                "device": "on-off-light",
+                "variant": "firmware",
+                "in_artifact": "zephyr/zephyr/zephyr.rps",
+                "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.rps",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\""
+                ]
+            },
+            {
+                "board": "siwx917_rb4338a",
+                "target": "BRD4338A",
+                "device": "on-off-light",
+                "variant": "ota",
+                "in_artifact": "zephyr/zephyr/matter.ota",
+                "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.ota",
+                "arguments": [
+                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
+                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
+                ]
+            }
+        ]
+    }
+}
