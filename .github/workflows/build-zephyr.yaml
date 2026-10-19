@@ -39,9 +39,8 @@ jobs:
           matrix="$(jq -ce --arg build_type "$BUILD_TYPE" '
             .defaults as $defaults
             | (.standard.default + (if $build_type == "full" then .full.default else [] end))
-            | map(. + {
+            | map($defaults + . + {
                 id: (.board + "-" + .device + "-" + .variant),
-                toolchain: $defaults.toolchain,
                 arguments: ($defaults.arguments + .arguments)
               })
             | if length == 0
@@ -167,13 +166,18 @@ jobs:
         working-directory: zephyrproject
         env:
           BUILD_ARGUMENTS: ${{ toJSON(matrix.arguments) }}
+          SYSBUILD: ${{ matrix.sysbuild }}
           ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
           ZEPHYR_SDK_INSTALL_DIR: ${{ github.workspace }}/zephyrproject/zephyr-sdk
         run: |
           set -euxo pipefail
           command -v ccache
           mapfile -t build_arguments < <(jq -r '.[]' <<< "$BUILD_ARGUMENTS")
-          west build -p always -b "${{ matrix.board }}" --sysbuild --cmake-only \
+          west_arguments=(--cmake-only)
+          if [[ "$SYSBUILD" == "true" ]]; then
+            west_arguments+=(--sysbuild)
+          fi
+          west build -p always -b "${{ matrix.board }}" "${west_arguments[@]}" \
             "${GITHUB_WORKSPACE}/examples/all-devices-app/zephyr" \
             -d "build/${{ matrix.board }}" \
             -- \

@@ -1,6 +1,7 @@
 {
     "defaults": {
         "toolchain": "zephyr",
+        "sysbuild": true,
         "arguments": [
             "-DCONFIG_CHIP_FACTORY_DATA=y",
             "-DCONFIG_CHIP_OTA_REQUESTOR=y"
@@ -42,7 +43,8 @@
                 "target": "BRD4338A",
                 "device": "dishwasher",
                 "variant": "firmware",
-                "in_artifact": "zephyr/zephyr/zephyr.rps",
+                "sysbuild": false,
+                "in_artifact": "zephyr/zephyr.rps",
                 "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.rps",
                 "arguments": [
                     "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
@@ -56,7 +58,8 @@
                 "target": "BRD4338A",
                 "device": "dishwasher",
                 "variant": "ota",
-                "in_artifact": "zephyr/zephyr/matter.ota",
+                "sysbuild": false,
+                "in_artifact": "zephyr/matter.ota",
                 "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.ota",
                 "arguments": [
                     "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
@@ -132,7 +135,8 @@
                 "target": "BRD4338A",
                 "device": "on-off-light",
                 "variant": "firmware",
-                "in_artifact": "zephyr/zephyr/zephyr.rps",
+                "sysbuild": false,
+                "in_artifact": "zephyr/zephyr.rps",
                 "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.rps",
                 "arguments": [
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
@@ -146,7 +150,8 @@
                 "target": "BRD4338A",
                 "device": "on-off-light",
                 "variant": "ota",
-                "in_artifact": "zephyr/zephyr/matter.ota",
+                "sysbuild": false,
+                "in_artifact": "zephyr/matter.ota",
                 "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.ota",
                 "arguments": [
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
