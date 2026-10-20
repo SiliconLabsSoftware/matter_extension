@@ -16,16 +16,23 @@ provides:
 
 requires:
   - name: matter_aws_transport
-  - name: mbedtls_sha1
-  - name: mbedtls_tls
-  - name: mbedtls_rsa
-  - name: mbedtls_aes
+  # TLS 1.2 client
+  - name: mbedtls_ssl_client
+  - name: mbedtls_ssl_proto_tls12
+  - name: mbedtls_ssl_keep_peer_certificate
+  - name: mbedtls_ssl_handshake_sha256
+  - name: mbedtls_key_exchange_ecdhe_ecdsa
   - name: mbedtls_pki
-  - name: mbedtls_jpake
-  - name: mbedtls_ecdsa
-  - name: mbedtls_ecc_secp256r1
-  - name: mbedtls_gcm
-  - name: mbedtls_debug
+  # PSA primitives for the TLS cipher suites and certificate chain
+  - name: psa_crypto_aes
+  - name: psa_crypto_cipher_cbc
+  - name: psa_crypto_gcm
+  - name: psa_crypto_hmac
+  - name: psa_crypto_sha1
+  - name: psa_crypto_tls12_prf
+  - name: psa_crypto_ecdsa
+  - name: psa_crypto_ecc_secp256r1
+  - name: psa_crypto_rsa_sign_legacy
 
 define:
   - name: SL_MATTER_ENABLE_AWS

@@ -27,9 +27,7 @@ requires:
   - name: mbedtls_ecdsa
   - name: mbedtls_ecc
   - name: mbedtls_hash
-  - name: mbedtls_hkdf
   - name: mbedtls_mpi
-  - name: mbedtls_oid
   - name: mbedtls_pem
   - name: mbedtls_pkcs5
   - name: mbedtls_pki
