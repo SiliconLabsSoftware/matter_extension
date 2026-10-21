@@ -21,7 +21,7 @@ TOGGLE_TIMEOUT_S = 300
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Matter Renode commissioning smoke test")
+    parser = argparse.ArgumentParser(description="Matter Renode commissioning test")
     parser.add_argument("--matter-elf", type=Path, required=True)
     args = parser.parse_args()
 
