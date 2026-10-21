@@ -48,13 +48,11 @@ jobs:
         id: mode
         run: |
           set -euo pipefail
-          # Refresh (unlocked) only for release_2.10-1.6.1:
-          # push on that branch, or nightly/manual dispatch with use_lockfile=false.
+          # Refresh (unlocked) only via nightly/manual dispatch with use_lockfile=false
+          # on release_2.10-1.6.1. Pushes always use the committed lock (stable gate).
           ref="${{ github.ref_name }}"
           event="${{ github.event_name }}"
-          if [[ "$ref" == "release_2.10-1.6.1" && "$event" == "push" ]]; then
-            echo "use-lockfile=false" >> "$GITHUB_OUTPUT"
-          elif [[ "$ref" == "release_2.10-1.6.1" && "$event" == "workflow_dispatch" && "${{ inputs.use_lockfile }}" == "false" ]]; then
+          if [[ "$ref" == "release_2.10-1.6.1" && "$event" == "workflow_dispatch" && "${{ inputs.use_lockfile }}" == "false" ]]; then
             echo "use-lockfile=false" >> "$GITHUB_OUTPUT"
           else
             echo "use-lockfile=true" >> "$GITHUB_OUTPUT"

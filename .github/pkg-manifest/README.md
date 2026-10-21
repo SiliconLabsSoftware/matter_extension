@@ -100,7 +100,8 @@ Flow (via `.github/actions/install-pkg-manifest` + `packages/build_app.sh`):
    slt install "matter_app/<PR_VERSION>@silabs" -e conan --check-updates=false
    ```
 
-5. Export `CI_PKG_LOCK` to the absolute path of `pkg.lock`.
+5. Export `CI_PKG_LOCK` (absolute path of `pkg.lock`) and `CHECK_UPDATES=false`
+   to `GITHUB_ENV` so later `build_app.sh` steps inherit both.
 6. For each app build, `build_app.sh`:
    - Copies `CI_PKG_LOCK` into the app directory as `pkg.lock`.
    - Rewrites `matter` / `matter_app` entries to the PR package version
@@ -112,14 +113,14 @@ test comes from the PR.
 
 ## Nightly CI (resolve + refresh)
 
-Lock refresh runs only on `release_2.10-1.6.1`:
+Lock refresh runs only on `release_2.10-1.6.1` when dispatched with
+`use_lockfile=false`:
 
-- Nightly dispatch from `.github/workflows/trigger-matter-packages-validation.yaml`
-  with `use_lockfile=false`.
-- A push to `release_2.10-1.6.1`.
+- Nightly schedule via `.github/workflows/trigger-matter-packages-validation.yaml`
+- Manual `workflow_dispatch` with `use_lockfile=false`
 
-Pushes to other branches (including test branches) install the existing locks
-and do not open a refresh pull request.
+Pushes (including to `release_2.10-1.6.1`) install the committed locks and do
+not open a refresh pull request.
 
 Flow:
 
@@ -179,7 +180,7 @@ conan remote add -f conan-prerelease https://conan-prerelease.silabs.net/
 | Path | Role |
 | --- | --- |
 | `slc/script/pkg_lock_to_conan_lock.py` | `pkg.lock` → `conan.lock` + `conanfile.txt` |
-| `.github/actions/install-pkg-manifest/` | Restore Matter cache; locked Conan install; set `CI_PKG_LOCK` |
+| `.github/actions/install-pkg-manifest/` | Restore Matter cache; locked Conan install; set `CI_PKG_LOCK` + `CHECK_UPDATES` |
 | `packages/build_app.sh` | Honors `CI_PKG_LOCK` / `--pkg-lock` and `CHECK_UPDATES` |
 | `.github/workflows/matter-packages-validation.yaml` | PR vs nightly mode; nightly lock refresh job |
 | `.github/workflows/trigger-matter-packages-validation.yaml` | Daily dispatch with `use_lockfile=false` |

@@ -1,8 +1,8 @@
 name: Install package manifest
 description: >
   Restore Matter packages. In locked mode, install CI Conan lock derived from
-  SLT pkg.lock, then install local matter_app. Also exports CI_PKG_LOCK for
-  build_app.sh (slt --check-updates=false).
+  SLT pkg.lock, then install local matter_app. Exports CI_PKG_LOCK and
+  CHECK_UPDATES for build_app.sh so later steps do not re-float deps.
 
 inputs:
   package-version:
@@ -12,7 +12,7 @@ inputs:
     description: Cache key created by the Matter package producer
     required: true
   use-lockfile:
-    description: If true, conan install --lockfile + export CI_PKG_LOCK
+    description: If true, conan install --lockfile + export CI_PKG_LOCK and CHECK_UPDATES=false
     required: false
     default: "true"
   fail-on-cache-miss:
@@ -102,9 +102,12 @@ runs:
         set -euo pipefail
         # Locked CI: do not re-float deps after conan --lockfile install.
         # Nightly (use-lockfile=false): allow normal resolve.
+        # Export so build_app.sh (and any later slt install) inherit the mode
+        # without each workflow re-setting CHECK_UPDATES.
         CHECK_UPDATES="true"
         if [[ "${{ inputs.use-lockfile }}" == "true" ]]; then
           CHECK_UPDATES="false"
         fi
+        echo "CHECK_UPDATES=${CHECK_UPDATES}" >> "${GITHUB_ENV}"
         slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan \
           --check-updates="${CHECK_UPDATES}"
