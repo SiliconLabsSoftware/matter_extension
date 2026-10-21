@@ -164,13 +164,9 @@ git add .github/pkg-manifest/pkg.lock \
 ```
 
 Always convert after editing or replacing `pkg.lock`. Never hand-edit
-`conan.lock` alone unless you also update `pkg.lock` (or accept drift).
+`conan.lock` alone unless you also update `pkg.lock`.
 
 ## Secrets / remotes
-
-| Name | Purpose |
-| --- | --- |
-| `SILABSSW_MATTER_CI_BOT_APP_ID` / `SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY` | Nightly lock refresh PR (`silabs-matter-ci-bot`), same as SDK submodule bump. |
 
 Remote used by CI (same as `create-and-cache-matter-packages` / `install-tools`; no Artifactory login):
 
