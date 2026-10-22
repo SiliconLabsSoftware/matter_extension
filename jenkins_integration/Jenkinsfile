@@ -116,7 +116,7 @@ pipeline
                                 buildDescription(build_description)
 
                                 try{
-                                    pipelineFunctions.upload_zephyr_artifacts()
+                                    pipelineFunctions.upload_zephyr_artifacts(workflow_id)
                                 } catch (e) {
                                     unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
                                 }
