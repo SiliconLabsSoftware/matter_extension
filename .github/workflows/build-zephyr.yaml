@@ -1,12 +1,11 @@
 name: Build Zephyr
 
 on:
-  push:
-    branches:
-      - main
-      - "release_*"
-  pull_request:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -33,7 +32,7 @@ jobs:
         id: matrix
         shell: bash
         env:
-          BUILD_TYPE: ${{ (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release_')) && 'full' || 'standard' }}
+          BUILD_TYPE: ${{ inputs.build-type }}
         run: |
           set -euo pipefail
           matrix="$(jq -ce --arg build_type "$BUILD_TYPE" '

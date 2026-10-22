@@ -1,5 +1,5 @@
 """
-Download Build Zephyr artifacts from GitHub Actions and upload board binaries to UBAI.
+Download Zephyr artifacts from GitHub Actions and upload board binaries to UBAI.
 
 Expects GHA layout (see build-zephyr.yaml):
     <app_name>/<TARGET>/<binary_name>.<ext>
@@ -10,6 +10,9 @@ uploader changes required.
 
 Usage:
     python upload_zephyr_artifacts.py --branch_name <branch> --build_number <n>
+
+Pass --workflow_id <id> to use the same dev-apps run selected by Jenkins.
+Without a workflow ID, discovery uses the standalone Build Zephyr workflow.
 """
 
 import argparse
@@ -35,9 +38,10 @@ WAIT_SECONDS = 60
 
 
 def _parse_args():
-    parser = argparse.ArgumentParser(description='Upload Build Zephyr binaries to UBAI')
+    parser = argparse.ArgumentParser(description='Upload Zephyr binaries to UBAI')
     parser.add_argument('--branch_name', required=True)
     parser.add_argument('--build_number', required=True)
+    parser.add_argument('--workflow_id', type=int, help='Selected dev-apps workflow run ID')
     return parser.parse_args()
 
 
@@ -117,10 +121,19 @@ def _get_workflow_run(workflow_id):
 
 def _get_artifact_download_url(workflow_id):
     url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
-    artifacts = _make_github_api_request(url).json().get('artifacts') or []
-    artifact = next((a for a in artifacts if a['name'] == ARTIFACT_NAME), None)
+    per_page = 100
+    response_data = _make_github_api_request(f"{url}?per_page={per_page}&page=1").json()
+    artifacts = response_data.get('artifacts') or []
+    total_count = response_data.get('total_count', len(artifacts))
+    total_pages = (total_count + per_page - 1) // per_page
+
+    for page in range(2, total_pages + 1):
+        response = _make_github_api_request(f"{url}?per_page={per_page}&page={page}")
+        artifacts.extend(response.json().get('artifacts') or [])
+
+    artifact = next((artifact for artifact in artifacts if artifact['name'] == ARTIFACT_NAME), None)
     if not artifact:
-        available = [a['name'] for a in artifacts]
+        available = [artifact['name'] for artifact in artifacts]
         raise RuntimeError(
             f"No {ARTIFACT_NAME} on workflow {workflow_id}. Available: {available}"
         )
@@ -211,7 +224,9 @@ def _upload_binaries(root, branch_name, build_number):
 
 def main():
     args = _parse_args()
-    workflow_id = _find_zephyr_workflow(args.branch_name)
+    workflow_id = (
+        args.workflow_id if args.workflow_id is not None else _find_zephyr_workflow(args.branch_name)
+    )
     extracted = _download_zephyr_artifact(workflow_id)
     _upload_binaries(extracted, args.branch_name, args.build_number)
     artifact_file = os.path.join('.', ARTIFACT_NAME + '.zip')

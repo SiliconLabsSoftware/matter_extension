@@ -4,7 +4,7 @@
         "sysbuild": true,
         "arguments": [
             "-DCONFIG_CHIP_FACTORY_DATA=y",
-            "-DCONFIG_CHIP_OTA_REQUESTOR=y"
+            "-DCONFIG_LOG_BUFFER_SIZE=6144"
         ]
     },
     "standard": {
@@ -17,6 +17,7 @@
                 "in_artifact": "merged_xg24_rb4187c_efr32mg24b220f1536im48.hex",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
@@ -31,6 +32,7 @@
                 "in_artifact": "zephyr/zephyr/matter.ota",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
@@ -47,6 +49,7 @@
                 "in_artifact": "zephyr/zephyr.rps",
                 "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.rps",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
@@ -62,6 +65,7 @@
                 "in_artifact": "zephyr/matter.ota",
                 "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.ota",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
@@ -80,6 +84,7 @@
                 "in_artifact": "merged_xg26_rb4121a_efr32mg26b420f3200im68.hex",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
@@ -94,6 +99,7 @@
                 "in_artifact": "zephyr/zephyr/matter.ota",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
@@ -109,6 +115,7 @@
                 "in_artifact": "merged_mgm260p_rb4351a_mgm260pd32vna.hex",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
@@ -123,6 +130,7 @@
                 "in_artifact": "zephyr/zephyr/matter.ota",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
@@ -139,6 +147,7 @@
                 "in_artifact": "zephyr/zephyr.rps",
                 "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.rps",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
@@ -154,6 +163,7 @@
                 "in_artifact": "zephyr/matter.ota",
                 "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.ota",
                 "arguments": [
+                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
