@@ -203,7 +203,7 @@ class matterRecipe(MatterBaseRecipe):
 
         files = silabs_package_assistant.find_slc_files_to_release(
             slc_sdk_or_extension_def_file=slce_file,
-            desired_qualities=["production", "evaluation"],
+            desired_qualities=["production", "evaluation", "experimental"],
             fail_on_missing_files=False,
             include_slcp=False,
             include_slcc=True,
