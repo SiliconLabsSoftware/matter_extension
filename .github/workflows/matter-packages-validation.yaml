@@ -22,6 +22,11 @@ on:
         required: false
         type: boolean
         default: true
+      use_lockfile:
+        description: 'true = PR/stable locked deps; false = nightly resolve + refresh lock'
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: create-matter-packages-${{ github.head_ref || github.ref_name }}
@@ -32,8 +37,30 @@ permissions:
   actions: write
 
 jobs:
+  resolve-deps-mode:
+    name: Resolve dependency mode
+    runs-on: ubuntu-latest
+    outputs:
+      use-lockfile: ${{ steps.mode.outputs.use-lockfile }}
+    steps:
+      - name: Select lockfile mode
+        id: mode
+        run: |
+          set -euo pipefail
+          # Refresh (unlocked) only via nightly/manual dispatch with use_lockfile=false
+          # on release_2.10-1.6.1. Pushes always use the committed lock (stable gate).
+          ref="${{ github.ref_name }}"
+          event="${{ github.event_name }}"
+          if [[ "$ref" == "release_2.10-1.6.1" && "$event" == "workflow_dispatch" && "${{ inputs.use_lockfile }}" == "false" ]]; then
+            echo "use-lockfile=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "use-lockfile=true" >> "$GITHUB_OUTPUT"
+          fi
+          echo "use-lockfile=$(grep '^use-lockfile=' "$GITHUB_OUTPUT" | cut -d= -f2)"
+
   matter-packages:
     name: Create Matter Packages
+    needs: resolve-deps-mode
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.packages.outputs.version }}
@@ -100,7 +127,7 @@ jobs:
   build-dev-apps:
     name: Build Dev Apps
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_dev_apps }}
-    needs: matter-packages
+    needs: [resolve-deps-mode, matter-packages]
     permissions:
       contents: read
       actions: write
@@ -110,11 +137,12 @@ jobs:
       build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+      use-lockfile: ${{ needs.resolve-deps-mode.outputs.use-lockfile == 'true' }}
 
   ota-size-check:
     name: OTA flash size check
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.ota_size_check }}
-    needs: matter-packages
+    needs: [resolve-deps-mode, matter-packages]
     permissions:
       contents: read
       actions: write
@@ -123,3 +151,93 @@ jobs:
     with:
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+      use-lockfile: ${{ needs.resolve-deps-mode.outputs.use-lockfile == 'true' }}
+
+  update-ci-lockfile:
+    name: Update CI pkg.lock and conan.lock
+    if: ${{ always() && github.ref_name == 'release_2.10-1.6.1' && needs.resolve-deps-mode.outputs.use-lockfile == 'false' && needs.build-dev-apps.result == 'success' && (needs.ota-size-check.result == 'success' || needs.ota-size-check.result == 'skipped') }}
+    needs: [resolve-deps-mode, matter-packages, build-dev-apps, ota-size-check]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
+
+      - name: Install Matter packages (no CI lock)
+        uses: ./.github/actions/install-pkg-manifest
+        with:
+          conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
+          package-version: ${{ needs.matter-packages.outputs.version }}
+          use-lockfile: "false"
+
+      - name: Resolve pkg.lock and convert to conan.lock
+        env:
+          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+        run: |
+          set -euo pipefail
+          APP_DIR="slc/apps/lock_app/wifi"
+          LOCK_DIR=".github/pkg-manifest"
+          [[ -f "${APP_DIR}/pkg.slt" ]] || python3 slc/script/generate_pkg_slt.py -d slc
+
+          # Fresh resolve: remove old lock so slt install floats.
+          rm -f "${APP_DIR}/pkg.lock"
+          (
+            cd "${APP_DIR}"
+            echo "Running unlocked slt install in ${APP_DIR}"
+            slt install --check-updates=true
+          )
+          [[ -f "${APP_DIR}/pkg.lock" ]] || {
+            echo "slt install did not produce ${APP_DIR}/pkg.lock"
+            exit 1
+          }
+
+          mkdir -p "${LOCK_DIR}"
+          cp -f "${APP_DIR}/pkg.lock" "${LOCK_DIR}/pkg.lock"
+          python3 slc/script/pkg_lock_to_conan_lock.py \
+            --input "${LOCK_DIR}/pkg.lock" \
+            --output "${LOCK_DIR}/conan.lock" \
+            --conanfile "${LOCK_DIR}/conanfile.txt"
+          echo "Updated ${LOCK_DIR}/pkg.lock and ${LOCK_DIR}/conan.lock"
+          wc -l "${LOCK_DIR}/pkg.lock" "${LOCK_DIR}/conan.lock"
+
+      - name: Generate GitHub App token
+        id: generate_token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
+
+      - name: Mask the generated token
+        run: echo "::add-mask::${{ steps.generate_token.outputs.token }}"
+
+      - name: Create lock refresh pull request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+          branch: automation/pkg-manifest-lock-${{ github.ref_name }}
+          base: ${{ github.ref_name }}
+          delete-branch: true
+          title: "NOJIRA: Refresh CI pkg-manifest locks"
+          commit-message: "NOJIRA: Refresh CI pkg-manifest locks from nightly slt resolve"
+          author: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          committer: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
+          add-paths: |
+            .github/pkg-manifest/pkg.lock
+            .github/pkg-manifest/conan.lock
+            .github/pkg-manifest/conanfile.txt
+          body: |
+            Auto-generated after successful unlocked Packages Validation.
+
+            - Source run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            - Mode: `use_lockfile=false` (nightly resolve)
+
+            Updates:
+            - `.github/pkg-manifest/pkg.lock`
+            - `.github/pkg-manifest/conan.lock`
+            - `.github/pkg-manifest/conanfile.txt`
