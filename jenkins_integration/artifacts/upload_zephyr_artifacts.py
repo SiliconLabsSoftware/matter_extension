@@ -14,9 +14,6 @@ Usage:
 Use the workflow run selected by Jenkins. Package-backed runs are skipped.
 """
 
-from jenkins_integration.artifacts.ubai_client import upload_to_ubai
-from jenkins_integration.github.github_workflow import _make_github_api_request
-import jenkins_integration.config as config
 import argparse
 import os
 import shutil
@@ -28,6 +25,10 @@ workspace_root = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
+
+import jenkins_integration.config as config
+from jenkins_integration.github.github_workflow import _make_github_api_request
+from jenkins_integration.artifacts.ubai_client import upload_to_ubai
 
 
 ARTIFACT_NAME = 'dev-artifacts-zephyr'
@@ -102,7 +103,8 @@ def _download_zephyr_artifact(workflow_id):
         run = _get_workflow_run(workflow_id)
         workflow_path = run['path'].split('@', 1)[0]
         if workflow_path != WORKFLOW_PATH:
-            print(f"Skipping Zephyr upload for workflow {workflow_id}: {workflow_path}")
+            print(
+                f"Skipping Zephyr upload for workflow {workflow_id}: {workflow_path}")
             return None
         status = run.get('status')
         conclusion = run.get('conclusion')
