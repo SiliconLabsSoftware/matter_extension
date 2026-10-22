@@ -201,9 +201,12 @@ def _get_artifact_info(workflow_id, sqa):
         if not artifact:
             raise RuntimeError(f"No SQA artifact (sqa-artifacts) found for workflow {workflow_id}. Available: {[a['name'] for a in artifacts]}")
     else:
-        artifact = next((a for a in artifacts if a['name'].startswith('dev-artifacts')), None)
+        artifact = next((a for a in artifacts if a['name'] in ('dev-artifacts-standard', 'dev-artifacts-full')), None)
         if not artifact:
-            raise RuntimeError(f"No dev artifact (dev-artifacts-*) found for workflow {workflow_id}. Available: {[a['name'] for a in artifacts]}")
+            raise RuntimeError(
+                f"No merged dev artifact (dev-artifacts-standard or dev-artifacts-full) found for workflow {workflow_id}. "
+                f"Available: {[a['name'] for a in artifacts]}"
+            )
     return {
         'download_url': artifact['archive_download_url'],
         'name': artifact['name'] + '.zip'
