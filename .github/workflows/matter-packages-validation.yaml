@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - release_2.10-1.6.1
-      - feature/package_manager_implementation_phase_2_lock
   workflow_dispatch:
     inputs:
       package_version:
