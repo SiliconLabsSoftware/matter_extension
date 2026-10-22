@@ -51,25 +51,9 @@
                 "arguments": [
                     "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
-                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=n",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\""
-                ]
-            },
-            {
-                "board": "siwx917_rb4338a",
-                "target": "BRD4338A",
-                "device": "dishwasher",
-                "variant": "ota",
-                "sysbuild": false,
-                "in_artifact": "zephyr/matter.ota",
-                "out_artifact": "matter_wifi_soc_all_device_app_dishwasher_zephyr.ota",
-                "arguments": [
-                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
-                    "-DALL_DEVICES_ENABLED_DEVICES=dishwasher",
-                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
-                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
-                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
                 ]
             }
         ]
@@ -149,25 +133,9 @@
                 "arguments": [
                     "-DCONFIG_CHIP_OTA_REQUESTOR=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
-                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
+                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=n",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\""
-                ]
-            },
-            {
-                "board": "siwx917_rb4338a",
-                "target": "BRD4338A",
-                "device": "on-off-light",
-                "variant": "ota",
-                "sysbuild": false,
-                "in_artifact": "zephyr/matter.ota",
-                "out_artifact": "matter_wifi_soc_all_device_app_on_off_light_zephyr.ota",
-                "arguments": [
-                    "-DCONFIG_CHIP_OTA_REQUESTOR=n",
-                    "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
-                    "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
-                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
-                    "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
                 ]
             }
         ]
