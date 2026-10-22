@@ -54,5 +54,4 @@ board_allowlist:
     - brd4350a
     - brd4351a
     - brd4407a
-    - brd4408a
     - brd9084b
