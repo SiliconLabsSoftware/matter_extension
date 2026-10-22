@@ -208,15 +208,14 @@ pipeline
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
-//                     Temp comment out due to SQA setup issues
-//                     parallelNodes['SiMG301 Lighting-App'] = {
-//                         pipelineFunctions.actionWithRetry {
-//                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
-//                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
-//                                 '4878', 'lighting-app','thread','BRD4407A',"",
-//                                 branch_name, env.BUILD_NUMBER)
-//                         }
-//                     }
+                    parallelNodes['SiMG301 Lighting-App'] = {
+                        pipelineFunctions.actionWithRetry {
+                            failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
+                                'gsdkMontrealNode','utf-matter-thread-4407a-ci',
+                                '4878', 'zigbee-light-conc','thread','BRD4407A',"",
+                                branch_name, env.BUILD_NUMBER)
+                        }
+                    }
 
                     parallelNodes.failFast = false
                     parallel parallelNodes
