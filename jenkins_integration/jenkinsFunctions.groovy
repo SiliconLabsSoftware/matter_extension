@@ -435,10 +435,22 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             }
                         }
                     }
-                    sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
-                    archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
+                    def testArtifactsId = "${appName}-${board}"
+                    sh """
+                        cp ./reports/pytest-report.html ./reports/pytest-report-${testArtifactsId}.html
+                        if [ -d TestResults ]; then
+                            rm -rf "TestResults-${testArtifactsId}"
+                            cp -a TestResults "TestResults-${testArtifactsId}"
+                            echo "Copied TestResults to TestResults-${testArtifactsId}"
+                        else
+                            echo "TestResults directory not found for ${testArtifactsId}; skipping TestResults archive"
+                        fi
+                    """
+                    archiveArtifacts artifacts: "reports/pytest-report-${testArtifactsId}.html", allowEmptyArchive: true, fingerprint: false
+                    archiveArtifacts artifacts: "TestResults-${testArtifactsId}/**", allowEmptyArchive: true, fingerprint: false
                     junit: 'reports/junit_report.xml'
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${testArtifactsId}.html"
+                    echo "Download UTF TestResults here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/TestResults-${testArtifactsId}/"
                 }
             }
         }
