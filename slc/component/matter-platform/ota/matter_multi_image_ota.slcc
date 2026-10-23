@@ -10,6 +10,7 @@ metadata:
 
 requires:
   - name: matter
+  - name: matter_provision_channel
   - name: bootloader_interface
     condition: [matter_platform_mg, device_series_2]
   - name: bootloader_interface_s3
