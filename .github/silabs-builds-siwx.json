@@ -214,7 +214,7 @@
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
-                "boards": ["brd4343a", "brd4343c", "brd4343s"],
+                "boards": ["brd4338a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix lit-120",
                               "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
             }
