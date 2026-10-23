@@ -66,6 +66,10 @@ include:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble
     file_list:
       - path: BLEShellCommands.h
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/provision
+    condition: [matter_provision_channel]
+    file_list:
+      - path: ProvisionShellCommands.h
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im
     file_list:
       - path: IMShellCommands.h
@@ -115,6 +119,8 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/tracing/TracingShellCommands.cpp
     condition: [matter_tracing]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble/BLEShellCommands.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/provision/ProvisionShellCommands.cpp
+    condition: [matter_provision_channel]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im/IMShellCommands.cpp
     condition: [matter_read_client]
   - path: third_party/matter_sdk/examples/platform/silabs/subscription/SubscriptionManager.cpp #required for IMShell
