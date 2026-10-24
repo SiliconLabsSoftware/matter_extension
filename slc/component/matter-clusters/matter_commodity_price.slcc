@@ -1,4 +1,4 @@
-category: Clusters|Energy Management
+category: Clusters|General
 description: >
   Implementation of the Commodity Price Server Cluster.
   The user has to enable the Commodity Price Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.
