@@ -9,7 +9,7 @@ sdk_extension:
   - id: matter
     version: "2.10.0"
     vendor: silabs
-  - id: wiseconnect3_sdk
+  - id: wifi
     version: "4.2.0"
     vendor: silabs
 
