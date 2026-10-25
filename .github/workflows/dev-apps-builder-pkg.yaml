@@ -54,6 +54,7 @@ jobs:
                   else
                       echo "build-type=standard" >> $GITHUB_OUTPUT
                   fi
+                  echo "ref=$ref day=$day (America/New_York) run-sqa=$(grep '^run-sqa=' "$GITHUB_OUTPUT" | cut -d= -f2)"
 
             # Capture weekday at workflow start (America/New_York). Evening crons finish
             # after midnight, so later jobs must not re-check "today".
@@ -234,7 +235,6 @@ jobs:
             wifi-soc-support: true
 
     # TODO: Remove the false condition once the build_performance_test_app build issue is fixed (See MATTER-7059)
-        secrets: inherit
     build_performance_test_app:
         if: false
         name: Build Performance Test App
