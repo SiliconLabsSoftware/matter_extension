@@ -1,8 +1,11 @@
 name: Packages Validation
 
 on:
-  # Branch runs + daily/Thursday (dispatch). PR gates stay on legacy CI.
+  # Push/dispatch on release; also PRs from feature/package_manager_internal_package into release.
   push:
+    branches:
+      - release_2.10-1.6.1
+  pull_request:
     branches:
       - release_2.10-1.6.1
   workflow_dispatch:
@@ -34,6 +37,8 @@ permissions:
 jobs:
   matter-packages:
     name: Create Matter Packages
+    # Other PRs into release keep legacy CI; only this feature branch runs Packages Validation.
+    if: ${{ github.event_name != 'pull_request' || github.head_ref == 'feature/package_manager_internal_package' }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.packages.outputs.version }}
@@ -99,7 +104,10 @@ jobs:
 
   build-dev-apps:
     name: Build Dev Apps
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.build_dev_apps }}
+    if: ${{
+      (github.event_name != 'pull_request' || github.head_ref == 'feature/package_manager_internal_package') &&
+      (github.event_name != 'workflow_dispatch' || inputs.build_dev_apps)
+    }}
     needs: matter-packages
     permissions:
       contents: read
@@ -107,13 +115,17 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/dev-apps-builder-pkg.yaml
     with:
-      build-type: ${{ (github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
+      # Push to release = full; feature PRs into release = standard.
+      build-type: ${{ (github.event_name != 'pull_request' && github.ref_name == 'release_2.10-1.6.1') && 'full' || 'standard' }}
       package-version: ${{ needs.matter-packages.outputs.version }}
       conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
 
   ota-size-check:
     name: OTA flash size check
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.ota_size_check }}
+    if: ${{
+      (github.event_name != 'pull_request' || github.head_ref == 'feature/package_manager_internal_package') &&
+      (github.event_name != 'workflow_dispatch' || inputs.ota_size_check)
+    }}
     needs: matter-packages
     permissions:
       contents: read
