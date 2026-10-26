@@ -787,9 +787,7 @@ REMOTE_NAME='${remoteName}'
 REMOTE_URL='${remoteUrl}'
 BASE_VERSION='${base}'
 QUALIFIER='${qualifier}'
-// if ! conan remote list | grep -q "^\${REMOTE_NAME}:"; then
 conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
-// fi
 conan remote login "\${REMOTE_NAME}" "\${CONAN_USER}" -p "\${ARTIFACTORY_TOKEN}"
 PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@silabs"
 LIST_JSON="\$(conan list "\${PATTERN}" -r "\${REMOTE_NAME}" --format=json 2>/dev/null || echo '{}')"
