@@ -108,7 +108,7 @@ jobs:
                       --exclude=third_party/ \
                       --exclude=".*tests/.*" \
                       --exclude=".*testing/.*" \
-                      --include=src/ \
+                      --filter=src/ \
                       --gcov-ignore-parse-errors \
                       --merge-mode-functions=merge-use-line-min \
                       --sonarqube=sonarqube-coverage.xml
