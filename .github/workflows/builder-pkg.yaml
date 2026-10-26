@@ -24,6 +24,11 @@ on:
             conan-cache-key:
                 required: true
                 type: string
+            app-package:
+                description: App Conan package to install and build from (matter_app or matter_app_internal).
+                required: false
+                type: string
+                default: matter_app
 
 permissions:
   contents: read
@@ -46,6 +51,7 @@ jobs:
               with:
                   conan-cache-key: ${{ inputs.conan-cache-key }}
                   package-version: ${{ inputs.package-version }}
+                  app-package: ${{ inputs.app-package }}
                   fail-on-cache-miss: true
 
             - name: Build ${{ inputs.example-app }} from packages
@@ -53,24 +59,25 @@ jobs:
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
                   MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+                  MATTER_APP_PACKAGE: ${{ inputs.app-package }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
                   example-app: ${{ inputs.example-app }}
-                  build-script: "$(slt where matter_app)/build_app.sh"
+                  build-script: "$(slt where ${{ inputs.app-package }})/build_app.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
                   continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
 
-            # Package builds write under $(slt where matter_app)/**/out/**, not workspace out/.
+            # Package builds write under $(slt where <app-package>)/**/out/**, not workspace out/.
             # Stage curated artifact/ outputs + maps, preserving path under out/ so upload
             # globs (out/*/*/artifact/**, out/*/*/*/artifact/**, **/build/**/*.map) match.
             - name: Collect package build artifacts
               shell: bash
               run: |
                   set -euo pipefail
-                  MATTER_APP="$(slt where matter_app)"
-                  echo "matter_app root: ${MATTER_APP}"
+                  APP_PKG_ROOT="$(slt where "${{ inputs.app-package }}")"
+                  echo "${{ inputs.app-package }} root: ${APP_PKG_ROOT}"
 
                   # Standalone bootloader builds only produce binaries under matter_bootloader/.
                   # App solution builds exclude that path so nested bootloaders are not uploaded.
@@ -80,7 +87,7 @@ jobs:
                   fi
 
                   mapfile -d '' -t bins < <(
-                    find "${MATTER_APP}" -type f \( \
+                    find "${APP_PKG_ROOT}" -type f \( \
                         -name '*.s37' -o -name '*.rps' -o -name '*.hex' -o -name '*.gbl' -o -name '*.map' \
                       \) \
                       -path '*/out/*' \
@@ -88,7 +95,7 @@ jobs:
                       "${EXCLUDE_NESTED_BTL[@]}" \
                       -print0
                   )
-                  echo "Found ${#bins[@]} binary/map file(s) under matter_app"
+                  echo "Found ${#bins[@]} binary/map file(s) under ${{ inputs.app-package }}"
 
                   staged=0
                   for f in "${bins[@]}"; do
@@ -107,8 +114,8 @@ jobs:
                   echo "Staged ${staged} file(s) under workspace out/:"
                   find "${GITHUB_WORKSPACE}/out" -type f 2>/dev/null | sort || true
                   if [[ "${staged}" -eq 0 ]]; then
-                    echo "WARNING: no artifact/ or map files under ${MATTER_APP}/**/out/**" >&2
-                    find "${MATTER_APP}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
+                    echo "WARNING: no artifact/ or map files under ${APP_PKG_ROOT}/**/out/**" >&2
+                    find "${APP_PKG_ROOT}" -type d -path '*/out/*' 2>/dev/null | head -50 || true
                   fi
 
             - name: Create asset files

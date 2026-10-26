@@ -19,13 +19,25 @@ Starting from the **root** directory:
 
 ### Create Matter Stack Package  
 ```bash
-conan export-pkg packages/matter/conanfile.py --name matter --version <matter_extension_version>
+conan export-pkg packages/matter/conanfile.py --name matter --version <matter_extension_version> --user silabs
+```
+
+### Create Matter Internal Components Package  
+```bash
+conan export-pkg packages/matter_internal/conanfile.py --name matter_internal --version <matter_extension_version> --user silabs
 ```
 
 ### Create Matter Sample App Package  
 ```bash
-conan export-pkg packages/matter_sample_app/conanfile.py
+conan export-pkg packages/matter_app/conanfile.py --name matter_app --version <matter_extension_version> --user silabs
 ```
+
+### Create Matter Internal Sample App Package  
+```bash
+conan export-pkg packages/matter_app_internal/conanfile.py --name matter_app_internal --version <matter_extension_version> --user silabs
+```
+
+Dependency chain: `matter_app` → `matter`; `matter_app_internal` → `matter_internal` → `matter`.
 
 ---
 
@@ -43,6 +55,7 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - Removes manual maintenance and prevents version drift in dependencies.  
 - Supports switching between single- or multi-dependency models for sample apps (option 2 or 3 in [Matter Package Manager design doc](https://confluence.silabs.com/spaces/MATTER/pages/594744893/Matter+Package+Manager), decision still pending).  
 - Generates `pkg.slt` for all directories containing a `.slcp` or `.slcw` file (Design option 3).  
+- Projects with `quality: internal` get a `matter_app_internal` dependency; also updates `packages/matter{,_internal,_app,_app_internal}/pkg.slt`.  
 
 ---
 
@@ -63,7 +76,9 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 - **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.  
 - **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.  
+- **`packages/matter_internal/conanfile.py`** – Packages `quality: internal` Matter components (`.slcc`) and their inputs; depends on `matter`.  
 - **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.   
+- **`packages/matter_app_internal/conanfile.py`** – Packages `quality: internal` sample apps; depends on `matter_internal`.  
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.  
 - **`slc/scripts/dependency_versions.yaml`** – Used as a single source of truth for dependencies
 - **`slc/scripts/matter_package_version`** – Used as a single source of truth for Matter package version
@@ -82,8 +97,14 @@ root/
 │   ├── matter
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
+│   ├── matter_internal
+│   │   ├── conanfile.py
+│   │   └── pkg.slt
 │   ├── matter_app
 │   │   ├── conanfile.py
+│   ├── matter_app_internal
+│   │   ├── conanfile.py
+│   │   └── pkg.slt
 │   ├── README.md
 └── slc/
     └── scripts/

@@ -30,9 +30,12 @@ PLATFORM HEURISTICS (when --common is NOT used)
     Matter dependency plus any dependencies in the 'common' group.
 
 SAMPLE APP PACKAGE
-    By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt' 
-    in the packages/matter_app directory, pointing at 'matter_app' rather than 'matter'.
-    Disable with --update-sample-app-pkg False.
+    By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt'
+    and 'packages/matter_app_internal/pkg.slt'. Disable with --update-sample-app-pkg False.
+
+STACK PACKAGE
+    By default (--update-stack-pkg True), also generates 'packages/matter/pkg.slt' and
+    'packages/matter_internal/pkg.slt'.
 
 VERSION-ONLY MODE
     Use --version-only to resolve and print just the Matter version without 
@@ -64,7 +67,7 @@ ARGUMENT SUMMARY
     --matter-version              Override Matter version (else read from matter.slce)
     --version-only                Only resolve and print Matter version, then exit
     --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
-    --update-sample-app-pkg, -s   Generate packages/matter_app/pkg.slt (default: True)
+    --update-sample-app-pkg, -s   Generate packages/matter_app{,_internal}/pkg.slt (default: True)
 
 EXIT CODES
     0 on success; 1 if the Matter version cannot be resolved.
@@ -244,10 +247,40 @@ version = "0"
         pkg_slt_file.write(pkg_slt_content)
     logger.debug(f"Generated {pkg_slt_path}")
 
+def _directory_has_internal_quality(root: str, files: list) -> bool:
+    """True if any .slcp/.slcw in the directory declares quality: internal."""
+    for name in files:
+        if not name.endswith((".slcp", ".slcw")):
+            continue
+        path = os.path.join(root, name)
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = yaml.safe_load(f) or {}
+        except Exception as e:
+            logger.debug("Skip unreadable %s: %s", path, e)
+            continue
+        if isinstance(data, dict) and data.get("quality") == "internal":
+            return True
+    return False
+
+
+def _app_pkg_slt_content(stack: str, matter_version: str) -> str:
+    """Single-package pkg.slt content matching committed matter_app / matter_app_internal style."""
+    return f"""# Version defaults to "0" if not defined
+version = "0"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+{stack} = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+"""
+
+
 def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
     logger.info(f"Using Matter package version: {matter_version}")
 
     pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(matter_version)
+    internal_app_content = _app_pkg_slt_content("matter_app_internal", matter_version)
 
     for root, dirs, files in os.walk(base_directory):
         # Skip whole subtree if root matches an exclude pattern
@@ -268,7 +301,9 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
         if not any(file.endswith((".slcp", ".slcw")) for file in files):
             continue
 
-        if common:
+        if _directory_has_internal_quality(root, files):
+            pkg_slt_content = internal_app_content
+        elif common:
             pkg_slt_content = pkg_slt_content_all
         else:
             path_components = os.path.normpath(root).split(os.path.sep)
@@ -302,10 +337,10 @@ def main():
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")
     parser.add_argument("--update-sample-app-pkg", "-s", type=lambda x: x.lower() in ('true', '1', 'yes', 'on'), 
                         default=True, metavar="BOOL",
-                        help="Update packages/matter_app/pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
+                        help="Update packages/matter_app/pkg.slt and packages/matter_app_internal/pkg.slt (default: True).")
     parser.add_argument("--update-stack-pkg", "-k", type=lambda x: x.lower() in ('true', '1', 'yes', 'on'), 
                         default=True, metavar="BOOL",
-                        help="Update packages/matter/pkg.slt (default: True). Use 'False', 'True', '0', '1', 'yes', 'no', 'on', 'off'.")
+                        help="Update packages/matter/pkg.slt and packages/matter_internal/pkg.slt (default: True).")
     args = parser.parse_args()
 
     # Configure logging once here so all helper functions share configuration
@@ -332,8 +367,22 @@ def main():
     generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
     if args.update_sample_app_pkg:
         generate_pkg_slt(args.verbose, 'packages/matter_app/pkg.slt', 'matter_app', matter_version, exclude_patterns)
+        generate_pkg_slt(
+            args.verbose,
+            'packages/matter_app_internal/pkg.slt',
+            'matter_app_internal',
+            matter_version,
+            exclude_patterns,
+        )
     if args.update_stack_pkg:
         generate_pkg_slt(args.verbose, 'packages/matter/pkg.slt', 'matter', matter_version, exclude_patterns)
+        generate_pkg_slt(
+            args.verbose,
+            'packages/matter_internal/pkg.slt',
+            'matter_internal',
+            matter_version,
+            exclude_patterns,
+        )
 
 if __name__ == "__main__":
     main()

@@ -260,7 +260,7 @@ class matterRecipe(MatterBaseRecipe):
         return normalized
 
     def _matter_extra_skip_reason(self, path: str) -> Optional[str]:
-        """Return skip reason for paths owned by matter_app, else None."""
+        """Return skip reason for paths owned by other packages, else None."""
         p = path.replace("\\", "/")
         if p.startswith("slc/apps/"):
             return "sample-app content (owned by matter_app package)"
@@ -268,7 +268,26 @@ class matterRecipe(MatterBaseRecipe):
             return "sample project/workspace (owned by matter_app package)"
         if p.startswith("slc/script/internal/") or p == "slc/script/internal":
             return "internal scripts (not packaged)"
+        if p.endswith(".slcc"):
+            quality = self._slcc_quality_for_extra_path(p)
+            if quality == "internal":
+                return "internal component (owned by matter_internal package)"
         return None
+
+    def _slcc_quality_for_extra_path(self, path: str) -> Optional[str]:
+        """Read quality from a .slcc path referenced by matter.slce.extra."""
+        resolved = self._resolve_repo_path(path)
+        if not resolved.is_file():
+            return None
+        try:
+            data = yaml.safe_load(resolved.read_text(encoding="utf-8")) or {}
+        except Exception as e:
+            self.output.warning(f"matter.slce.extra: unreadable {path}: {e}")
+            return None
+        if not isinstance(data, dict):
+            return None
+        quality = data.get("quality")
+        return quality if isinstance(quality, str) else None
 
     def _process_slce_extra(self, filename: str = "matter.slce.extra") -> dict:
         """Parse matter.slce.extra and collect extra packaging metadata.

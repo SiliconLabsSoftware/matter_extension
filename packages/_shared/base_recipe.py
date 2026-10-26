@@ -1,6 +1,7 @@
 from pathlib import Path
 from conan import ConanFile
 from conan.tools.files import copy
+from typing import Generator, Optional
 import os
 import re
 import yaml
@@ -33,6 +34,20 @@ class MatterBaseRecipe(ConanFile):
         "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
         "maintainers": [],
     }
+
+    # Sample apps that must never be Conan-packaged (git-checkout only).
+    # Subclasses may override.
+    _EXCLUDED_APP_PATH_PARTS = ("dishwasher_app",)
+
+    # Project input sections only — skip export/artifact build outputs, filter tags, etc.
+    _INPUT_PATH_KEYS = (
+        "source",
+        "include",
+        "config_file",
+        "other_file",
+        "readme",
+        "post_build",
+    )
 
     def set_version(self):
         """Resolve Conan version (SLCE base + SL_PRERELEASE*).
@@ -177,6 +192,327 @@ class MatterBaseRecipe(ConanFile):
         Cached at module import time for performance.
         """
         return _DEP_VERSIONS
+
+    # --------------- Sample-app / SLC packaging helpers ---------------
+    def _existing_repo_relative_files(self, files: set[str]) -> set[str]:
+        """Keep existing files as paths relative to repo_root (cwd-independent)."""
+        root = self.repo_root.resolve()
+        normalized: set[str] = set()
+        for file in files:
+            p = Path(file)
+            if not p.is_absolute():
+                p = root / file
+            if not p.is_file():
+                continue
+            try:
+                normalized.add(str(p.resolve().relative_to(root)))
+            except ValueError:
+                normalized.add(str(p.resolve()))
+        return normalized
+
+    @classmethod
+    def _iter_slc_path_entries(cls, node) -> Generator[str, None, None]:
+        """Yield every string 'path' value from nested SLC YAML structures."""
+        if isinstance(node, dict):
+            path_val = node.get("path")
+            if isinstance(path_val, str):
+                yield path_val
+            for value in node.values():
+                yield from cls._iter_slc_path_entries(value)
+        elif isinstance(node, list):
+            for item in node:
+                yield from cls._iter_slc_path_entries(item)
+
+    @classmethod
+    def _iter_input_path_entries(cls, data: dict) -> Generator[str, None, None]:
+        """Yield path values from sample input sections only."""
+        for key in cls._INPUT_PATH_KEYS:
+            section = data.get(key)
+            if section is None:
+                continue
+            yield from cls._iter_slc_path_entries(section)
+
+    @classmethod
+    def _iter_slcc_input_file_paths(cls, data: dict) -> Generator[str, None, None]:
+        """Yield repo-style paths from .slcc input sections (honors file_list)."""
+        for key in cls._INPUT_PATH_KEYS:
+            section = data.get(key)
+            if not isinstance(section, list):
+                continue
+            for item in section:
+                if not isinstance(item, dict):
+                    continue
+                base = item.get("path")
+                if not isinstance(base, str) or not base.strip():
+                    continue
+                base = base.strip().replace("\\", "/")
+                file_list = item.get("file_list")
+                if file_list:
+                    for fl in file_list:
+                        if isinstance(fl, dict) and isinstance(fl.get("path"), str):
+                            sub = fl["path"].strip().replace("\\", "/").lstrip("/")
+                            yield f"{base.rstrip('/')}/{sub}"
+                        elif isinstance(fl, str) and fl.strip():
+                            yield f"{base.rstrip('/')}/{fl.strip().lstrip('/')}"
+                else:
+                    yield base
+
+    @classmethod
+    def _is_excluded_app_path(cls, path) -> bool:
+        """True when the SLC project lives under an app excluded from packaging."""
+        excluded = getattr(cls, "_EXCLUDED_APP_PATH_PARTS", ())
+        parts = Path(path).parts
+        return any(part in excluded for part in parts)
+
+    @staticmethod
+    def _slc_project_selected(
+        data: dict,
+        desired_qualities: list[str],
+        desired_packages: list[str],
+    ) -> bool:
+        """Match Matter projects/components by quality and package id."""
+        quality = data.get("quality")
+        if quality is not None and quality not in desired_qualities:
+            return False
+
+        package = data.get("package")
+        if package in desired_packages:
+            return True
+
+        for ext in data.get("sdk_extension") or []:
+            if isinstance(ext, dict) and ext.get("id") in desired_packages:
+                return True
+        return False
+
+    def _gather_slcp_external_inputs(
+        self,
+        desired_qualities: list[str],
+        desired_packages: list[str],
+    ) -> set[str]:
+        """Collect files referenced by .slcp/.slcw input paths for packaging.
+
+        Only source/include/config_file/other_file/readme/post_build paths are
+        considered. Export artifacts (e.g. artifact/*.o) are ignored.
+
+        Sample projects use repo-relative paths such as
+        ../../../../third_party/matter_sdk/... . Those must exist under the
+        app package root so CLI generate resolves them the same way as in the
+        git tree.
+        """
+        root = self.repo_root.resolve()
+        collected: set[str] = set()
+        missing: list[str] = []
+        pkg = getattr(self, "name", type(self).__name__)
+
+        for slc_file in root.rglob("*.slc*"):
+            if "third_party" in slc_file.parts:
+                continue
+            if slc_file.suffix not in (".slcp", ".slcw"):
+                continue
+            if self._is_excluded_app_path(slc_file):
+                continue
+
+            try:
+                data = yaml.safe_load(slc_file.read_text(encoding="utf-8")) or {}
+            except Exception as e:
+                self.output.warning(f"Skip unreadable {slc_file}: {e}")
+                continue
+
+            if not isinstance(data, dict):
+                continue
+            if not self._slc_project_selected(data, desired_qualities, desired_packages):
+                continue
+
+            for rel in self._iter_input_path_entries(data):
+                # Skip bare file_list names (resolved under their include dir).
+                if "/" not in rel and not rel.startswith("."):
+                    continue
+
+                resolved = (slc_file.parent / rel).resolve()
+                try:
+                    resolved.relative_to(root)
+                except ValueError:
+                    missing.append(f"{slc_file}: {rel} (outside repo)")
+                    continue
+
+                if not resolved.exists():
+                    missing.append(f"{slc_file}: {rel}")
+                    continue
+
+                if resolved.is_file():
+                    collected.add(str(resolved))
+                elif resolved.is_dir():
+                    for file_path in resolved.rglob("*"):
+                        if file_path.is_file():
+                            collected.add(str(file_path))
+
+        if missing:
+            sample = "\n  ".join(missing[:30])
+            more = f"\n  ... and {len(missing) - 30} more" if len(missing) > 30 else ""
+            raise FileNotFoundError(
+                f"{pkg} packaging missing .slcp/.slcw inputs "
+                "(initialize third_party/matter_sdk submodule before export-pkg):\n  "
+                f"{sample}{more}"
+            )
+
+        self.output.info(
+            f"Gathered {len(collected)} files from .slcp/.slcw input path references "
+            f"for {pkg} packaging"
+        )
+        return collected
+
+    def _gather_internal_slcc_files(self, desired_packages: list[str]) -> set[str]:
+        """Collect quality:internal .slcc files and their input path references.
+
+        These stack components are excluded from the public matter package and must
+        ship with matter_internal (e.g. matter_ble_dmp_test + DMP btconf).
+        """
+        root = self.repo_root.resolve()
+        component_root = root / "slc" / "component"
+        collected: set[str] = set()
+        missing: list[str] = []
+        pkg = getattr(self, "name", type(self).__name__)
+
+        if not component_root.is_dir():
+            return collected
+
+        for slcc_file in component_root.rglob("*.slcc"):
+            try:
+                data = yaml.safe_load(slcc_file.read_text(encoding="utf-8")) or {}
+            except Exception as e:
+                self.output.warning(f"Skip unreadable {slcc_file}: {e}")
+                continue
+
+            if not isinstance(data, dict):
+                continue
+            if data.get("quality") != "internal":
+                continue
+            if not self._slc_project_selected(
+                data, desired_qualities=["internal"], desired_packages=desired_packages
+            ):
+                continue
+
+            try:
+                collected.add(str(slcc_file.resolve().relative_to(root)))
+            except ValueError:
+                collected.add(str(slcc_file.resolve()))
+
+            for rel in self._iter_slcc_input_file_paths(data):
+                # .slcc paths are normally repo-relative; fall back to slcc-relative.
+                candidates = []
+                if rel.startswith((".", "/")):
+                    candidates.append((slcc_file.parent / rel).resolve())
+                else:
+                    candidates.append((root / rel).resolve())
+                    candidates.append((slcc_file.parent / rel).resolve())
+
+                resolved = next((c for c in candidates if c.exists()), None)
+                if resolved is None:
+                    missing.append(f"{slcc_file}: {rel}")
+                    continue
+                try:
+                    resolved.relative_to(root)
+                except ValueError:
+                    missing.append(f"{slcc_file}: {rel} (outside repo)")
+                    continue
+
+                if resolved.is_file():
+                    collected.add(str(resolved))
+                elif resolved.is_dir():
+                    for file_path in resolved.rglob("*"):
+                        if file_path.is_file():
+                            collected.add(str(file_path))
+
+        if missing:
+            sample = "\n  ".join(missing[:30])
+            more = f"\n  ... and {len(missing) - 30} more" if len(missing) > 30 else ""
+            raise FileNotFoundError(
+                f"{pkg} packaging missing internal .slcc inputs "
+                "(initialize third_party/matter_sdk submodule before export-pkg):\n  "
+                f"{sample}{more}"
+            )
+
+        self.output.info(
+            f"Gathered {len(collected)} files from internal .slcc components "
+            f"for {pkg} packaging"
+        )
+        return collected
+
+    def _gather_slc_release_files(
+        self,
+        desired_qualities: list[str],
+        desired_packages: list[str],
+        assistant,
+    ) -> set:
+        """Discover .slcp/.slcw files (excluding third_party) and collect related release files.
+
+        Returns a set of file paths including the SLC definition file itself plus any related files
+        when the assistant reports matches for the given qualities/packages.
+        """
+        collected: set[str] = set()
+        root = self.repo_root
+        for slc_file in root.rglob("*.slc*"):
+            if "third_party" in slc_file.parts:
+                continue
+            if slc_file.suffix not in (".slcp", ".slcw"):
+                continue
+            if self._is_excluded_app_path(slc_file):
+                continue
+            rel_path = str(slc_file)
+            try:
+                related = assistant.list_files_in_slc_file(
+                    slc_file_path=rel_path,
+                    desired_qualities=desired_qualities,
+                    desired_packages=desired_packages,
+                    fail_on_missing_files=False,
+                )
+            except Exception as e:
+                self.output.warning(f"Failed processing {rel_path}: {e}")
+                continue
+            if related:
+                collected.add(rel_path)
+                collected.update(related)
+        return collected
+
+    def _collect_app_package_files(
+        self,
+        desired_qualities: list[str],
+        desired_packages: list[str],
+        assistant,
+        *,
+        include_internal_slcc: bool = False,
+        seed: Optional[set[str]] = None,
+    ) -> set[str]:
+        """Gather sample-app package file set (release + inputs + optional internal .slcc).
+
+        Shared by matter_app / matter_app_internal package() and build() to avoid drift.
+        Returns existing repo-relative paths with required root files re-applied and checked.
+        """
+        files_to_package: set[str] = set(seed or ())
+        files_to_package.update(
+            self._gather_slc_release_files(
+                desired_qualities=desired_qualities,
+                desired_packages=desired_packages,
+                assistant=assistant,
+            )
+        )
+        files_to_package.update(self._gather_required_root_files())
+        files_to_package.update(
+            self._gather_slcp_external_inputs(
+                desired_qualities=desired_qualities,
+                desired_packages=desired_packages,
+            )
+        )
+        if include_internal_slcc:
+            files_to_package.update(
+                self._gather_internal_slcc_files(desired_packages=desired_packages)
+            )
+        # Resolve against repo_root — cwd during export-pkg is not always the repo.
+        files_to_package = self._existing_repo_relative_files(files_to_package)
+        # Root metadata uses repo-relative names; re-add after exists-filter, then hard-require.
+        files_to_package.update(self._gather_required_root_files())
+        self._require_root_files(files_to_package)
+        return files_to_package
 
 
 def _dependency_versions_candidates(repo_root: Path) -> list[Path]:

@@ -3,7 +3,7 @@ description: Export Matter Conan packages and save their isolated cache for down
 
 inputs:
   package-version:
-    description: Version assigned to matter and matter_app packages.
+    description: Version assigned to matter, matter_internal, matter_app, and matter_app_internal packages.
     required: true
   conan-cache-key:
     description: Optional cache key. A run-scoped key is generated when omitted.
@@ -52,9 +52,13 @@ runs:
         CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}}"
 
         conan remove "matter/${VERSION}@silabs" -c || true
+        conan remove "matter_internal/${VERSION}@silabs" -c || true
         conan remove "matter_app/${VERSION}@silabs" -c || true
+        conan remove "matter_app_internal/${VERSION}@silabs" -c || true
         conan export-pkg packages/matter/conanfile.py --name=matter --version="${VERSION}" --user=silabs
+        conan export-pkg packages/matter_internal/conanfile.py --name=matter_internal --version="${VERSION}" --user=silabs
         conan export-pkg packages/matter_app/conanfile.py --name=matter_app --version="${VERSION}" --user=silabs
+        conan export-pkg packages/matter_app_internal/conanfile.py --name=matter_app_internal --version="${VERSION}" --user=silabs
 
         conan list "*" -c --format=json | python3 -c '
         import json
@@ -63,13 +67,16 @@ runs:
 
         data = json.load(sys.stdin)
         cache = data.get("Local Cache", data)
+        allowed = {"matter", "matter_internal", "matter_app", "matter_app_internal"}
         for reference in cache:
-            if reference.split("/", 1)[0] not in {"matter", "matter_app"}:
+            if reference.split("/", 1)[0] not in allowed:
                 subprocess.run(["conan", "remove", reference, "-c"], check=False)
         '
 
         conan list "matter/${VERSION}@silabs:*"
+        conan list "matter_internal/${VERSION}@silabs:*"
         conan list "matter_app/${VERSION}@silabs:*"
+        conan list "matter_app_internal/${VERSION}@silabs:*"
         echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
         echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
 
