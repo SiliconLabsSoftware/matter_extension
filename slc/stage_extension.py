@@ -28,6 +28,11 @@ exclude_root_directories = [
     'matter_extension/slc/tools'
 ]
 
+# Files at the source root to exclude from copying
+exclude_root_files = [
+    'matter_app.slsdk'
+]
+
 exclude_submodules = [
     'simplicity_sdk',
     'wifi_sdk',
@@ -136,6 +141,8 @@ def copy_directory(source_directory, target_location):
                 print(f"Warning: Source file does not exist: {source_file}")
                 continue
             relative_path = os.path.relpath(root, source_directory)
+            if relative_path == "." and file in exclude_root_files:
+                continue
             target_dir = os.path.join(target_location, relative_path)
             os.makedirs(target_dir, exist_ok=True)
             shutil.copy2(source_file, os.path.join(target_dir, file))
