@@ -679,7 +679,7 @@ EOF
  * Returns '' on release_ branches, which keep the checked-in packages/.prerelease.
  */
 def resolvePrereleaseQualifier() {
-    if (env.BRANCH_NAME?.startsWith('release_')) {
+    if (env.BRANCH_NAME?.startsWith('release_') || env.BRANCH_NAME == 'test/release_2.10-ci-failure') {
         return ''
     }
     def isPr = (env.CHANGE_ID?.trim()) || (env.BRANCH_NAME ==~ /^PR-\d+$/)
@@ -738,7 +738,7 @@ def resolvePackageVersion() {
     }
 
     def base = readMatterBaseVersion()
-    def isRelease = env.BRANCH_NAME?.startsWith('release_')
+    def isRelease = env.BRANCH_NAME?.startsWith('release_') || env.BRANCH_NAME == 'test/release_2.10-ci-failure'
 
     writePrereleaseLabel()
     def qualifier
