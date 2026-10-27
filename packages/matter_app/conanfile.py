@@ -84,11 +84,6 @@ class matter_appRecipe(MatterBaseRecipe):
     def matter_app_folder(self) -> str:
         return str(self.repo_root)
 
-    def set_version(self):
-        silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
-        if not self.channel:
-            self.channel = silabs_package_assistant.get_channel(self)
-
     def requirements(self):
         # Range on line version.
         self.requires(f"matter/{self.matter_conan_range}@{self.user}")
