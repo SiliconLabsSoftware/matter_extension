@@ -88,26 +88,41 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install host dependencies and clone Zephyr manifest
+      - name: Install host dependencies
         shell: bash
-        # Instead of main, replace with the official 4.5 tag once created.
         run: |
           set -euxo pipefail
           sudo -n apt-get update
           sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
-          git clone --depth 1 --branch main https://github.com/SiliconLabsSoftware/zephyr-silabs "$GITHUB_WORKSPACE/zephyrproject/zephyr-silabs"
+
+      - name: Checkout Zephyr manifest
+        # Instead of main, replace with the official 4.5 tag once created.
+        uses: actions/checkout@v7
+        with:
+          repository: SiliconLabsSoftware/zephyr-silabs
+          ref: main
+          path: zephyrproject/zephyr-silabs
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up SLT
+        id: setup-slt
+        uses: SiliconLabsSoftware/action-setup-slt@v2
+
+      - name: Set SLT paths
+        shell: bash
+        run: |
+          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
+          echo "${{ steps.setup-slt.outputs.conan-path }}" >> "$GITHUB_PATH"
 
       - name: Install Simplicity Commander
         shell: bash
         run: |
           set -euo pipefail
-          archive="$RUNNER_TEMP/Commander_linux_x86_64_1v25p0b1995.tar.bz"
-          curl --fail --location --retry 3 --silent --show-error \
-            https://updates.silabs.com/studio/v6/updates/update_site/archives/commander/1.25.0/Commander_linux_x86_64_1v25p0b1995.tar.bz \
-            --output "$archive"
-          printf '%s  %s\n' 956ae8e9e1600e492e1c4e57d271941ebf83bde6bfe23530a4e09ea300fdea32 "$archive" | sha256sum --check --strict
-          tar -xjf "$archive" -C "$RUNNER_TEMP"
-          echo "$RUNNER_TEMP/commander" >> "$GITHUB_PATH"
+          slt install commander
+          COMMANDER_PATH="$(slt where commander)"
+          echo "COMMANDER_PATH=$COMMANDER_PATH" >> "$GITHUB_ENV"
+          echo "$COMMANDER_PATH" >> "$GITHUB_PATH"
 
       - name: Set up Zephyr workspace and SDK
         uses: zephyrproject-rtos/action-zephyr-setup@v1.0.15
