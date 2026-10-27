@@ -129,7 +129,14 @@ def stage_provision_tooling(staging: Path) -> None:
 
     python_bin, py_version, stdlib = ubuntu_python3()
     install_file(python_bin, staging / "guest-bin" / "python3", 0o755)
-    shutil.copytree(stdlib, staging / "usr" / "lib" / py_version, ignore=STDLIB_IGNORE, symlinks=False)
+    stdlib_dest = staging / "usr" / "lib" / stdlib.name
+    shutil.copytree(stdlib, stdlib_dest, ignore=STDLIB_IGNORE, symlinks=False)
+    if not (stdlib_dest / "encodings").is_dir():
+        common.die(f"incomplete python stdlib staged at {stdlib_dest}")
+
+    stdlib_zip = Path(f"/usr/lib/python{py_version.replace('.', '')}.zip")
+    if stdlib_zip.is_file():
+        install_file(stdlib_zip, staging / "usr" / "lib" / stdlib_zip.name, 0o644)
 
     dest = staging / "opt" / "provision"
     shutil.copytree(PROVISION_SRC, dest / "tool", ignore=PROVISION_IGNORE)
