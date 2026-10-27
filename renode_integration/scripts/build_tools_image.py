@@ -97,22 +97,30 @@ def find_ot_ctl(build_dir):
 
 
 def ubuntu_python3():
-    """python3 from apt — same ABI as the guest tools image."""
-    binary = shutil.which("python3")
-    if not binary:
-        common.die("python3 not found on PATH after apt install")
+    """python3 from apt."""
+    binary = Path("/usr/bin/python3")
+    if not binary.is_file():
+        common.die("apt python3 not found at /usr/bin/python3")
     binary = Path(os.path.realpath(binary))
-    result = subprocess.run(
+
+    stdlib = Path(
+        subprocess.run(
+            [str(binary), "-c", "import sysconfig; print(sysconfig.get_path('stdlib'))"],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+    )
+    if not stdlib.is_dir():
+        common.die(f"python stdlib not found at {stdlib}")
+
+    py_version = subprocess.run(
         [str(binary), "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"],
         capture_output=True,
         text=True,
         check=True,
-    )
-    version = result.stdout.strip()
-    stdlib = Path(f"/usr/lib/python{version}")
-    if not stdlib.is_dir():
-        common.die(f"python stdlib not found at {stdlib}")
-    return binary, version, stdlib
+    ).stdout.strip()
+    return binary, py_version, stdlib
 
 
 def stage_provision_tooling(staging: Path) -> None:
