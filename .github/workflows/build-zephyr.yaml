@@ -17,7 +17,7 @@ env:
 jobs:
   prepare:
     name: Prepare Zephyr builds
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
       sdk-sha: ${{ steps.sdk.outputs.sha }}
@@ -69,7 +69,7 @@ jobs:
   zephyr-all-devices:
     name: all-devices-app (${{ matrix.id }})
     needs: prepare
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       CCACHE_SLOPPINESS: time_macros
     strategy:
@@ -222,7 +222,7 @@ jobs:
     name: Package Zephyr artifacts
     needs: [prepare, zephyr-all-devices]
     if: ${{ !cancelled() && needs.prepare.result == 'success' }}
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Download successful Zephyr artifacts
         uses: actions/download-artifact@v8
