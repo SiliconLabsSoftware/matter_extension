@@ -3,6 +3,9 @@
 # that branch in the dispatch dropdown (e.g. release_2.10-1.6.1).
 name: Packages Validation
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
     inputs:
