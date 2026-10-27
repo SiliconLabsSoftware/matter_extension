@@ -35,21 +35,25 @@ class MatterBaseRecipe(ConanFile):
     }
 
     def set_version(self):
-        """Resolve Conan version (SLCE base + SL_PRERELEASE*).
+        """Resolve Conan version and channel.
 
-        Priority:
+        Version priority:
           1. MATTER_PACKAGE_VERSION env (explicit override for local/CI one-offs)
           2. silabs_package_assistant.get_version(matter.slce)
              - local: base + "-0.dev" (e.g. 2.10.0-0.dev)
              - CI with SL_PRERELEASE + SL_PRERELEASE_NUMBER: base + "-alpha.N"
+
+        Channel: set from silabs_package_assistant.get_channel when unset.
         """
+        assistant = self.python_requires["silabs_package_assistant"].module
         override = os.environ.get("MATTER_PACKAGE_VERSION", "").strip()
         if override:
             self.version = override
-            return
+        else:
+            self.version = self.version or assistant.get_version(self.matter_slce_path)
 
-        assistant = self.python_requires["silabs_package_assistant"].module
-        self.version = self.version or assistant.get_version(self.matter_slce_path)
+        if not self.channel:
+            self.channel = assistant.get_channel(self)
 
     def package_id(self):
         # Unified behavior: header-only / content-only style id

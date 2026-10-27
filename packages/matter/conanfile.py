@@ -87,11 +87,6 @@ class matterRecipe(MatterBaseRecipe):
     def matter_folder(self) -> str:
         return str(self.repo_root)
 
-    def set_version(self):
-        silabs_package_assistant = self.python_requires["silabs_package_assistant"].module
-        if not self.channel:
-            self.channel = silabs_package_assistant.get_channel(self)
-
     def requirements(self):
         """Declare recipe dependencies using centralized version mapping.
 

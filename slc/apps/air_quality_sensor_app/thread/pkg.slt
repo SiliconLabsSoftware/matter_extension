@@ -5,4 +5,4 @@ release-stream = "2026-12"
  
 [dependency]
 # Get a specific version of the package
-matter = { version = ">=2.10.0 <2.10.1", prerelease=true }
+matter_app = { version = ">=2.10.0 <2.10.1", prerelease=true }
