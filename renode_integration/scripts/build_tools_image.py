@@ -8,7 +8,6 @@ configs, chip-tool, and shared libraries come from the Ubuntu packages.
 import os
 import shutil
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 
@@ -97,13 +96,32 @@ def find_ot_ctl(build_dir):
     common.die(f"ot-ctl not found under {build_dir}")
 
 
+def ubuntu_python3():
+    """python3 from apt — same ABI as the guest tools image."""
+    binary = shutil.which("python3")
+    if not binary:
+        common.die("python3 not found on PATH after apt install")
+    binary = Path(os.path.realpath(binary))
+    result = subprocess.run(
+        [str(binary), "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    version = result.stdout.strip()
+    stdlib = Path(f"/usr/lib/python{version}")
+    if not stdlib.is_dir():
+        common.die(f"python stdlib not found at {stdlib}")
+    return binary, version, stdlib
+
+
 def stage_provision_tooling(staging: Path) -> None:
     if not PROVISION_SRC.is_dir():
         common.die(f"provision tool not found at {PROVISION_SRC}")
 
-    version = f"python{sys.version_info.major}.{sys.version_info.minor}"
-    install_file(Path(f"/usr/bin/{version}"), staging / "guest-bin" / "python3", 0o755)
-    shutil.copytree(f"/usr/lib/{version}", staging / "usr" / "lib" / version, ignore=STDLIB_IGNORE, symlinks=False)
+    python_bin, py_version, stdlib = ubuntu_python3()
+    install_file(python_bin, staging / "guest-bin" / "python3", 0o755)
+    shutil.copytree(stdlib, staging / "usr" / "lib" / py_version, ignore=STDLIB_IGNORE, symlinks=False)
 
     dest = staging / "opt" / "provision"
     shutil.copytree(PROVISION_SRC, dest / "tool", ignore=PROVISION_IGNORE)
@@ -111,7 +129,7 @@ def stage_provision_tooling(staging: Path) -> None:
         common.die(f"provision requirements not found at {PROVISION_REQUIREMENTS}")
     subprocess.run(
         [
-            sys.executable,
+            str(python_bin),
             "-m",
             "pip",
             "install",
