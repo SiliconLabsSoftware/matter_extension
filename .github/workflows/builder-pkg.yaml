@@ -54,13 +54,12 @@ jobs:
                   use-lockfile: ${{ inputs.use-lockfile && 'true' || 'false' }}
                   fail-on-cache-miss: true
 
+            # CHECK_UPDATES and CI_PKG_LOCK come only from install-pkg-manifest (GITHUB_ENV).
             - name: Build ${{ inputs.example-app }} from packages
               uses: SiliconLabsSoftware/matter_build_action@v2
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
                   MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
-                  # PR/stable: lockfile + no updates. Nightly resolve: allow slt to float.
-                  CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
@@ -69,6 +68,43 @@ jobs:
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
                   continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+
+            # Unlocked lock_app/wifi (siwx-soc): capture the resolved pkg.lock from this
+            # green build so update-ci-lockfile can promote the tested graph (no re-resolve).
+            - name: Stage unlocked seed pkg.lock
+              if: ${{ !inputs.use-lockfile && inputs.example-app == 'lock_app' && inputs.platform == 'siwx-soc' }}
+              shell: bash
+              run: |
+                  set -euo pipefail
+                  MATTER_APP="$(slt where matter_app)"
+                  REL="${{ inputs.path-to-example-app }}"
+                  APP_DIR="$(dirname "${MATTER_APP}/${REL}")"
+                  LOCK=""
+                  if [[ -f "${APP_DIR}/pkg.lock" ]]; then
+                    LOCK="${APP_DIR}/pkg.lock"
+                  else
+                    LOCK="$(find "${MATTER_APP}" -path '*/lock_app/wifi/pkg.lock' -type f 2>/dev/null | head -1 || true)"
+                  fi
+                  [[ -n "${LOCK}" && -f "${LOCK}" ]] || {
+                    echo "Missing pkg.lock after unlocked lock_app/wifi (siwx-soc) build"
+                    echo "Looked in: ${APP_DIR}/pkg.lock"
+                    find "${MATTER_APP}" -name 'pkg.lock' -type f 2>/dev/null | head -20 || true
+                    exit 1
+                  }
+                  mkdir -p "${GITHUB_WORKSPACE}/ci-pkg-lock-seed"
+                  cp -f "${LOCK}" "${GITHUB_WORKSPACE}/ci-pkg-lock-seed/pkg.lock"
+                  echo "Seed lock from ${LOCK}"
+                  wc -l "${GITHUB_WORKSPACE}/ci-pkg-lock-seed/pkg.lock"
+
+            - name: Upload unlocked seed pkg.lock
+              if: ${{ !inputs.use-lockfile && inputs.example-app == 'lock_app' && inputs.platform == 'siwx-soc' }}
+              uses: actions/upload-artifact@v7
+              with:
+                  name: ci-unlocked-pkg-lock
+                  path: ci-pkg-lock-seed/pkg.lock
+                  if-no-files-found: error
+                  retention-days: 7
+                  overwrite: true
 
             # Package builds write under $(slt where matter_app)/**/out/**, not workspace out/.
             # Stage curated artifact/ outputs + maps, preserving path under out/ so upload

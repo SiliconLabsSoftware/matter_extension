@@ -416,6 +416,12 @@ for name in ("matter", "matter_app"):
 open(dst, "w", encoding="utf-8").write(text)
 print(f"Wrote {dst} (matter/matter_app -> {matter_ver})")
 PY
+else
+  # Unlocked: drop any leftover lock so slt floats from pkg.slt ranges.
+  if [[ -f "${APP_DIR}/pkg.lock" ]]; then
+    echo "Removing leftover ${APP_DIR}/pkg.lock (unlocked build)"
+    rm -f "${APP_DIR}/pkg.lock"
+  fi
 fi
 
 echo "Running slt install (project pkg.slt / pkg.slconf, --check-updates=${CHECK_UPDATES})..."

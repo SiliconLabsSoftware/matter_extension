@@ -1,0 +1,51 @@
+name: Validate pkg-manifest locks
+
+# Ensure committed conan.lock / conanfile.txt match pkg.lock (source of truth).
+on:
+  pull_request:
+    paths:
+      - '.github/pkg-manifest/**'
+      - 'slc/script/pkg_lock_to_conan_lock.py'
+      - '.github/workflows/validate-pkg-manifest.yaml'
+  push:
+    paths:
+      - '.github/pkg-manifest/**'
+      - 'slc/script/pkg_lock_to_conan_lock.py'
+      - '.github/workflows/validate-pkg-manifest.yaml'
+
+permissions:
+  contents: read
+
+jobs:
+  sync-check:
+    name: pkg.lock ↔ conan.lock sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Regenerate Conan files from pkg.lock and diff
+        run: |
+          set -euo pipefail
+          LOCK_DIR=".github/pkg-manifest"
+          [[ -f "${LOCK_DIR}/pkg.lock" ]] || {
+            echo "Missing ${LOCK_DIR}/pkg.lock"
+            exit 1
+          }
+
+          python3 slc/script/pkg_lock_to_conan_lock.py \
+            --input "${LOCK_DIR}/pkg.lock" \
+            --output "${LOCK_DIR}/conan.lock" \
+            --conanfile "${LOCK_DIR}/conanfile.txt"
+
+          if ! git diff --exit-code -- "${LOCK_DIR}/conan.lock" "${LOCK_DIR}/conanfile.txt"; then
+            echo ""
+            echo "ERROR: ${LOCK_DIR}/conan.lock and/or conanfile.txt are out of sync with pkg.lock."
+            echo "Regenerate and commit:"
+            echo "  python3 slc/script/pkg_lock_to_conan_lock.py \\"
+            echo "    --input ${LOCK_DIR}/pkg.lock \\"
+            echo "    --output ${LOCK_DIR}/conan.lock \\"
+            echo "    --conanfile ${LOCK_DIR}/conanfile.txt"
+            exit 1
+          fi
+          echo "conan.lock and conanfile.txt match pkg.lock"
