@@ -460,7 +460,9 @@ def _upload_chip_tool(artifact_path, branch_name, build_number, package_version)
 def _upload_mmic_host(artifact_path, branch_name, build_number, package_version):
     """Upload mmic host artifact to UBAI."""
     print("Uploading mmic host to UBAI.")
-    upload_to_ubai(artifact_path, "mmic_host", package_version, branch_name, build_number)
+    upload_to_ubai(artifact_path, "mmic", "host", branch_name, build_number)
+    # Upload to UBAI with package version
+    upload_to_ubai(artifact_path, "mmic", package_version, branch_name, build_number)
 
 
 def _upload_chip_ota_provider(artifact_path, branch_name, build_number, package_version):
