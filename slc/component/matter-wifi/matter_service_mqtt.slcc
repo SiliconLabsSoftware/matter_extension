@@ -25,7 +25,7 @@ source:
 
 define:
   - name: SL_MATTER_ENABLE_MQTT_SERVICE
-    value: "1"
+    value: "0"
   - name: SLI_PAHO_MQTT_OVER_LWIP
     value: "1"
     condition: [paho_mqtt_embedded]
