@@ -1,0 +1,36 @@
+# Skeleton on the default branch so the Actions UI exposes "Run workflow".
+# Real jobs live on release/feature branches that own this workflow; select
+# that branch in the dispatch dropdown (e.g. release_2.10-1.6.1).
+name: Packages Validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      package_version:
+        description: 'MATTER_PACKAGE_VERSION (empty = slc/script/matter_package_version)'
+        required: false
+        type: string
+        default: ''
+      build_dev_apps:
+        description: 'Build Dev Apps (from package cache)'
+        required: false
+        type: boolean
+        default: true
+      ota_size_check:
+        description: 'Run OTA flash size check'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  placeholder:
+    name: Dispatch placeholder (select a release/feature branch)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Instruct caller to select the real branch
+        run: |
+          set -euo pipefail
+          echo "This is the default-branch skeleton for workflow_dispatch UI enablement."
+          echo "Re-run with Branch set to a ref that has the full Packages Validation workflow"
+          echo "(e.g. release_2.10-1.6.1), or: gh workflow run matter-packages-validation.yaml --ref <branch>"
+          echo "Current ref: ${GITHUB_REF_NAME}"
