@@ -6,65 +6,47 @@
 # in the app directory. The Matter extension is taken from the git checkout (MATTER_ROOT).
 #
 #   Usage:
-#   ./slc/build.sh <slcp/slcw path> <board>
+#   ./slc/build-pkg.sh <slcp/slcw path> <board> [options...]
 #
 #   Example .slcp usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
+#   ./slc/build-pkg.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
 #
 #   Example .slcw usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
+#   ./slc/build-pkg.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/
 #
+#   Lockfile modes (default: unlocked — float via pkg.slt):
+#   ./slc/build-pkg.sh --use-lockfile <slcp/slcw> <board>
+#       Pins third-party deps from .github/pkg-manifest/pkg.lock (CHECK_UPDATES=false).
+#   ./slc/build-pkg.sh --pkg-lock PATH/to/pkg.lock <slcp/slcw> <board>
+#       Same as locked, but use an explicit SLT pkg.lock.
+#   ./slc/build-pkg.sh --check-updates true|false ...
+#       Override slt --check-updates (locked defaults to false; unlocked to true).
+#
 #   Example --configuration option usage:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
+#   ./slc/build-pkg.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --configuration CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION:20,CHIP_DEVICE_CONFIG_DEVICE_SOFTWARE_VERSION_STRING:\"1.0.0-1.0\"
 #
-#   --skip_gen option : Allows to skip the slc gen step and only run the make command to rebuild modified files. slc gen normally regenerate your config, autogen, linker_options and makefile for your output folder.
-#                       This option only works if the project has previously been generated
-#   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --skip_gen
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
+#   --skip_gen : Skip slc gen; only make/rebuild (project must already be generated).
+#   ./slc/build-pkg.sh ... brd4187c --skip_gen
 #
-#   --with_app option : Allows to specify additional components for the application build for solutions only. If provided for .slcp file, silently ignored.
-#   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --with_app '<component1>,<component2>'
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
-#
-#   --without_app option : Allows to exclude specific components from the application build for solutions only. If provided for .slcp file, silently ignored.
-#   Example
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp brd4187c --without_app '<component1>,<component2>'
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_freertos/
-#
-#   --with_bootloader option : Allows to specify additional components for the bootloader build for solutions only. If provided for .slcp file, silently ignored.
-#   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat_freertos.slcw brd4187c --with_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_freertos_solution/
-#
-#   --without_bootloader option : Allows to exclude specific components from the bootloader build for solutions only. If provided for .slcp file, silently ignored.
-#   Example
-#   ./slc/build.sh slc/apps/thermostat/wifi/matter_wifi_917_ncp_thermostat_freertos.slcw brd4187c --without_bootloader '<component1>,<component2>'
-#       output in: out/brd4187c/matter_wifi_917_ncp_thermostat_freertos_solution/
-#
-#   -pids option : Allows to build only specific parts of a solution (.slcw) project. If provided for .slcp file, silently ignored.
-#   Valid arguments: 'bootloader' or 'application'
-#   Example bootloader-only build:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids bootloader
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only bootloader)
-#   Example application-only build:
-#   ./slc/build.sh slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_series_2_freertos.slcw brd4187c -pids application
-#       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
+#   --with_app / --without_app / --with_bootloader / --without_bootloader / -pids
+#       Same as classic slc/build.sh (solutions .slcw).
 #
 #   Create packages in local Conan cache:
-#   ./slc/build.sh --create-package-version 2.10.0-0.dev [--clean]
+#   ./slc/build-pkg.sh --create-package-version 2.10.0-0.dev [--clean]
 #
-#   Export from repo and build via packages/build_app.sh:
-#   ./slc/build.sh --build-from-package-version 2.10.0-0.dev [--clean] \
+#   Export from repo and build via packages/build_app.sh (lock flags forwarded):
+#   ./slc/build-pkg.sh --build-from-package-version 2.10.0-0.dev [--use-lockfile] [--clean] \
 #       matter_wifi_soc_lock_app_freertos.slcw brd4338a
 #
 #   --clean : Repo dev — remove out/ before build.
-#             Package modes — remove matter/matter_app from Conan cache before export
-#             (package out/ is removed with the cached package; not passed to build_app.sh).
+#             Package modes — remove only matter/<ver> and matter_app/<ver> from Conan
+#             cache before export (other versions kept; package out/ goes with the package).
+#
+#   Env (same names as CI / build_app.sh):
+#   CHECK_UPDATES   Default for --check-updates when the flag is omitted
+#   CI_PKG_LOCK     Default for --pkg-lock when the flag is omitted
 #
 
 die() {
@@ -162,6 +144,10 @@ DO_CREATE_PKG=false
 DO_BUILD_FROM_PKG=false
 MATTER_PACKAGE_VERSION=""
 WANT_CLEAN=false
+USE_LOCKFILE=false
+CHECK_UPDATES_SET=false
+CHECK_UPDATES="${CHECK_UPDATES:-true}"
+PKG_LOCK="${CI_PKG_LOCK:-}"
 REMAINING_ARGS=()
 
 while [ $# -gt 0 ]; do
@@ -182,6 +168,24 @@ while [ $# -gt 0 ]; do
 		WANT_CLEAN=true
 		shift
 		;;
+	--use-lockfile)
+		USE_LOCKFILE=true
+		shift
+		;;
+	--pkg-lock)
+		[ -n "${2:-}" ] || die "--pkg-lock needs a path"
+		PKG_LOCK="$2"
+		USE_LOCKFILE=true
+		shift 2
+		;;
+	--check-updates)
+		[ -n "${2:-}" ] || die "--check-updates needs true or false"
+		CHECK_UPDATES="$2"
+		[ "${CHECK_UPDATES}" = "true" ] || [ "${CHECK_UPDATES}" = "false" ] \
+			|| die "--check-updates needs true or false"
+		CHECK_UPDATES_SET=true
+		shift 2
+		;;
 	*)
 		REMAINING_ARGS+=("$1")
 		shift
@@ -193,6 +197,26 @@ set -- "${REMAINING_ARGS[@]}"
 if [ "${DO_CREATE_PKG}" = true ] && [ "${DO_BUILD_FROM_PKG}" = true ]; then
 	die "use either --create-package-version or --build-from-package-version, not both"
 fi
+
+# Resolve lock mode: --use-lockfile defaults to CI pkg-manifest; any pkg.lock implies
+# no float unless the caller explicitly passed --check-updates.
+DEFAULT_CI_PKG_LOCK="${MATTER_ROOT}/.github/pkg-manifest/pkg.lock"
+if [ "${USE_LOCKFILE}" = true ] && [ -z "${PKG_LOCK}" ]; then
+	PKG_LOCK="${DEFAULT_CI_PKG_LOCK}"
+fi
+if [ -n "${PKG_LOCK}" ]; then
+	[ -f "${PKG_LOCK}" ] || die "pkg.lock not found: ${PKG_LOCK}"
+	PKG_LOCK="$(cd "$(dirname "${PKG_LOCK}")" && pwd)/$(basename "${PKG_LOCK}")"
+	if [ "${CHECK_UPDATES_SET}" = false ]; then
+		CHECK_UPDATES="false"
+	fi
+	export CI_PKG_LOCK="${PKG_LOCK}"
+else
+	# Unlocked: do not inherit a leftover CI_PKG_LOCK from the environment.
+	unset CI_PKG_LOCK || true
+fi
+export CHECK_UPDATES
+echo "Lock mode: $([ -n "${PKG_LOCK}" ] && echo "locked (${PKG_LOCK})" || echo "unlocked") CHECK_UPDATES=${CHECK_UPDATES}"
 
 setup_conan() {
 	if ! command -v slt >/dev/null 2>&1; then
@@ -211,10 +235,11 @@ setup_conan() {
 }
 
 remove_matter_packages_from_cache() {
+	local ver="${1:?remove_matter_packages_from_cache needs a version}"
 	setup_conan
-	echo "Removing local matter / matter_app Conan packages..."
-	"${CONAN}" remove "matter/*@silabs" -c || true
-	"${CONAN}" remove "matter_app/*@silabs" -c || true
+	echo "Removing local matter/${ver}@silabs and matter_app/${ver}@silabs..."
+	"${CONAN}" remove "matter/${ver}@silabs" -c || true
+	"${CONAN}" remove "matter_app/${ver}@silabs" -c || true
 }
 
 export_matter_packages() {
@@ -241,12 +266,42 @@ install_matter_app_package() {
 	local ref="matter_app/${ver}@silabs"
 
 	export MATTER_PACKAGE_VERSION="${ver}"
-	echo "Installing ${ref} via SLT..."
-	slt install "${ref}" -e conan
+	echo "Installing ${ref} via SLT (--check-updates=${CHECK_UPDATES})..."
+	slt install "${ref}" -e conan --check-updates="${CHECK_UPDATES}"
+}
+
+# Apply CI/local pkg.lock into an app dir, or remove a leftover lock when unlocked.
+# Repo builds omit matter/matter_app pins (Matter comes from MATTER_ROOT via slconf).
+# Package builds leave rewrite to packages/build_app.sh.
+apply_or_clear_app_pkg_lock() {
+	local app_dir="$1"
+	local strip_matter="${2:-false}"
+
+	if [ -n "${PKG_LOCK}" ]; then
+		echo "Applying pkg.lock from ${PKG_LOCK} -> ${app_dir}/pkg.lock"
+		if [ "${strip_matter}" = true ]; then
+			python3 - "${PKG_LOCK}" "${app_dir}/pkg.lock" <<'PY'
+import re
+import sys
+
+src, dst = sys.argv[1], sys.argv[2]
+text = open(src, encoding="utf-8").read()
+for name in ("matter", "matter_app"):
+    text = re.sub(rf"(?m)^\s*{name}\s*=\s*\[[^\]]*\]\s*\n?", "", text)
+open(dst, "w", encoding="utf-8").write(text)
+print(f"Wrote {dst} (omitted matter/matter_app; local MATTER_ROOT used)")
+PY
+		else
+			cp -f "${PKG_LOCK}" "${app_dir}/pkg.lock"
+		fi
+	elif [ -f "${app_dir}/pkg.lock" ]; then
+		echo "Removing leftover ${app_dir}/pkg.lock (unlocked build)"
+		rm -f "${app_dir}/pkg.lock"
+	fi
 }
 
 if [ "${DO_CREATE_PKG}" = true ]; then
-	[ "${WANT_CLEAN}" = true ] && remove_matter_packages_from_cache
+	[ "${WANT_CLEAN}" = true ] && remove_matter_packages_from_cache "${MATTER_PACKAGE_VERSION}"
 	export_matter_packages "${MATTER_PACKAGE_VERSION}"
 	install_matter_app_package "${MATTER_PACKAGE_VERSION}"
 	echo "Export done."
@@ -257,10 +312,16 @@ if [ "${DO_BUILD_FROM_PKG}" = true ]; then
 	if [ -z "${1:-}" ] || [ -z "${2:-}" ]; then
 		die "--build-from-package-version requires <project.slcp|project.slcw> <board> [options...]"
 	fi
-	[ "${WANT_CLEAN}" = true ] && remove_matter_packages_from_cache
+	[ "${WANT_CLEAN}" = true ] && remove_matter_packages_from_cache "${MATTER_PACKAGE_VERSION}"
 	export_matter_packages "${MATTER_PACKAGE_VERSION}"
 	# build_app.sh only accepts positional project/board when they are the first args.
-	exec "${MATTER_ROOT}/packages/build_app.sh" "$1" "$2" --version "${MATTER_PACKAGE_VERSION}" "${@:3}"
+	# Forward lock mode explicitly (also available via CHECK_UPDATES / CI_PKG_LOCK env).
+	BUILD_APP_ARGS=("$1" "$2" --version "${MATTER_PACKAGE_VERSION}" --check-updates "${CHECK_UPDATES}")
+	if [ -n "${PKG_LOCK}" ]; then
+		BUILD_APP_ARGS+=(--pkg-lock "${PKG_LOCK}")
+	fi
+	BUILD_APP_ARGS+=("${@:3}")
+	exec "${MATTER_ROOT}/packages/build_app.sh" "${BUILD_APP_ARGS[@]}"
 fi
 
 # --- Repo development build (default) ---
@@ -543,8 +604,10 @@ fi
 
 (
 	cd "${PROJECT_APP_DIR}"
-	echo "Running slt install (project pkg.slt / pkg.slconf)..."
-	slt install
+	# Repo path: pin third-party from CI lock when requested; Matter stays local (MATTER_ROOT).
+	apply_or_clear_app_pkg_lock "${PROJECT_APP_DIR}" true
+	echo "Running slt install (project pkg.slt / pkg.slconf, --check-updates=${CHECK_UPDATES})..."
+	slt install --check-updates="${CHECK_UPDATES}"
 	prepend_sdk_paths_to_slconf
 
 	if [ "$skip_gen" = false ]; then

@@ -65,12 +65,12 @@ jobs:
           package-version: ${{ inputs.package-version }}
           use-lockfile: ${{ inputs.use-lockfile }}
 
+      # CHECK_UPDATES and CI_PKG_LOCK come only from install-pkg-manifest (GITHUB_ENV).
       - name: Build window-app
         if: matrix.id == 'mg24'
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
-          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.window_app_path }}
@@ -84,7 +84,6 @@ jobs:
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
-          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.lighting_path }}
@@ -98,7 +97,6 @@ jobs:
         uses: SiliconLabsSoftware/matter_build_action@v2
         env:
           MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
-          CHECK_UPDATES: ${{ inputs.use-lockfile && 'false' || 'true' }}
         with:
           json-file-path: ${{ matrix.json_file }}
           path-to-example-app: ${{ matrix.zigbee_matter_light_path }}

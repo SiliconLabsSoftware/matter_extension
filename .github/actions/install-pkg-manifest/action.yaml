@@ -100,13 +100,14 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        # Locked CI: do not re-float deps after conan --lockfile install.
-        # Nightly (use-lockfile=false): allow normal resolve.
-        # Export so build_app.sh (and any later slt install) inherit the mode
-        # without each workflow re-setting CHECK_UPDATES.
+        # Single source of truth for later build steps (do not re-set in workflows):
+        # Locked: CI_PKG_LOCK + CHECK_UPDATES=false
+        # Unlocked: clear CI_PKG_LOCK + CHECK_UPDATES=true
         CHECK_UPDATES="true"
         if [[ "${{ inputs.use-lockfile }}" == "true" ]]; then
           CHECK_UPDATES="false"
+        else
+          echo "CI_PKG_LOCK=" >> "${GITHUB_ENV}"
         fi
         echo "CHECK_UPDATES=${CHECK_UPDATES}" >> "${GITHUB_ENV}"
         slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan \

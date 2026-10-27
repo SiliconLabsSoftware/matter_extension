@@ -23,13 +23,15 @@ on:
         type: boolean
         default: true
       use_lockfile:
-        description: 'true = PR/stable locked deps; false = nightly resolve + refresh lock'
+        description: 'true = locked deps (PR/push/Matter-delta); false = daily resolve + refresh lock'
         required: false
         type: boolean
         default: true
 
+# Separate groups so a locked push/nightly cannot cancel a daily unlock (and
+# vice versa). Unlock only via workflow_dispatch with use_lockfile=false.
 concurrency:
-  group: create-matter-packages-${{ github.head_ref || github.ref_name }}
+  group: create-matter-packages-${{ github.head_ref || github.ref_name }}-${{ (github.event_name == 'workflow_dispatch' && inputs.use_lockfile == false) && 'unlock' || 'locked' }}
   cancel-in-progress: true
 
 permissions:
@@ -47,8 +49,8 @@ jobs:
         id: mode
         run: |
           set -euo pipefail
-          # Refresh (unlocked) only via nightly/manual dispatch with use_lockfile=false
-          # on release_2.10-1.6.1. Pushes always use the committed lock (stable gate).
+          # Refresh (unlocked) only via daily/manual dispatch with use_lockfile=false
+          # on release_2.10-1.6.1. Pushes and Matter-delta nightly stay locked.
           ref="${{ github.ref_name }}"
           event="${{ github.event_name }}"
           if [[ "$ref" == "release_2.10-1.6.1" && "$event" == "workflow_dispatch" && "${{ inputs.use_lockfile }}" == "false" ]]; then
@@ -166,44 +168,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Cache tools
-        uses: ./.github/actions/cache-tools
-
-      - name: Install Matter packages (no CI lock)
-        uses: ./.github/actions/install-pkg-manifest
+      # Capture from green unlocked lock_app/wifi (siwx-soc) — no second resolve.
+      - name: Download unlocked seed pkg.lock
+        uses: actions/download-artifact@v7
         with:
-          conan-cache-key: ${{ needs.matter-packages.outputs.conan-cache-key }}
-          package-version: ${{ needs.matter-packages.outputs.version }}
-          use-lockfile: "false"
+          name: ci-unlocked-pkg-lock
+          path: ci-pkg-lock-seed
 
-      - name: Resolve pkg.lock and convert to conan.lock
-        env:
-          MATTER_PACKAGE_VERSION: ${{ needs.matter-packages.outputs.version }}
+      - name: Promote seed pkg.lock and convert to conan.lock
         run: |
           set -euo pipefail
-          APP_DIR="slc/apps/lock_app/wifi"
           LOCK_DIR=".github/pkg-manifest"
-          [[ -f "${APP_DIR}/pkg.slt" ]] || python3 slc/script/generate_pkg_slt.py -d slc
-
-          # Fresh resolve: remove old lock so slt install floats.
-          rm -f "${APP_DIR}/pkg.lock"
-          (
-            cd "${APP_DIR}"
-            echo "Running unlocked slt install in ${APP_DIR}"
-            slt install --check-updates=true
-          )
-          [[ -f "${APP_DIR}/pkg.lock" ]] || {
-            echo "slt install did not produce ${APP_DIR}/pkg.lock"
+          SEED="ci-pkg-lock-seed/pkg.lock"
+          [[ -f "${SEED}" ]] || {
+            echo "Missing artifact ${SEED} (expected from unlocked lock_app/wifi siwx-soc build)"
+            ls -la ci-pkg-lock-seed || true
             exit 1
           }
 
           mkdir -p "${LOCK_DIR}"
-          cp -f "${APP_DIR}/pkg.lock" "${LOCK_DIR}/pkg.lock"
+          cp -f "${SEED}" "${LOCK_DIR}/pkg.lock"
           python3 slc/script/pkg_lock_to_conan_lock.py \
             --input "${LOCK_DIR}/pkg.lock" \
             --output "${LOCK_DIR}/conan.lock" \
             --conanfile "${LOCK_DIR}/conanfile.txt"
-          echo "Updated ${LOCK_DIR}/pkg.lock and ${LOCK_DIR}/conan.lock"
+          echo "Updated ${LOCK_DIR}/pkg.lock and ${LOCK_DIR}/conan.lock from green build seed"
           wc -l "${LOCK_DIR}/pkg.lock" "${LOCK_DIR}/conan.lock"
 
       - name: Generate GitHub App token
@@ -224,7 +213,7 @@ jobs:
           base: ${{ github.ref_name }}
           delete-branch: true
           title: "NOJIRA: Refresh CI pkg-manifest locks"
-          commit-message: "NOJIRA: Refresh CI pkg-manifest locks from nightly slt resolve"
+          commit-message: "NOJIRA: Refresh CI pkg-manifest locks from unlocked lock_app/wifi build"
           author: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
           committer: "silabs-matter-ci-bot[bot] <209700385+silabs-matter-ci-bot[bot]@users.noreply.github.com>"
           add-paths: |
@@ -235,7 +224,8 @@ jobs:
             Auto-generated after successful unlocked Packages Validation.
 
             - Source run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-            - Mode: `use_lockfile=false` (nightly resolve)
+            - Mode: `use_lockfile=false`
+            - Seed: `pkg.lock` captured from green unlocked `lock_app` / `siwx-soc` (wifi) build (no post-green re-resolve)
 
             Updates:
             - `.github/pkg-manifest/pkg.lock`
