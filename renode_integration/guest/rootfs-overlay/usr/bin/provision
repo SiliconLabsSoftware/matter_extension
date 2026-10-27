@@ -1,0 +1,28 @@
+#!/bin/sh
+# Run the packaged provision.py with the bundled AArch64 python3, loader and libs.
+set -eu
+
+TOOLS=${MATTER_TOOLS_ROOT:-/root/matter-tools}
+if [ ! -d "$TOOLS/opt/provision" ] && [ -d /docker/opt/provision ]; then
+    TOOLS=/docker
+fi
+
+LOADER="$TOOLS/lib/ld-linux-aarch64.so.1"
+LIBS="$TOOLS/usr/lib/aarch64-linux-gnu:$TOOLS/lib"
+PYTHON="$TOOLS/guest-bin/python3"
+PROVISION="$TOOLS/opt/provision"
+
+if [ ! -x "$LOADER" ] || [ ! -x "$PYTHON" ] || [ ! -f "$PROVISION/tool/provision.py" ]; then
+    echo "provision: matter-tools is not mounted or was built without provisioning support" >&2
+    exit 1
+fi
+
+# provision.py writes ./temp and latest.json, and the tools image is read-only.
+WORK=${PROVISION_WORK_DIR:-/tmp/provision}
+mkdir -p "$WORK"
+cd "$WORK"
+
+export PYTHONHOME="$TOOLS/usr"
+export PYTHONPATH="$PROVISION/site-packages"
+export PYTHONDONTWRITEBYTECODE=1
+exec "$LOADER" --library-path "$LIBS" "$PYTHON" "$PROVISION/tool/provision.py" "$@"

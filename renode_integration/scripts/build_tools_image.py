@@ -8,17 +8,25 @@ configs, chip-tool, and shared libraries come from the Ubuntu packages.
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
 import common
 
 GUEST_BINS = ("btattach", "btmgmt", "dbus-daemon", "dbus-send", "dbus-monitor")
+PROVISION_SRC = Path(common.REPO_ROOT) / "third_party" / "matter_support" / "provision"
+PROVISION_REQUIREMENTS = PROVISION_SRC / "requirements.txt"
+STDLIB_IGNORE = shutil.ignore_patterns(
+    "__pycache__", "test", "tests", "idlelib", "tkinter", "turtledemo", "ensurepip", "lib2to3"
+)
+PROVISION_IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc", "test", "temp", "latest.json")
 APT_PACKAGES = (
     "sudo",
     "git",
     "ca-certificates",
     "python3",
+    "python3-pip",
     "e2fsprogs",
     "bluez",
     "dbus",
@@ -89,6 +97,51 @@ def find_ot_ctl(build_dir):
     common.die(f"ot-ctl not found under {build_dir}")
 
 
+def stage_provision_tooling(staging: Path) -> None:
+    if not PROVISION_SRC.is_dir():
+        common.die(f"provision tool not found at {PROVISION_SRC}")
+
+    version = f"python{sys.version_info.major}.{sys.version_info.minor}"
+    install_file(Path(f"/usr/bin/{version}"), staging / "guest-bin" / "python3", 0o755)
+    shutil.copytree(f"/usr/lib/{version}", staging / "usr" / "lib" / version, ignore=STDLIB_IGNORE, symlinks=False)
+
+    dest = staging / "opt" / "provision"
+    shutil.copytree(PROVISION_SRC, dest / "tool", ignore=PROVISION_IGNORE)
+    if not PROVISION_REQUIREMENTS.is_file():
+        common.die(f"provision requirements not found at {PROVISION_REQUIREMENTS}")
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "install",
+            "-q",
+            "--no-cache-dir",
+            "--only-binary=:all:",
+            "--target",
+            str(dest / "site-packages"),
+            "-r",
+            str(PROVISION_REQUIREMENTS),
+        ],
+        check=True,
+    )
+
+    lib_dir = staging / "usr" / "lib" / "aarch64-linux-gnu"
+    lib_dir.mkdir(parents=True, exist_ok=True)
+    binaries = [staging / "guest-bin" / "python3"]
+    for root in (staging / "usr" / "lib", staging / "opt" / "provision" / "site-packages"):
+        if root.is_dir():
+            binaries.extend(root.rglob("*.so"))
+    libs = set()
+    for binary in binaries:
+        if binary.is_file():
+            libs.update(linked_libs(binary))
+    for lib in sorted(libs):
+        target = lib_dir / Path(lib).name
+        if not target.exists():
+            shutil.copy2(lib, target)
+
+
 def build(chip_tool):
     apt_install(APT_PACKAGES)
     pinned = str(common.manifest_lookup("tools_image.ubuntu_version"))
@@ -146,12 +199,16 @@ def build(chip_tool):
             0o644,
         )
 
+        stage_provision_tooling(staging)
+
         libs = set()
-        for binary in guest_bin.iterdir():
-            if binary.is_file():
-                libs.update(linked_libs(binary))
+        for path in staging.rglob("*"):
+            if path.is_file() and (path.parent.name == "guest-bin" or path.suffix == ".so"):
+                libs.update(linked_libs(path))
         for lib in sorted(libs):
-            shutil.copy2(lib, lib_dir / os.path.basename(lib))
+            target = lib_dir / os.path.basename(lib)
+            if not target.exists():
+                shutil.copy2(lib, target)
         shutil.copy2("/lib/ld-linux-aarch64.so.1", staging / "lib" / "ld-linux-aarch64.so.1")
 
         out_dir = Path(common.RENODE_INTEGRATION_DIR) / "out" / "guest-rootfs"

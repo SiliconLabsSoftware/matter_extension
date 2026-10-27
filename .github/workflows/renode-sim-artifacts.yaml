@@ -99,6 +99,9 @@ jobs:
       - name: Initialize matter_sdk
         run: git submodule update --init third_party/matter_sdk
 
+      - name: Initialize matter_support
+        run: git submodule update --init third_party/matter_support
+
       - name: Checkout matter_sdk submodules
         run: |
           cd third_party/matter_sdk

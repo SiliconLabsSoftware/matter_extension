@@ -8,7 +8,7 @@ Matter Renode simulation in CI and locally. Matter application ELFs come from
 
 The simulation models:
 
-- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool)
+- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool, `provision`)
 - **thread_rcp** - EFR32 Thread RCP (Spinel over UART)
 - **ble_rcp** - EFR32 BLE RCP (HCI over UART)
 - **matter_soc** - EFR32 Matter device (added at runtime from checkpoint)
@@ -115,11 +115,37 @@ python3 renode_integration/harness/commissioning_test.py \
 The harness uses the assembled bundle at `renode_integration/out/bundle`. Exit code `0` means commissioning and
 toggle succeeded. Device logs are on stdout from `test_lib`.
 
+### Provisioning over BLE (manual)
+
+Published common bundles include provisioning support: `matter-tools.ext2` ships
+`python3`, `provision.py`, and BLE dependencies. The rootfs overlay provides the
+`/usr/bin/provision` wrapper. Fetch the bundle, then supply your own
+provisioning-enabled Matter ELF and NVM3 image.
+
+The SoC must boot with the provision-required flag (NVM3 key `0x87228`) already set. Build the NVM3 image from the app's linker map with Commander, then start the provisioning resc:
+
+```sh
+# From the repository root, after fetch_bundle.py
+cp /path/to/matter_thread_soc_lighting_app_freertos.out renode_integration/out/bundle/matter.out
+python3 renode_integration/scripts/make_provision_nvm3.py \
+  --map /path/to/<app>.map \
+  --output renode_integration/out/bundle/nvm3-provision.hex
+
+cd renode_integration/out/bundle
+./renode/renode -e '$matter_elf=@'"$(pwd)"'/matter.out' resc/matter-sim-prov.resc
+```
+
+On the hub console, use the address printed on the SoC UART (`BLE Static Device Address`). For example:
+
+```sh
+provision read vendor_id -c bt:<BLE_ADDRESS> -o /tmp/provision-read.json
+```
+
 ### Rebuilding artifacts (maintainers)
 
 Use workflow [renode-sim-artifacts](../.github/workflows/renode-sim-artifacts.yaml)
 (`publish=true` after bumping `BUNDLE_VERSION`). Individual scripts under `scripts/`
-are for CI and pipeline development; `build_tools_image.py` requires the
+are for CI and pipeline development. `build_tools_image.py` requires the
 `ubuntu-24.04-arm` runner.
 
 ### Cold boot (no checkpoint)
@@ -159,6 +185,8 @@ chip-tool onoff toggle 101 1
 The job is non-blocking (`continue-on-error`) during the pilot. Hub and SoC UART
 output is streamed to the job log via Renode `test_lib`.
 
+Automated Renode provisioning validation will be implemented in a follow-up PR.
+
 ## Updating the bundle
 
 1. Edit `sim-manifest.json`, overlays, or resc files.
@@ -187,6 +215,9 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
   - `bluetoothd`, `btattach`, `btmgmt`, `dbus-*`, `system.conf` and `bluetooth.conf`: the Ubuntu
     `bluez` and `dbus` packages.
   - Shared libraries and the loader: resolved with `ldd` from the build host.
+  - `python3`, `third_party/matter_support/provision`, and pip deps from
+    `third_party/matter_support/provision/requirements.txt`: staged under `/opt/provision` on the
+    tools image (CI checks out `matter_support`).
 
   The guest is Buildroot, so `S99matter-services` runs these binaries through the bundled loader
   and copies the D-Bus configs into place at boot.
