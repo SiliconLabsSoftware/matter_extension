@@ -1,0 +1,136 @@
+project_name: generator_firmware_efr32
+package: platform
+quality: production
+label: Matter Provisioner Generator
+description: >
+  Generates the key-pair, and CSR for the DAC
+category: Example|Platform
+filter:
+  - { name: Device Type, value: [SoC] }
+  - { name: MCU, value: [32-bit MCU] }
+  - { name: Project Difficulty, value: [Beginner] }
+ui_hints:
+  highlight:
+    - { path: README.md, focus: true }
+readme:
+  - { path: README.md }
+
+provides:
+  - name: nvm3_custom_init
+  # Series 2 places NVM3 at runtime (efr32.cpp) instead of using nvm3_default_common_linker.c
+  - name: nvm3_default_backend
+    condition: [device_series_2]
+
+component:
+  - { id: sl_main }
+  - { id: freertos }
+  - { id: device_init }
+  - { id: cpp_support }
+  - { id: iostream_rtt }
+  - { id: psa_its }
+  - { id: psa_driver }
+  - { id: psa_crypto }
+  - { id: psa_crypto_ecc_secp256r1 }
+  - { id: psa_crypto_sha256 }
+  - { id: psa_crypto_ecdsa }
+  - { id: psa_crypto_cipher_ctr }
+  - { id: mbedtls_pkcs5 }
+  - { id: mbedtls_ecc }
+  - { id: mbedtls_sha }
+  - { id: mbedtls_x509 }
+  - { id: bootloader_app_properties }
+  # Exposes platform/bootloader/common so startup_*.c can include api/application_properties.h
+  - { id: bootloader_interface_headers }
+  - { id: nvm3_default }
+  - id: emlib_rmu
+    condition: [device_series_2]
+  - id: hal_emu
+    condition: [device_series_3]
+
+include:
+  - { path: "../../../../third_party/matter_sdk/examples/generator-firmware/silabs/include" }
+  - { path: ../../../../third_party/matter_support/provision }
+  - { path: ../../../../third_party/matter_sdk/examples }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs }
+  - { path: ../../../../third_party/matter_sdk/src }
+  - { path: ../../../../third_party/matter_sdk/src/include }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction }
+  - { path: ../../../../third_party/matter_sdk/zzz_generated/app-common }
+  - { path: ../../../../third_party/nlassert/include }
+  - { path: ../../../../third_party/nlio/include }
+
+source:
+  - { path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/include/app.h }
+  - { path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/app.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/efr32.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCrypto.h }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoPSA.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReader.h }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReaderCommon.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageWriter.h }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannel.h }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelRTT.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageReader.cpp }
+  - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageWriter.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/crypto/CHIPCryptoPALPSA.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/Base64.h }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/Base64.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/BytesToHex.h }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/BytesToHex.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/CHIPMem.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.h }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/logging/CHIPLogging.h }
+  - { path: ../../../../third_party/matter_sdk/src/lib/support/logging/TextOnlyLogging.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/credentials/DeviceAttestationCredsProvider.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.h }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/Logging.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKey.h }
+  - { path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKeyPSA.cpp }
+  - { path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.h }
+  - { path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.cpp }
+
+library:
+  - { path: ../../../../third_party/matter_support/provision/libs/libProvision-m33-hard.a }
+
+define:
+  - { name: SL_PROVISION_GENERATOR, value: "1" }
+  - { name: SL_MATTER_PROVISION_CHANNEL_ENABLED, value: "1" }
+  - { name: SL_MATTER_ENABLE_OTA_ENCRYPTION, value: "1" }
+  - { name: SL_MATTER_TEST_EVENT_TRIGGER_ENABLED, value: "1" }
+  - { name: SILABS_PROVISION_PROTOCOL_V1, value: "0" }
+  - { name: CHIP_SYSTEM_CONFIG_USE_SOCKETS, value: "1" }
+  - { name: CHIP_CRYPTO_PLATFORM, value: "1" }
+  - { name: CHIP_LOG_FILTERING, value: "1" }
+  - {
+      name: CHIP_PLATFORM_CONFIG_INCLUDE,
+      value: "<platform/silabs/CHIPPlatformConfig.h>",
+    }
+  - { name: CHIP_SYSTEM_CONFIG_USE_BSD_IFADDRS, value: "0" }
+  - { name: CHIP_CONFIG_MEMORY_MGMT_MALLOC, value: "0" }
+  - { name: CHIP_CONFIG_MEMORY_MGMT_PLATFORM, value: "1" }
+
+toolchain_settings:
+  - { option: optimize, value: size }
+  - { option: cxx_standard, value: c++17 }
+  - { option: gcc_compiler_option, value: -Wno-unused-parameter }
+
+template_contribution:
+  - name: lockbits_size
+    value: 8192
+  - name: memory_flash_start
+    value: 0x1008000
+    condition: [SIMG301M114KIH]
+  - name: memory_flash_size
+    value: 0x1a4000
+    condition: [SIMG301M114KIH]
+  - name: code_region1_size
+    value: 0x118000
+    condition: [SIMG301M114KIH]
+
+tag:
+  - hidden

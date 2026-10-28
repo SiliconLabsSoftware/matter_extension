@@ -112,6 +112,8 @@ def download_and_upload_artifacts(workflow_id, branch_name, build_number, sqa=Fa
             sqa,
             package_version,
         )
+        if not sqa:
+            _upload_generator_firmware(workflow_id, branch_name, build_number)
         print("Artifact download and upload process completed successfully.")
     except Exception as e:
         print(f"Error during artifact processing: {e}")
@@ -403,6 +405,33 @@ def _upload_merged_artifacts(artifact_file, artifact_name, branch_name, build_nu
             upload_to_artifactory(filtered_artifact_file, filtered_artifactory_artifact_name, branch_name, str(build_number))
     except Exception as e:
         raise RuntimeError(f"Failed to upload merged artifacts: {e}")
+
+
+def _upload_generator_firmware(workflow_id, branch_name, build_number):
+    """
+    Upload the Generator Firmware images to Artifactory as generator_firmware_<version>.zip.
+
+    Args:
+        workflow_id (int): Workflow run ID to download the artifact from
+        branch_name (str): Branch name for the upload
+        build_number (int): Build number for the upload
+
+    Raises:
+        RuntimeError: If download or upload fails
+    """
+    workflow_artifact_url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
+    response = _make_github_api_request(workflow_artifact_url)
+    artifacts = response.json().get('artifacts') or []
+    artifact = next((a for a in artifacts if a['name'] == config.generator_firmware_artifact_name), None)
+    if not artifact:
+        print(f"No {config.generator_firmware_artifact_name} artifact found for workflow {workflow_id}, skipping.")
+        return
+    try:
+        artifact_file = _download_artifact(artifact['archive_download_url'], artifact['name'] + '.zip')
+        version = _get_matter_extension_version()
+        upload_to_artifactory(artifact_file, f"generator_firmware_{version}.zip", branch_name, str(build_number))
+    except Exception as e:
+        raise RuntimeError(f"Failed to upload Generator Firmware: {e}")
 
 
 def _validate_binaries_upload_parameters(binaries_folder, branch_name, build_number):

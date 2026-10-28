@@ -246,6 +246,11 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             platform: series-3-bootloader
 
+    build_generator_firmware:
+        name: Build Generator Firmware
+        needs: [cache-tools, cache-sdks]
+        uses: ./.github/workflows/gfw-builder.yaml
+
     build-sqa-tools:
         name: Build SQA Tools
         needs: [set-build-type, cache-tools, cache-sdks]
