@@ -126,6 +126,93 @@ run_slc_generate_with_retry() {
 	return $exit_code
 }
 
+# sdk_extension "- id: wifi" is the Wi-Fi SDK. Component "- id: wifi" is left alone.
+# .slcw files point at .slcp projects; only those .slcp files are rewritten.
+WIFI_SDK_BACKUPS=()
+
+revert_wifi_sdk_extension() {
+	local entry src backup
+	for entry in "${WIFI_SDK_BACKUPS[@]+"${WIFI_SDK_BACKUPS[@]}"}"; do
+		src="${entry%%|*}"
+		backup="${entry#*|}"
+		if [ -f "$backup" ]; then
+			cp -f "$backup" "$src"
+			rm -f "$backup"
+			echo "Reverted sdk_extension wifi in $src"
+		fi
+	done
+}
+
+list_project_slcps() {
+	local project="$1"
+	local dir rel
+
+	if [[ "$project" == *.slcp ]]; then
+		printf '%s\n' "$project"
+		return
+	fi
+
+	dir=$(dirname "$project")
+	while IFS= read -r rel; do
+		[ -n "$rel" ] || continue
+		rel="${rel%\"}"
+		rel="${rel#\"}"
+		printf '%s\n' "$dir/$rel"
+	done < <(grep -E '^[[:space:]]*-[[:space:]]*path:[[:space:]]+.*\.slcp[[:space:]]*$' "$project" | sed -E 's/^[[:space:]]*-[[:space:]]*path:[[:space:]]+//')
+}
+
+# Rewrite sdk_extension id wifi -> wiseconnect3_sdk. No-op when that entry is absent.
+patch_wifi_sdk_extension_file() {
+	local slcp="$1"
+	local backup
+
+	if [ ! -f "$slcp" ]; then
+		echo "WARNING: project file not found: $slcp"
+		return 0
+	fi
+
+	backup=$(mktemp)
+	cp -f "$slcp" "$backup"
+	if python3 - "$slcp" <<'PY'
+import sys
+
+path = sys.argv[1]
+with open(path, "r", newline="") as handle:
+    lines = handle.readlines()
+
+out = []
+in_sdk = False
+changed = False
+for line in lines:
+    body = line.rstrip("\r\n")
+    if not in_sdk and body.strip() == "sdk_extension:":
+        in_sdk = True
+        out.append(line)
+        continue
+    if in_sdk and body and not body[0].isspace() and not body.lstrip().startswith("#"):
+        in_sdk = False
+    if in_sdk and body.strip() == "- id: wifi":
+        indent = body[: len(body) - len(body.lstrip(" \t"))]
+        nl = "\r\n" if line.endswith("\r\n") else "\n"
+        out.append(f"{indent}- id: wiseconnect3_sdk{nl}")
+        changed = True
+        continue
+    out.append(line)
+
+if not changed:
+    sys.exit(2)
+
+with open(path, "w", newline="") as handle:
+    handle.writelines(out)
+PY
+	then
+		WIFI_SDK_BACKUPS+=("${slcp}|${backup}")
+		echo "Temporarily set sdk_extension id wifi -> wiseconnect3_sdk in $slcp"
+	else
+		rm -f "$backup"
+	fi
+}
+
 MATTER_ROOT="${MATTER_ROOT:-$(pwd -P)}"
 echo "MATTER_ROOT: $MATTER_ROOT"
 : "${SISDK_ROOT:=$MATTER_ROOT/third_party/simplicity_sdk}"
@@ -342,6 +429,11 @@ fi
 
 echo "Building $SILABS_APP for $SILABS_BOARD in $OUTPUT_DIR"
 
+# Wi-Fi projects declare sdk_extension id "wifi". Swap it for the build, then restore.
+trap revert_wifi_sdk_extension EXIT
+while IFS= read -r project_slcp; do
+	patch_wifi_sdk_extension_file "$project_slcp"
+done < <(list_project_slcps "$SILABS_APP_PATH")
 
 EXTENSION_DIR=$MATTER_ROOT
 WISECONNECT3_DIR=$MATTER_ROOT/third_party/wifi_sdk
