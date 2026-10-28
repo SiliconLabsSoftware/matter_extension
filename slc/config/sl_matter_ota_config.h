@@ -21,7 +21,7 @@
 // <i> Leave empty ("") to resolve the URL hostname via DNS.
 // <i> Example: "192.168.1.50"
 #ifndef HTTPS_OTA_CONNECT_IP
-#define HTTPS_OTA_CONNECT_IP "192.168.29.150"
+#define HTTPS_OTA_CONNECT_IP ""
 #endif
 
 // <<< end of configuration section >>>

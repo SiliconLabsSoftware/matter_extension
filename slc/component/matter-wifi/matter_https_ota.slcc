@@ -1,0 +1,37 @@
+id: matter_https_ota
+label: Matter HTTPS Vendor OTA
+description: >
+  Vendor HTTPS OTA path alongside Matter BDX. Shares OTAMultiImageProcessorImpl.
+  Provides HttpsDownloader, VendorOTARequestor, periodic check driver, and Matter gate.
+  Uses the shared HttpClient from matter_service_http_offload (GetRange on http_client thread).
+package: matter
+category: Matter-WiFi|OTA
+quality: experimental
+metadata:
+  sbom:
+    license: Apache 2.0
+
+provides:
+  - name: matter_https_ota
+
+requires:
+  - name: matter_multi_image_ota
+  - name: matter_service_http_offload
+
+include:
+  - path: third_party/matter_sdk/src/platform/silabs/services
+    file_list:
+      - path: https_downloader.h
+      - path: vendor_ota_requestor.h
+      - path: vendor_ota_requestor_driver.h
+      - path: vendor_ota_matter_gate.h
+
+source:
+  - path: third_party/matter_sdk/src/platform/silabs/services/https_downloader.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/vendor_ota_requestor.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/vendor_ota_requestor_driver.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/vendor_ota_matter_gate.cpp
+
+define:
+  - name: SL_MATTER_ENABLE_HTTPS_OTA
+    value: "1"
