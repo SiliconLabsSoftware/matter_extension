@@ -47,6 +47,7 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageReader.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageFlash.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageWriter.cpp
+    condition: [matter_multi_image_ota]
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReaderCommon.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoPSA.cpp
     unless: [matter_crypto_tinycrypt_siwx917]
