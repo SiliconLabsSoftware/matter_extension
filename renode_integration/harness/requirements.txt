@@ -1,0 +1,2 @@
+pyrenode3 @ git+https://github.com/antmicro/pyrenode3.git@a4a804ddada430bb9a8ce81b00e78668b55486e2
+pythonnet==3.2.0
