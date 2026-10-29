@@ -1,0 +1,44 @@
+name: Renode Provisioning Artifacts
+
+on:
+  workflow_dispatch: # TODO: determine if keeping in final rev
+  workflow_call:
+    inputs:
+      build-type:
+        description: "dev-apps build type"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  provisioning-disk:
+    name: Build provision image
+    runs-on: ubuntu-24.04-arm
+    continue-on-error: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Initialize matter_support
+        run: git submodule update --init third_party/matter_support
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends e2fsprogs python3 python3-pip
+
+      - name: Build provision image
+        run: python3 renode_integration/scripts/build_provision_image.py
+
+      - name: Upload provision image
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-provision-image
+          path: renode_integration/out/guest-rootfs/matter-provision.ext2
+          if-no-files-found: error
+      

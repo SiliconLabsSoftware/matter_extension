@@ -1,0 +1,36 @@
+:name: MATTER_FROM_CHECKPOINT_PROVISION
+:description: Checkpoint hub with PR provision disk, SoC with NVM3 provision-required key. Run matter-provision-mount on the hub console before provision.
+
+$checkpoint ?= $ORIGIN/../linux-booted-thread.save
+EmulationManager Load $checkpoint
+
+$matter_provision ?= $ORIGIN/../guest-rootfs/matter-provision.ext2
+mach set "matter_hub"
+provision_virtio LoadImage $matter_provision
+
+$matter_elf ?= $ORIGIN/../matter.out
+$nvm3_hex ?= $ORIGIN/../nvm3-provision.hex
+
+logLevel 3
+
+$matter_hub_console_port ?= 4540
+$matter_cli_port ?= 3452
+
+mach set "matter_hub"
+emulation CreateServerSocketTerminal $matter_hub_console_port "matter_hub_console" false
+connector Connect sysbus.uart1 matter_hub_console
+
+mach create "matter_soc"
+using sysbus
+machine LoadPlatformDescription @platforms/boards/silabs/brd4187c.repl
+sysbus LoadELF $matter_elf
+sysbus LoadHEX $nvm3_hex
+cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`
+cpu PerformanceInMips 50
+connector Connect sysbus.radio wireless
+connector Connect sysbus.radio ble
+emulation CreateServerSocketTerminal $matter_cli_port "matter_cli" false
+connector Connect sysbus.eusart0 matter_cli
+
+mach set "matter_hub"
+start

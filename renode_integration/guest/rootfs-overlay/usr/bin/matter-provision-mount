@@ -1,0 +1,48 @@
+#!/bin/sh
+# Mount matter-provision.ext2 after Renode loads it post-checkpoint.
+set -eu
+
+MARKER="tool/provision.py"
+DEST="/root/matter-provision"
+PROBE_DIR="/run/matter-provision-probe"
+
+# Check if disk is mounted and valid
+if mountpoint -q "$DEST" 2>/dev/null; then
+    if [ -e "$DEST/$MARKER" ]; then
+        echo "matter-provision-mount: already mounted at $DEST"
+        exit 0
+    fi
+fi
+
+# Rescan and probe available virtio block devices
+for dev in /dev/vda /dev/vdb /dev/vdc; do
+    [ -b dev ] || continue
+    
+    # trigger kernel rescan for dynamically attached renode disks
+    echo 1 > "/sys/block/$(basename "$dev")/device/rescan"
+
+    # probe the device read-only to look for provisioning marker
+    mkdir -p "$PROBE_DIR"
+    if mount -o ro "$dev" "$PROBE_DIR" 2>/dev/null; then
+        if [ -e "$PROBE_DIR/$MARKER" ]; then
+            umount "$PROBE_DIR"
+            rmdir "$PROBE_DIR"
+            
+            # disk found, mount it to final destination
+            mkdir -p "$DEST"
+            if mount -o ro "$dev" "$DEST"; then
+                echo "matter-provision-mount: mounted $dev at $DEST"
+                exit 0
+            fi
+            exit 1
+        fi
+        umount "$PROBE_DIR"
+    fi
+done
+
+# Clean up probe directory if nothing was found
+[ -d "$PROBE_DIR" ] && rmdir "$PROBE_DIR"
+
+echo "matter-provision-mount: no disk with $MARKER found" >&2
+echo "Load matter-provision.ext2 on provision_virtio, then retry." >&2
+exit 1
