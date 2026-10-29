@@ -1,0 +1,25 @@
+#!/bin/sh
+# Run matter_support provision.py from the provision disk (tool + Python runtime).
+set -eu
+
+PROVISION_ROOT=${MATTER_PROVISION_ROOT:-/root/matter-provision}
+TOOL="$PROVISION_ROOT/tool/provision.py"
+LOADER="$PROVISION_ROOT/lib/ld-linux-aarch64.so.1"
+LIBS="$PROVISION_ROOT/usr/lib/aarch64-linux-gnu:$PROVISION_ROOT/lib"
+PY="$PROVISION_ROOT/guest-bin/python3"
+
+if [ ! -f "$TOOL" ]; then
+    echo "provision: matter-provision disk is not mounted ($TOOL)" >&2
+    exit 1
+fi
+if [ ! -x "$LOADER" ] || [ ! -x "$PY" ]; then
+    echo "provision: matter-provision disk is missing python3 or its loader" >&2
+    exit 1
+fi
+
+mkdir -p /tmp/provision
+cd /tmp/provision
+export PYTHONHOME="$PROVISION_ROOT"
+export PYTHONNOUSERSITE=1
+export PYTHONPATH="$PROVISION_ROOT/opt/provision/site-packages${PYTHONPATH:+:$PYTHONPATH}"
+exec "$LOADER" --library-path "$LIBS" "$PY" "$TOOL" "$@"

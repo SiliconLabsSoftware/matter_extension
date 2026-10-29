@@ -8,7 +8,7 @@ Matter Renode simulation in CI and locally. Matter application ELFs come from
 
 The simulation models:
 
-- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool)
+- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool, provision)
 - **thread_rcp** - EFR32 Thread RCP (Spinel over UART)
 - **ble_rcp** - EFR32 BLE RCP (HCI over UART)
 - **matter_soc** - EFR32 Matter device (added at runtime from checkpoint)
@@ -159,6 +159,43 @@ chip-tool onoff toggle 101 1
 The job is non-blocking (`continue-on-error`) during the pilot. Hub and SoC UART
 output is streamed to the job log via Renode `test_lib`.
 
+## Provision tool disk
+
+The hub exposes a second VirtIO block device (`provision_virtio`) for `matter_support/provision`. The published bundle ships a checkpoint with that device. It does not ship `matter-provision.ext2`. Build and attach the image with workflow [`.github/workflows/renode-provisioning-artifacts.yaml`](../.github/workflows/renode-provisioning-artifacts.yaml) when running provisioning tests.
+
+| Artifact | Role |
+|----------|------|
+| `matter-tools.ext2` | OTBR, BlueZ, chip-tool |
+| `matter-provision.ext2` | `tool/`, arm64 Python, `requirements.txt` wheels, `MATTER_SUPPORT_REVISION` |
+
+After the hub mounts the provision disk at `/root/matter-provision`, `/usr/bin/provision` runs `tool/provision.py` using the interpreter and wheels on that same disk.
+
+**Run provision against a bundle locally**:
+
+Use a provisioning-enabled Matter build (`matter_provision_channel`).
+
+SoC must boot with NVM3 key `0x87228=1` to put the device in provisioning mode. Build hex from the app linker map:
+
+```sh
+cp path/to/matter.out renode_integration/out/bundle/matter.out
+python3 renode_integration/scripts/make_provision_nvm3.py \
+  --map path/to/matter_thread_soc_lighting_app_freertos.map \
+  --output renode_integration/out/bundle/nvm3-provision.hex
+```
+
+Fetch the runtime bundle with a checkpoint that includes `provision_virtio`.
+
+Build `matter-provision.ext2` in CI, download, and copy it under `out/bundle/guest-rootfs/`.
+
+Run simulation using `matter-sim-prov.resc` (`LoadImage` on `provision_virtio`, provision-enabled SoC + NVM3 hex):
+
+```sh
+cd renode_integration/out/bundle && ./renode/renode resc/matter-sim-prov.resc
+# 4540: matter-provision-mount  |  3452: BLE address  |  provision read vendor_id -c bt:...
+```
+
+Run `matter-provision-mount` in hub console after load to mount provisioning disk.
+
 ## Updating the bundle
 
 1. Edit `sim-manifest.json`, overlays, or resc files.
@@ -175,6 +212,7 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 | Checkpoint won't load | Renode build mismatch, rebuild Renode and run `harness/generate_checkpoint.py` |
 | `oras pull` auth failure | `gh auth login` and ensure GHCR package access |
 | `matter-services` timeout | Check guest logs at `/tmp/*.log` on hub console |
+| `provision: matter-provision disk is not mounted` | Use `matter-sim-prov.resc`, then run `matter-provision-mount` on the hub console |
 | New Thread network needed | `matter-thread-init --force` on hub console |
 
 ## Implementation notes
@@ -190,5 +228,8 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 
   The guest is Buildroot, so `S99matter-services` runs these binaries through the bundled loader
   and copies the D-Bus configs into place at boot.
+- **Provision image:** built on Linux aarch64 with `build_provision_image.py`: `matter_support/provision`
+  as `tool/`, pinned `requirements.txt`, pip wheels under `opt/provision/site-packages`, and a bundled
+  arm64 `python3` plus stdlib and shared libraries on the same ext2.
 - **Checkpoint:** `harness/generate_checkpoint.py` drives Renode through pyrenode3 (`MatterSim`). It includes `matter-sim-full.resc`, waits for `matter-services: READY`, logs in, runs `matter-thread-init`, and saves `linux-booted-thread.save`. The macOS smoke test loads that checkpoint with the same harness. Dependencies are pinned in `harness/requirements.txt`.
 - **Storage:** ORAS artifacts on `ghcr.io/siliconlabssoftware/matter-renode-sim`.

@@ -101,14 +101,22 @@ def sha256_file(path):
     return digest.hexdigest()
 
 
-def find_debugfs():
-    found = shutil.which("debugfs")
+def _find_e2fs_tool(name):
+    found = shutil.which(name)
     if found:
         return found
     for candidate in (
-        "/opt/homebrew/opt/e2fsprogs/sbin/debugfs",
-        "/usr/sbin/debugfs",
+        f"/opt/homebrew/opt/e2fsprogs/sbin/{name}",
+        f"/usr/sbin/{name}",
     ):
         if os.access(candidate, os.X_OK):
             return candidate
-    die("debugfs not found (install e2fsprogs)")
+    die(f"{name} not found (install e2fsprogs)")
+
+
+def find_mkfs_ext2():
+    return _find_e2fs_tool("mkfs.ext2")
+
+
+def find_debugfs():
+    return _find_e2fs_tool("debugfs")

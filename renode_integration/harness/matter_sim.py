@@ -110,6 +110,12 @@ class MatterSim:
         resc_path = self.bundle_dir / "resc" / resc
         test_lib.execute_monitor_command(f"include @{resc_path}")
 
+    def mount_provision(self, tester: object, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> None:
+        """Run matter-provision-mount on the hub (after matter-sim-prov.resc LoadImage)."""
+        rc, report = run_shell(tester, "matter-provision-mount", timeout_s)
+        if rc != 0:
+            raise RuntimeError(f"matter-provision-mount failed (rc={rc})\n{report[-2000:]}")
+
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.
 

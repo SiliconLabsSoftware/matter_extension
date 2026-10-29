@@ -1,7 +1,7 @@
 {
   "renode": {
     "repo": "https://github.com/SiliconLabsSoftware/renode.git",
-    "commit": "4007141a92fe35e5fb6ed94069aa57e8b3275fec"
+    "commit": "5a35b1ac8681e5a8d04a79a6b672f161dcf80dae"
   },
   "base_rootfs": {
     "url": "https://dl.antmicro.com/projects/renode/rootfs.ext2-s_62914560-a92499f1e488a57b212b6e6cb3c8869911feecb3",
