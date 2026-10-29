@@ -9,31 +9,70 @@ pipeline
         {
             steps {
                 script {
-                    node('gsdkMontrealNode') {
-                        ws('/home/dockerUser/qaWorkspace/') {
-                            dir('utf_app_matter') {
-                                withCredentials([usernamePassword(
-                                    credentialsId: 'github-app',
-                                    usernameVariable: 'GITHUB_APP',
-                                    passwordVariable: 'GITHUB_ACCESS_TOKEN'
-                                )]) {
-                                    checkout scm: [$class                            : 'GitSCM',
-                                                    branches                         : [[name: 'main']],
-                                                    browser                          : [$class: 'GithubWeb',
-                                                    repoUrl: 'https://github.com/SiliconLabsInternal/utf_app_matter'],
-                                                    extensions                       : [
-                                                        [$class: 'SubmoduleOption',
-                                                            disableSubmodules: true,
-                                                            parentCredentials: true,
-                                                            recursiveSubmodules: false],
-                                                        [$class: 'CleanBeforeCheckout',
-                                                            deleteUntrackedNestedRepositories: true]],
-                                                    userRemoteConfigs                : [[credentialsId: 'github-app',
-                                                                    url: 'https://github.com/SiliconLabsInternal/utf_app_matter.git']]]
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        node('gsdkMontrealNode') {
+                            ws('/home/dockerUser/qaWorkspace/') {
+                                dir('utf_app_matter') {
+                                    withCredentials([usernamePassword(
+                                        credentialsId: 'github-app',
+                                        usernameVariable: 'GITHUB_APP',
+                                        passwordVariable: 'GITHUB_ACCESS_TOKEN'
+                                    )]) {
+                                        checkout scm: [$class                            : 'GitSCM',
+                                                        branches                         : [[name: 'main']],
+                                                        browser                          : [$class: 'GithubWeb',
+                                                        repoUrl: 'https://github.com/SiliconLabsInternal/utf_app_matter'],
+                                                        extensions                       : [
+                                                            [$class: 'SubmoduleOption',
+                                                                disableSubmodules: true,
+                                                                parentCredentials: true,
+                                                                recursiveSubmodules: false],
+                                                            [$class: 'CleanBeforeCheckout',
+                                                                deleteUntrackedNestedRepositories: true]],
+                                                        userRemoteConfigs                : [[credentialsId: 'github-app',
+                                                                        url: 'https://github.com/SiliconLabsInternal/utf_app_matter.git']]]
+                                    }
+                                    sh 'git rev-parse HEAD && git remote -v && git status -sb'
+                                    echo 'cloning successful!'
                                 }
-                                sh 'git rev-parse HEAD && git remote -v && git status -sb'
-                                echo 'cloning successful!'
                             }
+                        }
+                    }
+                }
+            }
+        }
+        stage('Create and Publish Matter Packages') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        node('Build-Farm-Large') {
+                            checkout scm
+                            def pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
+                            // Clone-only smoke test (full publish path was in pre-be06b164 Jenkinsfile)
+                            pipelineFunctions.checkoutGithubActionRepo(
+                                'action-conan-create-publish',
+                                'https://github.com/SiliconLabsInternal/action-conan-create-publish.git',
+                                'refs/tags/v2.5.4'
+                            )
+                            echo 'action-conan-create-publish clone successful!'
+                        }
+                    }
+                }
+            }
+        }
+        stage('Promote Matter Packages to SQA') {
+            steps {
+                script {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        node('Build-Farm-Large') {
+                            checkout scm
+                            def pipelineFunctions = load 'jenkins_integration/jenkinsFunctions.groovy'
+                            pipelineFunctions.checkoutGithubActionRepo(
+                                'action-conan-promote',
+                                'https://github.com/SiliconLabsInternal/action-conan-promote.git',
+                                '*/v2'
+                            )
+                            echo 'action-conan-promote clone successful!'
                         }
                     }
                 }
