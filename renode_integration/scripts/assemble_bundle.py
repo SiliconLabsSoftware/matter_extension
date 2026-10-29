@@ -33,7 +33,7 @@ def main():
     copy_test_lib(bundle)
     guest_out = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "guest-rootfs")
     guest_dest = os.path.join(bundle, "guest-rootfs")
-    for name in ("matter-rootfs.ext2", "matter-tools.ext2", "zynqmp-matter-linux.dtb"):
+    for name in ("matter-rootfs.ext2", "matter-tools.ext2", "zynqmp-matter-linux.dtb", "matter-provision.ext2"):
         copy_if_exists(os.path.join(guest_out, name), guest_dest)
 
     rcp_out = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "rcp")

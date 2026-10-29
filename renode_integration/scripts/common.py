@@ -69,6 +69,8 @@ def artifact_tag(kind, host=None):
         return f"{BUNDLE_VERSION}-common"
     if kind == "runtime":
         return f"{BUNDLE_VERSION}-runtime-{host or detect_host()}"
+    if kind == "provision":
+        return f"{BUNDLE_VERSION}-provision"
     die(f"unknown bundle kind: {kind}")
 
 

@@ -1,22 +1,40 @@
 name: Renode Provisioning Artifacts
 
 on:
-  workflow_dispatch: # TODO: determine if keeping in final rev
-  workflow_call:
+  workflow_dispatch:
     inputs:
-      build-type:
-        description: "dev-apps build type"
+      publish:
+        description: "Publish artifacts to GHCR"
         required: true
-        type: string
+        type: boolean
+        default: false
+  pull_request:
+    branches:
+      - main
+      - release_*
+    paths:
+      - ".gitmodules"
+      - "third_party/matter_support"
+      - "renode_integration/scripts/build_provision_image.py"
+  push:
+    branches:
+      - main
+      - release_*
+    paths:
+      - ".gitmodules"
+      - "third_party/matter_support"
+      - "renode_integration/scripts/build_provision_image.py"
 
-permissions:
-  contents: read
-  packages: read
+concurrency:
+  group: renode-provision-artifacts
+  cancel-in-progress: false
 
 jobs:
-  provisioning-disk:
+  build-provisioning:
     name: Build provision image
     runs-on: ubuntu-24.04-arm
+    permissions:
+      contents: read
     continue-on-error: false
     steps:
       - name: Checkout
@@ -41,4 +59,42 @@ jobs:
           name: renode-provision-image
           path: renode_integration/out/guest-rootfs/matter-provision.ext2
           if-no-files-found: error
-      
+
+  publish-provisioning:
+    name: Publish provisioning
+    needs: build-provisioning
+    if: |
+      always() && 
+      needs.build-provisioning.result == 'success' && 
+      (github.event_name == 'push' || github.event_name == 'pull_request' || inputs.publish == true)    
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download provision image artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-provision-image
+          path: renode_integration/out/guest-rootfs
+
+      - name: Assemble provisioning bundle
+        run: python3 renode_integration/scripts/assemble_bundle.py
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Publish provisioning bundle to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+          python3 renode_integration/scripts/publish_bundle.py provision
