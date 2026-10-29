@@ -44,6 +44,14 @@ jobs:
                   )
                   git submodule update --init --depth 1 -- "${paths[@]}"
 
+            # Submodule wifi_sdk still uses wiseconnect3_sdk; repo SLCPs use wifi for packages.
+            - name: Map sdk_extension wifi to wiseconnect3_sdk
+              run: |
+                  set -euo pipefail
+                  # Only sdk_extension entries (next line is version:). Leave component `- id: wifi` alone.
+                  find slc/apps -type f \( -name '*.slcp' -o -name '*.slcw' \) -print0 \
+                    | xargs -0 perl -i -0pe 's/^(\s*- id: )wifi(\n\s+version:)/${1}wiseconnect3_sdk$2/gm'
+
             - name: Cache SDKs
               uses: ./.github/actions/cache-sdks
 
