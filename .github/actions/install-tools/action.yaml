@@ -42,10 +42,10 @@ runs:
         echo "${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_PATH
         echo "${{ steps.setup-action.outputs.conan-path }}" >> $GITHUB_PATH
 
-    - name: Update SLT
-      shell: bash
-      run: |
-        slt update --self
+    # - name: Update SLT
+    #   shell: bash
+    #   run: |
+    #     slt update --self
 
     - name: Install slc-cli
       shell: bash

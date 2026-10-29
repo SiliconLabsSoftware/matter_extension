@@ -646,7 +646,6 @@ mkdir -p "${HOME}/.local/bin"
 unzip -o "/tmp/${SLT_PKG_NAME}" -d "${HOME}/.local/bin"
 rm -f "/tmp/${SLT_PKG_NAME}"
 export SLT_CI=true
-slt update --self
 slt --version
 
 export CONAN_HOME="${CONAN_HOME:-${HOME}/.silabs/slt/installs/conan}"
