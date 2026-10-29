@@ -48,18 +48,6 @@ def dir_size_mb(path):
     return max(64, (total + 1024 * 1024 - 1) // (1024 * 1024) + 8)
 
 
-def support_revision():
-    support = os.path.join(common.REPO_ROOT, "third_party", "matter_support")
-    result = subprocess.run(
-        ["git", "-C", support, "rev-parse", "HEAD"],
-        capture_output=True,
-        text=True,
-    )
-    if result.returncode != 0:
-        return "unknown\n"
-    return result.stdout.strip() + "\n"
-
-
 def stage_python_runtime(staging):
     req = (
         Path(common.REPO_ROOT)
@@ -128,7 +116,6 @@ def build_provision_ext2(output: Path) -> None:
     try:
         staging = work / "staging"
         shutil.copytree(src, staging / "tool", ignore=_IGNORE)
-        (staging / "MATTER_SUPPORT_REVISION").write_text(support_revision(), encoding="utf-8")
         stage_python_runtime(staging)
 
         output.parent.mkdir(parents=True, exist_ok=True)
