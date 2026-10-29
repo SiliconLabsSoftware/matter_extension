@@ -46,5 +46,6 @@ include:
 
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageReader.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageWriter.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReaderCommon.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoPSA.cpp

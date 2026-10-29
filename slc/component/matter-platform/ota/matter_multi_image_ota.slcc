@@ -30,12 +30,6 @@ source:
     condition: [siwx917_ncp]
   - path: third_party/matter_sdk/src/platform/silabs/multi-ota/SiWx917/OTAWiFiFirmwareProcessor.cpp
     condition: [matter_platform_siwx917]
-  - path: third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageWriter.cpp
-    condition: [matter_provision_default]
-    unless: [matter_provision_channel]
-  - path: third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageWriter.cpp
-    condition: [matter_provision_flash]
-    unless: [matter_provision_channel]
 
 include:
   - path: third_party/matter_sdk/src/platform/silabs/multi-ota
