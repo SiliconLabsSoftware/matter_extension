@@ -1,13 +1,17 @@
 name: Restore and install Matter packages
-description: Restore an isolated Conan cache containing Matter packages and install matter_app.
+description: Restore an isolated Conan cache containing Matter packages and install an app package.
 
 inputs:
   conan-cache-key:
     description: Cache key created by the Matter package producer.
     required: true
   package-version:
-    description: Version of matter_app to install from the restored cache.
+    description: Version of the app package to install from the restored cache.
     required: true
+  app-package:
+    description: App Conan package to install (matter_app or matter_app_internal).
+    required: false
+    default: matter_app
   fail-on-cache-miss:
     description: Fail when the requested package cache does not exist.
     required: false
@@ -54,4 +58,12 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan
+        APP_PACKAGE="${{ inputs.app-package }}"
+        case "${APP_PACKAGE}" in
+          matter_app|matter_app_internal) ;;
+          *)
+            echo "error: app-package must be matter_app or matter_app_internal (got: ${APP_PACKAGE})" >&2
+            exit 1
+            ;;
+        esac
+        slt install "${APP_PACKAGE}/${{ inputs.package-version }}@silabs" -e conan
