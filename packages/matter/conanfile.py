@@ -99,8 +99,9 @@ class matterRecipe(MatterBaseRecipe):
         versions file consumed by both scripts and recipes.
         """
 
+        channel = self.release_stream_channel
         for dep_name, dep_version in self.dep_versions.items():  # preserves insertion order (Python 3.7+)
-            self.requires(f"{dep_name}/{dep_version}@{self.user}")
+            self.requires(f"{dep_name}/{dep_version}@{self.user}/{channel}")
 
     def slt_requirements(self):
         req = {}
