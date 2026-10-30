@@ -45,7 +45,9 @@ is built independently from the same common inputs.
 The expected workflow is to pull published artifacts from GHCR, not to rebuild
 rootfs, tools image, RCPs, or Renode locally. The **common** bundle includes
 `matter-rootfs.ext2`, `matter-tools.ext2`, DTB, RCP ELFs, and resc files. The
-**runtime** bundle for your host adds portable Renode and the checkpoint. The **provision** bundle includes `matter-provision.ext2` with dependencies to provision simulated devices.
+**runtime** bundle for your host adds portable Renode and the checkpoint. The 
+**provision** bundle includes `matter-provision.ext2` with dependencies to 
+provision simulated devices.
 
 ### Prerequisites
 
@@ -130,7 +132,9 @@ python3 renode_integration/scripts/make_provision_nvm3.py \
   --output renode_integration/out/bundle/nvm3-provision.hex
 ```
 
-Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle tied to the PR with:
+Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you 
+would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle 
+tied to the PR with:
 
 ```sh
 cd renode_integration
@@ -154,7 +158,8 @@ nc localhost 4540
 matter-provision-mount
 ```
 
-Take note of the BLE address advertised in the Matter SoC device console (can find with `nc localhost 3452`). You can now provision over simulated BLE medium using that address. For example in the hub console:
+Take note of the BLE address advertised in the Matter SoC device console (can find with `nc localhost 3452`). You can 
+now provision over simulated BLE medium using that address. For example in the hub console:
 
 ```sh
 provision read vendor_id -c bt:BLE-ADDRESS -o /tmp/provision-read.json
@@ -165,7 +170,8 @@ provision read vendor_id -c bt:BLE-ADDRESS -o /tmp/provision-read.json
 Use workflow [renode-sim-artifacts](../.github/workflows/renode-sim-artifacts.yaml)
 (`publish=true` after bumping `BUNDLE_VERSION`). Individual scripts under `scripts/`
 are for CI and pipeline development. `build_tools_image.py` requires the
-`ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml) manually. 
+`ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but 
+can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml). 
 
 ### Cold boot (no checkpoint)
 
