@@ -31,9 +31,9 @@ source:
     condition: [matter_provision_flash]
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelEFR32BLE.cpp
-    unless: [device_family_siwg917]
+    condition: [matter_ble]
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelSi917BLE.cpp
-    condition: [device_family_siwg917]
+    unless: [matter_ble]
 
 library:
   # Default storage only needs the proprietary library when the channel is enabled.
