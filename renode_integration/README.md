@@ -27,13 +27,15 @@ The simulation models:
 
 ## Common vs runtime artifacts
 
-Artifacts are split into two GHCR packages sharing the same version `N`:
+Artifacts are split into GHCR packages sharing the same version `N`:
 
 | Tag | Contents |
 |-----|----------|
 | `vN-common` | rootfs, tools image, DTB, RCP ELFs, resc files |
 | `vN-runtime-linux-x64` | Renode build + checkpoint (CI, Linux, WSL2) |
 | `vN-runtime-osx-arm64` | Renode build + checkpoint (macOS for local development) |
+| `vN-provision` | `matter_support/provision`, python dependencies |
+| `vN-provision-pr-<PR-NUM>` | `matter_support/provision`, python dependencies for a PR that updates `third_party/matter_support` | 
 
 Checkpoints are tied to the Renode build that created them. Each host runtime
 is built independently from the same common inputs.
@@ -43,7 +45,7 @@ is built independently from the same common inputs.
 The expected workflow is to pull published artifacts from GHCR, not to rebuild
 rootfs, tools image, RCPs, or Renode locally. The **common** bundle includes
 `matter-rootfs.ext2`, `matter-tools.ext2`, DTB, RCP ELFs, and resc files. The
-**runtime** bundle for your host adds portable Renode and the checkpoint.
+**runtime** bundle for your host adds portable Renode and the checkpoint. The **provision** bundle includes `matter-provision.ext2` with dependencies to provision simulated devices.
 
 ### Prerequisites
 
@@ -115,12 +117,55 @@ python3 renode_integration/harness/commissioning_test.py \
 The harness uses the assembled bundle at `renode_integration/out/bundle`. Exit code `0` means commissioning and
 toggle succeeded. Device logs are on stdout from `test_lib`.
 
+### Manual provisioning test
+
+Use a provisioning-enabled Matter build (include component `matter_provision_channel`).
+
+SoC must boot with NVM3 key `0x87228=1` to put the device in provisioning mode. Build hex from the app linker map:
+
+```sh
+cp path/to/matter_app.out renode_integration/out/bundle/matter.out
+python3 renode_integration/scripts/make_provision_nvm3.py \
+  --map path/to/matter_app.map \
+  --output renode_integration/out/bundle/nvm3-provision.hex
+```
+
+Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle tied to the PR with:
+
+```sh
+cd renode_integration
+python3 scripts/fetch_bundle.py -p PR-NUM
+```
+
+Run simulation using `matter-sim-prov.resc` (`LoadImage` on `provision_virtio`, provision-enabled SoC + NVM3 hex):
+
+```sh
+cd renode_integration/out/bundle 
+./renode/renode resc/matter-sim-prov.resc
+```
+
+Run `matter-provision-mount` in hub console after load to mount provisioning disk:
+
+```sh
+# Matter Hub
+nc localhost 4540
+
+# On simulated Matter Hub:
+matter-provision-mount
+```
+
+Take note of the BLE address advertised in the Matter SoC device console (can find with `nc localhost 3452`). You can now provision over simulated BLE medium using that address. For example in the hub console:
+
+```sh
+provision read vendor_id -c bt:BLE-ADDRESS -o /tmp/provision-read.json
+```
+
 ### Rebuilding artifacts (maintainers)
 
 Use workflow [renode-sim-artifacts](../.github/workflows/renode-sim-artifacts.yaml)
 (`publish=true` after bumping `BUNDLE_VERSION`). Individual scripts under `scripts/`
-are for CI and pipeline development; `build_tools_image.py` requires the
-`ubuntu-24.04-arm` runner.
+are for CI and pipeline development. `build_tools_image.py` requires the
+`ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml)
 
 ### Cold boot (no checkpoint)
 
@@ -159,42 +204,8 @@ chip-tool onoff toggle 101 1
 The job is non-blocking (`continue-on-error`) during the pilot. Hub and SoC UART
 output is streamed to the job log via Renode `test_lib`.
 
-## Provision tool disk
-
-The hub exposes a second VirtIO block device (`provision_virtio`) for `matter_support/provision`. The published bundle ships a checkpoint with that device. It does not ship `matter-provision.ext2`. Build and attach the image with workflow [`.github/workflows/renode-provisioning-artifacts.yaml`](../.github/workflows/renode-provisioning-artifacts.yaml) when running provisioning tests.
-
-| Artifact | Role |
-|----------|------|
-| `matter-tools.ext2` | OTBR, BlueZ, chip-tool |
-| `matter-provision.ext2` | `tool/`, arm64 Python, `requirements.txt` wheels, `MATTER_SUPPORT_REVISION` |
-
-After the hub mounts the provision disk at `/root/matter-provision`, `/usr/bin/provision` runs `tool/provision.py` using the interpreter and wheels on that same disk.
-
-**Run provision against a bundle locally**:
-
-Use a provisioning-enabled Matter build (`matter_provision_channel`).
-
-SoC must boot with NVM3 key `0x87228=1` to put the device in provisioning mode. Build hex from the app linker map:
-
-```sh
-cp path/to/matter.out renode_integration/out/bundle/matter.out
-python3 renode_integration/scripts/make_provision_nvm3.py \
-  --map path/to/matter_thread_soc_lighting_app_freertos.map \
-  --output renode_integration/out/bundle/nvm3-provision.hex
-```
-
-Fetch the runtime bundle with a checkpoint that includes `provision_virtio`.
-
-Build `matter-provision.ext2` in CI, download, and copy it under `out/bundle/guest-rootfs/`.
-
-Run simulation using `matter-sim-prov.resc` (`LoadImage` on `provision_virtio`, provision-enabled SoC + NVM3 hex):
-
-```sh
-cd renode_integration/out/bundle && ./renode/renode resc/matter-sim-prov.resc
-# 4540: matter-provision-mount  |  3452: BLE address  |  provision read vendor_id -c bt:...
-```
-
-Run `matter-provision-mount` in hub console after load to mount provisioning disk.
+### CI provisioning test
+Will be implemented in future PRs.
 
 ## Updating the bundle
 
@@ -202,6 +213,8 @@ Run `matter-provision-mount` in hub console after load to mount provisioning dis
 2. Validate with a CI run or targeted script changes on the appropriate runner
 3. Bump `BUNDLE_VERSION` in `scripts/common.py` when publishing a new GHCR tag.
 4. Dispatch `renode-sim-artifacts` with `publish=true`.
+
+The provisioning bundle is automatically updated with any updates to `third_party/matter_support`. Can also manually update by dispatching `renode-provisioning-artifacts` with `publish=true`.
 
 Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCPs.
 
