@@ -121,7 +121,7 @@ pipeline
                                 buildDescription(build_description)
 
                                 try{
-                                    pipelineFunctions.upload_zephyr_artifacts()
+                                    pipelineFunctions.upload_zephyr_artifacts(workflow_id)
                                 } catch (e) {
                                     unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
                                 }
@@ -270,11 +270,8 @@ pipeline
         stage('Create and Publish Matter Packages') {
             steps {
                 script {
-                    def isRelease = env.BRANCH_NAME.startsWith('release_')
-                    def remoteName = isRelease ? 'silabs-conan-production' : 'matter-conan-dev'
-                    def remoteUrl = isRelease
-                        ? 'https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production'
-                        : 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
+                    def remoteName = 'matter-conan-dev'
+                    def remoteUrl = 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
                     def actionDir = "${env.WORKSPACE}/action-conan-create-publish"
 
                     pipelineFunctions.checkoutGithubActionRepo(
