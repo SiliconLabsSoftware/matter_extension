@@ -444,10 +444,10 @@ def _process_individual_artifact(artifact_name, artifact_path, branch_name, buil
     elif artifact_name == "ota-scripts.zip":
         _upload_ota_scripts(artifact_path, branch_name, build_number, package_version)
     elif artifact_name == "mmic_host":
-        _upload_mmic_host(artifact_path, branch_name, build_number)
+        _upload_mmic_host(artifact_path, branch_name, build_number, package_version)
     elif os.path.isdir(artifact_path):
         if artifact_name == "WiFi-Firmware":
-            _upload_wifi_firmware(artifact_path, branch_name, build_number)
+            _upload_wifi_firmware(artifact_path, branch_name, build_number, package_version)
         else:
             _upload_board_artifacts(artifact_name, artifact_path, branch_name, build_number)
 
@@ -457,10 +457,12 @@ def _upload_chip_tool(artifact_path, branch_name, build_number, package_version)
     print("Uploading chip-tool to UBAI.")
     upload_to_ubai(artifact_path, "Chiptool", package_version, branch_name, build_number)
 
-def _upload_mmic_host(artifact_path, branch_name, build_number):
+def _upload_mmic_host(artifact_path, branch_name, build_number, package_version):
     """Upload mmic host artifact to UBAI."""
     print("Uploading mmic host to UBAI.")
     upload_to_ubai(artifact_path, "mmic", "host", branch_name, build_number)
+    # Upload to UBAI with package version
+    upload_to_ubai(artifact_path, "mmic", package_version, branch_name, build_number)
 
 
 def _upload_chip_ota_provider(artifact_path, branch_name, build_number, package_version):
@@ -481,7 +483,7 @@ def _upload_ota_scripts(artifact_path, branch_name, build_number, package_versio
     upload_to_ubai(artifact_path, "matter", package_version, branch_name, build_number)
 
 
-def _upload_wifi_firmware(wifi_firmware_path, branch_name, build_number):
+def _upload_wifi_firmware(wifi_firmware_path, branch_name, build_number, package_version):
     """
     Upload Wi-Fi firmware artifacts to UBAI.
 
@@ -489,15 +491,16 @@ def _upload_wifi_firmware(wifi_firmware_path, branch_name, build_number):
         wifi_firmware_path (str): Path to the WiFi-Firmware directory
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
+        package_version (str): Matter package version used as UBAI target
     """
     print("Processing WiFi-Firmware artifacts.")
     for board_folder in os.listdir(wifi_firmware_path):
         board_path = os.path.join(wifi_firmware_path, board_folder)
         if os.path.isdir(board_path):
-            _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_number)
+            _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_number, package_version)
 
 
-def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_number):
+def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_number, package_version):
     """
     Upload Wi-Fi firmware files for a specific board.
 
@@ -506,6 +509,7 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_num
         board_folder (str): Board folder name
         branch_name (str): Branch name for upload
         build_number (int): Build number for upload
+        package_version (str): Matter package version used as UBAI target
     """
     ubai_app_name = f"WiFi-Firmware-{board_folder}"
     for dirpath, _, filenames in os.walk(board_path):
@@ -514,6 +518,8 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_num
                 fw_file_path = os.path.join(dirpath, fw_file)
                 print(f"Uploading WiFi firmware: {fw_file_path}")
                 upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, build_number)
+                # Upload to UBAI with package version
+                upload_to_ubai(fw_file_path, ubai_app_name, package_version, branch_name, build_number)
 
 
 def _upload_board_artifacts(board_id, board_path, branch_name, build_number):
