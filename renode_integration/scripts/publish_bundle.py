@@ -58,12 +58,10 @@ def push(kind):
     path = archive_path(kind)
     if not os.path.isfile(path):
         common.die(f"bundle archive missing {path}; run prepare first")
-    
-    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
-    
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
-    
+    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
+
     print(f"Publishing {package}:{tag}")
     subprocess.run(
         [
