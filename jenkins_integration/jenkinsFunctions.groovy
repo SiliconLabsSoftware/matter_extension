@@ -756,10 +756,8 @@ def resolvePackageVersion() {
         return base
     }
 
-    def remoteName = isRelease ? 'silabs-conan-production' : 'matter-conan-dev'
-    def remoteUrl = isRelease
-        ? 'https://artifactory.silabs.net/artifactory/api/conan/silabs-conan-production'
-        : 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
+    def remoteName = 'matter-conan-dev'
+    def remoteUrl = 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
 
     def nextN = nextPrereleaseNumberFromRemote(base, qualifier, remoteName, remoteUrl)
     env.SL_PRERELEASE_NUMBER = nextN

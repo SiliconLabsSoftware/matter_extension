@@ -390,7 +390,9 @@ run_generate() {
   if [[ -n "${pid}" ]]; then
     args+=(-pids "${pid}")
   fi
-  args+=("${EXTRA_GENERATE_ARGS[@]}")
+  if ((${#EXTRA_GENERATE_ARGS[@]} > 0)); then
+    args+=("${EXTRA_GENERATE_ARGS[@]}")
+  fi
   args+=(--generator-timeout=300 -o "${OUTPUT_FORMAT}")
 
   echo "Running slc ${args[*]}"
