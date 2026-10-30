@@ -88,7 +88,8 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             package-version: ${{ inputs.package-version }}
             conan-cache-key: ${{ inputs.conan-cache-key }}
-            trustzone-support: true
+            # TODO: Re-enable once trustzone build is fixed
+            trustzone-support: false
 
     build_air_quality_sensor_app:
         name: Build Air Quality Sensor App
@@ -240,6 +241,9 @@ jobs:
            build-type: ${{ needs.set-build-type.outputs.build-type }}
            package-version: ${{ inputs.package-version }}
            conan-cache-key: ${{ inputs.conan-cache-key }}
+           # TODO: Re-enable mg24/mg26 once wake_on_matter builds are fixed
+           mg24-support: false
+           mg26-support: false
            mgm24-support: false
            mg24-internal-support: false
            mg26-internal-support: false

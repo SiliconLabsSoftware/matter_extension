@@ -102,6 +102,9 @@ pipeline
         stage('Upload Artifacts') {
             steps {
                 script {
+                    // Temporary hardcode: pin shared UBAI + Conan package version.
+                    env.MATTER_PACKAGE_VERSION = '2.10.0-alpha.15'
+                    env.SL_PRERELEASE_NUMBER = '15'
                     // Resolve outside ubai docker: SLT/Conan list+1 for shared package version (.N).
                     def packageVersion = pipelineFunctions.resolvePackageVersion()
                     build_description += "\nPackage version: ${packageVersion}"
@@ -286,6 +289,9 @@ pipeline
                         pipelineFunctions.initMatterPackageSubmodules()
                         pipelineFunctions.setupUv()
                         pipelineFunctions.setupSltAndConan()
+                        // Temporary hardcode: match Upload Artifacts / UBAI package version.
+                        env.MATTER_PACKAGE_VERSION = '2.10.0-alpha.15'
+                        env.SL_PRERELEASE_NUMBER = '15'
                         // Release branches keep packages/.prerelease; others get pr.<n> or the branch name.
                         pipelineFunctions.writePrereleaseLabel()
 
