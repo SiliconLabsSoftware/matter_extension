@@ -25,7 +25,7 @@ class MatterBaseRecipe(ConanFile):
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
     url = "https://github.com/SiliconLabsSoftware/matter_extension"
     topics = "silabs"
-    python_requires = "silabs_package_assistant/[>=1 <2]@silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
     # Used by silabs_package_assistant.get_channel; matches pkg.slt release-stream.
     release_stream_channel = "2026-12"
 
