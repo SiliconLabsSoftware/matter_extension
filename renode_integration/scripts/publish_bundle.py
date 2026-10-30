@@ -53,54 +53,31 @@ def prepare(kind):
             archive.add(os.path.join(bundle, name), arcname=name)
     print(f"Prepared {path}")
 
-def get_target_tags(kind: str) -> list[str]:
-    ACTIVE_BRANCHES = {"main", "release_2.10-1.6.1", "provisioning_disk"} # TODO: rm after testing
-    event_name = os.environ.get("GITHUB_EVENT_NAME","")
-    active_branch = os.environ.get("GITHUB_BASE_REF") if event_name == "pull_request" else os.environ.get("GITHUB_REF_NAME")
-
-    if active_branch not in ACTIVE_BRANCHES:
-        print(f"Skipping registration: '{active_branch}' is not an active branch.")
-        return []
-
-    base_tag = common.artifact_tag(kind)
-
-    if event_name == "pull_request":
-        pr_num = os.environ.get("GITHUB_PR_NUMBER")
-        if kind == "provision" and pr_num:
-            return [f"{base_tag}-pr-{pr_num}"]
-        print(f"Skipping PR tag publication for bundle kind: '{kind}'")
-        return []
-
-    return [base_tag]
-
 
 def push(kind):
     path = archive_path(kind)
     if not os.path.isfile(path):
         common.die(f"bundle archive missing {path}; run prepare first")
     
-    tags_to_push = get_target_tags(kind)
-    if not tags_to_push:
-        return
+    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
     
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
     
-    for tag in tags_to_push:
-        print(f"Publishing {package}:{tag}")
-        subprocess.run(
-            [
-                oras,
-                "push",
-                f"{package}:{tag}",
-                "--annotation",
-                f"org.opencontainers.image.source={SOURCE_ANNOTATION}",
-                f"{os.path.basename(path)}:application/vnd.oci.image.layer.v1.tar",
-            ],
-            cwd=os.path.dirname(path),
-            check=True,
-        )
-        print(f"Published {package}:{tag}")
+    print(f"Publishing {package}:{tag}")
+    subprocess.run(
+        [
+            oras,
+            "push",
+            f"{package}:{tag}",
+            "--annotation",
+            f"org.opencontainers.image.source={SOURCE_ANNOTATION}",
+            f"{os.path.basename(path)}:application/vnd.oci.image.layer.v1.tar",
+        ],
+        cwd=os.path.dirname(path),
+        check=True,
+    )
+    print(f"Published {package}:{tag}")
 
 
 def main():

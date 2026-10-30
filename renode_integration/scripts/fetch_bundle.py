@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Pull the published common bundle and this host's runtime from GHCR."""
 
+import argparse
 import os
 import shutil
 import subprocess
@@ -39,6 +40,17 @@ def pull_bundle(oras, package, tag, bundle, kind):
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="pull required common, runtime, and provisioning bundle"
+    )
+    parser.add_argument(
+        "-p", "--pr",
+        type=str,
+        default=None,
+        help="explicitly request provisioning bundle built for a specific PR number."
+    )
+    args = parser.parse_args()
+
     oras = common.require_cmd("oras")
     host = common.detect_host()
     package = common.manifest_lookup("ghcr.package")
@@ -59,6 +71,17 @@ def main():
         pull_bundle(oras, package, runtime_tag, bundle, "runtime")
     else:
         print(f"warning: no runtime artifact for {host}, build Renode and run harness/generate_checkpoint.py")
+
+    provision_tag = common.resolve_provision_tag(is_publish=False, pr_num=args.pr)
+    fetched_provision = subprocess.run(
+        [oras, "manifest", "fetch", f"{package}:{provision_tag}"],
+        capture_output=True,
+    )
+    if fetched_provision.returncode == 0:
+        print(f"Fetching {package}:{provision_tag} -> {bundle}")
+        pull_bundle(oras, package, provision_tag, bundle, "provision")
+    else:
+        common.die(f"Error: Provisioning artifact '{package}:{provision_tag}' not found. Verify PR number or wait for the CI build pipeline to finish.")
 
     print(f"Bundle fetched to {bundle}")
 

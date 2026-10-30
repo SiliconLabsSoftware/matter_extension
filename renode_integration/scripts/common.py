@@ -20,6 +20,43 @@ def bundle_dir():
 
 
 RENODE_SRC_DIR = os.path.join(RENODE_INTEGRATION_DIR, "renode-src")
+ACTIVE_BRANCHES = {"main", "release_2.10-1.6.1", "provisioning_disk"} # TODO: rm provisioning_disk after testing
+
+
+def resolve_provision_tag(is_publish: bool = False, pr_num: str = None) -> str:
+    """
+    Resolves single targeted OCI artifact tags for the provision bundle.
+    Returns None if the branch context is inactive.
+    """
+    base_tag = artifact_tag("provision")
+
+    # CLI arg for PR num
+    if pr_num:
+        print(f"Explicit target requested -> PR #{pr_num}")
+        return f"{base_tag}-pr-{pr_num}"
+
+    # GHA CI context
+    event_name = os.environ.get("GITHUB_EVENT_NAME","")
+    if event_name:
+        if event_name == "pull_request":
+            active_branch = os.environ.get("GITHUB_BASE_REF")
+        else:
+            active_branch = os.environ.get("GITHUB_REF_NAME")
+
+        if active_branch not in ACTIVE_BRANCHES:
+            print(f"Skipping registration: '{active_branch}' is not an active branch.")
+            return None
+
+        if event_name == "pull_request":
+            env_pr = os.environ.get("GITHUB_PR_NUMBER")
+            if env_pr:
+                return f"{base_tag}-pr-{env_pr}"
+            if is_publish:
+                return None
+        return base_tag
+
+    # Standard local context
+    return base_tag
 
 
 def ensure_renode_source_tree():
