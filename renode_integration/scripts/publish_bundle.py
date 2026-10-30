@@ -54,7 +54,7 @@ def prepare(kind):
     print(f"Prepared {path}")
 
 def get_target_tags(kind: str) -> list[str]:
-    ACTIVE_BRANCHES = {"main", "release_2.10-1.6.1"}
+    ACTIVE_BRANCHES = {"main", "release_2.10-1.6.1", "provisioning_disk"} # TODO: rm after testing
     event_name = os.environ.get("GITHUB_EVENT_NAME","")
     active_branch = os.environ.get("GITHUB_BASE_REF") if event_name == "pull_request" else os.environ.get("GITHUB_REF_NAME")
 
