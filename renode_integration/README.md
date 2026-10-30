@@ -165,7 +165,7 @@ provision read vendor_id -c bt:BLE-ADDRESS -o /tmp/provision-read.json
 Use workflow [renode-sim-artifacts](../.github/workflows/renode-sim-artifacts.yaml)
 (`publish=true` after bumping `BUNDLE_VERSION`). Individual scripts under `scripts/`
 are for CI and pipeline development. `build_tools_image.py` requires the
-`ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml)
+`ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml) manually. 
 
 ### Cold boot (no checkpoint)
 
