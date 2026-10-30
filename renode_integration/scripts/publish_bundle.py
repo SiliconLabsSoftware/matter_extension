@@ -20,8 +20,8 @@ def bundle_contents(bundle, kind):
         directories = ("renode",)
         filenames = ("linux-booted-thread.save",)
     elif kind == "provision":
-        directories = ()
-        filenames = (os.path.join("guest-rootfs", "matter-provision.ext2"),)
+        directories = ("guest-rootfs",)
+        filenames = ()
     else:
         common.die(f"unknown kind: {kind}")
     for name in directories:
@@ -42,16 +42,15 @@ def archive_path(kind):
 
 def prepare(kind):
     bundle = common.bundle_dir()
-    full_paths = bundle_contents(bundle, kind)
+    names = bundle_contents(bundle, kind)
     path = archive_path(kind)
     staging = os.path.dirname(path)
     shutil.rmtree(staging, ignore_errors=True)
     os.makedirs(staging)
 
     with tarfile.open(path, "w", dereference=True) as archive:
-        for full_path in full_paths:
-            arcname = os.path.relpath(full_path, bundle)
-            archive.add(full_path, arcname=arcname)
+        for name in names:
+            archive.add(os.path.join(bundle, name), arcname=name)
     print(f"Prepared {path}")
 
 def get_target_tags(kind: str) -> list[str]:
