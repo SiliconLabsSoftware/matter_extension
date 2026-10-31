@@ -47,7 +47,8 @@ component:
   - id: matter_network_commissioning
   - id: matter_operational_credentials
   - id: matter_ota_requestor
-  - id: matter_ota_support
+  - id: matter_multi_image_ota
+  - id: matter_https_ota
   - id: matter_software_diagnostics
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
