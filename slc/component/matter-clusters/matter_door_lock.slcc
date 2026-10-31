@@ -15,11 +15,13 @@ source:
   - path: third_party/matter_sdk/src/app/clusters/door-lock-server/CodegenIntegration.cpp
     unless: [matter_code_driven_dm]
   - path: third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server-callback.cpp
+  - path: third_party/matter_sdk/src/app/clusters/door-lock-server/DoorLockCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/door-lock-server
     file_list:
       - path: door-lock-delegate.h
       - path: door-lock-server.h
+      - path: DoorLockCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_door_lock
