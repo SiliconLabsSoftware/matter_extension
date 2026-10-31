@@ -35,3 +35,6 @@ source:
 define:
   - name: SL_MATTER_ENABLE_HTTPS_OTA
     value: "1"
+  
+conflicts:
+  - name: matter_ota_support
