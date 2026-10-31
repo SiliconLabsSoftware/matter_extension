@@ -54,4 +54,13 @@ runs:
       shell: bash
       run: |
         set -euo pipefail
-        slt install "matter_app/${{ inputs.package-version }}@silabs" -e conan
+        VERSION="${{ inputs.package-version }}"
+        CHANNEL="${MATTER_PACKAGE_CHANNEL:-}"
+        if [[ -z "${CHANNEL}" ]]; then
+          CHANNEL="$(tr -d '[:space:]' < packages/_shared/release_stream_channel)"
+        fi
+        [[ -n "${CHANNEL}" ]] || { echo "error: empty release_stream_channel / MATTER_PACKAGE_CHANNEL" >&2; exit 1; }
+        export MATTER_PACKAGE_CHANNEL="${CHANNEL}"
+        echo "MATTER_PACKAGE_CHANNEL=${CHANNEL}" >> "$GITHUB_ENV"
+        echo "Installing matter_app/${VERSION}@silabs/${CHANNEL}"
+        slt install "matter_app/${VERSION}@silabs/${CHANNEL}" -e conan

@@ -56,12 +56,14 @@
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
 #   Create packages in local Conan cache:
-#   ./slc/build.sh --create-package-version 2.10.0-0.dev [--clean]
+#   ./slc/build.sh --create-package-version 2.10.0-0.dev [--channel 2026-12] [--clean]
 #
 #   Export from repo and build via packages/build_app.sh:
-#   ./slc/build.sh --build-from-package-version 2.10.0-0.dev [--clean] \
+#   ./slc/build.sh --build-from-package-version 2.10.0-0.dev [--channel 2026-12] [--clean] \
 #       matter_wifi_soc_lock_app_freertos.slcw brd4338a
 #
+#   --channel : Conan channel for package refs (default: packages/_shared/release_stream_channel
+#               or env MATTER_PACKAGE_CHANNEL).
 #   --clean : Repo dev — remove out/ before build.
 #             Package modes — remove matter/matter_app from Conan cache before export
 #             (package out/ is removed with the cached package; not passed to build_app.sh).
@@ -161,6 +163,10 @@ fi
 DO_CREATE_PKG=false
 DO_BUILD_FROM_PKG=false
 MATTER_PACKAGE_VERSION=""
+# Conan channel for package refs; default from packages/_shared/release_stream_channel.
+if [ -z "${MATTER_PACKAGE_CHANNEL:-}" ]; then
+	MATTER_PACKAGE_CHANNEL="$(tr -d '[:space:]' < "${MATTER_ROOT}/packages/_shared/release_stream_channel")"
+fi
 WANT_CLEAN=false
 REMAINING_ARGS=()
 
@@ -176,6 +182,11 @@ while [ $# -gt 0 ]; do
 		[ -n "${2:-}" ] || die "--build-from-package-version needs a value"
 		DO_BUILD_FROM_PKG=true
 		MATTER_PACKAGE_VERSION="$2"
+		shift 2
+		;;
+	--channel)
+		[ -n "${2:-}" ] || die "--channel needs a value"
+		MATTER_PACKAGE_CHANNEL="$2"
 		shift 2
 		;;
 	--clean)
@@ -213,34 +224,42 @@ setup_conan() {
 remove_matter_packages_from_cache() {
 	setup_conan
 	echo "Removing local matter / matter_app Conan packages..."
-	"${CONAN}" remove "matter/*@silabs" -c || true
-	"${CONAN}" remove "matter_app/*@silabs" -c || true
+	"${CONAN}" remove "matter/*@silabs/*" -c || true
+	"${CONAN}" remove "matter_app/*@silabs/*" -c || true
 }
 
 export_matter_packages() {
 	local ver="$1"
+	local channel="${MATTER_PACKAGE_CHANNEL}"
 
 	setup_conan
 	echo "MATTER_PACKAGE_VERSION=${ver}"
+	echo "MATTER_PACKAGE_CHANNEL=${channel}"
 
-	echo "Exporting matter/${ver}@silabs ..."
+	echo "Exporting matter/${ver}@silabs/${channel} ..."
 	"${CONAN}" export-pkg "${MATTER_ROOT}/packages/matter/conanfile.py" \
 		--name=matter \
 		--version="${ver}" \
-		--user=silabs
+		--user=silabs \
+		--channel="${channel}"
 
-	echo "Exporting matter_app/${ver}@silabs ..."
+	echo "Exporting matter_app/${ver}@silabs/${channel} ..."
 	"${CONAN}" export-pkg "${MATTER_ROOT}/packages/matter_app/conanfile.py" \
 		--name=matter_app \
 		--version="${ver}" \
-		--user=silabs
+		--user=silabs \
+		--channel="${channel}"
+
+	export MATTER_PACKAGE_CHANNEL="${channel}"
 }
 
 install_matter_app_package() {
 	local ver="$1"
-	local ref="matter_app/${ver}@silabs"
+	local channel="${MATTER_PACKAGE_CHANNEL}"
+	local ref="matter_app/${ver}@silabs/${channel}"
 
 	export MATTER_PACKAGE_VERSION="${ver}"
+	export MATTER_PACKAGE_CHANNEL="${channel}"
 	echo "Installing ${ref} via SLT..."
 	slt install "${ref}" -e conan
 }
@@ -260,7 +279,10 @@ if [ "${DO_BUILD_FROM_PKG}" = true ]; then
 	[ "${WANT_CLEAN}" = true ] && remove_matter_packages_from_cache
 	export_matter_packages "${MATTER_PACKAGE_VERSION}"
 	# build_app.sh only accepts positional project/board when they are the first args.
-	exec "${MATTER_ROOT}/packages/build_app.sh" "$1" "$2" --version "${MATTER_PACKAGE_VERSION}" "${@:3}"
+	exec "${MATTER_ROOT}/packages/build_app.sh" "$1" "$2" \
+		--version "${MATTER_PACKAGE_VERSION}" \
+		--channel "${MATTER_PACKAGE_CHANNEL}" \
+		"${@:3}"
 fi
 
 # --- Repo development build (default) ---

@@ -366,7 +366,7 @@ extra_files:
   - matter_docs.xml
   - matter_templates.xml
   - packages/.prerelease
-  - packages/README.md
+  - packages/DEVELOPER_README.md
   - packages/_shared/base_recipe.py
   - packages/build_app.sh
   - packages/matter/conanfile.py
@@ -742,6 +742,7 @@ extra_files:
   - slc/script/gsdk_matter.patch
   - slc/script/hwfilter-config.yml
   - slc/script/list_header_files.py
+  - packages/_shared/release_stream_channel
   - slc/script/matter_package_version
   - slc/script/metadata-generation.yml
   - slc/script/remove_obsolete_cluster_components.py

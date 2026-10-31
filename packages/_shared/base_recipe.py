@@ -1,8 +1,10 @@
 from pathlib import Path
+from typing import Optional
 from conan import ConanFile
 from conan.tools.files import copy
 import os
 import re
+import subprocess
 import yaml
 
 # Shared metadata and helpers for matter packages
@@ -16,6 +18,25 @@ except IndexError:
 _LINE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
+def read_package_metadata(name: str) -> str:
+    """Read metadata file from packages/_shared (or exported e/_shared/)."""
+    paths: list[Path] = [
+        SHARED_REPO_ROOT / "packages" / "_shared" / name,
+    ]
+    if _RECIPE_PATH.parent.name == "_shared":
+        paths.insert(0, _RECIPE_PATH.parent / name)
+
+    for path in paths:
+        if path.is_file():
+            value = path.read_text(encoding="utf-8").strip()
+            if value:
+                return value
+            raise RuntimeError(f"{path} is empty")
+    raise FileNotFoundError(
+        f"{name} not found under packages/_shared or exported recipe _shared/"
+    )
+
+
 class MatterBaseRecipe(ConanFile):
     user = "silabs"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
@@ -23,7 +44,10 @@ class MatterBaseRecipe(ConanFile):
     homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
     url = "https://github.com/SiliconLabsSoftware/matter_extension"
     topics = "silabs"
-    python_requires = "silabs_package_assistant/[>=1 <2]@silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+    # Used by silabs_package_assistant.get_channel; matches pkg.slt release-stream.
+    # Loaded from packages/_shared/release_stream_channel.
+    release_stream_channel = read_package_metadata("release_stream_channel")
 
     # Central SL metadata
     sl_metadata = {
@@ -35,21 +59,74 @@ class MatterBaseRecipe(ConanFile):
     }
 
     def set_version(self):
-        """Resolve Conan version (SLCE base + SL_PRERELEASE*).
+        """Resolve Conan version and channel.
 
-        Priority:
+        Version priority:
           1. MATTER_PACKAGE_VERSION env (explicit override for local/CI one-offs)
           2. silabs_package_assistant.get_version(matter.slce)
              - local: base + "-0.dev" (e.g. 2.10.0-0.dev)
              - CI with SL_PRERELEASE + SL_PRERELEASE_NUMBER: base + "-alpha.N"
+
+        Channel priority when unset on the recipe:
+          1. MATTER_PACKAGE_CHANNEL env (CI / build-pkg.sh; from release_stream_channel)
+          2. resolve_channel() (wraps assistant.get_channel + Matter remaps)
         """
+        assistant = self.python_requires["silabs_package_assistant"].module
         override = os.environ.get("MATTER_PACKAGE_VERSION", "").strip()
         if override:
             self.version = override
-            return
+        else:
+            self.version = self.version or assistant.get_version(self.matter_slce_path)
 
+        if not self.channel:
+            channel_override = os.environ.get("MATTER_PACKAGE_CHANNEL", "").strip()
+            if channel_override:
+                self.channel = channel_override
+            else:
+                self.channel = self.resolve_channel()
+
+    def _git_current_branch(self) -> str:
+        """Current git branch, or empty string if undetermined / detached HEAD."""
+        result = subprocess.run(
+            ["git", "branch", "--show-current"],
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=str(self.repo_root),
+        )
+        if result.returncode != 0:
+            return ""
+        return (result.stdout or "").strip()
+
+    def resolve_channel(self) -> Optional[str]:
+        """Wrap silabs_package_assistant.get_channel for Matter release branch naming.
+
+        Why this wrapper is needed:
+            assistant.get_channel maps main, release/* (slash), and detached HEAD to
+            release_stream_channel. Matter historically names release branches
+            release_* (underscore), e.g. release_2.10-1.6.1. Without this remap that
+            branch would export as @silabs/release_2.10-1.6.1 while requirements() and
+            pkg.slt still use release_stream_channel (e.g. 2026-12), breaking resolution.
+            Only an exact branch match is remapped (not startswith).
+
+        Future release branch naming:
+            Prefer release/<line> (slash) so assistant.get_channel alone is enough and
+            this remap is unnecessary, e.g. release/2.10-1.6.1. Until then, add new
+            Matter release_* branch names to the exact-match check below. Feature
+            branches keep sanitized names; GitHub PRs keep pr-<N>.
+        """
         assistant = self.python_requires["silabs_package_assistant"].module
-        self.version = self.version or assistant.get_version(self.matter_slce_path)
+        channel = assistant.get_channel(self)
+
+        # Keep assistant PR channel (pr-<N>); do not remap release branch PR sources.
+        if os.getenv("GITHUB_BASE_REF"):
+            return channel
+
+        branch_name = self._git_current_branch()
+        if branch_name == "rajivni-2026-10-12-channel-2026-12":
+            return self.release_stream_channel
+
+        return channel
 
     def package_id(self):
         # Unified behavior: header-only / content-only style id
