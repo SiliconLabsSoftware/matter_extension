@@ -18,6 +18,25 @@ except IndexError:
 _LINE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
 
 
+def read_package_metadata(name: str) -> str:
+    """Read metadata file from packages/_shared (or exported e/_shared/)."""
+    paths: list[Path] = [
+        SHARED_REPO_ROOT / "packages" / "_shared" / name,
+    ]
+    if _RECIPE_PATH.parent.name == "_shared":
+        paths.insert(0, _RECIPE_PATH.parent / name)
+
+    for path in paths:
+        if path.is_file():
+            value = path.read_text(encoding="utf-8").strip()
+            if value:
+                return value
+            raise RuntimeError(f"{path} is empty")
+    raise FileNotFoundError(
+        f"{name} not found under packages/_shared or exported recipe _shared/"
+    )
+
+
 class MatterBaseRecipe(ConanFile):
     user = "silabs"
     license = "www.silabs.com/about-us/legal/master-software-license-agreement"
@@ -27,7 +46,8 @@ class MatterBaseRecipe(ConanFile):
     topics = "silabs"
     python_requires = "silabs_package_assistant/[~2]@silabs"
     # Used by silabs_package_assistant.get_channel; matches pkg.slt release-stream.
-    release_stream_channel = "2026-12"
+    # Loaded from packages/_shared/release_stream_channel.
+    release_stream_channel = read_package_metadata("release_stream_channel")
 
     # Central SL metadata
     sl_metadata = {
@@ -47,7 +67,9 @@ class MatterBaseRecipe(ConanFile):
              - local: base + "-0.dev" (e.g. 2.10.0-0.dev)
              - CI with SL_PRERELEASE + SL_PRERELEASE_NUMBER: base + "-alpha.N"
 
-        Channel: resolve_channel() when unset (wraps assistant.get_channel).
+        Channel priority when unset on the recipe:
+          1. MATTER_PACKAGE_CHANNEL env (CI / build-pkg.sh; from release_stream_channel)
+          2. resolve_channel() (wraps assistant.get_channel + Matter remaps)
         """
         assistant = self.python_requires["silabs_package_assistant"].module
         override = os.environ.get("MATTER_PACKAGE_VERSION", "").strip()
@@ -57,7 +79,11 @@ class MatterBaseRecipe(ConanFile):
             self.version = self.version or assistant.get_version(self.matter_slce_path)
 
         if not self.channel:
-            self.channel = self.resolve_channel()
+            channel_override = os.environ.get("MATTER_PACKAGE_CHANNEL", "").strip()
+            if channel_override:
+                self.channel = channel_override
+            else:
+                self.channel = self.resolve_channel()
 
     def _git_current_branch(self) -> str:
         """Current git branch, or empty string if undetermined / detached HEAD."""
@@ -97,7 +123,7 @@ class MatterBaseRecipe(ConanFile):
             return channel
 
         branch_name = self._git_current_branch()
-        if branch_name == "release_2.10-1.6.1":
+        if branch_name == "rajivni-2026-10-12-channel-2026-12":
             return self.release_stream_channel
 
         return channel

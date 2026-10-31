@@ -160,6 +160,16 @@ class matter_appRecipe(MatterBaseRecipe):
             src=str(build_app_src.parent),
             dst=os.path.join(self.package_folder, "."),
         )
+        # Channel default for packaged build_app.sh (--channel / MATTER_PACKAGE_CHANNEL).
+        channel_src = repo_root / "packages" / "_shared" / "release_stream_channel"
+        if not channel_src.is_file():
+            raise FileNotFoundError(f"missing {channel_src}")
+        copy(
+            self,
+            pattern="release_stream_channel",
+            src=str(channel_src.parent),
+            dst=os.path.join(self.package_folder, "."),
+        )
 
         if (repo_root / "conan-matter_app.lock").is_file():
             copy(self, pattern="conan-matter_app.lock", src=matter_app_folder, dst=os.path.join(self.package_folder, "."))

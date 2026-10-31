@@ -18,6 +18,9 @@ outputs:
   version:
     description: Exported package version.
     value: ${{ steps.create.outputs.version }}
+  channel:
+    description: Conan channel (from packages/_shared/release_stream_channel).
+    value: ${{ steps.create.outputs.channel }}
   conan-cache-key:
     description: Cache key containing the exported packages.
     value: ${{ steps.create.outputs.conan-cache-key }}
@@ -48,13 +51,20 @@ runs:
       run: |
         set -euo pipefail
         VERSION="${{ inputs.package-version }}"
+        CHANNEL="$(tr -d '[:space:]' < packages/_shared/release_stream_channel)"
+        [[ -n "${CHANNEL}" ]] || { echo "error: empty packages/_shared/release_stream_channel" >&2; exit 1; }
+        export MATTER_PACKAGE_CHANNEL="${CHANNEL}"
+        echo "MATTER_PACKAGE_CHANNEL=${CHANNEL}" >> "$GITHUB_ENV"
         CACHE_KEY="${{ inputs.conan-cache-key }}"
-        CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${{ github.run_id }}-${{ github.run_attempt }}}"
+        CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${CHANNEL}-${{ github.run_id }}-${{ github.run_attempt }}}"
 
-        conan remove "matter/${VERSION}@silabs" -c || true
-        conan remove "matter_app/${VERSION}@silabs" -c || true
-        conan export-pkg packages/matter/conanfile.py --name=matter --version="${VERSION}" --user=silabs
-        conan export-pkg packages/matter_app/conanfile.py --name=matter_app --version="${VERSION}" --user=silabs
+        echo "Exporting matter/${VERSION}@silabs/${CHANNEL} and matter_app/${VERSION}@silabs/${CHANNEL}"
+        conan remove "matter/${VERSION}@silabs/${CHANNEL}" -c || true
+        conan remove "matter_app/${VERSION}@silabs/${CHANNEL}" -c || true
+        conan export-pkg packages/matter/conanfile.py \
+          --name=matter --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+        conan export-pkg packages/matter_app/conanfile.py \
+          --name=matter_app --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
 
         conan list "*" -c --format=json | python3 -c '
         import json
@@ -68,9 +78,10 @@ runs:
                 subprocess.run(["conan", "remove", reference, "-c"], check=False)
         '
 
-        conan list "matter/${VERSION}@silabs:*"
-        conan list "matter_app/${VERSION}@silabs:*"
+        conan list "matter/${VERSION}@silabs/${CHANNEL}:*"
+        conan list "matter_app/${VERSION}@silabs/${CHANNEL}:*"
         echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+        echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
         echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"
 
     - name: Save Matter package cache
