@@ -238,6 +238,7 @@ jobs:
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools, cache-sdks]
+        if: needs.set-build-type.outputs.build-type != 'full'
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
@@ -256,6 +257,7 @@ jobs:
     build_zephyr_all_devices:
         name: Build Zephyr All-Devices App
         needs: set-build-type
+        if: needs.set-build-type.outputs.build-type != 'full'
         uses: ./.github/workflows/build-zephyr.yaml
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
@@ -288,7 +290,7 @@ jobs:
             - build_series_3_bootloader
             - build_wake_on_matter_app
             - build_zephyr_all_devices
-        if: success()
+        if: ${{ !cancelled() && !failure() }}
 
         steps:
             - name: Merge artifacts

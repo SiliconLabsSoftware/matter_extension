@@ -68,7 +68,7 @@ on:
 
 jobs:
     mg24-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24.json'
@@ -78,7 +78,7 @@ jobs:
             platform: mg24
 
     mg24-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-internal-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-internal.json'
@@ -88,7 +88,7 @@ jobs:
             platform: mg24-internal
 
     mg24-trustzone-build-job:
-        if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support }}
+        if: ${{ inputs.thread-support && inputs.mg24-support && inputs.trustzone-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg24-trustzone.json'
@@ -98,7 +98,7 @@ jobs:
             platform: mg24-trustzone
 
     mgm24-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm24-support }}
+        if: ${{ inputs.thread-support && inputs.mgm24-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24.json'
@@ -108,7 +108,7 @@ jobs:
             platform: mgm24
 
     mgm24-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm24-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mgm24-internal-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm24-internal.json'
@@ -118,7 +118,7 @@ jobs:
             platform: mgm24-internal
 
     mg26-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-support }}
+        if: ${{ inputs.thread-support && inputs.mg26-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26.json'
@@ -128,7 +128,7 @@ jobs:
             platform: mg26
 
     mg26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mg26-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mg26-internal-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mg26-internal.json'
@@ -138,7 +138,7 @@ jobs:
             platform: mg26-internal
 
     mgm26-internal-build-job:
-        if: ${{ inputs.thread-support && inputs.mgm26-internal-support }}
+        if: ${{ inputs.thread-support && inputs.mgm26-internal-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-mgm26-internal.json'
@@ -148,7 +148,7 @@ jobs:
             platform: mgm26-internal
 
     ncp-917-build-job:
-        if: ${{ inputs.ncp-917-support }}
+        if: ${{ inputs.ncp-917-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-917-ncp.json'
@@ -178,7 +178,7 @@ jobs:
             platform: siwx-soc
 
     sixg301-build-job:
-        if: ${{ inputs.thread-support && inputs.sixg301-support }}
+        if: ${{ inputs.thread-support && inputs.sixg301-support && inputs.build-type != 'full' }}
         uses: ./.github/workflows/builder.yaml
         with:
             json-file-path: './.github/silabs-builds-sixg301.json'

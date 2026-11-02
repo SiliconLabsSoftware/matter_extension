@@ -283,6 +283,7 @@ jobs:
     build_series_3_bootloader:
         name: Build Series 3 Bootloader
         needs: [set-build-type, cache-tools]
+        if: needs.set-build-type.outputs.build-type != 'full'
         uses: ./.github/workflows/builder-pkg.yaml
         with:
             json-file-path: './.github/silabs-builds-series-3-bootloader.json'
