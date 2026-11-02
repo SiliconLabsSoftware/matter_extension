@@ -39,7 +39,7 @@ One-time setup (user runs in a terminal, agent must not). Use a hub-only key, no
   1. ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_matter_hub -C matter-hub
      If the key has a passphrase: ssh-add ~/.ssh/id_ed25519_matter_hub
 
-  2. Add to ~/.ssh/config (HOST = Matter Hub IP):
+  2. Add to ~/.ssh/config. Manually create the file if needed. (HOST = Matter Hub IP):
        Host HOST
          User ubuntu
          IdentityFile ~/.ssh/id_ed25519_matter_hub
