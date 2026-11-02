@@ -300,7 +300,6 @@ jobs:
 
     build_coverage:
         name: Build Coverage
-        continue-on-error: true
         needs:
             - set-build-type
         if: ${{ github.ref_name == 'main' || startsWith(github.ref_name, 'release_') || startsWith(github.ref_name, 'SL_compatibility') }}
