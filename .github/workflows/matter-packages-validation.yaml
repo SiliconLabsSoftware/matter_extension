@@ -2,9 +2,6 @@ name: Packages Validation
 
 on:
   # Branch runs + daily/Thursday (dispatch). PR gates stay on legacy CI.
-  push:
-    branches:
-      - release_2.10-1.6.1
   workflow_dispatch:
     inputs:
       package_version:

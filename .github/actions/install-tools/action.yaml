@@ -36,6 +36,7 @@ runs:
     - name: Set Environment Variables
       shell: bash
       run: |
+        echo "CONAN_HOME=/home/runner/.silabs/slt/installs/conan" >> $GITHUB_ENV
         echo "STUDIO_ADAPTER_PACK_PATH=/tmp/zap-linux-x64" >> $GITHUB_ENV
         echo "SLT_PATH=${{ steps.setup-action.outputs.slt-path }}" >> $GITHUB_ENV
         echo "/tmp/zap-linux-x64" >> $GITHUB_PATH

@@ -20,7 +20,7 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
     }
 }
 
-def upload_zephyr_artifacts() {
+def upload_zephyr_artifacts(workflow_id) {
     withCredentials([
         usernamePassword(credentialsId: 'svc_gsdk', passwordVariable: 'SL_PASSWORD', usernameVariable: 'SL_USERNAME'),
         usernamePassword(credentialsId: 'Matter-Extension-GitHub', usernameVariable: 'GITHUB_APP', passwordVariable: 'GITHUB_ACCESS_TOKEN')
@@ -28,7 +28,7 @@ def upload_zephyr_artifacts() {
     {
         def logFile = "upload_zephyr_artifacts_${env.BUILD_NUMBER}.log"
         sh(script: """
-            bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} 2>&1 | tee '${logFile}'"
+            bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --workflow_id ${workflow_id} 2>&1 | tee '${logFile}'"
         """)
     }
 }
@@ -756,10 +756,8 @@ def resolvePackageVersion() {
         return base
     }
 
-    def remoteName = isRelease ? 'silabs-conan-production' : 'matter-conan-dev'
-    def remoteUrl = isRelease
-        ? 'https://artifactory-local.silabs.net/artifactory/api/conan/silabs-conan-production'
-        : 'https://artifactory-local.silabs.net/artifactory/api/conan/matter-conan-dev'
+    def remoteName = 'matter-conan-dev'
+    def remoteUrl = 'https://artifactory.silabs.net/artifactory/api/conan/matter-conan-dev'
 
     def nextN = nextPrereleaseNumberFromRemote(base, qualifier, remoteName, remoteUrl)
     env.SL_PRERELEASE_NUMBER = nextN
