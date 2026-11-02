@@ -166,6 +166,8 @@ configuration:
     value: 1
 
   # Default ICD configurations
+  - name: SL_ICD_ENABLE_SELECTIVE_SLEEP
+    value: 0
   - name: SL_IDLE_MODE_DURATION_S
     value: "1800"
   - name: SL_ACTIVE_MODE_DURATION_MS
