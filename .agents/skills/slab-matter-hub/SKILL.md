@@ -1,5 +1,5 @@
 ---
-name: slab-chip-tool
+name: slab-matter-hub
 description: >-
   Commission and control Silicon Labs Matter over Thread end devices through the
   Matter Hub (Raspberry Pi OTBR + chip-tool) via SSH from the developer machine
