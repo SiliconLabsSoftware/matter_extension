@@ -4,9 +4,9 @@ set -eu
 
 MARKER="tool/provision.py"
 DEST="/root/matter-provision"
-PROBE_DIR="/run/matter-provision-probe"
+# provision_virtio is the second virtio block device -> vdb.
+PROVISION_DEV=/dev/vdb
 
-# Check if disk is mounted and valid
 if mountpoint -q "$DEST" 2>/dev/null; then
     if [ -e "$DEST/$MARKER" ]; then
         echo "matter-provision-mount: already mounted at $DEST"
@@ -14,35 +14,29 @@ if mountpoint -q "$DEST" 2>/dev/null; then
     fi
 fi
 
-# Rescan and probe available virtio block devices
-for dev in /dev/vda /dev/vdb /dev/vdc; do
-    [ -b dev ] || continue
-    
-    # trigger kernel rescan for dynamically attached renode disks
-    echo 1 > "/sys/block/$(basename "$dev")/device/rescan"
+if [ ! -b "$PROVISION_DEV" ]; then
+    echo "matter-provision-mount: $PROVISION_DEV not present" >&2
+    exit 1
+fi
 
-    # probe the device read-only to look for provisioning marker
-    mkdir -p "$PROBE_DIR"
-    if mount -o ro "$dev" "$PROBE_DIR" 2>/dev/null; then
-        if [ -e "$PROBE_DIR/$MARKER" ]; then
-            umount "$PROBE_DIR"
-            rmdir "$PROBE_DIR"
-            
-            # disk found, mount it to final destination
-            mkdir -p "$DEST"
-            if mount -o ro "$dev" "$DEST"; then
-                echo "matter-provision-mount: mounted $dev at $DEST"
-                exit 0
-            fi
-            exit 1
-        fi
-        umount "$PROBE_DIR"
-    fi
-done
+echo 1 > "/sys/block/vdb/device/rescan"
+size=$(cat /sys/block/vdb/size 2>/dev/null) || size=0
+if [ "$size" -le 0 ] 2>/dev/null; then
+    echo "matter-provision-mount: $PROVISION_DEV has no image (size 0)" >&2
+    echo "Load matter-provision.ext2 on provision_virtio, then retry." >&2
+    exit 1
+fi
 
-# Clean up probe directory if nothing was found
-[ -d "$PROBE_DIR" ] && rmdir "$PROBE_DIR"
+mkdir -p "$DEST"
+if ! mount -o ro "$PROVISION_DEV" "$DEST"; then
+    echo "matter-provision-mount: mount $PROVISION_DEV failed" >&2
+    exit 1
+fi
+if [ ! -e "$DEST/$MARKER" ]; then
+    umount "$DEST"
+    echo "matter-provision-mount: $PROVISION_DEV is not a provision image (missing $MARKER)" >&2
+    exit 1
+fi
 
-echo "matter-provision-mount: no disk with $MARKER found" >&2
-echo "Load matter-provision.ext2 on provision_virtio, then retry." >&2
-exit 1
+echo "matter-provision-mount: mounted $PROVISION_DEV at $DEST"
+exit 0
