@@ -5,9 +5,6 @@ $checkpoint ?= $ORIGIN/../linux-booted-thread.save
 EmulationManager Load $checkpoint
 
 $matter_provision ?= $ORIGIN/../guest-rootfs/matter-provision.ext2
-mach set "matter_hub"
-provision_virtio LoadImage $matter_provision
-
 $matter_elf ?= $ORIGIN/../matter.out
 $nvm3_hex ?= $ORIGIN/../nvm3-provision.hex
 
@@ -34,3 +31,5 @@ connector Connect sysbus.eusart0 matter_cli
 
 mach set "matter_hub"
 start
+
+provision_virtio LoadImage $matter_provision
