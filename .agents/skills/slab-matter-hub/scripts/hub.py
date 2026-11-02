@@ -142,6 +142,22 @@ def ssh_conn_failed(proc: subprocess.CompletedProcess[str]) -> bool:
     )
 
 
+def ssh_failure_exit(
+    host: str,
+    proc: subprocess.CompletedProcess[str],
+    *,
+    check_connection: bool = True,
+) -> Optional[int]:
+    """Return an exit code for auth/transport SSH failures, or None to continue."""
+    if auth_failed(proc):
+        print_user_setup("SSH key auth failed.")
+        return 1
+    if check_connection and ssh_conn_failed(proc):
+        print(f"SSH connection to {host} failed.", file=sys.stderr)
+        return print_proc(proc) or 1
+    return None
+
+
 def require_host() -> str:
     """Load host from JSON. Exit with setup help if config is missing."""
     host = load_saved_host()
@@ -156,12 +172,8 @@ def cmd_discover(args: argparse.Namespace) -> int:
     if args.host:
         host = args.host.strip()
         proc = run_ssh(host, ["test", "-x", CHIP_TOOL])
-        if auth_failed(proc):
-            print_user_setup("SSH key auth failed.")
-            return 1
-        if ssh_conn_failed(proc):
-            print(f"SSH connection to {host} failed.", file=sys.stderr)
-            return print_proc(proc) or 1
+        if (code := ssh_failure_exit(host, proc)) is not None:
+            return code
         if proc.returncode != 0:
             print(f"{host} is not a Matter Hub (chip-tool missing).", file=sys.stderr)
             return 1
@@ -181,17 +193,15 @@ def cmd_check(args: argparse.Namespace) -> int:
     """Agent entry: confirm key auth, chip-tool, and passwordless ``ot-ctl``."""
     host = require_host()
     proc = run_ssh(host, ["test", "-x", CHIP_TOOL])
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
-    if ssh_conn_failed(proc):
-        print(f"SSH connection to {host} failed.", file=sys.stderr)
-        return print_proc(proc) or 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     if proc.returncode != 0:
         print(f"chip-tool not found at {CHIP_TOOL}", file=sys.stderr)
         return 1
 
     proc = run_ssh(host, ["sudo", "-n", "ot-ctl", "state"])
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     if proc.returncode != 0:
         print("sudo -n ot-ctl state failed. Passwordless sudo for ot-ctl is required.", file=sys.stderr)
         return print_proc(proc) or 1
@@ -203,9 +213,8 @@ def cmd_check(args: argparse.Namespace) -> int:
 def cmd_dataset(args: argparse.Namespace) -> int:
     host = require_host()
     proc = run_ssh(host, ["sudo", "-n", "ot-ctl", "dataset", "active", "-x"])
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     if proc.returncode != 0:
         return print_proc(proc)
     lines = (proc.stdout or "").strip().splitlines()
@@ -243,9 +252,8 @@ def cmd_start_thread(args: argparse.Namespace) -> int:
         [f"sh -c {shlex.quote(START_THREAD_SCRIPT.strip())}"],
         timeout=120,
     )
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     return print_proc(proc)
 
 
@@ -273,9 +281,8 @@ def write_last_node_id(host: str, node_id: int) -> None:
 def cmd_show_node_id(args: argparse.Namespace) -> int:
     host = require_host()
     proc = run_ssh(host, ["cat", LAST_NODE_ID_REMOTE])
-    if ssh_conn_failed(proc):
-        print(f"SSH connection to {host} failed.", file=sys.stderr)
-        return print_proc(proc) or 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     if proc.returncode != 0:
         print("No last node id on hub.", file=sys.stderr)
         return 1
@@ -314,9 +321,8 @@ def cmd_commission_thread(args: argparse.Namespace) -> int:
         ),
         timeout=COMMISSION_TIMEOUT_S,
     )
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     code = print_proc(proc)
     if code == 0:
         write_last_node_id(host, node_id)
@@ -330,9 +336,8 @@ def cmd_run(args: argparse.Namespace) -> int:
         print("No chip-tool arguments. Example: run onoff on 1 1", file=sys.stderr)
         return 1
     proc = run_ssh(host, chip_tool_argv(args.chip_tool_args), timeout=COMMISSION_TIMEOUT_S)
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     return print_proc(proc)
 
 
@@ -342,9 +347,8 @@ def cmd_logs(args: argparse.Namespace) -> int:
         host,
         ["journalctl", "-u", "otbr-agent", "--no-pager", "-n", str(args.lines)],
     )
-    if auth_failed(proc):
-        print_user_setup("SSH key auth failed.")
-        return 1
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
     return print_proc(proc)
 
 
