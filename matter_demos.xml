@@ -4377,7 +4377,7 @@
     <property key="core.boardCompatibility" value="brd2601b"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd2601b/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd2608a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4387,7 +4387,7 @@
     <property key="core.boardCompatibility" value="brd2608a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd2608a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4116a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4397,7 +4397,7 @@
     <property key="core.boardCompatibility" value="brd4116a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4116a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4117a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4407,7 +4407,7 @@
     <property key="core.boardCompatibility" value="brd4117a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4117a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4118a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4417,7 +4417,7 @@
     <property key="core.boardCompatibility" value="brd4118a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4118a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4120a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4427,7 +4427,7 @@
     <property key="core.boardCompatibility" value="brd4120a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4120a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4121a.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4437,7 +4437,7 @@
     <property key="core.boardCompatibility" value="brd4121a"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4121a/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4186c.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4447,7 +4447,7 @@
     <property key="core.boardCompatibility" value="brd4186c"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4186c/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd4187c.demo.matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS">
@@ -4457,7 +4457,7 @@
     <property key="core.boardCompatibility" value="brd4187c"/>
     <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4187c/matter_thread_soc_wake_on_matter_series_2_freertos_solution/artifact/matter_thread_soc_wake_on_matter_series_2_freertos_full.s37"/>
     <property key="core.readmeFiles" value="slc/apps/wake_on_matter/thread/README.md"/>
-    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
   <demo name="brd2601b.demo.matter_thread_soc_window_app_series_2_freertos" label="Matter Thread - SoC Window App with external Bootloader FreeRTOS">
