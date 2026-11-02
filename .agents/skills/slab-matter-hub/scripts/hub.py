@@ -134,6 +134,7 @@ def ssh_conn_failed(proc: subprocess.CompletedProcess[str]) -> bool:
     stderr = proc.stderr or ""
     return proc.returncode != 0 and (
         "Connection timed out" in stderr
+        or "Operation timed out" in stderr
         or "Connection refused" in stderr
         or "Could not resolve hostname" in stderr
         or "No route to host" in stderr
