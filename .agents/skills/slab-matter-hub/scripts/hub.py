@@ -30,7 +30,7 @@ COMMISSION_TIMEOUT_S = 180
 DEFAULT_PIN = "20202021"
 DEFAULT_DISCRIMINATOR = "3840"
 
-HUB_SCRIPT = "python3 .agents/skills/chip-tool/scripts/hub.py"
+HUB_SCRIPT = "python3 .agents/skills/slab-matter-hub/scripts/hub.py"
 
 # Shown when config is missing or SSH key auth fails
 HUB_SETUP_STEPS = f"""\
@@ -348,7 +348,7 @@ def cmd_logs(args: argparse.Namespace) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Matter Hub chip-tool over SSH")
+    parser = argparse.ArgumentParser(description="Matter Hub over SSH")
 
     sub = parser.add_subparsers(dest="command", required=True)
 
