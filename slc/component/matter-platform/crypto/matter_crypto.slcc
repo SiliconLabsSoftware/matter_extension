@@ -33,7 +33,6 @@ requires:
     condition: [matter_provision]
   - name: matter_ecdsa_deterministic_selection
     condition: [matter_provision]
-    unless: [matter_aws]
   - name: mbedtls_ecc_secp256r1
 
   # OT CoAP Cert libs
