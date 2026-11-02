@@ -120,6 +120,14 @@ The harness uses the assembled bundle at `renode_integration/out/bundle`. Exit c
 toggle succeeded. Device logs are on stdout from `test_lib`.
 
 ### Manual provisioning test
+Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you 
+would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle 
+tied to the PR with:
+
+```sh
+cd renode_integration
+python3 scripts/fetch_bundle.py -p PR-NUM
+```
 
 Use a provisioning-enabled Matter build (include component `matter_provision_channel`).
 
@@ -130,15 +138,6 @@ cp path/to/matter_app.out renode_integration/out/bundle/matter.out
 python3 renode_integration/scripts/make_provision_nvm3.py \
   --map path/to/matter_app.map \
   --output renode_integration/out/bundle/nvm3-provision.hex
-```
-
-Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you 
-would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle 
-tied to the PR with:
-
-```sh
-cd renode_integration
-python3 scripts/fetch_bundle.py -p PR-NUM
 ```
 
 Run simulation using `matter-sim-prov.resc` (`LoadImage` on `provision_virtio`, provision-enabled SoC + NVM3 hex):
