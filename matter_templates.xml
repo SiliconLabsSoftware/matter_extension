@@ -1533,7 +1533,7 @@
     <properties key="category" value="Matter Application"/>
     <properties key="quality" value="EXPERIMENTAL"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <properties key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <properties key="core.hidden" value="true"/>
   </descriptors>
   <descriptors name="matter_thread_soc_wake_on_matter_series_2_freertos" label="Matter Thread - SoC Wake on Matter with external Bootloader FreeRTOS" description="Demonstrates a POC of eceiving Matter subscription on a Thread NCP with external bootloader">
@@ -1549,7 +1549,7 @@
     <properties key="category" value="Matter Application"/>
     <properties key="quality" value="PRODUCTION"/>
     <properties key="stockConfigCompatibility" value="com.silabs.ss.framework.project.toolchain.core.default"/>
-    <properties key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <properties key="filters" value="Capability|Multiprotocol Difficulty|Advanced Type|NCP Type|RCP Wireless\ Technology|Bluetooth Wireless\ Technology|Matter Wireless\ Technology|Thread"/>
     <properties key="solutionProjects" value="slc.apps.bootloaders.bootloader_storage_external_single_series_2.matter_bootloader_external_series_2.slcp slc.apps.wake_on_matter.thread.matter_thread_soc_wake_on_matter_freertos.slcp"/>
   </descriptors>
   <descriptors name="matter_thread_soc_window_app_freertos" label="Matter Thread - SoC Window App FreeRTOS" description="Demonstrates a sample implementation of a Matter over Thread window covering app">
