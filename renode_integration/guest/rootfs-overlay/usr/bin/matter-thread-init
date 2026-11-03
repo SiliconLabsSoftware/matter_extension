@@ -1,0 +1,211 @@
+#!/bin/sh
+# Create and start a fresh Thread network through the running OTBR service.
+set -eu
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+export PATH
+
+TOOLS=${MATTER_TOOLS_ROOT:-/root/matter-tools}
+if [ ! -x "$TOOLS/guest-bin/ot-ctl" ] && [ -x /docker/guest-bin/ot-ctl ]; then
+    TOOLS=/docker
+fi
+
+LOADER="$TOOLS/lib/ld-linux-aarch64.so.1"
+LIBS="$TOOLS/usr/lib/aarch64-linux-gnu:$TOOLS/lib"
+OT="$TOOLS/guest-bin/ot-ctl"
+DBUS_SEND="$TOOLS/guest-bin/dbus-send"
+DBUS_MONITOR="$TOOLS/guest-bin/dbus-monitor"
+DBUS_DEST="io.openthread.BorderRouter.wpan0"
+DBUS_PATH="/io/openthread/BorderRouter/wpan0"
+DBUS_IFACE="io.openthread.BorderRouter"
+STATUS=/tmp/thread-init.status
+DATASET=/tmp/thread-dataset.hex
+FORCE=0
+
+# Same socket S99matter-services passes to dbus-daemon --system.
+export DBUS_SYSTEM_BUS_ADDRESS="${DBUS_SYSTEM_BUS_ADDRESS:-unix:path=/run/dbus/system_bus_socket}"
+
+usage()
+{
+    echo "Usage: matter-thread-init [--force]"
+    echo "  --force  stop an existing Thread network before creating a new one"
+}
+
+log()
+{
+    echo "matter-thread-init: $*" | tee -a "$STATUS"
+}
+
+run_guest()
+{
+    "$LOADER" --library-path "$LIBS" "$@"
+}
+
+ot()
+{
+    run_guest "$OT" "$@"
+}
+
+ot_first_line()
+{
+    output="$(ot "$@" 2>/dev/null)" || return 1
+    printf '%s\n' "$output" | tr -d '\r' | sed -n '1p'
+}
+
+dbus_get_role()
+{
+    reply="$(run_guest "$DBUS_SEND" --system --print-reply --reply-timeout=2000 \
+        --dest="$DBUS_DEST" "$DBUS_PATH" \
+        org.freedesktop.DBus.Properties.Get \
+        string:"$DBUS_IFACE" string:DeviceRole)" || return 1
+    role="$(printf '%s\n' "$reply" | sed -n 's/.*string "\([^"]*\)".*/\1/p' | sed -n '$p')"
+    [ -n "$role" ] || return 1
+    printf '%s\n' "$role"
+}
+
+cleanup_wait()
+{
+    if [ -n "${WD_PID:-}" ]; then
+        kill "$WD_PID" 2>/dev/null || true
+        wait "$WD_PID" 2>/dev/null || true
+        WD_PID=""
+    fi
+    if [ -n "${MON_PID:-}" ]; then
+        kill "$MON_PID" 2>/dev/null || true
+        wait "$MON_PID" 2>/dev/null || true
+        MON_PID=""
+    fi
+    exec 3>&- 2>/dev/null || true
+    exec 3<&- 2>/dev/null || true
+    if [ -n "${MON_FIFO:-}" ]; then
+        rm -f "$MON_FIFO"
+        MON_FIFO=""
+    fi
+}
+
+# Monitor first, then one Get, then block on PropertiesChanged.
+# timeout_s is a watchdog on the monitor (20s stop / 60s leader).
+wait_for_state()
+{
+    wanted="$1"
+    timeout_s="${2:-60}"
+    MON_FIFO="/tmp/matter-thread-role.fifo.$$"
+    MON_PID=""
+    WD_PID=""
+
+    rm -f "$MON_FIFO"
+    mkfifo "$MON_FIFO"
+    exec 3<>"$MON_FIFO"
+
+    run_guest "$DBUS_MONITOR" --system \
+        "type='signal',interface='org.freedesktop.DBus.Properties',member='PropertiesChanged',path='$DBUS_PATH'" \
+        >&3 2>/dev/null &
+    MON_PID=$!
+    # Let dbus-monitor finish BecomeMonitor before Get so we cannot miss the edge.
+    usleep 100000
+
+    current="$(dbus_get_role)" || {
+        cleanup_wait
+        log "ERROR: dbus-send DeviceRole failed"
+        exit 1
+    }
+    if [ "$current" = "$wanted" ]; then
+        cleanup_wait
+        return 0
+    fi
+
+    (
+        usleep $((timeout_s * 1000000))
+        printf '%s\n' "###MATTER_THREAD_WAIT_TIMEOUT###" > "$MON_FIFO"
+    ) &
+    WD_PID=$!
+
+    pending=0
+    found=0
+    while IFS= read -r line <&3; do
+        case "$line" in
+            "###MATTER_THREAD_WAIT_TIMEOUT###")
+                break
+                ;;
+        esac
+        if [ "$pending" -eq 1 ]; then
+            role="$(printf '%s\n' "$line" | sed -n 's/.*string "\([^"]*\)".*/\1/p')"
+            pending=0
+            if [ "$role" = "$wanted" ]; then
+                found=1
+                break
+            fi
+            continue
+        fi
+        case "$line" in
+            *'string "DeviceRole"'*) pending=1 ;;
+        esac
+    done
+
+    cleanup_wait
+    [ "$found" -eq 1 ]
+}
+
+case "${1:-}" in
+    "") ;;
+    --force) FORCE=1 ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage >&2; exit 2 ;;
+esac
+
+: > "$STATUS"
+
+if [ ! -x "$LOADER" ] || [ ! -x "$OT" ]; then
+    log "ERROR: matter-tools is not mounted or ot-ctl is missing"
+    exit 1
+fi
+if [ ! -x "$DBUS_SEND" ] || [ ! -x "$DBUS_MONITOR" ]; then
+    log "ERROR: matter-tools is missing dbus-send or dbus-monitor"
+    exit 1
+fi
+
+state="$(dbus_get_role)" || {
+    log "ERROR: dbus-send DeviceRole failed; is OTBR on the system bus? check /tmp/otbr.log"
+    exit 1
+}
+
+if [ "$state" != disabled ]; then
+    if [ "$FORCE" -ne 1 ]; then
+        log "ERROR: Thread state is $state, not disabled"
+        log "Restart the simulation or rerun with --force to replace the network"
+        exit 1
+    fi
+
+    log "stopping existing Thread network"
+    ot thread stop >/dev/null
+    ot ifconfig down >/dev/null
+    if ! wait_for_state disabled 20; then
+        log "ERROR: timed out waiting for Thread to stop"
+        exit 1
+    fi
+fi
+
+log "creating a new operational dataset"
+ot dataset init new
+ot dataset commit active
+
+dataset="$(ot_first_line dataset active -x)"
+case "$dataset" in
+    ""|*[!0-9a-fA-F]*)
+        log "ERROR: ot-ctl returned an invalid active dataset"
+        exit 1
+        ;;
+esac
+printf '%s\n' "$dataset" > "$DATASET"
+
+ot ifconfig up
+ot thread start
+log "waiting for promotion to Thread leader"
+if ! wait_for_state leader 60; then
+    state="$(dbus_get_role)" || state=unavailable
+    log "ERROR: timed out waiting for leader; current state is $state"
+    exit 1
+fi
+
+log "READY"
+log "Thread dataset: $dataset"
