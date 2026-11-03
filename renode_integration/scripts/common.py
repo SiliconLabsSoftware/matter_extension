@@ -58,6 +58,7 @@ def resolve_provision_tag(is_publish: bool = False, pr_num: str = None) -> str:
             if env_pr:
                 return f"{base_tag}-pr-{env_pr}"
             if is_publish:
+                print("Skipping provision publish: pull_request without GITHUB_PR_NUMBER set")
                 return None
         return base_tag
 

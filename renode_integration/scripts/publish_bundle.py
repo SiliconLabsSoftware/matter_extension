@@ -68,6 +68,9 @@ def push(kind):
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
     tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
+    if tag is None:
+        print("Skipping publish: no OCI tag for this branch/event context")
+        return
 
     print(f"Publishing {package}:{tag}")
     subprocess.run(

@@ -68,6 +68,8 @@ jobs:
       needs.build-provisioning.result == 'success' && 
       (github.event_name == 'push' || github.event_name == 'pull_request' || inputs.publish == true)    
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
     permissions:
       contents: read
       packages: write
