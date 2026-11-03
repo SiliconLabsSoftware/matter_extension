@@ -33,6 +33,11 @@ requires:
   - name: psa_crypto_ecdsa
   - name: psa_crypto_ecc_secp256r1
   - name: psa_crypto_rsa_sign_legacy
+  - name: matter_ecdsa_deterministic_stub
+    condition: [matter_provision]
+
+conflicts:
+  - name: matter_ecdsa_deterministic_default
 
 define:
   - name: SL_MATTER_ENABLE_AWS
