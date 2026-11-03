@@ -1,12 +1,11 @@
 name: Build Zephyr
 
 on:
-  push:
-    branches:
-      - main
-      - "release_*"
-  pull_request:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -14,75 +13,244 @@ permissions:
 
 env:
   CHIP_LOG_TIMESTAMPS: false
-  PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
 jobs:
-  zephyr-lighting-app:
-    name: Lighting App
-
+  prepare:
+    name: Prepare Zephyr builds
     runs-on: ubuntu-latest
-    if: github.actor != 'restyled-io[bot]'
-
-    container:
-      image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      sdk-sha: ${{ steps.sdk.outputs.sha }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7
         with:
           submodules: false
+          persist-credentials: false
 
-      - name: Mark repository as safe for Git
+      - name: Generate build matrix
+        id: matrix
         shell: bash
+        env:
+          BUILD_TYPE: ${{ inputs.build-type }}
         run: |
-          git config --global --add safe.directory '*'
+          set -euo pipefail
+          matrix="$(jq -ce --arg build_type "$BUILD_TYPE" '
+            .defaults as $defaults
+            | (.standard.default + (if $build_type == "full" then .full.default else [] end))
+            | map($defaults + . + {
+                id: (.board + "-" + .device + "-" + .variant),
+                arguments: ($defaults.arguments + .arguments)
+              })
+            | if length == 0
+                or length != (unique_by(.id) | length)
+                or length != (unique_by([.target, .out_artifact]) | length)
+              then error("Empty matrix or duplicate build/artifact")
+              else {include: .}
+              end
+          ' .github/silabs-builds-zephyr.json)"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
 
-      - name: Initialize matter_sdk submodule
-        shell: bash
-        run: |
-          git submodule update --init third_party/matter_sdk
-
-      - name: Checkout matter_sdk silabs submodules
-        shell: bash
-        run: |
-          cd third_party/matter_sdk
-          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
-
-      - name: Bootstrap
-        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
+      - name: Resolve pinned Matter SDK revision
+        id: sdk
+        uses: actions/github-script@v8
         with:
-          platform: silabs_docker
+          script: |
+            const { data } = await github.rest.repos.getContent({
+              ...context.repo,
+              path: 'third_party/matter_sdk',
+              ref: context.sha,
+            });
+            if (Array.isArray(data) || !data.submodule_git_url) {
+              throw new Error('Expected matter_sdk to be a submodule');
+            }
+            core.setOutput('sha', data.sha);
 
-      - name: Build SiWx917 Zephyr Lighting App
+  zephyr-all-devices:
+    name: all-devices-app (${{ matrix.id }})
+    needs: prepare
+    runs-on: ubuntu-latest
+    env:
+      CCACHE_SLOPPINESS: time_macros
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - name: Checkout Matter SDK
+        uses: actions/checkout@v7
+        with:
+          repository: SiliconLabsSoftware/matter_sdk
+          ref: ${{ needs.prepare.outputs.sdk-sha }}
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install host dependencies
         shell: bash
         run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b siwx917_rb4338a -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+          set -euxo pipefail
+          sudo -n apt-get update
+          sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
 
-      - name: Export SiWx917 Zephyr RPS
+      - name: Checkout Zephyr manifest
+        # Instead of main, replace with the official 4.5 tag once created.
+        uses: actions/checkout@v7
+        with:
+          repository: SiliconLabsSoftware/zephyr-silabs
+          ref: main
+          path: zephyrproject/zephyr-silabs
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up SLT
+        id: setup-slt
+        uses: SiliconLabsSoftware/action-setup-slt@v2
+
+      - name: Set SLT paths
         shell: bash
         run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4338A
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.rps \
-             artifacts/lighting-app-zephyr/BRD4338A/matter_wifi_soc_lighting_app_zephyr.rps
+          echo "${{ steps.setup-slt.outputs.slt-path }}" >> "$GITHUB_PATH"
+          echo "${{ steps.setup-slt.outputs.conan-path }}" >> "$GITHUB_PATH"
 
-      - name: Build EFR32xG24 Zephyr Lighting App
+      - name: Install Simplicity Commander
         shell: bash
         run: |
-          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-             "cd /opt/silabs/zephyr-silabs \
-              && west build -b xg24_rb4187c -p always ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/lighting-app/silabs/zephyr"
+          set -euo pipefail
+          slt install commander
+          COMMANDER_PATH="$(slt where commander)"
+          echo "COMMANDER_PATH=$COMMANDER_PATH" >> "$GITHUB_ENV"
+          echo "$COMMANDER_PATH" >> "$GITHUB_PATH"
 
-      - name: Export EFR32xG24 Zephyr HEX
+      - name: Set up Zephyr workspace and SDK
+        uses: zephyrproject-rtos/action-zephyr-setup@v1.0.15
+        with:
+          app-path: zephyr-silabs
+          base-path: zephyrproject
+          sdk-version: "1.0.1"
+          toolchains: arm-zephyr-eabi
+          enable-ccache: "true"
+          ccache-cache-key: zephyr-all-devices-${{ matrix.id }}-${{ matrix.toolchain }}
+          ccache-max-size: 0.5G
+          west-project-filter: "-matter"
+
+      - name: Configure Zephyr workspace and Matter submodules
+        shell: bash
+        working-directory: zephyrproject
+        run: |
+          set -euxo pipefail
+          west zephyr-export
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git -C "$GITHUB_WORKSPACE" submodule update --init --depth 1 --jobs 4 -- \
+              third_party/editline/repo \
+              third_party/jsoncpp/repo \
+              third_party/nlassert/repo \
+              third_party/nlio/repo \
+              third_party/uriparser/repo \
+              third_party/pigweed/repo \
+              third_party/silabs/matter_support
+          : > "$GITHUB_WORKSPACE/build_overrides/pigweed_environment.gni"
+          west blobs fetch
+
+      - name: Install GN from Matter's pinned CIPD version
+        shell: bash
+        working-directory: zephyrproject
+        run: |
+          set -euxo pipefail
+          git clone --depth 1 https://chromium.googlesource.com/chromium/tools/depot_tools.git "$RUNNER_TEMP/depot_tools"
+          gn_version="$(python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          config = Path(os.environ["GITHUB_WORKSPACE"]) / "third_party/pigweed/repo/pw_env_setup/py/pw_env_setup/cipd_setup/pigweed.json"
+          packages = json.loads(config.read_text())["packages"]
+          gn = next(package for package in packages if package["path"] == "gn/gn/${platform}")
+          print(gn["tags"][0])
+          PY
+          )"
+          "$RUNNER_TEMP/depot_tools/cipd" install gn/gn/linux-amd64 "$gn_version" -root "$RUNNER_TEMP/gn"
+          echo "$RUNNER_TEMP/gn" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/gn/gn" --version
+
+      - name: Build All-Devices App
+        shell: bash
+        working-directory: zephyrproject
+        env:
+          BUILD_ARGUMENTS: ${{ toJSON(matrix.arguments) }}
+          SYSBUILD: ${{ matrix.sysbuild }}
+          ZEPHYR_TOOLCHAIN_VARIANT: ${{ matrix.toolchain }}
+          ZEPHYR_SDK_INSTALL_DIR: ${{ github.workspace }}/zephyrproject/zephyr-sdk
+        run: |
+          set -euxo pipefail
+          command -v ccache
+          mapfile -t build_arguments < <(jq -r '.[]' <<< "$BUILD_ARGUMENTS")
+          west_arguments=(--cmake-only)
+          if [[ "$SYSBUILD" == "true" ]]; then
+            west_arguments+=(--sysbuild)
+          fi
+          west build -p always -b "${{ matrix.board }}" "${west_arguments[@]}" \
+            "${GITHUB_WORKSPACE}/examples/all-devices-app/zephyr" \
+            -d "build/${{ matrix.board }}" \
+            -- \
+            -DZEPHYR_TOOLCHAIN_VARIANT="${ZEPHYR_TOOLCHAIN_VARIANT}" \
+            -DZEPHYR_EXTRA_MODULES="${GITHUB_WORKSPACE}" \
+            -DUSE_CCACHE=1 \
+            "${build_arguments[@]}"
+
+          mapfile -t gn_args_files < <(find "build/${{ matrix.board }}" -type f -path '*/modules/connectedhomeip/args.tmp')
+          test "${#gn_args_files[@]}" -gt 0
+          for gn_args_file in "${gn_args_files[@]}"; do
+            printf '%s\n' --arg-string pw_command_launcher ccache >> "$gn_args_file"
+          done
+          west build -d "build/${{ matrix.board }}"
+
+      - name: Show ccache statistics
+        if: ${{ always() }}
         shell: bash
         run: |
-          mkdir -p artifacts/lighting-app-zephyr/BRD4187C
-          cp /opt/silabs/zephyr-silabs/build/zephyr/zephyr.hex \
-             artifacts/lighting-app-zephyr/BRD4187C/matter_thread_soc_lighting_app_series_2_zephyr_full.hex
+          if command -v ccache >/dev/null 2>&1; then
+            ccache --show-stats
+          fi
+
+      - name: Export Zephyr artifacts
+        shell: bash
+        run: |
+          set -euxo pipefail
+          artifact_dir="artifacts/all-devices-app-zephyr/${{ matrix.target }}"
+          mkdir -p "$artifact_dir"
+          cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.board }}/${{ matrix.in_artifact }}" \
+              "$artifact_dir/${{ matrix.out_artifact }}"
 
       - name: Upload Zephyr binary artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dev-artifacts-zephyr-${{ matrix.board }}-${{ matrix.toolchain }}-${{ matrix.out_artifact }}
+          path: artifacts/
+          if-no-files-found: error
+          overwrite: true
+          retention-days: 1
+
+  package-zephyr:
+    name: Package Zephyr artifacts
+    needs: [prepare, zephyr-all-devices]
+    if: ${{ !cancelled() && needs.prepare.result == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download successful Zephyr artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: dev-artifacts-zephyr-*
+          merge-multiple: true
+          path: artifacts/
+
+      - name: Upload consolidated Zephyr artifacts
         uses: actions/upload-artifact@v7
         with:
           name: dev-artifacts-zephyr
           path: artifacts/
           if-no-files-found: error
+          overwrite: true
+          retention-days: 1

@@ -9,6 +9,8 @@ metadata:
     license: Zlib
 requires:
   - name: matter_multipan
+  - name: mbedtls_jpake
+  - name: mbedtls_key_exchange_ecjpake
 provides:
   - name: matter_multipan_internal
 source:

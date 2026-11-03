@@ -7,6 +7,8 @@ The Matter over Wi-Fi EVSE example is a baseline demonstration of electric vehic
 - [Purpose/Scope](#purposescope)
 - [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
 - [Steps to Run Demo](#steps-to-run-demo)
+- [Extending Base App Implementation](#extending-base-app-implementation)
+  - [Energy Management Hardware Integration](#energy-management-hardware-integration)
 - [Troubleshooting](#troubleshooting)
 - [Resources](#resources)
 - [Report Bugs & Get Support](#report-bugs--get-support)
@@ -95,6 +97,29 @@ This sample app works out of the box with no additional configuration required. 
 | LED 0   | Short flash off   | Provisioned, no full service connectivity                       |
 | LED 0   | Solid on          | Fully provisioned with service connectivity                     |
 | LED 1   | —                 | Currently unused                                                |
+
+## Extending Base App Implementation
+
+See [Extending Base App Implementation](https://docs.silabs.com/matter/2.10.0/matter-api-reference#extending-base-app-implementation)
+for how to customize application behavior using `CustomerAppTask` and CRTP `*Impl()` hooks.
+
+Per-example override API references: `autogen/AppTaskImpl.h`, `autogen/AppTask.cpp`.
+
+### Energy Management Hardware Integration
+
+The CRTP `CustomerAppTask` pattern covers AppTask behavior. Energy management hardware
+integration (Power and Energy Measurement, Power Topology, and
+activating/deactivating the charging hardware in response to cluster commands) is not 
+currently routed through CRTP. Work is planned to route this functionality through the
+CRTP `CustomerAppTask` interface in the future.
+
+Until that follow up work is complete, manufacturers who need to connect real
+energy management hardware must edit the following shared delegate implementations
+directly:
+
+- `examples/energy-management/electrical-sensor/src/ElectricalEnergyMeasurementDelegateImpl.cpp`
+- `examples/energy-management/electrical-sensor/src/ElectricalPowerMeasurementDelegateImpl.cpp`
+- `examples/energy-management/electrical-sensor/src/PowerTopologyDelegateImpl.cpp`
 
 ## Troubleshooting
 

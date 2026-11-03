@@ -104,7 +104,7 @@ jobs:
         id: generate_token
         uses: actions/create-github-app-token@v3
         with:
-            app-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
+            client-id: ${{ vars.SILABSSW_MATTER_CI_BOT_APP_ID }}
             private-key:
                 ${{ secrets.SILABSSW_MATTER_CI_BOT_APP_PRIVATE_KEY }}
 

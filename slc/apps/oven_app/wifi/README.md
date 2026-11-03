@@ -7,6 +7,7 @@ The Matter over Wi-Fi oven example is a baseline demonstration of an oven built 
 - [Purpose/Scope](#purposescope)
 - [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
 - [Steps to Run Demo](#steps-to-run-demo)
+- [Extending Base App Implementation](#extending-base-app-implementation)
 - [Troubleshooting](#troubleshooting)
 - [Resources](#resources)
 - [Report Bugs & Get Support](#report-bugs--get-support)
@@ -82,6 +83,13 @@ This sample app works out of the box with no additional configuration required. 
 |---------|-------------------|-----------------------------------------------------------------|
 | BTN0    | Press and release | Start/restart BLE advertisement, print QR code URL to RTT logs |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
+
+## Extending Base App Implementation
+
+See [Extending Base App Implementation](https://docs.silabs.com/matter/2.10.0/matter-api-reference#extending-base-app-implementation)
+for how to customize application behavior using `CustomerAppTask` and CRTP `*Impl()` hooks.
+
+Per-example override API references: `autogen/AppTaskImpl.h`, `autogen/AppTask.cpp`.
 
 ## Troubleshooting
 

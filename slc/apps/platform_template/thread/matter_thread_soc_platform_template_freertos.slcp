@@ -152,6 +152,9 @@ configuration:
     value: 1
 
   # Default ICD configurations
+  - name: SL_ICD_ENABLE_SELECTIVE_SLEEP
+    value: 0
+    condition: [matter_icd_core]
   - name: CHIP_CONFIG_ENABLE_ICD_LIT
     value: 1
     condition: [matter_icd_core]

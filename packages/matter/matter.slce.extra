@@ -236,6 +236,7 @@ components:
   - matter_power_source_configuration
   - matter_power_topology
   - matter_pressure_measurement
+  - matter_provision_channel
   - matter_provision_default
   - matter_provision_flash
   - matter_proximity_ranging
@@ -639,6 +640,7 @@ extra_files:
   - slc/component/matter-platform/config/matter_includes.slcc
   - slc/component/matter-platform/cpc/matter_cpc.slcc
   - slc/component/matter-platform/crypto/matter_crypto.slcc
+  - slc/component/matter-platform/device-attestation-credentials/matter_provision_channel.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_default.slcc
   - slc/component/matter-platform/device-attestation-credentials/matter_provision_flash.slcc
   - slc/component/matter-platform/display/matter_default_lcd_config.slcc
@@ -1660,6 +1662,8 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/mode-base-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/mode-base-server/Delegate.h
+  - third_party/matter_sdk/src/app/clusters/mode-base-server/MigrateModeBaseServerStorage.cpp
+  - third_party/matter_sdk/src/app/clusters/mode-base-server/MigrateModeBaseServerStorage.h
   - third_party/matter_sdk/src/app/clusters/mode-base-server/ModeBaseCluster.cpp
   - third_party/matter_sdk/src/app/clusters/mode-base-server/ModeBaseCluster.h
   - third_party/matter_sdk/src/app/clusters/mode-base-server/README.md
@@ -1670,11 +1674,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/mode-base-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/mode-base-server/tests/TestModeBaseCluster.cpp
   - third_party/matter_sdk/src/app/clusters/mode-select-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/CodegenIntegration.h
   - third_party/matter_sdk/src/app/clusters/mode-select-server/ModeSelectCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/ModeSelectCluster.h
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/SupportedModesManager.cpp
   - third_party/matter_sdk/src/app/clusters/mode-select-server/SupportedModesManager.h
   - third_party/matter_sdk/src/app/clusters/mode-select-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/mode-select-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/mode-select-server/supported-modes-manager.h
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/mode-select-server/tests/TestModeSelectCluster.cpp
   - third_party/matter_sdk/src/app/clusters/network-commissioning/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/network-commissioning/CodegenInstance.cpp
   - third_party/matter_sdk/src/app/clusters/network-commissioning/CodegenInstance.h

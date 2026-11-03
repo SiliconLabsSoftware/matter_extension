@@ -7,6 +7,7 @@ The Matter over Thread refrigerator example is a baseline demonstration of a fri
 - [Purpose/Scope](#purposescope)
 - [Prerequisites/Setup Requirements](#prerequisitessetup-requirements)
 - [Steps to Run Demo](#steps-to-run-demo)
+- [Extending Base App Implementation](#extending-base-app-implementation)
 - [Troubleshooting](#troubleshooting)
 - [Resources](#resources)
 - [Report Bugs & Get Support](#report-bugs--get-support)
@@ -93,6 +94,13 @@ This sample app works out of the box with no additional configuration required. 
 | LED 0   | Rapid even flash  | BLE connected, commissioning in progress                       |
 | LED 0   | Short flash off   | Provisioned, no full Thread connectivity                        |
 | LED 0   | Solid on          | Fully provisioned with Thread connectivity                      |
+
+## Extending Base App Implementation
+
+See [Extending Base App Implementation](https://docs.silabs.com/matter/2.10.0/matter-api-reference#extending-base-app-implementation)
+for how to customize application behavior using `CustomerAppTask` and CRTP `*Impl()` hooks.
+
+Per-example override API references: `autogen/AppTaskImpl.h`, `autogen/AppTask.cpp`.
 
 ## Troubleshooting
 
