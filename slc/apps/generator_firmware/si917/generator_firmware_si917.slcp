@@ -154,6 +154,3 @@ toolchain_settings:
   - { option: cxx_standard, value: c++17 }
   - { option: gcc_compiler_option, value: -Wno-unused-parameter }
   - { option: gcc_compiler_option, value: -Wno-missing-field-initializers }
-
-tag:
-  - hidden

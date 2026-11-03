@@ -131,6 +131,3 @@ template_contribution:
   - name: code_region1_size
     value: 0x118000
     condition: [SIMG301M114KIH]
-
-tag:
-  - hidden

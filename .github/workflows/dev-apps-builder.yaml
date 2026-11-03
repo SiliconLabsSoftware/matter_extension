@@ -293,6 +293,7 @@ jobs:
             - build_series_3_bootloader
             - build_wake_on_matter_app
             - build_zephyr_all_devices
+            - build_generator_firmware
         if: success()
 
         steps:

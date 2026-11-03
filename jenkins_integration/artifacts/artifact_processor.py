@@ -417,15 +417,17 @@ def _upload_generator_firmware(workflow_id, branch_name, build_number):
         build_number (int): Build number for the upload
 
     Raises:
-        RuntimeError: If download or upload fails
+        RuntimeError: If the artifact is missing, or download or upload fails
     """
     workflow_artifact_url = f"{config.actions_runs_base_url}/{workflow_id}/artifacts"
     response = _make_github_api_request(workflow_artifact_url)
     artifacts = response.json().get('artifacts') or []
     artifact = next((a for a in artifacts if a['name'] == config.generator_firmware_artifact_name), None)
     if not artifact:
-        print(f"No {config.generator_firmware_artifact_name} artifact found for workflow {workflow_id}, skipping.")
-        return
+        raise RuntimeError(
+            f"No {config.generator_firmware_artifact_name} artifact found for workflow {workflow_id}. "
+            "Generator Firmware must be built before app artifacts are published."
+        )
     try:
         artifact_file = _download_artifact(artifact['archive_download_url'], artifact['name'] + '.zip')
         version = _get_matter_extension_version()
