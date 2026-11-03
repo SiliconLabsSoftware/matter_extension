@@ -10,13 +10,16 @@ metadata:
 provides:
   - name: matter_rgb_leds
 requires:
+  # simple_rgb_pwm_led is the EFR32 PWM driver. SiWx917 boards also provide
+  # hardware_board_has_rgb and use sl_si91x_led_917 instead. SLC does not
+  # allow `unless` on a requires entry, so require the MG platform as well.
   - name: simple_rgb_pwm_led
-    condition: [hardware_board_has_rgb]
+    condition: [hardware_board_has_rgb, matter_platform_mg]
 recommends:
   - id: simple_rgb_pwm_led
     vendor: silabs
     instance: [rgb_led0]
-    condition: [hardware_board_has_rgb]
+    condition: [hardware_board_has_rgb, matter_platform_mg]
 include:
   - path: third_party/matter_sdk/examples/platform/silabs/rgb_led
     file_list:

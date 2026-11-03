@@ -90,8 +90,11 @@ component:
   - id: ot_ncp_cpc
   - id: ot_reset_utils
   - id: mbedtls_jpake
-  - id: mbedtls_tls
-  - id: mbedtls_dtls
+  - id: mbedtls_ssl_client
+  - id: mbedtls_ssl_proto_dtls
+  - id: mbedtls_ssl_dtls_anti_replay
+  - id: mbedtls_ssl_dtls_hello_verify
+  - id: mbedtls_ssl_cookie
   - id: ot_ncp_source
   - id: ot_cli_source
   # Override configuration for JTAG use
