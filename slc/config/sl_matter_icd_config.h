@@ -44,7 +44,8 @@
 // <i> Default: 200 milliseconds
 #define SL_TRANSPORT_ACTIVE_INTERVAL 200
 
-// <o SL_CSL_TIMEOUT>  CSL Timeout (sec)
+// <o SL_CSL_TIMEOUT>  CSL Timeout (sec) (Thread only)
+// <i> Applies only to OpenThread synchronized sleepy end devices (SSEDs).
 // <i> Maximum time device waits for synchronized communication window
 // <i> Coordinated Sampled Listening Timeout (Default: 30 seconds)
 // <i> Feature requires matter_synchronized_sed component
@@ -55,7 +56,8 @@
 // <i> Set to true if device supports dynamic switching from SIT to LIT operating modes (DSLS)
 #define CHIP_CONFIG_ENABLE_ICD_DSLS 0
 
-// <q SL_ICD_ENABLE_SELECTIVE_SLEEP>  Enable Dynamic DTIM-LI-based Switching
+// <q SL_ICD_ENABLE_SELECTIVE_SLEEP>  Enable Dynamic DTIM-LI-based Switching (Wi-Fi only)
+// <i> Applies only to Wi-Fi devices; has no effect on Thread devices.
 // <i> Dynamic Switching from DTIM based to Long Interval based sleep (Default: 1)
 // <i> Set to true, if device supports dynamic switching from DTIM based to Long Interval based sleep (Selective Sleep)
 // <i> This feature is used to reduce power consumption in devices that support both DTIM and Long Interval based sleep modes.

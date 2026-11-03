@@ -53,7 +53,7 @@ def upload_to_ubai(file_path, app_name, target, branch_name, build_number, stack
 
 
 # TODO: Need to change or remove this
-def search_file_in_ubai(branch_name, build_number, sqa):
+def search_file_in_ubai(branch_name, build_number, sqa, target="matter"):
     """
     Check if the final artifact is already uploaded to UBAI.
     
@@ -61,6 +61,7 @@ def search_file_in_ubai(branch_name, build_number, sqa):
         branch_name (str): Branch name to search for.
         build_number (int): Build number to search for.
         sqa (bool): Whether to search for SQA or dev artifacts.
+        target (str): UBAI target metadata (package version for Matter uploads).
 
     Returns:
         list or None: List of found artifact lines, or None if not found or error.
@@ -71,7 +72,7 @@ def search_file_in_ubai(branch_name, build_number, sqa):
     else:
         build_binaries = "dev-apps-standard"
     
-    print(f"Searching for {build_binaries} in UBAI with build_number: {build_number}")
+    print(f"Searching for {build_binaries} in UBAI with build_number: {build_number}, target: {target}")
     
     try:
         result = subprocess.run([
