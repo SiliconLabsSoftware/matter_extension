@@ -380,6 +380,13 @@ extra_files:
   - provision.mattpconf
   - provision/support/JLinkDevices.xml
   - provision/support/efr32mg26/EFR32XG26.JLinkScript
+  - renode_integration/guest/dts/zynqmp-matter-linux.dts
+  - renode_integration/guest/rootfs-overlay/etc/init.d/S99matter-services
+  - renode_integration/guest/rootfs-overlay/usr/bin/chip-tool
+  - renode_integration/guest/rootfs-overlay/usr/bin/matter-thread-init
+  - renode_integration/resc/matter-sim-full.resc
+  - renode_integration/resc/matter-sim.resc
+  - renode_integration/sim-manifest.json
   - requirements.txt
   - slc/build-pkg.sh
   - slc/build.sh
