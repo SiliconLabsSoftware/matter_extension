@@ -66,7 +66,7 @@
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
-                "boards": ["brd2601b", "brd2703a", "brd4187c"],
+                "boards": ["brd4187c"],
                 "arguments": ["--output_suffix low-power-em4",
                               "--with_app matter_platform_low_power,matter_em4",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
