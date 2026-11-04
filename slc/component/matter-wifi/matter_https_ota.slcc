@@ -32,9 +32,14 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/vendor_ota_requestor_driver.cpp
   - path: third_party/matter_sdk/src/platform/silabs/services/vendor_ota_matter_gate.cpp
 
+config_file:
+  - path: slc/config/sl_matter_https_ota_config.h
+    file_id: matter_https_ota_config
+
 define:
   - name: SL_MATTER_ENABLE_HTTPS_OTA
     value: "1"
-  
+
 conflicts:
   - name: matter_ota_support
+

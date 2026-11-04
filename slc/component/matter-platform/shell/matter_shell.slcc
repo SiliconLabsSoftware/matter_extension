@@ -63,6 +63,10 @@ include:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble
     file_list:
       - path: BLEShellCommands.h
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/https
+    condition: [matter_https_ota]
+    file_list:
+      - path: HTTPSShellCommands.h
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im
     file_list:
       - path: IMShellCommands.h
@@ -108,6 +112,8 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/shell/tracing/TracingShellCommands.cpp
     condition: [matter_tracing]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/ble/BLEShellCommands.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/shell/https/HTTPSShellCommands.cpp
+    condition: [matter_https_ota]
   - path: third_party/matter_sdk/examples/platform/silabs/shell/im/IMShellCommands.cpp
     condition: [matter_read_client]
     
