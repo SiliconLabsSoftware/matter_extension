@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Commission a Matter device in Renode and send a simple on/off toggle."""
+"""
+@file commissioning_test.py
+@brief Commission a simulated Matter end device and verify on/off control.
+
+Copies the given Matter ELF into the bundle, loads matter-sim.resc, pairs over
+BLE-Thread with chip-tool on the hub UART, and toggles the On/Off cluster.
+"""
 
 from __future__ import annotations
 
