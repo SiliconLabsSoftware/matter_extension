@@ -330,6 +330,45 @@ def cmd_commission_thread(args: argparse.Namespace) -> int:
     return code
 
 
+def cmd_commission_wifi(args: argparse.Namespace) -> int:
+    host = require_host()
+    ssid = (args.ssid or "").strip()
+    password = (args.password or "").strip()
+    if not ssid:
+        print("Wi-Fi SSID required. Use --ssid.", file=sys.stderr)
+        return 1
+    if not password:
+        print("Wi-Fi password required. Use --password.", file=sys.stderr)
+        return 1
+
+    node_id = args.node_id if args.node_id is not None else random.randint(1, 100000)
+    pin = args.pin or DEFAULT_PIN
+    discriminator = args.discriminator or DEFAULT_DISCRIMINATOR
+
+    proc = run_ssh(
+        host,
+        chip_tool_argv(
+            [
+                "pairing",
+                "ble-wifi",
+                str(node_id),
+                ssid,
+                password,
+                pin,
+                discriminator,
+            ]
+        ),
+        timeout=COMMISSION_TIMEOUT_S,
+    )
+    if (code := ssh_failure_exit(host, proc)) is not None:
+        return code
+    code = print_proc(proc)
+    if code == 0:
+        write_last_node_id(host, node_id)
+        print(f"node_id={node_id}", file=sys.stderr)
+    return code
+
+
 def cmd_run(args: argparse.Namespace) -> int:
     host = require_host()
     if not args.chip_tool_args:
@@ -386,6 +425,18 @@ def build_parser() -> argparse.ArgumentParser:
     commission.add_argument("--discriminator", default=None)
     commission.add_argument("--dataset", default=None, help="Hex dataset (no hex: prefix)")
     commission.set_defaults(func=cmd_commission_thread)
+
+    commission_wifi = sub.add_parser("commission-wifi", help="BLE-Wi-Fi commissioning")
+    commission_wifi.add_argument("--node-id", type=int, default=None)
+    commission_wifi.add_argument("--pin", default=None)
+    commission_wifi.add_argument("--discriminator", default=None)
+    commission_wifi.add_argument("--ssid", required=True, help="Infrastructure Wi-Fi SSID")
+    commission_wifi.add_argument(
+        "--password",
+        required=True,
+        help="Infrastructure Wi-Fi passphrase (must be the same network as the Matter Hub)",
+    )
+    commission_wifi.set_defaults(func=cmd_commission_wifi)
 
     sub.add_parser("show-node-id", help="Print last commissioned node id from hub").set_defaults(
         func=cmd_show_node_id
