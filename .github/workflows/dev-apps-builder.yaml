@@ -273,6 +273,8 @@ jobs:
             packages: read
             actions: read
         uses: ./.github/workflows/renode-commissioning-tests.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
 
     merge-apps:
         name: Merge App Artifacts
