@@ -158,7 +158,7 @@ release-stream = "{release_stream}"
  
 [dependency]
 # Get a specific version of the package
-matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+matter = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
 """
 
     def merged_lines(group_name: str) -> str:
@@ -176,7 +176,10 @@ matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
         for name, ver in merged.items():
             if name == "matter":
                 continue
-            lines.append(f"{name} = {{ version = \"{ver}\", installer =\"conan\", prerelease=true }}\n")
+            lines.append(
+                f'{name} = {{ version = "{ver}", installer = "conan", user="silabs", '
+                f'channel="{release_stream}", prerelease = true }}\n'
+            )
         return "".join(lines)
 
     thread_block = merged_lines("thread")
@@ -263,7 +266,7 @@ release-stream = "{release_stream}"
  
 [dependency]
 # Get a specific version of the package
-{stack} = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+{stack} = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
 """
     with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
         pkg_slt_file.write(pkg_slt_content)
