@@ -12,7 +12,6 @@ provides:
 
 requires:
   # Mbed TLS 4 core and TF-PSA-Crypto integration
-  - name: mbedtls_core
   - name: psa_crypto_common
 
   # PSA crypto components. The device driver accelerates these when
@@ -35,7 +34,6 @@ requires:
   - name: mbedtls_base64
   # Software ECP for the SPAKE2+ fallback, which still calls Mbed TLS ECP.
   - name: mbedtls_ecc_secp256r1
-  - name: mbedtls_sha256
     condition: [matter_provision]
   - name: matter_ecdsa_deterministic_selection
     condition: [matter_provision]
@@ -112,7 +110,7 @@ define:
     condition: [ot_multi_instance_cert_libs]
 
 template_contribution:
-  - name: mbedtls_config
+  - name: psa_crypto_builtin_config
     value: MBEDTLS_MPI_WINDOW_SIZE 1
   - name: mbedtls_config
     value: MBEDTLS_X509_REMOVE_INFO
