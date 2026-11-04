@@ -38,7 +38,7 @@ jobs:
         uses: ./.github/actions/install-tools
 
       - name: Build RCPs
-        run: python3 renode_integration/scripts/build_rcps.py
+        run: ./renode_integration/scripts/build_rcps.py
 
       - name: Upload RCP artifacts
         uses: actions/upload-artifact@v7
@@ -65,7 +65,7 @@ jobs:
 
       - name: Build rootfs and DTB
         run: |
-          python3 renode_integration/scripts/build_rootfs_image.py
+          ./renode_integration/scripts/build_rootfs_image.py
           mkdir -p renode_integration/out/guest-rootfs
           dtc -I dts -O dtb \
             -o renode_integration/out/guest-rootfs/zynqmp-matter-linux.dtb \
@@ -122,7 +122,7 @@ jobs:
             "./scripts/build/build_examples.py --target linux-arm64-chip-tool-ipv6only-clang build"
 
       - name: Build tools image
-        run: python3 renode_integration/scripts/build_tools_image.py
+        run: ./renode_integration/scripts/build_tools_image.py
 
       - name: Upload tools image
         uses: actions/upload-artifact@v7
@@ -167,7 +167,7 @@ jobs:
           path: renode_integration/out/guest-rootfs
 
       - name: Assemble common bundle
-        run: python3 renode_integration/scripts/assemble_bundle.py
+        run: ./renode_integration/scripts/assemble_bundle.py
 
       - name: Upload common bundle
         uses: actions/upload-artifact@v7
@@ -206,7 +206,7 @@ jobs:
       - name: Publish common to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          python3 renode_integration/scripts/publish_bundle.py common
+          ./renode_integration/scripts/publish_bundle.py common
 
   build-runtime:
     needs:
@@ -251,8 +251,8 @@ jobs:
 
       - name: Build Renode
         run: |
-          python3 renode_integration/scripts/build_renode.py
-          python3 renode_integration/scripts/assemble_bundle.py
+          ./renode_integration/scripts/build_renode.py
+          ./renode_integration/scripts/assemble_bundle.py
 
       - name: Install harness dependencies
         run: |
@@ -262,7 +262,7 @@ jobs:
       - name: Generate checkpoint
         env:
           PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
-        run: python3 renode_integration/harness/generate_checkpoint.py
+        run: ./renode_integration/harness/generate_checkpoint.py
 
       # Test checkpoint load on macOS to verify that the bundle is working
       # Not needed on Linux (will be tested in CI commissioning tests)
@@ -270,10 +270,10 @@ jobs:
         if: matrix.host == 'osx-arm64'
         env:
           PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
-        run: python3 renode_integration/harness/smoke_test_checkpoint.py
+        run: ./renode_integration/harness/smoke_test_checkpoint.py
 
       - name: Package runtime bundle
-        run: python3 renode_integration/scripts/publish_bundle.py prepare runtime
+        run: ./renode_integration/scripts/publish_bundle.py prepare runtime
 
       - name: Upload runtime bundle
         uses: actions/upload-artifact@v7
@@ -322,4 +322,4 @@ jobs:
       - name: Publish runtime to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          python3 renode_integration/scripts/publish_bundle.py push runtime
+          ./renode_integration/scripts/publish_bundle.py push runtime
