@@ -1,4 +1,10 @@
-"""Shared paths, manifest lookup, and host detection for the Renode bundle scripts."""
+"""
+@file common.py
+@brief Shared paths, manifest lookup, and host detection for Renode bundle scripts.
+
+Loads sim-manifest.json, resolves GHCR artifact tags, and provides helpers used by
+build, assemble, fetch, and publish scripts under renode_integration/scripts/.
+"""
 
 import hashlib
 import json

@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Build the pinned Renode fork for this host."""
+"""
+@file build_renode.py
+@brief Build the pinned Renode fork for the current host.
+
+Clones or updates renode-src per sim-manifest.json, runs build.sh, and installs the
+portable package under out/renode/<host>. On macOS arm64, verifies native libraries.
+"""
 
 import os
 import shutil
