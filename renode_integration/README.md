@@ -120,12 +120,13 @@ The harness uses the assembled bundle at `renode_integration/out/bundle`. Exit c
 toggle succeeded. Device logs are on stdout from `test_lib`.
 
 ### Manual provisioning test
-Fetch the bundle with `fetch_bundle.py`, by default this pulls the latest provisioning bundle for the release. If you 
-would like to fetch the bundle and test against a PR that updates `matter_support` submodule, you can fetch the bundle 
-tied to the PR with:
+Fetch once with `--require-provision` so the script fails if the provisioning image is not on GHCR yet. Add `-p PR-NUM`
+when testing a PR that updates `matter_support` (`-p` already requires the provision artifact, `--require-provision` is optional there):
 
 ```sh
 cd renode_integration
+python3 scripts/fetch_bundle.py --require-provision
+# Or a PR specific bundle with:
 python3 scripts/fetch_bundle.py -p PR-NUM
 ```
 

@@ -54,9 +54,15 @@ def main():
         "-p", "--pr",
         type=str,
         default=None,
-        help="explicitly request provisioning bundle built for a specific PR number."
+        help="explicitly request provisioning bundle built for a specific PR number.",
+    )
+    parser.add_argument(
+        "--require-provision",
+        action="store_true",
+        help="fail if the provisioning artifact is missing (implied by -p).",
     )
     args = parser.parse_args()
+    require_provision = args.require_provision or args.pr is not None
 
     oras = common.require_cmd("oras")
     host = common.detect_host()
@@ -80,15 +86,30 @@ def main():
         print(f"warning: no runtime artifact for {host}, build Renode and run harness/generate_checkpoint.py")
 
     provision_tag = common.resolve_provision_tag(is_publish=False, pr_num=args.pr)
-    fetched_provision = subprocess.run(
-        [oras, "manifest", "fetch", f"{package}:{provision_tag}"],
-        capture_output=True,
+    provision_missing_msg = (
+        f"provisioning artifact '{package}:{provision_tag}' not found. "
+        "verify PR number or wait for the CI build pipeline to finish"
     )
-    if fetched_provision.returncode == 0:
-        print(f"Fetching {package}:{provision_tag} -> {bundle}")
-        pull_bundle(oras, package, provision_tag, bundle, "provision")
+
+    if provision_tag is None:
+        if require_provision:
+            common.die(
+                "provisioning artifact tag could not be resolved in this CI context. "
+                "use -p PR-NUM or run fetch locally"
+            )
+        print("warning: skipping provision bundle (no provision tag for this context)")
     else:
-        common.die(f"Error: Provisioning artifact '{package}:{provision_tag}' not found. Verify PR number or wait for the CI build pipeline to finish.")
+        fetched_provision = subprocess.run(
+            [oras, "manifest", "fetch", f"{package}:{provision_tag}"],
+            capture_output=True,
+        )
+        if fetched_provision.returncode == 0:
+            print(f"Fetching {package}:{provision_tag} -> {bundle}")
+            pull_bundle(oras, package, provision_tag, bundle, "provision")
+        elif require_provision:
+            common.die(f"error: {provision_missing_msg}")
+        else:
+            print(f"warning: no {provision_missing_msg}")
 
     print(f"Bundle fetched to {bundle}")
 
