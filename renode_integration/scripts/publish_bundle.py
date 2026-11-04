@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Package a common or runtime bundle and push it to GHCR with ORAS."""
+"""
+@file publish_bundle.py
+@brief Package a common or runtime bundle and push it to GHCR with ORAS.
+
+Usage:
+  publish_bundle.py common|runtime
+  publish_bundle.py prepare|push common|runtime
+"""
 
 import os
 import shutil

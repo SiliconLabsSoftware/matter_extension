@@ -1,4 +1,10 @@
-"""pyrenode3 harness for the Matter Renode simulation."""
+"""
+@file matter_sim.py
+@brief pyrenode3 harness for the Matter Renode simulation.
+
+Configures PYRENODE_PATH from the assembled bundle, drives Renode monitor/resc scripts,
+and exposes UART testers for the simulated Matter hub and SoC.
+"""
 
 from __future__ import annotations
 

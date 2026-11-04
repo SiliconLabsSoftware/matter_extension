@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Build matter-tools.ext2 on Ubuntu arm64.
+"""
+@file build_tools_image.py
+@brief Build matter-tools.ext2 on Ubuntu arm64 for the simulated Matter hub.
 
 otbr-agent and ot-ctl come from the upstream ot-br-posix build. BlueZ, D-Bus, their
-configs, chip-tool, and shared libraries come from the Ubuntu packages.
+configs, chip-tool, and shared libraries come from Ubuntu packages.
+Intended to run on ubuntu-24.04-arm in CI, use fetch_bundle.py on other hosts.
 """
 
 import os

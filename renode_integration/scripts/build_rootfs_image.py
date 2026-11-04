@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Build matter-rootfs.ext2 from the Antmicro base plus the Matter overlay"""
+"""
+@file build_rootfs_image.py
+@brief Build matter-rootfs.ext2 from the pinned Antmicro base plus the Matter overlay.
+
+Downloads and verifies the base ext2 image, patches fstab and init scripts via debugfs,
+and applies files from guest/rootfs-overlay.
+"""
 
 import os
 import shutil
