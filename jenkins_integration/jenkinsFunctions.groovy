@@ -928,7 +928,6 @@ for ref in ${packageRefs}; do
 done
 EOF
     """.stripIndent().trim())
-}
 
 def shouldTriggerSqaRegression() {
     return env.BRANCH_NAME.startsWith("release_") && buildStartedOnThursday()
