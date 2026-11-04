@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Copy built artifacts into the published bundle layout."""
+"""
+@file assemble_bundle.py
+@brief Copy built artifacts into the published bundle layout.
+
+Collects guest rootfs/tools images and DTB, RCP ELFs, resc scripts, Renode test_lib,
+and the host-specific portable Renode tree into renode_integration/out/bundle.
+"""
 
 import glob
 import os

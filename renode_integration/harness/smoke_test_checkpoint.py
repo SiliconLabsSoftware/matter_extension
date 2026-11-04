@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Load the booted-Linux checkpoint and confirm the hub console responds."""
+"""
+@file smoke_test_checkpoint.py
+@brief Load the booted-Linux checkpoint and confirm the hub console responds.
+
+Loads linux-booted-thread.save, starts emulation, attaches to the hub
+UART, and waits for a root shell prompt. Used in CI to validate runtime bundles on macOS.
+"""
 
 from __future__ import annotations
 

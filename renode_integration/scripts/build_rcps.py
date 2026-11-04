@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Build Thread and BLE RCP binaries for the Renode Matter simulation."""
+"""
+@file build_rcps.py
+@brief Build Thread and BLE RCP binaries for the Matter Renode simulation.
+
+Generates and compiles slcp projects from sim-manifest.json with flow-control overrides
+disabled for Renode (no WPK emulation). Outputs *.out files under out/rcp/.
+"""
 
 import argparse
 import os

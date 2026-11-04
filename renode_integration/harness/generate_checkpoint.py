@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Generate a Renode checkpoint with Linux booted and Thread network formed."""
+"""
+@file generate_checkpoint.py
+@brief Generate a Renode checkpoint with Linux booted and Thread network formed.
+
+Boots matter-sim-full.resc via pyrenode3, waits for matter-services, logs in as root,
+runs matter-thread-init, and saves linux-booted-thread.save under the bundle directory.
+"""
 
 from __future__ import annotations
 

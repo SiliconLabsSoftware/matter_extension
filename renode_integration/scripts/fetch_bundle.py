@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Pull the published common bundle and this host's runtime from GHCR."""
+"""
+@file fetch_bundle.py
+@brief Pull the published common bundle and this host's runtime from GHCR.
+
+Uses ORAS to download versioned artifacts tagged in sim-manifest.json into 
+renode_integration/out/bundle. Skips runtime fetch if no artifact exists for 
+the host.
+"""
 
 import os
 import shutil
