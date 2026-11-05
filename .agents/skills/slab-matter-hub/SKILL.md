@@ -1,8 +1,8 @@
 ---
 name: slab-matter-hub
 description: >-
-  Commission and control Silicon Labs Matter over Thread end devices through the
-  Matter Hub (Raspberry Pi OTBR + chip-tool) via SSH from the developer machine
+  Commission and control Silicon Labs Matter over Thread or Wi-Fi end devices through
+  the Matter Hub (Raspberry Pi OTBR + chip-tool) via SSH from the developer machine
   (Windows, Linux, or macOS). Requires one-time user Matter Hub SSH setup before
   the agent can run hub.py. Use when the user asks to commission, pair, or control
   a Matter device with chip-tool, mattertool, or the Matter Hub after build/flash.
@@ -26,7 +26,7 @@ Before commissioning or `run`, call `hub.py check` once. If it fails (non-zero e
 
 Only the **user** writes the hub config: `hub.py discover --host HOST` after SSH key setup. The agent sends the user **HOST** only inside the setup instructions, it does not run `discover` itself.
 
-Treat hub setup as **complete** only after `hub.py check` succeeds. Until then, do not run `dataset`, `commission-thread`, `run`, or `logs`.
+Treat hub setup as **complete** only after `hub.py check` succeeds. Until then, do not run `dataset`, `commission-thread`, `commission-wifi`, `run`, or `logs`.
 
 ## Purpose
 
@@ -34,7 +34,7 @@ Run chip-tool on the user's [Matter Hub](https://docs.silabs.com/matter/latest/m
 
 Out of scope:
 
-- Building or flashing firmware (use SLC / SDM skills)
+- Building or flashing firmware (use other Silicon Labs agent skills)
 - Installing chip-tool on the developer machine
 - `chip-tool interactive start`, tmux, or long-lived SSH shells
 - Sourcing [mattertool](tools/matter_rpi_image/scripts/matterTool.sh) over SSH (shell variables do not persist)
@@ -43,18 +43,48 @@ In scope:
 
 - Hub connectivity check after user configuration (`check`)
 - Thread dataset read and optional new network formation
-- BLE-Thread commissioning
+- BLE-Thread and BLE-Wi-Fi commissioning
 - Arbitrary chip-tool cluster commands
 - Bounded OTBR journal logs
 
-End-device UART logs stay on the kit via the SDM skill.
+## Resolve Matter transport (Thread vs Wi-Fi)
+
+Do **not** guess `commission-thread` vs `commission-wifi`. Pick exactly one pairing mode before commissioning in the [default workflow](#default-workflow).
+
+**Do not infer transport.** If it is not abundantly clear (below), **ask the user** and wait for an answer before any `commission-thread` or `commission-wifi` call.
+
+### Abundantly clear (proceed without asking)
+
+Use **Thread** when any of these is true:
+
+- The user states Thread, OTBR, operational dataset, or `ble-thread`.
+- The user names or points to a **Thread sample application** as the image they built or flashed.
+
+Use **Wi-Fi** when any of these is true:
+
+- The user states Wi-Fi, WLAN, or `ble-wifi`, or supplies infrastructure **SSID and password** for commissioning.
+- The user names or points to a **Wi-Fi sample application** as the image they built or flashed.
+
+When transport is abundantly clear, state it in one line and continue. Skip asking.
+
+### Not abundantly clear (ask, do not infer)
+
+If none of the above applies, ask once:
+
+**“Should I commission over Matter Thread (`commission-thread` + hub dataset) or Matter Wi-Fi (`commission-wifi` + your SSID/password)?”**
+
+Do not run `commission-thread` or `commission-wifi` until the user answers.
+
+If the user later references both transports or an ambiguous app, ask which operational network to use (Thread dataset vs Wi-Fi credentials).
+
+Record the chosen transport in the session (for example `transport=thread`) so later `run` and `show-node-id` stay consistent. Do not store transport in `matter-hub.json`.
 
 ## Executor
 
 Run from the workspace root with **Python 3**. Use `python3` on Linux/macOS or `python` on Windows if that is how Python 3 is installed:
 
 ```bash
-python3 .agents/skills/chip-tool/scripts/hub.py <subcommand> [args]
+python3 .agents/skills/slab-matter-hub/scripts/hub.py <subcommand> [args]
 ```
 
 `hub.py` uses the system `ssh` client. Stdlib only. SSH targets the LAN. If the sandbox blocks the Pi, rerun with unrestricted network permissions.
@@ -89,6 +119,7 @@ Dedicated SSH key for the hub only (not GitHub/corporate defaults). `hub.py` use
 | `dataset` | Print active Thread operational dataset (hex) |
 | `start-thread` | Factory-reset OTBR and form a new Thread network (destructive, user must ask) |
 | `commission-thread` | BLE-Thread pair. Writes last node id on the Pi |
+| `commission-wifi` | BLE-Wi-Fi pair. Writes last node id on the Pi |
 | `run` | Pass remaining args to chip-tool |
 | `show-node-id` | Read last node id from `/tmp/last-node-id` on the hub |
 | `logs` | Last 200 lines of `otbr-agent` journal |
@@ -99,15 +130,21 @@ Defaults: pin `20202021`, discriminator `3840`. Options: `--node-id`, `--pin`, `
 
 Uses dataset from `--dataset`, else `dataset` subcommand output. Blocks until chip-tool exits (up to 180s). Saves node id to `/tmp/last-node-id` on the Pi.
 
+### `commission-wifi`
+
+Required: `--ssid`, `--password` (infrastructure Wi-Fi, device and hub must reach the same network). Defaults: pin `20202021`, discriminator `3840`. Options: `--node-id`, `--pin`, `--discriminator`.
+
+Blocks until chip-tool exits (up to 180s). Saves node id to `/tmp/last-node-id` on the Pi.
+
 ### `run`
 
 Forwards argv to chip-tool. Example:
 
 ```bash
-python3 .agents/skills/chip-tool/scripts/hub.py run onoff on 1 1
+python3 .agents/skills/slab-matter-hub/scripts/hub.py run onoff on 1 1
 ```
 
-If the user omits node id, read last id from the Pi with `hub.py show-node-id` or reuse the node id from `commission-thread`.
+If the user omits node id, read last id from the Pi with `hub.py show-node-id` or reuse the node id from `commission-thread` or `commission-wifi`.
 
 ## Consent
 
@@ -119,10 +156,21 @@ If the user omits node id, read last id from the Pi with `hub.py show-node-id` o
 After the Matter app is built, flashed, and advertising:
 
 1. `check` (if it fails, send stderr setup text verbatim and stop)
-2. `dataset` (or `start-thread` only if requested)
-3. `commission-thread` with credentials from device logs if not defaults
-4. `run` for cluster commands
-5. `logs` if OTBR-side diagnosis is needed
+2. [Resolve Matter transport](#resolve-matter-transport-thread-vs-wi-fi). Ask when it is not abundantly clear.
+
+**Thread end device:**
+
+3. `dataset` (or `start-thread` only if requested)
+4. `commission-thread` with `--pin` / `--discriminator` from the user when not using hub defaults (`20202021`, `3840`)
+
+**Wi-Fi end device:**
+
+3. `commission-wifi --ssid SSID --password PASSWORD` with `--pin` / `--discriminator` from the user when not using hub defaults
+
+**Both:**
+
+5. `run` for cluster commands
+6. `logs` if OTBR-side diagnosis is needed (Thread only)
 
 ## Pairing reference
 
@@ -132,10 +180,18 @@ Thread BLE (hub runs chip-tool):
 pairing ble-thread <node_id> hex:<dataset> <pin> <discriminator>
 ```
 
-`hub.py commission-thread` builds this command. Matter over Wi-Fi (`pairing ble-wifi`) is not implemented yet. A `commission-wifi` subcommand will be implemented in a follow-up.
+`hub.py commission-thread` builds the Thread command. 
+
+Wi-Fi BLE (hub runs chip-tool):
+
+```text
+pairing ble-wifi <node_id> <ssid> <password> <pin> <discriminator>
+```
+
+`hub.py commission-wifi` builds the Wi-Fi command.
 
 ## Logs
 
-- chip-tool output: stdout of `run` and `commission-thread`
+- chip-tool output: stdout of `run`, `commission-thread`, and `commission-wifi`
 - OTBR: `logs` subcommand (`journalctl -u otbr-agent --no-pager -n 200`)
 - Do not run `journalctl -f` or `tail -f`
