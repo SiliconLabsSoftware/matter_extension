@@ -58,6 +58,7 @@ def stage_python_runtime(staging):
     dynload = staging / "lib" / "python3.12" / "lib-dynload"
     if dynload.is_dir():
         binaries.extend(p for p in dynload.iterdir() if p.suffix == ".so")
+    binaries.extend(site.rglob("*.so"))
     common.copy_dynamic_libs_for_binaries(
         binaries,
         lib_dir,

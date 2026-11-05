@@ -91,7 +91,7 @@ jobs:
           path: renode_integration/out/guest-rootfs
 
       - name: Assemble provisioning bundle
-        run: python3 renode_integration/scripts/assemble_bundle.py
+        run: python3 renode_integration/scripts/assemble_bundle.py --provision
 
       - name: Install ORAS
         uses: oras-project/setup-oras@v2

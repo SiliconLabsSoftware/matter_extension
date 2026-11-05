@@ -7,6 +7,7 @@ Collects guest rootfs/tools images and DTB, RCP ELFs, resc scripts, Renode test_
 and the host-specific portable Renode tree into renode_integration/out/bundle.
 """
 
+import argparse
 import glob
 import os
 import shutil
@@ -33,9 +34,36 @@ def copy_if_exists(src, dest_dir):
         shutil.copy2(src, os.path.join(dest_dir, os.path.basename(src)))
 
 
-def main():
+def assemble_provision_bundle(bundle):
+    src = os.path.join(
+        common.RENODE_INTEGRATION_DIR,
+        "out",
+        "guest-rootfs",
+        "matter-provision.ext2",
+    )
+    if not os.path.isfile(src):
+        common.die(f"provision image not found at {src}")
+    dest = os.path.join(bundle, "guest-rootfs")
+    os.makedirs(dest, exist_ok=True)
+    shutil.copy2(src, os.path.join(dest, "matter-provision.ext2"))
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--provision",
+        action="store_true",
+        help="assemble only the provisioning image",
+    )
+    args = parser.parse_args(argv)
+
     bundle = common.bundle_dir()
     os.makedirs(bundle, exist_ok=True)
+    if args.provision:
+        assemble_provision_bundle(bundle)
+        print(f"Assembled provision bundle at {bundle}")
+        return
+
     copy_test_lib(bundle)
     guest_out = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "guest-rootfs")
     guest_dest = os.path.join(bundle, "guest-rootfs")
