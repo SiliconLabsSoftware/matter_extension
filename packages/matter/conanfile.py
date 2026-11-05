@@ -81,6 +81,8 @@ class matterRecipe(MatterBaseRecipe):
 
     # Provide a unified folder reference for the recipe logic without needing
     # to override __init__ (Conan discourages custom __init__ implementations).
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+
     @property
     def matter_folder(self) -> str:
         return str(self.repo_root)
@@ -97,8 +99,9 @@ class matterRecipe(MatterBaseRecipe):
         versions file consumed by both scripts and recipes.
         """
 
+        channel = self.release_stream_channel
         for dep_name, dep_version in self.dep_versions.items():  # preserves insertion order (Python 3.7+)
-            self.requires(f"{dep_name}/{dep_version}@{self.user}")
+            self.requires(f"{dep_name}/{dep_version}@{self.user}/{channel}")
 
     def slt_requirements(self):
         req = {}

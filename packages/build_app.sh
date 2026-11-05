@@ -16,6 +16,8 @@
 #   --board BOARD            Board id, e.g. brd4338a (required)
 #   --version VER            matter_app version to install (default: env MATTER_PACKAGE_VERSION
 #                            or 2.10.0)
+#   --channel CHANNEL        Conan channel (default: env MATTER_PACKAGE_CHANNEL or
+#                            packages/_shared/release_stream_channel)
 #   --output_suffix SUFFIX   Append a suffix to the output directory
 #   --with_app COMPONENTS    Add components to the application
 #   --without_app COMPONENTS Remove components from the application
@@ -31,8 +33,30 @@
 
 set -euo pipefail
 
+# Print an error to stderr and exit with status 1.
+die() {
+  echo "error: $*" >&2
+  exit 1
+}
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Prefer packaged copy beside build_app.sh, else repo packages/_shared/.
+_channel_file=""
+for _cand in \
+  "${SCRIPT_DIR}/release_stream_channel" \
+  "${SCRIPT_DIR}/_shared/release_stream_channel" \
+  "${SCRIPT_DIR}/../_shared/release_stream_channel"
+do
+  if [[ -f "${_cand}" ]]; then
+    _channel_file="${_cand}"
+    break
+  fi
+done
+[[ -n "${_channel_file}" ]] || die "release_stream_channel not found (expected under packages/_shared)"
+CHANNEL_DEFAULT="$(tr -d '[:space:]' < "${_channel_file}")"
 VERSION_DEFAULT="2.10.0"
 MATTER_PACKAGE_VERSION="${MATTER_PACKAGE_VERSION:-${VERSION_DEFAULT}}"
+MATTER_PACKAGE_CHANNEL="${MATTER_PACKAGE_CHANNEL:-${CHANNEL_DEFAULT}}"
 PROJECT=""
 BOARD=""
 JOBS=8
@@ -50,12 +74,6 @@ EXTRA_GENERATE_ARGS=()
 usage() {
   sed -n '2,/^$/p' "$0" | sed 's/^# \?//'
   exit "${1:-0}"
-}
-
-# Print an error to stderr and exit with status 1.
-die() {
-  echo "error: $*" >&2
-  exit 1
 }
 
 # Abort if the named command is not on PATH.
@@ -108,6 +126,11 @@ while [[ $# -gt 0 ]]; do
     --version)
       MATTER_PACKAGE_VERSION="${2:-}"
       [[ -n "${MATTER_PACKAGE_VERSION}" ]] || die "--version needs a value"
+      shift 2
+      ;;
+    --channel)
+      MATTER_PACKAGE_CHANNEL="${2:-}"
+      [[ -n "${MATTER_PACKAGE_CHANNEL}" ]] || die "--channel needs a value"
       shift 2
       ;;
     --output_suffix)
@@ -234,8 +257,10 @@ if [[ "${PROJECT}" != *.slcp && "${PROJECT}" != *.slcw ]]; then
 fi
 
 export MATTER_PACKAGE_VERSION
-REF="matter_app/${MATTER_PACKAGE_VERSION}@silabs"
+export MATTER_PACKAGE_CHANNEL
+REF="matter_app/${MATTER_PACKAGE_VERSION}@silabs/${MATTER_PACKAGE_CHANNEL}"
 echo "MATTER_PACKAGE_VERSION=${MATTER_PACKAGE_VERSION}"
+echo "MATTER_PACKAGE_CHANNEL=${MATTER_PACKAGE_CHANNEL}"
 
 need_cmd slt
 
