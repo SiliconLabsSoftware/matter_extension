@@ -133,6 +133,15 @@ jobs:
                   cat ./target_gcc.csv
                   python3 ./slc/script/code_size_diff_check.py ./current_gcc.csv ./target_gcc.csv --toolchain gcc \
                       | tee code_size_report_gcc.txt
+                  python3 ./tools/code_size_tools/code_size_viewer.py $(find ./current -name "*.map") $(find ./out -name "*.map") --map --html
+
+            - name: Upload Code Size Diff HTML
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: code-size-diff-html
+                  path: code_size_diff.html
+                  retention-days: 4
 
             - name: Generate Code Size Results and Compare (llvm)
               ## TODO: Remove the skip condition when wifi on llvm is supported
