@@ -17,6 +17,7 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
+  - id: watchdog_manager
   - id: common_token_manager_dynamic
     condition: [device_series_3]
   - id: common_token_manager
