@@ -588,7 +588,7 @@
     ]
   },
   {
-    "clusterCode": "test hidden manufacturer specific-server",
+    "clusterCode": "unit testing-server",
     "value": [
       "%extension-matter%matter_test_cluster"
     ]
