@@ -12,24 +12,28 @@ provides:
 
 requires:
   # Mbed TLS 4 core and TF-PSA-Crypto integration
-  - name: mbedtls_core
   - name: psa_crypto_common
 
-  # PSA crypto components
+  # PSA crypto components. The device driver accelerates these when
+  # SL_PSA_DRIVERS_ENABLED is set. Do not add the matching mbedtls_*
+  # components: they force PSA software builtins.
   - name: psa_its
+  - name: psa_crypto_aes
   - name: psa_crypto_ccm
+  - name: psa_crypto_cmac
   - name: psa_crypto_ecdh
   - name: psa_crypto_ecdsa
   - name: psa_crypto_hkdf
   - name: psa_crypto_sha256
   - name: psa_crypto_ecc
+  - name: psa_crypto_ecc_secp256r1
 
   # Mbedtls components
   - name: mbedtls_x509
   - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
   - name: mbedtls_base64
-  - name: mbedtls_cmac
-  - name: mbedtls_sha256
+  # Software ECP for the SPAKE2+ fallback, which still calls Mbed TLS ECP.
+  - name: mbedtls_ecc_secp256r1
     condition: [matter_provision]
   - name: matter_ecdsa_deterministic_selection
     condition: [matter_provision]
@@ -87,14 +91,16 @@ define:
     value: 0
   - name: OPENTHREAD_CONFIG_DETERMINISTIC_ECDSA_ENABLE
     value: 0
-  - name: MBEDTLS_USER_CONFIG_FILE
+  # Read after psa_crypto_config.h and before TF-PSA-Crypto enables
+  # software builtins. MBEDTLS_USER_CONFIG_FILE is too late for this.
+  - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
     value: "<sli_psa_builtin_config.h>"
     unless: [matter_aws]
   - name: MBEDTLS_USER_CONFIG_FILE
     value: "<efr32-chip-mbedtls-config.h>"
     condition: [matter_aws]
   - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
-    value: <efr32-psa-crypto-config.h>
+    value: "<efr32-psa-crypto-config.h>"
     condition: [matter_aws]
   # OT CoAP Cert libs
   - name: MBEDTLS_SSL_HANDSHAKE_WITH_CERT_ENABLED
@@ -104,8 +110,10 @@ define:
     condition: [ot_multi_instance_cert_libs]
 
 template_contribution:
-  - name: mbedtls_config
+  - name: psa_crypto_builtin_config
     value: MBEDTLS_MPI_WINDOW_SIZE 1
+  - name: mbedtls_config
+    value: MBEDTLS_X509_REMOVE_INFO
 
 source:
   # The non-secure TrustZone image cannot include psa_crypto_source because it

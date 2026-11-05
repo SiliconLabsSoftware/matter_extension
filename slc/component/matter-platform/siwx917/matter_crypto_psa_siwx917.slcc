@@ -26,11 +26,13 @@ requires:
   - name: psa_crypto_hkdf
   - name: psa_crypto_sha256
 
-  # mbedTLS components
+  # PSA CMAC. mbedtls_cmac / mbedtls_ccm would force software builtins.
+  - name: psa_crypto_cmac
+
+  # mbedTLS components. ECC stays because SiWx917 PSA ECC requires the
+  # software curve implementation.
   - name: mbedtls_platform_dynamic_memory_allocation_config_init_runtime
   - name: mbedtls_base64
-  - name: mbedtls_cmac
-  - name: mbedtls_ccm
   - name: mbedtls_ecc
   - name: mbedtls_x509
   - name: mbedtls_version
@@ -86,7 +88,7 @@ include:
 define:
   - name: MBEDTLS_USER_CONFIG_FILE
     value: <siwx917-chip-mbedtls-config.h>
-  - name: MBEDTLS_PSA_CRYPTO_USER_CONFIG_FILE
+  - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
     value: <siwx917-chip-psa-config.h>
   - name: SLI_SI91X_TRNG_DUPLICATE_CHECK
     value: 0
