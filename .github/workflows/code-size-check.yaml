@@ -124,6 +124,10 @@ jobs:
               env:
                 MATTER_ROOT: ${{ github.workspace }}/baseline
 
+            - name: Install code size tools dependencies
+              run: |
+                  pip3 install -r ./tools/code_size_tools/requirements.txt
+
             - name: Generate Code Size Results and Compare (gcc)
               shell: bash
               run: |
