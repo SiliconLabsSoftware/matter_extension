@@ -50,7 +50,7 @@
 {%- if example.quality == 'internal' or (templates_hidden is defined and example.name in templates_hidden) %}
     <properties key="core.hidden" value="true"/>
 {%- endif %}
-{%- elif 'matter_thread_host_openthread_border_router_doc' not in example.name %}
+{%- elif example.name not in ['matter_thread_host_openthread_border_router_doc', 'generator_firmware_efr32', 'generator_firmware_si917'] %}
     <properties key="core.hidden" value="true"/>
 {%- endif %}
   </descriptors>
