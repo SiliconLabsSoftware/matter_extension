@@ -17,36 +17,6 @@ import common
 
 _IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc", "test", "temp", "latest.json")
 
-def first_file(*paths):
-    for path in paths:
-        if os.path.isfile(path):
-            return path
-    common.die("none of these exist: " + " ".join(paths))
-
-
-def install_file(src, dest, mode):
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dest)
-    os.chmod(dest, mode)
-
-
-def linked_libs(binary):
-    result = subprocess.run(["ldd", str(binary)], capture_output=True, text=True, check=True)
-    libs = []
-    for line in result.stdout.splitlines():
-        fields = line.split()
-        if len(fields) >= 3 and fields[1] == "=>" and fields[2].startswith("/"):
-            libs.append(fields[2])
-    return libs
-
-
-def dir_size_mb(path):
-    total = 0
-    for root, _, names in os.walk(path):
-        for name in names:
-            total += os.path.getsize(os.path.join(root, name))
-    return max(64, (total + 1024 * 1024 - 1) // (1024 * 1024) + 8)
-
 
 def stage_python_runtime(staging):
     req = (
@@ -65,8 +35,8 @@ def stage_python_runtime(staging):
     lib_dir.mkdir(parents=True)
     (staging / "lib").mkdir(exist_ok=True)
 
-    python = Path(first_file("/usr/bin/python3.12", "/usr/bin/python3"))
-    install_file(python, guest_bin / "python3", 0o755)
+    python = Path(common.first_file("/usr/bin/python3.12", "/usr/bin/python3"))
+    common.install_file(python, guest_bin / "python3", 0o755)
     stdlib = Path("/usr/lib/python3.12")
     if not stdlib.is_dir():
         common.die(f"python stdlib not found at {stdlib}")
@@ -84,18 +54,15 @@ def stage_python_runtime(staging):
     )
     shutil.copy2(req, staging / "requirements.txt")
 
-    libs = set()
-    for binary in guest_bin.iterdir():
-        if binary.is_file():
-            libs.update(linked_libs(binary))
+    binaries = [p for p in guest_bin.iterdir() if p.is_file()]
     dynload = staging / "lib" / "python3.12" / "lib-dynload"
     if dynload.is_dir():
-        for binary in dynload.iterdir():
-            if binary.suffix == ".so":
-                libs.update(linked_libs(binary))
-    for lib in sorted(libs):
-        shutil.copy2(lib, lib_dir / os.path.basename(lib))
-    shutil.copy2("/lib/ld-linux-aarch64.so.1", staging / "lib" / "ld-linux-aarch64.so.1")
+        binaries.extend(p for p in dynload.iterdir() if p.suffix == ".so")
+    common.copy_dynamic_libs_for_binaries(
+        binaries,
+        lib_dir,
+        staging / "lib" / "ld-linux-aarch64.so.1",
+    )
 
 
 def build_provision_ext2(output: Path) -> None:
@@ -118,23 +85,7 @@ def build_provision_ext2(output: Path) -> None:
         shutil.copytree(src, staging / "tool", ignore=_IGNORE)
         stage_python_runtime(staging)
 
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.unlink(missing_ok=True)
-        size_mb = dir_size_mb(staging)
-        subprocess.run(
-            [
-                common.find_mkfs_ext2(),
-                "-q",
-                "-d",
-                str(staging),
-                "-L",
-                "matter-provision",
-                str(output),
-                f"{size_mb}M",
-            ],
-            check=True,
-        )
-        print(f"Built {output} ({size_mb}M)")
+        common.make_ext2_from_staging(staging, output, "matter-provision", extra_mb=8, min_mb=64)
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

@@ -40,19 +40,6 @@ def apt_install(packages):
     )
 
 
-def first_file(*paths):
-    for path in paths:
-        if os.path.isfile(path):
-            return path
-    common.die("none of these exist: " + " ".join(paths))
-
-
-def install_file(src, dest, mode):
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src, dest)
-    os.chmod(dest, mode)
-
-
 def ubuntu_version_id():
     values = {}
     with open("/etc/os-release", encoding="utf-8") as handle:
@@ -62,24 +49,6 @@ def ubuntu_version_id():
             key, value = line.strip().split("=", 1)
             values[key] = value.strip('"')
     return values.get("VERSION_ID", "")
-
-
-def dir_size_mb(path):
-    total = 0
-    for root, _, names in os.walk(path):
-        for name in names:
-            total += os.path.getsize(os.path.join(root, name))
-    return (total + 1024 * 1024 - 1) // (1024 * 1024) + 64
-
-
-def linked_libs(binary):
-    result = subprocess.run(["ldd", str(binary)], capture_output=True, text=True, check=True)
-    libs = []
-    for line in result.stdout.splitlines():
-        fields = line.split()
-        if len(fields) >= 3 and fields[1] == "=>" and fields[2].startswith("/"):
-            libs.append(fields[2])
-    return libs
 
 
 def find_ot_ctl(build_dir):
@@ -129,44 +98,35 @@ def build(chip_tool):
         guest_bin.mkdir(parents=True)
         lib_dir.mkdir(parents=True)
         (staging / "lib").mkdir()
-        install_file(otbr_build / "src" / "agent" / "otbr-agent", guest_bin / "otbr-agent", 0o755)
-        install_file(find_ot_ctl(otbr_build), guest_bin / "ot-ctl", 0o755)
-        install_file(chip_tool, guest_bin / "chip-tool", 0o755)
+        common.install_file(otbr_build / "src" / "agent" / "otbr-agent", guest_bin / "otbr-agent", 0o755)
+        common.install_file(find_ot_ctl(otbr_build), guest_bin / "ot-ctl", 0o755)
+        common.install_file(chip_tool, guest_bin / "chip-tool", 0o755)
         for name in GUEST_BINS:
-            install_file(shutil.which(name), guest_bin / name, 0o755)
-        bluetoothd = first_file("/usr/libexec/bluetooth/bluetoothd", "/usr/lib/bluetooth/bluetoothd")
-        install_file(bluetoothd, guest_bin / "bluetoothd", 0o755)
+            common.install_file(shutil.which(name), guest_bin / name, 0o755)
+        bluetoothd = common.first_file("/usr/libexec/bluetooth/bluetoothd", "/usr/lib/bluetooth/bluetoothd")
+        common.install_file(bluetoothd, guest_bin / "bluetoothd", 0o755)
 
-        install_file(Path("/usr/share/dbus-1/system.conf"), staging / "usr/share/dbus-1/system.conf", 0o644)
-        bluetooth_conf = first_file(
+        common.install_file(Path("/usr/share/dbus-1/system.conf"), staging / "usr/share/dbus-1/system.conf", 0o644)
+        bluetooth_conf = common.first_file(
             "/usr/share/dbus-1/system.d/bluetooth.conf",
             "/etc/dbus-1/system.d/bluetooth.conf",
         )
-        install_file(bluetooth_conf, staging / "etc/dbus-1/system.d/bluetooth.conf", 0o644)
-        install_file(
+        common.install_file(bluetooth_conf, staging / "etc/dbus-1/system.d/bluetooth.conf", 0o644)
+        common.install_file(
             otbr_build / "src/agent/otbr-agent.conf",
             staging / "etc/dbus-1/system.d/otbr-agent.conf",
             0o644,
         )
 
-        libs = set()
-        for binary in guest_bin.iterdir():
-            if binary.is_file():
-                libs.update(linked_libs(binary))
-        for lib in sorted(libs):
-            shutil.copy2(lib, lib_dir / os.path.basename(lib))
-        shutil.copy2("/lib/ld-linux-aarch64.so.1", staging / "lib" / "ld-linux-aarch64.so.1")
+        common.copy_dynamic_libs_for_binaries(
+            guest_bin.iterdir(),
+            lib_dir,
+            staging / "lib" / "ld-linux-aarch64.so.1",
+        )
 
         out_dir = Path(common.RENODE_INTEGRATION_DIR) / "out" / "guest-rootfs"
         output = out_dir / "matter-tools.ext2"
-        out_dir.mkdir(parents=True, exist_ok=True)
-        output.unlink(missing_ok=True)
-        size_mb = dir_size_mb(staging)
-        subprocess.run(
-            ["mkfs.ext2", "-q", "-d", str(staging), "-L", "matter-tools", str(output), f"{size_mb}M"],
-            check=True,
-        )
-        print(f"Built {output} ({size_mb}M)")
+        common.make_ext2_from_staging(staging, output, "matter-tools", extra_mb=64)
     finally:
         shutil.rmtree(work, ignore_errors=True)
 

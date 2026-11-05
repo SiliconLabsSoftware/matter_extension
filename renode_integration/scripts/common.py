@@ -4,6 +4,8 @@
 
 Loads sim-manifest.json, resolves GHCR artifact tags, and provides helpers used by
 build, assemble, fetch, and publish scripts under renode_integration/scripts/.
+Guest ext2 image builders share first_file, install_file, linked_libs, dir_size_mb,
+copy_dynamic_libs_for_binaries, and make_ext2_from_staging.
 """
 
 import hashlib
@@ -12,6 +14,7 @@ import os
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 RENODE_INTEGRATION_DIR = os.path.dirname(SCRIPT_DIR)
@@ -166,3 +169,65 @@ def find_mkfs_ext2():
 
 def find_debugfs():
     return _find_e2fs_tool("debugfs")
+
+
+def first_file(*paths):
+    for path in paths:
+        if os.path.isfile(path):
+            return path
+    die("none of these exist: " + " ".join(paths))
+
+
+def install_file(src, dest, mode):
+    dest = Path(dest)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dest)
+    os.chmod(dest, mode)
+
+
+def linked_libs(binary):
+    result = subprocess.run(["ldd", str(binary)], capture_output=True, text=True, check=True)
+    libs = []
+    for line in result.stdout.splitlines():
+        fields = line.split()
+        if len(fields) >= 3 and fields[1] == "=>" and fields[2].startswith("/"):
+            libs.append(fields[2])
+    return libs
+
+
+def dir_size_mb(path, *, extra_mb=64, min_mb=0):
+    total = 0
+    for root, _, names in os.walk(path):
+        for name in names:
+            total += os.path.getsize(os.path.join(root, name))
+    used_mb = (total + 1024 * 1024 - 1) // (1024 * 1024)
+    return max(min_mb, used_mb + extra_mb)
+
+
+def copy_dynamic_libs_for_binaries(binaries, lib_dir, loader_dest=None):
+    libs = set()
+    for binary in binaries:
+        path = Path(binary)
+        if path.is_file():
+            libs.update(linked_libs(path))
+    lib_dir = Path(lib_dir)
+    lib_dir.mkdir(parents=True, exist_ok=True)
+    for lib in sorted(libs):
+        shutil.copy2(lib, lib_dir / os.path.basename(lib))
+    if loader_dest is not None:
+        loader_dest = Path(loader_dest)
+        loader_dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2("/lib/ld-linux-aarch64.so.1", loader_dest)
+
+
+def make_ext2_from_staging(staging, output, label, *, extra_mb=64, min_mb=0):
+    output = Path(output)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.unlink(missing_ok=True)
+    size_mb = dir_size_mb(staging, extra_mb=extra_mb, min_mb=min_mb)
+    subprocess.run(
+        [find_mkfs_ext2(), "-q", "-d", str(staging), "-L", label, str(output), f"{size_mb}M"],
+        check=True,
+    )
+    print(f"Built {output} ({size_mb}M)")
+    return size_mb
