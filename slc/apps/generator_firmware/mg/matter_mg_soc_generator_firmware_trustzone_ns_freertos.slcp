@@ -1,19 +1,9 @@
-project_name: generator_firmware_trustzone_ns
-package: platform
+project_name: matter_mg_soc_generator_firmware_trustzone_ns_freertos
+label: Matter MG - SoC Generator Firmware TrustZone Non-Secure FreeRTOS
+description: Demonstrates on-device DAC key-pair and CSR generation for Matter factory provisioning with TrustZone on MG SoC devices.
+category: Matter Application
 quality: production
-label: Non-Secure side of the TrustZone Matter Provisioner Firmware
-description: >
-  Generates the key-pair, and CSR for the DAC
-category: Example|Platform
-filter:
-  - { name: Device Type, value: [SoC] }
-  - { name: MCU, value: [32-bit MCU] }
-  - { name: Project Difficulty, value: [Beginner] }
-ui_hints:
-  highlight:
-    - { path: README.md, focus: true }
-readme:
-  - { path: README.md }
+package: matter
 
 component:
   - { id: sl_main }
@@ -153,6 +143,24 @@ import:
 post_build:
   profile: tz_nonsecure_application
 
+filter:
+  - name: Type
+    value:
+      - SoC Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
 tag:
   - companion:secure_app
   - hidden
+
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true

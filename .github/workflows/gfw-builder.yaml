@@ -22,35 +22,35 @@ jobs:
                 # Image names must match client/config/devices.yaml entries of the provisioning tool.
                 include:
                     - family: efr32mg24
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: EFR32MG24A010F1024IM48
                       image: efr32mg24_core.s37
                     - family: efr32mg26
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: EFR32MG26B410F3200IM48
                       image: efr32mg26_core.s37
                     - family: sixg3l
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: brd4407a
                       image: sixg3l_core.s37
                     - family: sixg3w
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: brd1019a,SIMG301M113WIH
                       image: sixg3w_core.s37
                     - family: sixg3k
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: brd1019a,SIMG301M114KIH
                       image: sixg3k_core.s37
                     - family: sixg3x8m
-                      project: efr32/generator_firmware_efr32
+                      project: mg/matter_mg_soc_generator_firmware_freertos
                       board: brd4408a
                       image: sixg3x8m_core.s37
                     - family: si917
-                      project: si917/generator_firmware_si917
+                      project: si917/matter_siwx917_soc_generator_firmware_freertos
                       board: brd4338a;wiseconnect3_sdk
                       image: si917_core.rps
                     - family: si917y
-                      project: si917/generator_firmware_si917
+                      project: si917/matter_siwx917_soc_generator_firmware_freertos
                       board: brd4343a;wiseconnect3_sdk
                       image: si917y_core.rps
 

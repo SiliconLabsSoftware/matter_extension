@@ -1,0 +1,23 @@
+workspace_name: matter_mg_soc_generator_firmware_trustzone_freertos
+label: Matter MG - SoC Generator Firmware TrustZone FreeRTOS
+description: Demonstrates TrustZone-enabled Matter Generator Firmware with secure, non-secure, and bootloader projects for MG SoC devices.
+quality: production
+package: matter
+project:
+  - path: ./matter_mg_soc_generator_firmware_trustzone_s_freertos.slcp
+    id: trustzone-secure
+    output: generator_firmware_secure
+  - path: ./matter_mg_soc_generator_firmware_trustzone_ns_freertos.slcp
+    id: application
+    output: generator_firmware_nonsecure
+  - path: ../../bootloaders/bootloader_storage_internal_single_series_2/matter_bootloader_internal_series_2.slcp
+    id: bootloader
+    output: matter_bootloader
+post_build:
+  path: ../../../postbuild/ws_trustzone_series2_workspace.slpb
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true

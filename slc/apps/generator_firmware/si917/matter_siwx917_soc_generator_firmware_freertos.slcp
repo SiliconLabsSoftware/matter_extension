@@ -1,20 +1,9 @@
-# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
-project_name: generator_firmware_si917
-package: platform
+project_name: matter_siwx917_soc_generator_firmware_freertos
+label: Matter SiWx917 - SoC Generator Firmware FreeRTOS
+description: Demonstrates on-device DAC key-pair and CSR generation and Matter factory provisioning on SiWx917 SoC devices.
+category: Matter Application
 quality: production
-label: Matter Provisioner Generator
-description: >
-  Generates the key-pair, and CSR for the DAC
-category: Example|Platform
-filter:
-  - { name: Device Type, value: [SoC] }
-  - { name: MCU, value: [32-bit MCU] }
-  - { name: Project Difficulty, value: [Beginner] }
-ui_hints:
-  highlight:
-    - { path: README.md, focus: true }
-readme:
-  - { path: README.md }
+package: matter
 
 sdk_extension:
   - id: wiseconnect3_sdk
@@ -152,3 +141,21 @@ toolchain_settings:
   - { option: cxx_standard, value: c++17 }
   - { option: gcc_compiler_option, value: -Wno-unused-parameter }
   - { option: gcc_compiler_option, value: -Wno-missing-field-initializers }
+
+filter:
+  - name: Type
+    value:
+      - SoC Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true

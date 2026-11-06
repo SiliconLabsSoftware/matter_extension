@@ -1,19 +1,20 @@
-project_name: generator_firmware_trustzone_s
-label: Secure side of the TrustZone Matter Provisioner Firmware
-package: platform
-description: >
-  This is a trustzone enabled application used to manage security operations from trustzone aware Matter applications.
-
-category: Matter generators
+project_name: matter_mg_soc_generator_firmware_trustzone_s_freertos
+label: Matter MG - SoC Generator Firmware TrustZone Secure FreeRTOS
+description: Demonstrates the TrustZone secure side used by Matter Generator Firmware for security operations on MG SoC devices.
+category: Matter Application
 quality: production
+package: matter
 
 filter:
-  - name: "Wireless Technology"
-    value: ["Thread"]
-  - name: "Device Type"
-    value: ["SoC"]
-  - name: "Project Difficulty"
-    value: ["Advanced"]
+  - name: Type
+    value:
+      - SoC Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
 
 component:
   - id: tz_secure_key_library_s
@@ -90,8 +91,7 @@ post_build:
   profile: tz_secure_application
 
 readme:
-  - path: README.md
-
+  - path: ./README.md
 ui_hints:
   highlight:
     - path: README.md

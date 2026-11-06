@@ -1,19 +1,9 @@
-project_name: generator_firmware_efr32
-package: platform
+project_name: matter_mg_soc_generator_firmware_freertos
+label: Matter MG - SoC Generator Firmware FreeRTOS
+description: Demonstrates on-device DAC key-pair and CSR generation and Matter factory provisioning on MG SoC devices.
+category: Matter Application
 quality: production
-label: Matter Provisioner Generator
-description: >
-  Generates the key-pair, and CSR for the DAC
-category: Example|Platform
-filter:
-  - { name: Device Type, value: [SoC] }
-  - { name: MCU, value: [32-bit MCU] }
-  - { name: Project Difficulty, value: [Beginner] }
-ui_hints:
-  highlight:
-    - { path: README.md, focus: true }
-readme:
-  - { path: README.md }
+package: matter
 
 provides:
   - name: nvm3_custom_init
@@ -175,6 +165,24 @@ toolchain_settings:
   - { option: optimize, value: size }
   - { option: cxx_standard, value: c++17 }
   - { option: gcc_compiler_option, value: -Wno-unused-parameter }
+
+filter:
+  - name: Type
+    value:
+      - SoC Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true
 
 template_contribution:
   - name: lockbits_size
