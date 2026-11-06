@@ -26,6 +26,9 @@ def bundle_contents(bundle, kind):
     elif kind == "runtime":
         directories = ("renode",)
         filenames = ("linux-booted-thread.save",)
+    elif kind == "provision":
+        directories = ("guest-rootfs",)
+        filenames = ()
     else:
         common.die(f"unknown kind: {kind}")
     for name in directories:
@@ -64,7 +67,10 @@ def push(kind):
         common.die(f"bundle archive missing {path}; run prepare first")
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
-    tag = common.artifact_tag(kind)
+    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
+    if tag is None:
+        print("Skipping publish: no OCI tag for this branch/event context")
+        return
 
     print(f"Publishing {package}:{tag}")
     subprocess.run(
@@ -83,14 +89,14 @@ def push(kind):
 
 
 def main():
-    usage = "usage: publish_bundle.py [prepare|push] common|runtime"
+    usage = "usage: publish_bundle.py [prepare|push] common|runtime|provision"
     if len(sys.argv) == 2:
         action, kind = "both", sys.argv[1]
     elif len(sys.argv) == 3:
         action, kind = sys.argv[1:]
     else:
         common.die(usage)
-    if action not in ("both", "prepare", "push") or kind not in ("common", "runtime"):
+    if action not in ("both", "prepare", "push") or kind not in ("common", "runtime", "provision"):
         common.die(usage)
     if action in ("both", "prepare"):
         prepare(kind)
