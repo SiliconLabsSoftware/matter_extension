@@ -75,7 +75,9 @@ class matter_internalRecipe(MatterBaseRecipe):
         return str(self.repo_root)
 
     def requirements(self):
-        self.requires(f"matter/{self.matter_conan_range}@{self.user}")
+        # Range on line version; channel matches pkg.slt release-stream.
+        channel = self.release_stream_channel
+        self.requires(f"matter/{self.matter_conan_range}@{self.user}/{channel}")
 
     def layout(self):
         pass

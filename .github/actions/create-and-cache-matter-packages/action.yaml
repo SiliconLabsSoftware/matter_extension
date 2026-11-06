@@ -58,19 +58,18 @@ runs:
         CACHE_KEY="${{ inputs.conan-cache-key }}"
         CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${CHANNEL}-${{ github.run_id }}-${{ github.run_attempt }}}"
 
+        # name/user default from each conanfile / MatterBaseRecipe; pass version + channel.
+        # Drop any prior matter* packages (all versions/channels) before re-export.
         echo "Exporting matter, matter_internal, matter_app, matter_app_internal ${VERSION}@silabs/${CHANNEL}"
-        conan remove "matter/${VERSION}@silabs/${CHANNEL}" -c || true
-        conan remove "matter_internal/${VERSION}@silabs/${CHANNEL}" -c || true
-        conan remove "matter_app/${VERSION}@silabs/${CHANNEL}" -c || true
-        conan remove "matter_app_internal/${VERSION}@silabs/${CHANNEL}" -c || true
+        conan remove "matter*/*" -c || true
         conan export-pkg packages/matter/conanfile.py \
-          --name=matter --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
         conan export-pkg packages/matter_internal/conanfile.py \
-          --name=matter_internal --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
         conan export-pkg packages/matter_app/conanfile.py \
-          --name=matter_app --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
         conan export-pkg packages/matter_app_internal/conanfile.py \
-          --name=matter_app_internal --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
 
         conan list "*" -c --format=json | python3 -c '
         import json

@@ -29,6 +29,10 @@ PLATFORM HEURISTICS (when --common is NOT used)
     - Common group dependencies are included for all platforms.
     - Matter dependency is always included first.
 
+INTERNAL APP PACKAGE HEURISTIC
+    Directories where every .slcp/.slcw has quality: internal get matter_app_internal.
+    Mixed qualities (e.g. production .slcp + internal .slcw) warn and keep matter_app.
+
 --common MODE
     Every discovered project receives uniform content consisting of just the
     Matter dependency plus any dependencies in the 'common' group.
@@ -275,8 +279,14 @@ release-stream = "{release_stream}"
         pkg_slt_file.write(pkg_slt_content)
     logger.debug(f"Generated {pkg_slt_path}")
 
-def _directory_has_internal_quality(root: str, files: list) -> bool:
-    """True if any .slcp/.slcw in the directory declares quality: internal."""
+def _directory_uses_matter_app_internal(root: str, files: list) -> bool:
+    """True only when every .slcp/.slcw in the directory is quality: internal.
+
+    Mixed qualities (e.g. production .slcp with internal .slcw) log a warning and
+    keep matter_app so a single pkg.slt does not pull internal-only packaging for
+    production projects in the same folder.
+    """
+    qualities = set()
     for name in files:
         if not name.endswith((".slcp", ".slcw")):
             continue
@@ -287,20 +297,32 @@ def _directory_has_internal_quality(root: str, files: list) -> bool:
         except Exception as e:
             logger.debug("Skip unreadable %s: %s", path, e)
             continue
-        if isinstance(data, dict) and data.get("quality") == "internal":
-            return True
+        if isinstance(data, dict) and data.get("quality") is not None:
+            qualities.add(data.get("quality"))
+    if not qualities:
+        return False
+    if qualities == {"internal"}:
+        return True
+    if "internal" in qualities:
+        logger.warning(
+            "Mixed SLC qualities in %s (%s); writing matter_app (not matter_app_internal)",
+            root,
+            ", ".join(sorted(str(q) for q in qualities)),
+        )
     return False
 
 
 def _app_pkg_slt_content(stack: str, matter_version: str) -> str:
     """Single-package pkg.slt content matching committed matter_app / matter_app_internal style."""
+    release_stream = resolve_release_stream_channel()
     return f"""# Version defaults to "0" if not defined
-version = "0"
+version = "1"
+release-stream = "{release_stream}"
  
  
 [dependency]
 # Get a specific version of the package
-{stack} = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+{stack} = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
 """
 
 
@@ -329,7 +351,7 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
         if not any(file.endswith((".slcp", ".slcw")) for file in files):
             continue
 
-        if _directory_has_internal_quality(root, files):
+        if _directory_uses_matter_app_internal(root, files):
             pkg_slt_content = internal_app_content
         elif common:
             pkg_slt_content = pkg_slt_content_all
