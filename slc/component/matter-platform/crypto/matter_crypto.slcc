@@ -38,6 +38,13 @@ requires:
   - name: matter_ecdsa_deterministic_selection
     condition: [matter_provision]
   - name: mbedtls_ecc_secp256r1
+  # TrustZone NS cannot use psa_crypto_source (conflicts with secure-key-library).
+  # Pull SiSDK mbedtls_source bignum/ECP via these components instead of
+  # vendoring third_party/simplicity_sdk files into the Matter package.
+  - name: mbedtls_mpi
+    condition: [trustzone_nonsecure]
+  - name: mbedtls_ecc
+    condition: [trustzone_nonsecure]
 
   # OT CoAP Cert libs
   - name: mbedtls_ssl_client
@@ -114,18 +121,3 @@ template_contribution:
     value: MBEDTLS_MPI_WINDOW_SIZE 1
   - name: mbedtls_config
     value: MBEDTLS_X509_REMOVE_INFO
-
-source:
-  # The non-secure TrustZone image cannot include psa_crypto_source because it
-  # conflicts with the secure-key-library interface. CHIP's SPAKE2+ fallback
-  # still uses these Mbed TLS bignum and ECP APIs directly.
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/bignum_core.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/bignum.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp_curves.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp_curves_new.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp.c
-    condition: [trustzone_nonsecure]
