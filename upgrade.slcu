@@ -367,3 +367,13 @@ upgrade:
            !!! WARNING !!! By default Wiseconnect linker is enabled for 917SoC, to use the matter linker file add toolchain_gcc_common component 
         remove:
           - toolchain_gcc_common
+
+  - sdk:
+      id: matter
+      version: "2.10.0"
+    component:
+      - trigger: matter_thread
+        description: >
+          Adding the watchdog_manager component to Matter Thread projects
+        add:
+           - watchdog_manager

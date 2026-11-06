@@ -78,13 +78,16 @@ class matter_appRecipe(MatterBaseRecipe):
 
     # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
     # on self.source_folder so repo-relative operations stay consistent.
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+
     @property
     def matter_app_folder(self) -> str:
         return str(self.repo_root)
 
     def requirements(self):
-        # Range on line version.
-        self.requires(f"matter/{self.matter_conan_range}@{self.user}")
+        # Range on line version; channel matches pkg.slt release-stream.
+        channel = self.release_stream_channel
+        self.requires(f"matter/{self.matter_conan_range}@{self.user}/{channel}")
 
     def layout(self):
         pass
@@ -155,6 +158,16 @@ class matter_appRecipe(MatterBaseRecipe):
             self,
             pattern="build_app.sh",
             src=str(build_app_src.parent),
+            dst=os.path.join(self.package_folder, "."),
+        )
+        # Channel default for packaged build_app.sh (--channel / MATTER_PACKAGE_CHANNEL).
+        channel_src = repo_root / "packages" / "_shared" / "release_stream_channel"
+        if not channel_src.is_file():
+            raise FileNotFoundError(f"missing {channel_src}")
+        copy(
+            self,
+            pattern="release_stream_channel",
+            src=str(channel_src.parent),
             dst=os.path.join(self.package_folder, "."),
         )
 

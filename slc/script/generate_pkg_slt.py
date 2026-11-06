@@ -12,7 +12,11 @@ OVERVIEW
 
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
-    2. Version field from the matter.slce file in the extension root (auto-appended with "-0.dev").
+    2. slc/script/matter_package_version
+    3. Version field from the matter.slce file in the extension root (auto-appended with "-0.dev").
+
+RELEASE-STREAM
+    packages/_shared/release_stream_channel (written as release-stream in every pkg.slt).
 
 DEPENDENCY VERSIONS SOURCE
     Non-Matter dependency versions are loaded from 'dependency_versions.yaml' which
@@ -45,8 +49,8 @@ EXCLUDES
     provided, 'third_party' is excluded by default.
 
 SAFETY / IDEMPOTENCE
-    Output is deterministic given the same inputs (YAML, flags, version). Files
-    are always overwritten, eliminating drift.
+    Output is deterministic given the same inputs (YAML, flags, version,
+    release_stream_channel). Files are always overwritten, eliminating drift.
 
 USAGE EXAMPLES
     python3 slc/script/generate_pkg_slt.py -d slc                      # heuristic mode
@@ -61,13 +65,14 @@ ARGUMENT SUMMARY
     --directory, -d               Base directory to search (default: cwd)
     --verbose, -v                 Enable verbose logging
     --common                      Ignore platform heuristics; emit Matter + common deps only
-    --matter-version              Override Matter version (else read from matter.slce)
+    --matter-version              Override Matter version (else matter_package_version, then matter.slce)
     --version-only                Only resolve and print Matter version, then exit
     --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
     --update-sample-app-pkg, -s   Generate packages/matter_app/pkg.slt (default: True)
 
 EXIT CODES
     0 on success; 1 if the Matter version cannot be resolved.
+    Missing/empty release_stream_channel raises RuntimeError.
 """
 
 import os
@@ -145,13 +150,15 @@ def build_content_strings(matter_version: str):
     For now 'common_header' and 'all_header' are identical (Matter only) to preserve
     previous behavior when --common is supplied.
     """
+    release_stream = resolve_release_stream_channel()
     header = f"""# Version defaults to "0" if not defined
-version = "0"
+version = "1"
+release-stream = "{release_stream}"
  
  
 [dependency]
 # Get a specific version of the package
-matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+matter = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
 """
 
     def merged_lines(group_name: str) -> str:
@@ -169,7 +176,10 @@ matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
         for name, ver in merged.items():
             if name == "matter":
                 continue
-            lines.append(f"{name} = {{ version = \"{ver}\", installer =\"conan\", prerelease=true }}\n")
+            lines.append(
+                f'{name} = {{ version = "{ver}", installer = "conan", user="silabs", '
+                f'channel="{release_stream}", prerelease = true }}\n'
+            )
         return "".join(lines)
 
     thread_block = merged_lines("thread")
@@ -180,12 +190,28 @@ matter = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
     return header, thread_block, wifi_block, header
 
 
+def _repo_root_from_script() -> str:
+    """slc/script/ -> repo root."""
+    return os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".."))
+
+
+def resolve_release_stream_channel() -> str:
+    """Read packages/_shared/release_stream_channel (pkg.slt release-stream)."""
+    path = os.path.join(_repo_root_from_script(), "packages", "_shared", "release_stream_channel")
+    with open(path, "r", encoding="utf-8") as f:
+        value = f.read().strip()
+    if not value:
+        raise RuntimeError(f"release_stream_channel is empty: {path}")
+    return value
+
+
 def resolve_matter_version(cli_version: Optional[str]) -> str:
     """Determine the Matter package version to embed.
 
     Priority:
       1. --matter-version CLI argument if provided
-      2. Version field from matter.slce file in the extension root
+      2. slc/script/matter_package_version
+      3. Version field from matter.slce (+ "-0.dev")
     Exits with error if neither source provides a version.
     """
     if cli_version:
@@ -194,37 +220,53 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     logger.debug("Script directory: %s", script_dir)
-    
-    # Try matter.slce file
-    slce_file = os.path.join(script_dir, "..", "..", "matter.slce")
+
+    version_file = os.path.join(script_dir, "matter_package_version")
+    try:
+        with open(version_file, "r", encoding="utf-8") as vf:
+            version = vf.read().strip()
+            if version:
+                logger.debug("Matter version read from matter_package_version: %s", version)
+                return version
+            logger.warning("Version file %s is empty", version_file)
+    except FileNotFoundError:
+        logger.debug("matter_package_version file %s not found", version_file)
+    except Exception as e:
+        logger.warning("Failed to read matter_package_version file %s: %s", version_file, e)
+
+    slce_file = os.path.join(_repo_root_from_script(), "matter.slce")
     try:
         with open(slce_file, "r", encoding="utf-8") as sf:
             slce_data = yaml.safe_load(sf)
             if slce_data and "version" in slce_data:
                 version = str(slce_data["version"]).strip()
                 if version:
-                    version = version+"-0.dev"
+                    version = version + "-0.dev"
                     logger.debug("Matter version read from matter.slce: %s", version)
                     return version
-                else:
-                    logger.warning("Version field in %s is empty", slce_file)
+                logger.warning("Version field in %s is empty", slce_file)
     except FileNotFoundError:
         logger.debug("matter.slce file %s not found", slce_file)
     except Exception as e:
         logger.warning("Failed to parse matter.slce file %s: %s", slce_file, e)
 
-    logger.error("Unable to determine Matter package version: provide --matter-version or ensure matter.slce has a valid version field.")
+    logger.error(
+        "Unable to determine Matter package version: provide --matter-version "
+        "or ensure matter_package_version / matter.slce has a valid version."
+    )
     sys.exit(1)
 
 def generate_pkg_slt(verbose, pkg_slt_path, stack, matter_version, exclude_patterns):
     logger.info(f"Generating {pkg_slt_path} for Matter version: {matter_version}")
-    pkg_slt_content = f"""# Version defaults to "0" if not defined
-version = "0"
+    release_stream = resolve_release_stream_channel()
+    pkg_slt_content = f"""# Version defaults to "1" if not defined
+version = "1"
+release-stream = "{release_stream}"
  
  
 [dependency]
 # Get a specific version of the package
-{stack} = {{ version = "{matter_version}", installer ="conan", prerelease=true }}
+{stack} = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
 """
     with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
         pkg_slt_file.write(pkg_slt_content)
@@ -282,7 +324,8 @@ def main():
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
     parser.add_argument("--common", action="store_true",
                         help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
-    parser.add_argument("--matter-version", help="Explicit Matter package version to embed; overrides matter.slce file.")
+    parser.add_argument("--matter-version",
+                        help="Explicit Matter package version to embed; overrides matter_package_version and matter.slce.")
     parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
     parser.add_argument("--exclude", "-e", action="append", default=[],
                         help="Directory exclude pattern (substring match). Can be repeated or provide comma-separated values.")

@@ -1,0 +1,116 @@
+:name: MATTER_HUB_BRINGUP
+:description: Matter Hub in Renode. ZynqMP Linux guest (OTBR + chip-tool) UART-hubbed to Thread/BLE RCPs.
+
+$root ?= $ORIGIN/..
+$guest_rootfs ?= $root/guest-rootfs
+$rcp_elf ?= $root/rcp/ot-rcp.out
+$hub_ble_elf ?= $root/rcp/bt_rcp_freertos.out
+
+# ZynqMP Linux guest firmware (local Matter boot rootfs + local DTB)
+$dtb?= $guest_rootfs/zynqmp-matter-linux.dtb
+$atf_elf?=   @https://dl.antmicro.com/projects/renode/zynq-us_plus--bl31.elf-s_770984-aad9c28d989600caa8fd436bca66eb500e0606dd
+$uboot?=     @https://dl.antmicro.com/projects/renode/zynq-us_plus--u-boot.bin-s_1351888-8291c2fd5e7fed3bda101e4c0694991fb40af277
+$uboot_elf?= @https://dl.antmicro.com/projects/renode/zynq-us_plus--u-boot.elf-s_1418000-23d4b0115d096ce9ed85c7e146f687a528382326
+$linux?=     @https://dl.antmicro.com/projects/renode/Image-s_22458880-2573cb5cd76576081947b8ec1aebcf631b6d4bb6
+$linux_elf?= @https://dl.antmicro.com/projects/renode/vmlinux-s_28175880-4d25e9de8b56d28e76e3a58e1a45089ac08c4cd5
+$rootfs?=    $guest_rootfs/matter-rootfs.ext2
+$matter_tools?= $guest_rootfs/matter-tools.ext2
+
+emulation SetGlobalSerialExecution true
+emulation CreateIEEE802_15_4Medium "wireless"
+emulation CreateBLEMedium "ble"
+emulation CreateSwitch "backbone"
+emulation SetGlobalQuantum "0.000020"
+emulation CreateUARTHub "spinel"
+emulation CreateUARTHub "hci"
+
+################################################
+# matter_hub — ZynqMP guest (OTBR + chip-tool + BlueZ)
+#   uart0 / ttyPS0 → spinel hub → Thread RCP
+#   uart2 / ttyPS3 → hci hub → BLE RCP
+#   uart1 / ttyPS1 → console
+################################################
+mach create "matter_hub"
+machine RealTimeClockMode HostTimeUTC
+using sysbus.cluster0
+using sysbus.cluster1
+
+machine LoadPlatformDescription @platforms/boards/silabs/matter_hub.repl
+machine SetSerialExecution true
+
+emulation CreateServerSocketTerminal 4540 "matter_hub_console" false
+connector Connect sysbus.uart1 matter_hub_console
+
+# Cadence UART transmission is instantaneous unless explicitly delayed. Pace
+# Linux-to-RCP traffic at the configured 8N1 wire rate so the three-byte EFR32
+# USART receive buffer is not overrun by a whole Spinel/HCI frame in one quantum.
+sysbus.uart0 CharacterTransmitDelayMicroseconds 22  # 460800 baud
+sysbus.uart2 CharacterTransmitDelayMicroseconds 87  # 115200 baud
+connector Connect sysbus.uart0 spinel
+connector Connect sysbus.uart2 hci
+connector Connect gem3 backbone
+
+macro matter_hub_reset
+"""
+    apu0 PC 0x1000000
+    cluster0 ForEach IsHalted true
+    apu0 IsHalted false
+    cluster1 ForEach IsHalted true
+
+    sysbus LoadELF    $atf_elf cpu=apu0
+    sysbus LoadFdt    $dtb    0x100000   "earlycon console=ttyPS1,115200n8 root=/dev/ram0 rw initrd=0x20000000,64M maxcpus=1 idle=halt" false
+    sysbus LoadBinary $uboot  0x8000000
+    sysbus LoadBinary $linux  0x10000000
+    sysbus LoadBinary $rootfs 0x20000000
+    matter_virtio LoadImage $matter_tools
+
+    sysbus LoadSymbolsFrom $uboot_elf
+    sysbus LoadSymbolsFrom $linux_elf
+"""
+
+mach clear
+
+################################################
+# Thread RCP
+################################################
+mach create "thread_rcp"
+using sysbus
+
+machine LoadPlatformDescription @platforms/boards/silabs/brd4186c.repl
+macro rcp_reset
+"""
+    cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`
+    cpu PerformanceInMips 50
+"""
+sysbus LoadELF $rcp_elf
+runMacro $rcp_reset
+connector Connect sysbus.usart0 spinel
+connector Connect sysbus.radio wireless
+logLevel 3
+mach clear
+
+################################################
+# Bluetooth RCP
+################################################
+mach create "ble_rcp"
+using sysbus
+
+machine LoadPlatformDescription @platforms/boards/silabs/brd4186c.repl
+macro ble_rcp_reset
+"""
+    cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`
+    cpu PerformanceInMips 50
+"""
+sysbus LoadELF $hub_ble_elf
+runMacro $ble_rcp_reset
+connector Connect sysbus.usart0 hci
+connector Connect sysbus.radio ble
+logLevel 3
+mach clear
+
+################################################
+# Boot Matter Hub
+################################################
+mach set "matter_hub"
+runMacro $matter_hub_reset
+start
