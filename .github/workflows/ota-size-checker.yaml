@@ -22,34 +22,91 @@ jobs:
       - uses: ./.github/actions/cache-sdks
 
   ota-check:
-    name: OTA flash check (${{ matrix.display }})
+    name: OTA check (${{ matrix.platform }} / ${{ matrix.app }})
     needs: cache-sdks
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - id: mg24
-            display: MG24
-            page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
+          - platform: MG24
+            app: window_app
+            app_path: slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
             json_file: ./.github/silabs-builds-mg24-ota.json
-            window_app_path: slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
 
-          - id: mg26
-            display: MG26
-            page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
+          - platform: MG24
+            app: multi_sensor_app
+            app_path: slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app_freertos.slcp
+            json_file: ./.github/silabs-builds-mg24-ota.json
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
+
+          - platform: MG24
+            app: lock_app
+            app_path: slc/apps/lock_app/thread/matter_thread_soc_lock_app_freertos.slcp
+            json_file: ./.github/silabs-builds-mg24-ota.json
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
+
+          - platform: MGM24
+            app: window_app
+            app_path: slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
+            json_file: ./.github/silabs-builds-mgm24-ota.json
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
+
+          - platform: MGM24
+            app: multi_sensor_app
+            app_path: slc/apps/multi_sensor_app/thread/matter_thread_soc_multi_sensor_app_freertos.slcp
+            json_file: ./.github/silabs-builds-mgm24-ota.json
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
+
+          - platform: MGM24
+            app: lock_app
+            app_path: slc/apps/lock_app/thread/matter_thread_soc_lock_app_freertos.slcp
+            json_file: ./.github/silabs-builds-mgm24-ota.json
+            available_flash: 1572864 # 1536 KiB
+            slot_size: 557056
+            slot_name: 550K
+
+          - platform: MG26
+            app: lighting_app
+            app_path: slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp
             json_file: ./.github/silabs-builds-mg26-ota.json
-            lighting_path: slc/apps/lighting_app/thread/matter_thread_soc_lighting_app_freertos.slcp
-            zigbee_matter_light_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light_freertos.slcp
+            available_flash: 3276800 # 3200 KiB
+            slot_size: 1048576
+            slot_name: 1MB
 
-          - id: mgm26
-            display: MGM26
-            page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 3276800 # bytes (~3.125 MB or 3200KB)
+          - platform: MG26
+            app: zigbee_light
+            app_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light_freertos.slcp
+            json_file: ./.github/silabs-builds-mg26-ota.json
+            available_flash: 3276800 # 3200 KiB
+            slot_size: 1048576
+            slot_name: 1MB
+
+          - platform: MGM26
+            app: zigbee_light
+            app_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light_freertos.slcp
             json_file: ./.github/silabs-builds-mgm26-ota.json
-            zigbee_matter_light_path: slc/apps/zigbee_light/thread/matter_thread_soc_zigbee_light_freertos.slcp
+            available_flash: 3276800 # 3200 KiB
+            slot_size: 1048576
+            slot_name: 1MB
+
+    env:
+      LABEL: ${{ matrix.platform }} / ${{ matrix.app }}
+      AVAILABLE_FLASH: ${{ matrix.available_flash }}
+      PAGE_SIZE: 8192 # 8 KiB flash page
+      OTA_MARGIN: 102400 # 100 KiB minimum spare flash
+      BOOTLOADER_SLOT_SIZE: ${{ matrix.slot_size }}
 
     steps:
       - name: Checkout
@@ -73,133 +130,142 @@ jobs:
       - name: Cache tools
         uses: ./.github/actions/cache-tools
 
-      - name: Build window-app
-        if: matrix.id == 'mg24'
+      - name: Build ${{ matrix.app }}
         uses: SiliconLabsSoftware/matter_build_action@v2
         with:
           json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.window_app_path }}
-          example-app: window_app
+          path-to-example-app: ${{ matrix.app_path }}
+          example-app: ${{ matrix.app }}
           build-script: "./slc/build.sh"
           output-directory: " "
           build-type: standard
 
-      - name: Build lighting-app 
-        if: matrix.id == 'mg26'
-        uses: SiliconLabsSoftware/matter_build_action@v2
-        with:
-          json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.lighting_path }}
-          example-app: lighting_app
-          build-script: "./slc/build.sh"
-          output-directory: " "
-          build-type: standard
-
-      - name: Build zigbee-matter-light
-        if: matrix.id == 'mg26' || matrix.id == 'mgm26'
-        uses: SiliconLabsSoftware/matter_build_action@v2
-        with:
-          json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.zigbee_matter_light_path }}
-          example-app: zigbee_light
-          build-script: "./slc/build.sh"
-          output-directory: " "
-          build-type: standard
-
-      - name: Check OTA image flash size
+      - name: Generate GBL images
+        id: gbl
         shell: bash
         run: |
           set -euo pipefail
 
-          PAGE_SIZE=${{ matrix.page_size }}
-          AVAILABLE_FLASH=${{ matrix.available_flash }}
-          PLATFORM="${{ matrix.display }}"
-
-          echo "========================================"
-          echo "OTA flash check (${PLATFORM})"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo "Event: ${{ github.event_name }}  Ref: ${{ github.ref }}  SHA: ${{ github.sha }}"
-          echo "========================================"
-
-          {
-            echo "## OTA flash check (${PLATFORM})"
-            echo "- **Event:** \`${{ github.event_name }}\`"
-            echo "- **Ref:** \`${{ github.ref }}\` @ \`${{ github.sha }}\`"
-            echo "- [Open this run in GitHub](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})"
-            echo ""
-          } >> "$GITHUB_STEP_SUMMARY"
-
           if ! command -v commander >/dev/null 2>&1; then
-            echo "commander not found, skipping OTA flash size check"
+            echo "::error title=${LABEL} - commander missing::commander not found in PATH"
             exit 1
           fi
 
-          IMAGES=$(find out -type f -name "*.s37" 2>/dev/null)
+          mapfile -t images < <(find out -type f -name "*.s37" | sort)
+          if [[ ${#images[@]} -eq 0 ]]; then
+            echo "::error title=${LABEL} - no image::No .s37 image found under out/"
+            exit 1
+          fi
 
-          FAIL=0
+          gbl_dir="$RUNNER_TEMP/gbl"
+          mkdir -p "$gbl_dir"
+          : > "$RUNNER_TEMP/ota_sizes.tsv"
 
-          for IMAGE in $IMAGES; do
-            board=$(echo "$IMAGE" | cut -d'/' -f2)
-            [[ -z "$board" ]] && continue
+          for image in "${images[@]}"; do
+            build=$(echo "$image" | cut -d/ -f2-3) # <board>/<build dir>
+            name=$(echo "${image#out/}" | tr '/' '_')
 
-            echo ""
-            echo "  Board: $board  Image: $IMAGE"
+            commander gbl create "$gbl_dir/${name}.gbl" --app "$image" >/dev/null
+            commander gbl create --compress lzma "$gbl_dir/${name}.lzma.gbl" --app "$image" >/dev/null
 
-            app_name="${board}-$(basename "$IMAGE" .s37)"
-            pushd /tmp >/dev/null
+            app_size=$(stat -c %s "$gbl_dir/${name}.gbl")
+            ota_size=$(stat -c %s "$gbl_dir/${name}.lzma.gbl")
+            printf '%s\t%s\t%s\n' "$build" "$app_size" "$ota_size" >> "$RUNNER_TEMP/ota_sizes.tsv"
 
-            commander gbl create "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-            file_size_running=$(stat -c "%s" "temporary-${app_name}.gbl")
-            rounded_running=$(( PAGE_SIZE * (file_size_running + PAGE_SIZE - 1) / PAGE_SIZE ))
-
-            commander gbl create --compress lzma "temporary-${app_name}.gbl" --app "$GITHUB_WORKSPACE/$IMAGE" 1>/dev/null
-            file_size_ota=$(stat -c "%s" "temporary-${app_name}.gbl")
-            rounded_ota=$(( PAGE_SIZE * (file_size_ota + PAGE_SIZE - 1) / PAGE_SIZE ))
-
-            sum=$(( rounded_running + rounded_ota ))
-            remaining=$(( AVAILABLE_FLASH - sum ))
-
-            popd >/dev/null
-
-            echo "  Running (rounded): $rounded_running B  OTA LZMA (rounded): $rounded_ota B  Remaining: $remaining B"
-
-            if [[ "$sum" -gt "$AVAILABLE_FLASH" ]]; then
-              echo "  FAIL: OTA image will NOT fit in ${AVAILABLE_FLASH} B"
-              FAIL=1
-              shortfall=$(( sum - AVAILABLE_FLASH ))
-              echo "::error title=${PLATFORM} OTA flash exceeded::board=${board} sum=${sum}B limit=${AVAILABLE_FLASH}B shortfall=${shortfall}B image=${IMAGE}"
-              {
-                echo "### ${PLATFORM} OTA failure"
-                echo "| Field | Value |"
-                echo "| --- | --- |"
-                echo "| Board | \`$board\` |"
-                echo "| Image | \`$IMAGE\` |"
-                echo "| Running (rounded) | ${rounded_running} B |"
-                echo "| OTA LZMA (rounded) | ${rounded_ota} B |"
-                echo "| Total (sum) | ${sum} B |"
-                echo "| Limit | ${AVAILABLE_FLASH} B |"
-                echo "| Shortfall | ${shortfall} B |"
-                echo ""
-              } >> "$GITHUB_STEP_SUMMARY"
-            else
-              echo "  PASS: OTA image fits"
-            fi
+            echo "${build}"
+            echo "  image:          ${image}"
+            echo "  app GBL:        ${app_size} B"
+            echo "  OTA GBL (LZMA): ${ota_size} B"
           done
 
-          if [[ "$FAIL" -eq 1 ]]; then
+      - name: OTA Flash Space Verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          kib() { awk -v b="$1" 'BEGIN { printf "%.1f KiB", b / 1024 }'; }
+          round() { echo $(( ($1 + PAGE_SIZE - 1) / PAGE_SIZE * PAGE_SIZE )); }
+
+          rule="flash ($(kib "$AVAILABLE_FLASH")) - app - OTA (LZMA) >= $(kib "$OTA_MARGIN"), sizes rounded up to $(kib "$PAGE_SIZE") pages"
+          echo "OTA Flash Space Verification: ${LABEL}"
+          echo "Rule: ${rule}"
+          echo ""
+          printf '%-6s  %-55s  %12s  %12s  %12s\n' "RESULT" "BUILD" "APP" "OTA (LZMA)" "SPARE"
+          {
             echo ""
-            echo "========================================"
-            echo "OTA FLASH CHECK FAILED (${PLATFORM})"
-            echo "Flash limit (running + OTA LZMA): ${AVAILABLE_FLASH} B"
-            echo "See FAIL lines and annotations above for each image."
-            echo "========================================"
-            exit 1
-          fi
+            echo "### OTA Flash Space Verification: ${LABEL}"
+            echo "Rule: ${rule}"
+            echo ""
+            echo "| Result | Build | App | OTA (LZMA) | Spare |"
+            echo "| --- | --- | ---: | ---: | ---: |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          fail=0
+          while IFS=$'\t' read -r build app_size ota_size; do
+            app=$(round "$app_size")
+            ota=$(round "$ota_size")
+            spare=$(( AVAILABLE_FLASH - app - ota ))
+            result=PASS
+            if (( spare < OTA_MARGIN )); then
+              result=FAIL
+              fail=1
+            fi
+
+            printf '%-6s  %-55s  %12s  %12s  %12s\n' "$result" "$build" "$(kib "$app")" "$(kib "$ota")" "$(kib "$spare")"
+            echo "| ${result} | \`${build}\` | $(kib "$app") | $(kib "$ota") | $(kib "$spare") |" >> "$GITHUB_STEP_SUMMARY"
+            if [[ "$result" == FAIL ]]; then
+              echo "::error title=${LABEL} - OTA flash space::${build}: spare flash after app + OTA is $(kib "$spare"), minimum is $(kib "$OTA_MARGIN") (short by $(kib $(( OTA_MARGIN - spare ))))"
+            fi
+          done < "$RUNNER_TEMP/ota_sizes.tsv"
 
           echo ""
-          echo "All ${PLATFORM} OTA flash checks passed."
+          if (( fail )); then
+            echo "FAILED: ${LABEL} does not leave $(kib "$OTA_MARGIN") spare flash for OTA."
+            exit 1
+          fi
+          echo "PASSED: ${LABEL}"
+
+      - name: Bootloader Slot Verification (${{ matrix.slot_name }})
+        if: ${{ !cancelled() && steps.gbl.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          kib() { awk -v b="$1" 'BEGIN { printf "%.1f KiB", b / 1024 }'; }
+          round() { echo $(( ($1 + PAGE_SIZE - 1) / PAGE_SIZE * PAGE_SIZE )); }
+
+          rule="OTA (LZMA) <= bootloader slot ($(kib "$BOOTLOADER_SLOT_SIZE")), size rounded up to $(kib "$PAGE_SIZE") pages"
+          echo "Bootloader Slot Verification: ${LABEL}"
+          echo "Rule: ${rule}"
+          echo ""
+          printf '%-6s  %-55s  %12s  %12s  %12s\n' "RESULT" "BUILD" "OTA (LZMA)" "SLOT" "SPARE"
           {
-            echo "### Result"
-            echo "All ${PLATFORM} OTA flash checks **passed**."
+            echo ""
+            echo "### Bootloader Slot Verification: ${LABEL}"
+            echo "Rule: ${rule}"
+            echo ""
+            echo "| Result | Build | OTA (LZMA) | Slot | Spare |"
+            echo "| --- | --- | ---: | ---: | ---: |"
           } >> "$GITHUB_STEP_SUMMARY"
+
+          fail=0
+          while IFS=$'\t' read -r build _ ota_size; do
+            ota=$(round "$ota_size")
+            spare=$(( BOOTLOADER_SLOT_SIZE - ota ))
+            result=PASS
+            if (( spare < 0 )); then
+              result=FAIL
+              fail=1
+            fi
+
+            printf '%-6s  %-55s  %12s  %12s  %12s\n' "$result" "$build" "$(kib "$ota")" "$(kib "$BOOTLOADER_SLOT_SIZE")" "$(kib "$spare")"
+            echo "| ${result} | \`${build}\` | $(kib "$ota") | $(kib "$BOOTLOADER_SLOT_SIZE") | $(kib "$spare") |" >> "$GITHUB_STEP_SUMMARY"
+            if [[ "$result" == FAIL ]]; then
+              echo "::error title=${LABEL} - bootloader slot::${build}: OTA image $(kib "$ota") exceeds bootloader slot $(kib "$BOOTLOADER_SLOT_SIZE") by $(kib $(( -spare )))"
+            fi
+          done < "$RUNNER_TEMP/ota_sizes.tsv"
+
+          echo ""
+          if (( fail )); then
+            echo "FAILED: ${LABEL} OTA image does not fit in the bootloader slot."
+            exit 1
+          fi
+          echo "PASSED: ${LABEL}"
