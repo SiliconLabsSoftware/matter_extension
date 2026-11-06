@@ -6,7 +6,7 @@ quality: production
 package: matter
 
 sdk_extension:
-  - id: wiseconnect3_sdk
+  - id: wifi
     version: "4.2.0"
     vendor: silabs
 
@@ -78,8 +78,8 @@ include:
   - path: ../../../../third_party/matter_sdk/src/crypto
 
 source:
-  - { path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/app.cpp }
-  - { path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/si917.cpp }
+  - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/app.cpp
+  - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/si917.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCrypto.h
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoMbed.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
@@ -159,3 +159,6 @@ ui_hints:
   highlight:
     - path: README.md
       focus: true
+
+post_build:
+  path: ../../../postbuild/matter_wifi_soc.slpb

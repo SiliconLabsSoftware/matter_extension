@@ -67,10 +67,11 @@ required for the default provisioning flow on supported SiWx917 boards.
 
 ### Steps for Execution
 
-1. Build the Generator Firmware for your board using Simplicity studio, or with our slc-cli base script for example:
+1. Build the Generator Firmware workspace for your board in Simplicity Studio,
+   or with the SLC CLI:
 
    ```shell
-   ./slc/build.sh slc/apps/generator_firmware/si917/matter_siwx917_soc_generator_firmware_freertos.slcp brd4338a
+   ./slc/build.sh slc/apps/generator_firmware/si917/matter_siwx917_soc_generator_firmware_freertos.slcw brd4338a
    ```
 
 2. Use the Silicon Labs Matter provisioning tool to flash the image and run

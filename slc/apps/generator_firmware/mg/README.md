@@ -11,7 +11,6 @@ Demonstrates on-device DAC key-pair and CSR generation and Matter factory data p
     - [HW Requirements](#hw-requirements)
     - [SW Requirements](#sw-requirements)
   - [Steps to Run Demo](#steps-to-run-demo)
-    - [Program a Bootloader](#program-a-bootloader)
     - [Configuration and Setup](#configuration-and-setup)
       - [TrustZone](#trustzone)
     - [Steps for Execution](#steps-for-execution)
@@ -57,19 +56,13 @@ For a full list of software requirements, see
 
 ## Steps to Run Demo
 
-### Program a Bootloader
-
-Generator Firmware is normally flashed by the provisioning tool as a temporary
-image. Only Series 3 (SiXG301) devices require a bootloader for Generator
-Firmware. Series 2 boards do not. Pre-built bootloader binaries are available at
-[Matter Bootloader Binaries](https://docs.silabs.com/matter/2.10.0/matter-prerequisites/matter-artifacts#matter-bootloader-binaries).
-
 ### Configuration and Setup
 
 Generator Firmware is not a standalone demo. It runs together with the host-side
 Matter provisioning script, which flashes the image and drives DAC/CSR
 generation and factory-data injection. No project-file customization is
-required for the default provisioning flow on supported MG boards.
+required for the default provisioning flow on supported MG boards. GFW does not
+require a bootloader; the provisioning tool flashes it as a temporary image.
 
 #### TrustZone
 
@@ -80,10 +73,12 @@ Then flash the combined artifact produced under the board output directory.
 
 ### Steps for Execution
 
-1. Build the Generator Firmware for your board using Simplicity studio, or with our slc-cli base script for example:
+1. Build the Generator Firmware workspace for your board in Simplicity Studio,
+   or with the SLC CLI:
 
    ```shell
-   ./slc/build.sh slc/apps/generator_firmware/mg/matter_mg_soc_generator_firmware_freertos.slcp brd4187c
+   ./slc/build.sh slc/apps/generator_firmware/mg/matter_mg_soc_generator_firmware_freertos.slcw brd4187c
+   ./slc/build.sh slc/apps/generator_firmware/mg/matter_mg_soc_generator_firmware_freertos.slcw brd4407a
    ```
 
 2. Use the Silicon Labs Matter provisioning tool to flash the generated image

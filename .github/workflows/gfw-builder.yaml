@@ -1,197 +1,197 @@
 name: Generator Firmware Builder
 
 on:
-    workflow_call:
-    workflow_dispatch:
+  workflow_call:
+  workflow_dispatch:
 
 permissions:
-    contents: read
-    actions: write
+  contents: read
+  actions: write
 
 env:
-    CHIP_LOG_TIMESTAMPS: false
+  CHIP_LOG_TIMESTAMPS: false
 
 jobs:
-    build-slc:
-        name: GFW ${{ matrix.family }}
-        runs-on: ubuntu-latest
+  build-slc:
+    name: GFW ${{ matrix.family }}
+    runs-on: ubuntu-latest
 
-        strategy:
-            fail-fast: false
-            matrix:
-                # Image names must match client/config/devices.yaml entries of the provisioning tool.
-                include:
-                    - family: efr32mg24
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: EFR32MG24A010F1024IM48
-                      image: efr32mg24_core.s37
-                    - family: efr32mg26
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: EFR32MG26B410F3200IM48
-                      image: efr32mg26_core.s37
-                    - family: sixg3l
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: brd4407a
-                      image: sixg3l_core.s37
-                    - family: sixg3w
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: brd1019a,SIMG301M113WIH
-                      image: sixg3w_core.s37
-                    - family: sixg3k
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: brd1019a,SIMG301M114KIH
-                      image: sixg3k_core.s37
-                    - family: sixg3x8m
-                      project: mg/matter_mg_soc_generator_firmware_freertos
-                      board: brd4408a
-                      image: sixg3x8m_core.s37
-                    - family: si917
-                      project: si917/matter_siwx917_soc_generator_firmware_freertos
-                      board: brd4338a;wiseconnect3_sdk
-                      image: si917_core.rps
-                    - family: si917y
-                      project: si917/matter_siwx917_soc_generator_firmware_freertos
-                      board: brd4343a;wiseconnect3_sdk
-                      image: si917y_core.rps
+    strategy:
+      fail-fast: false
+      matrix:
+        # Image names must match client/config/devices.yaml entries of the provisioning tool.
+        include:
+          - family: efr32mg24
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: EFR32MG24A010F1024IM48
+            image: efr32mg24_core.s37
+          - family: efr32mg26
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: EFR32MG26B410F3200IM48
+            image: efr32mg26_core.s37
+          - family: sixg3l
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: brd4407a
+            image: sixg3l_core.s37
+          - family: sixg3w
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: brd1019a,SIMG301M113WIH
+            image: sixg3w_core.s37
+          - family: sixg3k
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: brd1019a,SIMG301M114KIH
+            image: sixg3k_core.s37
+          - family: sixg3x8m
+            project: mg/matter_mg_soc_generator_firmware_freertos
+            board: brd4408a
+            image: sixg3x8m_core.s37
+          - family: si917
+            project: si917/matter_siwx917_soc_generator_firmware_freertos
+            board: brd4338a;wiseconnect3_sdk
+            image: si917_core.rps
+          - family: si917y
+            project: si917/matter_siwx917_soc_generator_firmware_freertos
+            board: brd4343a;wiseconnect3_sdk
+            image: si917y_core.rps
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-              with:
-                  submodules: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
 
-            - name: Initialize non-SDK submodules
-              run: |
-                  set -euo pipefail
-                  mapfile -t paths < <(
-                    git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
-                      | awk '{print $2}' \
-                      | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
-                  )
-                  git submodule update --init --depth 1 -- "${paths[@]}"
+      - name: Initialize non-SDK submodules
+        run: |
+          set -euo pipefail
+          mapfile -t paths < <(
+            git config --file .gitmodules --get-regexp '^submodule\..*\.path$' \
+              | awk '{print $2}' \
+              | grep -vE 'third_party/simplicity_sdk$|third_party/wifi_sdk$|third_party/third_party_hw_drivers_extension$'
+          )
+          git submodule update --init --depth 1 -- "${paths[@]}"
 
-            - name: Cache SDKs
-              uses: ./.github/actions/cache-sdks
+      - name: Cache SDKs
+        uses: ./.github/actions/cache-sdks
 
-            - name: Cache tools
-              uses: ./.github/actions/cache-tools
+      - name: Cache tools
+        uses: ./.github/actions/cache-tools
 
-            - name: Build ${{ matrix.family }}
-              run: |
-                  ./slc/build.sh slc/apps/generator_firmware/${{ matrix.project }}.slcp "${{ matrix.board }}"
+      - name: Build ${{ matrix.family }}
+        run: |
+          ./slc/build.sh slc/apps/generator_firmware/${{ matrix.project }}.slcw "${{ matrix.board }}"
 
-            - name: Collect image
-              run: |
-                  set -euo pipefail
-                  board="${{ matrix.board }}"
-                  board_dir=$(echo "${board%%;*}" | tr ',' '_')
-                  project=$(basename "${{ matrix.project }}")
-                  src="out/${board_dir}/${project}/build/debug/${project}.s37"
-                  mkdir -p artifacts/generator_firmware
-                  case "${{ matrix.image }}" in
-                      *.rps) commander rps create "artifacts/generator_firmware/${{ matrix.image }}" --app "$src" ;;
-                      *)     cp "$src" "artifacts/generator_firmware/${{ matrix.image }}" ;;
-                  esac
-                  ls -l artifacts/generator_firmware
+      - name: Collect image
+        run: |
+          set -euo pipefail
+          board="${{ matrix.board }}"
+          board_dir=$(echo "${board%%;*}" | tr ',' '_')
+          workspace=$(basename "${{ matrix.project }}")
+          ext="${{ matrix.image }##*.}"
+          # get right image extension.(MG: .s37, SiWx917: .rps).
+          src=out/${board_dir}/${workspace}_solution/generator_firmware/artifact/*."${ext}"
+          echo "Using image: ${src}"
+          mkdir -p artifacts/generator_firmware
+          cp ${src} "artifacts/generator_firmware/${{ matrix.image }}"
+          ls -l artifacts/generator_firmware
 
-            - name: Upload image
-              uses: actions/upload-artifact@v7
-              with:
-                  name: gfw-${{ matrix.family }}
-                  path: artifacts/
-                  if-no-files-found: error
-                  retention-days: 1
+      - name: Upload image
+        uses: actions/upload-artifact@v7
+        with:
+          name: gfw-${{ matrix.family }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 1
 
-    build-zephyr:
-        name: GFW Zephyr ${{ matrix.board }}
-        runs-on: ubuntu-latest
+  build-zephyr:
+    name: GFW Zephyr ${{ matrix.board }}
+    runs-on: ubuntu-latest
 
-        container:
-            image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
-        env:
-            PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
+    container:
+      image: ghcr.io/project-chip/chip-build-silabs-zephyr:202
+    env:
+      PW_ENVIRONMENT_ROOT: ${{ github.workspace }}/.environment
 
-        strategy:
-            fail-fast: false
-            matrix:
-                include:
-                    - board: xg24_gfw
-                      output: zephyr.hex
-                      image: zephyr_xg24_core.hex
-                    - board: xg26_gfw
-                      output: zephyr.hex
-                      image: zephyr_xg26_core.hex
-                    - board: siwx917_gfw
-                      output: zephyr.rps
-                      image: zephyr_siwx917_core.rps
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - board: xg24_gfw
+            output: zephyr.hex
+            image: zephyr_xg24_core.hex
+          - board: xg26_gfw
+            output: zephyr.hex
+            image: zephyr_xg26_core.hex
+          - board: siwx917_gfw
+            output: zephyr.rps
+            image: zephyr_siwx917_core.rps
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v7
-              with:
-                  submodules: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
 
-            - name: Mark repository as safe for Git
-              shell: bash
-              run: |
-                  git config --global --add safe.directory '*'
+      - name: Mark repository as safe for Git
+        shell: bash
+        run: |
+          git config --global --add safe.directory '*'
 
-            - name: Initialize matter_sdk submodule
-              shell: bash
-              run: |
-                  git submodule update --init third_party/matter_sdk
+      - name: Initialize matter_sdk submodule
+        shell: bash
+        run: |
+          git submodule update --init third_party/matter_sdk
 
-            - name: Checkout matter_sdk silabs submodules
-              shell: bash
-              run: |
-                  cd third_party/matter_sdk
-                  ./scripts/checkout_submodules.py --shallow --platform silabs_docker
+      - name: Checkout matter_sdk silabs submodules
+        shell: bash
+        run: |
+          cd third_party/matter_sdk
+          ./scripts/checkout_submodules.py --shallow --platform silabs_docker
 
-            - name: Bootstrap
-              uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
-              with:
-                  platform: silabs_docker
+      - name: Bootstrap
+        uses: SiliconLabsSoftware/matter_build_action/bootstrap@v2
+        with:
+          platform: silabs_docker
 
-            - name: Apply Generator Firmware Zephyr patches
-              shell: bash
-              run: |
-                  GFW_DIR=${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/generator-firmware/silabs/zephyr
-                  cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-                     "cd /opt/silabs/zephyr-silabs \
-                      && west patch -b ${GFW_DIR}/patches -l ${GFW_DIR}/patches/patches.yml apply"
+      - name: Apply Generator Firmware Zephyr patches
+        shell: bash
+        run: |
+          GFW_DIR=${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/generator-firmware/silabs/zephyr
+          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
+             "cd /opt/silabs/zephyr-silabs \
+              && west patch -b ${GFW_DIR}/patches -l ${GFW_DIR}/patches/patches.yml apply"
 
-            - name: Build ${{ matrix.board }}
-              shell: bash
-              run: |
-                  cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
-                     "cd /opt/silabs/zephyr-silabs \
-                      && west build -d build/gfw-${{ matrix.board }} -b ${{ matrix.board }} -p always \
-                         ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/generator-firmware/silabs/zephyr"
+      - name: Build ${{ matrix.board }}
+        shell: bash
+        run: |
+          cd third_party/matter_sdk && ./scripts/run_in_build_env.sh \
+             "cd /opt/silabs/zephyr-silabs \
+              && west build -d build/gfw-${{ matrix.board }} -b ${{ matrix.board }} -p always \
+                 ${GITHUB_WORKSPACE}/third_party/matter_sdk/examples/generator-firmware/silabs/zephyr"
 
-            - name: Collect image
-              shell: bash
-              run: |
-                  mkdir -p artifacts/generator_firmware
-                  cp /opt/silabs/zephyr-silabs/build/gfw-${{ matrix.board }}/zephyr/${{ matrix.output }} \
-                     artifacts/generator_firmware/${{ matrix.image }}
+      - name: Collect image
+        shell: bash
+        run: |
+          mkdir -p artifacts/generator_firmware
+          cp /opt/silabs/zephyr-silabs/build/gfw-${{ matrix.board }}/zephyr/${{ matrix.output }} \
+             artifacts/generator_firmware/${{ matrix.image }}
 
-            - name: Upload image
-              uses: actions/upload-artifact@v7
-              with:
-                  name: gfw-zephyr-${{ matrix.board }}
-                  path: artifacts/
-                  if-no-files-found: error
-                  retention-days: 1
+      - name: Upload image
+        uses: actions/upload-artifact@v7
+        with:
+          name: gfw-zephyr-${{ matrix.board }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 1
 
-    merge:
-        name: Merge Generator Firmware artifacts
-        runs-on: ubuntu-latest
-        needs: [build-slc, build-zephyr]
-        if: success()
-        steps:
-            - name: Merge artifacts
-              uses: actions/upload-artifact/merge@v7
-              with:
-                  name: generator-firmware
-                  pattern: gfw-*
-                  delete-merged: true
+  merge:
+    name: Merge Generator Firmware artifacts
+    runs-on: ubuntu-latest
+    needs: [build-slc, build-zephyr]
+    if: success()
+    steps:
+      - name: Merge artifacts
+        uses: actions/upload-artifact/merge@v7
+        with:
+          name: generator-firmware
+          pattern: gfw-*
+          delete-merged: true

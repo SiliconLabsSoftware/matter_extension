@@ -1,0 +1,9 @@
+workspace_name: matter_mg_soc_generator_firmware_freertos
+label: Matter MG - SoC Generator Firmware FreeRTOS
+quality: production
+package: matter
+description: Demonstrates on-device DAC key-pair and CSR generation for Matter factory provisioning on MG SoC devices.
+project:
+  - path: ./matter_mg_soc_generator_firmware_freertos.slcp
+    id: application
+    output: generator_firmware
