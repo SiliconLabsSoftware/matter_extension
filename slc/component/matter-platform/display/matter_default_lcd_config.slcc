@@ -34,13 +34,7 @@ requires:
       - brd9084b
   - name: matter_lcd_917SOC
     condition:
-      - brd9084a
-  - name: matter_lcd_917SOC
-    condition:
       - brd9084c
-  - name: matter_lcd_917SOC
-    condition:
-      - brd9084d
 
 # Keep this requirement under matter_lcd_917SOC's
   - name: matter_qr_code
