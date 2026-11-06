@@ -86,12 +86,12 @@ jobs:
           board="${{ matrix.board }}"
           board_dir=$(echo "${board%%;*}" | tr ',' '_')
           workspace=$(basename "${{ matrix.project }}")
-          ext="${{ matrix.image }##*.}"
-          # get right image extension.(MG: .s37, SiWx917: .rps).
+          image="${{ matrix.image }}"
+          ext="${image##*.}"
           src=out/${board_dir}/${workspace}_solution/generator_firmware/artifact/*."${ext}"
           echo "Using image: ${src}"
           mkdir -p artifacts/generator_firmware
-          cp ${src} "artifacts/generator_firmware/${{ matrix.image }}"
+          cp ${src} "artifacts/generator_firmware/${image}"
           ls -l artifacts/generator_firmware
 
       - name: Upload image
