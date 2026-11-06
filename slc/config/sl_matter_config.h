@@ -78,7 +78,7 @@
 #define SL_MATTER_DEFERRED_ATTRIBUTE_STORE_DELAY_MS 2000
 #endif
 
-// <o SL_MATTER_WATCHDOG_OWNERSHIP> SL Watchdog Ownership
+// <q SL_MATTER_WATCHDOG_OWNERSHIP> SL Watchdog Ownership
 // <i> Default: 1 in debug, 0 in release
 // <i> Controls what takes ownership of the watchdog:
 // <i>  0: Default Watchdog behaviour. Customers can configure and implement their own starve callback.
