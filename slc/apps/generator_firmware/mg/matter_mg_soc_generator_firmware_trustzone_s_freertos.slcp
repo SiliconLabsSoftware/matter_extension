@@ -1,9 +1,14 @@
 project_name: matter_mg_soc_generator_firmware_trustzone_s_freertos
 label: Matter MG - SoC Generator Firmware TrustZone Secure FreeRTOS
-description: Demonstrates the TrustZone secure side used by Matter Generator Firmware for security operations on MG SoC devices.
+description: Demonstrates a sample implementation of the TrustZone secure side used by Matter Generator Firmware for security operations on MG SoC devices.
 category: Matter Application
 quality: production
 package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.10.0"
+    vendor: silabs
 
 filter:
   - name: Type

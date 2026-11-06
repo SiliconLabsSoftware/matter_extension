@@ -1,9 +1,14 @@
 project_name: matter_mg_soc_generator_firmware_trustzone_ns_freertos
 label: Matter MG - SoC Generator Firmware TrustZone Non-Secure FreeRTOS
-description: Demonstrates on-device DAC key-pair and CSR generation for Matter factory provisioning with TrustZone on MG SoC devices.
+description: Demonstrates a sample implementation of Matter Generator Firmware with TrustZone for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.
 category: Matter Application
 quality: production
 package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.10.0"
+    vendor: silabs
 
 component:
   - { id: sl_main }

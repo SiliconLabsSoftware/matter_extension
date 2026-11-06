@@ -1,9 +1,14 @@
 project_name: matter_mg_soc_generator_firmware_freertos
 label: Matter MG - SoC Generator Firmware FreeRTOS
-description: Demonstrates on-device DAC key-pair and CSR generation and Matter factory provisioning on MG SoC devices.
+description: Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.
 category: Matter Application
 quality: production
 package: matter
+
+sdk_extension:
+  - id: matter
+    version: "2.10.0"
+    vendor: silabs
 
 provides:
   - name: nvm3_custom_init
@@ -120,6 +125,13 @@ filter:
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - prebuilt_demo
+  - hardware:rf:band:2400
+  - hwfilter:device:device_series_3
+  - hwfilter:device:device_series_2
+  - hidden
 
 readme:
   - path: ./README.md
