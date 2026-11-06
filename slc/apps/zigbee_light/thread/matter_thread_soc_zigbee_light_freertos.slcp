@@ -8,6 +8,7 @@ description: Demonstrates a sample implementation of a Matter and Zigbee multipr
 component:
   - id: device_init
   - id: clock_manager
+  - id: watchdog_manager
   - id: rail_mux
   - id: sl_main
   # Needed to use Network Analyser
