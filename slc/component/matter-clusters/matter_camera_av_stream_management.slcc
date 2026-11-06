@@ -1,4 +1,4 @@
-category: Clusters|Cameras
+category: Clusters|General
 description: >
   Implementation of the Camera AV Stream Management Server Cluster.
   The user has to enable the Camera AV Stream Management Server Cluster in the ZCL Advanced Platform (ZAP) tool in order to enable this functionality.

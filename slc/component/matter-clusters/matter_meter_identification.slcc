@@ -12,11 +12,12 @@ metadata:
 provides:
   - name: matter_meter_identification
 source:
-  - path: third_party/matter_sdk/src/app/clusters/meter-identification-server/meter-identification-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/meter-identification-server/MeterIdentificationCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/meter-identification-server
     file_list:
       - path: meter-identification-server.h
+      - path: MeterIdentificationCluster.h
       - path: MeterIdentificationTestEventTriggerHandler.h
 template_contribution:
   - name: component_catalog
