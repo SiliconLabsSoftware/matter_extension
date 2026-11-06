@@ -3,7 +3,7 @@ description: Export Matter Conan packages and save their isolated cache for down
 
 inputs:
   package-version:
-    description: Version assigned to matter and matter_app packages.
+    description: Version assigned to matter, matter_internal, matter_app, and matter_app_internal packages.
     required: true
   conan-cache-key:
     description: Optional cache key. A run-scoped key is generated when omitted.
@@ -58,13 +58,18 @@ runs:
         CACHE_KEY="${{ inputs.conan-cache-key }}"
         CACHE_KEY="${CACHE_KEY:-matter-conan-${VERSION}-${CHANNEL}-${{ github.run_id }}-${{ github.run_attempt }}}"
 
-        echo "Exporting matter/${VERSION}@silabs/${CHANNEL} and matter_app/${VERSION}@silabs/${CHANNEL}"
-        conan remove "matter/${VERSION}@silabs/${CHANNEL}" -c || true
-        conan remove "matter_app/${VERSION}@silabs/${CHANNEL}" -c || true
+        # name/user default from each conanfile / MatterBaseRecipe; pass version + channel.
+        # Drop any prior matter* packages (all versions/channels) before re-export.
+        echo "Exporting matter, matter_internal, matter_app, matter_app_internal ${VERSION}@silabs/${CHANNEL}"
+        conan remove "matter*/*" -c || true
         conan export-pkg packages/matter/conanfile.py \
-          --name=matter --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
+        conan export-pkg packages/matter_internal/conanfile.py \
+          --version="${VERSION}" --channel="${CHANNEL}"
         conan export-pkg packages/matter_app/conanfile.py \
-          --name=matter_app --version="${VERSION}" --user=silabs --channel="${CHANNEL}"
+          --version="${VERSION}" --channel="${CHANNEL}"
+        conan export-pkg packages/matter_app_internal/conanfile.py \
+          --version="${VERSION}" --channel="${CHANNEL}"
 
         conan list "*" -c --format=json | python3 -c '
         import json
@@ -73,13 +78,16 @@ runs:
 
         data = json.load(sys.stdin)
         cache = data.get("Local Cache", data)
+        allowed = {"matter", "matter_internal", "matter_app", "matter_app_internal"}
         for reference in cache:
-            if reference.split("/", 1)[0] not in {"matter", "matter_app"}:
+            if reference.split("/", 1)[0] not in allowed:
                 subprocess.run(["conan", "remove", reference, "-c"], check=False)
         '
 
         conan list "matter/${VERSION}@silabs/${CHANNEL}:*"
+        conan list "matter_internal/${VERSION}@silabs/${CHANNEL}:*"
         conan list "matter_app/${VERSION}@silabs/${CHANNEL}:*"
+        conan list "matter_app_internal/${VERSION}@silabs/${CHANNEL}:*"
         echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
         echo "channel=${CHANNEL}" >> "$GITHUB_OUTPUT"
         echo "conan-cache-key=${CACHE_KEY}" >> "$GITHUB_OUTPUT"

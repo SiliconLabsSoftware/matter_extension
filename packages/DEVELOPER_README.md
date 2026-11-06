@@ -37,13 +37,18 @@ Pass `--channel` only when you need a non-default channel.
 CHANNEL="$(tr -d '[:space:]' < packages/_shared/release_stream_channel)"
 # or: CHANNEL=2026-12
 
+# name/user default from each conanfile / MatterBaseRecipe
 conan export-pkg packages/matter/conanfile.py \
-  --name=matter --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
+  --version=<matter_extension_version> --channel="${CHANNEL}"
+
+conan export-pkg packages/matter_internal/conanfile.py \
+  --version=<matter_extension_version> --channel="${CHANNEL}"
 
 conan export-pkg packages/matter_app/conanfile.py \
-  --name=matter_app --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
+  --version=<matter_extension_version> --channel="${CHANNEL}"
+
+conan export-pkg packages/matter_app_internal/conanfile.py \
+  --version=<matter_extension_version> --channel="${CHANNEL}"
 ```
 
 ---
@@ -80,6 +85,7 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - **`packages/_shared/release_stream_channel`** – One-liner Conan channel / `pkg.slt` release-stream (SoT for channel).
 - **`MATTER_PACKAGE_VERSION`** – Optional runtime version override (Jenkins/CI).
 - **`MATTER_PACKAGE_CHANNEL`** – Optional runtime channel override; CI defaults from `release_stream_channel`.
+- **`MATTER_APP_PACKAGE`** – Optional app package selector: `matter_app` (default) or `matter_app_internal`.
 
 ---
 
@@ -87,7 +93,9 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 - **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.
 - **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.
+- **`packages/matter_internal/conanfile.py`** – Packages `quality: internal` Matter components (`.slcc`) and their inputs; depends on `matter`.
 - **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.
+- **`packages/matter_app_internal/conanfile.py`** – Packages `quality: internal` sample apps; depends on `matter_internal`.
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
 - **`slc/script/dependency_versions.yaml`** – Used as a single source of truth for dependencies
 - **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
@@ -109,8 +117,14 @@ root/
 │   ├── matter
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
+│   ├── matter_internal
+│   │   ├── conanfile.py
+│   │   └── pkg.slt
 │   ├── matter_app
 │   │   ├── conanfile.py
+│   ├── matter_app_internal
+│   │   ├── conanfile.py
+│   │   └── pkg.slt
 │   ├── DEVELOPER_README.md
 └── slc/
     └── script/
