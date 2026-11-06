@@ -14,3 +14,4 @@ github_headers = {
 artifact_upload_path_dev = 'https://artifactory.silabs.net/artifactory/gsdk-generic-development/matter_extension_github/'
 artifact_upload_path_release = 'https://artifactory.silabs.net/artifactory/gsdk-generic-staging/matter_extension_github/'
 artifactory_headers = {'Content-type': 'application/zip'}
+generator_firmware_artifact_name = 'generator-firmware'

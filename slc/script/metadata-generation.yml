@@ -38,6 +38,7 @@ templates_hidden:
 demos_exclude:
   - matter_thread_soc_lighting_app_trustzone_series_3_freertos
   - matter_wifi_917_ncp_lock_app_dual_stack_freertos
+  - matter_mg_soc_generator_firmware_trustzone_freertos
 
 # Hard-coded board lists for templates for any corner cases
 templates_board_overrides:

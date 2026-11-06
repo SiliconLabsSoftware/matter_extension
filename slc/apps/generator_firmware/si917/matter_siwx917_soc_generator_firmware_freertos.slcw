@@ -1,0 +1,9 @@
+workspace_name: matter_siwx917_soc_generator_firmware_freertos
+label: Matter SiWx917 - SoC Generator Firmware FreeRTOS
+quality: production
+package: matter
+description: Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on SiWx917 SoC devices.
+project:
+  - path: ./matter_siwx917_soc_generator_firmware_freertos.slcp
+    id: application
+    output: generator_firmware
