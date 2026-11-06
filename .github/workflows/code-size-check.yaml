@@ -124,6 +124,10 @@ jobs:
               env:
                 MATTER_ROOT: ${{ github.workspace }}/baseline
 
+            - name: Install code size tools dependencies
+              run: |
+                  pip3 install -r ./tools/code_size_tools/requirements.txt
+
             - name: Generate Code Size Results and Compare (gcc)
               shell: bash
               run: |
@@ -133,6 +137,15 @@ jobs:
                   cat ./target_gcc.csv
                   python3 ./slc/script/code_size_diff_check.py ./current_gcc.csv ./target_gcc.csv --toolchain gcc \
                       | tee code_size_report_gcc.txt
+                  python3 ./tools/code_size_tools/code_size_viewer.py $(find ./current -name "*.map" | grep gcc) $(find ./out -name "*.map" | grep gcc) --map --html
+
+            - name: Upload Code Size Diff HTML
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: code-size-diff-html
+                  path: code_size_diff.html
+                  retention-days: 4
 
             - name: Generate Code Size Results and Compare (llvm)
               ## TODO: Remove the skip condition when wifi on llvm is supported
