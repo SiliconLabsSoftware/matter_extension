@@ -51,7 +51,8 @@ jobs:
               uses: ./.github/actions/cache-tools
             - name: Build ${{ inputs.example-app }}
               uses: SiliconLabsSoftware/matter_build_action@v2
-              continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+              # Test branch: keep building remaining PSRAM flavors after a failure.
+              continue-on-error: true
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}
@@ -59,7 +60,7 @@ jobs:
                   build-script: "./slc/build.sh"
                   output-directory: " "
                   build-type: ${{ inputs.build-type }}
-                  continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
+                  continue-on-error: true
 
             - name: Create asset files
               if: startsWith(github.ref_name, 'release_')
