@@ -28,6 +28,19 @@ exclude_root_directories = [
     'matter_extension/slc/tools'
 ]
 
+# Files at the source root to exclude from copying
+exclude_root_files = [
+    'matter_app.slsdk'
+]
+
+# Appended to the staged root matter.slsdk. CoL writes these into the published package.
+matter_slsdk_append_lines = [
+    "prop.file.templatesFile=matter_templates.xml",
+    "prop.file.docsFile=matter_docs.xml",
+    "prop.file.demosFile=matter_demos.xml",
+    "prop.subLabel=Silicon\\\\ Labs\\\\ Matter\\\\ 2.10.0-1.6.1",
+]
+
 exclude_submodules = [
     'simplicity_sdk',
     'wifi_sdk',
@@ -136,9 +149,15 @@ def copy_directory(source_directory, target_location):
                 print(f"Warning: Source file does not exist: {source_file}")
                 continue
             relative_path = os.path.relpath(root, source_directory)
+            if relative_path == "." and file in exclude_root_files:
+                continue
             target_dir = os.path.join(target_location, relative_path)
             os.makedirs(target_dir, exist_ok=True)
-            shutil.copy2(source_file, os.path.join(target_dir, file))
+            target_file = os.path.join(target_dir, file)
+            shutil.copy2(source_file, target_file)
+            if relative_path == "." and file == "matter.slsdk":
+                with open(target_file, "a", encoding="utf-8") as handle:
+                    handle.write("\n".join(matter_slsdk_append_lines) + "\n")
 
 
 def main():
