@@ -2,14 +2,272 @@
     "standard": {
         "default": [
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-classifier",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-classifier",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss-classifier",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-psram-text-data",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-psram-text-data",
                     "--with toolchain_llvm",
@@ -17,18 +275,360 @@
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-lto-psram-text-data",
                     "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-lto-psram-text-data",
                     "--with toolchain_llvm_lto",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss-classifier",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-classifier",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,sl_si91x_code_classifier"
                 ]
             }
         ]
@@ -36,14 +636,272 @@
     "full": {
         "default": [
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-classifier",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-classifier",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss-classifier",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-psram-text-data",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-psram-text-data",
                     "--with toolchain_llvm",
@@ -51,18 +909,360 @@
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-lto-psram-text-data",
                     "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-lto-psram-text-data",
                     "--with toolchain_llvm_lto",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss-classifier",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-classifier",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,sl_si91x_code_classifier"
                 ]
             }
         ]
@@ -70,14 +1270,272 @@
     "custom-sqa": {
         "default": [
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-classifier",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-classifier",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-bss-classifier",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-psram-text-data",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-psram-text-data",
                     "--with toolchain_llvm",
@@ -85,18 +1543,360 @@
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix gcc-lto-psram-text-data",
                     "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram"
                 ]
             },
             {
-                "boards": ["brd4342a", "brd4343s"],
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
                 "arguments": [
                     "--output_suffix llvm-lto-psram-text-data",
                     "--with toolchain_llvm_lto",
                     "--with_app psram_core,text_segment_in_psram,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data-bss-classifier",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-text-data-bss-classifier",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-text-data-bss-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-text-data-bss-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,text_segment_in_psram,data_segment_in_psram,bss_segment_in_psram,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-classifier",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-classifier",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-classifier",
+                    "--with_app toolchain_gcc_lto,psram_core,sl_si91x_code_classifier"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a",
+                    "brd4343s"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-classifier",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,sl_si91x_code_classifier"
                 ]
             }
         ]
