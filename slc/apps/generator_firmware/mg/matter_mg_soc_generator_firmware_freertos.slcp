@@ -129,8 +129,7 @@ filter:
 tag:
   - prebuilt_demo
   - hardware:rf:band:2400
-  - hwfilter:device:device_series_3
-  - hwfilter:device:device_series_2
+  - hwfilter:device:device_efx
   - hidden
 
 readme:

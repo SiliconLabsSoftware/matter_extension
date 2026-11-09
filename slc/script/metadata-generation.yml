@@ -63,6 +63,7 @@ templates_board_overrides:
 #   - For regular apps: ci_source is the app name in silabs-builds-*.json
 #   - For ncp apps: ci_source is "_ncp_917" (reads from silabs-builds-917-ncp.json)
 #   - For json files handling special cases (eg ncp and trustzone): ci_source is end of json filename (eg "_ncp_917" for silabs-builds-917-ncp.json)
+#   - For generator firmware: ci_source is "gfw-builder" (board list from .github/workflows/gfw-builder.yaml)
 use_ci_boards_for_demos:
   matter_thread_soc_zigbee_light_series_2_internal_freertos: zigbee_light
   matter_wifi_917_ncp_lock_app_freertos: _ncp_917
@@ -70,3 +71,5 @@ use_ci_boards_for_demos:
   matter_wifi_917_ncp_fan_control_app_freertos: _ncp_917
   matter_wifi_917_ncp_window_app_freertos: _ncp_917
   matter_thread_soc_lighting_app_trustzone_series_2_freertos: _trustzone
+  matter_mg_soc_generator_firmware_freertos: gfw-builder
+  matter_siwx917_soc_generator_firmware_freertos: gfw-builder
