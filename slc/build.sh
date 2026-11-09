@@ -356,7 +356,14 @@ fi
 
 if [ "$skip_gen" = false ]; then
 	if [[ "$SILABS_APP_PATH" == *.slcw ]]; then
-		if [[ "$SILABS_APP_PATH" != *wifi_soc* ]] && [ "$GENERATE_BOOTLOADER" = true ]; then
+		# Only generate bootloader when the workspace actually defines one.
+		# App-only workspaces (e.g. wifi_soc, GFW Series 2 / SiWx917) have no bootloader project.
+		HAS_BOOTLOADER_PROJECT=false
+		if grep -qE '^[[:space:]]*id:[[:space:]]*bootloader[[:space:]]*$' "$SILABS_APP_PATH"; then
+			HAS_BOOTLOADER_PROJECT=true
+		fi
+
+		if [ "$HAS_BOOTLOADER_PROJECT" = true ] && [ "$GENERATE_BOOTLOADER" = true ]; then
 			# Get bootloader arguments
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")
 			BOOTLOADER_WITHOUT_ARG=$(build_without_arg "$WITHOUT_BOOTLOADER_COMPONENTS")

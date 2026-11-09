@@ -1,0 +1,170 @@
+project_name: matter_siwx917_soc_generator_firmware_freertos
+label: Matter SiWx917 - SoC Generator Firmware FreeRTOS
+description: Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on SiWx917 SoC devices.
+category: Matter Application
+quality: production
+package: matter
+
+sdk_extension:
+  - id: wifi
+    version: "4.2.0"
+    vendor: silabs
+
+component:
+  - { id: sl_main }
+  - { id: freertos }
+  - { id: cpp_support }
+  - { id: iostream_rtt }
+  - { id: segger_rtt }
+  - { id: nvm3_lib }
+  # mbedTLS components
+  - { id: mbedtls_config }
+  - { id: mbedtls_source }
+  - { id: mbedtls_platform_dynamic_memory_allocation_config_init_runtime }
+  - { id: mbedtls_aes }
+  - { id: mbedtls_asn1 }
+  - { id: mbedtls_base64 }
+  - { id: mbedtls_ccm }
+  - { id: mbedtls_cipher }
+  - { id: mbedtls_cipher_ctr }
+  - { id: mbedtls_ecdh }
+  - { id: mbedtls_ecdsa }
+  - { id: mbedtls_ecc }
+  - { id: mbedtls_error }
+  - { id: mbedtls_hash }
+  - { id: mbedtls_jpake }
+  - { id: mbedtls_mpi }
+  - { id: mbedtls_pem }
+  - { id: mbedtls_pkcs5 }
+  - { id: mbedtls_pki }
+  - { id: mbedtls_random }
+  - { id: mbedtls_sha256 }
+  - { id: mbedtls_sha512 }
+  - { id: mbedtls_version }
+  - { id: mbedtls_x509 }
+  # Wiseconnect SDK 3.xx
+  - { id: rsilib_userconfig }
+  - { id: wiseconnect_common }
+  - { id: sl_si91x_common_flash_nvm3 }
+  - { id: sl_si91x_wireless }
+  - { id: sl_si91x_errno }
+  - { id: sl_si91x_internal_stack }
+  - { id: basic_network_config_manager }
+  - { id: si917_memory_default_config }
+  - { id: sl_si91x_basic_buffers }
+  - { id: sl_si91x_mcu }
+  - { id: board_configuration_headers }
+  - { id: wifi }
+  - { id: si91x_debug }
+  - { id: sl_si91x_trng }
+  - { id: sl_si91x_crypto_multithread }
+  - { id: sl_si91x_soc_soft_reset }
+
+include:
+  - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/include
+  - path: ../../../../third_party/matter_support/provision
+  - path: ../../../../third_party/nlassert/include/
+  - path: ../../../../third_party/nlio/include/
+  - path: ../../../../third_party/matter_sdk/zzz_generated/app-common/
+  - path: ../../../../third_party/matter_sdk/examples/
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/
+  - path: ../../../../third_party/matter_sdk/src/
+  - path: ../../../../third_party/matter_sdk/src/include/
+  - path: ../../../../third_party/matter_sdk/src/lib/support/
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/
+  - path: ../../../../third_party/matter_support/tinycrypt/inc
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/
+  - path: ../../../../third_party/matter_sdk/src/crypto
+
+source:
+  - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/app.cpp
+  - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/src/si917.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCrypto.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoMbed.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageCustom.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReader.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReaderCommon.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageWriter.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannel.h
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelRTT.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageFlash.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageReader.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageWriter.cpp
+  - path: ../../../../third_party/matter_sdk/src/credentials/DeviceAttestationCredsProvider.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKeyMbed.cpp
+  - path: ../../../../third_party/matter_sdk/src/lib/support/Base64.h
+  - path: ../../../../third_party/matter_sdk/src/lib/support/Base64.cpp
+  - path: ../../../../third_party/matter_sdk/src/lib/support/BytesToHex.h
+  - path: ../../../../third_party/matter_sdk/src/lib/support/BytesToHex.cpp
+  - path: ../../../../third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.h
+  - path: ../../../../third_party/matter_sdk/src/lib/support/CHIPMem.cpp
+  - path: ../../../../third_party/matter_sdk/src/lib/support/logging/CHIPLogging.h
+  - path: ../../../../third_party/matter_sdk/src/lib/support/logging/TextOnlyLogging.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.h
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/Logging.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/WiseMcuSpam.cpp
+  - path: ../../../../third_party/matter_sdk/src/platform/silabs/SiWx/CHIPCryptoPALTinyCrypt.cpp
+  - path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.h
+  - path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.cpp
+  - path: ../../../../third_party/matter_sdk/examples/platform/silabs/syscalls_stubs.cpp
+  - path: ../../../../third_party/matter_support/tinycrypt/src/ecc.c
+  - path: ../../../../third_party/matter_support/tinycrypt/src/ecc_dh.c
+  - path: ../../../../third_party/matter_support/tinycrypt/src/ecc_dsa.c
+  - path: ../../../../third_party/matter_support/tinycrypt/src/tinycrypt_util.c
+
+library:
+  - path: ../../../../third_party/matter_support/provision/libs/libProvision-m4-softfp.a
+
+define:
+  - { name: DEBUG_EFM }
+  - { name: SUPPORT_CPLUSPLUS, value: "1" }
+  - { name: SILABS_PROVISION_PROTOCOL_V1, value: "0" }
+  - { name: SL_PROVISION_GENERATOR, value: "1" }
+  - { name: SL_PROVISION_CHANNEL_ENABLED, value: "1" }
+  - { name: SL_MATTER_ENABLE_OTA_ENCRYPTION, value: "1" }
+  - { name: SL_MATTER_TEST_EVENT_TRIGGER_ENABLED, value: "1" }
+  - { name: SL_MATTER_USE_FLASH_STORE, value: "1" }
+  - { name: SL_MBEDTLS_USE_TINYCRYPT, value: "1" }
+  - { name: CHIP_SYSTEM_CONFIG_USE_SOCKETS, value: "1" }
+  - { name: CHIP_CONFIG_ENABLE_ICD_SERVER, value: "0" }
+  - { name: CHIP_SYSTEM_CONFIG_USE_BSD_IFADDRS, value: "0" }
+  - { name: CHIP_CONFIG_MEMORY_MGMT_MALLOC, value: "0" }
+  - { name: CHIP_CONFIG_MEMORY_MGMT_PLATFORM, value: "1" }
+  - { name: MBEDTLS_CONFIG_FILE, value: \"siwx917-chip-mbedtls-config.h\" }
+  - { name: NVM3_LOCK_OVERRIDE, value: "1" }
+
+toolchain_settings:
+  - { option: optimize, value: debug }
+  - { option: cxx_standard, value: c++17 }
+  - { option: gcc_compiler_option, value: -Wno-unused-parameter }
+  - { option: gcc_compiler_option, value: -Wno-missing-field-initializers }
+
+filter:
+  - name: Type
+    value:
+      - SoC Project
+  - name: Difficulty
+    value:
+      - Advanced
+  - name: Wireless Technology
+    value:
+      - Matter
+
+tag:
+  - prebuilt_demo
+  - hidden
+  - hwfilter:board:si91x_b0_board
+  - hwfilter:device:device_si91x
+
+readme:
+  - path: ./README.md
+ui_hints:
+  highlight:
+    - path: README.md
+      focus: true
+
+post_build:
+  path: ../../../postbuild/matter_wifi_soc.slpb

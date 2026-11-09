@@ -300,6 +300,11 @@ jobs:
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    build_generator_firmware:
+        name: Build Generator Firmware
+        needs: [cache-tools]
+        uses: ./.github/workflows/gfw-builder.yaml
+
     merge-apps:
         name: Merge App Artifacts
         runs-on: ubuntu-latest
@@ -326,6 +331,7 @@ jobs:
             - build_rangehood_app
             - build_series_3_bootloader
             - build_wake_on_matter_app
+            - build_generator_firmware
         if: ${{ !cancelled() && !failure() }}
 
         steps:

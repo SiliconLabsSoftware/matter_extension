@@ -1340,6 +1340,76 @@
     <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
     <property key="core.quality" value="PRODUCTION"/>
   </demo>
+  <demo name="efr32mg24a010f1024im48.demo.matter_mg_soc_generator_firmware_freertos" label="Matter MG - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter MG - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="efr32mg24a010f1024im48"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/efr32mg24a010f1024im48/matter_mg_soc_generator_firmware_freertos_solution/artifact/matter_mg_soc_generator_firmware_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/mg/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="efr32mg26b410f3200im48.demo.matter_mg_soc_generator_firmware_freertos" label="Matter MG - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter MG - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="efr32mg26b410f3200im48"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/efr32mg26b410f3200im48/matter_mg_soc_generator_firmware_freertos_solution/artifact/matter_mg_soc_generator_firmware_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/mg/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4407a.demo.matter_mg_soc_generator_firmware_freertos" label="Matter MG - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter MG - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4407a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4407a/matter_mg_soc_generator_firmware_freertos_solution/artifact/matter_mg_soc_generator_firmware_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/mg/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd1019a.demo.matter_mg_soc_generator_firmware_freertos" label="Matter MG - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter MG - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd1019a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd1019a/matter_mg_soc_generator_firmware_freertos_solution/artifact/matter_mg_soc_generator_firmware_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/mg/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4408a.demo.matter_mg_soc_generator_firmware_freertos" label="Matter MG - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on MG SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter MG - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4408a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4408a/matter_mg_soc_generator_firmware_freertos_solution/artifact/matter_mg_soc_generator_firmware_freertos_full.s37"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/mg/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4338a.demo.matter_siwx917_soc_generator_firmware_freertos" label="Matter SiWx917 - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on SiWx917 SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter SiWx917 - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4338a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4338a/matter_siwx917_soc_generator_firmware_freertos_solution/artifact/matter_siwx917_soc_generator_firmware_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/si917/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
+  <demo name="brd4343a.demo.matter_siwx917_soc_generator_firmware_freertos" label="Matter SiWx917 - SoC Generator Firmware FreeRTOS">
+    <model:description>Demonstrates a sample implementation of Matter Generator Firmware for on-device DAC key-pair and CSR generation and factory provisioning on SiWx917 SoC devices.</model:description>
+    <property key="demos.blurb" value="Matter SiWx917 - SoC Generator Firmware FreeRTOS app"/>
+    <property key="core.partCompatibility" value=".*"/>
+    <property key="core.boardCompatibility" value="brd4343a"/>
+    <property key="demos.imageFile" value="asset://extension.matter_2.10.0/demos/brd4343a/matter_siwx917_soc_generator_firmware_freertos_solution/artifact/matter_siwx917_soc_generator_firmware_freertos.rps"/>
+    <property key="core.readmeFiles" value="slc/apps/generator_firmware/si917/README.md"/>
+    <property key="filters" value="Difficulty|Advanced Type|SoC\ Project Wireless\ Technology|Matter"/>
+    <property key="core.quality" value="PRODUCTION"/>
+  </demo>
   <demo name="brd2601b.demo.matter_thread_soc_light_switch_app_series_2_freertos" label="Matter Thread - SoC Light Switch with external Bootloader FreeRTOS">
     <model:description>Demonstrates a sample implementation of a Matter over Thread light switch app with external bootloader. This configuration will increase power usage in EM2.</model:description>
     <property key="demos.blurb" value="Matter Thread - SoC Light Switch with external Bootloader FreeRTOS app"/>
