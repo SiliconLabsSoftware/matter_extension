@@ -53,6 +53,8 @@ jobs:
               continue-on-error: ${{ inputs.build-type == 'custom-sqa' }}
               env:
                   MATTER_PACKAGE_VERSION: ${{ inputs.package-version }}
+                  # Packaged build_app.sh also reads release_stream_channel beside itself.
+                  MATTER_PACKAGE_CHANNEL: ${{ env.MATTER_PACKAGE_CHANNEL }}
               with:
                   json-file-path: ${{ inputs.json-file-path }}
                   path-to-example-app: ${{ inputs.path-to-example-app }}

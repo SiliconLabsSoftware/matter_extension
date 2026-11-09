@@ -162,6 +162,8 @@ configuration:
     value: 1
 
   # Default ICD configurations
+  - name: SL_ICD_ENABLE_SELECTIVE_SLEEP
+    value: 0
   - name: SL_IDLE_MODE_DURATION_S
     value: "1800"
   - name: SL_ACTIVE_MODE_DURATION_MS
@@ -200,6 +202,17 @@ filter:
   - name: Wireless Technology
     value:
       - Matter
+
+tag:
+  - hardware:rf:band:2400
+  - hardware:component:button:2+
+  - hardware:component:led:2+
+  - hwfilter:device:device_supports_bluetooth
+  - hwfilter:device:device_supports_thread
+  - hidden
+
+readme:
+  - path: ./README.md
 
 post_build:
   profile: application

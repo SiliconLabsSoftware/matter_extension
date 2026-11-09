@@ -17,6 +17,7 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
+  - id: watchdog_manager
   - id: common_token_manager_dynamic
     condition: [device_series_3]
   - id: common_token_manager
@@ -156,6 +157,8 @@ configuration:
     value: 1
 
   # Default ICD configurations for window-app (SIT)
+  - name: SL_ICD_ENABLE_SELECTIVE_SLEEP
+    value: 0
   - name: SL_IDLE_MODE_DURATION_S
     value: "600"
   - name: SL_ACTIVE_MODE_DURATION_MS

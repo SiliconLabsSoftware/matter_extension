@@ -12,7 +12,6 @@ provides:
   condition: [matter_aws]
 requires:
 - name: mbedtls_asn1_parse
-- name: mbedtls_oid
 - name: mbedtls_pk_parse
 template_contribution:
 - name: mbedtls_config
