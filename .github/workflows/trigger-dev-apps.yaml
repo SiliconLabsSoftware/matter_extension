@@ -4,9 +4,7 @@ on:
   schedule:
     # release_2.10-1.6.1: 8:05 pm EDT daily
     - cron: "5 0 * * *"
-    # release_2.9-1.6: Wednesday at 8:05 pm EDT
-    - cron: "5 0 * * 4"
-    # main: Thursday at 8:05 pm EDT (biweekly; gated in plan job)
+    # main / release_2.9-1.6: Thursday at 8:05 pm EDT (biweekly alternating; gated in plan job)
     - cron: "5 0 * * 5"
 
 permissions:
@@ -28,18 +26,14 @@ jobs:
               echo 'targets=["release_2.10-1.6.1"]' >> "$GITHUB_OUTPUT"
               echo "Daily schedule: release_2.10-1.6.1"
               ;;
-            "5 0 * * 4")
-              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT"
-              echo "Weekly schedule: release_2.9-1.6"
-              ;;
             "5 0 * * 5")
               week=$(date -u +%V)
               if (( 10#$week % 2 == 0 )); then
                 echo 'targets=["main"]' >> "$GITHUB_OUTPUT"
                 echo "Biweekly schedule: main (week $week)"
               else
-                echo 'targets=[]' >> "$GITHUB_OUTPUT"
-                echo "Skipping main this week (week $week)"
+                echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT"
+                echo "Biweekly schedule: release_2.9-1.6 (week $week)"
               fi
               ;;
             *)
@@ -74,7 +68,7 @@ jobs:
           set -euo pipefail
 
           if [[ "$BRANCH" == "main" || "$BRANCH" == "release_2.9-1.6" ]]; then
-            since="7 days ago"
+            since="14 days ago"
           else
             since="24 hours ago"
           fi
