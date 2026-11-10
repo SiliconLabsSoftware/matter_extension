@@ -1,0 +1,20 @@
+diff --git a/network_stack/paho_mqtt_embedded/component/paho_mqtt_embedded.slcc b/network_stack/paho_mqtt_embedded/component/paho_mqtt_embedded.slcc
+index 6ae043f127..462c5f551c 100644
+--- a/network_stack/paho_mqtt_embedded/component/paho_mqtt_embedded.slcc
++++ b/network_stack/paho_mqtt_embedded/component/paho_mqtt_embedded.slcc
+@@ -221,15 +221,9 @@ define:
+   value: '0'
+ - name: SLI_MQTT_TLS_ALPN_USE_BSD
+   value: '1'
+-- name: SLI_MBEDTLS_CONFIG_AUTOGEN_OVERRIDE_FILE
+-  value: '"sli_lwip_mqtt_mbedtls_config.h"'
+-  condition: ["sl_si91x_lwip_stack"]
+ - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
+   value: '"sli_lwip_mqtt_psa_crypto_config.h"'
+   condition: ["sl_si91x_lwip_stack"]
+-- name: SLI_MBEDTLS_CONFIG_AUTOGEN_OVERRIDE_FILE
+-  value: '"sli_lwip_mqtt_mbedtls_config.h"'
+-  condition: ["sl_si91x_network_dual_stack"]
+ - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
+   value: '"sli_lwip_mqtt_psa_crypto_config.h"'
+   condition: ["sl_si91x_network_dual_stack"]
