@@ -329,7 +329,7 @@ def send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
     }
 }
 
-def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, board, wifi_module, branchName, buildNumber)
+def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterType, rtos, board, wifi_module, branchName, buildNumber)
 {
     def failed_test_results = [failedTests: [], failedCount: 0]
     globalLock(credentialsId: 'hwmux_token_matterci', deviceGroup: deviceGroup) {
@@ -408,6 +408,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             "MATTER_APP_EXAMPLE=${appName}",
                             'RUN_SUITE=true',
                             "MATTER_TYPE=${matterType}",
+                            "RTOS=${rtos}",
                             "BUILD_TOOL=SLC",
                             "WIFI_MODULE=${wifi_module}",
                             "TEST_TYPE=ci",
