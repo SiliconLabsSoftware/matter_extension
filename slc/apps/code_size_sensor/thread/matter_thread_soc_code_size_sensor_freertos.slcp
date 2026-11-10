@@ -14,11 +14,6 @@ component:
   - id: device_init
   - id: sl_main
   - id: clock_manager
-  - id: common_token_manager_dynamic
-    condition: [device_series_3]
-  - id: common_token_manager
-    condition: [device_series_3]
-
   - id: matter
   - id: matter_platform_mg
   - id: matter_ble
@@ -28,6 +23,8 @@ component:
   - id: matter_crypto
   - id: matter_gatt_static
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
   - id: app_common
 
   - id: matter_access_control
@@ -73,7 +70,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 config_file:
   - path: ./config/sl_matter_sensor_config.h
     file_id: matter_sensor_config

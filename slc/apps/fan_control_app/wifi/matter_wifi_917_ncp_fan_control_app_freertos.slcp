@@ -31,6 +31,8 @@ component:
 
   - id: app_common
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
 
   - id: mbedtls_entropy_default_aws
     condition: [matter_aws]

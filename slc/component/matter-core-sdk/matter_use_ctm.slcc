@@ -10,5 +10,11 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_use_ctm
+requires:
+  - name: common_token_manager
+  # Series 2 CTM legacy sources include Zigbee token headers. Without Zigbee/Connect,
+  # this component supplies the stub headers and STACK_TYPES_HEADER.
+  - name: common_token_manager_compatibility
+    condition: [device_series_2]
 source:
   - path: third_party/matter_sdk/src/platform/silabs/SilabsConfigCTM.cpp

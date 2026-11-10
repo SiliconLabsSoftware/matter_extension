@@ -30,10 +30,6 @@ component:
   - id: sl_main
   - id: clock_manager
   - id: watchdog_manager
-  - id: common_token_manager_dynamic
-    condition: [device_series_3]
-  - id: common_token_manager
-    condition: [device_series_3]
   - id: matter_buttons
   - id: matter_leds
   # Data Model
@@ -63,6 +59,8 @@ component:
   - id: rail_util_pti
   - id: matter_crypto
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
   - id: app_common
   - id: bootloader_interface
   - id: bootloader_interface_s2
@@ -111,7 +109,7 @@ requires:
   - name: matter_drivers_series_2
     condition:
       - device_series_3
-      
+
 config_file:
   - path: ../../../../provision.mattpconf
     directory: provision
