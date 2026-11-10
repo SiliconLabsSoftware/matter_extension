@@ -2,10 +2,10 @@ name: Trigger Dev Apps Build
 
 on:
   schedule:
-    # release_2.9-1.6: 8:05 pm EDT daily
+    # release_2.10-1.6.1: 8:05 pm EDT daily
     - cron: "5 0 * * *"
-    # release_2.10-1.6.1: 8:05 am EDT daily
-    - cron: "5 12 * * *"
+    # release_2.9-1.6: Wednesday at 8:05 pm EDT
+    - cron: "5 0 * * 4"
     # main: Thursday at 8:05 pm EDT (biweekly; gated in plan job)
     - cron: "5 0 * * 5"
 
@@ -25,12 +25,12 @@ jobs:
         run: |
           case "${{ github.event.schedule }}" in
             "5 0 * * *")
-              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT"
-              echo "Daily schedule: release_2.9-1.6"
-              ;;
-            "5 12 * * *")
               echo 'targets=["release_2.10-1.6.1"]' >> "$GITHUB_OUTPUT"
               echo "Daily schedule: release_2.10-1.6.1"
+              ;;
+            "5 0 * * 4")
+              echo 'targets=["release_2.9-1.6"]' >> "$GITHUB_OUTPUT"
+              echo "Weekly schedule: release_2.9-1.6"
               ;;
             "5 0 * * 5")
               week=$(date -u +%V)
@@ -73,7 +73,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "$BRANCH" == "main" ]]; then
+          if [[ "$BRANCH" == "main" || "$BRANCH" == "release_2.9-1.6" ]]; then
             since="7 days ago"
           else
             since="24 hours ago"
