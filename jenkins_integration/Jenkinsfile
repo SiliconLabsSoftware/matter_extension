@@ -15,6 +15,7 @@ pipeline
                     if (!fileExists('coverage/sonarqube-coverage.xml')) {
                         error('[FAIL] coverage/sonarqube-coverage.xml missing at repo root. Commit it before running this test branch.')
                     }
+                    sh 'git submodule update --init third_party/matter_sdk'
                     withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
                         sh '''
                             docker run --rm \
