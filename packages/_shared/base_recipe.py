@@ -361,6 +361,89 @@ class MatterBaseRecipe(ConanFile):
                 return True
         return False
 
+    def _collect_slc_input_paths(
+        self,
+        slc_file: Path,
+        data: dict,
+        root: Path,
+        collected: set[str],
+        missing: list[str],
+    ) -> None:
+        """Resolve input-section paths from one .slcp/.slcw into collected/missing."""
+        for rel in self._iter_input_path_entries(data):
+            # Skip bare file_list names (resolved under their include dir).
+            if "/" not in rel and not rel.startswith("."):
+                continue
+
+            resolved = (slc_file.parent / rel).resolve()
+            try:
+                resolved.relative_to(root)
+            except ValueError:
+                missing.append(f"{slc_file}: {rel} (outside repo)")
+                continue
+
+            if not resolved.exists():
+                missing.append(f"{slc_file}: {rel}")
+                continue
+
+            if resolved.is_file():
+                collected.add(str(resolved))
+            elif resolved.is_dir():
+                for file_path in resolved.rglob("*"):
+                    if file_path.is_file():
+                        collected.add(str(file_path))
+
+    def _gather_nested_workspace_project_inputs(
+        self,
+        slcw_file: Path,
+        data: dict,
+        root: Path,
+        collected: set[str],
+        missing: list[str],
+    ) -> None:
+        """Collect inputs from .slcp projects referenced by a selected .slcw.
+
+        Nested projects (e.g. production bootloaders pulled into an internal
+        workspace) may not match desired_qualities, but their readme/source
+        inputs must still ship with the package for generate --copy-sources.
+        """
+        for proj in data.get("project") or []:
+            if not isinstance(proj, dict):
+                continue
+            proj_rel = proj.get("path")
+            if not isinstance(proj_rel, str) or not proj_rel.strip():
+                continue
+
+            nested_path = (slcw_file.parent / proj_rel).resolve()
+            try:
+                nested_path.relative_to(root)
+            except ValueError:
+                missing.append(f"{slcw_file}: {proj_rel} (outside repo)")
+                continue
+
+            if nested_path.suffix != ".slcp":
+                continue
+            if not nested_path.is_file():
+                missing.append(f"{slcw_file}: {proj_rel}")
+                continue
+            if self._is_excluded_app_path(nested_path):
+                continue
+
+            try:
+                nested_data = yaml.safe_load(nested_path.read_text(encoding="utf-8")) or {}
+            except Exception as e:
+                self.output.warning(f"Skip unreadable nested project {nested_path}: {e}")
+                continue
+
+            if not isinstance(nested_data, dict):
+                continue
+
+            # Do not re-filter by quality: nested projects are required by the
+            # selected workspace even when their own quality differs.
+            self._collect_slc_input_paths(
+                nested_path, nested_data, root, collected, missing
+            )
+
     def _gather_slcp_external_inputs(
         self,
         desired_qualities: list[str],
@@ -375,6 +458,10 @@ class MatterBaseRecipe(ConanFile):
         ../../../../third_party/matter_sdk/... . Those must exist under the
         app package root so CLI generate resolves them the same way as in the
         git tree.
+
+        For selected .slcw files, also collect inputs from nested project .slcp
+        entries so shared bootloaders keep their readmes in quality-filtered
+        packages (e.g. matter_app_internal).
         """
         root = self.repo_root.resolve()
         collected: set[str] = set()
@@ -400,28 +487,12 @@ class MatterBaseRecipe(ConanFile):
             if not self._slc_project_selected(data, desired_qualities, desired_packages):
                 continue
 
-            for rel in self._iter_input_path_entries(data):
-                # Skip bare file_list names (resolved under their include dir).
-                if "/" not in rel and not rel.startswith("."):
-                    continue
+            self._collect_slc_input_paths(slc_file, data, root, collected, missing)
 
-                resolved = (slc_file.parent / rel).resolve()
-                try:
-                    resolved.relative_to(root)
-                except ValueError:
-                    missing.append(f"{slc_file}: {rel} (outside repo)")
-                    continue
-
-                if not resolved.exists():
-                    missing.append(f"{slc_file}: {rel}")
-                    continue
-
-                if resolved.is_file():
-                    collected.add(str(resolved))
-                elif resolved.is_dir():
-                    for file_path in resolved.rglob("*"):
-                        if file_path.is_file():
-                            collected.add(str(file_path))
+            if slc_file.suffix == ".slcw":
+                self._gather_nested_workspace_project_inputs(
+                    slc_file, data, root, collected, missing
+                )
 
         if missing:
             sample = "\n  ".join(missing[:30])

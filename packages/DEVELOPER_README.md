@@ -95,7 +95,7 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.
 - **`packages/matter_internal/conanfile.py`** – Packages `quality: internal` Matter components (`.slcc`) and their inputs; depends on `matter`.
 - **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.
-- **`packages/matter_app_internal/conanfile.py`** – Packages `quality: internal` sample apps; depends on `matter_internal`.
+- **`packages/matter_app_internal/conanfile.py`** – Packages `quality: internal` sample apps; depends on `matter` and `matter_internal`.
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
 - **`slc/script/dependency_versions.yaml`** – Used as a single source of truth for dependencies
 - **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
