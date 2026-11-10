@@ -24,6 +24,7 @@ pipeline
                                 -v "$WORKSPACE:/usr/src" \
                                 sonarsource/sonar-scanner-cli:11 \
                                 -Dsonar.scm.disabled=true \
+                                -Dsonar.branch.name="$BRANCH_NAME" \
                                 -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
                         '''
                     }
