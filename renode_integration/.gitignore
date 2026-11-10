@@ -1,0 +1,7 @@
+out/
+.cache/
+__pycache__/
+renode-src/
+*.save
+*.ext2
+*.dtb

@@ -2,7 +2,8 @@
 """
 Validate that every demos.imageFile in matter_demos.xml has:
   1. A matching .slcw file present in the repository
-  2. A board listed in CI json files that corresponds to the solution
+  2. A board listed in CI (silabs-builds-*.json, or gfw-builder.yaml for
+     generator firmware) that corresponds to the solution
 
 Run from the repository root:
     python3 slc/script/validate_demo_images.py
@@ -80,6 +81,34 @@ def _app_key_from_solution_name(solution_name: str) -> str:
             s = s[: -len(suffix)]
             break
     return s
+
+def gfw_slc_targets(repo_root: Path) -> list[tuple[str, str]]:
+    """SLC matrix from gfw-builder.yaml as (project basename, board id).
+
+    Board values may carry a part (brd1019a,OPN) or an SDK selector
+    (brd4338a;wiseconnect3_sdk). The demo board id is the token before either.
+    """
+    path = repo_root / ".github" / "workflows" / "gfw-builder.yaml"
+    if not path.is_file():
+        return []
+    slc_section = path.read_text(encoding="utf-8").split("\n  build-zephyr:", 1)[0]
+    projects = re.findall(r"(?m)^\s+project:\s+(\S+)", slc_section)
+    boards = re.findall(r"(?m)^\s+board:\s+(\S+)", slc_section)
+    if len(projects) != len(boards):
+        return []
+    targets: list[tuple[str, str]] = []
+    for project, board in zip(projects, boards):
+        board_id = board.split(";")[0].split(",")[0].lower()
+        targets.append((project.rsplit("/", 1)[-1], board_id))
+    return targets
+
+def gfw_boards_for_project(workspace_name: str, repo_root: Path) -> list[str]:
+    """Unique demo board ids built for one generator-firmware workspace."""
+    boards: list[str] = []
+    for name, board_id in gfw_slc_targets(repo_root):
+        if name == workspace_name and board_id not in boards:
+            boards.append(board_id)
+    return boards
 
 def _json_keys_for_solution_name(solution_name: str) -> list[str]:
     """Return list of json file identifiers that CI uses for this solution"""
@@ -159,20 +188,30 @@ def validate(demos_xml: Path, repo_root: Path) -> int:
         if solution_name not in slcw_names:
             errs.append(f"no .slcw found for '{solution_name}'")
 
-        # Board and suffix covered in CI json for this solution type
-        json_keys = _json_keys_for_solution_name(solution_name)
-        if not json_keys:
-            errs.append(f"unknown solution type, cannot determine CI json for '{solution_name}'")
-        else:
-            covered = False
-            for jk in json_keys:
-                p = github_dir / f"silabs-builds-{jk}.json"
-                if p.exists() and _board_covered_in_json(p, app_key, board, solution_name, suffix):
-                    covered = True
-                    break
+        # Generator firmware CI matrix is inline in gfw-builder.yaml, not silabs-builds-*.json.
+        if "generator_firmware" in solution_name:
+            covered = any(
+                name == solution_name and (built == board or built.startswith(board + "_"))
+                for name, built in gfw_slc_targets(repo_root)
+            )
             if not covered:
-                suffix_label = f" (suffix '{suffix}')" if suffix else ""
-                errs.append(f"board '{board}'{suffix_label} not covered in CI json for app '{app_key}' (checked: {', '.join(json_keys)})")
+                errs.append(
+                    f"board '{board}' not covered in gfw-builder.yaml for '{solution_name}'"
+                )
+        else:
+            json_keys = _json_keys_for_solution_name(solution_name)
+            if not json_keys:
+                errs.append(f"unknown solution type, cannot determine CI json for '{solution_name}'")
+            else:
+                covered = False
+                for jk in json_keys:
+                    p = github_dir / f"silabs-builds-{jk}.json"
+                    if p.exists() and _board_covered_in_json(p, app_key, board, solution_name, suffix):
+                        covered = True
+                        break
+                if not covered:
+                    suffix_label = f" (suffix '{suffix}')" if suffix else ""
+                    errs.append(f"board '{board}'{suffix_label} not covered in CI json for app '{app_key}' (checked: {', '.join(json_keys)})")
 
         if errs:
             failures.append(f"FAIL  {board} / {solution_name}{('_' + suffix) if suffix else ''}\n      " + "\n      ".join(errs))

@@ -723,6 +723,26 @@ def readMatterBaseVersion() {
 }
 
 /**
+ * Resolve Conan channel / pkg.slt release-stream and set env.MATTER_PACKAGE_CHANNEL.
+ * Priority: existing MATTER_PACKAGE_CHANNEL, else packages/_shared/release_stream_channel.
+ */
+def resolveMatterPackageChannel() {
+    def channel = env.MATTER_PACKAGE_CHANNEL?.trim()
+    if (!channel) {
+        channel = sh(
+            script: "tr -d '[:space:]' < \"${env.WORKSPACE}/packages/_shared/release_stream_channel\"",
+            returnStdout: true
+        ).trim()
+    }
+    if (!channel) {
+        error('empty packages/_shared/release_stream_channel')
+    }
+    env.MATTER_PACKAGE_CHANNEL = channel
+    echo "MATTER_PACKAGE_CHANNEL=${channel}"
+    return channel
+}
+
+/**
  * Resolve full Matter package version for this build and set env.MATTER_PACKAGE_VERSION.
  * Always <base>-<qualifier>.<N> where N is next from the Conan remote (list +1).
  *   - release_: qualifier from packages/.prerelease, remote silabs-conan-production
@@ -771,6 +791,7 @@ def resolvePackageVersion() {
  * Next prerelease integer for matter/<base>-<qualifier>.N@silabs on the given remote.
  */
 def nextPrereleaseNumberFromRemote(String base, String qualifier, String remoteName, String remoteUrl) {
+    def channel = resolveMatterPackageChannel()
     withCredentials([string(credentialsId: 'artifactory_token', variable: 'ARTIFACTORY_TOKEN')]) {
         setupSltAndConan()
         def nextN = sh(script: """
@@ -784,9 +805,11 @@ REMOTE_NAME='${remoteName}'
 REMOTE_URL='${remoteUrl}'
 BASE_VERSION='${base}'
 QUALIFIER='${qualifier}'
+CHANNEL='${channel}'
 conan remote add -f "\${REMOTE_NAME}" "\${REMOTE_URL}"
 conan remote login "\${REMOTE_NAME}" "\${CONAN_USER}" -p "\${ARTIFACTORY_TOKEN}"
-PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@silabs"
+# Scope to current release stream so .N counters stay independent across channels.
+PATTERN="matter/\${BASE_VERSION}-\${QUALIFIER}.*@silabs/\${CHANNEL}"
 LIST_JSON="\$(conan list "\${PATTERN}" -r "\${REMOTE_NAME}" --format=json 2>/dev/null || echo '{}')"
 python3 -c "
 import json,re,sys
@@ -838,6 +861,7 @@ def readConanPackageOutputJson(String jsonPath = null) {
 def runActionConanCreatePublish(String name, String conanfile, String remoteName, String remoteUrl, String actionDir) {
     def packageVersion = env.MATTER_PACKAGE_VERSION?.trim() ?: ''
     def prereleaseNumber = env.SL_PRERELEASE_NUMBER?.trim() ?: ''
+    def channel = resolveMatterPackageChannel()
     sh("""
         bash <<'EOF'
 set -euo pipefail
@@ -845,14 +869,17 @@ cd "\${WORKSPACE}"
 export PATH="\${HOME}/.local/bin:\${PATH}"
 export CONAN_HOME="\${CONAN_HOME:-\${HOME}/.silabs/slt/installs/conan}"
 export CONAN_HOME
+CHANNEL='${channel}'
+export MATTER_PACKAGE_CHANNEL="\${CHANNEL}"
 echo "CONAN_HOME=\${CONAN_HOME}"
-echo "MATTER_PACKAGE_VERSION=${packageVersion} SL_PRERELEASE_NUMBER=${prereleaseNumber} SL_PRERELEASE=\${SL_PRERELEASE:-}"
+echo "MATTER_PACKAGE_VERSION=${packageVersion} MATTER_PACKAGE_CHANNEL=\${CHANNEL} SL_PRERELEASE_NUMBER=${prereleaseNumber} SL_PRERELEASE=\${SL_PRERELEASE:-}"
 conan remote list
 echo "Running action-conan-create-publish for ${name} (${conanfile})"
 rm -f "\${WORKSPACE}/conan_package_output.json"
 env \\
   "CONAN_HOME=\${CONAN_HOME}" \\
   "MATTER_PACKAGE_VERSION=${packageVersion}" \\
+  "MATTER_PACKAGE_CHANNEL=\${CHANNEL}" \\
   "SL_PRERELEASE_NUMBER=${prereleaseNumber}" \\
   "INPUT_CONANFILE_PATH=${conanfile}" \\
   "INPUT_REMOTE_USERNAME=svc_gsdk" \\
