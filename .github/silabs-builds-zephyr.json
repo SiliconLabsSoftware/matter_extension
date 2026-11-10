@@ -68,11 +68,7 @@
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
                 ]
-            }
-        ]
-    },
-    "full": {
-        "default": [
+            },
             {
                 "board": "xg26_rb4121a",
                 "target": "BRD4121A",
@@ -161,6 +157,10 @@
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"2.0\""
                 ]
             }
+        ]  
+    },
+    "full": {
+        "default": [
         ]
     }
 }
