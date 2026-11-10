@@ -1,0 +1,128 @@
+{
+    "standard": {
+        "default": [
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            }
+        ]
+    },
+    "full": {
+        "default": [
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            }
+        ]
+    },
+    "custom-sqa": {
+        "default": [
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-psram-data",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-psram-data",
+                    "--with toolchain_llvm",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix gcc-lto-psram-data",
+                    "--with_app toolchain_gcc_lto,psram_core,data_segment_in_psram"
+                ]
+            },
+            {
+                "boards": [
+                    "brd4342a"
+                ],
+                "arguments": [
+                    "--output_suffix llvm-lto-psram-data",
+                    "--with toolchain_llvm_lto",
+                    "--with_app psram_core,data_segment_in_psram"
+                ]
+            }
+        ]
+    }
+}
