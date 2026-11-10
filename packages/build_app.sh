@@ -457,7 +457,11 @@ else
   esac
 
   if [[ "${SKIP_GEN}" == false ]]; then
-    if [[ "${PROJECT}" != *wifi_soc* && "${GENERATE_BOOTLOADER}" == true ]]; then
+    HAS_BOOTLOADER_PROJECT=false
+    if grep -qE '^[[:space:]]*id:[[:space:]]*bootloader[[:space:]]*$' "${PROJECT_PATH}"; then
+      HAS_BOOTLOADER_PROJECT=true
+    fi
+    if [[ "${HAS_BOOTLOADER_PROJECT}" == true && "${GENERATE_BOOTLOADER}" == true ]]; then
       run_generate bootloader "${WITH_BOOTLOADER_COMPONENTS}" "${WITHOUT_BOOTLOADER_COMPONENTS}"
     fi
     if [[ "${GENERATE_TRUSTZONE}" == true ]]; then

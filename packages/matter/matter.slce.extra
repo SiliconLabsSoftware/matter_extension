@@ -216,6 +216,7 @@ components:
   - matter_nlio
   - matter_no_debug
   - matter_no_lcd_shell
+  - matter_nvm3_runtime_backend
   - matter_occupancy_sensor
   - matter_on_off
   - matter_onoff_plug
@@ -370,6 +371,7 @@ extra_files:
   - packages/.prerelease
   - packages/DEVELOPER_README.md
   - packages/_shared/base_recipe.py
+  - packages/_shared/release_stream_channel
   - packages/build_app.sh
   - packages/matter/conanfile.py
   - packages/matter/matter.slce.extra
@@ -671,6 +673,7 @@ extra_files:
   - slc/component/matter-platform/matter_platform_siwx917.slcc
   - slc/component/matter-platform/memory-monitoring/matter_memory_monitoring.slcc
   - slc/component/matter-platform/mmic/matter_ncp.slcc
+  - slc/component/matter-platform/nvm3/matter_nvm3_runtime_backend.slcc
   - slc/component/matter-platform/ota/matter_multi_image_custom_processor.slcc
   - slc/component/matter-platform/ota/matter_multi_image_ota.slcc
   - slc/component/matter-platform/ota/matter_multi_image_ota_encryption.slcc
@@ -753,7 +756,6 @@ extra_files:
   - slc/script/gsdk_matter.patch
   - slc/script/hwfilter-config.yml
   - slc/script/list_header_files.py
-  - packages/_shared/release_stream_channel
   - slc/script/matter_package_version
   - slc/script/metadata-generation.yml
   - slc/script/remove_obsolete_cluster_components.py
@@ -788,6 +790,11 @@ extra_files:
   - src/app/zap-templates/templates/app/slc_compatibility/metadata.zapt
   - src/app/zap-templates/templates/app/slc_compatibility/static-cluster-config.h.zapt
   - src/app/zap-templates/zcl/zcl.json
+  - tools/code_size_tools/code_size_viewer.py
+  - tools/code_size_tools/csv_parser.py
+  - tools/code_size_tools/html_report.py
+  - tools/code_size_tools/map_parser.py
+  - tools/code_size_tools/requirements.txt
   - tools/console/README.md
   - tools/console/console_log_parser.py
   - tools/console/console_ui.py

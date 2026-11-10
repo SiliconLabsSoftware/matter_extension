@@ -31,6 +31,9 @@ requires:
       - brd4343c
   - name: matter_lcd_917SOC
     condition:
+      - brd4343s
+  - name: matter_lcd_917SOC
+    condition:
       - brd9084b
   - name: matter_lcd_917SOC
     condition:

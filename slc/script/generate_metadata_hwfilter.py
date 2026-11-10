@@ -161,6 +161,12 @@ def boards_for_workspace_from_records(
     if not records:
         return []
 
+    if ci_source == "gfw-builder":
+        # Generator firmware boards come from the workflow matrix, not silabs-builds-*.json.
+        from validate_demo_images import gfw_boards_for_project
+
+        return gfw_boards_for_project(workspace_name, _SCRIPT_DIR.parents[1])
+
     if ci_source in CI_SOURCE_JSON_GLOBS:
         pattern = CI_SOURCE_JSON_GLOBS[ci_source]
         json_files = [r for r in records if fnmatch.fnmatch(r.name, pattern)]
