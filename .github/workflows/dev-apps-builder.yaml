@@ -1,8 +1,9 @@
 name: Build Dev apps
 
 # Test-branch trim: Wi-Fi SoC PSRAM matrix only (lighting + lock).
-# Boards/flavors live in .github/silabs-builds-siwx.json
-#   brd4342a + brd4343s x gcc / llvm / gcc-lto / llvm-lto (+ psram-text-data)
+# Flavors split across 8 JSON shards, run in parallel:
+#   .github/silabs-builds-siwx-psram-{1..8}.json
+#   brd4342a x gcc / llvm / gcc-lto / llvm-lto (+ every text/data/bss combo)
 
 on:
     pull_request:
@@ -76,29 +77,21 @@ jobs:
             - uses: ./.github/actions/cache-sdks
               id: cache-sdks
 
-    build_lighting_app:
-        name: Build Lighting App (SiWx PSRAM)
+    build_psram:
+        name: ${{ matrix.example-app }} psram-${{ matrix.shard }}
         needs: [set-build-type, cache-tools, cache-sdks]
-        uses: ./.github/workflows/platform-builder.yaml
+        strategy:
+            fail-fast: false
+            matrix:
+                example-app: [lighting_app, lock_app]
+                shard: [1, 2, 3, 4, 5, 6, 7, 8]
+        uses: ./.github/workflows/builder.yaml
         with:
-            example-app: "lighting_app"
+            json-file-path: './.github/silabs-builds-siwx-psram-${{ matrix.shard }}.json'
+            path-to-example-app: slc/apps/${{ matrix.example-app }}/wifi/matter_wifi_soc_${{ matrix.example-app }}_freertos.slcw
+            example-app: ${{ matrix.example-app }}
             build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
-            wifi-soc-support: true
-            ncp-917-support: false
-            trustzone-support: false
-
-    build_lock_app:
-        name: Build Lock App (SiWx PSRAM)
-        needs: [set-build-type, cache-tools, cache-sdks]
-        uses: ./.github/workflows/platform-builder.yaml
-        with:
-            example-app: "lock_app"
-            build-type: ${{ needs.set-build-type.outputs.build-type }}
-            thread-support: false
-            wifi-soc-support: true
-            ncp-917-support: false
-            trustzone-support: false
+            platform: siwx-soc-psram-${{ matrix.example-app }}-${{ matrix.shard }}
 
     merge-apps:
         name: Merge App Artifacts
@@ -107,8 +100,7 @@ jobs:
             - set-build-type
             - cache-tools
             - cache-sdks
-            - build_lighting_app
-            - build_lock_app
+            - build_psram
         if: success()
 
         steps:
