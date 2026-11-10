@@ -267,6 +267,17 @@ pipeline
                 }
             }
         }
+        stage('Trigger SQA Zephyr Pipelines')
+        {
+            when {
+                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "trigger_zephyr_pipelines" }
+            }
+            steps {
+                script {
+                    pipelineFunctions.trigger_sqa_zephyr_pipelines()
+                }
+            }
+        }
         stage('Create and Publish Matter Packages') {
             steps {
                 script {
@@ -355,17 +366,17 @@ pipeline
                 }
             }
         }
-        stage('Trigger SQA Zephyr Pipelines')
-        {
-            when {
-                expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "trigger_zephyr_pipelines" }
-            }
-            steps {
-                script {
-                    pipelineFunctions.trigger_sqa_zephyr_pipelines()
-                }
-            }
-        }
+//         stage('Trigger SQA Zephyr Pipelines')
+//         {
+//             when {
+//                 expression { env.BRANCH_NAME.startsWith("release_") || env.BRANCH_NAME == "trigger_zephyr_pipelines" }
+//             }
+//             steps {
+//                 script {
+//                     pipelineFunctions.trigger_sqa_zephyr_pipelines()
+//                 }
+//             }
+//         }
     }
     post {
         failure {
