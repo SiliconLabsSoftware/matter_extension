@@ -206,7 +206,7 @@ jobs:
       - name: Publish common to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          ./renode_integration/scripts/publish_bundle.py common
+          ./renode_integration/scripts/publish_bundle.py --bundle common
 
   build-runtime:
     needs:
@@ -273,7 +273,7 @@ jobs:
         run: ./renode_integration/harness/smoke_test_checkpoint.py
 
       - name: Package runtime bundle
-        run: ./renode_integration/scripts/publish_bundle.py prepare runtime
+        run: ./renode_integration/scripts/publish_bundle.py --bundle runtime --action prepare
 
       - name: Upload runtime bundle
         uses: actions/upload-artifact@v7
@@ -322,4 +322,4 @@ jobs:
       - name: Publish runtime to GHCR
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          ./renode_integration/scripts/publish_bundle.py push runtime
+          ./renode_integration/scripts/publish_bundle.py --bundle runtime --action push
