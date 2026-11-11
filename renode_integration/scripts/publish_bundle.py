@@ -4,14 +4,14 @@
 @brief Package a common or runtime bundle and push it to GHCR with ORAS.
 
 Usage:
-  publish_bundle.py common|runtime
-  publish_bundle.py prepare|push common|runtime
+  publish_bundle.py --bundle common|runtime
+  publish_bundle.py --bundle common|runtime --action prepare|push
 """
 
+import argparse
 import os
 import shutil
 import subprocess
-import sys
 import tarfile
 
 import common
@@ -82,16 +82,28 @@ def push(kind):
     print(f"Published {package}:{tag}")
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Package a common or runtime bundle and push it to GHCR with ORAS.",
+    )
+    parser.add_argument(
+        "--bundle",
+        required=True,
+        choices=("common", "runtime"),
+        help="bundle to package and publish",
+    )
+    parser.add_argument(
+        "--action",
+        choices=("prepare", "push"),
+        default="both",
+        help="prepare archive and/or push to GHCR (default: both)",
+    )
+    return parser.parse_args()
+
+
 def main():
-    usage = "usage: publish_bundle.py [prepare|push] common|runtime"
-    if len(sys.argv) == 2:
-        action, kind = "both", sys.argv[1]
-    elif len(sys.argv) == 3:
-        action, kind = sys.argv[1:]
-    else:
-        common.die(usage)
-    if action not in ("both", "prepare", "push") or kind not in ("common", "runtime"):
-        common.die(usage)
+    args = parse_args()
+    action, kind = args.action, args.bundle
     if action in ("both", "prepare"):
         prepare(kind)
     if action in ("both", "push"):
