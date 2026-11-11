@@ -48,7 +48,6 @@ component:
   - id: matter_operational_credentials
   - id: matter_ota_requestor
   - id: matter_https_ota
-
   - id: matter_software_diagnostics
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
@@ -61,6 +60,8 @@ component:
   - id: matter_dual_stack
   - id: matter_service_http_offload
   - id: matter_service_mqtt
+  - id: matter_mqtt_bridge
+    condition: [matter_service_mqtt]
   - id: paho_mqtt_embedded
 
   # Override configuration for JTAG use
