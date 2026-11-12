@@ -376,9 +376,10 @@ upgrade:
         description: >
           Adding the watchdog_manager component to Matter Thread projects
         add:
-           - watchdog_manager
+           - id: watchdog_manager
+             vendor: silabs
       - trigger: matter_provision_default
         description: >
           Adding matter_use_ctm component to Matter MG projects using matter_provision_default
         add:
-           - matter_use_ctm
+           - id: matter_use_ctm
