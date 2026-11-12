@@ -54,7 +54,7 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttTopic.cpp
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttValueConverter.cpp
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MqttClientTransportPort.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/adapters/ClusterAdapterRegistry.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/ClusterAdapterRegistry.cpp
   - path: third_party/matter_sdk/examples/thermostat/silabs/src/ThermostatMqttBridgeConfig.cpp
   - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/DoorLockAdapter.cpp
   - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/OnOffAdapter.cpp
