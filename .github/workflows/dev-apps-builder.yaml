@@ -183,17 +183,17 @@ jobs:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
             wifi-soc-support: false
 
-    build_zigbee_light:
-       name: Build Zigbee Light App
-       needs: [set-build-type, cache-tools, cache-sdks]
-       uses: ./.github/workflows/platform-builder.yaml
-       with:
-           example-app: "zigbee_light"
-           build-type: ${{ needs.set-build-type.outputs.build-type }}
-           mg24-internal-support: false
-           mgm24-support: false
-           mgm24-internal-support: false
-           wifi-soc-support: false
+    # build_zigbee_light:
+    #    name: Build Zigbee Light App
+    #    needs: [set-build-type, cache-tools, cache-sdks]
+    #    uses: ./.github/workflows/platform-builder.yaml
+    #    with:
+    #        example-app: "zigbee_light"
+    #        build-type: ${{ needs.set-build-type.outputs.build-type }}
+    #        mg24-internal-support: false
+    #        mgm24-support: false
+    #        mgm24-internal-support: false
+    #        wifi-soc-support: false
     build_wake_on_matter_app:
        name: Build Wake on Matter App
        needs: [set-build-type, cache-tools, cache-sdks]
@@ -286,7 +286,6 @@ jobs:
             - build_evse_app
             - build_performance_test_app
             - build_platform_template
-            - build_zigbee_light
             - build_closure_app
             - build_oven_app
             - build_rangehood_app
