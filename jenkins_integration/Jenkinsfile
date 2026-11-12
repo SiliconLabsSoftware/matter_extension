@@ -290,9 +290,12 @@ pipeline
                         pipelineFunctions.writePrereleaseLabel()
 
                         def refs = []
+                        // Dependency order: matter -> matter_internal -> matter_app / matter_app_internal
                         [
-                            [name: 'matter',     recipe: "${env.WORKSPACE}/packages/matter/conanfile.py"],
-                            [name: 'matter_app', recipe: "${env.WORKSPACE}/packages/matter_app/conanfile.py"],
+                            [name: 'matter',              recipe: "${env.WORKSPACE}/packages/matter/conanfile.py"],
+                            [name: 'matter_internal',     recipe: "${env.WORKSPACE}/packages/matter_internal/conanfile.py"],
+                            [name: 'matter_app',          recipe: "${env.WORKSPACE}/packages/matter_app/conanfile.py"],
+                            [name: 'matter_app_internal', recipe: "${env.WORKSPACE}/packages/matter_app_internal/conanfile.py"],
                         ].each { pkg ->
                             pipelineFunctions.runActionConanCreatePublish(
                                 pkg.name, pkg.recipe, remoteName, remoteUrl, actionDir
@@ -305,7 +308,7 @@ pipeline
                             refs << fullRef
                             echo "Captured full_package_ref for ${pkg.name}: ${fullRef}"
 
-                            // Share prerelease number with matter_app so versions match
+                            // Share prerelease number across packages so versions match
                             if (!env.SL_PRERELEASE_NUMBER?.trim() && pkgInfo.prerelease_number) {
                                 env.SL_PRERELEASE_NUMBER = pkgInfo.prerelease_number.toString()
                                 echo "SL_PRERELEASE_NUMBER=${env.SL_PRERELEASE_NUMBER}"

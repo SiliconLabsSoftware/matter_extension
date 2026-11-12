@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build a Matter sample from installed Conan/SLT packages (matter + matter_app).
+# Build a Matter sample from installed Conan/SLT packages (matter + app package).
 #
 # Independent of a git checkout: no --export and no submodule updates.
 # Installs SLT tools (conan, slc-cli, zap) and OS packages (make, find) as needed.
@@ -9,15 +9,18 @@
 #   ./packages/build_app.sh matter_wifi_soc_lighting_app_freertos.slcw brd4338a
 #   ./packages/build_app.sh --slcp <name>.slcp --board <board> --version 2.10.0-alpha.8
 #   "$(slt where matter_app)/build_app.sh" --project <name>.slcp --board <board>
+#   MATTER_APP_PACKAGE=matter_app_internal "$(slt where matter_app_internal)/build_app.sh" ...
 #
 # Options:
 #   --project NAME           Sample .slcp/.slcw basename (required)
 #   --slcp NAME              Alias for --project
 #   --board BOARD            Board id, e.g. brd4338a (required)
-#   --version VER            matter_app version to install (default: env MATTER_PACKAGE_VERSION
+#   --version VER            App package version to install (default: env MATTER_PACKAGE_VERSION
 #                            or 2.10.0)
 #   --channel CHANNEL        Conan channel (default: env MATTER_PACKAGE_CHANNEL or
 #                            packages/_shared/release_stream_channel)
+#   --app-package NAME       App Conan package: matter_app or matter_app_internal
+#                            (default: env MATTER_APP_PACKAGE or matter_app)
 #   --output_suffix SUFFIX   Append a suffix to the output directory
 #   --with_app COMPONENTS    Add components to the application
 #   --without_app COMPONENTS Remove components from the application
@@ -57,6 +60,7 @@ CHANNEL_DEFAULT="$(tr -d '[:space:]' < "${_channel_file}")"
 VERSION_DEFAULT="2.10.0"
 MATTER_PACKAGE_VERSION="${MATTER_PACKAGE_VERSION:-${VERSION_DEFAULT}}"
 MATTER_PACKAGE_CHANNEL="${MATTER_PACKAGE_CHANNEL:-${CHANNEL_DEFAULT}}"
+MATTER_APP_PACKAGE="${MATTER_APP_PACKAGE:-matter_app}"
 PROJECT=""
 BOARD=""
 JOBS=8
@@ -131,6 +135,11 @@ while [[ $# -gt 0 ]]; do
     --channel)
       MATTER_PACKAGE_CHANNEL="${2:-}"
       [[ -n "${MATTER_PACKAGE_CHANNEL}" ]] || die "--channel needs a value"
+      shift 2
+      ;;
+    --app-package)
+      MATTER_APP_PACKAGE="${2:-}"
+      [[ -n "${MATTER_APP_PACKAGE}" ]] || die "--app-package needs a value"
       shift 2
       ;;
     --output_suffix)
@@ -258,9 +267,15 @@ fi
 
 export MATTER_PACKAGE_VERSION
 export MATTER_PACKAGE_CHANNEL
-REF="matter_app/${MATTER_PACKAGE_VERSION}@silabs/${MATTER_PACKAGE_CHANNEL}"
+export MATTER_APP_PACKAGE
+case "${MATTER_APP_PACKAGE}" in
+  matter_app | matter_app_internal) ;;
+  *) die "--app-package / MATTER_APP_PACKAGE must be matter_app or matter_app_internal (got: ${MATTER_APP_PACKAGE})" ;;
+esac
+REF="${MATTER_APP_PACKAGE}/${MATTER_PACKAGE_VERSION}@silabs/${MATTER_PACKAGE_CHANNEL}"
 echo "MATTER_PACKAGE_VERSION=${MATTER_PACKAGE_VERSION}"
 echo "MATTER_PACKAGE_CHANNEL=${MATTER_PACKAGE_CHANNEL}"
+echo "MATTER_APP_PACKAGE=${MATTER_APP_PACKAGE}"
 
 need_cmd slt
 
@@ -336,11 +351,13 @@ export POST_BUILD_EXE
 echo "Installing ${REF} via SLT..."
 slt install "${REF}" -e conan
 
-MATTER_APP="$(slt where matter_app)"
+APP_PKG_ROOT="$(slt where "${MATTER_APP_PACKAGE}")"
 MATTER="$(slt where matter)"
-[[ -n "${MATTER_APP}" ]] || die "slt where matter_app returned empty"
+[[ -n "${APP_PKG_ROOT}" ]] || die "slt where ${MATTER_APP_PACKAGE} returned empty"
 [[ -n "${MATTER}" ]] || die "slt where matter returned empty"
-echo "MATTER_APP=${MATTER_APP}"
+# Legacy alias used by callers/docs that expect MATTER_APP as the app package root.
+MATTER_APP="${APP_PKG_ROOT}"
+echo "APP_PKG_ROOT=${APP_PKG_ROOT} (${MATTER_APP_PACKAGE})"
 echo "MATTER=${MATTER}"
 
 print_pkg_meta_version() {
@@ -354,19 +371,19 @@ print_pkg_meta_version() {
   echo "${label} package version=${ver:-unknown}"
 }
 
-print_pkg_meta_version "${MATTER_APP}" "matter_app"
+print_pkg_meta_version "${APP_PKG_ROOT}" "${MATTER_APP_PACKAGE}"
 print_pkg_meta_version "${MATTER}" "matter"
 
 # Accept repo-relative paths (matter_build_action / slc/build.sh style) or basenames.
-if [[ -f "${MATTER_APP}/${PROJECT}" ]]; then
-  PROJECT_PATH="${MATTER_APP}/${PROJECT}"
+if [[ -f "${APP_PKG_ROOT}/${PROJECT}" ]]; then
+  PROJECT_PATH="${APP_PKG_ROOT}/${PROJECT}"
 elif [[ -f "${PROJECT}" ]]; then
   PROJECT_PATH="${PROJECT}"
 else
   PROJECT_BASENAME="$(basename "${PROJECT}")"
-  PROJECT_PATH="$(find "${MATTER_APP}" -type f -name "${PROJECT_BASENAME}" 2>/dev/null | head -n1 || true)"
+  PROJECT_PATH="$(find "${APP_PKG_ROOT}" -type f -name "${PROJECT_BASENAME}" 2>/dev/null | head -n1 || true)"
 fi
-[[ -n "${PROJECT_PATH}" ]] || die "could not find ${PROJECT} under ${MATTER_APP}"
+[[ -n "${PROJECT_PATH}" ]] || die "could not find ${PROJECT} under ${APP_PKG_ROOT}"
 PROJECT="$(basename "${PROJECT_PATH}")"
 
 APP_DIR="$(dirname "${PROJECT_PATH}")"
