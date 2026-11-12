@@ -103,6 +103,7 @@ include:
     -   path: SoftwareFaultReports.h
     -   path: silabs_utils.h
     -   path: MatterConfig.h
+    -   path: SilabsTimeSyncDelegate.h
     -   path: CRTPHelpers.h
     -   path: LEDWidget.h
     -   path: sl_systemview_config.h
@@ -134,6 +135,7 @@ include:
       - path: BlePlatformConfig.h
       - path: KeyValueStoreManagerImpl.h
       - path: SystemPlatformConfig.h
+      - path: SystemTimeSupport.h
   - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction
     file_list:
       - path: SilabsPlatformBase.h
@@ -157,7 +159,6 @@ include:
       - path: OpenThreadDnssdImpl.h
   - path: third_party/matter_sdk/src/platform/FreeRTOS
     file_list:
-      - path: SystemTimeSupport.h
       - path: GenericThreadStackManagerImpl_FreeRTOS.h
       - path: GenericThreadStackManagerImpl_FreeRTOS.hpp
 label: efr32
@@ -169,7 +170,7 @@ metadata:
   sbom:
     license: "Apache 2.0"
 source:
-  - path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/SystemTimeSupport.cpp
   - path: third_party/matter_sdk/src/platform/OpenThread/DnssdImpl.cpp
   - path: third_party/matter_sdk/src/platform/OpenThread/OpenThreadDnssdImpl.cpp
   - path: third_party/matter_sdk/src/platform/OpenThread/OpenThreadUtils.cpp
