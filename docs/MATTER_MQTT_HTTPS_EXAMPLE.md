@@ -9,7 +9,7 @@ Build a SiWx917 BRD4338A Wi-Fi Thermostat app to evaluate:
 - **Live MQTT** — stay connected (idle auto-yield); subscribe/publish via Matter shell; receive inbound publishes
 - **HTTPS** — GET / PUT / POST via Matter shell after client init
 
-This demo uses TLS 1.2 for authentication and FreeRTOS Heap4 for memory management.
+This demo uses TLS 1.2 for authentication and FreeRTOS Heap3 for memory management.
 TLS 1.3 is only supported for the HTTPs client, but not on the MQTTs client.
 
 **Project name:** `matter_wifi_soc_thermostat_dual_stack_freertos`
@@ -19,10 +19,10 @@ TLS 1.3 is only supported for the HTTPs client, but not on the MQTTs client.
 Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
 
 1. On `kInternetConnectivityChange` (IPv4, or IPv6 when dual-stack is enabled), `AppTask::MatterServicesEventHandler` posts work to the AppTask thread.
-2. `mqtt_client_demo_start()` — Start / Init / Connect. The MQTT service thread idle-yields for keepalive and inbound messages; the session stays up.
+2. `mqtt_client_demo_start()` — Start / Init; Connect runs from `OnInitDone`. The MQTT service thread idle-yields for keepalive and inbound messages; the session stays up.
 3. `https_client_demo_start()` — Start / Init only (default NWP certificate index; no hardcoded index).
 4. On `kWiFiConnectivityChange` with `kConnectivity_Lost`, `mqtt_client_demo_stop()` disconnects MQTT (Start/Init kept for reconnect).
-5. Matter shell (`demo mqtt` / `demo http`) posts subscribe/publish or HTTPS PUT/GET/POST onto the AppTask thread so blocking work does not starve the CHIP stack.
+5. Matter shell (`demo mqtt` / `demo http`) posts Subscribe/Publish or HTTPS PUT/GET/POST onto the AppTask thread so blocking work does not starve the CHIP stack.
 
 ## Adding Wi-Fi and Matter Extension in Studio
 
@@ -106,18 +106,18 @@ These prints are for observing connectivity and commissioning while MQTT/HTTPS r
 
 Add these `#define`s near the top of the file (before the `#ifndef` / `#error` checks). Values must match your LAN broker:
 
-| Symbol              | Description                                                                                                           |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| `MQTT_BROKER_IP`    | Device connects to this IPv4 address for MQTTS. Must be reachable from the board.                                     |
-| `MQTT_TLS_HOSTNAME` | Hostname used for TLS certificate check (CN/SAN). Not used as the IP. Must match the broker certificate or TLS fails. |
-| `MQTT_BROKER_PORT`  | MQTTS TCP port.                                                                                                       |
+| Symbol                 | Description                                                                                                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MQTT_BROKER_ENDPOINT` | DNS name or IPv4 string for MQTTS connect. Literals use `sl_net_inet_addr`; otherwise DNS resolve. Must be reachable from the board.                        |
+| `MQTT_TLS_HOSTNAME`    | Hostname for TLS SNI / cert check (CN/SAN). If not provided (`nullptr`), `MqttClient` uses `MQTT_BROKER_ENDPOINT`. Must match the broker cert or TLS fails. |
+| `MQTT_BROKER_PORT`     | MQTTS TCP port.                                                                                                                                             |
 
-Optional overrides (defaults exist via `#ifndef`): `MQTT_USERNAME`, `MQTT_PASSWORD`, `MQTT_TOPIC`, `MQTT_PUBLISH_MESSAGE`.
+Optional overrides (defaults exist via `#ifndef`): `MQTT_USERNAME`, `MQTT_PASSWORD`, `MQTT_TOPIC`, `MQTT_PUBLISH_MESSAGE`, `MQTT_CLIENT_ID`, `MQTT_CLIENT_PORT`.
 
 Example (replace with your broker values):
 
 ```c
-#define MQTT_BROKER_IP ""
+#define MQTT_BROKER_ENDPOINT ""
 #define MQTT_TLS_HOSTNAME ""
 #define MQTT_BROKER_PORT 8883
 #define MQTT_TOPIC "MQTT_TOPIC"
@@ -135,19 +135,19 @@ Inbound publishes are delivered through `MqttClient::SetSubscriptionCallback` (`
 
 Add these `#define`s near the top of the file (before the `#ifndef` / `#error` checks). Values must match your LAN HTTPS server:
 
-| Symbol           | Description                                                                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------------- |
-| `HTTP_SERVER_IP` | Device connects to this IPv4 address for HTTPS. Must be reachable from the board.                       |
-| `HTTP_HOSTNAME`  | Hostname used for TLS certificate check (CN/SAN / SNI). Must match the server certificate or TLS fails. |
-| `HTTP_PORT`      | HTTPS TCP port.                                                                                         |
+| Symbol                 | Description                                                                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `HTTP_SERVER_ENDPOINT` | DNS name or IPv4 of the HTTPS server. Must be reachable from the board.                                                                                      |
+| `HTTP_TLS_HOSTNAME`    | Hostname for TLS SNI / Host header (CN/SAN). If not provided (`nullptr`), `HttpClient` uses `HTTP_SERVER_ENDPOINT`. Must match the server cert or TLS fails. |
+| `HTTP_PORT`            | HTTPS TCP port.                                                                                                                                              |
 
-Optional overrides (defaults exist via `#ifndef`): `HTTP_USER`, `HTTP_PASS`.
+Optional overrides (defaults exist via `#ifndef`): `HTTP_USER`, `HTTP_PASS`, `HTTP_URL`, `HTTP_POST_DATA`.
 
 Example (replace with your server values):
 
 ```c
-#define HTTP_SERVER_IP ""
-#define HTTP_HOSTNAME ""
+#define HTTP_SERVER_ENDPOINT ""
+#define HTTP_TLS_HOSTNAME ""
 #define HTTP_PORT 8443
 ```
 
@@ -197,25 +197,25 @@ Edit before build. Point defaults at **your** LAN.
 
 ### MQTT — `mqtt_example.h`
 
-| Field        | `#define`                         | Demo default           | Customer need to set     |
-| ------------ | --------------------------------- | ---------------------- | ------------------------ |
-| Broker IP    | `MQTT_BROKER_IP`                  | ``                     | MQTTS broker IPv4        |
-| TLS hostname | `MQTT_TLS_HOSTNAME`               | ``                     | Matches broker cert      |
-| Port         | `MQTT_BROKER_PORT`                | ``                     | MQTTS port               |
-| User / pass  | `MQTT_USERNAME` / `MQTT_PASSWORD` | `john` / `doe`         | Broker auth              |
-| Topic        | `MQTT_TOPIC`                      | `MQTT_TOPIC`           | Align with MQTT Explorer |
-| Publish body | `MQTT_PUBLISH_MESSAGE`            | `MQTT_PUBLISH_MESSAGE` | Payload you expect       |
-| CA           | `kCaCertExample[]` in `cacert.h`  | Broker CA              |                          |
+| Field           | `#define`                         | Demo default           | Customer need to set                    |
+| --------------- | --------------------------------- | ---------------------- | --------------------------------------- |
+| Broker endpoint | `MQTT_BROKER_ENDPOINT`            | ``                     | MQTTS DNS name or IPv4                  |
+| TLS hostname    | `MQTT_TLS_HOSTNAME`               | ``                     | Matches broker cert; else endpoint used |
+| Port            | `MQTT_BROKER_PORT`                | ``                     | MQTTS port                              |
+| User / pass     | `MQTT_USERNAME` / `MQTT_PASSWORD` | `john` / `doe`         | Broker auth                             |
+| Topic           | `MQTT_TOPIC`                      | `MQTT_TOPIC`           | Align with MQTT Explorer                |
+| Publish body    | `MQTT_PUBLISH_MESSAGE`            | `MQTT_PUBLISH_MESSAGE` | Payload you expect                      |
+| CA              | `kCaCertExample[]` in `cacert.h`  | Broker CA              |                                         |
 
 ### HTTPS — `https_offload_example.h`
 
-| Field     | `#define`                        | Demo default   | Customer need to set |
-| --------- | -------------------------------- | -------------- | -------------------- |
-| Server IP | `HTTP_SERVER_IP`                 | ``             | HTTPS server IPv4    |
-| Hostname  | `HTTP_HOSTNAME`                  | ``             | Matches server cert  |
-| Port      | `HTTP_PORT`                      | ``             | HTTPS port           |
-| Auth      | `HTTP_USER` / `HTTP_PASS`        | `john` / `doe` | Auth                 |
-| CA        | `kCaCertExample[]` in `cacert.h` | Server CA      |                      |
+| Field           | `#define`                        | Demo default   | Customer need to set                    |
+| --------------- | -------------------------------- | -------------- | --------------------------------------- |
+| Server endpoint | `HTTP_SERVER_ENDPOINT`           | ``             | HTTPS DNS name or IPv4                  |
+| TLS hostname    | `HTTP_TLS_HOSTNAME`              | ``             | Matches server cert; else endpoint used |
+| Port            | `HTTP_PORT`                      | ``             | HTTPS port                              |
+| Auth            | `HTTP_USER` / `HTTP_PASS`        | `john` / `doe` | Auth                                    |
+| CA              | `kCaCertExample[]` in `cacert.h` | Server CA      |                                         |
 
 ### HTTPS OTA — sl_matter_https_ota_config.h
 
@@ -298,18 +298,18 @@ After Wi-Fi is up, wait for connectivity-driven start. Expect logs similar to:
 
 ```text
 Scheduling Matter Services initialization
-MQTT client initialized
-MQTT demo starting
-MQTT connecting to broker <broker-ip> port 8883 (TLS=yes)
-MQTT TCP/TLS connection established
-MQTT connected
-MQTT ready (use demo mqtt for subscribe/publish)
+MQTT demo: starting service
+MQTT demo: initializing client
+[MQTT] connecting to broker <broker-endpoint> port 8883 (TLS=yes)
+MQTT demo: ready (use demo mqtt for subscribe/publish)
 ```
+
+Connect runs from the Init completion callback (`OnInitDone`) during `mqtt_client_demo_start()`, not from the shell.
 
 1. Subscribe on the host to your topic (example uses `MQTT_TOPIC`) **before** running `demo mqtt`:
 
 ```bash
- mosquitto_sub -h <IP> -p 8883 --cafile ca.crt -t MQTT_TOPIC -v
+ mosquitto_sub -h <IP-or-hostname> -p 8883 --cafile ca.crt -t MQTT_TOPIC -v
 ```
 
 2. On the device Matter shell:
@@ -324,12 +324,10 @@ MQTT ready (use demo mqtt for subscribe/publish)
 **MQTT demo logs on device (after** `demo mqtt`**):**
 
 ```text
-[info][DL] MQTT subscribed to MQTT_TOPIC
-[info][DL] MQTT published to MQTT_TOPIC
-[info][DL] MQTT demo completed (auto-yield keeps session alive)
-[info][DL] MQTT message received on topic: MQTT_TOPIC
-[info][DL] MQTT message: <payload from broker>
-[info][DL] MQTT demo message on MQTT_TOPIC: <payload from broker>
+[info][DL] MQTT demo: subscribing to topic MQTT_TOPIC
+[info][DL] MQTT demo: publishing message to topic MQTT_TOPIC
+[info][DL] MQTT demo: completed (auto-yield keeps session alive)
+[info][DL] MQTT demo: message on MQTT_TOPIC: <payload from broker>
 ```
 
 You can run `demo mqtt` again later; if already connected, Connect is skipped and Subscribe/Publish run again.
@@ -507,3 +505,7 @@ Changes reflected in this guide:
 | `5326af6972d` (#1221) | MQTT Start/Init/Connect runs on the AppTask thread; disconnect on Wi-Fi loss with reconnect on next connectivity event.                                                                                                                   |
 | `343012841fc` (#1216) | Matter shell `demo mqtt` / `demo http` post Subscribe/Publish and HTTPS PUT/GET/POST to AppTask (shell no longer blocks on the demo).                                                                                                     |
 | Doc update            | How-to-test rewritten around Matter shell; MQTT receive documented as working; HTTPS CA index log updated to default (`0`); pass criteria require shell-driven MQTT and HTTPS.                                                            |
+| `8b4fdab490` (#1239)  | MQTT DNS: `MQTT_BROKER_IP` replaced by `MQTT_BROKER_ENDPOINT` (IPv4 literal or hostname). Connect resolves via DNS when not a literal. If `MQTT_TLS_HOSTNAME` is unset (`nullptr`), TLS uses the endpoint.                                |
+| `8917ac3322` (#1279)  | HTTPS DNS: `HTTP_SERVER_IP` / `HTTP_HOSTNAME` replaced by `HTTP_SERVER_ENDPOINT` / `HTTP_TLS_HOSTNAME`. Request path resolves via DNS when not a literal. If TLS hostname is unset (`nullptr`), TLS / Host uses the endpoint.             |
+| `9ecd72f5` (#1070)    | SiWx917 Matter platform switches FreeRTOS heap from Heap4 to Heap3 (`freertos_heap_3`).                                                                                                                                                   |
+| Doc update            | Guide aligned to current demo: endpoint + DNS config, TLS-hostname fallback, Heap3, Matter-shell how-to-test, and refreshed MQTT start/log strings.                                                                                       |
