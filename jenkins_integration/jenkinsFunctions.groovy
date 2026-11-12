@@ -470,7 +470,37 @@ def parse_test_results_failures(output) {
     }
     return [failedTests: failedTests, failedCount: failedCount]
 }
-
+def trigger_sqa_zephyr_pipelines()
+{
+    if(sqaFunctions.isProductionJenkinsServer())
+    {
+        def zephyr_list = ['feature-thread', 'feature-wifi']
+        def errorOccurred = false
+        try{
+            sshagent(['svc_gsdk-ssh']) {
+                if (!fileExists('sqa-pipelines')) {
+                    sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
+                }
+                zephyr_list.each { zephyr_type ->
+                    dir('sqa-pipelines') {
+                        try{
+                            sqaFunctions.commitToMatterSqaPipelines(zephyr_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                        } catch (e) {
+                            unstable("Error when triggering ${zephyr_type}: ${e.message}")
+                            errorOccurred = true
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            unstable("Error when triggering SQA pipelines: ${e.message}")
+            errorOccurred = true
+        }
+        if (errorOccurred) {
+            currentBuild.result = 'UNSTABLE'
+        }
+    }
+}
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
