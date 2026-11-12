@@ -8,6 +8,7 @@ Build a SiWx917 BRD4338A Wi-Fi Thermostat app to evaluate:
 - **Dual stack** — Matter + MQTTS on host LwIP; HTTPS on NWP
 - **Live MQTT** — stay connected (idle auto-yield); subscribe/publish via Matter shell; receive inbound publishes
 - **HTTPS** — GET / PUT / POST via Matter shell after client init
+- **HTTPS OTA** — vendor OTA over HTTPS (`https-ota` shell) alongside Matter BDX
 
 This demo uses TLS 1.2 for authentication and FreeRTOS Heap3 for memory management.
 TLS 1.3 is only supported for the HTTPs client, but not on the MQTTs client.
@@ -43,6 +44,7 @@ Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
 - `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h`
 - `third_party/matter_sdk/examples/thermostat/silabs/include/https_offload_example.h`
 - `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h`
+- `slc/config/sl_matter_https_ota_config.h` (HTTPS OTA periodic timeout / default URL)
 
 ### Changes for `OnPlatform` events based on the `CHIPDeviceEvent.h`
 
@@ -137,7 +139,7 @@ Add these `#define`s near the top of the file (before the `#ifndef` / `#error` c
 
 | Symbol                 | Description                                                                                                                                                  |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `HTTP_SERVER_ENDPOINT` | DNS name or IPv4 of the HTTPS server. Must be reachable from the board.                                                                                      |
+| `HTTP_SERVER_ENDPOINT` | DNS name or IPv4 of the HTTPS server. Literals use `sl_net_inet_addr`; otherwise DNS resolve. Must be reachable from the board.                              |
 | `HTTP_TLS_HOSTNAME`    | Hostname for TLS SNI / Host header (CN/SAN). If not provided (`nullptr`), `HttpClient` uses `HTTP_SERVER_ENDPOINT`. Must match the server cert or TLS fails. |
 | `HTTP_PORT`            | HTTPS TCP port.                                                                                                                                              |
 
@@ -153,16 +155,16 @@ Example (replace with your server values):
 
 The HTTPS demo leaves `HttpClientConfig::certificateIndex` at the default (`SL_HTTPS_CLIENT_DEFAULT_CERTIFICATE_INDEX`, typically `0`). Do not hardcode a non-default index unless your NWP credential layout requires it.
 
-### HTTPS OTA Changes (sl_matter_https_ota_config.h)
+### HTTPS OTA changes (`slc/config/sl_matter_https_ota_config.h`)
 
-Update these defines that match to your HTTPS server:
+Update these defines to match your HTTPS OTA server. Dual-stack thermostat includes `matter_https_ota`. Host in the URL may be DNS or IPv4 (no IPv6): `https://host[:port]/path`.
 
-| Symbol                                 | Description                                                     |
-| -------------------------------------- | --------------------------------------------------------------- |
-| 'SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT' | HTTPS ota downloader's periodic retry timer                     |
-| 'SL_MATTER_HTTPS_OTA_DEFAULT_URL'      | Default url for HTTPS ota downloader to use for periodic checks |
+| Symbol                                 | Description                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | Periodic HTTPS OTA check interval (seconds). Default: same as `OTA_PERIODIC_TIMEOUT` (`86400`).        |
+| `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | Compile-time default periodic URL. Leave `""` to skip periodic checks until shell `https-ota default`. |
 
-Example (replace with your server values)):
+Example (replace with your server values):
 
 ```c
 #define SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT (24 * 60 * 60)
@@ -217,12 +219,12 @@ Edit before build. Point defaults at **your** LAN.
 | Auth            | `HTTP_USER` / `HTTP_PASS`        | `john` / `doe` | Auth                                    |
 | CA              | `kCaCertExample[]` in `cacert.h` | Server CA      |                                         |
 
-### HTTPS OTA — sl_matter_https_ota_config.h
+### HTTPS OTA — `slc/config/sl_matter_https_ota_config.h`
 
-| Field            | `#define`                              | Demo default                       | Customer need to set                                 |
-| ---------------- | -------------------------------------- | ---------------------------------- | ---------------------------------------------------- |
-| Periodic Timeout | `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | 86400 (Same as Matter OTA timeout) | Peroidic retry timer value                           |
-| OTA Default URL  | `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | ``                                 | HTTPS server IPv4 url to OTA file for periodic retry |
+| Field            | `#define`                              | Demo default                 | Customer need to set                                             |
+| ---------------- | -------------------------------------- | ---------------------------- | ---------------------------------------------------------------- |
+| Periodic timeout | `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | `86400` (same as Matter OTA) | Periodic check interval (seconds)                                |
+| OTA default URL  | `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | ``                           | `https://host[:port]/path` (DNS or IPv4); or set later via shell |
 
 ## Software and Hardware Requirements
 
@@ -257,7 +259,7 @@ chip-tool thermostat read occupied-cooling-setpoint 1 1
 # Expect "2500" value as output in chip-tool log
 ```
 
-### Matter shell (required for MQTT / HTTPS demos)
+### Matter shell (required for MQTT / HTTPS / HTTPS OTA demos)
 
 Open a serial terminal to the device console (Matter shell is enabled for this dual-stack thermostat build). After Wi-Fi / internet is up, wait for service start logs, then run demos from the shell. This shell runs over UART, meanwhile logs are directed to JLink RTT.
 
@@ -265,9 +267,10 @@ Help:
 
 ```text
 demo
+https-ota
 ```
 
-Expected help text (when both services are enabled):
+Expected `demo` help text (when both services are enabled):
 
 ```text
 Usage: demo <service>
@@ -275,10 +278,21 @@ Usage: demo <service>
   mqtt  Run MQTT connect/subscribe/publish on the AppTask thread
 ```
 
+Expected `https-ota` help text:
+
+```text
+Usage: https-ota <url|abort|default|status>
+  url <url>       Start one-shot HTTPS OTA (no NVM write)
+  abort           Cancel in-progress HTTPS OTA
+  default <url>   Set periodic check URL (RAM only, lost on reboot)
+  status          Show state / progress / last result
+```
+
 | Shell command | What runs on AppTask                                       |
 | ------------- | ---------------------------------------------------------- |
 | `demo mqtt`   | `mqtt_client_demo_run()` — Subscribe + Publish             |
 | `demo http`   | `https_client_demo_run()` — HTTPS PUT, then GET, then POST |
+| `https-ota …` | Vendor HTTPS OTA (`url` / `abort` / `default` / `status`)  |
 
 Shell replies immediately with a post confirmation; results appear in the device log:
 
@@ -437,7 +451,7 @@ Init (`HTTPS loaded TLS CA…` / `HTTPS client init success`) happens on connect
 9. If the periodic retry timer triggers the ota download, verify the device log at the download start will be as below and the remaining steps stay the same.
 
 ```text
-[0000:01:31.356][info][SWU] [HTTPS-OTA] session start source=periodic url=https://otaserver.com:8443/test_multiota_v15_Office_2.0.ota
+[0000:01:31.356][info][SWU] [HTTPS-OTA] using periodic url=https://otaserver.com:8443/test_multiota_v15_Office_2.0.ota
 [0000:01:31.357][info][SWU] Stopping the Periodic Query timer
 [0000:01:31.362][info][SWU] HandlePrepareDownload: started
 [0000:01:33.733][info][SWU] [HTTPS-OTA] header accepted: vendor=65521 product=32782 version=2
@@ -492,6 +506,7 @@ Same flash image:
 - Matter commission and thermostat R/W work
 - MQTT connects on internet up; `demo mqtt` can publish and the device can receive inbound messages while the session stays alive
 - `demo http` HTTPS PUT / GET / POST succeed
+- `https-ota url <url>` downloads a newer multi-image OTA over HTTPS (Range / HTTP 206) and applies after reset
 
 Evaluation demo only.
 
@@ -504,8 +519,9 @@ Changes reflected in this guide:
 | `997c85ff362` (#1165) | Matter service demos moved from `BaseApplication` to thermostat `AppTask`. MQTT idle auto-yield keeps the session alive; subscription callback delivers inbound publishes. HTTPS uses default NWP certificate index (no hardcoded index). |
 | `5326af6972d` (#1221) | MQTT Start/Init/Connect runs on the AppTask thread; disconnect on Wi-Fi loss with reconnect on next connectivity event.                                                                                                                   |
 | `343012841fc` (#1216) | Matter shell `demo mqtt` / `demo http` post Subscribe/Publish and HTTPS PUT/GET/POST to AppTask (shell no longer blocks on the demo).                                                                                                     |
-| Doc update            | How-to-test rewritten around Matter shell; MQTT receive documented as working; HTTPS CA index log updated to default (`0`); pass criteria require shell-driven MQTT and HTTPS.                                                            |
 | `8b4fdab490` (#1239)  | MQTT DNS: `MQTT_BROKER_IP` replaced by `MQTT_BROKER_ENDPOINT` (IPv4 literal or hostname). Connect resolves via DNS when not a literal. If `MQTT_TLS_HOSTNAME` is unset (`nullptr`), TLS uses the endpoint.                                |
 | `8917ac3322` (#1279)  | HTTPS DNS: `HTTP_SERVER_IP` / `HTTP_HOSTNAME` replaced by `HTTP_SERVER_ENDPOINT` / `HTTP_TLS_HOSTNAME`. Request path resolves via DNS when not a literal. If TLS hostname is unset (`nullptr`), TLS / Host uses the endpoint.             |
 | `9ecd72f5` (#1070)    | SiWx917 Matter platform switches FreeRTOS heap from Heap4 to Heap3 (`freertos_heap_3`).                                                                                                                                                   |
-| Doc update            | Guide aligned to current demo: endpoint + DNS config, TLS-hostname fallback, Heap3, Matter-shell how-to-test, and refreshed MQTT start/log strings.                                                                                       |
+| `39f97878` (#1190)    | HTTPS vendor OTA (`matter_https_ota`) on dual-stack thermostat: shell `https-ota`, periodic URL config, coexistence with Matter BDX.                                                                                                      |
+| `4b4024cd` (#1235)    | Doc coverage for HTTPS OTA how-to-test / config.                                                                                                                                                                                          |
+| Doc update            | Guide re-verified after rebase: endpoint + DNS, TLS-hostname fallback, Heap3, Matter-shell MQTT/HTTPS, HTTPS OTA shell/logs/config path, pass criteria.                                                                                   |
