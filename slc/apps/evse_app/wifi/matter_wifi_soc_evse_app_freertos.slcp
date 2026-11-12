@@ -44,6 +44,7 @@ component:
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: matter_power_source
+  - id: matter_time_synchronization
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart

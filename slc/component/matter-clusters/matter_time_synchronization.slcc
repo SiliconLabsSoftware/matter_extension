@@ -11,6 +11,8 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_time_synchronization
+requires:
+  - name: matter_read_client
 source:
   - path: third_party/matter_sdk/src/app/clusters/time-synchronization-server/CodegenIntegration.cpp
     unless: [matter_code_driven_dm]
