@@ -2,7 +2,7 @@ id: matter_mqtt_bridge
 package: matter
 description: >
   Matter MQTT cluster bridge: maps Matter attribute changes and commands to the Silabs MQTT cloud contract.
-  Includes thermostat demo adapters and DeviceMqttProfile wiring when enabled.
+  Includes platform demo adapters and DeviceMqttProfile wiring when enabled.
 label: Matter MQTT Cluster Bridge
 category: Matter-WiFi|Services|MQTT
 quality: experimental
@@ -21,43 +21,43 @@ define:
     value: "1"
   - name: SL_MATTER_MQTT_BRIDGE_WILDCARD_SUBSCRIBE
     value: "1"
+  - name: SL_MATTER_MQTT_BRIDGE_POST_ATTRIBUTE_HOOK
+    value: "1"
 
 include:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/include
     file_list:
-      - path: AttributeValueReader.h
-      - path: ClusterAdapter.h
-      - path: CommandInjector.h
-      - path: DeviceIdSource.h
-      - path: DeviceMqttProfile.h
-      - path: MatterMqttAttributeListener.h
-      - path: MatterMqttBridge.h
-      - path: MatterMqttBridgeConfig.h
-      - path: MatterMqttCodec.h
-      - path: MatterMqttContract.h
-      - path: MatterMqttTopic.h
-      - path: MatterMqttTypes.h
-      - path: MatterMqttValueConverter.h
-      - path: MqttTransportPort.h
-  - path: third_party/matter_sdk/examples/thermostat/silabs/include
+      - path: attribute_value_reader.h
+      - path: cluster_adapter.h
+      - path: command_injector.h
+      - path: device_mqtt_profile.h
+      - path: matter_mqtt_attribute_listener.h
+      - path: matter_mqtt_bridge.h
+      - path: matter_mqtt_bridge_config.h
+      - path: matter_mqtt_codec.h
+      - path: matter_mqtt_contract.h
+      - path: matter_mqtt_topic.h
+      - path: matter_mqtt_types.h
+      - path: matter_mqtt_value_converter.h
+      - path: mqtt_transport_port.h
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge
     file_list:
-      - path: ThermostatMqttBridgeConfig.h
+      - path: MatterMqttBridgeConfig.h
 
 source:
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/AttributeValueReader.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/CommandInjector.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/DeviceIdSource.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttAttributeListener.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttBridge.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttCodec.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttContract.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttTopic.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttValueConverter.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MqttClientTransportPort.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/ClusterAdapterRegistry.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/ThermostatMqttBridgeConfig.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/DoorLockAdapter.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/OnOffAdapter.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/ThermostatAdapter.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/ThermostatMqttAdapterRegistry.cpp
-  - path: third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_bridge/WindowCoveringAdapter.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/attribute_value_reader.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/command_injector.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/device_mqtt_profile.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_attribute_listener.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_bridge.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_codec.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_topic.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_value_converter.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/mqtt_client_transport_port.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/cluster_adapter_registry.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MatterMqttBridgeConfig.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MqttAdapterRegistry.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/adapters/DoorLockAdapter.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/adapters/OnOffAdapter.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/adapters/ThermostatAdapter.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/adapters/WindowCoveringAdapter.cpp
