@@ -12,7 +12,7 @@ requires:
   - name: uartdrv_eusart
     condition:
       - matter_platform_mg
-  - name: si91x_debug
+  - name: sl_uart
     condition:
       - matter_platform_siwx917
 
