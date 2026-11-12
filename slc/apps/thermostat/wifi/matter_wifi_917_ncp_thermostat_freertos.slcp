@@ -33,6 +33,8 @@ component:
   - id: matter_thermostat_app
   - id: app_common
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
 
   - id: mbedtls_x509_use_aws
     condition: [matter_aws]
@@ -42,7 +44,7 @@ component:
     condition: [matter_aws]
   - id: psa_crypto_tls12_prf
     condition: [matter_aws]
-    
+
   - id: matter_codegen_dm
   - id: matter_access_control
   - id: matter_administrator_commissioning

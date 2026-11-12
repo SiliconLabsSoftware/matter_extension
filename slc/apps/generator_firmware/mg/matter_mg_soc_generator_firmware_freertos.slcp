@@ -42,6 +42,8 @@ component:
     condition: [device_series_2]
   - id: hal_emu
     condition: [device_series_3]
+  # CTM for NVM3 config storage and static secure tokens for DAC/PAI/CD.
+  - { id: matter_use_ctm }
 
 include:
   - path: ../../../../third_party/matter_sdk/examples/generator-firmware/silabs/include
@@ -83,6 +85,7 @@ source:
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.h
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
+    unless: [matter_use_ctm]
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/Logging.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKey.h

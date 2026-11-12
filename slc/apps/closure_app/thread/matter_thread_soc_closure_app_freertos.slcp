@@ -27,6 +27,8 @@ component:
   - id: matter_shell
   - id: matter_gatt_static
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
   - id: matter_log_uart
   - id: matter_closure
   - id: matter_closure_control

@@ -9,8 +9,7 @@ metadata:
   sbom:
     license: Zlib
 requires:
-# For compatibility with the Zigbee token manager
-  - name: common_token_manager_dynamic
+  # For compatibility with the Zigbee token manager.
   - name: common_token_manager
 
   - name: zigbee_address_table

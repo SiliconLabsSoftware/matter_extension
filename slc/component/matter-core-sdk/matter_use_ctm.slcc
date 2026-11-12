@@ -10,5 +10,15 @@ metadata:
     license: "Apache 2.0"
 provides:
   - name: matter_use_ctm
+requires:
+  - name: common_token_manager
+  # Series 2 CTM legacy sources include Zigbee token headers. Without Zigbee/Connect,
+  # this component supplies the stub headers and STACK_TYPES_HEADER.
+  - name: common_token_manager_compatibility
+    condition: [device_series_2]
+# Series 2 CTM static/manufacturing code calls MSC_Init/WriteWord/Deinit. Those symbols
+# come from em_msc.c, which emlib_msc deliberately omits under trustzone_nonsecure.
+conflicts:
+  - name: trustzone_nonsecure
 source:
   - path: third_party/matter_sdk/src/platform/silabs/SilabsConfigCTM.cpp

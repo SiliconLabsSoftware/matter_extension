@@ -1,4 +1,3 @@
-
 project_name: matter_wifi_917_ncp_window_app_freertos
 label: Matter WiFi - 917 NCP Window App FreeRTOS
 description: Demonstrates a sample implementation of a 917 NCP Matter over Wi-Fi window covering app
@@ -35,6 +34,8 @@ component:
   - id: matter_window
   - id: app_common
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
 
   - id: mbedtls_x509_use_aws
     condition: [matter_aws]
@@ -197,4 +198,3 @@ post_build:
 
 other_file:
   - path: ../../../image/qr_code_img.png
-

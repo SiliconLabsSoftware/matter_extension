@@ -15,10 +15,6 @@ component:
   - id: sl_main
   - id: clock_manager
   - id: watchdog_manager
-  - id: common_token_manager_dynamic
-    condition: [device_series_3]
-  - id: common_token_manager
-    condition: [device_series_3]
   - id: matter_buttons
   - id: matter_leds
 
@@ -35,6 +31,8 @@ component:
   - id: matter_lock
   - id: app_common
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
 
   - id: matter_codegen_dm
   - id: matter_access_control

@@ -15,10 +15,6 @@ component:
   - id: sl_main
   - id: clock_manager
   - id: watchdog_manager
-  - id: common_token_manager_dynamic
-    condition: [device_series_3]
-  - id: common_token_manager
-    condition: [device_series_3]
   - id: matter_buttons
   - id: matter_leds
 
@@ -31,6 +27,9 @@ component:
   - id: matter_shell
   - id: matter_gatt_static
   - id: matter_provision_default
+  # TODO: Discuss with CTM team. sl_token_manufacturing.c calls MSC_* directly and we cannot link em_msc.c in NS trustzone.
+  #  - id: matter_use_ctm
+  #    condition: [matter_provision_default]
   - id: matter_log_uart
 
   - id: matter_lighting

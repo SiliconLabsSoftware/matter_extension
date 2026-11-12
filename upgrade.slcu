@@ -25,7 +25,7 @@ upgrade:
            - matter_psa_crypto_builtin_override
       - trigger: matter_mbedtls
         description: >
-          Upgrading project to Matter 2.1.1, replacing the Matter MbedTLS component with Matter MbedTLS Crypto 
+          Upgrading project to Matter 2.1.1, replacing the Matter MbedTLS component with Matter MbedTLS Crypto
         remove:
            - matter_mbedtls
         add:
@@ -66,28 +66,28 @@ upgrade:
     component:
       - trigger: matter_icd
         description: >
-          Combined ICD components into one 
+          Combined ICD components into one
         remove:
            - matter_icd
         add:
            - matter_icd_management
       - trigger: matter_thread_example
         description: >
-          Using matter_thread component 
+          Using matter_thread component
         remove:
            - matter_thread_example
         add:
            - matter_thread
       - trigger: matter_thread_ftd
         description: >
-          Using GSDK OT components now 
+          Using GSDK OT components now
         remove:
            - matter_thread_ftd
         add:
            - ot_stack_ftd
       - trigger: matter_thread_cert_ftd_lib
         description: >
-          Using GSDK OT components now 
+          Using GSDK OT components now
         remove:
            - matter_thread_cert_ftd_lib
         add:
@@ -95,7 +95,7 @@ upgrade:
            - ot_cert_libs
       - trigger: matter_thread_coap_cert_ftd_lib
         description: >
-          Using GSDK OT components now 
+          Using GSDK OT components now
         remove:
            - matter_thread_coap_cert_ftd_lib
         add:
@@ -104,7 +104,7 @@ upgrade:
            - ot_coap_cert_libs
       - trigger: matter_thread_mtd
         description: >
-          Using GSDK OT components now 
+          Using GSDK OT components now
         remove:
            - matter_thread_mtd
         add:
@@ -171,39 +171,39 @@ upgrade:
       - name: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
         replacement: SL_BT_RTOS_LINK_LAYER_TASK_STACK_SIZE
         description: >
-          Updating value: 
+          Updating value:
         value:
           "(1000)": "(1024)"
       - name: SL_BT_RTOS_HOST_STACK_TASK_STACK_SIZE
         replacement: SL_BT_RTOS_HOST_STACK_TASK_STACK_SIZE
         description: >
-          Updating value: 
+          Updating value:
         value:
           "(2000)": "(2048)"
       - name: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
         replacement: SL_BT_RTOS_EVENT_HANDLER_STACK_SIZE
         description: >
-          Updating value: 
+          Updating value:
         value:
           "(1000)": "(1536)"
 
   - sdk:
       id: matter
       version: "2.4.0"
-      
+
     component:
       - trigger: matter_uart_wifi_wf200
         description: Removing the matter_uart_wifi_wf200 component
-        remove: 
+        remove:
           - matter_uart_wifi_wf200
 
       - trigger: matter_uart_wifi
         description: Removing the matter_uart_wifi component
-        remove: 
+        remove:
           - matter_uart_wifi
-      
+
       - trigger: matter_sensor
-        description: Removing the matter_sensor component 
+        description: Removing the matter_sensor component
         remove:
           - matter_sensor
 
@@ -237,7 +237,7 @@ upgrade:
   - sdk:
       id: matter
       version: "2.5.0"
-    
+
     component:
       - trigger: siwx917_ncp_extension
         description: Simplify and merge 917 NCP components
@@ -245,14 +245,14 @@ upgrade:
           - siwx917_ncp_extension
         add:
           - siwx917_ncp
-      
+
       - trigger: rs911x_ncp_extension
         description: Simplify and merge rs911x NCP components
         remove:
           - rs911x_ncp_extension
         add:
           - rs911x_ncp
-      
+
       - trigger: wf200_ncp_extension
         description: Simplify and merge wf200 NCP components
         remove:
@@ -264,15 +264,15 @@ upgrade:
         description: Remove extra NCP component in favor of platform NCP component
         remove:
           - efx_ncp_custom_host_mcu
-      
+
       - trigger: matter_thread
         description: remove the ot_rtos_wrappers_real component
         remove:
           - ot_rtos_wrappers_real
-      
+
       - trigger: matter_platform_efr32
         description: Rename matter_platform_efr32 to matter_platform_mg
-        remove: 
+        remove:
           - matter_platform_efr32
         add:
           - matter_platform_mg
@@ -298,10 +298,10 @@ upgrade:
   - sdk:
       id: matter
       version: "2.5.1"
-    
-    configuration:     
+
+    configuration:
       - script: slc/config/scripts/upgrade_config_to_2.5.1.lua
-  
+
   - sdk:
       id: matter
       version: "2.5.2"
@@ -333,7 +333,7 @@ upgrade:
       - name: configUSE_NEWLIB_REENTRANT
         replacement: configUSE_NEWLIB_REENTRANT
         description: >
-          Updating configUSE_NEWLIB_REENTRANT value from 1 to 0 
+          Updating configUSE_NEWLIB_REENTRANT value from 1 to 0
         value:
           "(1)": "(0)"
 
@@ -343,7 +343,7 @@ upgrade:
     component:
       - trigger: matter
         description: >
-           !!! WARNING !!! Automatic upgrades to Matter 2.7.0 are not recommended. Instead create a new project and manually port your changes. 
+           !!! WARNING !!! Automatic upgrades to Matter 2.7.0 are not recommended. Instead create a new project and manually port your changes.
         status: user_verification
     configuration:
       - script: slc/config/scripts/upgrade_config_to_2.7.0.lua
@@ -354,7 +354,7 @@ upgrade:
     component:
       - trigger: matter
         description: >
-           !!! WARNING !!! Automatic upgrades to Matter 2.8.0 are not recommended. Instead create a new project and manually port your changes. 
+           !!! WARNING !!! Automatic upgrades to Matter 2.8.0 are not recommended. Instead create a new project and manually port your changes.
         status: user_verification
 
   - sdk:
@@ -364,7 +364,7 @@ upgrade:
     component:
       - trigger: toolchain_gcc_common
         description: >
-           !!! WARNING !!! By default Wiseconnect linker is enabled for 917SoC, to use the matter linker file add toolchain_gcc_common component 
+           !!! WARNING !!! By default Wiseconnect linker is enabled for 917SoC, to use the matter linker file add toolchain_gcc_common component
         remove:
           - toolchain_gcc_common
 
@@ -377,3 +377,8 @@ upgrade:
           Adding the watchdog_manager component to Matter Thread projects
         add:
            - watchdog_manager
+      - trigger: matter_provision_default
+        description: >
+          Adding matter_use_ctm component to Matter MG projects using matter_provision_default
+        add:
+           - matter_use_ctm

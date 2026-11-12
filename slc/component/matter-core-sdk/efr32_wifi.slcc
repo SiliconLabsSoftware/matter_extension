@@ -167,7 +167,9 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
   - path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
   - path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
+  # matter_use_ctm supplies SilabsConfigCTM.cpp. Keep direct NVM3 access otherwise.
   - path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
+    unless: [matter_use_ctm]
   - path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOpaqueKeypair.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOperationalKeystore.cpp
