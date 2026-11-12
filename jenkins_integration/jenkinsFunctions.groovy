@@ -449,12 +449,26 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                         else
                             echo "TestResults directory not found for ${testArtifactsId}; skipping TestResults archive"
                         fi
+                        rm -rf "reports-device-logs-${testArtifactsId}"
+                        mkdir -p "reports-device-logs-${testArtifactsId}"
+                        shopt -s nullglob
+                        for session_dir in ./reports/*-tests~*/; do
+                            if [ -d "\$session_dir" ]; then
+                                cp -a "\$session_dir" "reports-device-logs-${testArtifactsId}/"
+                            fi
+                        done
+                        shopt -u nullglob
+                        if [ -z "\$(ls -A reports-device-logs-${testArtifactsId} 2>/dev/null)" ]; then
+                            echo "No UTF per-test device log directories under reports/ for ${testArtifactsId}"
+                        fi
                     """
                     archiveArtifacts artifacts: "reports/pytest-report-${testArtifactsId}.html", allowEmptyArchive: true, fingerprint: false
                     archiveArtifacts artifacts: "TestResults-${testArtifactsId}/**", allowEmptyArchive: true, fingerprint: false
+                    archiveArtifacts artifacts: "reports-device-logs-${testArtifactsId}/**", allowEmptyArchive: true, fingerprint: false
                     junit: 'reports/junit_report.xml'
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${testArtifactsId}.html"
-                    echo "Download UTF TestResults here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/TestResults-${testArtifactsId}/"
+                    echo "Download test results here: ${env.BUILD_URL}artifact/reports/pytest-report-${testArtifactsId}.html"
+                    echo "Download UTF TestResults here: ${env.BUILD_URL}artifact/TestResults-${testArtifactsId}/"
+                    echo "Download UTF device logs here: ${env.BUILD_URL}artifact/reports-device-logs-${testArtifactsId}/"
                 }
             }
         }

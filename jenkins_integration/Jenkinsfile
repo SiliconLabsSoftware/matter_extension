@@ -213,7 +213,7 @@ pipeline
                                 'lighting-app','wifi','BRD4338A','917_soc', branch_name, env.BUILD_NUMBER)
                         }
                     }
-                    parallelNodes['SiMG301 Lighting-App'] = {
+                    parallelNodes['SiMG301 Zigbee-Light-Conc-App'] = {
                         pipelineFunctions.actionWithRetry {
                             failed_tests_4407a = pipelineFunctions.execute_sanity_tests(
                                 'gsdkMontrealNode','utf-matter-thread-4407a-ci',
@@ -225,26 +225,32 @@ pipeline
                     parallelNodes.failFast = false
                     parallel parallelNodes
 
-                    def totalFailedTests = 0
+                    def blockingFailedTests = 0
+                    def nonBlockingFailedTests = 0
                     def failedTestsSummary = []
 
                     if (failed_tests_mg24 && failed_tests_mg24.failedCount > 0) {
-                        totalFailedTests += failed_tests_mg24.failedCount
+                        blockingFailedTests += failed_tests_mg24.failedCount
                         failedTestsSummary << "MG24: ${failed_tests_mg24.failedCount} failed tests - ${failed_tests_mg24.failedTests.join(', ')}"
                     }
 
                     if (failed_tests_917 && failed_tests_917.failedCount > 0) {
-                        totalFailedTests += failed_tests_917.failedCount
+                        blockingFailedTests += failed_tests_917.failedCount
                         failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
                     }
 
-//                     Temp comment out due to SQA setup issues
-//                     if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
-//                         totalFailedTests += failed_tests_4407a.failedCount
-//                         failedTestsSummary << "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
-//                     }
+                    if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
+                        def siMg301Summary = "SiMG301: ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
+                        if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
+                            nonBlockingFailedTests += failed_tests_4407a.failedCount
+                            failedTestsSummary << "SiMG301 (warning only): ${failed_tests_4407a.failedCount} failed tests - ${failed_tests_4407a.failedTests.join(', ')}"
+                        } else {
+                            blockingFailedTests += failed_tests_4407a.failedCount
+                            failedTestsSummary << siMg301Summary
+                        }
+                    }
 
-                    def sqa_tests_result = totalFailedTests > 0 ? "FAIL" : "PASS"
+                    def sqa_tests_result = blockingFailedTests > 0 ? "FAIL" : "PASS"
                     def sqa_tests_summary = failedTestsSummary.isEmpty() ? "All tests passed successfully." : failedTestsSummary.join('\n')
 
                     echo "SQA Tests Result: ${sqa_tests_result}"
@@ -255,9 +261,12 @@ pipeline
                         pipelineFunctions.send_test_results_to_github(commit_sha, sqa_tests_result, sqa_tests_summary)
                     }
                     if (env.BRANCH_NAME.startsWith("main") || env.BRANCH_NAME.startsWith("release_")) {
-                        if (sqa_tests_result == "FAIL") {
+                        if (blockingFailedTests > 0) {
                             sendSlackNotification("SQA Tests Failed", "FAIL", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
+                        } else if (nonBlockingFailedTests > 0) {
+                            unstable("[WARN] SiMG301 Zigbee-Light-Conc-App sanity tests failed (non-blocking). See summary:\n${sqa_tests_summary}")
+                            sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
                         } else {
                             sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
                             echo "All tests passed successfully."
