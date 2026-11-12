@@ -6,7 +6,7 @@ quality: production
 package: matter
 
 sdk_extension:
-  - id: wifi
+  - id: wiseconnect3_sdk
     version: "4.2.0"
     vendor: silabs
 
