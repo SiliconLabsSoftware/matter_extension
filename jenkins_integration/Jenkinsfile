@@ -145,16 +145,20 @@ pipeline
                                 archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
                             }
                             if (fileExists('coverage/sonarqube-coverage.xml')) {
-                                withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
-                                    sh '''
-                                        docker run --rm \
-                                            -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
-                                            -e SONAR_TOKEN="$SONAR_TOKEN" \
-                                            -v "$WORKSPACE:/usr/src" \
-                                            sonarsource/sonar-scanner-cli:11 \
-                                            -Dsonar.scm.disabled=true \
-                                            -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
-                                    '''
+                                try {
+                                    withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                                        sh '''
+                                            docker run --rm \
+                                                -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
+                                                -e SONAR_TOKEN="$SONAR_TOKEN" \
+                                                -v "$WORKSPACE:/usr/src" \
+                                                sonarsource/sonar-scanner-cli:11 \
+                                                -Dsonar.scm.disabled=true \
+                                                -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
+                                        '''
+                                    }
+                                } catch (e) {
+                                    unstable("SonarQube analysis failed: ${e.message}")
                                 }
                             } else {
                                 echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
