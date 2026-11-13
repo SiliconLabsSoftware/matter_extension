@@ -3,7 +3,6 @@ name: Notify dev app build failure
 # workflow_run always uses this file from the default branch.
 # Pull request workflows cannot change the step that reads the webhook.
 on:
-  push:
   workflow_run:
     workflows: ["Build Dev apps"]
     types: [completed]
@@ -19,9 +18,8 @@ jobs:
     # Nightly builds dispatch this workflow, so they use workflow_dispatch too.
     # A dispatch on main or release_* is a full build.
     if: >-
-      github.event_name == 'push' ||
-      (github.event.workflow_run.conclusion == 'failure' &&
-      github.event.workflow_run.event == 'workflow_dispatch')
+      github.event.workflow_run.conclusion == 'failure' &&
+      github.event.workflow_run.event == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Post failure to Slack
