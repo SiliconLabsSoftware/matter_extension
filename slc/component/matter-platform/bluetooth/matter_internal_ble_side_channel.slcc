@@ -4,7 +4,7 @@ label: matter_internal_ble_side_channel
 description: >
     Enables a silabs internal BLE side channel in Matter Apps for testing purpose
 category: Matter|Core
-quality: internal
+quality: experimental
 metadata:
   sbom:
     license: "Apache 2.0"
