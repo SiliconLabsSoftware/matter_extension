@@ -80,10 +80,12 @@ This sample app works out of the box with no additional configuration required. 
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-4. Control the device:
+4. Read sensor attributes on endpoint 1:
    ```shell
-   chip-tool onoff on 1 1
-   chip-tool onoff off 1 1
+   chip-tool airquality read air-quality 1 1
+   chip-tool temperaturemeasurement read measured-value 1 1
+   chip-tool relativehumiditymeasurement read measured-value 1 1
+   chip-tool carbonmonoxideconcentrationmeasurement read measured-value 1 1
    ```
 
 **Button and LED reference:**
@@ -92,13 +94,10 @@ This sample app works out of the box with no additional configuration required. 
 |---------|-------------------|-----------------------------------------------------------------|
 | BTN0    | Press and release | Start/restart BLE advertisement, print QR code URL to RTT logs |
 | BTN0    | Hold 6 s          | Initiate factory reset (release within 6 s to cancel)           |
-| BTN1    | Press and release | Toggle light state on/off                                       |
 | LED 0   | Short flash on    | Unprovisioned, waiting for commissioning                        |
 | LED 0   | Rapid even flash  | BLE connected, commissioning in progress                        |
 | LED 0   | Short flash off   | Provisioned, no full Thread connectivity                        |
 | LED 0   | Solid on          | Fully provisioned with Thread connectivity                      |
-| LED 1   | Solid on         | Light is on                                                     |
-| LED 1   | Off              | Light is off                                                    |
 
 ## Extending Base App Implementation
 

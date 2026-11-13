@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import os
 import re
+import socket
+from contextlib import ExitStack
 from pathlib import Path
 
 DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
@@ -83,23 +85,22 @@ def login_root(tester: object, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> Non
 
 def run_shell(tester: object, cmd: str, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> tuple[int, str]:
     """Run a shell command on the guest and return its exit code and UART transcript."""
+    tester.ClearReport()
     test_lib.write_line(tester, f'{cmd}; echo "__RC=$?"')
-    matched = test_lib.wait_for(tester, r"__RC=(\d+)", timeout=timeout_s)
+    matched = test_lib.wait_for(tester, r"^__RC=(\d+)\r?$", timeout=timeout_s, endline=True)
     report = str(tester.GetReport())
     line_match = re.search(r"__RC=(\d+)", matched) if matched else None
     if line_match is not None:
         return int(line_match.group(1)), report
-    rc_matches = re.findall(r"__RC=(\d+)", report)
-    if not rc_matches:
-        raise RuntimeError(f"could not parse exit code from console output\n{report[-2000:]}")
-    return int(rc_matches[-1]), report
+    raise RuntimeError(f"missing command exit status in console response\n{report[-2000:]}")
 
 
 class MatterSim:
-    """In-process Renode session for one bundle directory."""
+    """In-process Renode session, optionally exposing TCP consoles for manual use."""
 
-    def __init__(self, bundle_dir: Path) -> None:
+    def __init__(self, bundle_dir: Path, *, socket_consoles: bool = True) -> None:
         self.bundle_dir = bundle_dir.resolve()
+        self._socket_consoles = socket_consoles
         configure_renode_env(self.bundle_dir)
         from pyrenode3.wrappers import Emulation, Monitor
 
@@ -108,6 +109,7 @@ class MatterSim:
         test_lib._e = self._emulation
         test_lib._m = self._monitor
         self._uart_testers: list[tuple[object, str]] = []
+        self._console_ports: set[int] = set()
 
     def load(self, resc: str, variables: dict[str, str] | None = None) -> None:
         """Set monitor variables, then include ``resc/<resc>`` from the bundle."""
@@ -116,6 +118,69 @@ class MatterSim:
         resc_path = self.bundle_dir / "resc" / resc
         test_lib.execute_monitor_command(f"include @{resc_path}")
 
+    def load_thread_checkpoint(
+        self,
+        *,
+        checkpoint: Path | None = None,
+        hub_console_port: int = 4540,
+    ) -> None:
+        """Load the Thread hub checkpoint and optionally expose its TCP console."""
+        ckpt = (checkpoint or self.bundle_dir / "linux-booted-thread.save").resolve()
+        if not ckpt.is_file():
+            raise FileNotFoundError(f"checkpoint not found: {ckpt}")
+        test_lib.execute_monitor_command(f"EmulationManager Load @{ckpt}")
+        test_lib.execute_monitor_command(f"path add @{self.bundle_dir / 'renode'}")
+        test_lib.execute_monitor_command("logLevel 3")
+        test_lib.execute_monitor_command('mach set "matter_hub"')
+        if self._socket_consoles:
+            test_lib.execute_monitor_command(
+                f'emulation CreateServerSocketTerminal {hub_console_port} "matter_hub_console" false'
+            )
+            self._console_ports.add(hub_console_port)
+            test_lib.execute_monitor_command("connector Connect sysbus.uart1 matter_hub_console")
+        test_lib.execute_monitor_command('mach set "matter_hub"')
+        test_lib.execute_monitor_command("start")
+
+    def attach_matter_soc(
+        self,
+        board: str,
+        elf_path: Path | str,
+        *,
+        machine_name: str = "matter_soc",
+        cli_port: int = 3452,
+        uart: str = "eusart0",
+        extra_hex: Path | str | None = None,
+    ) -> None:
+        """Add a Matter SoC after the hub checkpoint is loaded."""
+        board_name = board.removesuffix(".repl")
+        repl = f"platforms/boards/silabs/{board_name}.repl"
+        if not (Path(test_lib.renode_base_path()) / repl).is_file():
+            raise FileNotFoundError(f"board REPL not found: {repl}")
+
+        elf = Path(elf_path).resolve()
+        cli_name = f"matter_cli_{machine_name}"
+        hex_path = Path(extra_hex).resolve() if extra_hex is not None else None
+
+        steps = [
+            f'mach create "{machine_name}"',
+            "using sysbus",
+            f"machine LoadPlatformDescription @{repl}",
+            f"sysbus LoadELF @{elf}",
+            *( [f"sysbus LoadHEX @{hex_path}"] if hex_path else [] ),
+            'cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`',
+            "cpu PerformanceInMips 50",
+            "connector Connect sysbus.radio wireless",
+            "connector Connect sysbus.radio ble",
+        ]
+        if self._socket_consoles:
+            steps.extend([
+                f'emulation CreateServerSocketTerminal {cli_port} "{cli_name}" false',
+                f"connector Connect sysbus.{uart} {cli_name}",
+            ])
+        for cmd in steps:
+            test_lib.execute_monitor_command(cmd)
+            if cmd.startswith("emulation CreateServerSocketTerminal "):
+                self._console_ports.add(cli_port)
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.
 
@@ -129,17 +194,20 @@ class MatterSim:
         self._uart_testers.append((tester, "matter_hub"))
         return tester
 
-    def soc_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
-        """Attach a tester to matter_soc eusart0.
-
-        The resc script also connects this UART to a socket. The tester records
-        the lighting app console from the moment it is attached.
-        """
-        machine = self._emulation.get_mach("matter_soc")
+    def soc_uart(
+        self,
+        timeout_s: float = DEFAULT_UART_TIMEOUT_S,
+        *,
+        machine_name: str = "matter_soc",
+    ) -> object:
+        """Attach a tester to a Matter SoC eusart0 (default ``matter_soc``)."""
+        machine = self._emulation.get_mach(machine_name)
         if machine is None:
-            raise RuntimeError("matter_soc machine not found")
-        tester = _register_uart_tester(self._emulation, "matter_soc", machine.sysbus.eusart0, timeout_s)
-        self._uart_testers.append((tester, "matter_soc"))
+            raise RuntimeError(f"{machine_name} machine not found")
+        tester = _register_uart_tester(
+            self._emulation, machine_name, machine.sysbus.eusart0, timeout_s
+        )
+        self._uart_testers.append((tester, machine_name))
         return tester
 
     def save(self, path: Path) -> None:
@@ -155,4 +223,11 @@ class MatterSim:
         for tester, machine_name in self._uart_testers:
             _unregister_uart_tester(tester, machine_name)
         self._uart_testers.clear()
-        self._emulation.clear()
+        with ExitStack() as consoles:
+            for port in self._console_ports:
+                try:
+                    consoles.enter_context(socket.create_connection(("127.0.0.1", port), timeout=1))
+                except OSError:
+                    pass
+            self._emulation.clear()
+        self._console_ports.clear()
