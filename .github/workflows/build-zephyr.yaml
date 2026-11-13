@@ -224,6 +224,31 @@ jobs:
           cp "$GITHUB_WORKSPACE/zephyrproject/build/${{ matrix.board }}/${{ matrix.in_artifact }}" \
               "$artifact_dir/${{ matrix.out_artifact }}"
 
+      - name: Export Zephyr checkout revision
+        shell: bash
+        env:
+          BUILD_ID: ${{ matrix.id }}
+        run: |
+          set -euxo pipefail
+          mkdir -p artifacts/zephyr-silabs-revisions
+          git -C zephyrproject/zephyr-silabs rev-parse HEAD \
+              > "artifacts/zephyr-silabs-revisions/$BUILD_ID.txt"
+
+      - name: Export SiWx917 connectivity firmware
+        if: ${{ startsWith(matrix.board, 'siwx917_') && matrix.variant == 'firmware' }}
+        shell: bash
+        working-directory: zephyrproject
+        run: |
+          set -euxo pipefail
+          blob_paths="$(west blobs list hal_silabs -f '{abspath}')"
+          if ! firmware="$(grep -E '/wiseconnect/connectivity_firmware/standard/SiWG917-[^/]+\.rps$' <<< "$blob_paths")"; then
+            echo "::error::No SiWx917 connectivity firmware declared by hal_silabs"
+            exit 1
+          fi
+          artifact_dir="$GITHUB_WORKSPACE/artifacts/WiFi-Firmware/siwx917"
+          mkdir -p "$artifact_dir"
+          cp "$firmware" "$artifact_dir/"
+
       - name: Upload Zephyr binary artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -231,7 +256,6 @@ jobs:
           path: artifacts/
           if-no-files-found: error
           overwrite: true
-          retention-days: 1
 
   package-zephyr:
     name: Package Zephyr artifacts
@@ -253,4 +277,3 @@ jobs:
           path: artifacts/
           if-no-files-found: error
           overwrite: true
-          retention-days: 1
