@@ -1487,6 +1487,13 @@
 			interrupt-parent = <0x05>;
 			interrupts = <0x00 0x21 0x04>;
 		};
+
+		virtio_provision@fe400400 {
+			compatible = "virtio,mmio";
+			reg = <0x00 0xfe400400 0x00 0x150>;
+			interrupt-parent = <0x05>;
+			interrupts = <0x00 0x22 0x04>;
+		};
 	};
 
 	fclk0: fclk0 {
