@@ -4,8 +4,8 @@
 @brief Package a common or runtime bundle and push it to GHCR with ORAS.
 
 Usage:
-  publish_bundle.py --bundle common|runtime
-  publish_bundle.py --bundle common|runtime --action prepare|push
+  publish_bundle.py --bundle common|runtime|provision
+  publish_bundle.py --bundle common|runtime|provision --action prepare|push
 """
 
 import argparse
@@ -26,6 +26,9 @@ def bundle_contents(bundle, kind):
     elif kind == "runtime":
         directories = ("renode",)
         filenames = ("linux-booted-thread.save",)
+    elif kind == "provision":
+        directories = ("guest-rootfs",)
+        filenames = ()
     else:
         common.die(f"unknown kind: {kind}")
     for name in directories:
@@ -64,7 +67,10 @@ def push(kind):
         common.die(f"bundle archive missing {path}; run prepare first")
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
-    tag = common.artifact_tag(kind)
+    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
+    if tag is None:
+        print("Skipping publish: no OCI tag for this branch/event context")
+        return
 
     print(f"Publishing {package}:{tag}")
     subprocess.run(
@@ -84,12 +90,12 @@ def push(kind):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Package a common or runtime bundle and push it to GHCR with ORAS.",
+        description="Package a common, runtime, or provision bundle and push it to GHCR with ORAS.",
     )
     parser.add_argument(
         "--bundle",
         required=True,
-        choices=("common", "runtime"),
+        choices=("common", "runtime", "provision"),
         help="bundle to package and publish",
     )
     parser.add_argument(

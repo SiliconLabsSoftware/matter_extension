@@ -181,6 +181,33 @@ class MatterSim:
             test_lib.execute_monitor_command(cmd)
             if cmd.startswith("emulation CreateServerSocketTerminal "):
                 self._console_ports.add(cli_port)
+
+    def pause(self) -> None:
+        """Pause all machines while attaching devices and UART testers."""
+        test_lib.execute_monitor_command("pause")
+
+    def start(self) -> None:
+        """Start or resume all machines."""
+        test_lib.execute_monitor_command("start")
+
+    def attach_provision_image(self, image_path: Path | None = None) -> None:
+        """Load a provisioning disk into the restored hub's provision_virtio device.
+
+        The checkpoint must already contain the provisioning virtio device and
+        guest DTB node. Mount the disk with mount_provision after attachment.
+        """
+        image = (image_path or self.bundle_dir / "guest-rootfs" / "matter-provision.ext2").resolve()
+        if not image.is_file():
+            raise FileNotFoundError(f"provisioning image not found: {image}")
+        test_lib.execute_monitor_command('mach set "matter_hub"')
+        test_lib.execute_monitor_command(f"provision_virtio LoadImage @{image}")
+
+    def mount_provision(self, tester: object, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> None:
+        """Mount the provisioning disk on the hub after attach_provision_image()."""
+        rc, report = run_shell(tester, "matter-provision-mount", timeout_s)
+        if rc != 0:
+            raise RuntimeError(f"matter-provision-mount failed (rc={rc})\n{report[-2000:]}")
+
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.
 
