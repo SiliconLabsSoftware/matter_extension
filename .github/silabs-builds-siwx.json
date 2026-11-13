@@ -129,6 +129,7 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
                               "--with_app matter_platform_low_power",
+                              "'--configuration DEBUG_UART_ENABLE:0'",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
@@ -203,6 +204,7 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix neutral-less-low-power",
                               "--with_app matter_neutral_less_switch_wifi,matter_platform_low_power",
+                              "'--configuration DEBUG_UART_ENABLE:0'",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
@@ -211,12 +213,18 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
                               "--with matter_platform_low_power",
+                              "'--configuration DEBUG_UART_ENABLE:0'",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
                 "boards": ["brd4338a", "brd4343a", "brd4343c", "brd4343s"],
                 "arguments": ["--output_suffix lit-120",
                               "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000'"]
+            },
+            {
+                "boards": ["brd4338a", "brd4343a", "brd4343c", "brd4343s"],
+                "arguments": ["--output_suffix lit-ipv4-120",
+                              "'--configuration SL_IDLE_MODE_DURATION_S:120,SL_TRANSPORT_IDLE_INTERVAL:120000,CHIP_DEVICE_CONFIG_ENABLE_IPV4:1'"]
             }
         ],
         "window_app" :[
@@ -224,6 +232,7 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix low-power",
                               "--with matter_platform_low_power",
+                              "'--configuration DEBUG_UART_ENABLE:0'",
                               "--without matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             },
             {
