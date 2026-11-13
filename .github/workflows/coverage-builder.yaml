@@ -104,7 +104,14 @@ jobs:
               shell: bash
               run: |
                   cd third_party/matter_sdk
-                  gcovr --sonarqube sonarqube-coverage.xml
+                  gcovr --exclude=zzz_generated/ \
+                      --exclude=third_party/ \
+                      --exclude=".*tests/.*" \
+                      --exclude=".*testing/.*" \
+                      --filter=src/ \
+                      --gcov-ignore-parse-errors \
+                      --merge-mode-functions=merge-use-line-min \
+                      --sonarqube=sonarqube-coverage.xml
 
             - name: Stage coverage artifact
               shell: bash
