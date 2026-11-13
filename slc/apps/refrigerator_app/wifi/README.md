@@ -76,7 +76,15 @@ This sample app works out of the box with no additional configuration required. 
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-4. Control the device using chip-tool or another Matter controller after commissioning.
+4. Read refrigerator status and setpoints:
+   ```shell
+   chip-tool refrigeratoralarm read state 1 1
+   chip-tool refrigeratorandtemperaturecontrolledcabinetmode read current-mode 1 1
+   chip-tool temperaturecontrol read temperature-setpoint 1 2
+   chip-tool temperaturecontrol read temperature-setpoint 1 3
+   ```
+
+   For more commands, run `chip-tool refrigeratorandtemperaturecontrolledcabinetmode` or `chip-tool temperaturecontrol`.
 
 **Button and LED reference:**
 
