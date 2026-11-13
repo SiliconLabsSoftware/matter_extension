@@ -1,0 +1,84 @@
+# Post-commission demo steps.
+# Steps: command, optional uart (hub|soc|soc_light), optional expect (regex on UART transcript).
+
+air_quality_sensor_app:
+  steps:
+    - command: chip-tool airquality read air-quality 101 1
+    - command: chip-tool temperaturemeasurement read measured-value 101 1
+    - command: chip-tool relativehumiditymeasurement read measured-value 101 1
+    - command: chip-tool carbonmonoxideconcentrationmeasurement read measured-value 101 1
+
+platform_template:
+  steps:
+    - command: chip-tool generaldiagnostics read network-interfaces 101 0
+    - command: chip-tool threadnetworkdiagnostics read network-name 101 0
+
+closure_app:
+  steps:
+    - command: chip-tool closurecontrol read cluster-revision 101 1
+
+evse_app:
+  steps:
+    - command: chip-tool energyevse read state 101 1
+    - command: chip-tool energyevse disable 101 1 --timedInteractionTimeoutMs 1000
+    - command: chip-tool energyevse enable-charging null 6000 32000 101 1 --timedInteractionTimeoutMs 1000
+    - command: chip-tool energyevsemode read current-mode 101 1
+
+fan_control_app:
+  steps:
+    - command: chip-tool fancontrol write fan-mode 1 101 1
+    - command: chip-tool fancontrol read fan-mode 101 1
+    - command: chip-tool fancontrol read fan-mode-sequence 101 1
+
+lighting_app:
+  steps:
+    - command: chip-tool onoff on 101 1
+    - command: chip-tool onoff off 101 1
+
+lock_app:
+  steps:
+    - command: chip-tool doorlock unlock-door 101 1 --timedInteractionTimeoutMs 1000
+    - command: chip-tool doorlock lock-door 101 1 --timedInteractionTimeoutMs 1000
+
+multi_sensor_app:
+  steps:
+    - command: chip-tool occupancysensing read occupancy 101 1
+    - command: chip-tool temperaturemeasurement read measured-value 101 2
+    - command: chip-tool relativehumiditymeasurement read measured-value 101 3
+
+onoff_plug_app:
+  steps:
+    - command: chip-tool onoff on 101 1
+    - command: chip-tool onoff off 101 1
+
+rangehood_app:
+  steps:
+    - command: chip-tool fancontrol write fan-mode 3 101 1
+    - command: chip-tool fancontrol write fan-mode 0 101 1
+    - command: chip-tool fancontrol read fan-mode 101 1
+    - command: chip-tool onoff on 101 2
+    - command: chip-tool onoff off 101 2
+
+refrigerator_app:
+  steps:
+    - command: chip-tool refrigeratoralarm read state 101 1
+    - command: chip-tool refrigeratorandtemperaturecontrolledcabinetmode read current-mode 101 1
+    - command: chip-tool temperaturecontrol read temperature-setpoint 101 2
+    - command: chip-tool temperaturecontrol read temperature-setpoint 101 3
+
+thermostat:
+  steps:
+    - command: chip-tool thermostat write occupied-cooling-setpoint 2500 101 1
+    - command: chip-tool thermostat read occupied-cooling-setpoint 101 1
+
+light_switch_app:
+  extra_app: lighting_app
+  light_node: 102
+  switch_node: 101
+  steps:
+    - command: "chip-tool binding write binding '[{\"fabricIndex\": 1, \"node\": 102, \"endpoint\": 1, \"cluster\": 6}]' 101 1"
+    - command: switch onoff toggle
+      uart: soc
+      expect: '(?m)^Done\r?$'
+    - command: chip-tool onoff read on-off 102 1
+      expect_onoff_change: true

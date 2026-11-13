@@ -1,0 +1,139 @@
+name: Renode Demo Tests
+
+on:
+  workflow_run:
+    workflows:
+      - "Build Dev apps"
+      - "Packages Validation"
+    branches:
+      - main
+      - "release_*"
+    types: [completed]
+
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
+env:
+  BUILD_TYPE: full
+
+jobs:
+  set-matrix:
+    name: Select demo apps
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    outputs:
+      include: ${{ steps.matrix.outputs.include }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          submodules: false
+
+      - name: Install flow parser
+        run: python3 -m pip install 'PyYAML>=6.0'
+
+      - name: Configure demo job matrix
+        id: matrix
+        run: ./renode_integration/harness/demo_config.py
+
+  renode-demo:
+    name: ${{ matrix.example-app }} ${{ matrix.board }}
+    needs: set-matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.set-matrix.outputs.include) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          submodules: false
+
+      - name: Download demo ELFs
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-demo-${{ env.BUILD_TYPE }}-${{ matrix.example-app }}-${{ matrix.platform }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: matter-elf
+
+      - name: Download companion demo ELFs
+        if: matrix.extra-app != ''
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-demo-${{ env.BUILD_TYPE }}-${{ matrix.extra-app }}-${{ matrix.platform }}
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: matter-elf-extra
+
+      - name: Locate demo ELFs
+        id: elfs
+        shell: bash
+        env:
+          EXAMPLE_APP: ${{ matrix.example-app }}
+          EXTRA_APP: ${{ matrix.extra-app }}
+          BOARD: ${{ matrix.board }}
+        run: |
+          set -euo pipefail
+          find_elf() {
+            local matches
+            matches=$(find "$1" -type f -name "matter_thread_soc_$2_freertos.out" \
+              \( -path "*/${BOARD}/*" -o -path "*/${BOARD}_*/*" -o -path "*/${BOARD},*/*" \) \
+              ! -path '*copy-sources*' | LC_ALL=C sort)
+            if [[ -z "$matches" ]]; then
+              echo "No ELF for $2 on ${BOARD} under $1" >&2
+              return 1
+            fi
+            if [[ "$matches" == *$'\n'* ]]; then
+              echo "Multiple ELFs for $2 on ${BOARD}. Select a single demo build:" >&2
+              echo "$matches" >&2
+              return 1
+            fi
+            echo "$matches"
+          }
+          matter_elf=$(find_elf matter-elf "$EXAMPLE_APP")
+          extra_elf=""
+          if [[ -n "$EXTRA_APP" ]]; then
+            extra_elf=$(find_elf matter-elf-extra "$EXTRA_APP")
+          fi
+          echo "matter_elf_path=$matter_elf" >> "$GITHUB_OUTPUT"
+          echo "extra_elf_path=$extra_elf" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Fetch Renode bundle
+        run: python3 renode_integration/scripts/fetch_bundle.py
+
+      - name: Install harness dependencies
+        run: |
+          python3 -m pip install -r renode_integration/harness/requirements.txt
+          python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
+
+      - name: Run README demo
+        run: |
+          ./renode_integration/harness/demo_test.py \
+            --app "${{ matrix.example-app }}" \
+            --board "${{ matrix.board }}" \
+            --matter-elf "${{ steps.elfs.outputs.matter_elf_path }}" \
+            --extra-elf "${{ steps.elfs.outputs.extra_elf_path }}"
