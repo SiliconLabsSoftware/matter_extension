@@ -717,7 +717,7 @@ def resolvePrereleaseQualifier() {
         return "pr.${prNum}"
     }
     // Conan refs use '/' as delimiter (name/version@user); sanitize branch chars.
-    return (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9._-]/, '-')
+    return (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9.-]/, '-')
 }
 
 /**
