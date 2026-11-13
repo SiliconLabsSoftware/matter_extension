@@ -21,9 +21,6 @@ Usage:
 Use the workflow run selected by Jenkins. Package-backed runs are skipped.
 """
 
-from jenkins_integration.artifacts.ubai_client import upload_to_ubai
-from jenkins_integration.github.github_workflow import _make_github_api_request
-import jenkins_integration.config as config
 import argparse
 import os
 import re
@@ -36,6 +33,10 @@ workspace_root = os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.abspath(__file__))))
 if workspace_root not in sys.path:
     sys.path.insert(0, workspace_root)
+
+from jenkins_integration.artifacts.ubai_client import upload_to_ubai
+from jenkins_integration.github.github_workflow import _make_github_api_request
+import jenkins_integration.config as config
 
 
 ARTIFACT_NAME = 'dev-artifacts-zephyr'
