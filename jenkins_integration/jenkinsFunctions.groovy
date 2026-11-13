@@ -451,15 +451,17 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                         fi
                         rm -rf "reports-device-logs-${testArtifactsId}"
                         mkdir -p "reports-device-logs-${testArtifactsId}"
-                        shopt -s nullglob
-                        for session_dir in ./reports/*-tests~*/; do
-                            if [ -d "\$session_dir" ]; then
-                                cp -a "\$session_dir" "reports-device-logs-${testArtifactsId}/"
+                        found_logs=0
+                        # DUT UART logs are flat files: reports/<test>_<ip>_<port>.txt
+                        # POSIX sh: an unmatched glob stays literal, so skip it with -f.
+                        for dut_log in ./reports/*.txt; do
+                            if [ -f "\$dut_log" ]; then
+                                cp -a "\$dut_log" "reports-device-logs-${testArtifactsId}/"
+                                found_logs=1
                             fi
                         done
-                        shopt -u nullglob
-                        if [ -z "\$(ls -A reports-device-logs-${testArtifactsId} 2>/dev/null)" ]; then
-                            echo "No UTF per-test device log directories under reports/ for ${testArtifactsId}"
+                        if [ "\$found_logs" -eq 0 ]; then
+                            echo "No DUT serial logs under reports/ for ${testArtifactsId}"
                         fi
                     """
                     archiveArtifacts artifacts: "reports/pytest-report-${testArtifactsId}.html", allowEmptyArchive: true, fingerprint: false
