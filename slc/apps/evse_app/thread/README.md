@@ -84,10 +84,12 @@ This sample app works out of the box with no additional configuration required. 
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-4. Control the device:
+4. Read EVSE state and control charging (after commissioning, use your node-id if different from 1):
    ```shell
-   chip-tool onoff on 1 1
-   chip-tool onoff off 1 1
+   chip-tool energyevse read state 1 1
+   chip-tool energyevse disable 1 1
+   chip-tool energyevse enable-charging null 6000 32000 1 1 --timedInteractionTimeoutMs 1000
+   chip-tool energyevsemode read current-mode 1 1
    ```
 
    **Note:** Push Button 1 triggers `EnergyManagementActionEventHandler`, which is not currently implemented.

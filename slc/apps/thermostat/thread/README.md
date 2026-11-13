@@ -81,7 +81,11 @@ This sample app works out of the box with no additional configuration required. 
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-4. Control the thermostat using chip-tool or another Matter controller after commissioning.
+4. Control the thermostat:
+   ```shell
+   chip-tool thermostat write occupied-cooling-setpoint 2500 1 1
+   chip-tool thermostat read occupied-cooling-setpoint 1 1
+   ```
 
 **Button and LED reference:**
 

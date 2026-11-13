@@ -53,7 +53,11 @@ This sample app works out of the box with no additional configuration required. 
 1. Build and flash the bootloader and application to your board (see project root README for build commands).
 2. On startup, the device advertises over BLE and shows the Matter QR code if the display is enabled.
 3. Commission the device using chip-tool, Simplicity Connect, or another Matter controller (e.g. `chip-tool pairing ble-thread 1 hex:<operationalDataset> 20202021 3840`).
-4. After commissioning, the device can be managed through Matter controllers for configuration and monitoring.
+4. Verify connectivity with diagnostic reads on the root endpoint:
+   ```shell
+   chip-tool generaldiagnostics read network-interfaces 1 0
+   chip-tool threadnetworkdiagnostics read network-name 1 0
+   ```
 
 **Button and LED reference:**
 

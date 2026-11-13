@@ -78,6 +78,17 @@ jobs:
                       echo "Created ${file}.asset"
                   done
 
+            # Need separate upload step for Renode ELF files to run demo tests in parallel
+            # Merge artifacts step deletes ELF files
+            - name: Upload Renode demo ELF artifact
+              if: contains(fromJson('["mg24","mg26","sixg301"]'), inputs.platform) && inputs.build-type != 'custom-sqa'
+              uses: actions/upload-artifact@v7
+              with:
+                  name: renode-demo-${{ inputs.build-type }}-${{ inputs.example-app }}-${{ inputs.platform }}
+                  path: out/*/*_freertos_solution/**/matter_thread_soc_${{ inputs.example-app }}_freertos.out
+                  if-no-files-found: error
+                  overwrite: true
+
             - name: Upload artifacts
               uses: actions/upload-artifact@v7
               with:
