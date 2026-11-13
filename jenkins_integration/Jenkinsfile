@@ -120,10 +120,10 @@ pipeline
                                 build_description += "\nGitHub Workflow Run Number: ${run_number}"
                                 buildDescription(build_description)
 
-                                try{
-                                    pipelineFunctions.upload_zephyr_artifacts(workflow_id)
-                                } catch (e) {
-                                    unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
+                                def zephyr_revisions = pipelineFunctions.upload_zephyr_artifacts(workflow_id)
+                                if (zephyr_revisions) {
+                                    build_description += "\nZephyr-Silabs Commit SHA: ${zephyr_revisions.join(', ')}"
+                                    buildDescription(build_description)
                                 }
                             }
                         }

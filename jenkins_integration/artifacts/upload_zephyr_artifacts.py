@@ -8,6 +8,13 @@ Expects GHA layout (see build-zephyr.yaml):
 Add another app by exporting under a new <app_name>/ tree in the workflow; no
 uploader changes required.
 
+SiWx917 NWP firmware uses WiFi-Firmware/siwx917/<firmware>.rps and is uploaded
+with app_name="Zephyr-WiFi-Firmware-siwx917" and target="siwx917".
+
+Zephyr checkout SHAs are read from zephyr-silabs-revisions/<build_id>.txt
+and printed for the Jenkins build description. Older artifacts without revision
+metadata remain uploadable with an explicit warning.
+
 Usage:
     python upload_zephyr_artifacts.py --branch_name <branch> --build_number <n> --workflow_id <id>
 
@@ -16,6 +23,7 @@ Use the workflow run selected by Jenkins. Package-backed runs are skipped.
 
 import argparse
 import os
+import re
 import shutil
 import sys
 import time
@@ -106,18 +114,11 @@ def _download_zephyr_artifact(workflow_id):
             print(
                 f"Skipping Zephyr upload for workflow {workflow_id}: {workflow_path}")
             return None
-        status = run.get('status')
-        conclusion = run.get('conclusion')
-        if status == 'completed' and conclusion != 'success':
-            raise RuntimeError(
-                f"Build Zephyr workflow {workflow_id} failed with conclusion '{conclusion}'"
-            )
-
         try:
             download_url, name = _get_artifact_download_url(workflow_id)
             return _download_and_extract(download_url, name)
         except RuntimeError as e:
-            if attempt < WAIT_ATTEMPTS and ARTIFACT_NAME in str(e) and status != 'completed':
+            if attempt < WAIT_ATTEMPTS and ARTIFACT_NAME in str(e):
                 print(
                     f"Artifact not ready ({attempt}/{WAIT_ATTEMPTS}), "
                     f"waiting {WAIT_SECONDS}s..."
@@ -125,6 +126,29 @@ def _download_zephyr_artifact(workflow_id):
                 time.sleep(WAIT_SECONDS)
                 continue
             raise
+
+
+def _print_zephyr_revisions(root):
+    revision_dir = os.path.join(root, 'zephyr-silabs-revisions')
+    if not os.path.exists(revision_dir):
+        print("Warning: Zephyr-Silabs revision metadata is unavailable.")
+        return
+
+    revisions = set()
+    for name in sorted(os.listdir(revision_dir)):
+        revision_file = os.path.join(revision_dir, name)
+        with open(revision_file, encoding='utf-8') as f:
+            revision = f.read().strip()
+        if not re.fullmatch(r'[0-9a-f]{40}', revision):
+            raise RuntimeError(
+                f"Invalid Zephyr-Silabs revision in {revision_file}: {revision!r}")
+        revisions.add(revision)
+
+    if not revisions:
+        raise RuntimeError(
+            f"No Zephyr-Silabs revisions found in {revision_dir}")
+    for revision in sorted(revisions):
+        print(f"Zephyr-Silabs Commit SHA - {revision}")
 
 
 def _iter_zephyr_binaries(root):
@@ -149,9 +173,12 @@ def _upload_binaries(root, branch_name, build_number):
 
     for app_name, target, file_path in _iter_zephyr_binaries(root):
         file_name = os.path.basename(file_path)
+        ubai_app_name = ""
+        if app_name == "WiFi-Firmware" and target == "siwx917":
+            ubai_app_name = "Zephyr-WiFi-Firmware-siwx917"
         print(
             f"Uploading {app_name}/{target}/{file_name} to UBAI (target={target})")
-        if upload_to_ubai(file_path, "", target, branch_name, build_number):
+        if upload_to_ubai(file_path, ubai_app_name, target, branch_name, build_number):
             uploaded += 1
         else:
             failures.append(f"{app_name}/{target}/{file_name}")
@@ -170,6 +197,7 @@ def main():
     extracted = _download_zephyr_artifact(args.workflow_id)
     if extracted is None:
         return
+    _print_zephyr_revisions(extracted)
     _upload_binaries(extracted, args.branch_name, args.build_number)
     artifact_file = os.path.join('.', ARTIFACT_NAME + '.zip')
     if not upload_to_ubai(
