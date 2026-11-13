@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import os
 import re
+import socket
+from contextlib import ExitStack
 from pathlib import Path
 
 DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
@@ -107,6 +109,7 @@ class MatterSim:
         test_lib._e = self._emulation
         test_lib._m = self._monitor
         self._uart_testers: list[tuple[object, str]] = []
+        self._console_ports: set[int] = set()
 
     def load(self, resc: str, variables: dict[str, str] | None = None) -> None:
         """Set monitor variables, then include ``resc/<resc>`` from the bundle."""
@@ -133,6 +136,7 @@ class MatterSim:
             test_lib.execute_monitor_command(
                 f'emulation CreateServerSocketTerminal {hub_console_port} "matter_hub_console" false'
             )
+            self._console_ports.add(hub_console_port)
             test_lib.execute_monitor_command("connector Connect sysbus.uart1 matter_hub_console")
         test_lib.execute_monitor_command('mach set "matter_hub"')
         test_lib.execute_monitor_command("start")
@@ -175,7 +179,8 @@ class MatterSim:
             ])
         for cmd in steps:
             test_lib.execute_monitor_command(cmd)
-
+            if cmd.startswith("emulation CreateServerSocketTerminal "):
+                self._console_ports.add(cli_port)
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.
 
@@ -218,4 +223,11 @@ class MatterSim:
         for tester, machine_name in self._uart_testers:
             _unregister_uart_tester(tester, machine_name)
         self._uart_testers.clear()
-        self._emulation.clear()
+        with ExitStack() as consoles:
+            for port in self._console_ports:
+                try:
+                    consoles.enter_context(socket.create_connection(("127.0.0.1", port), timeout=1))
+                except OSError:
+                    pass
+            self._emulation.clear()
+        self._console_ports.clear()
