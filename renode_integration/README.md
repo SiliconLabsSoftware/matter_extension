@@ -6,7 +6,7 @@ Matter Renode simulation in CI and locally. Matter application ELFs come from
 
 ## Overview
 
-The simulation models:
+The simulation runs:
 
 - **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool)
 - **thread_rcp** - EFR32 Thread RCP (Spinel over UART)
