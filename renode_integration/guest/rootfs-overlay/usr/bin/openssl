@@ -1,0 +1,16 @@
+#!/bin/sh
+# Run bundled openssl from the provision disk with its matching dynamic linker and libs.
+set -eu
+
+PROVISION_ROOT=${MATTER_PROVISION_ROOT:-/root/matter-provision}
+
+LOADER="$PROVISION_ROOT/lib/ld-linux-aarch64.so.1"
+LIBS="$PROVISION_ROOT/usr/lib/aarch64-linux-gnu:$PROVISION_ROOT/lib"
+OPENSSL="$PROVISION_ROOT/guest-bin/openssl.bin"
+
+if [ ! -x "$LOADER" ] || [ ! -x "$OPENSSL" ]; then
+    echo "openssl: matter-provision is not mounted or openssl.bin is missing" >&2
+    exit 1
+fi
+
+exec "$LOADER" --library-path "$LIBS" "$OPENSSL" "$@"

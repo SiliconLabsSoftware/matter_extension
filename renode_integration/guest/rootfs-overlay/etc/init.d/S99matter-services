@@ -76,14 +76,14 @@ start()
 
     mkdir -p "$TOOLS"
     if ! mountpoint -q "$TOOLS"; then
-        # With the legacy Docker disk present, matter-tools is vdb.  Without
-        # it (the preferred configuration), it is vda.
-        for dev in /dev/vdb /dev/vda; do
-            [ -b "$dev" ] || continue
-            mount -o ro "$dev" "$TOOLS" && break
-        done
-        if ! mountpoint -q "$TOOLS"; then
-            log "ERROR: cannot mount matter-tools from /dev/vda or /dev/vdb"
+        # matter_virtio is always the first virtio block device -> vda.
+        tools_dev=/dev/vda
+        if [ ! -b "$tools_dev" ]; then
+            log "ERROR: matter-tools block device $tools_dev missing"
+            return 1
+        fi
+        if ! mount -o ro "$tools_dev" "$TOOLS"; then
+            log "ERROR: cannot mount matter-tools from $tools_dev"
             return 1
         fi
     fi
