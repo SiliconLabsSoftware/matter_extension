@@ -16,7 +16,22 @@ import common
 
 PROVISION_REQUIRED_KEY = "0x87228"
 PROVISION_REQUIRED_OBJECT = f"{PROVISION_REQUIRED_KEY}:01"
-DEFAULT_DEVICE = "EFR32MG24B220F1536IM48"
+
+
+def board_device(board):
+    """Resolve a board's part from the SDK's board component metadata."""
+    board = board.lower()
+    if not re.fullmatch(r"brd[0-9]+[a-z]", board):
+        raise ValueError(f"invalid board name: {board}, expected e.g. brd4187c")
+    component = (
+        Path(common.REPO_ROOT) / "third_party/simplicity_sdk/boards/hardware/board/component" / f"{board}.slcc"
+    )
+    if not component.is_file():
+        raise ValueError(f"board component not found: {component}; check --board and the Simplicity SDK submodule")
+    devices = re.findall(r"^\s*- board:device:([a-zA-Z0-9]+)\s*$", component.read_text(encoding="utf-8"), re.MULTILINE)
+    if len(devices) != 1:
+        raise ValueError(f"expected one device in board component: {component}")
+    return devices[0].upper()
 
 
 def nvm3_region(map_path):
@@ -32,9 +47,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--map", required=True, type=Path, help="linker map of the Matter app")
     parser.add_argument(
-        "--device",
-        default=DEFAULT_DEVICE,
-        help=f"part number for commander nvm3 initfile flash layout (default: {DEFAULT_DEVICE})",
+        "--board",
+        required=True,
+        help="SDK board name, e.g. brd4187c (requires the Simplicity SDK submodule)",
     )
     parser.add_argument(
         "--output",
@@ -43,6 +58,10 @@ def main():
         help="Intel HEX output (default: out/nvm3-provision.hex)",
     )
     args = parser.parse_args()
+    try:
+        device = board_device(args.board)
+    except ValueError as exc:
+        parser.error(str(exc))
     if not args.map.is_file():
         common.die(f"map not found: {args.map}")
 
@@ -59,7 +78,7 @@ def main():
                 "nvm3",
                 "initfile",
                 "--device",
-                args.device,
+                device,
                 "--address",
                 address,
                 "--size",

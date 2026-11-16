@@ -141,13 +141,15 @@ python3 -m pip install --no-deps -e ./renode_integration/out/bundle/test_lib
 ```
 
 Use a Matter build containing `matter_provision_channel`. Generate an NVM3 image
-setting key `0x87228=1` from that same build's linker map. The device below is the
-MG24 default; use the correct part and matching map for other boards:
+setting key `0x87228=1` from that same build's linker map. Specify `--board` to
+resolve the part from the Simplicity SDK submodule's board metadata.
+`--board` is required, with no default. Use the same
+board and matching map for image generation and the provisioning session:
 
 ```sh
 python3 renode_integration/scripts/make_provision_nvm3.py \
   --map /path/to/matter_app.map \
-  --device EFR32MG24B220F1536IM48 \
+  --board brd4187c \
   --output renode_integration/out/nvm3-provision.hex
 
 python3 renode_integration/harness/provision_session.py \
