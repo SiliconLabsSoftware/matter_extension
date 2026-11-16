@@ -53,6 +53,19 @@ define:
   - name: SL_MATTER_SIWX_WIFI_ENABLE
   - name: SL_SI91x_DUAL_INTERRUPTS_ERRATA
   - name: NVM3_LOCK_OVERRIDE
+  # Wi-Fi sli_buffer_manager pool sizes (override WiseConnect defaults for Matter SoC RAM Optimization).
+  - name: SLI_BUFFER_MANAGER_CE_CMD_TX_POOL_BLOCK_COUNT
+    value: 3
+  - name: SLI_BUFFER_MANAGER_DATA_TX_POOL_BLOCK_COUNT
+    value: 3
+  - name: SLI_BUFFER_MANAGER_HAL_CMD_DATA_RX_POOL_BLOCK_COUNT
+    value: 5
+  - name: SLI_BUFFER_MANAGER_HAL_CMD_DATA_RX_POOL_UART_BLOCK_COUNT
+    value: 10
+  - name: SLI_BUFFER_MANAGER_QUEUE_NODE_POOL_BLOCK_COUNT
+    value: 20
+  - name: SLI_BUFFER_MANAGER_COMMON_POOL_BLOCK_COUNT
+    value: 1
 toolchain_settings:
   - option: gcc_linker_option
     value: "-Wl,--wrap=MemoryAlloc"
