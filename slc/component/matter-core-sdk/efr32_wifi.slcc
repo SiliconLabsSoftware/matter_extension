@@ -150,6 +150,7 @@ include:
   - path: BlePlatformConfig.h
   - path: KeyValueStoreManagerImpl.h
   - path: SystemPlatformConfig.h
+  - path: SystemTimeSupport.h
 - path: third_party/matter_sdk/src/platform/FreeRTOS
   file_list:
   - path: SystemTimeSupport.h

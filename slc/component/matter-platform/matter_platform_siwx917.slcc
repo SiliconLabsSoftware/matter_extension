@@ -43,6 +43,7 @@ include:
       - path: BaseApplication.h
       - path: BaseAppEvent.h
       - path: SoftwareFaultReports.h
+      - path: SilabsTimeSyncDelegate.h
 source:
   - path: third_party/matter_sdk/examples/platform/silabs/BaseApplication.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/silabs_utils.cpp

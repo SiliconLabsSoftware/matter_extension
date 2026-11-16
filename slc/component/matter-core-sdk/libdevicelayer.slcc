@@ -22,6 +22,7 @@ include:
       - path: GenericThreadStackManagerImpl_OpenThread.hpp
       - path: GenericThreadStackManagerImpl_OpenThread.h
       - path: OpenThreadDnssdImpl.h
+      - path: TxtEntries.h
   - path: third_party/matter_sdk/src/platform
     file_list:
       - path: DeviceSafeQueue.h
