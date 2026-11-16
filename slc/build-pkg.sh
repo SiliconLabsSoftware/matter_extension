@@ -499,21 +499,19 @@ PY
 }
 
 # Build slc generate argument list (SDK paths from pkg.slconf after slt install).
+# Sets the global gen_args array. Namerefs (local -n) are not available in bash 3.2 (macOS default).
 build_generate_args() {
-	local -n _out=$1
-	shift
-	_out=(generate -d "${OUTPUT_DIR}")
-	_out+=("${PROJECT_FLAG}" "${PROJECT_FILE}")
+	gen_args=(generate -d "${OUTPUT_DIR}")
+	gen_args+=("${PROJECT_FLAG}" "${PROJECT_FILE}")
 	while [ $# -gt 0 ]; do
-		_out+=("$1")
+		gen_args+=("$1")
 		shift
 	done
-	_out+=(--generator-timeout=180 -o "${OUTPUT_FORMAT}")
+	gen_args+=(--generator-timeout=180 -o "${OUTPUT_FORMAT}")
 }
 
 run_generate() {
-	local gen_args=()
-	build_generate_args gen_args "$@"
+	build_generate_args "$@"
 	# shellcheck disable=SC2086
 	run_slc_generate_with_retry "${gen_args[@]}" ${CONFIG_ARGS}
 }
