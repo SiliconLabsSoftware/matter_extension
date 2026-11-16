@@ -371,7 +371,6 @@ extra_files:
   - matter_docs.xml
   - matter_templates.xml
   - packages/README.md
-  - packages/_shared/base_recipe.py
   - packages/matter/conanfile.py
   - packages/matter/matter.slce.extra
   - packages/matter/pkg.slt

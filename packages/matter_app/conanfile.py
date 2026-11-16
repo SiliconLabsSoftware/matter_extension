@@ -1,32 +1,30 @@
 import os
-import sys
-from conan import ConanFile
-from conan.tools.scm import Git
-from conan.tools.files import copy, update_conandata
-from typing import Iterable, Optional, Generator
-import yaml
 from pathlib import Path
 
-## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
+from conan import ConanFile
+from conan.scm import Git
+from conan.tools.files import copy
+
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-try:
-    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
-    if str(_PKG_ROOT) not in sys.path:
-        sys.path.insert(0, str(_PKG_ROOT))
-except Exception:
-    pass
-from _shared.base_recipe import MatterBaseRecipe
+class matter_appRecipe(ConanFile):
+    user = "silabs"
+    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
+    author = "Silicon Laboratories Inc."
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
+    url = "https://github.com/SiliconLabsSoftware/matter_extension"
+    topics = "silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
 
-
-class matter_appRecipe(MatterBaseRecipe):
     name = "matter_app"
     version = "2.6.1-0.dev"
     description = "matter sample-app package"
+
     # Other attributes
     # revision_mode = "scm"
+    revision_mode = "hash"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -68,11 +66,23 @@ class matter_appRecipe(MatterBaseRecipe):
       "sdkLtsTag": ""
     }
 
-        # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
-        # on self.source_folder so repo-relative operations stay consistent.
-        @property
-        def matter_app_folder(self) -> str:
-                return str(self.repo_root)
+    # Centralized folder reference (mirrors matter recipe pattern). Avoids relying
+    # on self.source_folder so repo-relative operations stay consistent.
+    @property
+    def matter_app_folder(self) -> str:
+        return str(self.repo_root)
+
+    @property
+    def repo_root_relative(self) -> Path:
+        """Return the checkout root relative to this conanfile's directory."""
+        git_root = Path(Git(self).run("rev-parse --show-toplevel").strip())
+        recipe_dir = Path(__file__).resolve().parent
+        return Path(os.path.relpath(git_root, recipe_dir))
+
+    @property
+    def repo_root(self) -> Path:
+        """Return the checkout root anchored at this conanfile's directory."""
+        return Path(__file__).resolve().parent / self.repo_root_relative
 
     def requirements(self):
         pass
@@ -186,7 +196,6 @@ class matter_appRecipe(MatterBaseRecipe):
         when the assistant reports matches for the given qualities/packages.
         """
         collected: set[str] = set()
-        # Use shared repository root provided by base recipe
         root = self.repo_root
         # Scan once for both extensions
         for slc_file in root.rglob("*.slc*"):

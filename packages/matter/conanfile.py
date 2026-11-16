@@ -1,33 +1,31 @@
 import os
 from pathlib import Path
-from conan import ConanFile
-from conan.tools.scm import Git
-from conan.tools.files import copy, update_conandata
-from typing import Iterable, Optional, Generator
-import sys
+
 import yaml
+from conan import ConanFile
+from conan.scm import Git
+from conan.tools.files import copy
+
 # For logging and error handling, use functions:
 # self.output.success, self.output.info, self.output.warning, self.output.error
 # See: https://docs.conan.io/2/reference/conanfile/attributes.html#output-contents
 
-## repo_root now provided by shared base recipe (MatterBaseRecipe.repo_root)
 
-
-try:
-    _PKG_ROOT = Path(__file__).parent.parent  # .../packages
-    if str(_PKG_ROOT) not in sys.path:
-        sys.path.insert(0, str(_PKG_ROOT))
-except Exception:
-    pass
-from _shared.base_recipe import MatterBaseRecipe
-
-
-class matterRecipe(MatterBaseRecipe):
+class matterRecipe(ConanFile):
+    user = "silabs"
+    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
+    author = "Silicon Laboratories Inc."
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
+    url = "https://github.com/SiliconLabsSoftware/matter_extension"
+    topics = "silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+        
     # Specific description (can override base if needed)
     description = "Matter extension for Simplicity SDK Suite"
 
     # Other attributes
     # revision_mode = "scm"
+    revision_mode = "hash"
 
     # Custom SLT metadata
     # Reference: https://confluence.silabs.com/spaces/SS/pages/669417743/SLT+options+in+conanfile.py
@@ -74,6 +72,22 @@ class matterRecipe(MatterBaseRecipe):
     @property
     def matter_folder(self) -> str:
         return str(self.repo_root)
+
+    @property
+    def repo_root_relative(self) -> Path:
+        """Return the checkout root relative to this conanfile's directory."""
+        git_root = Path(Git(self).run("rev-parse --show-toplevel").strip())
+        recipe_dir = Path(__file__).resolve().parent
+        return Path(os.path.relpath(git_root, recipe_dir))
+
+    @property
+    def repo_root(self) -> Path:
+        """Return the checkout root anchored at this conanfile's directory."""
+        return Path(__file__).resolve().parent / self.repo_root_relative
+
+    @property
+    def dep_versions(self) -> dict:
+        return self._load_dep_versions_shared()
 
     def requirements(self):
         """Declare recipe dependencies using centralized version mapping.
@@ -243,7 +257,7 @@ class matterRecipe(MatterBaseRecipe):
 
         Missing or malformed YAML gracefully degrades with warnings.
         """
-        filename = os.path.join(self.repo_root, filename)
+        filename = self.repo_root / filename
         os.chdir(self.repo_root)
         result = {
             "extra_files_including_descriptor": set(),
@@ -288,8 +302,21 @@ class matterRecipe(MatterBaseRecipe):
 
         Keeps logic centralized so build() and package() stay DRY.
         """
-        filename = os.path.join(self.repo_root, filename)
+        filename = self.repo_root / filename
         if not os.path.exists(filename):
             raise FileNotFoundError(f"SLCE file not found: {filename}")
         # Maintain previous usage of a relative string path
         return f"./{filename}"
+
+
+    def _load_dep_versions_shared(self, filename: str = "dependency_versions.yaml") -> dict:
+        target = self.repo_root / "slc" / "script" / filename
+        if not target.exists():
+            raise FileNotFoundError(
+                f"Dependency versions file not found at expected canonical path: {target}"
+            )
+        try:
+            with target.open("r", encoding="utf-8") as f:
+                return yaml.safe_load(f) or {}
+        except Exception as e:
+            raise RuntimeError(f"Failed to parse dependency versions file {target}: {e}") from e

@@ -77,8 +77,6 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 ```
 root/
 ├── packages
-│   ├── _shared
-│   │   └── base_recipe.py
 │   ├── matter
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
