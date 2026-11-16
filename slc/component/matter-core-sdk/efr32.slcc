@@ -103,6 +103,7 @@ include:
     -   path: board_config.h
     -   path: OTAConfig.h
     -   path: SoftwareFaultReports.h
+    -   path: SilabsTimeSyncDelegate.h
     -   path: silabs_utils.h
     -   path: MatterConfig.h
     -   path: CRTPHelpers.h
@@ -149,6 +150,7 @@ include:
       - path: BLEChannel.h
   - path: third_party/matter_sdk/src/platform/OpenThread
     file_list:
+      - path: OpenThreadTxtEntries.h
       - path: OpenThreadUtils.h
       - path: GenericThreadStackManagerImpl_OpenThread_LwIP.h
       - path: GenericNetworkCommissioningThreadDriver.h

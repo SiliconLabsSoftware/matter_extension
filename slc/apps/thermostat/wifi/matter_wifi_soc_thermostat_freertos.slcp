@@ -53,7 +53,7 @@ component:
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
   - id: matter_time_format_localization
-    from: matter
+  - id: matter_time_synchronization
   - id: matter_wifi_network_diagnostics
   #- id: matter_si70xx_sensor
   - id: matter_default_lcd_config
