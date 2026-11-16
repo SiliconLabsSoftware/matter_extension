@@ -1,0 +1,20 @@
+#!/bin/sh
+# Run the packaged AArch64 chip-tool with its matching dynamic linker and libs.
+set -eu
+
+TOOLS=${MATTER_TOOLS_ROOT:-/root/matter-tools}
+if [ ! -x "$TOOLS/guest-bin/chip-tool" ] && [ -x /docker/guest-bin/chip-tool ]; then
+    TOOLS=/docker
+fi
+
+LOADER="$TOOLS/lib/ld-linux-aarch64.so.1"
+LIBS="$TOOLS/usr/lib/aarch64-linux-gnu:$TOOLS/lib"
+CHIP_TOOL="$TOOLS/guest-bin/chip-tool"
+
+if [ ! -x "$LOADER" ] || [ ! -x "$CHIP_TOOL" ]; then
+    echo "chip-tool: matter-tools is not mounted or chip-tool is missing" >&2
+    exit 1
+fi
+
+exec "$LOADER" --library-path "$LIBS" "$CHIP_TOOL" "$@"
+
