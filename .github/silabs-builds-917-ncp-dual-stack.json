@@ -4,6 +4,10 @@
             {
                 "boards": ["brd4120a", "brd4187c"],
                 "arguments": ["--with_app matter_aws,matter_aws_transport_nwp"]
+            },
+            {
+                "boards": ["brd4187c"],
+                "arguments": ["--with_app matter_aws,matter_aws_transport_nwp", "--output_suffix copy-sources", "--copy-sources"]
             }
         ]
     }
