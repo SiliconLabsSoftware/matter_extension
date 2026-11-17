@@ -1,0 +1,10 @@
+# Export order. matter is first so CI can reuse its prerelease number.
+# Do not add matter_internal or matter_app_internal until their recipes exist.
+# Planned, selected by SLC quality "internal":
+#   matter_internal      requires matter
+#   matter_app_internal  requires matter and matter_internal
+packages:
+  - name: matter
+    recipe: packages/matter/conanfile.py
+  - name: matter_app
+    recipe: packages/matter_app/conanfile.py

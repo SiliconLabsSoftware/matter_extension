@@ -19,7 +19,7 @@ RELEASE-STREAM
     packages/_shared/release_stream_channel (written as release-stream in every pkg.slt).
 
 DEPENDENCY VERSIONS SOURCE
-    Non-Matter dependency versions are loaded from 'dependency_versions.yaml' which
+    Non-Matter dependency versions are loaded from 'packages/matter_dependencies.yaml' which
     supports both grouped format (common/thread/wifi) and legacy flat format.
     Groups allow fine-grained control over which dependencies are included for each platform.
 
@@ -86,40 +86,35 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
-def _load_grouped_versions(filename: str = "dependency_versions.yaml") -> Dict[str, Dict[str, str]]:
+def _load_grouped_versions(filename: str = "matter_dependencies.yaml") -> Dict[str, Dict[str, str]]:
     """Load grouped dependency versions (common/thread/wifi) from YAML.
 
     Accepts either new grouped format or legacy flat mapping. Returns a dict:
         { "common": {...}, "thread": {...}, "wifi": {...} }
-    Fallback provides minimal defaults if the file is missing or malformed.
+    Raises if the file is missing, empty, or not a mapping. No defaults are used,
+    so a wrong path cannot produce pkg.slt files with stale versions.
     """
     script_dir = os.path.dirname(os.path.abspath(__file__))
     candidates = [
-        os.path.join(script_dir, filename),
-        os.path.join(script_dir, "..", "..", filename),
-        os.path.join(os.getcwd(), filename),
+        os.path.join(script_dir, "..", "..", "packages", filename),
+        os.path.join(os.getcwd(), "packages", filename),
     ]
-    raw: Dict[str, Any] = {}
-    for path in candidates:
-        if os.path.exists(path):
-            try:
-                with open(path, "r", encoding="utf-8") as f:
-                    data = yaml.safe_load(f) or {}
-                if isinstance(data, dict):
-                    raw = data
-                    logger.debug("Loaded dependency versions from %s", path)
-                    break
-            except Exception as e:
-                logger.error("Failed parsing dependency versions file %s: %s", path, e)
-                break
+    path = next((p for p in candidates if os.path.isfile(p)), None)
+    if path is None:
+        raise FileNotFoundError(f"{filename} not found; looked in: {', '.join(candidates)}")
+    with open(path, "r", encoding="utf-8") as f:
+        raw: Dict[str, Any] = yaml.safe_load(f) or {}
+    if not isinstance(raw, dict) or not raw:
+        raise ValueError(f"{path} must contain a non-empty mapping")
+    logger.debug("Loaded dependency versions from %s", path)
     grouped: Dict[str, Dict[str, str]]
-    if raw and any(k in raw for k in ("thread", "wifi", "common")):
+    if any(k in raw for k in ("thread", "wifi", "common")):
         grouped = {
             "common": raw.get("common", {}) or {},
             "thread": raw.get("thread", {}) or {},
             "wifi": raw.get("wifi", {}) or {},
         }
-    elif raw:  # legacy flat mapping; no explicit groups provided
+    else:  # legacy flat mapping; no explicit groups provided
         # Instead of maintaining hardcoded dependency name lists, just put all
         # flat keys into both 'thread' and 'wifi' groups so additions require
         # no script changes. Keep 'common' empty (or could optionally lift
@@ -129,13 +124,6 @@ def _load_grouped_versions(filename: str = "dependency_versions.yaml") -> Dict[s
             "common": {},
             "thread": dict(flat_items),
             "wifi": dict(flat_items),
-        }
-    else:
-        logger.warning("dependency_versions.yaml not found; using embedded fallback versions")
-        grouped = {
-            "common": {"bluetooth_le_host": "0.0.6"},
-            "thread": {"openthread": "0.1.5", "rail_module": "0.0.5"},
-            "wifi": {"platform_nwp_siwx91x": "0.0.3", "bluetooth_le_siwx91x": "0.0.3", "lwip": "0.0.5"},
         }
     return grouped
 

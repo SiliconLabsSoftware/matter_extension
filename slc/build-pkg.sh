@@ -65,7 +65,7 @@
 #   --channel : Conan channel for package refs (default: packages/_shared/release_stream_channel
 #               or env MATTER_PACKAGE_CHANNEL).
 #   --clean : Repo dev — remove out/ before build.
-#             Package modes — remove matter/matter_app from Conan cache before export
+#             Package modes — remove packages listed in packages/packages.yaml before export
 #             (package out/ is removed with the cached package; not passed to build_app.sh).
 #
 
@@ -223,9 +223,7 @@ setup_conan() {
 
 remove_matter_packages_from_cache() {
 	setup_conan
-	echo "Removing local matter / matter_app Conan packages..."
-	"${CONAN}" remove "matter/*@silabs/*" -c || true
-	"${CONAN}" remove "matter_app/*@silabs/*" -c || true
+	python3 "${MATTER_ROOT}/packages/pkgctl.py" remove --conan "${CONAN}"
 }
 
 export_matter_packages() {
@@ -235,22 +233,11 @@ export_matter_packages() {
 	setup_conan
 	echo "MATTER_PACKAGE_VERSION=${ver}"
 	echo "MATTER_PACKAGE_CHANNEL=${channel}"
-
-	echo "Exporting matter/${ver}@silabs/${channel} ..."
-	"${CONAN}" export-pkg "${MATTER_ROOT}/packages/matter/conanfile.py" \
-		--name=matter \
-		--version="${ver}" \
-		--user=silabs \
-		--channel="${channel}"
-
-	echo "Exporting matter_app/${ver}@silabs/${channel} ..."
-	"${CONAN}" export-pkg "${MATTER_ROOT}/packages/matter_app/conanfile.py" \
-		--name=matter_app \
-		--version="${ver}" \
-		--user=silabs \
-		--channel="${channel}"
-
 	export MATTER_PACKAGE_CHANNEL="${channel}"
+	python3 "${MATTER_ROOT}/packages/pkgctl.py" export \
+		--version "${ver}" \
+		--channel "${channel}" \
+		--conan "${CONAN}"
 }
 
 install_matter_app_package() {

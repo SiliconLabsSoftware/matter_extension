@@ -32,18 +32,13 @@ Pass `--channel` only when you need a non-default channel.
   matter_wifi_soc_lock_app_freertos.slcw brd4338a
 ```
 
-### Direct Conan export-pkg
+### Direct export
+
+`packages/pkgctl.py` reads `packages/packages.yaml` and exports each recipe in order.
+
 ```bash
 CHANNEL="$(tr -d '[:space:]' < packages/_shared/release_stream_channel)"
-# or: CHANNEL=2026-12
-
-conan export-pkg packages/matter/conanfile.py \
-  --name=matter --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
-
-conan export-pkg packages/matter_app/conanfile.py \
-  --name=matter_app --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
+python3 packages/pkgctl.py export --version <matter_extension_version> --channel "${CHANNEL}"
 ```
 
 ---
@@ -85,15 +80,18 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 ## File Descriptions
 
-- **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.
-- **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.
-- **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.
-- **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
-- **`slc/script/dependency_versions.yaml`** – Used as a single source of truth for dependencies
-- **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
+- **`packages/packages.yaml`** – Package names and recipes, in export order. `pkgctl.py`, `slc/build-pkg.sh`, GitHub Actions, and Jenkins read this list.
+- **`packages/pkgctl.py`** – `export`, `remove`, `names`, `recipes`, and `prune-cache` for every entry in `packages.yaml`.
+- **`packages/matter/conanfile.py`** – Matter stack package. Declares `recipe_support.MATTER` and delegates to `recipe_support`.
+- **`packages/matter/matter.slce.extra`** – Extra files for the stack package. Sample-app paths are skipped; those belong to `matter_app`.
+- **`packages/matter_app/conanfile.py`** – Sample-app package. Declares `recipe_support.MATTER_APP` and delegates to `recipe_support`. Projects are selected by SLC `quality` (`production`, `evaluation`, `experimental`).
+- **`packages/_shared/recipe_support.py`** – `PackageSpec` for each recipe and the calls into `silabs_package_assistant` (`get_version`, `get_channel`, `find_slc_files_to_release`, `list_files_in_slc_file`, `trim_paths`, `copy_files`). See the module docstring.
 - **`packages/_shared/release_stream_channel`** – One-liner Conan channel / pkg.slt release-stream
-- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package.
-- **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.
+- **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
+- **`packages/matter_dependencies.yaml`** – Pinned platform dependency versions for the `matter` package (common, thread, wifi groups). Read by the `matter` recipe, by `slc/script/generate_pkg_slt.py`, and packaged into `matter`.
+- **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
+- **`pkg.slt`** – Generated next to projects and under `packages/matter`. Declares the `matter` dependency.
+- **`packages/matter_app/pkg.slt`** – Declares the `matter_app` dependency.
 
 ---
 
@@ -104,13 +102,17 @@ root/
 ├── matter.slce
 ├── packages
 │   ├── _shared
-│   │   ├── base_recipe.py
+│   │   ├── recipe_support.py
 │   │   └── release_stream_channel
+│   ├── matter_dependencies.yaml
+│   ├── packages.yaml
+│   ├── pkgctl.py
+│   ├── build_app.sh
 │   ├── matter
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
 │   ├── matter_app
-│   │   ├── conanfile.py
+│   │   └── conanfile.py
 │   ├── DEVELOPER_README.md
 └── slc/
     └── script/
