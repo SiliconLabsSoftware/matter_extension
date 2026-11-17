@@ -66,7 +66,7 @@ Use an ELF built for the SoC board you pass to `--board`. **MG24**, **MG26**, an
 
 ### Demo test (local and CI)
 
-`harness/demo_test.py` is the single entry point: it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
+`harness/demo_test.py` is the single entry point. In demo and commissioned interactive modes, it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
 
 The harness always uses the bundle fetched into `renode_integration/out/bundle`. From the repository root (after `fetch_bundle.py`):
 
@@ -109,9 +109,13 @@ Cold boot (no checkpoint) remains `resc/matter-sim-full.resc` for maintainers re
 
 ### Manual provisioning test
 
-`harness/provision_session.py` reuses `MatterSim` and Renode `test_lib` to attach a
+`harness/demo_test.py --provision` reuses `MatterSim` and Renode `test_lib` to attach a
 provisioning disk and a provisioning-enabled SoC to the Thread hub checkpoint.
-It runs provisioning inside the simulated hub and does not commission the device.
+It opens a manual provisioning prompt inside the simulated hub before commissioning.
+`--provision` requires `--nvm3-hex` and cannot be combined with `--app`,
+`--extra-elf`, or `--interactive`. The `--nvm3-hex` and `--provision-image`
+options require `--provision`.
+The harness uses the bundle at `renode_integration/out/bundle`.
 
 From the repository root, fetch the bundle with `--require-provision` so a missing
 provisioning image fails immediately. Use `-p PR-NUM` instead for a PR-specific
@@ -136,7 +140,7 @@ python3 renode_integration/scripts/make_provision_nvm3.py \
   --board brd4187c \
   --output renode_integration/out/nvm3-provision.hex
 
-python3 renode_integration/harness/provision_session.py \
+python3 renode_integration/harness/demo_test.py --provision \
   --matter-elf /path/to/matter_app.out \
   --board brd4187c \
   --nvm3-hex renode_integration/out/nvm3-provision.hex
@@ -144,8 +148,7 @@ python3 renode_integration/harness/provision_session.py \
 
 The harness loads the disk through `provision_virtio`, runs `matter-provision-mount`,
 and attaches the SoC UART tester while emulation is paused, before the SoC starts.
-Use `--provision-image PATH` to override the disk or `--bundle-dir PATH` to use a
-bundle fetched from another registry, such as a fork's registry.
+Use `--provision-image PATH` to override the provisioning disk.
 
 In interactive mode, wait for provisioning readiness in the streamed SoC UART log
 and note its BLE address before issuing commands. You can also attach to hub port
@@ -237,7 +240,7 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 | Checkpoint won't load | Renode build mismatch, rebuild Renode and run `harness/generate_checkpoint.py` |
 | `oras pull` auth failure | `gh auth login` and ensure GHCR package access |
 | `matter-services` timeout | Check guest logs at `/tmp/*.log` on hub console |
-| `provision: matter-provision disk is not mounted` | Use `harness/provision_session.py`, which attaches and mounts the provisioning disk; verify checkpoint compatibility |
+| `provision: matter-provision disk is not mounted` | Use `harness/demo_test.py --provision`, which attaches and mounts the provisioning disk. Verify checkpoint compatibility |
 | New Thread network needed | `matter-thread-init --force` on hub console |
 
 ## Implementation notes
