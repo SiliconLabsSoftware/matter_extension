@@ -11,6 +11,7 @@ from __future__ import annotations
 import os
 import re
 import socket
+import sys
 from contextlib import ExitStack
 from pathlib import Path
 
@@ -118,6 +119,24 @@ def _rcp_commands(name: str, elf: Path, uart_hub: str, medium: str) -> list[str]
         "logLevel 3",
         "mach clear",
     ]
+
+
+def interactive_hub(hub: object, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> None:
+    """Read guest shell commands until exit or EOF; report failures and continue."""
+    while True:
+        try:
+            command = input("hub> ").strip()
+        except EOFError:
+            return
+        if command in ("exit", "quit"):
+            return
+        if command:
+            try:
+                rc, report = run_shell(hub, command, timeout_s)
+                if rc != 0:
+                    print(f"Guest command failed (rc={rc})\n{report[-2000:]}", file=sys.stderr)
+            except RuntimeError as exc:
+                print(f"Command failed: {exc}", file=sys.stderr)
 
 
 class MatterSim:
