@@ -204,7 +204,7 @@
                 "boards": ["brd4338a"],
                 "arguments": ["--output_suffix neutral-less-low-power",
                               "--with_app matter_neutral_less_switch_wifi,matter_platform_low_power",
-                              "'--configuration DEBUG_UART_ENABLE:0'",
+                              "'--configuration DEBUG_UART_ENABLE:0,SL_NET_APP_PROFILE:SL_NET_APP_PROFILE_NEUTRAL_LESS_SWITCH'",
                               "--without_app matter_shell,matter_qr_code,matter_lcd,matter_lcd_917SOC,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
