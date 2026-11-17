@@ -81,6 +81,7 @@
                 "in_artifact": "merged_xg26_rb4121a_efr32mg26b420f3200im68.hex",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
                 "arguments": [
+                    "CONFIG_CHIP_USE_ZEPHYR_NETWORKING=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
@@ -95,6 +96,7 @@
                 "in_artifact": "zephyr/zephyr/matter.ota",
                 "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
                 "arguments": [
+                    "CONFIG_CHIP_USE_ZEPHYR_NETWORKING=y",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
@@ -108,8 +110,12 @@
                 "device": "on-off-light",
                 "variant": "firmware",
                 "in_artifact": "merged_xgm240_rb4316a_mgm240pb22vna.hex",
-                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_full.hex",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_lto_full.hex",
                 "arguments": [
+                    "CONFIG_ISR_TABLES_LOCAL_DECLARATION=y",
+                    "CONFIG_LTO=y",
+                    "CONFIG_LTO_SINGLE_THREADED=y",
+                    "CONFIG_CBPRINTF_FP_SUPPORT=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=1",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION_STRING=\"1.0\"",
@@ -122,8 +128,12 @@
                 "device": "on-off-light",
                 "variant": "ota",
                 "in_artifact": "zephyr/zephyr/matter.ota",
-                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr.ota",
+                "out_artifact": "matter_thread_soc_all_device_app_on_off_light_series_2_zephyr_lto.ota",
                 "arguments": [
+                    "CONFIG_ISR_TABLES_LOCAL_DECLARATION=y",
+                    "CONFIG_LTO=y",
+                    "CONFIG_LTO_SINGLE_THREADED=y",
+                    "CONFIG_CBPRINTF_FP_SUPPORT=n",
                     "-DALL_DEVICES_ENABLED_DEVICES=on-off-light",
                     "-DCONFIG_CHIP_OTA_IMAGE_BUILD=y",
                     "-DCONFIG_CHIP_DEVICE_SOFTWARE_VERSION=2",
