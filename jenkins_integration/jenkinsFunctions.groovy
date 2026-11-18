@@ -14,7 +14,7 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
         """)
         def output = readFile(logFile).trim()
         // TODO: rm skill-packaging branch after testing
-        if (!sqa && !env.CHANGE_ID && (env.BRANCH_NAME in ['main', 'skill-packaging'] || env.BRANCH_NAME?.startsWith('release_'))) {
+        if (env.BRANCH_NAME in ['main', 'skill-packaging-test'] || env.BRANCH_NAME?.startsWith('release_')) {
             sh 'python3 jenkins_integration/artifacts/publish_skill_pack.py'
         }
         if(!sqa){
