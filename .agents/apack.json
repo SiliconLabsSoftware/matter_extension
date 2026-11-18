@@ -1,0 +1,19 @@
+{
+  "id": "matter-skills",
+  "label": "Matter agent skills",
+  "description": "Cursor and VSCode agent skills for Matter development",
+  "path": ["../mcp-config"],
+  "executable": {
+    "mcp-config:linux.x86_64": { "exe": "mcp-config" },
+    "mcp-config:linux.aarch64": { "exe": "mcp-config" },
+    "mcp-config:macosx.x86_64": { "exe": "mcp-config" },
+    "mcp-config:macosx.aarch64": { "exe": "mcp-config" },
+    "mcp-config:win32.x86": { "exe": "mcp-config.exe" },
+    "mcp-config:win32.x86_64": { "exe": "mcp-config.exe" }
+  },
+  "function": {
+    "postinstall": {
+      "cmd": "$(mcp-config) batch [ --file ${apack.directory}/postinstall-commands.txt ] [ --var rootdirectory=${apack.directory} ]"
+    }
+  }
+}
