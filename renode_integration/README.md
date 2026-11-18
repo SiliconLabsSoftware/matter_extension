@@ -59,7 +59,7 @@ gh auth login
 python3 scripts/fetch_bundle.py
 ```
 
-Use an ELF built for the SoC board you pass to `--board` (default `brd4187c`). **MG24**, **MG26**, and **SixG301** have been exercised in this simulation.
+Use an ELF built for the SoC board you pass to `--board`. **MG24**, **MG26**, and **SixG301** have been exercised in this simulation.
 
 ### Demo test (local and CI)
 
