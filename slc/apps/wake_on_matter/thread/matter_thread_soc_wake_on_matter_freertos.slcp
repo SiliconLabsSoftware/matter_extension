@@ -1,7 +1,7 @@
 project_name: matter_thread_soc_wake_on_matter_freertos
 label: Matter Thread - SoC Wake on Matter FreeRTOS
 description: Demonstrates a POC of receiving Matter subscription on a Thread NCP
-quality: experimental
+quality: production
 package: matter
 category: Matter Application
 filter: 
@@ -155,7 +155,7 @@ define:
   - name: OPENTHREAD_CONFIG_MAX_STATECHANGE_HANDLERS
     value: 4
   - name: SL_MATTER_LOG_LEVEL
-    value: SL_MATTER_LOG_DETAIL
+    value: SL_MATTER_LOG_PROGRESS
 #  - name: SL_OPENTHREAD_MULTI_PAN_ENABLE
 #    value: 1 
 
@@ -233,7 +233,7 @@ configuration:
     name: SL_CPC_DRV_UART_VCOM_FLOW_CONTROL_TYPE
     value: eusartHwFlowControlCtsAndRts
   - name: OPENTHREAD_CONFIG_LOG_OUTPUT
-    value: OPENTHREAD_CONFIG_LOG_OUTPUT_PLATFORM_DEFINED
+    value: OPENTHREAD_CONFIG_LOG_OUTPUT_NONE
   - condition:
     - ot_rtt_log
     name: BUFFER_SIZE_UP
@@ -260,7 +260,7 @@ toolchain_settings:
   - option: cxx_standard
     value: gnu++17
   - option: optimize
-    value: debug
+    value: size
 
 tag:
   - hardware:rf:band:2400
