@@ -258,6 +258,9 @@ def get_category(path_in_source: str, default_category: str, library_name: str, 
     if "lib/gcc" in library_name:
         return "C/C++ Standard Library"
 
+    if "librail" in library_name or "librail" in file_name:
+        return "RAIL Lib"
+
     # FIle name mapping is more precise but tedious to maintain
     category_name = get_category_from_filename(file_name) 
     if category_name:
