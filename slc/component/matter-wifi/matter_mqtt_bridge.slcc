@@ -2,7 +2,7 @@ id: matter_mqtt_bridge
 package: matter
 description: >
   Matter MQTT cluster bridge: maps Matter attribute changes and commands to the Silabs MQTT cloud contract.
-  Includes platform demo adapters and DeviceMqttProfile wiring when enabled.
+  Includes platform demo cluster filters and DeviceMqttProfile wiring when enabled.
 label: Matter MQTT Cluster Bridge
 category: Matter-WiFi|Services|MQTT
 quality: experimental
@@ -24,7 +24,7 @@ include:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/include
     file_list:
       - path: attribute_value_reader.h
-      - path: cluster_adapter.h
+      - path: matter_mqtt_cluster_filter.h
       - path: command_injector.h
       - path: device_mqtt_profile.h
       - path: matter_mqtt_bridge.h
@@ -39,7 +39,7 @@ include:
   - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge
     file_list:
       - path: MatterMqttBridgeConfig.h
-      - path: EmberMqttAttributeValueReader.h
+      - path: EmberMqttBridgePlatform.h
 
 source:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/command_injector.cpp
@@ -48,7 +48,7 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_codec.cpp
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_topic.cpp
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/mqtt_client_transport_port.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/cluster_adapter_registry.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_cluster_filter_registry.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MatterMqttBridgeConfig.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/EmberMqttAttributeValueReader.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MqttAdapterRegistry.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/EmberMqttBridgePlatform.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MqttFilterRegistry.cpp
