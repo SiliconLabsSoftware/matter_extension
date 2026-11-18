@@ -22,6 +22,9 @@ def commit_change_summary = ""
 // svc_matter credential ID.
 def sonarqubeTokenCredentialId = 'sonarqube_token'
 
+// Temporary: validate the SonarQube scan only. Set to false to restore the full pipeline.
+def staticAnalysisOnly = true
+
 def combineSlackSummary(String commitSummary, String extra) {
     def c = commitSummary?.trim() ?: ''
     def e = extra?.trim() ?: ''
@@ -100,6 +103,7 @@ pipeline
             }
         }
         stage('Upload Artifacts') {
+            when { expression { !staticAnalysisOnly } }
             steps {
                 script {
                     // Resolve outside ubai docker: SLT/Conan list+1 for shared package version (.N).
@@ -133,51 +137,67 @@ pipeline
         }
         stage('Coverage and Code Size') {
             when {
-                expression { env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
+                expression { staticAnalysisOnly || env.BRANCH_NAME == "main" || env.BRANCH_NAME.startsWith("release_") }
             }
             parallel {
                 stage('Code Coverage & Static Code Analysis') {
                     when {
-                        expression { env.BRANCH_NAME == "main" }
+                        expression {
+                            staticAnalysisOnly || env.BRANCH_NAME == "main" || env.BRANCH_NAME == "release_2.10-1.6.1"
+                        }
                     }
                     steps {
                         script {
-                            withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
-                                pipelineFunctions.actionWithRetry {
-                                    pipelineFunctions.download_coverage_artifact(workflow_id)
-                                }
-                                sh '''
-                                    if [ -f coverage/coverage.info ]; then
-                                        echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
-                                        ls -la coverage/
-                                        if [ -f coverage/sonarqube-coverage.xml ]; then
-                                            echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
-                                        else
-                                            echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
-                                        fi
-                                    fi
-                                '''
-                                archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
-                            }
-                            if (fileExists('coverage/sonarqube-coverage.xml')) {
-                                withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                            if (!staticAnalysisOnly) {
+                                withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
+                                    pipelineFunctions.actionWithRetry {
+                                        pipelineFunctions.download_coverage_artifact(workflow_id)
+                                    }
                                     sh '''
-                                        docker run --rm \
-                                            -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
-                                            -e SONAR_TOKEN="$SONAR_TOKEN" \
-                                            -v "$WORKSPACE:/usr/src" \
-                                            sonarsource/sonar-scanner-cli:11 \
-                                            -Dsonar.scm.disabled=true \
-                                            -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml
+                                        if [ -f coverage/coverage.info ]; then
+                                            echo "[SUCCESS] GitHub LCOV coverage artifact downloaded to ./coverage"
+                                            ls -la coverage/
+                                            if [ -f coverage/sonarqube-coverage.xml ]; then
+                                                echo "[SUCCESS] sonarqube-coverage.xml present (from GitHub Actions)"
+                                            else
+                                                echo "[WARN] sonarqube-coverage.xml missing; run a workflow that includes the gcovr step in coverage-builder.yaml"
+                                            fi
+                                        fi
                                     '''
+                                    archiveArtifacts artifacts: 'coverage/**', allowEmptyArchive: true, fingerprint: false
                                 }
-                            } else {
+                            }
+                            // staticAnalysisOnly: ignore leftover coverage XML from prior workspace builds.
+                            def hasCoverage = !staticAnalysisOnly && fileExists('coverage/sonarqube-coverage.xml')
+                            if (!hasCoverage && !staticAnalysisOnly) {
                                 echo '[SKIP] No coverage/sonarqube-coverage.xml; skipping SonarQube analysis.'
+                            } else {
+                                if (!hasCoverage) {
+                                    echo '[INFO] No coverage report; running static analysis on checked-out sources.'
+                                    sh 'rm -rf coverage'
+                                }
+                                def scannerArgs = "-Dsonar.scm.disabled=true -Dsonar.branch.name=${env.BRANCH_NAME}"
+                                if (hasCoverage) {
+                                    scannerArgs += ' -Dsonar.coverageReportPaths=coverage/sonarqube-coverage.xml'
+                                }
+                                withCredentials([string(credentialsId: sonarqubeTokenCredentialId, variable: 'SONAR_TOKEN')]) {
+                                    withEnv(["SONAR_SCANNER_ARGS=${scannerArgs}"]) {
+                                        sh '''
+                                            docker run --rm \
+                                                -e SONAR_HOST_URL="https://sonarqube.silabs.net" \
+                                                -e SONAR_TOKEN="$SONAR_TOKEN" \
+                                                -v "$WORKSPACE:/usr/src" \
+                                                sonarsource/sonar-scanner-cli:11 \
+                                                $SONAR_SCANNER_ARGS
+                                        '''
+                                    }
+                                }
                             }
                         }
                     }
                 }
                 stage('Code Size Analysis') {
+                    when { expression { !staticAnalysisOnly } }
                     steps {
                         script {
                             withDockerContainer(image: 'artifactory.silabs.net/gsdk-docker-production/gsdk_nomad_containers/gsdk_ubai:latest') {
@@ -190,6 +210,7 @@ pipeline
         }
         stage('Execute CI Tests')
         {
+            when { expression { !staticAnalysisOnly } }
             steps {
                 script {
                     def parallelNodes = [:]
@@ -268,6 +289,7 @@ pipeline
             }
         }
         stage('Create and Publish Matter Packages') {
+            when { expression { !staticAnalysisOnly } }
             steps {
                 script {
                     def remoteName = 'matter-conan-dev'
@@ -323,8 +345,10 @@ pipeline
             // SiliconLabsInternal/action-conan-promote@v2 via uv + JFrog CLI
             when {
                 expression {
-                    env.BRANCH_NAME.startsWith("SL_compatibility") ||
-                    env.BRANCH_NAME.startsWith("release_")
+                    !staticAnalysisOnly && (
+                        env.BRANCH_NAME.startsWith("SL_compatibility") ||
+                        env.BRANCH_NAME.startsWith("release_")
+                    )
                 }
             }
             steps {
@@ -358,7 +382,7 @@ pipeline
         stage('Trigger SQA Zephyr Pipelines')
         {
             when {
-                expression { env.BRANCH_NAME.startsWith("release_") }
+                expression { !staticAnalysisOnly && env.BRANCH_NAME.startsWith("release_") }
             }
             steps {
                 script {
