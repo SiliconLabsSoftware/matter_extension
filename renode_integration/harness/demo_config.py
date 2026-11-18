@@ -39,9 +39,8 @@ DEMO_TARGETS: tuple[DemoTarget, ...] = (
     DemoTarget("mg26", "brd4118a"),
     DemoTarget("mg26", "brd4120a"),
     DemoTarget("mg26", "brd4121a"),
-    # TODO: re-enable when rainier commissioning failures ironed out on physical hw
-    # DemoTarget("sixg301", "brd4407a"),
-    # DemoTarget("sixg301", "brd1019a"),
+    DemoTarget("sixg301", "brd4407a"),
+    DemoTarget("sixg301", "brd1019a"),
 )
 
 
