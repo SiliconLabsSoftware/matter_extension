@@ -80,6 +80,7 @@ component:
   - { id: matter_on_off }
   - { id: matter_scenes }
   - { id: matter }
+  - { id: matter_subscription_persistence }
   - { id: matter_ota_support }
   - { id: matter_ota_requestor }
   - { id: matter_access_control }

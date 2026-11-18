@@ -15,6 +15,7 @@ component:
   - id: sl_main
   - id: clock_manager
   - id: matter
+  - id: matter_subscription_persistence
   - id: matter_platform_mg
   - id: matter_ble
   - id: ot_stack_mtd

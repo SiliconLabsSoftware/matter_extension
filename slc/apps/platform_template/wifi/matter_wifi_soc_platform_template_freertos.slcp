@@ -15,6 +15,7 @@ sdk_extension:
 
 component:
   - id: matter
+  - id: matter_subscription_persistence
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
 
