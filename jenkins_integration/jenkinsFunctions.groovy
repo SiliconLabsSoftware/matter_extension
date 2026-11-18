@@ -13,8 +13,7 @@ def upload_artifacts(sqa=false, commit_sha="null", workflow_id="null", run_numbe
             bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --sqa ${sqa} --commit_sha ${commit_sha} --workflow_id ${workflow_id} --run_number ${run_number} --package_version ${packageVersion} 2>&1 | tee '${logFile}'"
         """)
         def output = readFile(logFile).trim()
-        // TODO: rm skill-packaging branch after testing
-        if (!sqa && !env.CHANGE_ID && (env.BRANCH_NAME in ['main', 'skill-packaging'] || env.BRANCH_NAME?.startsWith('release_'))) {
+        if (!sqa && (env.BRANCH_NAME == 'main' || env.BRANCH_NAME?.startsWith('release_'))) {
             sh 'python3 jenkins_integration/artifacts/publish_skill_pack.py'
         }
         if(!sqa){
