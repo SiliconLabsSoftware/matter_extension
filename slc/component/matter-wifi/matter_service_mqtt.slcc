@@ -23,6 +23,10 @@ include:
 source:
   - path: third_party/matter_sdk/src/platform/silabs/services/mqtt_client.cpp
 
+config_file:
+  - path: slc/config/sl_matter_mqtt_config.h
+    file_id: matter_mqtt_config
+
 define:
   - name: SL_MATTER_ENABLE_MQTT_SERVICE
     value: "1"
