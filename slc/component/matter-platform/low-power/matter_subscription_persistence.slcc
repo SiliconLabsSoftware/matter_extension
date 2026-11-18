@@ -20,3 +20,4 @@ include:
       - path: SimpleSubscriptionResumptionStorage.h
 source:
   - path: third_party/matter_sdk/src/app/SimpleSubscriptionResumptionStorage.cpp
+  - path: third_party/matter_sdk/src/app/SubscriptionResumptionSessionEstablisher.cpp
