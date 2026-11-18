@@ -33,7 +33,7 @@ def main() -> int:
         metavar="PATH",
         help="Second SoC ELF (required when --app has a paired demo binary)",
     )
-    parser.add_argument("--board", default="brd4187c", help="SoC board repl name, e.g. brd4187c")
+    parser.add_argument("--board", required=True, help="SoC board repl name, e.g. brd4187c")
     parser.add_argument(
         "--interactive",
         action="store_true",

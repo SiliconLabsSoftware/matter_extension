@@ -156,7 +156,7 @@ def run_demo(
     app: str | None,
     *,
     extra_elf: Path | None = None,
-    board: str = "brd4187c",
+    board: str,
     interactive: bool = False,
 ) -> None:
     """Commission, then run the demo flow or an interactive hub session."""
