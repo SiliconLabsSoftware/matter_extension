@@ -12,12 +12,17 @@ metadata:
 provides:
   - name: matter_keypad_input
 source:
-  - path: third_party/matter_sdk/src/app/clusters/keypad-input-server/keypad-input-server.cpp
+  - path: third_party/matter_sdk/src/app/clusters/keypad-input-server/CodegenIntegration.cpp
+    unless: [matter_code_driven_dm]
+  - path: third_party/matter_sdk/src/app/clusters/keypad-input-server/KeypadInputCluster.cpp
 include:
   - path: third_party/matter_sdk/src/app/clusters/keypad-input-server
     file_list:
+      - path: CodegenIntegration.h
+        unless: [matter_code_driven_dm]
       - path: keypad-input-delegate.h
       - path: keypad-input-server.h
+      - path: KeypadInputCluster.h
 template_contribution:
   - name: component_catalog
     value: matter_keypad_input

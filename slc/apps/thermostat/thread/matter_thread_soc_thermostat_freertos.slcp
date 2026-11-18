@@ -46,8 +46,10 @@ component:
   - id: matter_operational_credentials
   - id: matter_ota_requestor
   - id: matter_thermostat
+  - id: matter_read_client
   - id: matter_thermostat_user_interface_configuration
   - id: matter_thread_network_diagnostics
+  - id: matter_time_synchronization
   - id: matter_user_label
   - id: matter_default_lcd_config
   - id: matter_log_uart

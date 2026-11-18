@@ -29,12 +29,12 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - id: mg24
-            display: MG24
-            page_size: 8192 # bytes (8 KiB flash page)
-            available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
-            json_file: ./.github/silabs-builds-mg24-ota.json
-            window_app_path: slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
+          # - id: mg24
+          #   display: MG24
+          #   page_size: 8192 # bytes (8 KiB flash page)
+          #   available_flash: 1572864 # bytes (~1.50 MB or 1536KB)
+          #   json_file: ./.github/silabs-builds-mg24-ota.json
+          #   window_app_path: slc/apps/window_app/thread/matter_thread_soc_window_app_freertos.slcp
 
           - id: mg26
             display: MG26
@@ -73,16 +73,16 @@ jobs:
       - name: Cache tools
         uses: ./.github/actions/cache-tools
 
-      - name: Build window-app
-        if: matrix.id == 'mg24'
-        uses: SiliconLabsSoftware/matter_build_action@v2
-        with:
-          json-file-path: ${{ matrix.json_file }}
-          path-to-example-app: ${{ matrix.window_app_path }}
-          example-app: window_app
-          build-script: "./slc/build.sh"
-          output-directory: " "
-          build-type: standard
+      # - name: Build window-app
+      #   if: matrix.id == 'mg24'
+      #   uses: SiliconLabsSoftware/matter_build_action@v2
+      #   with:
+      #     json-file-path: ${{ matrix.json_file }}
+      #     path-to-example-app: ${{ matrix.window_app_path }}
+      #     example-app: window_app
+      #     build-script: "./slc/build.sh"
+      #     output-directory: " "
+      #     build-type: standard
 
       - name: Build lighting-app 
         if: matrix.id == 'mg26'

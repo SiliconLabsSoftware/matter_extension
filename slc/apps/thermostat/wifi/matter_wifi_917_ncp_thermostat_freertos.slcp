@@ -59,10 +59,11 @@ component:
   - id: matter_operational_credentials
   - id: matter_ota_requestor
   - id: matter_software_diagnostics
+  - id: matter_read_client
   - id: matter_thermostat
   - id: matter_thermostat_user_interface_configuration
   - id: matter_time_format_localization
-    from: matter
+  - id: matter_time_synchronization
   - id: matter_wifi_network_diagnostics
   # Override configuration for JTAG use
   - id: matter_configuration_over_swo

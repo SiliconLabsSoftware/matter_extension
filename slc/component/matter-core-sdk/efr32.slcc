@@ -103,6 +103,7 @@ include:
     -   path: board_config.h
     -   path: OTAConfig.h
     -   path: SoftwareFaultReports.h
+    -   path: SilabsTimeSyncDelegate.h
     -   path: silabs_utils.h
     -   path: MatterConfig.h
     -   path: CRTPHelpers.h
@@ -134,6 +135,7 @@ include:
       - path: BlePlatformConfig.h
       - path: KeyValueStoreManagerImpl.h
       - path: SystemPlatformConfig.h
+      - path: SystemTimeSupport.h
   - path: third_party/matter_sdk/src/platform/silabs/platformAbstraction
     file_list:
       - path: SilabsPlatformBase.h
@@ -149,12 +151,14 @@ include:
       - path: BLEChannel.h
   - path: third_party/matter_sdk/src/platform/OpenThread
     file_list:
+      - path: OpenThreadTxtEntries.h
       - path: OpenThreadUtils.h
       - path: GenericThreadStackManagerImpl_OpenThread_LwIP.h
       - path: GenericNetworkCommissioningThreadDriver.h
       - path: GenericThreadStackManagerImpl_OpenThread.hpp
       - path: GenericThreadStackManagerImpl_OpenThread.h
       - path: OpenThreadDnssdImpl.h
+      - path: TxtEntries.h
   - path: third_party/matter_sdk/src/platform/FreeRTOS
     file_list:
       - path: SystemTimeSupport.h

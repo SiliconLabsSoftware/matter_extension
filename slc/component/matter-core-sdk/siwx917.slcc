@@ -105,6 +105,7 @@ include:
   - path: board_config.h
   - path: OTAConfig.h
   - path: SoftwareFaultReports.h
+  - path: SilabsTimeSyncDelegate.h
   - path: silabs_utils.h
   - path: MatterConfig.h
   - path: CRTPHelpers.h
@@ -147,6 +148,7 @@ include:
   - path: BlePlatformConfig.h
   - path: KeyValueStoreManagerImpl.h
   - path: SystemPlatformConfig.h
+  - path: SystemTimeSupport.h
 - path: third_party/matter_sdk/src/platform/FreeRTOS
   file_list:
   - path: SystemTimeSupport.h

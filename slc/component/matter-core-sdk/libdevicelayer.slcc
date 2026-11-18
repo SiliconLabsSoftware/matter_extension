@@ -15,12 +15,14 @@ include:
   - path: third_party/nlio/include
   - path: third_party/matter_sdk/src/platform/OpenThread
     file_list:
+      - path: OpenThreadTxtEntries.h
       - path: OpenThreadUtils.h
       - path: GenericThreadStackManagerImpl_OpenThread_LwIP.h
       - path: GenericNetworkCommissioningThreadDriver.h
       - path: GenericThreadStackManagerImpl_OpenThread.hpp
       - path: GenericThreadStackManagerImpl_OpenThread.h
       - path: OpenThreadDnssdImpl.h
+      - path: TxtEntries.h
   - path: third_party/matter_sdk/src/platform
     file_list:
       - path: DeviceSafeQueue.h
