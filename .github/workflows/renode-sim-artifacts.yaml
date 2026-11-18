@@ -149,19 +149,19 @@ jobs:
           python-version: "3.11"
 
       - name: Download RCP artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-rcps
           path: renode_integration/out/rcp
 
       - name: Download guest rootfs artifacts
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-guest-rootfs
           path: renode_integration/out/guest-rootfs
 
       - name: Download tools image
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-tools-image
           path: renode_integration/out/guest-rootfs
@@ -195,7 +195,7 @@ jobs:
           python-version: "3.11"
 
       - name: Download common bundle
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-common-bundle
           path: renode_integration/out/bundle
@@ -244,7 +244,7 @@ jobs:
           dotnet-version: "8.0.x"
 
       - name: Download common bundle
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-common-bundle
           path: renode_integration/out/bundle
@@ -311,7 +311,7 @@ jobs:
           python-version: "3.11"
 
       - name: Download runtime bundle
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: renode-runtime-${{ matrix.host }}
           path: renode_integration/out/publish/runtime
