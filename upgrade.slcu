@@ -386,7 +386,7 @@ upgrade:
            - id: matter_use_ctm
       - trigger: matter
         description: >
-          Enable persistent subscriptions using the matter_subscription_persistence component.
+          Migrate existing persistent subscription configuration to the matter_subscription_persistence component.
         add:
            - id: matter_subscription_persistence
     configuration:
