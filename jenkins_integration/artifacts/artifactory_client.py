@@ -20,7 +20,7 @@ if workspace_root not in sys.path:
 import jenkins_integration.config as config
 
 
-def upload_to_artifactory(filepath, artifact_name, branch_name, build_number):
+def upload_to_artifactory(filepath, artifact_name, branch_name, build_number, *, destination_url=None, content_type=None):
     """
     Upload an artifact file to Artifactory.
     
@@ -29,6 +29,8 @@ def upload_to_artifactory(filepath, artifact_name, branch_name, build_number):
         artifact_name (str): Name of the artifact.
         branch_name (str): Branch name for the artifact.
         build_number (str): Build number for the artifact.
+        destination_url (str): Optional explicit URL for artifacts such as skill packages.
+        content_type (str): Optional Content-Type override, e.g. application/json for site.json.
         
     Returns:
         str: The download URI of the uploaded artifact
@@ -42,8 +44,8 @@ def upload_to_artifactory(filepath, artifact_name, branch_name, build_number):
     print(f"Uploading {artifact_name} to Artifactory for branch {branch_name}, build {build_number}")
     
     try:
-        artifactory_url = _construct_artifactory_url(branch_name, build_number, artifact_name)
-        response = _perform_artifactory_upload(filepath, artifactory_url)
+        artifactory_url = destination_url or _construct_artifactory_url(branch_name, build_number, artifact_name)
+        response = _perform_artifactory_upload(filepath, artifactory_url, content_type=content_type)
         download_uri = response.json()['downloadUri']
         print(f"Successfully uploaded to Artifactory: {download_uri}")
         return download_uri
@@ -122,13 +124,14 @@ def _is_release_branch(branch_name):
     return "release_" in branch_name or branch_name == "main"
 
 
-def _perform_artifactory_upload(filepath, artifactory_url):
+def _perform_artifactory_upload(filepath, artifactory_url, *, content_type=None):
     """
     Perform the actual upload to Artifactory.
     
     Args:
         filepath (str): Path to the file to upload
         artifactory_url (str): The Artifactory URL to upload to
+        content_type (str): Optional Content-Type override
         
     Returns:
         requests.Response: The response from Artifactory
@@ -146,7 +149,7 @@ def _perform_artifactory_upload(filepath, artifactory_url):
         with open(filepath, 'rb') as file_data:
             response = requests.put(
                 artifactory_url,
-                headers=config.artifactory_headers,
+                headers={"Content-type": content_type} if content_type else config.artifactory_headers,
                 data=file_data,
                 auth=(username, password)
             )

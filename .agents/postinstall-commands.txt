@@ -1,1 +1,0 @@
-install-skills --agent all --source ${rootdirectory}/skills/slab-matter-hub
