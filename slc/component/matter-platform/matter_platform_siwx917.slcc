@@ -53,6 +53,7 @@ define:
   - name: SL_MATTER_SIWX_WIFI_ENABLE
   - name: SL_SI91x_DUAL_INTERRUPTS_ERRATA
   - name: NVM3_LOCK_OVERRIDE
+  #TODO: Replace the SLI macros with SL macros after SI91X-22662 is resolved
   # Wi-Fi sli_buffer_manager pool sizes (override WiseConnect defaults for Matter SoC RAM Optimization).
   - name: SLI_BUFFER_MANAGER_CE_CMD_TX_POOL_BLOCK_COUNT
     value: 3

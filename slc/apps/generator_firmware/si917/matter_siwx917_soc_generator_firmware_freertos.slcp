@@ -135,6 +135,7 @@ define:
   - { name: CHIP_CONFIG_MEMORY_MGMT_PLATFORM, value: "1" }
   - { name: MBEDTLS_CONFIG_FILE, value: \"siwx917-chip-mbedtls-config.h\" }
   - { name: NVM3_LOCK_OVERRIDE, value: "1" }
+  #TODO: Replace the SLI macros with SL macros after SI91X-22662 is resolved
   # Wi-Fi sli_buffer_manager pool sizes (override WiseConnect defaults for Matter SiWx917 RAM optimization).
   - { name: SLI_BUFFER_MANAGER_CE_CMD_TX_POOL_BLOCK_COUNT, value: "3" }
   - { name: SLI_BUFFER_MANAGER_DATA_TX_POOL_BLOCK_COUNT, value: "3" }
