@@ -18,15 +18,15 @@ Matter Hub access is a **one-time manual setup by the user**. The agent does **n
 
 **Only** use `hub.py` subcommands (see [Executor](#executor)).
 
-Before commissioning or `run`, call `hub.py check` once. If it fails (non-zero exit) with messages such as `No Matter Hub host in ~/.silabs/matter-hub.json` or `Permission denied`:
+Before commissioning or `chip-tool`, call `hub.py check` once. If it fails (non-zero exit) with messages such as `No Matter Hub host in ~/.silabs/matter-hub.json` or `Permission denied`:
 
-1. Stop the chip-tool workflow (no commission, no `run`, no retries with network tools).
+1. Stop the chip-tool workflow (no commission, no `chip-tool`, no retries with network tools).
 2. Give the user the [one-time setup](#one-time-hub-setup-user-not-agent) steps verbatim. Do not improvise discovery or guess HOST.
 3. Wait until the user confirms setup is done, then run `check` again.
 
 Only the **user** writes the hub config: `hub.py discover --host HOST` after SSH key setup. The agent sends the user **HOST** only inside the setup instructions, it does not run `discover` itself.
 
-Treat hub setup as **complete** only after `hub.py check` succeeds. Until then, do not run `dataset`, `commission-thread`, `commission-wifi`, `run`, or `logs`.
+Treat hub setup as **complete** only after `hub.py check` succeeds. Until then, do not run `dataset`, `commission-thread`, `commission-wifi`, `chip-tool`, or `logs`.
 
 ## Purpose
 
@@ -77,7 +77,7 @@ Do not run `commission-thread` or `commission-wifi` until the user answers.
 
 If the user later references both transports or an ambiguous app, ask which operational network to use (Thread dataset vs Wi-Fi credentials).
 
-Record the chosen transport in the session (for example `transport=thread`) so later `run` and `show-node-id` stay consistent. Do not store transport in `matter-hub.json`.
+Record the chosen transport in the session (for example `transport=thread`) so later `chip-tool` and `show-node-id` stay consistent. Do not store transport in `matter-hub.json`.
 
 ## Executor
 
@@ -120,7 +120,7 @@ Dedicated SSH key for the hub only (not GitHub/corporate defaults). `hub.py` use
 | `start-thread` | Factory-reset OTBR and form a new Thread network (destructive, user must ask) |
 | `commission-thread` | BLE-Thread pair. Writes last node id on the Pi |
 | `commission-wifi` | BLE-Wi-Fi pair. Writes last node id on the Pi |
-| `run` | Pass remaining args to chip-tool |
+| `chip-tool` | Pass remaining args to chip-tool |
 | `show-node-id` | Read last node id from `/tmp/last-node-id` on the hub |
 | `logs` | Last 200 lines of `otbr-agent` journal |
 
@@ -136,15 +136,29 @@ Required: `--ssid`, `--password` (infrastructure Wi-Fi, device and hub must reac
 
 Blocks until chip-tool exits (up to 180s). Saves node id to `/tmp/last-node-id` on the Pi.
 
-### `run`
+### `chip-tool`
 
 Forwards argv to chip-tool. Example:
 
 ```bash
-python3 .agents/skills/slab-matter-hub/scripts/hub.py run onoff on 1 1
+python3 .agents/skills/slab-matter-hub/scripts/hub.py chip-tool onoff on 1 1
 ```
 
 If the user omits node id, read last id from the Pi with `hub.py show-node-id` or reuse the node id from `commission-thread` or `commission-wifi`.
+
+## Command discovery (required before execution)
+
+Before executing an arbitrary chip-tool command, first run
+`hub.py chip-tool <cluster> <command> -h` to discover its arguments, then
+construct and execute the actual command. If the cluster or command name is
+unknown, start with `hub.py chip-tool -h` and then
+`hub.py chip-tool <cluster> -h`. Do not guess syntax or
+argument order. Help is forwarded to chip-tool, the wrapper does not automatically
+run help or populate arguments. Help may exit nonzero, inspect output. SSH
+failures must stop the action.
+
+The dedicated `commission-thread` and `commission-wifi` subcommands construct
+known pairing arguments and do not require help discovery before execution.
 
 ## Consent
 
@@ -169,7 +183,7 @@ After the Matter app is built, flashed, and advertising:
 
 **Both:**
 
-5. `run` for cluster commands
+5. `chip-tool` for cluster commands
 6. `logs` if OTBR-side diagnosis is needed (Thread only)
 
 ## Pairing reference
@@ -192,6 +206,6 @@ pairing ble-wifi <node_id> <ssid> <password> <pin> <discriminator>
 
 ## Logs
 
-- chip-tool output: stdout of `run`, `commission-thread`, and `commission-wifi`
+- chip-tool output: stdout of `chip-tool`, `commission-thread`, and `commission-wifi`
 - OTBR: `logs` subcommand (`journalctl -u otbr-agent --no-pager -n 200`)
 - Do not run `journalctl -f` or `tail -f`
