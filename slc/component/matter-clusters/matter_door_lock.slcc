@@ -21,7 +21,9 @@ include:
     file_list:
       - path: door-lock-delegate.h
       - path: door-lock-server.h
+      - path: door-lock-types.h
       - path: DoorLockCluster.h
+      - path: OneBasedIndex.h
 template_contribution:
   - name: component_catalog
     value: matter_door_lock

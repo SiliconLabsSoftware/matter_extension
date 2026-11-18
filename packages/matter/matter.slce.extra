@@ -379,6 +379,26 @@ extra_files:
   - packages/matter_app/pkg.slt
   - packages/remotes.json
   - provision.mattpconf
+  - renode_integration/README.md
+  - renode_integration/guest/dts/zynqmp-matter-linux.dts
+  - renode_integration/guest/rootfs-overlay/etc/init.d/S99matter-services
+  - renode_integration/guest/rootfs-overlay/usr/bin/chip-tool
+  - renode_integration/guest/rootfs-overlay/usr/bin/matter-thread-init
+  - renode_integration/harness/generate_checkpoint.py
+  - renode_integration/harness/matter_sim.py
+  - renode_integration/harness/requirements.txt
+  - renode_integration/harness/smoke_test_checkpoint.py
+  - renode_integration/resc/matter-sim-full.resc
+  - renode_integration/resc/matter-sim.resc
+  - renode_integration/scripts/assemble_bundle.py
+  - renode_integration/scripts/build_rcps.py
+  - renode_integration/scripts/build_renode.py
+  - renode_integration/scripts/build_rootfs_image.py
+  - renode_integration/scripts/build_tools_image.py
+  - renode_integration/scripts/common.py
+  - renode_integration/scripts/fetch_bundle.py
+  - renode_integration/scripts/publish_bundle.py
+  - renode_integration/sim-manifest.json
   - requirements.txt
   - slc/apps/air_quality_sensor_app/thread/README.md
   - slc/apps/air_quality_sensor_app/thread/matter_thread_soc_air_quality_sensor_app_freertos.slcp
@@ -1397,6 +1417,7 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/bindings/binding-table.h
   - third_party/matter_sdk/src/app/clusters/bindings/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/bindings/tests/TestBindingCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/bindings/tests/TestBindingManager.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/tests/TestBindingTable.cpp
   - third_party/matter_sdk/src/app/clusters/bindings/tests/TestPendingNotificationMap.cpp
   - third_party/matter_sdk/src/app/clusters/boolean-state-configuration-server/BUILD.gn
@@ -1685,14 +1706,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/door-lock-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/door-lock-server/DoorLockCluster.cpp
   - third_party/matter_sdk/src/app/clusters/door-lock-server/DoorLockCluster.h
+  - third_party/matter_sdk/src/app/clusters/door-lock-server/OneBasedIndex.h
   - third_party/matter_sdk/src/app/clusters/door-lock-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/door-lock-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-delegate.h
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server-callback.cpp
   - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-server.h
+  - third_party/matter_sdk/src/app/clusters/door-lock-server/door-lock-types.h
   - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/TestDoorLockCluster.cpp
   - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/TestDoorLockLocalBufferCopy.cpp
+  - third_party/matter_sdk/src/app/clusters/door-lock-server/tests/TestOneBasedIndex.cpp
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/dynamic-lighting-server/CodegenIntegration.h
@@ -1952,11 +1976,17 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/joint-fabric-datastore-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/joint-fabric-datastore-server/joint-fabric-datastore-server.cpp
   - third_party/matter_sdk/src/app/clusters/keypad-input-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/CodegenIntegration.cpp
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/CodegenIntegration.h
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/KeypadInputCluster.cpp
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/KeypadInputCluster.h
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/README.md
   - third_party/matter_sdk/src/app/clusters/keypad-input-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/keypad-input-server/app_config_dependent_sources.gni
   - third_party/matter_sdk/src/app/clusters/keypad-input-server/keypad-input-delegate.h
-  - third_party/matter_sdk/src/app/clusters/keypad-input-server/keypad-input-server.cpp
   - third_party/matter_sdk/src/app/clusters/keypad-input-server/keypad-input-server.h
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/tests/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/keypad-input-server/tests/TestKeypadInputCluster.cpp
   - third_party/matter_sdk/src/app/clusters/laundry-dryer-controls-server/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/laundry-dryer-controls-server/CodegenIntegration.cpp
   - third_party/matter_sdk/src/app/clusters/laundry-dryer-controls-server/CodegenIntegration.h
@@ -2299,9 +2329,9 @@ extra_files:
   - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/tests/TestProximityRangingCluster.cpp
   - third_party/matter_sdk/src/app/clusters/proximity-ranging-server/tests/TestProximityRangingDriver.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/BUILD.gn
+  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/PumpConfigurationAndControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.cmake
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/app_config_dependent_sources.gni
-  - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/pump-configuration-and-control-server.cpp
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/tests/BUILD.gn
   - third_party/matter_sdk/src/app/clusters/pump-configuration-and-control-server/tests/TestPumpConfigurationAndControlCluster.cpp
   - third_party/matter_sdk/src/app/clusters/push-av-stream-transport-server/BUILD.gn
