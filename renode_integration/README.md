@@ -177,26 +177,12 @@ hub> exit
 ```
 
 This is a manual session requiring an interactive terminal. Provisioning commands,
-readiness checks, and readback verification are performed by the operator. Automated
-provisioning tests are deferred until the test plan is defined. The provisioning
-artifact workflows build and publish the disk; they do not execute provisioning tests.
-Guest files such as `/tmp/provision-read.json` live inside the simulation; inspect
-them with guest commands before closing the session.
-
-This entry point does not automatically infer the BLE address, provision credentials,
-reset the device, or commission it. When testing write/readback or `auto`, use the
-provisioning tool's inputs for that scenario. For subsequent commissioning, verify
-any required firmware transition/reset and use the credentials actually provisioned.
-
-The checkpoint must include the provisioning virtio device, updated guest DTB, and
-rootfs helpers. Rebuild the common bundle and runtime checkpoints when introducing
-those inputs. Updating only the provisioning disk does not update an old checkpoint.
+readiness checks, and readback verification are performed by the operator.
 
 ### Rebuilding artifacts (maintainers)
 
 Individual scripts under `scripts/` are for CI and pipeline development,
-`build_tools_image.py` requires the `ubuntu-24.04-arm` runner. The provisioning image is kept up to date by default on pushes to active development branches, but
-can also update manually by dispatching [renode-provisioning-artifacts](../.github/workflows/renode-provisioning-artifacts.yaml).
+`build_tools_image.py` requires the `ubuntu-24.04-arm` runner.
 
 ## CI
 
