@@ -30,7 +30,7 @@ COMMISSION_TIMEOUT_S = 180
 DEFAULT_PIN = "20202021"
 DEFAULT_DISCRIMINATOR = "3840"
 
-HUB_SCRIPT = f"{sys.executable} {Path(__file__).resolve()}"
+HUB_SCRIPT = f"python3 {Path(__file__).resolve()}"
 
 # Shown when config is missing or SSH key auth fails
 HUB_SETUP_STEPS = f"""\
