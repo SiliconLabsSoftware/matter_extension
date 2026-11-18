@@ -22,6 +22,21 @@
 // <i> Default: same as broker endpoint when left as a concrete hostname string
 #define SL_MATTER_MQTT_TLS_HOSTNAME ""
 
+// <s.256 SL_MATTER_MQTT_TLS_CA_CERTIFICATE > MQTT TLS CA certificate
+// <i> MQTT TLS CA certificate, e.g. string to load compiled in certificate
+// <i> Default: ""
+#define SL_MATTER_MQTT_TLS_CA_CERTIFICATE ""
+
+// <s.256 SL_MATTER_MQTT_TLS_CLIENT_KEY > MQTT TLS client key
+// <i> MQTT TLS client key, e.g. string to load compiled in key
+// <i> Default: ""
+#define SL_MATTER_MQTT_TLS_CLIENT_KEY ""
+
+// <s.256 SL_MATTER_MQTT_TLS_CLIENT_CERTIFICATE > MQTT TLS client certificate
+// <i> MQTT TLS client certificate, e.g. string to load compiled in certificate
+// <i> Default: ""
+#define SL_MATTER_MQTT_TLS_CLIENT_CERTIFICATE ""
+
 // <s.64 SL_MATTER_MQTT_CLIENT_ID> MQTT client ID
 // <i> Default: "matter-mqtt-client"
 #define SL_MATTER_MQTT_CLIENT_ID "matter-mqtt-client"
