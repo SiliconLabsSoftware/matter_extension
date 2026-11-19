@@ -273,7 +273,7 @@ def read_dataset(host: str, explicit: Optional[str]) -> Optional[str]:
 
 
 def write_last_node_id(host: str, node_id: int) -> None:
-    """Remember commissioned node id on the hub for ``show-node-id`` / later ``run``."""
+    """Remember commissioned node id on the hub for ``show-node-id`` / later ``chip-tool``."""
     remote = f"echo {node_id} > {LAST_NODE_ID_REMOTE}"
     run_ssh(host, [f"sh -c {shlex.quote(remote)}"])
 
@@ -369,10 +369,10 @@ def cmd_commission_wifi(args: argparse.Namespace) -> int:
     return code
 
 
-def cmd_run(args: argparse.Namespace) -> int:
+def cmd_chip_tool(args: argparse.Namespace) -> int:
     host = require_host()
     if not args.chip_tool_args:
-        print("No chip-tool arguments. Example: run onoff on 1 1", file=sys.stderr)
+        print("No chip-tool arguments. Example: chip-tool onoff on 1 1", file=sys.stderr)
         return 1
     proc = run_ssh(host, chip_tool_argv(args.chip_tool_args), timeout=COMMISSION_TIMEOUT_S)
     if (code := ssh_failure_exit(host, proc)) is not None:
@@ -442,9 +442,8 @@ def build_parser() -> argparse.ArgumentParser:
         func=cmd_show_node_id
     )
 
-    run_p = sub.add_parser("run", help="Run chip-tool with arguments")
-    run_p.add_argument("chip_tool_args", nargs=argparse.REMAINDER)
-    run_p.set_defaults(func=cmd_run)
+    run_p = sub.add_parser("chip-tool", help="Run chip-tool with arguments", add_help=False)
+    run_p.set_defaults(func=cmd_chip_tool)
 
     logs_p = sub.add_parser("logs", help="OTBR agent journal")
     logs_p.add_argument("--lines", type=int, default=200)
@@ -455,7 +454,11 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> int:
     parser = build_parser()
-    args = parser.parse_args()
+    args, remaining = parser.parse_known_args()
+    if args.command == "chip-tool":
+        args.chip_tool_args = remaining
+    elif remaining:
+        parser.error("unrecognized arguments: " + " ".join(remaining))
     return int(args.func(args))
 
 

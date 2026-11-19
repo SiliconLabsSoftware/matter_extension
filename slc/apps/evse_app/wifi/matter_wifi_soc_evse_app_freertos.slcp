@@ -9,13 +9,14 @@ sdk_extension:
   - id: matter
     version: "2.10.0"
     vendor: silabs
-  - id: wifi
+  - id: wiseconnect3_sdk
     version: "4.2.0"
     vendor: silabs
 
 component:
   - id: matter_leds
   - id: matter
+  - id: matter_subscription_persistence
   - id: matter_wifi_ble
   - id: matter_crypto_tinycrypt_siwx917
 
@@ -44,6 +45,7 @@ component:
   - id: matter_ota_requestor
   - id: matter_ota_support
   - id: matter_power_source
+  - id: matter_time_synchronization
   - id: matter_shell
   - id: matter_default_lcd_config
   - id: matter_log_uart

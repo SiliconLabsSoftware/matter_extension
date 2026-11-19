@@ -19,6 +19,7 @@ component:
   - id: matter_buttons
   - id: matter_leds
   - id: matter
+  - id: matter_subscription_persistence
   - id: matter_platform_mg
   - id: matter_ble
   - id: matter_thread
@@ -27,6 +28,8 @@ component:
   - id: matter_shell
   - id: matter_gatt_static
   - id: matter_provision_default
+  - id: matter_use_ctm
+    condition: [matter_provision_default]
   - id: matter_log_uart
   - id: matter_closure
   - id: matter_closure_control

@@ -30,6 +30,10 @@ def upload_zephyr_artifacts(workflow_id) {
         sh(script: """
             bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --workflow_id ${workflow_id} 2>&1 | tee '${logFile}'"
         """)
+        def revisionPrefix = 'Zephyr-Silabs Commit SHA - '
+        return readFile(logFile).readLines()
+            .findAll { it.startsWith(revisionPrefix) }
+            .collect { it.substring(revisionPrefix.length()) }
     }
 }
 
@@ -471,7 +475,37 @@ def parse_test_results_failures(output) {
     }
     return [failedTests: failedTests, failedCount: failedCount]
 }
-
+def trigger_sqa_zephyr_pipelines()
+{
+    if(sqaFunctions.isProductionJenkinsServer())
+    {
+        def zephyr_list = ['feature-thread', 'feature-wifi']
+        def errorOccurred = false
+        try{
+            sshagent(['svc_gsdk-ssh']) {
+                if (!fileExists('sqa-pipelines')) {
+                    sh 'git clone ssh://git@stash.silabs.com/wmn_sqa/sqa-pipelines.git'
+                }
+                zephyr_list.each { zephyr_type ->
+                    dir('sqa-pipelines') {
+                        try{
+                            sqaFunctions.commitToMatterSqaPipelines(zephyr_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                        } catch (e) {
+                            unstable("Error when triggering ${zephyr_type}: ${e.message}")
+                            errorOccurred = true
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            unstable("Error when triggering SQA pipelines: ${e.message}")
+            errorOccurred = true
+        }
+        if (errorOccurred) {
+            currentBuild.result = 'UNSTABLE'
+        }
+    }
+}
 /**
  * Take a Jenkins action (closure) such as node(){} and retry it in the event
  * of an exception where we think the node was reclaimed by AWS or otherwise
@@ -688,7 +722,7 @@ def resolvePrereleaseQualifier() {
         return "pr.${prNum}"
     }
     // Conan refs use '/' as delimiter (name/version@user); sanitize branch chars.
-    return (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9._-]/, '-')
+    return (env.BRANCH_NAME ?: 'unknown').replaceAll(/[^A-Za-z0-9.-]/, '-')
 }
 
 /**

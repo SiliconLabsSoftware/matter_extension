@@ -104,6 +104,7 @@ include:
   - path: SoftwareFaultReports.h
   - path: silabs_utils.h
   - path: MatterConfig.h
+  - path: SilabsTimeSyncDelegate.h
   - path: CRTPHelpers.h
   - path: LEDWidget.h
   - path: sl_systemview_config.h
@@ -148,14 +149,14 @@ include:
   - path: BlePlatformConfig.h
   - path: KeyValueStoreManagerImpl.h
   - path: SystemPlatformConfig.h
+  - path: SystemTimeSupport.h
 - path: third_party/matter_sdk/src/platform/FreeRTOS
   file_list:
-  - path: SystemTimeSupport.h
   - path: GenericThreadStackManagerImpl_FreeRTOS.h
   - path: GenericThreadStackManagerImpl_FreeRTOS.hpp
 
 source:
-  - path: third_party/matter_sdk/src/platform/FreeRTOS/SystemTimeSupport.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/SystemTimeSupport.cpp
   - path: third_party/matter_sdk/src/platform/SingletonConfigurationManager.cpp
   - path: third_party/matter_sdk/src/platform/silabs/ChipDie.cpp
   - path: third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
@@ -166,7 +167,9 @@ source:
   - path: third_party/matter_sdk/src/platform/silabs/Logging.cpp
   - path: third_party/matter_sdk/src/platform/silabs/MigrationManager.cpp
   - path: third_party/matter_sdk/src/platform/silabs/NetworkCommissioningWiFiDriver.cpp
+  # matter_use_ctm supplies SilabsConfigCTM.cpp. Keep direct NVM3 access otherwise.
   - path: third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
+    unless: [matter_use_ctm]
   - path: third_party/matter_sdk/src/platform/silabs/efr32/CHIPCryptoPALPsaEfr32.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOpaqueKeypair.cpp
   - path: third_party/matter_sdk/src/platform/silabs/efr32/Efr32PsaOperationalKeystore.cpp

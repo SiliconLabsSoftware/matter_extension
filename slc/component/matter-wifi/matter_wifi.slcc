@@ -18,6 +18,8 @@ define:
     value: EMBER_PLATFORM_CORTEXM3
   - name: PLATFORM_HEADER
     value: "platform-header.h"
+  - name: SL_NET_NETWORK_MANAGER_THREAD_STACK_SIZE
+    value: "1024"
 config_file:
   - path: slc/config/sl_matter_wifi_config.h
     file_id: matter_wifi_config

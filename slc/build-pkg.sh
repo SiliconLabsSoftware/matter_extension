@@ -570,6 +570,12 @@ fi
 	prepend_sdk_paths_to_slconf
 
 	if [ "$skip_gen" = false ]; then
+	# Package generate resolves wifi. Put wiseconnect3_sdk back when this subshell exits.
+	slc_hits="$(grep -l -- 'wiseconnect3_sdk' ./*.slcp ./*.slcw 2>/dev/null || true)"
+	if [ -n "${slc_hits}" ]; then
+		printf '%s\n' "${slc_hits}" | xargs perl -i.bak -0pe 's/^(\s*- id: )wiseconnect3_sdk(\n\s+version:)/${1}wifi$2/gm'
+		trap 'for b in ./*.slcp.bak ./*.slcw.bak; do [ -f "$b" ] && mv "$b" "${b%.bak}"; done' EXIT
+	fi
 	if [[ "${PROJECT_FILE}" == *.slcw ]]; then
 		if [[ "${PROJECT_FILE}" != *wifi_soc* ]] && [ "$GENERATE_BOOTLOADER" = true ]; then
 			BOOTLOADER_WITH_ARG=$(build_with_arg "$SILABS_BOARD" "$WITH_BOOTLOADER_COMPONENTS")

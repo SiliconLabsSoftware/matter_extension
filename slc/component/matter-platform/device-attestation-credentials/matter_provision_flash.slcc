@@ -48,7 +48,7 @@ source:
   - path: third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageFlash.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionStorageReaderCommon.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoPSA.cpp
-    unless: [matter_crypto_tinycrypt_siwx917]
+    condition: [matter_crypto_psa_siwx917]
   - path: third_party/matter_sdk/examples/platform/silabs/provision/ProvisionCryptoMbed.cpp
     condition: [matter_crypto_tinycrypt_siwx917]
 

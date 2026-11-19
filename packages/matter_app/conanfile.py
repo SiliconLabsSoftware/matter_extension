@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from conan import ConanFile
 from conan.tools.scm import Git
@@ -22,6 +23,12 @@ try:
 except Exception:
     pass
 from _shared.base_recipe import MatterBaseRecipe
+
+# sdk_extension entries only (the next line is version:). Component `- id: wifi` has no version.
+_SDK_EXTENSION_WISECONNECT_TO_WIFI = re.compile(
+    r"^(\s*- id: )wiseconnect3_sdk(\r?\n\s+version:)",
+    re.MULTILINE,
+)
 
 
 class matter_appRecipe(MatterBaseRecipe):
@@ -149,6 +156,8 @@ class matter_appRecipe(MatterBaseRecipe):
             src_folder=matter_app_folder,
             dst_folder=os.path.join(self.package_folder, "."),
         )
+        # Repo SLCPs stay wiseconnect3_sdk. Packaged copies must name the wifi package.
+        self._map_packaged_wiseconnect_extension_to_wifi(files_to_package)
 
         # Package-only builder at package root: <pkg>/build_app.sh
         build_app_src = repo_root / "packages" / "build_app.sh"
@@ -246,6 +255,26 @@ class matter_appRecipe(MatterBaseRecipe):
             except ValueError:
                 normalized.add(str(p.resolve()))
         return normalized
+
+    def _map_packaged_wiseconnect_extension_to_wifi(self, files: set[str]) -> None:
+        """Rewrite packaged sdk_extension ids from wiseconnect3_sdk to wifi."""
+        package_root = Path(self.package_folder)
+        ids_changed = 0
+        for rel in files:
+            path = Path(rel)
+            if path.is_absolute() or path.suffix not in (".slcp", ".slcw"):
+                continue
+            slc_file = package_root / path
+            text = slc_file.read_text(encoding="utf-8")
+            if "wiseconnect3_sdk" not in text:
+                continue
+            new_text, count = _SDK_EXTENSION_WISECONNECT_TO_WIFI.subn(r"\1wifi\2", text)
+            if count:
+                slc_file.write_text(new_text, encoding="utf-8")
+                ids_changed += count
+        self.output.info(
+            f"Mapped {ids_changed} sdk_extension wiseconnect3_sdk id(s) to wifi"
+        )
 
     @staticmethod
     def _iter_slc_path_entries(node) -> Generator[str, None, None]:

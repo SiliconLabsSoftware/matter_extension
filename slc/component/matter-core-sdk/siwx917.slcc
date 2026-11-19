@@ -105,6 +105,7 @@ include:
   - path: SoftwareFaultReports.h
   - path: silabs_utils.h
   - path: MatterConfig.h
+  - path: SilabsTimeSyncDelegate.h
   - path: CRTPHelpers.h
   - path: LEDWidget.h
   - path: sl_systemview_config.h
