@@ -457,7 +457,7 @@ def trigger_sqa_pipelines(pipeline_type)
                         smoke_list.each { smoke_type ->
                         dir('sqa-pipelines') {
                             try{
-                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "${env.BRANCH_NAME}", "${env.BUILD_NUMBER}")
+                                sqaFunctions.commitToMatterSqaPipelines(smoke_type, "SL_compatibility_WCSDK_4.1.3_Matter_2.9.2-1.6", "1")
                             } catch (e) {
                                 unstable("Error when triggering ${smoke_type}: ${e.message}")
                                 errorOccurred = true
