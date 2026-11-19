@@ -23,32 +23,28 @@ define:
 include:
   - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/include
     file_list:
-      - path: attribute_value_reader.h
-      - path: matter_mqtt_cluster_filter.h
-      - path: command_injector.h
-      - path: device_mqtt_profile.h
-      - path: matter_mqtt_bridge.h
-      - path: matter_mqtt_bridge_config.h
-      - path: matter_mqtt_log.h
-      - path: matter_mqtt_codec.h
-      - path: matter_mqtt_contract.h
-      - path: matter_mqtt_topic.h
-      - path: matter_mqtt_types.h
-      - path: mqtt_noop_command_handler.h
-      - path: mqtt_transport_port.h
+      - path: AttributeValueReader.h
+      - path: MatterMqttClusterFilter.h
+      - path: CommandInjector.h
+      - path: DeviceMqttProfile.h
+      - path: MatterMqttBridge.h
+      - path: MatterMqttBridgeConfig.h
+      - path: MatterMqttLog.h
+      - path: MatterMqttCodec.h
+      - path: MatterMqttContract.h
+      - path: MatterMqttTopic.h
   - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge
     file_list:
-      - path: MatterMqttBridgeConfig.h
+      - path: MatterMqttBridgeConfigImpl.h
       - path: EmberMqttBridgePlatform.h
 
 source:
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/command_injector.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/device_mqtt_profile.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_bridge.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_codec.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_topic.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/mqtt_client_transport_port.cpp
-  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/matter_mqtt_cluster_filter_registry.cpp
-  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MatterMqttBridgeConfig.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/CommandInjector.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/DeviceMqttProfile.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttBridge.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttCodec.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttTopic.cpp
+  - path: third_party/matter_sdk/src/platform/silabs/services/matter_mqtt_bridge/src/MatterMqttClusterFilterRegistry.cpp
+  - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MatterMqttBridgeConfigImpl.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/EmberMqttBridgePlatform.cpp
   - path: third_party/matter_sdk/examples/platform/silabs/matter_mqtt_bridge/MqttFilterRegistry.cpp
