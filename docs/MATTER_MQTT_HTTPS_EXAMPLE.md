@@ -40,11 +40,11 @@ Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
    ![Matter source path](images/matter-source-path.png)
 6. Apply the changes below in:
 
-- `slc/config/sl_matter_mqtt_config.h` (broker endpoint, port, client id, client port, TLS, username, password)
+- `slc/config/sl_matter_mqtt_config.h` (broker endpoint, port, client id, client port, TLS, TLS credentials, username, password)
 - `third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_example.cpp`
 - `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h` (topic and publish message only)
 - `third_party/matter_sdk/examples/thermostat/silabs/include/https_offload_example.h`
-- `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h`
+- `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h` (HTTPS CA)
 - `slc/config/sl_matter_https_ota_config.h` (HTTPS OTA periodic timeout / default URL)
 
 ### Changes for `OnPlatform` events based on the `CHIPDeviceEvent.h`
@@ -117,6 +117,9 @@ Set these in `sl_matter_mqtt_config.h`. `mqtt_example.h` includes that header. V
 | `SL_MATTER_MQTT_CLIENT_PORT` | `5003`                   | Local source port.                                                                                                                   |
 | `SL_MATTER_MQTT_TLS_ENABLED` | `1`                      | `1` enables TLS. `0` connects without TLS.                                                                                           |
 | `SL_MATTER_MQTT_TLS_HOSTNAME`| `SL_MATTER_MQTT_BROKER_ENDPOINT`| Hostname for TLS SNI / cert check (CN/SAN). Must match the broker cert or TLS fails.                                                 |
+| `SL_MATTER_MQTT_TLS_CA_CERTIFICATE`     | `""` | PEM of the CA that signed the broker cert. Empty skips server verification. |
+| `SL_MATTER_MQTT_TLS_CLIENT_CERTIFICATE` | `""` | Client certificate PEM for mutual TLS. Used only when the client key is also set. |
+| `SL_MATTER_MQTT_TLS_CLIENT_KEY`         | `""` | Client private key PEM for mutual TLS. Used only when the client certificate is also set. |
 | `SL_MATTER_MQTT_CLIENT_USERNAME`    | `""`                     | Broker username. Empty skips a username.                                                                                             |
 | `SL_MATTER_MQTT_CLIENT_PASSWORD`    | `""`                     | Broker password. Empty skips a password.                                                                                             |
 
@@ -131,16 +134,24 @@ Example (replace with your broker values):
 #define SL_MATTER_MQTT_CLIENT_PORT 5003
 #define SL_MATTER_MQTT_TLS_ENABLED 1
 #define SL_MATTER_MQTT_TLS_HOSTNAME SL_MATTER_MQTT_BROKER_ENDPOINT
+#define SL_MATTER_MQTT_TLS_CA_CERTIFICATE \
+    "-----BEGIN CERTIFICATE-----\n" \
+    "...\n" \
+    "-----END CERTIFICATE-----\n"
+#define SL_MATTER_MQTT_TLS_CLIENT_KEY ""
+#define SL_MATTER_MQTT_TLS_CLIENT_CERTIFICATE ""
 #define SL_MATTER_MQTT_CLIENT_USERNAME ""
 #define SL_MATTER_MQTT_CLIENT_PASSWORD ""
 ```
 
+TLS credential macros are PEM string literals with `\n` at the end of each line. Leave `""` to skip a credential.
+
 Inbound publishes are delivered through `MqttClient::SetSubscriptionCallback` (`OnMqttMessage` in `mqtt_example.cpp`). While connected and idle, the MQTT service thread auto-runs `MQTTYield` for keepalive and receive — no explicit Yield from the demo is required after subscribe/publish.
 
-### Certificates (`certs/cacert.h`)
+### HTTPS certificate (`certs/cacert.h`)
 
-- `kCaCertExample[]` — Trusted CA used to verify the CA cert. Fill with PEM of the CA that signed the cert (same format as the sample: `-----BEGIN CERTIFICATE-----` …). The sample CA will not work with your server.
-- If MQTTS and HTTPS use different CAs, use the CA for the demo you are running (or split into two cert files).
+- `kCaCertExample[]` — Trusted CA used by the HTTPS demo. Fill with PEM of the CA that signed the server cert (same format as the sample: `-----BEGIN CERTIFICATE-----` …). The sample CA will not work with your server.
+- MQTTS does not use this file. Set its CA in `SL_MATTER_MQTT_TLS_CA_CERTIFICATE`.
 
 ### HTTPS changes (`https_offload_example.h`)
 
@@ -217,7 +228,8 @@ Edit before build. Point defaults at **your** LAN.
 | TLS             | `SL_MATTER_MQTT_TLS_ENABLED`                         | `1`                           | `0` to disable TLS                           |
 | TLS hostname    | `SL_MATTER_MQTT_TLS_HOSTNAME`                        | `SL_MATTER_MQTT_BROKER_ENDPOINT`     | Must match the broker cert                   |
 | User / pass     | `SL_MATTER_MQTT_CLIENT_USERNAME` / `SL_MATTER_MQTT_CLIENT_PASSWORD`| `""` / `""`                   | Broker auth; leave empty if unused           |
-| CA              | `kCaCertExample[]` in `cacert.h`                     | Sample CA                     | CA that signed the broker cert               |
+| CA              | `SL_MATTER_MQTT_TLS_CA_CERTIFICATE`                  | `""`                          | PEM of the CA that signed the broker cert    |
+| Client cert/key | `SL_MATTER_MQTT_TLS_CLIENT_CERTIFICATE` / `SL_MATTER_MQTT_TLS_CLIENT_KEY` | `""` / `""` | PEM pair for mutual TLS; leave empty if unused |
 
 Topic and publish body stay in `mqtt_example.h`:
 
