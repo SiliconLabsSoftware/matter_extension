@@ -48,15 +48,18 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 *Timestamp:* ${currentTime} UTC
 
 📋 *Details:*"""
+
+    if (env.MATTER_PACKAGE_VERSION?.trim()) {
+        message += "\n• *Package Version:* `${env.MATTER_PACKAGE_VERSION}`"
+    }
     
     if (reportedCommitSha) {
         message += "\n• *Commit SHA:* `${reportedCommitSha}`"
     }
-    if (runNumber) {
+    if (runNumber && workflowId) {
+        message += "\n• *GitHub Workflow Run:* <https://github.com/SiliconLabsSoftware/matter_extension/actions/runs/${workflowId}|#${runNumber}>"
+    } else if (runNumber) {
         message += "\n• *GitHub Workflow Run:* #${runNumber}"
-    }
-    if (workflowId) {
-        message += "\n• *Workflow ID:* ${workflowId}"
     }
     
     if (summary && summary.trim()) {
