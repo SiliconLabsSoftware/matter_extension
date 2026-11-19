@@ -70,6 +70,17 @@
 // <i> Default: ""
 #define SL_MATTER_MQTT_CLIENT_PASSWORD ""
 
+// <o SL_MATTER_MQTT_RECONNECT_INTERVAL_MS> MQTT broker reconnect base interval (ms)
+// <i> Base delay for exponential backoff when Connect fails (broker down / unreachable).
+// <i> Delay = interval * (1 << retryCount). Default matches Wi-Fi station reconnect (5000).
+// <i> Default: 5000
+#define SL_MATTER_MQTT_RECONNECT_INTERVAL_MS 5000
+
+// <o SL_MATTER_MQTT_RECONNECT_MAX_BACKOFF> MQTT broker reconnect max backoff shift
+// <i> Caps retryCount used in (1 << retryCount). Max delay = interval * (1 << max).
+// <i> Default: 5 (up to 32x base interval)
+#define SL_MATTER_MQTT_RECONNECT_MAX_BACKOFF 5
+
 // <<< end of configuration section >>>
 
 #endif // SL_MATTER_MQTT_CONFIG
