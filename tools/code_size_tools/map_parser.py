@@ -87,6 +87,9 @@ def get_map_category(path: str) -> str:
     if "lib/gcc" in path or "arm-none-eabi/lib" in path:
         return "C/C++ Standard Library"
 
+    if "librail" in path:
+        return "RAIL Lib"
+
     category = get_category_from_filename(_object_name(path))
     if category:
         return category

@@ -317,7 +317,7 @@ class ComparisonCategoryWidget(QWidget):
         self.folder_path: Path = folder_path
         self.total_code_size_a: int = total_code_size_a
         self.total_code_size_b: int = total_code_size_b
-        self.color: str = "#E57373" if color_index % 2 == 0 else "#CCCCCC"
+        self.color: str = "#FFFFFF" if color_index % 2 == 0 else "#B0B0B0"
         self.expanded: bool = False
         self.details_widget: Optional[QWidget] = None
         
@@ -346,7 +346,7 @@ class ComparisonCategoryWidget(QWidget):
         # Category name button
         obj_count_a = len(self.objects_a)
         obj_count_b = len(self.objects_b)
-        self.header_button = QPushButton(f"{self.category_name} ({obj_count_a}/{obj_count_b})")
+        self.header_button = QPushButton(f"▶ {self.category_name} ({obj_count_a}/{obj_count_b})")
         self.header_button.setStyleSheet(f"""
             QPushButton {{
                 background-color: #3c3c3c;
@@ -515,7 +515,7 @@ class ComparisonCategoryWidget(QWidget):
         self.expanded = False
         obj_count_a = len(self.objects_a)
         obj_count_b = len(self.objects_b)
-        self.header_button.setText(f"{self.category_name} ({obj_count_a}/{obj_count_b})")
+        self.header_button.setText(f"▶ {self.category_name} ({obj_count_a}/{obj_count_b})")
         self.layout.removeWidget(self.details_widget)
         self.details_widget.deleteLater()
         self.details_widget = None
@@ -553,7 +553,7 @@ class CategoryWidget(QWidget):
         self.folder_path: Path = folder_path
         self.function_data: Optional[Dict[str, List[Tuple[str, int]]]] = function_data
         self.total_code_size: int = total_code_size
-        self.color: str = "#E57373" if color_index % 2 == 0 else "#CCCCCC"
+        self.color: str = "#FFFFFF" if color_index % 2 == 0 else "#B0B0B0"
         self.expanded: bool = False
         self.details_widget: Optional[QWidget] = None
         
@@ -570,7 +570,7 @@ class CategoryWidget(QWidget):
         
         # Category header button
         self.header_button = QPushButton(
-            f"{self.category_name}: {self.total_size:,} bytes ({percentage:.1f}%)"
+            f"▶ {self.category_name}: {self.total_size:,} bytes ({percentage:.1f}%)"
         )
         self.header_button.setStyleSheet(f"""
             QPushButton {{
@@ -633,7 +633,7 @@ class CategoryWidget(QWidget):
         self.details_widget.deleteLater()
         self.details_widget = None
         percentage = (self.total_size / self.total_code_size * 100) if self.total_code_size > 0 else 0
-        self.header_button.setText(f"{self.category_name}: {self.total_size:,} bytes ({percentage:.1f}%)")
+        self.header_button.setText(f"▶ {self.category_name}: {self.total_size:,} bytes ({percentage:.1f}%)")
 
 
 class CodeSizeViewer(QMainWindow):
@@ -1140,8 +1140,9 @@ Usage:
   code_size_viewer.py /path/to/folder  # Open GUI with pre-loaded folder
   code_size_viewer.py LATEST REFERENCE          # Compare two folders in the GUI
   code_size_viewer.py LATEST REFERENCE --html   # Write a portable HTML comparison report
+  code_size_viewer.py LATEST --html             # Write a portable HTML report for a single input
   code_size_viewer.py app.map --map    # Analyze a GNU ld map file (flash usage)
-  code_size_viewer.py latest.map reference.map --map [--html]  # Compare two map files
+  code_size_viewer.py latest.map [reference.map] --map --html  # HTML report for one map file or a comparison of two
 
 Comparison:
   The first folder/map file is always the "Latest" build and the second one is
@@ -1170,7 +1171,7 @@ CSV Format:
     parser.add_argument(
         "--html",
         action="store_true",
-        help="Generate a static HTML comparison report instead of opening the GUI"
+        help="Generate a static HTML report instead of opening the GUI (comparison when two inputs are given)"
     )
     
     parser.add_argument(
@@ -1191,20 +1192,23 @@ CSV Format:
         parser.error("--map requires a path to a .map file")
     
     if args.html:
-        if not args.folder or not args.second_folder:
-            parser.error("--html requires two inputs")
+        if not args.folder:
+            parser.error("--html requires at least one input")
         folder_a = Path(args.folder).resolve()
-        folder_b = Path(args.second_folder).resolve()
+        folder_b = Path(args.second_folder).resolve() if args.second_folder else None
         try:
             if args.map:
                 data_a, _ = parse_map_file(folder_a)
-                data_b, _ = parse_map_file(folder_b)
+                data_b = parse_map_file(folder_b)[0] if folder_b else None
             else:
                 data_a = parse_csv(find_csv_file(folder_a))
-                data_b = parse_csv(find_csv_file(folder_b))
+                data_b = parse_csv(find_csv_file(folder_b)) if folder_b else None
         except (FileNotFoundError, ValueError) as e:
             sys.exit(f"Error: {e}")
-        name_a, name_b = ("", "") if args.map else (folder_a.name, folder_b.name)
+        if args.map:
+            name_a, name_b = "", ""
+        else:
+            name_a, name_b = folder_a.name, folder_b.name if folder_b else ""
         output = generate_diff_report(
             data_a, data_b, name_a, name_b, Path(args.output)
         )
