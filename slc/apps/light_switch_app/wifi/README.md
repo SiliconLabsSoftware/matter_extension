@@ -54,7 +54,7 @@ This sample app works out of the box with no additional configuration required. 
 | OpenThread Idle polling interval | 15 minutes |
 | OpenThread Active polling interval | 1 second |
 
-**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.9.2/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.1.2-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
+**Region code (SiWx917 Wi-Fi):** For Wi-Fi configurations, the region code can be set in this [file](https://github.com/SiliconLabsSoftware/matter_sdk/blob/v2.9.2/src/platform/silabs/wifi/SiWx/WifiInterfaceImpl.cpp). The available region codes can be found [here](https://github.com/SiliconLabs/wiseconnect/blob/v4.1.3-content-for-docs/components/protocol/wifi/inc/sl_wifi_constants.h#L739).
 
 ### Steps for Execution
 
