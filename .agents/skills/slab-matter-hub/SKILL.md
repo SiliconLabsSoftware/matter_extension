@@ -81,10 +81,10 @@ Record the chosen transport in the session (for example `transport=thread`) so l
 
 ## Executor
 
-Run from the workspace root with **Python 3**. Use `python3` on Linux/macOS or `python` on Windows if that is how Python 3 is installed:
+Run with **Python 3** (`python3` on Linux/macOS, `python` on Windows when that is Python 3). Resolve `<skill_dir>` to this skill folder (for example `.agents/skills/slab-matter-hub` in matter_extension, or the path under your IDE skills directory after SLT install):
 
 ```bash
-python3 .agents/skills/slab-matter-hub/scripts/hub.py <subcommand> [args]
+python3 <skill_dir>/scripts/hub.py <subcommand> [args]
 ```
 
 `hub.py` uses the system `ssh` client. Stdlib only. SSH targets the LAN. If the sandbox blocks the Pi, rerun with unrestricted network permissions.
@@ -141,7 +141,7 @@ Blocks until chip-tool exits (up to 180s). Saves node id to `/tmp/last-node-id` 
 Forwards argv to chip-tool. Example:
 
 ```bash
-python3 .agents/skills/slab-matter-hub/scripts/hub.py chip-tool onoff on 1 1
+python3 <skill_dir>/scripts/hub.py chip-tool onoff on 1 1
 ```
 
 If the user omits node id, read last id from the Pi with `hub.py show-node-id` or reuse the node id from `commission-thread` or `commission-wifi`.
