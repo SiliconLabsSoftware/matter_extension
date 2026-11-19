@@ -250,6 +250,11 @@ pipeline
                         failedTestsSummary << "917: ${failed_tests_917.failedCount} failed tests - ${failed_tests_917.failedTests.join(', ')}"
                     }
 
+                    if (failed_tests_mg24_zephyr && failed_tests_mg24_zephyr.failedCount > 0) {
+                        totalFailedTests += failed_tests_mg24_zephyr.failedCount
+                        failedTestsSummary << "MG24-Zephyr: ${failed_tests_mg24_zephyr.failedCount} failed tests - ${failed_tests_mg24_zephyr.failedTests.join(', ')}"
+                    }
+
 //                     Temp comment out due to SQA setup issues
 //                     if (failed_tests_4407a && failed_tests_4407a.failedCount > 0) {
 //                         totalFailedTests += failed_tests_4407a.failedCount
