@@ -30,6 +30,10 @@ def upload_zephyr_artifacts(workflow_id) {
         sh(script: """
             bash -eo pipefail -c "python3 -u jenkins_integration/artifacts/upload_zephyr_artifacts.py --branch_name ${env.BRANCH_NAME} --build_number ${env.BUILD_NUMBER} --workflow_id ${workflow_id} 2>&1 | tee '${logFile}'"
         """)
+        def revisionPrefix = 'Zephyr-Silabs Commit SHA - '
+        return readFile(logFile).readLines()
+            .findAll { it.startsWith(revisionPrefix) }
+            .collect { it.substring(revisionPrefix.length()) }
     }
 }
 
