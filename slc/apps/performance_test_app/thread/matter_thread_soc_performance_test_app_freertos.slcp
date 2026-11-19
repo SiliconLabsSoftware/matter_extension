@@ -20,6 +20,7 @@ component:
   - id: matter_leds
 
   - id: matter
+  - id: matter_subscription_persistence
   - id: matter_platform_mg
   - id: matter_ble
   - id: matter_thread
