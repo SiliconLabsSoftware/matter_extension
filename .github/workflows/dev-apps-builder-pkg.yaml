@@ -351,6 +351,20 @@ jobs:
         with:
             build-type: ${{ needs.set-build-type.outputs.build-type }}
 
+    renode-sanity-tests:
+        name: Renode Sanity Tests
+        permissions:
+            contents: read
+            actions: read
+            packages: read
+        needs:
+            - set-build-type
+            - build_lighting_app
+        uses: ./.github/workflows/renode-sanity-tests.yaml
+        with:
+            build-type: ${{ needs.set-build-type.outputs.build-type }}
+            run-id: ${{ github.run_id }}
+
     wait-for-test-results:
         name: Wait for Test Results
         needs:

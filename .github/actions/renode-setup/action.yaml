@@ -1,0 +1,99 @@
+name: Renode harness setup
+description: Python, .NET, ORAS, GHCR login, fetch Renode bundle, and harness dependencies.
+
+inputs:
+  example-app:
+    description: App whose ELF to locate. Leave empty for checkpoint-only setup
+    required: false
+    default: ""
+  board:
+    description: Board to select when locating ELFs
+    required: false
+    default: ""
+  elf-dir:
+    description: Downloaded primary ELF artifact directory
+    required: false
+    default: matter-elf
+  extra-app:
+    description: Optional companion app whose ELF to locate
+    required: false
+    default: ""
+  extra-elf-dir:
+    description: Downloaded companion ELF artifact directory
+    required: false
+    default: matter-elf-extra
+
+outputs:
+  matter_elf_path:
+    description: Selected primary ELF path
+    value: ${{ steps.elfs.outputs.matter_elf_path }}
+  extra_elf_path:
+    description: Selected companion ELF path, or empty for single-device runs
+    value: ${{ steps.elfs.outputs.extra_elf_path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Locate ELFs
+      id: elfs
+      if: inputs.example-app != ''
+      shell: bash
+      env:
+        EXAMPLE_APP: ${{ inputs.example-app }}
+        EXTRA_APP: ${{ inputs.extra-app }}
+        BOARD: ${{ inputs.board }}
+        ELF_DIR: ${{ inputs.elf-dir }}
+        EXTRA_ELF_DIR: ${{ inputs.extra-elf-dir }}
+      run: |
+        set -euo pipefail
+        : "${BOARD:?board input is required when example-app is set}"
+        find_elf() {
+          local matches
+          matches=$(find "$1" -type f -name "matter_thread_soc_$2_freertos.out" \
+            \( -path "*/${BOARD}/*" -o -path "*/${BOARD}_*/*" -o -path "*/${BOARD},*/*" \) \
+            ! -path '*copy-sources*' | LC_ALL=C sort)
+          if [[ -z "$matches" ]]; then
+            echo "No ELF for $2 on ${BOARD} under $1" >&2
+            return 1
+          fi
+          if [[ "$matches" == *$'\n'* ]]; then
+            echo "Multiple ELFs for $2 on ${BOARD}. Select a single demo build:" >&2
+            echo "$matches" >&2
+            return 1
+          fi
+          echo "$matches"
+        }
+        matter_elf=$(find_elf "$ELF_DIR" "$EXAMPLE_APP")
+        extra_elf=""
+        if [[ -n "$EXTRA_APP" ]]; then
+          extra_elf=$(find_elf "$EXTRA_ELF_DIR" "$EXTRA_APP")
+        fi
+        echo "matter_elf_path=$matter_elf" >> "$GITHUB_OUTPUT"
+        echo "extra_elf_path=$extra_elf" >> "$GITHUB_OUTPUT"
+
+    - name: Set up Python
+      uses: actions/setup-python@v7
+      with:
+        python-version: "3.11"
+
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v6
+      with:
+        dotnet-version: "8.0.x"
+
+    - name: Install ORAS
+      uses: oras-project/setup-oras@v2
+
+    - name: Log in to GHCR
+      shell: bash
+      run: echo "${{ github.token }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+    - name: Fetch Renode bundle
+      shell: bash
+      run: python3 renode_integration/scripts/fetch_bundle.py
+
+    - name: Install harness dependencies
+      shell: bash
+      run: |
+        python3 -m pip install -r renode_integration/harness/requirements.txt
+        python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib

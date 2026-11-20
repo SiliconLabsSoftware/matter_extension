@@ -1,5 +1,5 @@
 """
-@file demo_runner.py
+@file renode_runner.py
 @brief Run Matter Renode demo flows and manual provisioning sessions.
 
 Loads demo_flows.yaml for post-commission verification and drives MatterSim UART
@@ -13,7 +13,7 @@ import time
 from pathlib import Path
 from typing import Any
 
-from demo_config import DEMO_FLOWS
+from renode_config import DEMO_FLOWS, SANITY_FLOWS
 
 import matter_sim
 from matter_sim import DEFAULT_BUNDLE, DEFAULT_UART_TIMEOUT_S, MatterSim, run_shell
@@ -27,7 +27,7 @@ COMMISSION_TIMEOUT_S = 1200
 STEP_TIMEOUT_S = 300
 
 
-def _commission(hub: object, node_id: int, timeout_s: float = COMMISSION_TIMEOUT_S) -> None:
+def commission(hub: object, node_id: int, timeout_s: float = COMMISSION_TIMEOUT_S) -> None:
     pair_cmd = (
         f"chip-tool pairing ble-thread {node_id} "
         f'"hex:$(cat /tmp/thread-dataset.hex)" {PASSCODE} {DISCRIMINATOR}'
@@ -36,6 +36,144 @@ def _commission(hub: object, node_id: int, timeout_s: float = COMMISSION_TIMEOUT
     pair_rc, pair_out = run_shell(hub, pair_cmd, timeout_s=timeout_s)
     if pair_rc != 0:
         raise RuntimeError(f"commissioning node {node_id} failed (rc={pair_rc})\n{pair_out[-2000:]}")
+
+
+def _strip_ansi(text: str) -> str:
+    return re.sub(r"\x1b\[[0-9;]*m", "", text)
+
+
+def _response_fingerprint(report: str) -> str:
+    payloads = []
+    for line in _strip_ansi(report).splitlines():
+        if "[TOO]" not in line:
+            continue
+        payload = line.split("[TOO]", 1)[1].strip()
+        if re.match(r"^(?:Device|Endpoint|Cluster|Attribute|DataVersion):", payload):
+            continue
+        if payload:
+            payloads.append(payload)
+    return "\n".join(payloads)
+
+
+def _read_fingerprint(rc: int, report: str) -> str:
+    fingerprint = _response_fingerprint(report)
+    if rc != 0 or not fingerprint or re.search(
+        r"Run command failure|status\s*=\s*0x(?!0+\b)[0-9a-f]+", report, re.I
+    ):
+        raise RuntimeError(f"attribute read failed (rc={rc})\n{report[-2000:]}")
+    return fingerprint
+
+
+def _format_command(command: str, ctx: dict[str, str]) -> str:
+    try:
+        return command.format(**ctx)
+    except KeyError as exc:
+        raise RuntimeError(f"missing flow variable {exc} for command {command!r}") from exc
+
+
+def _hub_uart(
+    sim: MatterSim,
+    timeout_s: float = DEFAULT_UART_TIMEOUT_S,
+    *,
+    require_prompt: bool = False,
+) -> object:
+    hub = sim.hub_uart(timeout_s)
+    test_lib.write_line(hub, "")
+    ready = test_lib.wait_for(hub, r"#\s*$", timeout=timeout_s)
+    if require_prompt and ready is None:
+        raise RuntimeError("hub shell did not become ready")
+    return hub
+
+
+def run_hub_step(
+    step: dict[str, Any],
+    hub: object,
+    ctx: dict[str, str],
+    *,
+    timeout_s: float = STEP_TIMEOUT_S,
+) -> None:
+    step_type = step.get("type")
+    if step_type == "readonly_pair":
+        _run_readonly_pair(step, hub, ctx, timeout_s=timeout_s)
+        return
+
+    command = _format_command(step["command"], ctx)
+    print(f"Running: {command}")
+    rc, report = run_shell(hub, command, timeout_s)
+
+    if step.get("skip_if_status") and re.search(step["skip_if_status"], report, re.I):
+        print(f"Skipping step (matched {step['skip_if_status']!r})")
+        return
+
+    expect_status = step.get("expect_status")
+    if expect_status:
+        if not re.search(re.escape(expect_status), report, re.I):
+            raise RuntimeError(f"expected status {expect_status!r} in output\n{report[-2000:]}")
+        return
+
+    if step.get("expect_failure"):
+        if not re.search(r"UNSUPPORTED_WRITE|Run command failure", report):
+            raise RuntimeError(f"expected command failure in output\n{report[-2000:]}")
+        return
+
+    cleaned_report = _strip_ansi(report)
+    if expect := step.get("expect"):
+        if not re.search(expect, cleaned_report):
+            raise RuntimeError(f"pattern {expect!r} not found\n{report[-2000:]}")
+
+    if extract := step.get("extract"):
+        for key, pattern in extract.items():
+            match = re.search(pattern, cleaned_report, re.DOTALL)
+            if not match:
+                raise RuntimeError(f"extract {key!r} failed for pattern {pattern!r}\n{report[-2000:]}")
+            ctx[key] = match.group(1)
+
+    if rc != 0 and not step.get("allow_nonzero_rc"):
+        if "status = 0x00 (SUCCESS)" not in cleaned_report:
+            raise RuntimeError(f"command failed with exit code {rc}\n{report[-2000:]}")
+
+
+def _run_readonly_pair(
+    step: dict[str, Any],
+    hub: object,
+    ctx: dict[str, str],
+    *,
+    timeout_s: float,
+) -> None:
+    read_cmd = _format_command(step["read"], ctx)
+    write_cmd = _format_command(step["write"], ctx)
+    print(f"Running: {read_cmd}")
+    read_rc, read_out = run_shell(hub, read_cmd, timeout_s)
+    if step.get("skip_if_unsupported") and re.search(r"UNSUPPORTED_ATTRIBUTE", read_out):
+        print("Skipping optional attribute (unsupported on DUT)")
+        return
+
+    baseline = _read_fingerprint(read_rc, read_out)
+    print(f"Running: {write_cmd}")
+    write_rc, write_out = run_shell(hub, write_cmd, timeout_s)
+    if not step.get("writable"):
+        if not re.search(r"\bUNSUPPORTED_WRITE\b|status\s*=\s*0x0*88\b", write_out, re.I):
+            raise RuntimeError(f"expected unsupported write\n{write_out[-2000:]}")
+
+    elif write_rc != 0:
+        raise RuntimeError(f"attribute write failed (rc={write_rc})\n{write_out[-2000:]}")
+
+    print(f"Running: {read_cmd}")
+    read_again_rc, read_again = run_shell(hub, read_cmd, timeout_s)
+    again = _read_fingerprint(read_again_rc, read_again)
+    if step.get("writable"):
+        expect = step.get("expect_after_write", "")
+        if expect and not re.search(re.escape(expect), _strip_ansi(read_again)):
+            raise RuntimeError(f"expected {expect!r} after write\n{read_again[-2000:]}")
+    else:
+        if again != baseline:
+            raise RuntimeError("attribute changed after unsupported write\n" f"before:\n{baseline}\nafter:\n{again}")
+
+
+def run_sanity_steps(steps: list[dict[str, Any]], hub: object) -> None:
+    ctx: dict[str, str] = {}
+    for step in steps:
+        run_hub_step(step, hub, ctx)
 
 
 def _chip_tool_subject_from_acl(report: str) -> int | None:
@@ -160,10 +298,7 @@ def run_demo(
     sim = MatterSim(DEFAULT_BUNDLE, socket_consoles=interactive)
     try:
         sim.load_thread_checkpoint()
-        hub = sim.hub_uart()
-
-        test_lib.write_line(hub, "")
-        test_lib.wait_for(hub, r"#\s*$", timeout=DEFAULT_UART_TIMEOUT_S)
+        hub = _hub_uart(sim)
 
         if dual:
             # Both ELFs use the same commissioning identity. Pair the light
@@ -172,11 +307,11 @@ def run_demo(
                 board, extra_elf.resolve(), machine_name="matter_soc_light", cli_port=3453
             )
             sim.soc_uart(machine_name="matter_soc_light")
-            _commission(hub, light_node)
+            commission(hub, light_node)
 
         sim.attach_matter_soc(board, elf)
         soc = sim.soc_uart()
-        _commission(hub, switch_node if dual else NODE_ID)
+        commission(hub, switch_node if dual else NODE_ID)
         if dual:
             _grant_switch_acl_on_light(hub, light_node, switch_node)
 
@@ -216,10 +351,7 @@ def run_provision(
     sim = MatterSim(DEFAULT_BUNDLE, socket_consoles=True)
     try:
         sim.load_thread_checkpoint()
-        hub = sim.hub_uart(timeout)
-        test_lib.write_line(hub, "")
-        if test_lib.wait_for(hub, r"#\s*$", timeout=timeout) is None:
-            raise RuntimeError("hub shell did not become ready")
+        hub = _hub_uart(sim, timeout, require_prompt=True)
         sim.attach_provision_image(provision_image)
         sim.mount_provision(hub, timeout)
 
@@ -233,5 +365,51 @@ def run_provision(
             "Enter non-interactive guest shell commands. exit, Ctrl-D or Ctrl-C closes."
         )
         matter_sim.interactive_hub(hub, timeout)
+    finally:
+        sim.close()
+
+
+def run_sanity_commission(
+    elf: Path,
+    *,
+    board: str,
+    save_path: Path,
+) -> None:
+    """Commission, run commission verification steps, and save a commissioned checkpoint."""
+    elf = elf.resolve()
+    save_path = save_path.resolve()
+    flow = SANITY_FLOWS["test_tc_commission"]
+    sim = MatterSim(DEFAULT_BUNDLE, socket_consoles=False)
+    try:
+        sim.load_thread_checkpoint()
+        hub = _hub_uart(sim)
+        sim.attach_matter_soc(board, elf)
+        sim.soc_uart()
+        commission(hub, NODE_ID)
+        run_sanity_steps(flow["steps"], hub)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        sim.save(save_path)
+        print(f"Saved commissioned checkpoint: {save_path}")
+    finally:
+        sim.close()
+
+
+def run_sanity_test(name: str, checkpoint: Path) -> None:
+    """Restore a commissioned checkpoint and run one sanity flow."""
+    if name not in SANITY_FLOWS:
+        raise ValueError(f"unknown sanity test {name!r}")
+    if name == "test_tc_commission":
+        raise ValueError("test_tc_commission runs only in --sanity-commission mode")
+    checkpoint = checkpoint.resolve()
+    if not checkpoint.is_file():
+        raise FileNotFoundError(f"checkpoint not found: {checkpoint}")
+
+    flow = SANITY_FLOWS[name]
+    sim = MatterSim(DEFAULT_BUNDLE, socket_consoles=False)
+    try:
+        sim.load_thread_checkpoint(checkpoint=checkpoint)
+        hub = _hub_uart(sim)
+        sim.soc_uart()
+        run_sanity_steps(flow["steps"], hub)
     finally:
         sim.close()
