@@ -40,8 +40,9 @@ Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
    ![Matter source path](images/matter-source-path.png)
 6. Apply the changes below in:
 
+- `slc/config/sl_matter_mqtt_config.h` (broker endpoint, port, client id, client port, TLS, username, password)
 - `third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_example.cpp`
-- `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h`
+- `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h` (topic and publish message only)
 - `third_party/matter_sdk/examples/thermostat/silabs/include/https_offload_example.h`
 - `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h`
 - `slc/config/sl_matter_https_ota_config.h` (HTTPS OTA periodic timeout / default URL)
@@ -104,26 +105,34 @@ err = PlatformMgr().AddEventHandler(OnPlatformEvent, 0);
 
 These prints are for observing connectivity and commissioning while MQTT/HTTPS run. Starting and stopping the services on IP/Wi-Fi changes is handled separately by `MatterServicesEventHandler` in `AppTask.cpp` (`kInternetConnectivityChange` / `kWiFiConnectivityChange`).
 
-### MQTTS changes (`mqtt_example.h`)
+### MQTTS changes (`slc/config/sl_matter_mqtt_config.h`)
 
-Add these `#define`s near the top of the file (before the `#ifndef` / `#error` checks). Values must match your LAN broker:
+Set these in `sl_matter_mqtt_config.h`. `mqtt_example.h` includes that header. Values must match your LAN broker:
 
-| Symbol                 | Description                                                                                                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `MQTT_BROKER_ENDPOINT` | DNS name or IPv4 string for MQTTS connect. Literals use `sl_net_inet_addr`; otherwise DNS resolve. Must be reachable from the board.                        |
-| `MQTT_TLS_HOSTNAME`    | Hostname for TLS SNI / cert check (CN/SAN). If not provided (`nullptr`), `MqttClient` uses `MQTT_BROKER_ENDPOINT`. Must match the broker cert or TLS fails. |
-| `MQTT_BROKER_PORT`     | MQTTS TCP port.                                                                                                                                             |
+| Symbol                       | Default                  | Description                                                                                                                          |
+| ---------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `SL_MATTER_MQTT_BROKER_ENDPOINT`    | `"example.com"`          | DNS name or IPv4 string for connect. Literals use `sl_net_inet_addr`; otherwise DNS resolve. Must be reachable from the board.      |
+| `SL_MATTER_MQTT_BROKER_PORT`        | `8883`                   | Broker TCP port. Use `8883` for TLS, `1883` for plain MQTT.                                                                          |
+| `SL_MATTER_MQTT_CLIENT_ID`   | `"matter-mqtt-client"`   | MQTT client ID.                                                                                                                      |
+| `SL_MATTER_MQTT_CLIENT_PORT` | `5003`                   | Local source port.                                                                                                                   |
+| `SL_MATTER_MQTT_TLS_ENABLED` | `1`                      | `1` enables TLS. `0` connects without TLS.                                                                                           |
+| `SL_MATTER_MQTT_TLS_HOSTNAME`| `SL_MATTER_MQTT_BROKER_ENDPOINT`| Hostname for TLS SNI / cert check (CN/SAN). Must match the broker cert or TLS fails.                                                 |
+| `SL_MATTER_MQTT_CLIENT_USERNAME`    | `""`                     | Broker username. Empty skips a username.                                                                                             |
+| `SL_MATTER_MQTT_CLIENT_PASSWORD`    | `""`                     | Broker password. Empty skips a password.                                                                                             |
 
-Optional overrides (defaults exist via `#ifndef`): `MQTT_USERNAME`, `MQTT_PASSWORD`, `MQTT_TOPIC`, `MQTT_PUBLISH_MESSAGE`, `MQTT_CLIENT_ID`, `MQTT_CLIENT_PORT`.
+`MQTT_TOPIC` and `MQTT_PUBLISH_MESSAGE` stay in `mqtt_example.h` (defaults `MQTT_TOPIC` and `MQTT_PUBLISH_MESSAGE`).
 
 Example (replace with your broker values):
 
 ```c
-#define MQTT_BROKER_ENDPOINT ""
-#define MQTT_TLS_HOSTNAME ""
-#define MQTT_BROKER_PORT 8883
-#define MQTT_TOPIC "MQTT_TOPIC"
-#define MQTT_PUBLISH_MESSAGE "MQTT_PUBLISH_MESSAGE"
+#define SL_MATTER_MQTT_BROKER_ENDPOINT "192.168.1.139"
+#define SL_MATTER_MQTT_BROKER_PORT 8883
+#define SL_MATTER_MQTT_CLIENT_ID "matter-mqtt-client"
+#define SL_MATTER_MQTT_CLIENT_PORT 5003
+#define SL_MATTER_MQTT_TLS_ENABLED 1
+#define SL_MATTER_MQTT_TLS_HOSTNAME SL_MATTER_MQTT_BROKER_ENDPOINT
+#define SL_MATTER_MQTT_CLIENT_USERNAME ""
+#define SL_MATTER_MQTT_CLIENT_PASSWORD ""
 ```
 
 Inbound publishes are delivered through `MqttClient::SetSubscriptionCallback` (`OnMqttMessage` in `mqtt_example.cpp`). While connected and idle, the MQTT service thread auto-runs `MQTTYield` for keepalive and receive — no explicit Yield from the demo is required after subscribe/publish.
@@ -197,17 +206,25 @@ Example (replace with your server values):
 
 Edit before build. Point defaults at **your** LAN.
 
-### MQTT — `mqtt_example.h`
+### MQTT — `slc/config/sl_matter_mqtt_config.h`
 
-| Field           | `#define`                         | Demo default           | Customer need to set                    |
-| --------------- | --------------------------------- | ---------------------- | --------------------------------------- |
-| Broker endpoint | `MQTT_BROKER_ENDPOINT`            | ``                     | MQTTS DNS name or IPv4                  |
-| TLS hostname    | `MQTT_TLS_HOSTNAME`               | ``                     | Matches broker cert; else endpoint used |
-| Port            | `MQTT_BROKER_PORT`                | ``                     | MQTTS port                              |
-| User / pass     | `MQTT_USERNAME` / `MQTT_PASSWORD` | `john` / `doe`         | Broker auth                             |
-| Topic           | `MQTT_TOPIC`                      | `MQTT_TOPIC`           | Align with MQTT Explorer                |
-| Publish body    | `MQTT_PUBLISH_MESSAGE`            | `MQTT_PUBLISH_MESSAGE` | Payload you expect                      |
-| CA              | `kCaCertExample[]` in `cacert.h`  | Broker CA              |                                         |
+| Field           | `#define`                                            | Demo default                  | Customer need to set                         |
+| --------------- | ---------------------------------------------------- | ----------------------------- | -------------------------------------------- |
+| Broker endpoint | `SL_MATTER_MQTT_BROKER_ENDPOINT`                            | `example.com`                 | MQTTS DNS name or IPv4                       |
+| Broker port     | `SL_MATTER_MQTT_BROKER_PORT`                                | `8883`                        | `8883` for TLS, `1883` for plain MQTT        |
+| Client ID       | `SL_MATTER_MQTT_CLIENT_ID`                           | `matter-mqtt-client`          | Unique client ID                             |
+| Client port     | `SL_MATTER_MQTT_CLIENT_PORT`                         | `5003`                        | Local source port                            |
+| TLS             | `SL_MATTER_MQTT_TLS_ENABLED`                         | `1`                           | `0` to disable TLS                           |
+| TLS hostname    | `SL_MATTER_MQTT_TLS_HOSTNAME`                        | `SL_MATTER_MQTT_BROKER_ENDPOINT`     | Must match the broker cert                   |
+| User / pass     | `SL_MATTER_MQTT_CLIENT_USERNAME` / `SL_MATTER_MQTT_CLIENT_PASSWORD`| `""` / `""`                   | Broker auth; leave empty if unused           |
+| CA              | `kCaCertExample[]` in `cacert.h`                     | Sample CA                     | CA that signed the broker cert               |
+
+Topic and publish body stay in `mqtt_example.h`:
+
+| Field        | `#define`              | Demo default           | Customer need to set     |
+| ------------ | ---------------------- | ---------------------- | ------------------------ |
+| Topic        | `MQTT_TOPIC`           | `MQTT_TOPIC`           | Align with MQTT Explorer |
+| Publish body | `MQTT_PUBLISH_MESSAGE` | `MQTT_PUBLISH_MESSAGE` | Payload you expect       |
 
 ### HTTPS — `https_offload_example.h`
 
