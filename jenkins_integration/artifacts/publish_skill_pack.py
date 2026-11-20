@@ -54,7 +54,8 @@ def main():
         "featureLevel": 0, "packageType": "apack",
         "groups": [{**package, "groupPackages": [{"id": "mcp-config"}]}],
         "packages": [
-            {**package, "os": system, "arch": arch, "url": f"{DOWNLOAD}/{zip_location}"}
+            {**package, "os": system, "arch": arch, "dir": ".",
+             "url": f"{DOWNLOAD}/{zip_location}"}
             for system, arch in [("windows", "amd64"), ("linux", "amd64"),
                                  ("darwin", "arm64"), ("darwin", "amd64")]
         ],
