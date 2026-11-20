@@ -458,7 +458,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                         # next to the Jenkins workspace instead of utf_app_matter/reports.
                         for search_dir in ./reports ./manifest /home/dockerUser/qaWorkspace/reports; do
                             if [ -d "\$search_dir" ]; then
-                                find "\$search_dir" -type f \( -name '*_4901.txt' -o -name '*_4902.txt' -o -name '*pti_logger*' \) >> "\$log_list"
+                                find "\$search_dir" -type f \\( -name '*_4901.txt' -o -name '*_4902.txt' -o -name '*pti_logger*' \\) >> "\$log_list"
                             fi
                         done
                         found_logs=0
