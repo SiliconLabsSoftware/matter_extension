@@ -165,6 +165,7 @@ components:
   - matter_group_key_mgmt
   - matter_groupcast
   - matter_groups
+  - matter_https_ota
   - matter_humidistat
   - matter_icd_checkin_sender
   - matter_icd_core
@@ -257,6 +258,9 @@ components:
   - matter_scenes
   - matter_scenes_support
   - matter_service_area
+  - matter_service_http_offload
+  - matter_service_mqtt
+  - matter_services
   - matter_shell
   - matter_si70xx_sensor
   - matter_sleep_manager
@@ -348,6 +352,22 @@ extra_files:
   - board_compatibility_matrix.html
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
+  - docs/MATTER_MQTT_HTTPS_EXAMPLE.md
+  - docs/images/add-extension-settings.png
+  - docs/images/add-matter-extension.png
+  - docs/images/add-wifi-extension.png
+  - docs/images/build-success-logs.png
+  - docs/images/configure-project.png
+  - docs/images/dual-stack-thermostat-filter.png
+  - docs/images/extensions-browse.png
+  - docs/images/flash-device.png
+  - docs/images/force-generate.png
+  - docs/images/matter-projects-home.png
+  - docs/images/matter-source-path.png
+  - docs/images/open-vscode-build.png
+  - docs/images/project-created.png
+  - docs/images/sdk-with-extensions.png
+  - docs/images/select-target-brd4338a.png
   - docs/images/silabs-logo.jpg
   - jenkins_integration/Jenkinsfile
   - jenkins_integration/artifacts/artifact_processor.py
@@ -365,8 +385,10 @@ extra_files:
   - matter.slce
   - matter.slsdk
   - matter_app.slsdk
+  - matter_app_internal.slsdk
   - matter_demos.xml
   - matter_docs.xml
+  - matter_internal.slsdk
   - matter_templates.xml
   - packages/.prerelease
   - packages/DEVELOPER_README.md
@@ -378,16 +400,35 @@ extra_files:
   - packages/matter/pkg.slt
   - packages/matter_app/conanfile.py
   - packages/matter_app/pkg.slt
+  - packages/matter_app_internal/conanfile.py
+  - packages/matter_app_internal/pkg.slt
+  - packages/matter_internal/conanfile.py
+  - packages/matter_internal/pkg.slt
+  - packages/packages.yaml
+  - packages/pkgctl.py
   - packages/remotes.json
   - provision.mattpconf
   - provision/support/JLinkDevices.xml
   - provision/support/efr32mg26/EFR32XG26.JLinkScript
+  - renode_integration/README.md
   - renode_integration/guest/dts/zynqmp-matter-linux.dts
   - renode_integration/guest/rootfs-overlay/etc/init.d/S99matter-services
   - renode_integration/guest/rootfs-overlay/usr/bin/chip-tool
   - renode_integration/guest/rootfs-overlay/usr/bin/matter-thread-init
+  - renode_integration/harness/generate_checkpoint.py
+  - renode_integration/harness/matter_sim.py
+  - renode_integration/harness/requirements.txt
+  - renode_integration/harness/smoke_test_checkpoint.py
   - renode_integration/resc/matter-sim-full.resc
   - renode_integration/resc/matter-sim.resc
+  - renode_integration/scripts/assemble_bundle.py
+  - renode_integration/scripts/build_rcps.py
+  - renode_integration/scripts/build_renode.py
+  - renode_integration/scripts/build_rootfs_image.py
+  - renode_integration/scripts/build_tools_image.py
+  - renode_integration/scripts/common.py
+  - renode_integration/scripts/fetch_bundle.py
+  - renode_integration/scripts/publish_bundle.py
   - renode_integration/sim-manifest.json
   - requirements.txt
   - slc/build-pkg.sh
@@ -714,11 +755,15 @@ extra_files:
   - slc/component/matter-wifi/matter_aws_transport_nwp.slcc
   - slc/component/matter-wifi/matter_dual_stack.slcc
   - slc/component/matter-wifi/matter_efr32_ncp.slcc
+  - slc/component/matter-wifi/matter_https_ota.slcc
   - slc/component/matter-wifi/matter_lwip.slcc
   - slc/component/matter-wifi/matter_lwip_modified.slcc
   - slc/component/matter-wifi/matter_lwip_support.slcc
   - slc/component/matter-wifi/matter_minimal_mdns.slcc
   - slc/component/matter-wifi/matter_neutral_less_switch_wifi.slcc
+  - slc/component/matter-wifi/matter_service_http_offload.slcc
+  - slc/component/matter-wifi/matter_service_mqtt.slcc
+  - slc/component/matter-wifi/matter_services.slcc
   - slc/component/matter-wifi/matter_sleep_manager.slcc
   - slc/component/matter-wifi/matter_wifi.slcc
   - slc/component/matter-wifi/mbedtls_entropy_default_aws.slcc

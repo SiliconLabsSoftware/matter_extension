@@ -54,7 +54,7 @@ root/slc/script/
 Generates `pkg.slt`, which is used by SLT to determine dependencies to download for development.
 
 - Centralized utility to generate consistent `pkg.slt` files across SLC projects and solutions.
-- A project `pkg.slt` and `packages/matter_app/pkg.slt` depend only on `matter_app`. `packages/matter/pkg.slt` depends only on `matter`.
+- A project `pkg.slt` has one dependency. All-`quality: internal` directories depend on `matter_app_internal`. Any other directory, including a mix, depends on `matter_app`. `packages/matter/pkg.slt` depends on `matter`, and `packages/matter_internal/pkg.slt` depends on `matter_internal`.
 - Generates `pkg.slt` for every directory containing a `.slcp` or `.slcw` file.
 - Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-0.dev`).
 - Release-stream comes from `packages/_shared/release_stream_channel`.
@@ -84,12 +84,14 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - **`packages/matter/conanfile.py`** – Matter stack package. Declares its package fields, `THREAD_DEPENDENCIES` and `WIFI_DEPENDENCIES`, and passes its packaging options to `recipe_support`.
 - **`packages/matter/matter.slce.extra`** – Extra files for the stack package. Sample-app paths are skipped; those belong to `matter_app`.
 - **`packages/matter_app/conanfile.py`** – Sample-app package. Declares its package fields and passes its packaging options to `recipe_support`. Projects are selected by SLC `quality` (`production`, `evaluation`, `experimental`).
+- **`packages/matter_internal/conanfile.py`** – Internal stack package (requires `matter`). Selects components with SLC `quality: internal`.
+- **`packages/matter_app_internal/conanfile.py`** – Internal sample-app package (requires `matter` and `matter_internal`). Selects projects with SLC `quality: internal`.
 - **`packages/_shared/recipe_support.py`** – the shared packaging logic and the calls into `silabs_package_assistant` (`get_version`, `get_channel`, `find_slc_files_to_release`, `list_files_in_slc_file`, `trim_paths`, `copy_files`). See the module docstring.
 - **`packages/_shared/release_stream_channel`** – One-liner Conan channel / pkg.slt release-stream
 - **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
 - **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
 - **`pkg.slt`** – Generated next to projects and under `packages/matter`. Declares the `matter` dependency.
-- **`packages/matter_app/pkg.slt`** – Declares the `matter_app` dependency.
+- **`packages/matter_app/pkg.slt`** – Declares the `matter_app` dependency. `packages/matter_app_internal/pkg.slt` declares `matter_app_internal`.
 
 ---
 

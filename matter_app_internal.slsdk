@@ -1,0 +1,9 @@
+# Properties file for Simplicity Studio metadata
+id=com.silabs.sdk.matter_app_internal
+
+version=2.10.0
+
+label=Silicon Labs Matter Internal Applications
+description=Matter internal sample applications package
+
+prop.subLabel=Silicon\\ Labs\\ Matter\\ Internal\\ 2.10.0-1.6.1

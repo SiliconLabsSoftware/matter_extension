@@ -28,9 +28,13 @@ exclude_root_directories = [
     'matter_extension/slc/tools'
 ]
 
-# Files at the source root to exclude from copying
+# Files at the source root to exclude from copying.
+# The staged tree is the matter extension (matter.slsdk). The other root
+# .slsdk files belong to separate packages.
 exclude_root_files = [
-    'matter_app.slsdk'
+    'matter_app.slsdk',
+    'matter_app_internal.slsdk',
+    'matter_internal.slsdk',
 ]
 
 # Appended to the staged root matter.slsdk. CoL writes these into the published package.
