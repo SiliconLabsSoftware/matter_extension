@@ -81,7 +81,14 @@ This sample app works out of the box with no additional configuration required. 
 
    **Other:** The device can also be provisioned and controlled using the Python controller, Android, or iOS app.
 
-4. Control the device using chip-tool or another Matter controller after commissioning.
+4. Control the range hood fan and light:
+   ```shell
+   chip-tool fancontrol write fan-mode 3 1 1
+   chip-tool fancontrol write fan-mode 0 1 1
+   chip-tool fancontrol read fan-mode 1 1
+   chip-tool onoff on 1 2
+   chip-tool onoff off 1 2
+   ```
 
 **Button and LED reference:**
 
