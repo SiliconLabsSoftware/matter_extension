@@ -346,11 +346,8 @@ echo "Installing ${REF} via SLT..."
 slt install "${REF}" -e conan
 
 APP_PKG="$(slt where "${PACKAGE}")"
-MATTER="$(slt where matter)"
 [[ -n "${APP_PKG}" ]] || die "slt where ${PACKAGE} returned empty"
-[[ -n "${MATTER}" ]] || die "slt where matter returned empty"
 echo "APP_PKG=${APP_PKG}"
-echo "MATTER=${MATTER}"
 
 print_pkg_meta_version() {
   local root="$1"
@@ -364,7 +361,6 @@ print_pkg_meta_version() {
 }
 
 print_pkg_meta_version "${APP_PKG}" "${PACKAGE}"
-print_pkg_meta_version "${MATTER}" "matter"
 
 # Accept repo-relative paths (matter_build_action / slc/build.sh style) or basenames.
 if [[ -f "${APP_PKG}/${PROJECT}" ]]; then
@@ -406,6 +402,12 @@ cd "${APP_DIR}"
 
 echo "Running slt install (project pkg.slt / pkg.slconf)..."
 slt install
+
+MATTER="$(slt where matter 2>/dev/null || true)"
+if [[ -n "${MATTER}" ]]; then
+  echo "MATTER=${MATTER}"
+  print_pkg_meta_version "${MATTER}" "matter"
+fi
 
 run_generate() {
   local pid="$1"
