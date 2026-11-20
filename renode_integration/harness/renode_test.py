@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-@file demo_test.py
+@file renode_test.py
 @brief Matter Renode demo CLI (CI and local): checkpoint, ELF, demo flow or interactive hub commands.
 
 Entry point for demo tests, commissioned interactive sessions, and manual provisioning.
@@ -12,7 +12,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from demo_config import DEMO_APPS, EXTRA_DEMO_APP
+from renode_config import DEMO_APPS, EXTRA_DEMO_APP, SANITY_MATRIX_TESTS
 
 
 def main() -> int:
@@ -25,14 +25,14 @@ def main() -> int:
         default=None,
         help="Run post-commission steps from demo_flows.yaml",
     )
-    parser.add_argument("--matter-elf", type=Path, required=True)
+    parser.add_argument("--matter-elf", type=Path, default=None)
     parser.add_argument(
         "--extra-elf",
         default="",
         metavar="PATH",
         help="Second SoC ELF (required when --app has a paired demo binary)",
     )
-    parser.add_argument("--board", required=True, help="SoC board repl name, e.g. brd4187c")
+    parser.add_argument("--board", default=None, help="SoC board repl name, e.g. brd4187c")
     parser.add_argument(
         "--interactive",
         action="store_true",
@@ -44,7 +44,27 @@ def main() -> int:
     )
     parser.add_argument("--nvm3-hex", type=Path, help="Initial NVM3 image for --provision")
     parser.add_argument("--provision-image", type=Path, help="Override the provisioning disk")
+    parser.add_argument(
+        "--sanity-commission",
+        action="store_true",
+        help="Commission lighting app and save a checkpoint for sanity tests",
+    )
+    parser.add_argument("--save", type=Path, help="Checkpoint path for --sanity-commission")
+    parser.add_argument(
+        "--sanity-test", choices=SANITY_MATRIX_TESTS,
+        help="Run one sanity test from sanity_flows.yaml",
+    )
+    parser.add_argument("--checkpoint", type=Path, help="Commissioned checkpoint for --sanity-test")
     args = parser.parse_args()
+
+    sanity_mode = args.sanity_commission or args.sanity_test is not None
+    if sanity_mode:
+        if args.app or args.interactive or args.provision:
+            parser.error("sanity modes cannot combine with --app, --interactive, or --provision")
+        if args.sanity_commission and None in (args.matter_elf, args.board, args.save):
+            parser.error("--sanity-commission requires --matter-elf, --board, and --save")
+        if args.sanity_test and args.checkpoint is None:
+            parser.error("--sanity-test requires --checkpoint")
 
     if args.provision:
         if args.app or args.extra_elf or args.interactive:
@@ -63,12 +83,16 @@ def main() -> int:
                 parser.error(f"--{name.replace('_', '-')}: file not found: {value}")
             setattr(args, name, value)
 
-    if args.app is None and not args.interactive and not args.provision:
-        parser.error("specify --app, --interactive, or --provision")
+    if not sanity_mode and args.app is None and not args.interactive and not args.provision:
+        parser.error("specify --app, --interactive, --provision, or a sanity mode")
+    if not sanity_mode and (args.matter_elf is None or args.board is None):
+        parser.error("demo and provision modes require --matter-elf and --board")
 
-    matter_elf = args.matter_elf.resolve()
-    if not matter_elf.is_file():
-        parser.error(f"--matter-elf: file not found: {matter_elf}")
+    matter_elf: Path | None = None
+    if args.matter_elf is not None:
+        matter_elf = args.matter_elf.resolve()
+        if not matter_elf.is_file():
+            parser.error(f"--matter-elf: file not found: {matter_elf}")
 
     extra_elf: Path | None = None
     if args.extra_elf.strip():
@@ -81,34 +105,50 @@ def main() -> int:
     elif extra_elf is not None and app not in EXTRA_DEMO_APP:
         parser.error("--extra-elf requires a dual-device --app")
 
+    if args.sanity_commission:
+        mode = "Sanity commission"
+    elif args.sanity_test:
+        mode = f"Sanity test {args.sanity_test}"
+    elif args.provision:
+        mode = "Provisioning session"
+    else:
+        mode = f"Demo session for {app or 'custom'}"
+
     try:
-        if args.provision:
-            from demo_runner import run_provision
+        if args.sanity_commission:
+            from renode_runner import run_sanity_commission
+
+            run_sanity_commission(matter_elf, board=args.board, save_path=args.save)
+        elif args.sanity_test:
+            from renode_runner import run_sanity_test
+
+            run_sanity_test(args.sanity_test, args.checkpoint)
+        elif args.provision:
+            from renode_runner import run_provision
 
             run_provision(
                 matter_elf, args.nvm3_hex, board=args.board,
                 provision_image=args.provision_image,
             )
-            print("Provisioning session completed")
-            return 0
+        else:
+            from renode_runner import run_demo
 
-        from demo_runner import run_demo
-
-        run_demo(
-            matter_elf,
-            app,
-            extra_elf=extra_elf,
-            board=args.board,
-            interactive=args.interactive,
-        )
-        label = app or "custom"
-        print(f"Demo session for {label} succeeded")
-        return 0
+            run_demo(
+                matter_elf,
+                app,
+                extra_elf=extra_elf,
+                board=args.board,
+                interactive=args.interactive,
+            )
     except KeyboardInterrupt:
         return 130
     except Exception as exc:
-        print(f"{'Provisioning' if args.provision else 'Demo'} session failed: {exc}", file=sys.stderr)
+        print(f"{mode} failed: {exc}", file=sys.stderr)
         return 1
+
+    result = "completed" if args.provision else "succeeded"
+    print(f"{mode} {result}")
+    return 0
 
 
 if __name__ == "__main__":

@@ -1,0 +1,169 @@
+name: Renode Sanity Tests
+
+on:
+  workflow_call:
+    inputs:
+      build-type:
+        required: true
+        type: string
+      run-id:
+        description: Workflow run id that produced renode-demo ELFs
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+  actions: read
+  packages: read
+
+env:
+  BOARD: brd4187c
+  EXAMPLE_APP: lighting_app
+  PLATFORM: mg24
+  CHECKPOINT: renode_integration/out/commissioned.save
+
+jobs:
+  set-matrix:
+    name: Select sanity tests
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    outputs:
+      include: ${{ steps.matrix.outputs.include }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Install flow parser
+        run: python3 -m pip install 'PyYAML>=6.0'
+
+      - name: Configure sanity job matrix
+        id: matrix
+        run: ./renode_integration/harness/renode_config.py --sanity-matrix
+
+      - name: Report pilot result
+        if: always()
+        shell: bash
+        env:
+          RESULT: ${{ job.status }}
+          LABEL: Sanity matrix setup
+        run: |
+          echo "### $LABEL: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$RESULT" != "success" ]]; then
+            echo "::warning title=Renode sanity pilot::$LABEL: $RESULT. Pilot failure is non-blocking. Inspect this job's logs."
+          fi
+
+  commission:
+    name: Commission brd4187c lighting
+    outputs:
+      checkpoint-ready: ${{ steps.checkpoint.outcome == 'success' }}
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Download lighting ELF
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-demo-${{ inputs.build-type }}-${{ env.EXAMPLE_APP }}-${{ env.PLATFORM }}
+          run-id: ${{ inputs.run-id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: matter-elf
+
+      - uses: ./.github/actions/renode-setup
+        id: setup
+        with:
+          example-app: ${{ env.EXAMPLE_APP }}
+          board: ${{ env.BOARD }}
+
+      - name: Run sanity commission
+        run: |
+          ./renode_integration/harness/renode_test.py \
+            --sanity-commission \
+            --board "${{ env.BOARD }}" \
+            --matter-elf "${{ steps.setup.outputs.matter_elf_path }}" \
+            --save "${{ env.CHECKPOINT }}"
+
+      - name: Upload commissioned checkpoint
+        id: checkpoint
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-sanity-commissioned-checkpoint
+          path: ${{ env.CHECKPOINT }}
+          retention-days: 1
+          if-no-files-found: error
+
+      - name: Report pilot result
+        if: always()
+        shell: bash
+        env:
+          RESULT: ${{ job.status }}
+          LABEL: Sanity commissioning
+        run: |
+          echo "### $LABEL: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$RESULT" != "success" ]]; then
+            echo "::warning title=Renode sanity pilot::$LABEL: $RESULT. Pilot failure is non-blocking. Inspect this job's logs."
+          fi
+
+  sanity:
+    name: ${{ matrix.sanity-test }}
+    needs: [set-matrix, commission]
+    if: needs.commission.outputs.checkpoint-ready == 'true' && needs.set-matrix.outputs.include != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.set-matrix.outputs.include) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Download commissioned checkpoint
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-sanity-commissioned-checkpoint
+          path: renode_integration/out
+
+      - uses: ./.github/actions/renode-setup
+
+      - name: Run sanity test
+        id: test
+        run: |
+          ./renode_integration/harness/renode_test.py \
+            --sanity-test "${{ matrix.sanity-test }}" \
+            --checkpoint "${{ env.CHECKPOINT }}"
+
+      - name: Report pilot result
+        if: always()
+        shell: bash
+        env:
+          RESULT: ${{ job.status }}
+          LABEL: ${{ matrix.sanity-test }}
+        run: |
+          echo "### $LABEL: $RESULT" >> "$GITHUB_STEP_SUMMARY"
+          if [[ "$RESULT" != "success" ]]; then
+            echo "::warning title=Renode sanity pilot::$LABEL: $RESULT. Pilot failure is non-blocking. Inspect this job's logs."
+          fi
+
+  summary:
+    name: Sanity summary
+    needs: [set-matrix, commission, sanity]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Aggregate job results
+        run: |
+          echo "## Renode sanity mirror (brd4187c lighting)" >> "$GITHUB_STEP_SUMMARY"
+          echo "This pilot is non-blocking. Failed jobs emit warning annotations and record their actual status in their job summaries." >> "$GITHUB_STEP_SUMMARY"
+          echo "Tests run only when commissioning produced a checkpoint and matrix setup succeeded." >> "$GITHUB_STEP_SUMMARY"
+          echo "[View jobs and failure annotations](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})" >> "$GITHUB_STEP_SUMMARY"
