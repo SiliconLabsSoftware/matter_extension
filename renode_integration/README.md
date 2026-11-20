@@ -21,7 +21,7 @@ The simulation runs:
 | `guest/dts/` | ZynqMP device tree source |
 | `guest/rootfs-overlay/` | Matter-specific files injected into the boot rootfs |
 | `scripts/` | Python scripts that build, assemble, fetch, and publish the bundle |
-| `harness/` | pyrenode3 harness (`MatterSim`, `demo_runner`), checkpoint generation |
+| `harness/` | pyrenode3 harness (`MatterSim`, `renode_runner`), `demo_flows.yaml`, `sanity_flows.yaml`, checkpoint generation |
 | `out/bundle/` | Assembled artifact tree (gitignored) |
 
 ## Common vs runtime artifacts
@@ -70,7 +70,7 @@ Use an ELF built for the SoC board you pass to `--board`. **MG24**, **MG26**, an
 
 ### Demo test (local and CI)
 
-`harness/demo_test.py` is the single entry point. In demo and commissioned interactive modes, it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
+`harness/renode_test.py` is the single entry point. In demo and commissioned interactive modes, it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
 
 The harness always uses the bundle fetched into `renode_integration/out/bundle`. From the repository root (after `fetch_bundle.py`):
 
@@ -78,7 +78,7 @@ The harness always uses the bundle fetched into `renode_integration/out/bundle`.
 python3 -m pip install -r renode_integration/harness/requirements.txt
 python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
 
-./renode_integration/harness/demo_test.py \
+./renode_integration/harness/renode_test.py \
   --app lighting_app \
   --board brd4187c \
   --matter-elf /path/to/matter_thread_soc_lighting_app_freertos.out
@@ -89,7 +89,7 @@ While the harness runs you can still attach with `nc localhost 4540` (hub) and `
 Use `--interactive` to commission the device and control it from a hub shell prompt. This skips the predefined demo steps and keeps the same commissioned simulation running until you exit:
 
 ```sh
-./renode_integration/harness/demo_test.py \
+./renode_integration/harness/renode_test.py \
   --matter-elf /path/to/matter_thread_soc_lighting_app_freertos.out \
   --interactive
 ```
@@ -129,7 +129,7 @@ PYTHONPATH=harness python3 harness/generate_checkpoint.py
 
 ### Manual provisioning test
 
-`harness/demo_test.py --provision` reuses `MatterSim` and Renode `test_lib` to attach a
+`harness/renode_test.py --provision` reuses `MatterSim` and Renode `test_lib` to attach a
 provisioning disk and a provisioning-enabled SoC to the Thread hub checkpoint.
 It opens a manual provisioning prompt inside the simulated hub before commissioning.
 `--provision` requires `--nvm3-hex` and cannot be combined with `--app`,
@@ -159,7 +159,7 @@ python3 renode_integration/scripts/make_provision_nvm3.py \
   --board brd4187c \
   --output renode_integration/out/nvm3-provision.hex
 
-python3 renode_integration/harness/demo_test.py --provision \
+python3 renode_integration/harness/renode_test.py --provision \
   --matter-elf /path/to/matter_app.out \
   --board brd4187c \
   --nvm3-hex renode_integration/out/nvm3-provision.hex
@@ -218,13 +218,33 @@ build-tools-image ──────┘         │
 
 ### CI demo tests
 
-Workflow [`.github/workflows/renode-demo-tests.yaml`](../.github/workflows/renode-demo-tests.yaml) drives `harness/demo_test.py` against `harness/demo_flows.yaml` (thread README `chip-tool` steps after commissioning).
+Workflow [`.github/workflows/renode-demo-tests.yaml`](../.github/workflows/renode-demo-tests.yaml) drives `harness/renode_test.py` against `harness/demo_flows.yaml` (thread README `chip-tool` steps after commissioning).
 
 | Trigger | Scope |
 |---------|--------|
-| `workflow_run` after **Build Dev apps** or **Packages Validation** | Parent workflow succeeded on `main` or `release_*`. All Matter-over-Thread demo apps × boards in `harness/demo_config.py` |
+| `workflow_run` after **Build Dev apps** or **Packages Validation** | Parent workflow succeeded on `main` or `release_*`. All Matter-over-Thread demo apps × boards in `harness/renode_config.py` |
 
 Jobs run in parallel (`fail-fast: false`), one per app and board: 13 apps × nine boards (117 jobs). Demos expect `renode-demo-full-*` artifacts from the triggering run. The boards are `brd4187c`, `brd4116a`, `brd4407a`, `brd4186c`, `brd4117a`, `brd4118a`, `brd4120a`, `brd4121a`, and `brd1019a`. Each job loads `platforms/boards/silabs/<board>.repl`. ELFs come from `renode-demo-<build-type>-<app>-<platform>` artifacts (tree paths under `out/<board>/…`, downloaded with `actions/download-artifact` and located by board in the workflow). Hub and SoC UART output is streamed to the job log via Renode `test_lib`.
+
+### CI sanity tests (MATTER-7158)
+
+Workflow [`.github/workflows/renode-sanity-tests.yaml`](../.github/workflows/renode-sanity-tests.yaml) mirrors the Jenkins CI sanity suite for **brd4187c** `lighting_app` using step definitions in `harness/sanity_flows.yaml`. It is called directly by both the source and package-based **Build Dev apps** workflows after `build_lighting_app` completes. Pilot jobs use `continue-on-error: true`. Setup, commissioning, and test failures emit warning annotations and record their actual status in job summaries. Tests are skipped when commissioning does not produce a checkpoint.
+
+1. **commission** – downloads `renode-demo-<build-type>-lighting_app-mg24`, runs `renode_test.py --sanity-commission`, uploads `commissioned.save`.
+2. **sanity** matrix – 16 jobs restore the checkpoint and run `renode_test.py --sanity-test <name>` in parallel.
+
+Local usage:
+
+```sh
+./renode_integration/harness/renode_test.py \
+  --sanity-commission --board brd4187c \
+  --matter-elf /path/to/matter_thread_soc_lighting_app_freertos.out \
+  --save renode_integration/out/commissioned.save
+
+./renode_integration/harness/renode_test.py \
+  --sanity-test test_tc_binfo_1_01 \
+  --checkpoint renode_integration/out/commissioned.save
+```
 
 ### CI provisioning test
 Will be implemented in future PRs.
@@ -251,7 +271,7 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 | Checkpoint won't load | Renode build mismatch, rebuild Renode and run `harness/generate_checkpoint.py` |
 | `oras pull` auth failure | `gh auth login` and ensure GHCR package access |
 | `matter-services` timeout | Check guest logs at `/tmp/*.log` on hub console |
-| `provision: matter-provision disk is not mounted` | Use `harness/demo_test.py --provision`, which attaches and mounts the provisioning disk. Verify checkpoint compatibility |
+| `provision: matter-provision disk is not mounted` | Use `harness/renode_test.py --provision`, which attaches and mounts the provisioning disk. Verify checkpoint compatibility |
 | New Thread network needed | `matter-thread-init --force` on hub console |
 
 ## Implementation notes

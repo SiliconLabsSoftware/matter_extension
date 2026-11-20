@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-@file demo_config.py
+@file renode_config.py
 @brief Renode demo matrix: Matter example apps, boards, and CI artifact naming.
 
 Loads app metadata from demo_flows.yaml and emits the parallel demo job matrix.
@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import json
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -17,6 +18,13 @@ import yaml
 
 with Path(__file__).with_name("demo_flows.yaml").open(encoding="utf-8") as handle:
     DEMO_FLOWS = yaml.safe_load(handle)
+
+with Path(__file__).with_name("sanity_flows.yaml").open(encoding="utf-8") as handle:
+    SANITY_FLOWS = yaml.safe_load(handle)
+
+SANITY_MATRIX_TESTS = tuple(
+    name for name in SANITY_FLOWS if name != "test_tc_commission"
+)
 
 DEMO_APPS = tuple(DEMO_FLOWS)
 EXTRA_DEMO_APP = {
@@ -68,7 +76,14 @@ def write_job_github_outputs(
         handle.write(f"include={payload}\n")
 
 
+def sanity_matrix_include() -> list[dict[str, str]]:
+    return [{"sanity-test": name} for name in SANITY_MATRIX_TESTS]
+
+
 def main() -> None:
+    if "--sanity-matrix" in sys.argv:
+        write_job_github_outputs(os.environ["GITHUB_OUTPUT"], sanity_matrix_include())
+        return
     write_job_github_outputs(os.environ["GITHUB_OUTPUT"], matrix_include())
 
 
