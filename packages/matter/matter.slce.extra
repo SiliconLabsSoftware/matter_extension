@@ -378,7 +378,6 @@ extra_files:
   - packages/matter/pkg.slt
   - packages/matter_app/conanfile.py
   - packages/matter_app/pkg.slt
-  - packages/matter_dependencies.yaml
   - packages/remotes.json
   - provision.mattpconf
   - provision/support/JLinkDevices.xml

@@ -12,34 +12,77 @@ for _base in (_recipe_dir, _recipe_dir.parent):
 
 from _shared import recipe_support
 
+# Platform dependency versions. requirements() requires both groups.
+# App pkg.slt files depend only on matter_app; these stay on the matter package.
+THREAD_DEPENDENCIES = {
+    "thread": "[>=3.2.0 <3.2.1,include_prerelease]",
+    "multiprotocol": "[>=1.2.0 <1.2.1,include_prerelease]",
+    "zigbee": "[>=9.2.0 <9.2.1,include_prerelease]",
+    "bluetooth_le_host": "[>=11.2.0 <11.2.1,include_prerelease]",
+    "cpc": "[>=4.10.0 <4.10.1,include_prerelease]",
+}
+
+WIFI_DEPENDENCIES = {
+    "wifi": "[>=4.2.0 <4.2.1,include_prerelease]",
+    "bluetooth_le_siwx91x": "[>=4.2.0 <4.2.1,include_prerelease]",
+}
+
+_QUALITIES = ("production", "evaluation", "experimental")
+
+_REQUIRED_ROOT_FILES = (
+    "matter.slsdk",
+    "src/app/zap-templates/app-templates.json",
+    "src/app/zap-templates/zcl/zcl.json",
+)
+
 
 class matterRecipe(ConanFile):
-    """Matter stack package. See recipe_support.MATTER for what it collects."""
+    """Matter stack package."""
 
-    name = recipe_support.MATTER.name
-    user = recipe_support.PACKAGE_USER
-    license = recipe_support.PACKAGE_LICENSE
-    author = recipe_support.PACKAGE_AUTHOR
-    homepage = recipe_support.PACKAGE_HOMEPAGE
-    url = recipe_support.PACKAGE_URL
-    topics = recipe_support.PACKAGE_TOPICS
-    python_requires = recipe_support.PYTHON_REQUIRES
-    release_stream_channel = recipe_support.read_package_metadata(
-        "release_stream_channel", recipe_file=__file__
-    )
-    description = recipe_support.MATTER.description
-    sl_metadata = recipe_support.SL_METADATA
+    name = "matter"
+    user = "silabs"
+    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
+    author = "Silicon Laboratories Inc."
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
+    url = "https://github.com/SiliconLabsSoftware/matter_extension"
+    topics = "silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+    release_stream_channel = "2026-12"
+    description = "Matter extension for Simplicity SDK Suite"
+    sl_metadata = {
+        "slack_channel": "#matter-development",
+        "team": "MATTER",
+        "confluence_doc": "",
+        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
+        "maintainers": [],
+    }
     revision_mode = "hash"
-    _spec = recipe_support.MATTER
 
-    options = recipe_support.slt_options()
-    default_options = recipe_support.slt_default_options()
+    options = {
+        "compatibleVersion": ["ANY"],
+        "subPackage": [True, False],
+        "releaseNotesUrl": ["ANY"],
+        "packageType": ["ANY"],
+        "sdkLtsTag": ["ANY"],
+    }
+    default_options = {
+        "compatibleVersion": "ANY",
+        "subPackage": False,
+        "releaseNotesUrl": "",
+        "packageType": "sdk",
+        "sdkLtsTag": "",
+    }
+
+    def get_version(self):
+        return recipe_support.matter_get_version(self)
 
     def set_version(self):
         recipe_support.set_version(self)
 
     def requirements(self):
-        recipe_support.apply_requirements(self)
+        channel = self.release_stream_channel
+        for name, version in {**THREAD_DEPENDENCIES, **WIFI_DEPENDENCIES}.items():
+            self.requires(f"{name}/{version}@{self.user}/{channel}")
 
     def slt_requirements(self):
         return {"zap": "~", "slc-cli": "~"}
@@ -48,16 +91,33 @@ class matterRecipe(ConanFile):
         recipe_support.apply_layout(self)
 
     def export(self):
-        recipe_support.export_recipe_files(self)
+        recipe_support.export_recipe_files(
+            self,
+            extra_filename="matter.slce.extra",
+        )
 
     def package_id(self):
         self.info.clear()
 
     def package(self):
-        recipe_support.package_from_spec(self)
+        recipe_support.matter_package_files(
+            self,
+            kind="stack",
+            required_root_files=_REQUIRED_ROOT_FILES,
+            extra_filename="matter.slce.extra",
+            skip_sample_apps=True,
+            qualities=_QUALITIES,
+        )
 
     def build(self):
-        recipe_support.write_filelists(self)
+        recipe_support.write_filelists(
+            self,
+            kind="stack",
+            required_root_files=_REQUIRED_ROOT_FILES,
+            extra_filename="matter.slce.extra",
+            skip_sample_apps=True,
+            qualities=_QUALITIES,
+        )
 
     def package_info(self):
         recipe_support.apply_package_info(self)

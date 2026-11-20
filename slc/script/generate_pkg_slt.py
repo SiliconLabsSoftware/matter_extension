@@ -2,13 +2,12 @@
 
 """
 @file generate_pkg_slt.py
-@brief Generate pkg.slt files adjacent to SLC projects (.slcp / .slcw) with
-       pinned dependency versions (Matter + platform-specific extras).
+@brief Generate pkg.slt files adjacent to SLC projects (.slcp / .slcw).
 
 OVERVIEW
-    Walk a base directory (recursively) and, for every directory containing at
-    least one .slcp or .slcw file, (re)write a pkg.slt file. Existing files are
-    overwritten for consistency (idempotent output).
+    Walk a base directory and, for every directory containing at least one
+    .slcp or .slcw file, write a pkg.slt that depends only on matter_app.
+    Existing files are overwritten.
 
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
@@ -18,57 +17,25 @@ MATTER VERSION RESOLUTION (priority)
 RELEASE-STREAM
     packages/_shared/release_stream_channel (written as release-stream in every pkg.slt).
 
-DEPENDENCY VERSIONS SOURCE
-    Non-Matter dependency versions are loaded from 'packages/matter_dependencies.yaml' which
-    supports both grouped format (common/thread/wifi) and legacy flat format.
-    Groups allow fine-grained control over which dependencies are included for each platform.
-
-PLATFORM HEURISTICS (when --common is NOT used)
-    - Path components NOT containing 'wifi' => Thread group dependencies appended.
-    - Path components containing 'wifi'     => Wi-Fi group dependencies appended.
-    - Common group dependencies are included for all platforms.
-    - Matter dependency is always included first.
-
---common MODE
-    Every discovered project receives uniform content consisting of just the
-    Matter dependency plus any dependencies in the 'common' group.
-
-SAMPLE APP PACKAGE
-    By default (--update-sample-app-pkg True), also generates 'packages/matter_app/pkg.slt' 
-    in the packages/matter_app directory, pointing at 'matter_app' rather than 'matter'.
-    Disable with --update-sample-app-pkg False.
+DEPENDENCIES
+    Project pkg.slt files and packages/matter_app/pkg.slt depend only on matter_app.
+    packages/matter/pkg.slt depends only on matter. Platform packages are
+    requirements of the matter Conan recipe, not of these pkg.slt files.
 
 VERSION-ONLY MODE
-    Use --version-only to resolve and print just the Matter version without 
-    generating any pkg.slt files. Useful for scripting and Makefiles.
+    Use --version-only to resolve and print just the Matter version without
+    generating any pkg.slt files.
 
 EXCLUDES
-    Directories can be skipped using --exclude/-e. Each value is a substring
-    match applied to full directory paths. Multiple excludes can be provided by
-    repeating -e or supplying comma-separated values. If no excludes are
-    provided, 'third_party' is excluded by default.
-
-SAFETY / IDEMPOTENCE
-    Output is deterministic given the same inputs (YAML, flags, version,
-    release_stream_channel). Files are always overwritten, eliminating drift.
+    Directories can be skipped using --exclude/-e. If none are provided,
+    'third_party' is excluded by default.
 
 USAGE EXAMPLES
-    python3 slc/script/generate_pkg_slt.py -d slc                      # heuristic mode
-    python3 slc/script/generate_pkg_slt.py -d slc --common             # uniform content
+    python3 slc/script/generate_pkg_slt.py -d slc
     python3 slc/script/generate_pkg_slt.py -d slc --matter-version 2.7.0-beta.1
-    python3 slc/script/generate_pkg_slt.py -d slc -e build,temp,legacy # exclude multiple
-    python3 slc/script/generate_pkg_slt.py --verbose
-    python3 slc/script/generate_pkg_slt.py --version-only              # just print version
+    python3 slc/script/generate_pkg_slt.py -d slc -e build,temp,legacy
+    python3 slc/script/generate_pkg_slt.py --version-only
     python3 slc/script/generate_pkg_slt.py --update-sample-app-pkg False
-
-ARGUMENT SUMMARY
-    --directory, -d               Base directory to search (default: cwd)
-    --verbose, -v                 Enable verbose logging
-    --common                      Ignore platform heuristics; emit Matter + common deps only
-    --matter-version              Override Matter version (else matter_package_version, then matter.slce)
-    --version-only                Only resolve and print Matter version, then exit
-    --exclude, -e                 Directory exclude pattern (repeatable/comma-separated)
-    --update-sample-app-pkg, -s   Generate packages/matter_app/pkg.slt (default: True)
 
 EXIT CODES
     0 on success; 1 if the Matter version cannot be resolved.
@@ -79,103 +46,11 @@ import os
 import sys
 import argparse
 import logging
-from typing import Dict, Optional, Any
+from typing import Optional
 import yaml
 
 # Module-level logger (configured once in main)
 logger = logging.getLogger(__name__)
-
-
-def _load_grouped_versions(filename: str = "matter_dependencies.yaml") -> Dict[str, Dict[str, str]]:
-    """Load grouped dependency versions (common/thread/wifi) from YAML.
-
-    Accepts either new grouped format or legacy flat mapping. Returns a dict:
-        { "common": {...}, "thread": {...}, "wifi": {...} }
-    Raises if the file is missing, empty, or not a mapping. No defaults are used,
-    so a wrong path cannot produce pkg.slt files with stale versions.
-    """
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    candidates = [
-        os.path.join(script_dir, "..", "..", "packages", filename),
-        os.path.join(os.getcwd(), "packages", filename),
-    ]
-    path = next((p for p in candidates if os.path.isfile(p)), None)
-    if path is None:
-        raise FileNotFoundError(f"{filename} not found; looked in: {', '.join(candidates)}")
-    with open(path, "r", encoding="utf-8") as f:
-        raw: Dict[str, Any] = yaml.safe_load(f) or {}
-    if not isinstance(raw, dict) or not raw:
-        raise ValueError(f"{path} must contain a non-empty mapping")
-    logger.debug("Loaded dependency versions from %s", path)
-    grouped: Dict[str, Dict[str, str]]
-    if any(k in raw for k in ("thread", "wifi", "common")):
-        grouped = {
-            "common": raw.get("common", {}) or {},
-            "thread": raw.get("thread", {}) or {},
-            "wifi": raw.get("wifi", {}) or {},
-        }
-    else:  # legacy flat mapping; no explicit groups provided
-        # Instead of maintaining hardcoded dependency name lists, just put all
-        # flat keys into both 'thread' and 'wifi' groups so additions require
-        # no script changes. Keep 'common' empty (or could optionally lift
-        # universally shared entries there later).
-        flat_items = {k: v for k, v in raw.items() if k not in ("common", "thread", "wifi")}
-        grouped = {
-            "common": {},
-            "thread": dict(flat_items),
-            "wifi": dict(flat_items),
-        }
-    return grouped
-
-
-DEP_GROUPS = _load_grouped_versions()
-
-
-def build_content_strings(matter_version: str):
-    """Return header plus platform-specific dependency blocks using grouped versions.
-
-    The returned tuple is (common_header, thread_block, wifi_block, all_header).
-    For now 'common_header' and 'all_header' are identical (Matter only) to preserve
-    previous behavior when --common is supplied.
-    """
-    release_stream = resolve_release_stream_channel()
-    header = f"""# Version defaults to "0" if not defined
-version = "1"
-release-stream = "{release_stream}"
- 
- 
-[dependency]
-# Get a specific version of the package
-matter = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
-"""
-
-    def merged_lines(group_name: str) -> str:
-        # Merge common first, then group-specific (group overrides duplicates)
-        common = DEP_GROUPS.get("common", {})
-        specific = DEP_GROUPS.get(group_name, {})
-        merged: Dict[str, str] = dict(common)
-        # Maintain insertion order: add keys from specific (overwriting any duplicates)
-        for k, v in specific.items():
-            merged[k] = v
-        # Simple emission: rely on merged dict insertion order (Python 3.7+ preserves it)
-        #  - common entries first
-        #  - followed by group-specific additions / overrides
-        lines = []
-        for name, ver in merged.items():
-            if name == "matter":
-                continue
-            lines.append(
-                f'{name} = {{ version = "{ver}", installer = "conan", user="silabs", '
-                f'channel="{release_stream}", prerelease = true }}\n'
-            )
-        return "".join(lines)
-
-    thread_block = merged_lines("thread")
-    wifi_block = merged_lines("wifi")
-    logger.debug("Resolved dependency groups: %s", DEP_GROUPS)
-    logger.debug("Thread block emitted:\n%s", thread_block)
-    logger.debug("WiFi block emitted:\n%s", wifi_block)
-    return header, thread_block, wifi_block, header
 
 
 def _repo_root_from_script() -> str:
@@ -260,10 +135,19 @@ release-stream = "{release_stream}"
         pkg_slt_file.write(pkg_slt_content)
     logger.debug(f"Generated {pkg_slt_path}")
 
-def generate_pkg_slt_files(base_directory, verbose, common, matter_version, exclude_patterns):
+def generate_pkg_slt_files(base_directory, verbose, matter_version, exclude_patterns):
+    """Write a matter_app-only pkg.slt next to every project."""
     logger.info(f"Using Matter package version: {matter_version}")
-
-    pkg_slt_content_common, pkg_slt_content_thread, pkg_slt_content_wifi, pkg_slt_content_all = build_content_strings(matter_version)
+    release_stream = resolve_release_stream_channel()
+    pkg_slt_content = f"""# Version defaults to "1" if not defined
+version = "1"
+release-stream = "{release_stream}"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+matter_app = {{ version = "{matter_version}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
+"""
 
     for root, dirs, files in os.walk(base_directory):
         # Skip whole subtree if root matches an exclude pattern
@@ -284,17 +168,6 @@ def generate_pkg_slt_files(base_directory, verbose, common, matter_version, excl
         if not any(file.endswith((".slcp", ".slcw")) for file in files):
             continue
 
-        if common:
-            pkg_slt_content = pkg_slt_content_all
-        else:
-            path_components = os.path.normpath(root).split(os.path.sep)
-            if "wifi" not in path_components:
-                pkg_slt_content = pkg_slt_content_common + pkg_slt_content_thread
-                # logger.debug("efr app contents = %s", pkg_slt_content_thread)
-            else:
-                pkg_slt_content = pkg_slt_content_common + pkg_slt_content_wifi
-                # logger.debug("wifi app contents = %s", pkg_slt_content_wifi)
-
         pkg_slt_path = os.path.join(root, "pkg.slt")
         try:
             with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
@@ -310,8 +183,6 @@ def main():
     parser.add_argument("--directory", "-d", default=os.getcwd(),
                         help="Base directory to search for .slcp files. Defaults to current working directory.")
     parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging.")
-    parser.add_argument("--common", action="store_true",
-                        help="Generate pkg.slt using only the universal pkg_slt_content_all for every project.")
     parser.add_argument("--matter-version",
                         help="Explicit Matter package version to embed; overrides matter_package_version and matter.slce.")
     parser.add_argument("--version-only", action="store_true", help="Only resolve and print the Matter version, then exit.")
@@ -346,7 +217,7 @@ def main():
         logger.info("No --exclude provided; defaulting to exclude: %s", exclude_patterns)
     if exclude_patterns and args.verbose:
         logger.debug(f"Exclude patterns: {exclude_patterns}")
-    generate_pkg_slt_files(args.directory, args.verbose, args.common, matter_version, exclude_patterns)
+    generate_pkg_slt_files(args.directory, args.verbose, matter_version, exclude_patterns)
     if args.update_sample_app_pkg:
         generate_pkg_slt(args.verbose, 'packages/matter_app/pkg.slt', 'matter_app', matter_version, exclude_patterns)
     if args.update_stack_pkg:

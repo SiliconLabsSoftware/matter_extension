@@ -12,34 +12,64 @@ for _base in (_recipe_dir, _recipe_dir.parent):
 
 from _shared import recipe_support
 
+_QUALITIES = ("production", "evaluation", "experimental")
+
+_REQUIRED_ROOT_FILES = (
+    "matter_app.slsdk",
+    "matter_templates.xml",
+)
+
+_PATH_MAPPINGS = (
+    "packages/build_app.sh=>build_app.sh",
+    "packages/_shared/release_stream_channel=>release_stream_channel",
+)
+
 
 class matter_appRecipe(ConanFile):
-    """Matter sample-app package. See recipe_support.MATTER_APP for what it collects."""
+    """Matter sample-app package."""
 
-    name = recipe_support.MATTER_APP.name
-    user = recipe_support.PACKAGE_USER
-    license = recipe_support.PACKAGE_LICENSE
-    author = recipe_support.PACKAGE_AUTHOR
-    homepage = recipe_support.PACKAGE_HOMEPAGE
-    url = recipe_support.PACKAGE_URL
-    topics = recipe_support.PACKAGE_TOPICS
-    python_requires = recipe_support.PYTHON_REQUIRES
-    release_stream_channel = recipe_support.read_package_metadata(
-        "release_stream_channel", recipe_file=__file__
-    )
-    description = recipe_support.MATTER_APP.description
-    sl_metadata = recipe_support.SL_METADATA
+    name = "matter_app"
+    user = "silabs"
+    license = "www.silabs.com/about-us/legal/master-software-license-agreement"
+    author = "Silicon Laboratories Inc."
+    homepage = "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
+    url = "https://github.com/SiliconLabsSoftware/matter_extension"
+    topics = "silabs"
+    python_requires = "silabs_package_assistant/[~2]@silabs"
+    release_stream_channel = "2026-12"
+    description = "matter sample-app package"
+    sl_metadata = {
+        "slack_channel": "#matter-development",
+        "team": "MATTER",
+        "confluence_doc": "",
+        "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
+        "maintainers": [],
+    }
     revision_mode = "hash"
-    _spec = recipe_support.MATTER_APP
 
-    options = recipe_support.slt_options()
-    default_options = recipe_support.slt_default_options()
+    options = {
+        "compatibleVersion": ["ANY"],
+        "subPackage": [True, False],
+        "releaseNotesUrl": ["ANY"],
+        "packageType": ["ANY"],
+        "sdkLtsTag": ["ANY"],
+    }
+    default_options = {
+        "compatibleVersion": "ANY",
+        "subPackage": False,
+        "releaseNotesUrl": "",
+        "packageType": "sdk",
+        "sdkLtsTag": "",
+    }
+
+    def get_version(self):
+        return recipe_support.matter_get_version(self)
 
     def set_version(self):
         recipe_support.set_version(self)
 
     def requirements(self):
-        recipe_support.apply_requirements(self)
+        recipe_support.apply_requirements(self, require_matter=True)
 
     def layout(self):
         recipe_support.apply_layout(self)
@@ -51,10 +81,23 @@ class matter_appRecipe(ConanFile):
         self.info.clear()
 
     def package(self):
-        recipe_support.package_from_spec(self)
+        recipe_support.matter_package_files(
+            self,
+            kind="app",
+            required_root_files=_REQUIRED_ROOT_FILES,
+            path_mappings=_PATH_MAPPINGS,
+            rewrite_wiseconnect=True,
+            qualities=_QUALITIES,
+        )
 
     def build(self):
-        recipe_support.write_filelists(self)
+        recipe_support.write_filelists(
+            self,
+            kind="app",
+            required_root_files=_REQUIRED_ROOT_FILES,
+            path_mappings=_PATH_MAPPINGS,
+            qualities=_QUALITIES,
+        )
 
     def package_info(self):
         recipe_support.apply_package_info(self)

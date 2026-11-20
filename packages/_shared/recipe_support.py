@@ -8,6 +8,10 @@ come from ``silabs_package_assistant`` (``find_slc_files_to_release``,
 ``list_files_in_slc_file``, ``get_version``, ``get_base_version``,
 ``get_channel``, ``trim_paths``, ``copy_files``, ``generate_metadata``).
 
+A ``matter_`` name wraps the assistant function of the same suffix and then
+applies Matter rules. ``matter_get_version`` calls ``get_version``. The assistant
+result is kept; this module only adds the Matter path, filter, or check.
+
 Two Conan contexts matter:
 
 * ``conan export-pkg`` loads ``packages/<name>/conanfile.py`` from the checkout.
@@ -15,10 +19,10 @@ Two Conan contexts matter:
   reads the tree from there.
 * A later ``conan install`` loads the copy under the cache ``e/`` folder, which
   is not a git checkout. ``requirements()`` and ``set_version()`` must use files
-  copied beside the recipe (``matter.slce``, ``matter_dependencies.yaml``).
+  copied beside the recipe (``matter.slce``).
 
 Adding ``matter_internal`` / ``matter_app_internal`` later means a new
-``PackageSpec``, a ``conanfile.py``, and one entry in ``packages.yaml``.
+``conanfile.py`` and one entry in ``packages.yaml``.
 Internal content is selected by SLC ``quality: internal``, not by path.
 """
 
@@ -32,37 +36,7 @@ from typing import Iterable, Optional
 
 import yaml
 
-# ---------------------------------------------------------------------------
-# Identity
-# ---------------------------------------------------------------------------
-
 LINE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
-
-# Pinned dependency versions for the matter stack, in packages/ beside this recipe tree.
-DEP_VERSIONS_FILE = "matter_dependencies.yaml"
-
-PACKAGE_USER = "silabs"
-PACKAGE_LICENSE = (
-    "www.silabs.com/about-us/legal/master-software-license-agreement"
-)
-PACKAGE_AUTHOR = "Silicon Laboratories Inc."
-PACKAGE_HOMEPAGE = (
-    "https://github.com/SiliconLabsSoftware/matter_extension/blob/main/README.md"
-)
-PACKAGE_URL = "https://github.com/SiliconLabsSoftware/matter_extension"
-PACKAGE_TOPICS = "silabs"
-PYTHON_REQUIRES = "silabs_package_assistant/[~2]@silabs"
-
-SL_METADATA = {
-    "slack_channel": "#matter-development",
-    "team": "MATTER",
-    "confluence_doc": "",
-    "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
-    "maintainers": [],
-}
-
-# Public packages. Internal recipes will use ("internal",).
-PUBLIC_QUALITIES = ("production", "evaluation", "experimental")
 
 # Consumed as separate Conan packages (SiSDK / Wi-Fi / AWS OTA). SLC
 # components may list files under these trees; never ship the trees themselves.
@@ -79,123 +53,16 @@ _WISECONNECT_EXTENSION = re.compile(
 )
 
 
-def slt_options() -> dict:
-    """SLT metadata options. A fresh dict per recipe so Conan cannot alias them."""
-    return {
-        "compatibleVersion": ["ANY"],
-        "subPackage": [True, False],
-        "releaseNotesUrl": ["ANY"],
-        "packageType": ["ANY"],
-        "sdkLtsTag": ["ANY"],
-    }
-
-
-def slt_default_options() -> dict:
-    """Default SLT option values. ``packageType`` is ``sdk`` for Matter packages."""
-    return {
-        "compatibleVersion": "ANY",
-        "subPackage": False,
-        "releaseNotesUrl": "",
-        "packageType": "sdk",
-        "sdkLtsTag": "",
-    }
-
-
-@dataclass(frozen=True)
-class PackageSpec:
-    """What differs between recipes. ``package()`` and ``requirements()`` read this.
-
-    ``kind`` is ``stack`` (SLCE + extra manifest + components) or ``app``
-    (``.slcp`` / ``.slcw`` projects and the files they reference).
-
-    ``also_require`` lists sibling packages that use the same line-version
-    range as ``matter``. ``matter_app_internal`` will set
-    ``require_matter=True`` and ``also_require=("matter_internal",)``.
-    ``matter_internal`` will set ``require_matter=True`` and
-    ``qualities=("internal",)``.
-    """
-
-    name: str
-    description: str
-    kind: str
-    required_root_files: tuple[str, ...]
-    qualities: tuple[str, ...] = PUBLIC_QUALITIES
-    slc_packages: tuple[str, ...] = ("matter",)
-    extra_filename: str | None = None
-    skip_sample_apps: bool = False
-    rewrite_wiseconnect: bool = False
-    # Assistant trim_paths rules, "source=>dest". copy_files applies them.
-    path_mappings: tuple[str, ...] = ()
-    require_dep_versions: bool = False
-    require_matter: bool = False
-    also_require: tuple[str, ...] = ()
-
-
-MATTER = PackageSpec(
-    name="matter",
-    description="Matter extension for Simplicity SDK Suite",
-    kind="stack",
-    required_root_files=(
-        "matter.slsdk",
-        "src/app/zap-templates/app-templates.json",
-        "src/app/zap-templates/zcl/zcl.json",
-    ),
-    extra_filename="matter.slce.extra",
-    skip_sample_apps=True,
-    require_dep_versions=True,
-)
-
-MATTER_APP = PackageSpec(
-    name="matter_app",
-    description="matter sample-app package",
-    kind="app",
-    required_root_files=(
-        "matter_app.slsdk",
-        "matter_templates.xml",
-    ),
-    rewrite_wiseconnect=True,
-    path_mappings=(
-        "packages/build_app.sh=>build_app.sh",
-        "packages/_shared/release_stream_channel=>release_stream_channel",
-    ),
-    require_matter=True,
-)
-
-
-def spec_of(conanfile) -> PackageSpec:
-    """Return the ``PackageSpec`` a recipe declares as ``_spec``, checking its name matches."""
-    spec = conanfile._spec
-    if spec.name != conanfile.name:
-        raise RuntimeError(
-            f"{conanfile.name} recipe _spec.name is {spec.name!r}"
-        )
-    return spec
-
-
 # ---------------------------------------------------------------------------
 # Checkout root and exported recipe files
 # ---------------------------------------------------------------------------
 
-def read_package_metadata(name: str, *, recipe_file: str | Path) -> str:
-    """Read a one-line file from ``e/_shared`` or ``packages/_shared``."""
-    recipe_dir = Path(recipe_file).resolve().parent
-    paths = [
-        recipe_dir / "_shared" / name,
-        recipe_dir.parent / "_shared" / name,
-    ]
-    for path in paths:
-        if path.is_file():
-            value = path.read_text(encoding="utf-8").strip()
-            if value:
-                return value
-            raise RuntimeError(f"{path} is empty")
-    raise FileNotFoundError(
-        f"{name} not found under packages/_shared or exported recipe _shared/"
-    )
-
-
 def _checkout_from_recipe_dir(recipe_dir: Path) -> Optional[Path]:
-    """Return the checkout when ``recipe_dir`` is ``packages/<name>`` or ``_shared``."""
+    """Return the git checkout when ``recipe_dir`` is under ``packages/``.
+
+    That is ``packages/<name>`` during ``export-pkg``, or ``packages/_shared``.
+    Returns None in the Conan cache, whose parent directory is not ``packages``.
+    """
     if recipe_dir.parent.name != "packages":
         return None
     root = recipe_dir.parent.parent
@@ -205,7 +72,11 @@ def _checkout_from_recipe_dir(recipe_dir: Path) -> Optional[Path]:
 
 
 def checkout_root(conanfile) -> Path:
-    """Checkout root. Fails in the Conan cache, where there is no checkout."""
+    """Repo root that contains ``matter.slce``.
+
+    Raises in the Conan cache. A cache recipe must use the files exported
+    beside it, not this checkout.
+    """
     recipe_folder = getattr(conanfile, "recipe_folder", None)
     if recipe_folder:
         found = _checkout_from_recipe_dir(Path(recipe_folder))
@@ -218,7 +89,12 @@ def checkout_root(conanfile) -> Path:
 
 
 def packaging_root(conanfile) -> Path:
-    """Tree ``package()`` copies from. Source folder after ``layout()``, else checkout."""
+    """Tree ``package()`` and ``build()`` read.
+
+    After ``apply_layout`` this is the source folder, which is the checkout.
+    Before layout, or when the source folder has no ``matter.slce``, it falls
+    back to ``checkout_root``.
+    """
     source = getattr(conanfile, "source_folder", None)
     if source and (Path(source) / "matter.slce").is_file():
         return Path(source)
@@ -226,7 +102,11 @@ def packaging_root(conanfile) -> Path:
 
 
 def slce_path(conanfile, filename: str = "matter.slce") -> str:
-    """Exported ``e/matter.slce`` when present, otherwise the checkout copy."""
+    """Path to ``matter.slce`` for version and dependency-range reads.
+
+    The copy exported next to the recipe (``e/matter.slce``) wins, so a later
+    ``conan install`` does not need the git checkout.
+    """
     recipe_folder = getattr(conanfile, "recipe_folder", None)
     if recipe_folder:
         exported = Path(recipe_folder) / filename
@@ -236,7 +116,12 @@ def slce_path(conanfile, filename: str = "matter.slce") -> str:
 
 
 def apply_layout(conanfile) -> None:
-    """Point ``export-pkg`` at the checkout. No-op for a cache recipe."""
+    """Point ``conan export-pkg`` at the checkout.
+
+    The recipe lives in ``packages/<name>``, so the Conan root is two levels
+    up and the source folder is that root. A recipe already in the cache is
+    left unchanged.
+    """
     recipe_dir = Path(conanfile.recipe_folder)
     if _checkout_from_recipe_dir(recipe_dir) is None:
         return
@@ -248,24 +133,34 @@ def apply_layout(conanfile) -> None:
 # Version and channel
 # ---------------------------------------------------------------------------
 
+def matter_get_version(conanfile) -> str:
+    """Conan version for this package.
+
+    Calls ``silabs_package_assistant.get_version`` with ``slce_path``. The
+    assistant reads the ``X.Y.Z`` line from ``matter.slce`` and appends the
+    ``SL_PRERELEASE`` suffix (``-0.dev`` when that variable is unset).
+    """
+    return _assistant(conanfile).get_version(slce_path(conanfile))
+
+
 def set_version(conanfile) -> None:
     """Set ``version`` and ``channel`` when the caller has not set them.
 
-    Version: ``MATTER_PACKAGE_VERSION`` overrides everything. Otherwise a version
-    already set on the recipe (``--version``) is kept. If none is set,
-    ``get_version`` builds it from ``matter.slce`` plus ``SL_PRERELEASE``.
+    Version, first match wins: ``MATTER_PACKAGE_VERSION``, then ``--version``,
+    then ``matter_get_version``.
 
-    Channel comes from ``get_channel`` unless ``MATTER_PACKAGE_CHANNEL`` or
-    ``--channel`` is set. ``get_channel`` maps ``main``, ``release/*``, and
-    ``sisdk-YYYY.M`` onto ``release_stream_channel``. A ``release_*`` branch
-    keeps its own name, so ``build-pkg.sh`` and CI pass the channel explicitly.
+    Channel, first match wins: ``--channel`` (already on ``conanfile.channel``),
+    then ``MATTER_PACKAGE_CHANNEL``, then ``get_channel``. ``get_channel`` uses
+    ``release_stream_channel`` for ``main``, ``release/*``, ``sisdk-YYYY.M``,
+    and a detached HEAD. Any other branch becomes the channel, so CI passes
+    the channel explicitly.
     """
     assistant = _assistant(conanfile)
     override = os.environ.get("MATTER_PACKAGE_VERSION", "").strip()
     if override:
         conanfile.version = override
     else:
-        conanfile.version = conanfile.version or assistant.get_version(slce_path(conanfile))
+        conanfile.version = conanfile.version or matter_get_version(conanfile)
 
     if conanfile.channel:
         return
@@ -277,21 +172,34 @@ def set_version(conanfile) -> None:
 
 
 def _assistant(conanfile):
-    """The ``silabs_package_assistant`` module loaded through ``python_requires``."""
+    """The ``silabs_package_assistant`` module from ``python_requires``.
+
+    Recipes declare ``python_requires = "silabs_package_assistant/[~2]@silabs"``.
+    Every ``matter_*`` wrapper calls through this.
+    """
     return conanfile.python_requires["silabs_package_assistant"].module
 
 
-def _path_pairs(spec: PackageSpec) -> list[tuple[str, str]]:
-    """Split ``source=>dest`` rules used by ``trim_paths``."""
+def _path_pairs(path_mappings: Iterable[str]) -> list[tuple[str, str]]:
+    """Split ``source=>dest`` rules into ``(source, dest)`` pairs.
+
+    ``trim_paths`` consumes the same strings but returns only destinations.
+    The pairs are how this module checks that each source file exists and
+    adds it to the copy set.
+    """
     pairs = []
-    for rule in spec.path_mappings:
+    for rule in path_mappings:
         src, dst = rule.split("=>", 1)
         pairs.append((src, dst))
     return pairs
 
 
-def matter_line_version(conanfile) -> str:
-    """X.Y.Z line version of ``matter.slce``, without a prerelease suffix."""
+def matter_get_base_version(conanfile) -> str:
+    """``X.Y.Z`` line version from ``matter.slce``, without a prerelease suffix.
+
+    Calls ``get_base_version``, then rejects anything that is not ``X.Y.Z``.
+    ``matter_conan_range`` builds dependency ranges from the result.
+    """
     line = _assistant(conanfile).get_base_version(slce_path(conanfile))
     if not LINE_VERSION_RE.match(line):
         raise RuntimeError(f"matter.slce version must be X.Y.Z, got {line!r}")
@@ -299,27 +207,39 @@ def matter_line_version(conanfile) -> str:
 
 
 def matter_conan_range(line_version: str) -> str:
-    """Conan range for a line version, e.g. ``2.10.0`` -> ``[>=2.10.0 <2.10.1,include_prerelease]``."""
+    """Conan range that matches one line version, including prereleases.
+
+    ``2.10.0`` becomes ``[>=2.10.0 <2.10.1,include_prerelease]``. Sibling
+    packages such as ``matter_app`` require ``matter`` with this range.
+    """
     major, minor, patch = line_version.split(".")
     upper = f"{major}.{minor}.{int(patch) + 1}"
     return f"[>={line_version} <{upper},include_prerelease]"
 
 
-def apply_requirements(conanfile) -> None:
-    """Deps from the YAML, then ``matter`` and any ``also_require`` siblings."""
-    spec = spec_of(conanfile)
+def apply_requirements(
+    conanfile,
+    *,
+    require_matter: bool = False,
+    also_require: tuple[str, ...] = (),
+) -> None:
+    """Declare sibling Conan requirements for this recipe.
+
+    ``require_matter`` and ``also_require`` add those packages at the
+    ``matter`` line-version range. They use ``user`` and
+    ``release_stream_channel``, not the channel ``get_channel`` computed for
+    this package. A feature-branch package still requires the release stream.
+    The ``matter`` recipe declares its own platform dependencies.
+    """
     channel = conanfile.release_stream_channel
     user = conanfile.user
-    if spec.require_dep_versions:
-        for dep_name, dep_version in load_dep_versions(conanfile).items():
-            conanfile.requires(f"{dep_name}/{dep_version}@{user}/{channel}")
-    if not spec.require_matter and not spec.also_require:
+    if not require_matter and not also_require:
         return
-    rng = matter_conan_range(matter_line_version(conanfile))
+    rng = matter_conan_range(matter_get_base_version(conanfile))
     names = []
-    if spec.require_matter:
+    if require_matter:
         names.append("matter")
-    names.extend(spec.also_require)
+    names.extend(also_require)
     for dep_name in names:
         conanfile.requires(f"{dep_name}/{rng}@{user}/{channel}")
 
@@ -329,15 +249,26 @@ def apply_requirements(conanfile) -> None:
 # ---------------------------------------------------------------------------
 
 def _copy(conanfile, pattern: str, src: str, dst: str) -> None:
-    """Copy files matching ``pattern`` from ``src`` to ``dst`` with Conan's ``copy``."""
+    """Copy files matching ``pattern`` with ``conan.tools.files.copy``.
+
+    Used for export globs and the lock file. The package file list is copied
+    by ``copy_files`` instead, which takes explicit paths and a trim map.
+    """
     from conan.tools.files import copy
 
     copy(conanfile, pattern, src=src, dst=dst)
 
 
-def export_recipe_files(conanfile) -> None:
-    """Copy the files a cache reload of ``requirements()`` / ``set_version()`` needs."""
-    spec = spec_of(conanfile)
+def export_recipe_files(
+    conanfile,
+    *,
+    extra_filename: str | None = None,
+) -> None:
+    """Copy the files a cache reload of ``requirements()`` and ``set_version()`` needs.
+
+    Copies ``packages/_shared`` and ``matter.slce`` into the export folder.
+    ``extra_filename`` copies that manifest from the recipe directory.
+    """
     root = checkout_root(conanfile)
 
     shared_src = Path(conanfile.recipe_folder).parent / "_shared"
@@ -356,67 +287,19 @@ def export_recipe_files(conanfile) -> None:
     if slce_src.is_file():
         _copy(conanfile, slce_src.name, str(slce_src.parent), conanfile.export_folder)
 
-    if spec.require_dep_versions:
-        for dep_src in _dep_version_candidates(conanfile, root):
-            if dep_src.is_file():
-                _copy(conanfile, dep_src.name, str(dep_src.parent), conanfile.export_folder)
-                break
-
-    if spec.extra_filename:
-        extra = Path(conanfile.recipe_folder) / spec.extra_filename
+    if extra_filename:
+        extra = Path(conanfile.recipe_folder) / extra_filename
         if extra.is_file():
             _copy(conanfile, extra.name, str(extra.parent), conanfile.export_folder)
 
 
 def apply_package_info(conanfile) -> None:
-    """Expose the package folder to consumers as ``SLC_SDK_PACKAGE_PATH``."""
+    """Publish the package folder to consumers as ``SLC_SDK_PACKAGE_PATH``.
+
+    SLC and the sample-app build scripts locate the installed package through
+    this environment variable.
+    """
     conanfile.buildenv_info.append_path("SLC_SDK_PACKAGE_PATH", conanfile.package_folder)
-
-
-# ---------------------------------------------------------------------------
-# Dependency versions
-# ---------------------------------------------------------------------------
-
-def _dep_version_candidates(conanfile, root: Optional[Path]) -> list[Path]:
-    """Cache copy beside the recipe first, then the checkout's packages/ folder."""
-    candidates = []
-    recipe_folder = getattr(conanfile, "recipe_folder", None)
-    if recipe_folder:
-        candidates.append(Path(recipe_folder) / DEP_VERSIONS_FILE)
-    if root is not None:
-        candidates.append(root / "packages" / DEP_VERSIONS_FILE)
-    return candidates
-
-
-def load_dep_versions(conanfile) -> dict:
-    """Flat name -> version map. Cache copy first, then ``packages/``."""
-    root = _checkout_from_recipe_dir(Path(conanfile.recipe_folder))
-    target = None
-    for candidate in _dep_version_candidates(conanfile, root):
-        if candidate.is_file():
-            target = candidate
-            break
-    if target is None:
-        raise FileNotFoundError(
-            f"{DEP_VERSIONS_FILE} not found beside the recipe or under packages/"
-        )
-    try:
-        data = yaml.safe_load(target.read_text(encoding="utf-8")) or {}
-    except Exception as exc:
-        raise RuntimeError(f"Failed to parse {target}: {exc}") from exc
-    if not isinstance(data, dict):
-        raise RuntimeError(f"{target} must contain a mapping")
-    if any(key in data for key in ("common", "thread", "wifi")):
-        merged: dict = {}
-        for group in ("common", "thread", "wifi"):
-            group_data = data.get(group) or {}
-            if not isinstance(group_data, dict):
-                raise RuntimeError(f"Dependency group {group!r} in {target} must be a mapping")
-            for name, version in group_data.items():
-                if version is not None:
-                    merged[name] = version
-        return merged
-    return {key: value for key, value in data.items() if value is not None}
 
 
 # ---------------------------------------------------------------------------
@@ -424,7 +307,7 @@ def load_dep_versions(conanfile) -> dict:
 # ---------------------------------------------------------------------------
 
 def _resolve(root: Path, path: str) -> Path:
-    """Absolute paths are returned as-is. Relative paths are joined to ``root``."""
+    """Join ``path`` to ``root``. An absolute path is returned unchanged."""
     candidate = Path(path)
     if not candidate.is_absolute():
         candidate = root / path
@@ -432,7 +315,11 @@ def _resolve(root: Path, path: str) -> Path:
 
 
 def _relative(root: Path, path: str) -> str:
-    """Path relative to ``root``, or the absolute path if it lies outside ``root``."""
+    """``path`` relative to ``root``.
+
+    A file that resolves outside ``root`` keeps its absolute path so the
+    caller can still see it.
+    """
     resolved = _resolve(root, path).resolve()
     try:
         return str(resolved.relative_to(root.resolve()))
@@ -441,7 +328,7 @@ def _relative(root: Path, path: str) -> str:
 
 
 def _existing_relative(root: Path, files: Iterable[str]) -> set[str]:
-    """Keep only entries that are files, as ``root``-relative paths."""
+    """Drop entries that are not files. What remains is relative to ``root``."""
     kept: set[str] = set()
     for file in files:
         resolved = _resolve(root, file)
@@ -451,12 +338,16 @@ def _existing_relative(root: Path, files: Iterable[str]) -> set[str]:
 
 
 def _required_present(root: Path, required: tuple[str, ...]) -> set[str]:
-    """The entries of ``required`` that exist as files under ``root``."""
+    """The names in ``required`` that exist as files under ``root``."""
     return {name for name in required if (root / name).is_file()}
 
 
 def _require_root_files(files: set[str], *, root: Path, required: tuple[str, ...], package_name: str) -> None:
-    """Raise if a required root file is missing from ``files``. Relative or absolute entries both match."""
+    """Fail the package when a required root file is missing from ``files``.
+
+    A required name matches a relative entry, an absolute entry, or the same
+    file reached by either spelling.
+    """
     if not required:
         return
     root = root.resolve()
@@ -487,7 +378,11 @@ def _require_root_files(files: set[str], *, root: Path, required: tuple[str, ...
 
 
 def _is_excluded_packaging_path(path: str) -> bool:
-    """True when ``path`` is under an SDK tree that ships as its own Conan package."""
+    """True when ``path`` is under SiSDK, the AWS OTA SDK, or the Wi-Fi SDK.
+
+    Those trees are separate Conan packages. SLC files may point at them;
+    this package must not ship them.
+    """
     normalized = path.replace("\\", "/").lstrip("./")
     for prefix in EXCLUDED_PATH_PREFIXES:
         if normalized == prefix or normalized.startswith(prefix + "/"):
@@ -498,7 +393,7 @@ def _is_excluded_packaging_path(path: str) -> bool:
 
 
 def _drop_excluded_paths(conanfile, files: set[str]) -> set[str]:
-    """Remove excluded SDK trees from a collected file set and log how many were dropped."""
+    """Remove ``EXCLUDED_PATH_PREFIXES`` from ``files`` and log the count."""
     kept = {path for path in files if not _is_excluded_packaging_path(path)}
     dropped = len(files) - len(kept)
     if dropped:
@@ -509,7 +404,12 @@ def _drop_excluded_paths(conanfile, files: set[str]) -> set[str]:
 
 
 def _sample_app_skip_reason(path: str) -> Optional[str]:
-    """Why a ``matter.slce.extra`` path belongs to the app package, or None to keep it."""
+    """Why a stack extra-manifest path is left out, or None to keep it.
+
+    Left out: the separate SDK trees, ``slc/apps``, ``.slcp`` and ``.slcw``
+    projects, and ``slc/script/internal``. Those belong to ``matter_app`` or
+    are not packaged.
+    """
     normalized = path.replace("\\", "/")
     if _is_excluded_packaging_path(normalized):
         return "separate Conan package (not shipped in matter)"
@@ -523,9 +423,10 @@ def _sample_app_skip_reason(path: str) -> Optional[str]:
 
 
 def _extra_candidates(conanfile, root: Path, filename: str) -> list[tuple[Path, str]]:
-    """Locations of the extra manifest in priority order: recipe copy, ``packages/<name>/``, repo root.
+    """Places the extra manifest may live. The first hit wins.
 
-    Each entry is ``(path, repo-relative name)``.
+    Order: beside the recipe, ``packages/<name>/``, then the repo root.
+    Each entry is ``(absolute path, repo-relative name)``.
     """
     candidates: list[tuple[Path, str]] = []
     recipe_folder = getattr(conanfile, "recipe_folder", None)
@@ -537,7 +438,7 @@ def _extra_candidates(conanfile, root: Path, filename: str) -> list[tuple[Path, 
             except ValueError:
                 rel = str(recipe_extra)
             candidates.append((recipe_extra, rel))
-    packaged = root / "packages" / spec_of(conanfile).name / filename
+    packaged = root / "packages" / conanfile.name / filename
     if packaged.is_file():
         candidates.append((packaged, str(packaged.relative_to(root.resolve()))))
     at_root = root / filename
@@ -546,20 +447,24 @@ def _extra_candidates(conanfile, root: Path, filename: str) -> list[tuple[Path, 
     return candidates
 
 
-def _read_stack_extra(conanfile, root: Path) -> tuple[set[str], list[str], list[str]]:
-    """Read the extra manifest. Sample-app paths are skipped for the stack package.
+def _read_stack_extra(
+    conanfile, root: Path, *, extra_filename: str | None, skip_sample_apps: bool
+) -> tuple[set[str], list[str], list[str]]:
+    """Read the stack extra manifest, usually ``matter.slce.extra``.
 
-    Returns ``(files, git_extra_files, git_path_mapping)``. The git lists feed
-    the filter-repo files only.
+    ``extra_files`` that exist are returned for the package. When
+    ``skip_sample_apps`` is set, paths that belong to the app package are
+    logged and dropped. ``git_extra_files`` and ``git_path_mapping`` are
+    returned for the filter-repo lists only; ``package()`` ignores them.
+    A missing or unreadable manifest is a warning, not a failure.
     """
-    spec = spec_of(conanfile)
     empty: tuple[set[str], list[str], list[str]] = (set(), [], [])
-    if not spec.extra_filename:
+    if not extra_filename:
         return empty
-    candidates = _extra_candidates(conanfile, root, spec.extra_filename)
+    candidates = _extra_candidates(conanfile, root, extra_filename)
     if not candidates:
         conanfile.output.warning(
-            f"{spec.extra_filename} not found (looked under the recipe and packages/{spec.name})"
+            f"{extra_filename} not found (looked under the recipe and packages/{conanfile.name})"
         )
         return empty
 
@@ -574,10 +479,10 @@ def _read_stack_extra(conanfile, root: Path) -> tuple[set[str], list[str], list[
     skipped = 0
     missing = 0
     for path in data.get("extra_files") or []:
-        if spec.skip_sample_apps:
+        if skip_sample_apps:
             reason = _sample_app_skip_reason(path)
             if reason:
-                conanfile.output.info(f"{spec.extra_filename}: skipped {path}: {reason}")
+                conanfile.output.info(f"{extra_filename}: skipped {path}: {reason}")
                 skipped += 1
                 continue
         resolved = _resolve(root, path)
@@ -585,40 +490,47 @@ def _read_stack_extra(conanfile, root: Path) -> tuple[set[str], list[str], list[
             files.add(_relative(root, str(resolved)))
         else:
             conanfile.output.warning(
-                f"{spec.extra_filename}: referenced extra file missing and skipped: {path}"
+                f"{extra_filename}: referenced extra file missing and skipped: {path}"
             )
             missing += 1
     conanfile.output.info(
-        f"{spec.extra_filename}: skipped {skipped} sample-app path(s), "
+        f"{extra_filename}: skipped {skipped} sample-app path(s), "
         f"{missing} missing path(s); kept {len(files)} file(s)"
     )
     return files, list(data.get("git_extra_files") or []), list(data.get("git_path_mapping") or [])
 
 
-def _stack_component_files(conanfile, root: Path) -> set[str]:
-    """Files ``find_slc_files_to_release`` lists for ``matter.slce``, filtered by quality and package."""
-    spec = spec_of(conanfile)
+def _matter_find_slc_files_to_release(conanfile, root: Path, qualities: tuple[str, ...]) -> set[str]:
+    """Stack files from ``find_slc_files_to_release`` on ``matter.slce``.
+
+    The assistant walks the SLCE ``component_path`` entries. This call limits
+    that walk to ``qualities`` and the ``matter`` SLC package, and it skips
+    ``.slcp`` files so sample apps stay out of the stack package. Missing
+    files are left for the assistant to warn about.
+    """
     assistant = _assistant(conanfile)
     slce = root / "matter.slce"
     if not slce.is_file():
         raise FileNotFoundError(f"SLCE file not found: {slce}")
     found = assistant.find_slc_files_to_release(
         slc_sdk_or_extension_def_file=str(slce),
-        desired_qualities=list(spec.qualities),
+        desired_qualities=list(qualities),
         fail_on_missing_files=False,
         include_slcp=False,
         include_slcc=True,
-        desired_packages=list(spec.slc_packages),
+        desired_packages=["matter"],
     )
     return set(found or [])
 
 
 def _iter_projects(root: Path):
-    """Projects outside ``third_party``.
+    """``.slcp`` and ``.slcw`` projects outside ``third_party``.
 
-    ``find_slc_files_to_release`` is not used here. It walks every ``.slcp``
-    under the SLCE root, including ``third_party``, and only accepts ``.slcw``
-    that sit on a ``component_path``. Sample apps live under ``slc/apps``.
+    This replaces the assistant's own crawl. ``find_slc_files_to_release``
+    walks every ``.slcp`` under the SLCE root, including ``third_party``, and
+    only accepts a ``.slcw`` that sits on a ``component_path``. Sample apps
+    live under ``slc/apps``. Each project found here is still passed to
+    ``list_files_in_slc_file``.
     """
     for slc_file in root.rglob("*.slc*"):
         if "third_party" in slc_file.parts:
@@ -629,10 +541,11 @@ def _iter_projects(root: Path):
 
 
 def _files_from_assistant_paths(root: Path, paths: Iterable[str]) -> set[str]:
-    """Turn assistant output into files under ``root``.
+    """Turn assistant paths into files that live under ``root``.
 
-    The assistant can return a directory, so its files are expanded here.
-    An entry outside ``root`` raises an error.
+    ``list_files_in_slc_file`` returns a directory when an SLC path has no
+    ``file_list``; that directory is expanded here. A path outside the
+    checkout raises. Paths under the separate SDK trees are dropped.
     """
     root = root.resolve()
     collected: set[str] = set()
@@ -654,27 +567,29 @@ def _files_from_assistant_paths(root: Path, paths: Iterable[str]) -> set[str]:
     return collected
 
 
-def _app_files(conanfile, root: Path) -> set[str]:
-    """Projects whose package and quality match, plus the files the assistant lists.
+def _matter_list_files_in_slc_file(conanfile, root: Path, qualities: tuple[str, ...]) -> set[str]:
+    """Files for the sample-app package.
 
-    ``list_files_in_slc_file`` applies the quality and package filter and expands
-    ``file_list`` entries. A path that is a directory (no ``file_list``) is expanded
-    here, because the assistant returns the directory itself.
+    ``_iter_projects`` chooses the projects. Each one is passed to
+    ``list_files_in_slc_file`` with ``qualities`` and the ``matter`` package,
+    which applies the SLC filter and expands ``file_list`` entries.
+    ``_files_from_assistant_paths`` then expands any directory the assistant
+    returned. A missing referenced file fails the package. Any other error
+    is logged and that project is skipped.
     """
-    spec = spec_of(conanfile)
     assistant = _assistant(conanfile)
     collected: set[str] = set()
     for slc_file in _iter_projects(root):
         try:
             related = assistant.list_files_in_slc_file(
                 slc_file_path=str(slc_file),
-                desired_qualities=list(spec.qualities),
-                desired_packages=list(spec.slc_packages),
+                desired_qualities=list(qualities),
+                desired_packages=["matter"],
                 fail_on_missing_files=True,
             )
         except FileNotFoundError as exc:
             raise FileNotFoundError(
-                f"{spec.name} packaging is missing a file referenced by {slc_file}. "
+                f"{conanfile.name} packaging is missing a file referenced by {slc_file}. "
                 "Initialize third_party/matter_sdk before export-pkg. "
                 f"{exc}"
             ) from exc
@@ -683,47 +598,69 @@ def _app_files(conanfile, root: Path) -> set[str]:
             continue
         if related:
             collected.update(_files_from_assistant_paths(root, related))
-    conanfile.output.info(f"Gathered {len(collected)} app files for {spec.name}")
+    conanfile.output.info(f"Gathered {len(collected)} app files for {conanfile.name}")
     return collected
 
 
 @dataclass
 class PackagePlan:
-    """Repo-relative files to package, and the filter-repo path mappings, for one recipe."""
+    """Repo-relative files for one recipe, plus its filter-repo path mappings."""
 
     files: set[str]
     pathmap: list[str]
 
 
-def collect_files(conanfile, *, for_filelist: bool) -> PackagePlan:
-    """Repo-relative files for ``package()`` or the filter-repo list from ``build()``."""
-    spec = spec_of(conanfile)
+def collect_files(
+    conanfile,
+    *,
+    for_filelist: bool,
+    kind: str,
+    required_root_files: tuple[str, ...],
+    extra_filename: str | None,
+    skip_sample_apps: bool,
+    path_mappings: tuple[str, ...],
+    qualities: tuple[str, ...],
+) -> PackagePlan:
+    """Repo-relative files for ``package()``, or the filter-repo list from ``build()``.
+
+    ``kind="stack"`` takes the extra manifest plus ``find_slc_files_to_release``.
+    ``kind="app"`` takes the sample-app projects. ``License`` and
+    ``required_root_files`` are always included. Excluded SDK trees are
+    removed, then the required files are added back and checked so a required
+    file cannot be dropped. ``for_filelist`` also keeps the git extra files
+    and records ``source:dest`` path mappings.
+    """
     root = packaging_root(conanfile)
     files: set[str] = {"License"}
     pathmap: list[str] = []
 
-    if spec.kind == "stack":
-        extra_files, git_extra, git_pathmap = _read_stack_extra(conanfile, root)
+    if kind == "stack":
+        extra_files, git_extra, git_pathmap = _read_stack_extra(
+            conanfile,
+            root,
+            extra_filename=extra_filename,
+            skip_sample_apps=skip_sample_apps,
+        )
         files.update(extra_files)
-        files.update(_stack_component_files(conanfile, root))
+        files.update(_matter_find_slc_files_to_release(conanfile, root, qualities))
         if for_filelist:
             files.update(_existing_relative(root, git_extra))
             pathmap.extend(git_pathmap)
-    elif spec.kind == "app":
-        files.update(_app_files(conanfile, root))
+    elif kind == "app":
+        files.update(_matter_list_files_in_slc_file(conanfile, root, qualities))
     else:
-        raise RuntimeError(f"Unknown package kind {spec.kind!r} on {spec.name}")
+        raise RuntimeError(f"Unknown package kind {kind!r} on {conanfile.name}")
 
-    files.update(_required_present(root, spec.required_root_files))
+    files.update(_required_present(root, required_root_files))
     files = _existing_relative(root, files)
     files = _drop_excluded_paths(conanfile, files)
-    files.update(_required_present(root, spec.required_root_files))
+    files.update(_required_present(root, required_root_files))
     _require_root_files(
-        files, root=root, required=spec.required_root_files, package_name=spec.name
+        files, root=root, required=required_root_files, package_name=conanfile.name
     )
 
     if for_filelist:
-        for src, dst in _path_pairs(spec):
+        for src, dst in _path_pairs(path_mappings):
             if (root / src).is_file():
                 files.add(src)
             pathmap.append(f"{src}:{dst}")
@@ -731,7 +668,11 @@ def collect_files(conanfile, *, for_filelist: bool) -> PackagePlan:
 
 
 def _rewrite_wiseconnect(conanfile, files: set[str]) -> None:
-    """Rename the ``wiseconnect3_sdk`` extension id to ``wifi`` in the packaged SLCP and SLCW files."""
+    """Rename the ``wiseconnect3_sdk`` sdk_extension id to ``wifi``.
+
+    Runs on the already copied ``.slcp`` and ``.slcw`` files. A component
+    line ``- id: wifi`` has no version and is left unchanged.
+    """
     package_root = Path(conanfile.package_folder)
     changed = 0
     for rel in files:
@@ -749,16 +690,38 @@ def _rewrite_wiseconnect(conanfile, files: set[str]) -> None:
     conanfile.output.info(f"Mapped {changed} sdk_extension wiseconnect3_sdk id(s) to wifi")
 
 
-def package_from_spec(conanfile) -> None:
-    """Copy the planned files into the package, applying path trimming and the WiseConnect rewrite.
+def matter_package_files(
+    conanfile,
+    *,
+    kind: str,
+    required_root_files: tuple[str, ...],
+    extra_filename: str | None = None,
+    skip_sample_apps: bool = False,
+    path_mappings: tuple[str, ...] = (),
+    rewrite_wiseconnect: bool = False,
+    qualities: tuple[str, ...],
+) -> None:
+    """Build the Conan package for one recipe.
 
-    Writes the package metadata last.
+    ``collect_files`` chooses the files. ``trim_paths`` relocates paths that
+    match ``path_mappings``, and ``copy_files`` writes them into the package
+    folder. After the copy, the WiseConnect rewrite runs when requested and
+    ``conan-<name>.lock`` is copied when it exists. ``generate_metadata``
+    runs last, on the final file list.
     """
-    spec = spec_of(conanfile)
     root = packaging_root(conanfile)
-    plan = collect_files(conanfile, for_filelist=False)
+    plan = collect_files(
+        conanfile,
+        for_filelist=False,
+        kind=kind,
+        required_root_files=required_root_files,
+        extra_filename=extra_filename,
+        skip_sample_apps=skip_sample_apps,
+        path_mappings=path_mappings,
+        qualities=qualities,
+    )
     files = set(plan.files)
-    for src, _dst in _path_pairs(spec):
+    for src, _dst in _path_pairs(path_mappings):
         if not (root / src).is_file():
             raise FileNotFoundError(f"missing {root / src}")
         files.add(src)
@@ -766,8 +729,8 @@ def package_from_spec(conanfile) -> None:
     assistant = _assistant(conanfile)
     file_list = list(files)
     mapping = None
-    if spec.path_mappings:
-        trimmed = assistant.trim_paths(file_list, list(spec.path_mappings))
+    if path_mappings:
+        trimmed = assistant.trim_paths(file_list, list(path_mappings))
         mapping = dict(zip(file_list, trimmed))
     assistant.copy_files(
         files_to_package=file_list,
@@ -775,21 +738,43 @@ def package_from_spec(conanfile) -> None:
         dst_folder=os.path.join(conanfile.package_folder, "."),
         trims_mapping=mapping,
     )
-    if spec.rewrite_wiseconnect:
+    if rewrite_wiseconnect:
         _rewrite_wiseconnect(conanfile, files)
 
-    lock_name = f"conan-{spec.name}.lock"
+    lock_name = f"conan-{conanfile.name}.lock"
     if (root / lock_name).is_file():
         _copy(conanfile, lock_name, str(root), os.path.join(conanfile.package_folder, "."))
     assistant.generate_metadata(conanfile, files)
 
 
-def write_filelists(conanfile) -> None:
-    """Write the filter-repo lists. ``build()`` does not compile anything."""
-    spec = spec_of(conanfile)
+def write_filelists(
+    conanfile,
+    *,
+    kind: str,
+    required_root_files: tuple[str, ...],
+    extra_filename: str | None = None,
+    skip_sample_apps: bool = False,
+    path_mappings: tuple[str, ...] = (),
+    qualities: tuple[str, ...],
+) -> None:
+    """Write the filter-repo lists at the checkout root.
+
+    ``<name>-filter-repo-filelist.txt`` is the sorted file list.
+    ``<name>-filter-repo-pathmap.txt`` is the ``source:dest`` mappings.
+    ``build()`` calls this and does not compile anything.
+    """
     root = packaging_root(conanfile)
-    plan = collect_files(conanfile, for_filelist=True)
-    list_path = root / f"{spec.name}-filter-repo-filelist.txt"
-    map_path = root / f"{spec.name}-filter-repo-pathmap.txt"
+    plan = collect_files(
+        conanfile,
+        for_filelist=True,
+        kind=kind,
+        required_root_files=required_root_files,
+        extra_filename=extra_filename,
+        skip_sample_apps=skip_sample_apps,
+        path_mappings=path_mappings,
+        qualities=qualities,
+    )
+    list_path = root / f"{conanfile.name}-filter-repo-filelist.txt"
+    map_path = root / f"{conanfile.name}-filter-repo-pathmap.txt"
     list_path.write_text("".join(f"{path}\n" for path in sorted(plan.files)), encoding="utf-8")
     map_path.write_text("".join(f"{line}\n" for line in plan.pathmap), encoding="utf-8")
