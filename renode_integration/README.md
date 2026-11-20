@@ -1,14 +1,14 @@
 # Matter Renode Simulation Artifacts
 
 This directory builds and publishes the non-Matter assets required to run the
-Matter Renode simulation in CI and locally. Matter application ELFs come from 
+Matter Renode simulation in CI and locally. Matter application ELFs come from
 `dev-apps-builder` or a local build, they are not part of this bundle.
 
 ## Overview
 
 The simulation runs:
 
-- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool)
+- **matter_hub** - ZynqMP Buildroot Linux guest (OTBR, BlueZ, chip-tool, provision)
 - **thread_rcp** - EFR32 Thread RCP (Spinel over UART)
 - **ble_rcp** - EFR32 BLE RCP (HCI over UART)
 - **matter_soc** - EFR32 Matter device (added at runtime from checkpoint)
@@ -34,6 +34,8 @@ Artifacts are split into GHCR packages sharing the same version `N`:
 | `vN-common` | rootfs, tools image, DTB, RCP ELFs, resc files |
 | `vN-runtime-linux-x64` | Renode build + checkpoint (CI, Linux, WSL2) |
 | `vN-runtime-osx-arm64` | Renode build + checkpoint (macOS for local development) |
+| `vN-provision` | `matter_support/provision`, python dependencies |
+| `vN-provision-pr-<PR-NUM>` | `matter_support/provision`, python dependencies for a PR that updates `third_party/matter_support` |
 
 Checkpoints are tied to the Renode build that created them. Each host runtime
 is built independently from the same common inputs.
@@ -43,7 +45,9 @@ is built independently from the same common inputs.
 The expected workflow is to pull published artifacts from GHCR, not to rebuild
 rootfs, tools image, RCPs, or Renode locally. The **common** bundle includes
 `matter-rootfs.ext2`, `matter-tools.ext2`, DTB, RCP ELFs, and resc files. The
-**runtime** bundle for your host adds portable Renode and the checkpoint.
+**runtime** bundle for your host adds portable Renode and the checkpoint. The
+**provision** bundle includes `matter-provision.ext2` with dependencies to
+provision simulated devices.
 
 ### Prerequisites
 
@@ -62,7 +66,7 @@ Use an ELF built for the SoC board you pass to `--board`. **MG24**, **MG26**, an
 
 ### Demo test (local and CI)
 
-`harness/demo_test.py` is the single entry point: it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
+`harness/demo_test.py` is the single entry point. In demo and commissioned interactive modes, it loads `linux-booted-thread.save` via pyrenode3, attaches the Matter SoC for `--board`, commissions node **101**, then runs README steps from `harness/demo_flows.yaml` (same path CI uses).
 
 The harness always uses the bundle fetched into `renode_integration/out/bundle`. From the repository root (after `fetch_bundle.py`):
 
@@ -102,6 +106,62 @@ You can also supply `--app` in interactive mode to select its device setup. For 
 CI: [`.github/workflows/renode-demo-tests.yaml`](../.github/workflows/renode-demo-tests.yaml) runs via `workflow_run` after a successful **Build Dev apps** or **Packages Validation** on `main` / `release_*`, using `renode-demo-full-*` artifacts from that workflow run. To form a new Thread network from the hub console, run `matter-thread-init --force` (e.g. via `nc` during a long-running session).
 
 Cold boot (no checkpoint) remains `resc/matter-sim-full.resc` for maintainers regenerating the bundle checkpoint.
+
+### Manual provisioning test
+
+`harness/demo_test.py --provision` reuses `MatterSim` and Renode `test_lib` to attach a
+provisioning disk and a provisioning-enabled SoC to the Thread hub checkpoint.
+It opens a manual provisioning prompt inside the simulated hub before commissioning.
+`--provision` requires `--nvm3-hex` and cannot be combined with `--app`,
+`--extra-elf`, or `--interactive`. The `--nvm3-hex` and `--provision-image`
+options require `--provision`.
+The harness uses the bundle at `renode_integration/out/bundle`.
+
+From the repository root, fetch the bundle with `--require-provision` so a missing
+provisioning image fails immediately. Use `-p PR-NUM` instead for a PR-specific
+provisioning image:
+
+```sh
+python3 renode_integration/scripts/fetch_bundle.py --require-provision
+# Or: python3 renode_integration/scripts/fetch_bundle.py -p PR-NUM
+python3 -m pip install -r renode_integration/harness/requirements.txt
+python3 -m pip install --no-deps -e ./renode_integration/out/bundle/test_lib
+```
+
+Use a Matter build containing `matter_provision_channel`. Generate an NVM3 image
+setting key `0x87228=1` from that same build's linker map. Specify `--board` to
+resolve the part from the Simplicity SDK submodule's board metadata.
+`--board` is required, with no default. Use the same
+board and matching map for image generation and the provisioning session:
+
+```sh
+python3 renode_integration/scripts/make_provision_nvm3.py \
+  --map /path/to/matter_app.map \
+  --board brd4187c \
+  --output renode_integration/out/nvm3-provision.hex
+
+python3 renode_integration/harness/demo_test.py --provision \
+  --matter-elf /path/to/matter_app.out \
+  --board brd4187c \
+  --nvm3-hex renode_integration/out/nvm3-provision.hex
+```
+
+The harness loads the disk through `provision_virtio`, runs `matter-provision-mount`,
+and attaches the SoC UART tester while emulation is paused, before the SoC starts.
+Use `--provision-image PATH` to override the provisioning disk.
+
+In interactive mode, wait for provisioning readiness in the streamed SoC UART log
+and note its BLE address before issuing commands. You can also attach to hub port
+4540 and SoC port 3452. At the `hub>` prompt, for example:
+
+```text
+hub> provision read vendor_id -c bt:BLE-ADDRESS -o /tmp/provision-read.json
+hub> cat /tmp/provision-read.json
+hub> exit
+```
+
+This is a manual session requiring an interactive terminal. Provisioning commands,
+readiness checks, and readback verification are performed by the operator.
 
 ### Rebuilding artifacts (maintainers)
 
@@ -145,12 +205,17 @@ Workflow [`.github/workflows/renode-demo-tests.yaml`](../.github/workflows/renod
 
 Jobs run in parallel (`fail-fast: false`), one per app and board: 13 apps × nine boards (117 jobs). Demos expect `renode-demo-full-*` artifacts from the triggering run. The boards are `brd4187c`, `brd4116a`, `brd4407a`, `brd4186c`, `brd4117a`, `brd4118a`, `brd4120a`, `brd4121a`, and `brd1019a`. Each job loads `platforms/boards/silabs/<board>.repl`. ELFs come from `renode-demo-<build-type>-<app>-<platform>` artifacts (tree paths under `out/<board>/…`, downloaded with `actions/download-artifact` and located by board in the workflow). Hub and SoC UART output is streamed to the job log via Renode `test_lib`.
 
+### CI provisioning test
+Will be implemented in future PRs.
+
 ## Updating the bundle
 
 1. Edit `sim-manifest.json`, overlays, or resc files.
 2. Validate with a CI run or targeted script changes on the appropriate runner
 3. Bump `BUNDLE_VERSION` in `scripts/common.py` when publishing a new GHCR tag.
 4. Dispatch `renode-sim-artifacts` with `publish=true`.
+
+The provisioning bundle is automatically updated with any updates to `third_party/matter_support`. Can also manually update by dispatching `renode-provisioning-artifacts` with `publish=true`.
 
 Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCPs.
 
@@ -161,11 +226,12 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 | Checkpoint won't load | Renode build mismatch, rebuild Renode and run `harness/generate_checkpoint.py` |
 | `oras pull` auth failure | `gh auth login` and ensure GHCR package access |
 | `matter-services` timeout | Check guest logs at `/tmp/*.log` on hub console |
+| `provision: matter-provision disk is not mounted` | Use `harness/demo_test.py --provision`, which attaches and mounts the provisioning disk. Verify checkpoint compatibility |
 | New Thread network needed | `matter-thread-init --force` on hub console |
 
 ## Implementation notes
 
-- **Rootfs:** Antmicro ZynqMP rootfs (`base_rootfs`, sha256-checked). The build adds 
+- **Rootfs:** Antmicro ZynqMP rootfs (`base_rootfs`, sha256-checked). The build adds
   `guest/rootfs-overlay/` through `debugfs -w`.
 - **Tools image:** built on Ubuntu arm64 (`tools_image.ubuntu_version`):
   - `otbr-agent`, `ot-ctl` and `otbr-agent.conf`: ot-br-posix at `ot_br_posix.commit`, built with
@@ -176,5 +242,8 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 
   The guest is Buildroot, so `S99matter-services` runs these binaries through the bundled loader
   and copies the D-Bus configs into place at boot.
+- **Provision image:** built on Linux aarch64 with `build_provision_image.py`: `matter_support/provision`
+  as `tool/`, pinned `requirements.txt`, pip wheels under `opt/provision/site-packages`, and a bundled
+  arm64 `python3` plus stdlib and shared libraries on the same ext2.
 - **Checkpoint:** `harness/generate_checkpoint.py` drives Renode through pyrenode3 (`MatterSim`). It includes `matter-sim-full.resc`, waits for `matter-services: READY`, logs in, runs `matter-thread-init`, and saves `linux-booted-thread.save`. The macOS smoke test loads that checkpoint with the same harness. Dependencies are pinned in `harness/requirements.txt`.
 - **Storage:** ORAS artifacts on `ghcr.io/siliconlabssoftware/matter-renode-sim`.

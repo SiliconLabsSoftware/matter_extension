@@ -1,6 +1,6 @@
 """
 @file demo_runner.py
-@brief Run Matter Renode demo flows (checkpoint, commission, chip-tool / shell steps).
+@brief Run Matter Renode demo flows and manual provisioning sessions.
 
 Loads demo_flows.yaml for post-commission verification and drives MatterSim UART
 sessions against the bundled linux-booted-thread checkpoint.
@@ -9,13 +9,13 @@ sessions against the bundled linux-booted-thread checkpoint.
 from __future__ import annotations
 
 import re
-import sys
 import time
 from pathlib import Path
 from typing import Any
 
 from demo_config import DEMO_FLOWS
 
+import matter_sim
 from matter_sim import DEFAULT_BUNDLE, DEFAULT_UART_TIMEOUT_S, MatterSim, run_shell
 
 import test_lib
@@ -134,23 +134,6 @@ def _run_step(
     return prior_onoff
 
 
-def _interactive_hub(hub: object) -> None:
-    print("Device commissioned. Enter hub shell commands. exit, Ctrl-D, or Ctrl-C to close.")
-    try:
-        while True:
-            command = input("hub> ").strip()
-            if command in ("exit", "quit"):
-                return
-            if not command:
-                continue
-            try:
-                _run_step({"command": command}, hub, None, None, None)
-            except RuntimeError as exc:
-                print(f"Command failed: {exc}", file=sys.stderr)
-    except (EOFError, KeyboardInterrupt):
-        print()
-
-
 def run_demo(
     elf: Path,
     app: str | None,
@@ -215,6 +198,40 @@ def run_demo(
                 _run_step(step, hub, None, None, None)
 
         if interactive:
-            _interactive_hub(hub)
+            print("Device commissioned. Enter hub shell commands. exit, Ctrl-D, or Ctrl-C to close.")
+            matter_sim.interactive_hub(hub, STEP_TIMEOUT_S)
+    finally:
+        sim.close()
+
+
+def run_provision(
+    matter_elf: Path,
+    nvm3_hex: Path,
+    *,
+    board: str = "brd4187c",
+    provision_image: Path | None = None,
+    timeout: float = DEFAULT_UART_TIMEOUT_S,
+) -> None:
+    """Mount provisioning tools and open the hub prompt with an uncommissioned SoC."""
+    sim = MatterSim(DEFAULT_BUNDLE, socket_consoles=True)
+    try:
+        sim.load_thread_checkpoint()
+        hub = sim.hub_uart(timeout)
+        test_lib.write_line(hub, "")
+        if test_lib.wait_for(hub, r"#\s*$", timeout=timeout) is None:
+            raise RuntimeError("hub shell did not become ready")
+        sim.attach_provision_image(provision_image)
+        sim.mount_provision(hub, timeout)
+
+        sim.pause()
+        sim.attach_matter_soc(board, matter_elf, extra_hex=nvm3_hex)
+        sim.soc_uart(timeout)
+        sim.start()
+        print(
+            "Manual provisioning session, device has not been commissioned.\n"
+            "Wait for provisioning readiness and read the BLE address from the SoC UART log.\n"
+            "Enter non-interactive guest shell commands. exit, Ctrl-D or Ctrl-C closes."
+        )
+        matter_sim.interactive_hub(hub, timeout)
     finally:
         sim.close()
