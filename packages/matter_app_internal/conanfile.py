@@ -68,11 +68,7 @@ class matter_app_internalRecipe(ConanFile):
         recipe_support.set_version(self)
 
     def requirements(self):
-        recipe_support.apply_requirements(
-            self,
-            require_matter=True,
-            also_require=("matter_internal",),
-        )
+        pass
 
     def layout(self):
         recipe_support.apply_layout(self)

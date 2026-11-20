@@ -54,7 +54,7 @@ root/slc/script/
 Generates `pkg.slt`, which is used by SLT to determine dependencies to download for development.
 
 - Centralized utility to generate consistent `pkg.slt` files across SLC projects and solutions.
-- A project `pkg.slt` has one dependency. All-`quality: internal` directories depend on `matter_app_internal`. Any other directory, including a mix, depends on `matter_app`. `packages/matter/pkg.slt` depends on `matter`, and `packages/matter_internal/pkg.slt` depends on `matter_internal`.
+- A project `pkg.slt` under `slc/` depends on `matter`. All-`quality: internal` directories also depend on `matter_internal`.
 - Generates `pkg.slt` for every directory containing a `.slcp` or `.slcw` file.
 - Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-0.dev`).
 - Release-stream comes from `packages/_shared/release_stream_channel`.

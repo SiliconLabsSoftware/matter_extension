@@ -6,11 +6,9 @@
 
 OVERVIEW
     Walk a base directory and, for every directory containing at least one
-    .slcp or .slcw file, write a pkg.slt with one dependency.
-    A directory whose projects are all quality:internal depends on
-    matter_app_internal. Every other directory, including a mix of internal
-    and public projects, depends on matter_app.
-    Existing files are overwritten.
+    .slcp or .slcw file, write a pkg.slt. Public (and mixed) directories
+    depend on matter. All-quality:internal directories depend on matter and
+    matter_internal. Existing files are overwritten.
 
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
@@ -24,13 +22,10 @@ RELEASE-STREAM
     packages/_shared/release_stream_channel (written as release-stream in every pkg.slt).
 
 DEPENDENCIES
-    One package per pkg.slt. All-internal project directories and
-    packages/matter_app_internal/pkg.slt depend on matter_app_internal.
-    Every other project directory and packages/matter_app/pkg.slt depend on
-    matter_app. packages/matter/pkg.slt depends on matter.
-    packages/matter_internal/pkg.slt depends on matter_internal.
-    Platform packages are requirements of the matter Conan recipe, not of
-    these pkg.slt files.
+    Project pkg.slt under slc/: matter always; also matter_internal when every
+    project in the directory is quality:internal.
+    Package-level packages/matter*/pkg.slt files are optional to refresh via
+    --update-sample-app-pkg / --update-stack-pkg.
 
 VERSION-ONLY MODE
     Use --version-only to resolve and print just the Matter version without
@@ -137,9 +132,21 @@ def _line_version_range(matter_version):
     return f">={base} <{upper}"
 
 
-def _pkg_slt_content(package_name, matter_version, release_stream):
-    """One-dependency pkg.slt body, matching the committed file layout."""
+def _dep_line(package_name, version_range, release_stream):
+    return (
+        f'{package_name} = {{ version = "{version_range}", installer = "conan", '
+        f'user="silabs", channel="{release_stream}", prerelease = true }}'
+    )
+
+
+def _pkg_slt_content(package_names, matter_version, release_stream):
+    """pkg.slt body with one or more Conan package dependencies."""
+    if isinstance(package_names, str):
+        package_names = (package_names,)
     version_range = _line_version_range(matter_version)
+    lines = "\n".join(
+        _dep_line(name, version_range, release_stream) for name in package_names
+    )
     return f"""# Version defaults to "0" if not defined
 version = 1
 release-stream = "{release_stream}"
@@ -147,7 +154,7 @@ release-stream = "{release_stream}"
  
 [dependency]
 # Get a specific version of the package
-{package_name} = {{ version = "{version_range}", installer = "conan", user="silabs", channel="{release_stream}", prerelease = true }}
+{lines}
 """
 
 
@@ -163,14 +170,14 @@ def _project_quality(path):
     return ""
 
 
-def _dependency_name(root, files):
-    """matter_app_internal only when every project in the directory is internal."""
+def _dependency_names(root, files):
+    """matter; also matter_internal when every project in the directory is internal."""
     projects = [name for name in files if name.endswith((".slcp", ".slcw"))]
     if projects and all(
         _project_quality(os.path.join(root, name)) == "internal" for name in projects
     ):
-        return "matter_app_internal"
-    return "matter_app"
+        return ("matter", "matter_internal")
+    return ("matter",)
 
 
 def generate_pkg_slt(verbose, pkg_slt_path, stack, matter_version, exclude_patterns):
@@ -204,12 +211,12 @@ def generate_pkg_slt_files(base_directory, verbose, matter_version, exclude_patt
         if not any(file.endswith((".slcp", ".slcw")) for file in files):
             continue
 
-        package_name = _dependency_name(root, files)
+        package_names = _dependency_names(root, files)
         pkg_slt_path = os.path.join(root, "pkg.slt")
         try:
             with open(pkg_slt_path, "w", encoding="utf-8") as pkg_slt_file:
-                pkg_slt_file.write(_pkg_slt_content(package_name, matter_version, release_stream))
-            logger.debug(f"Generated {package_name} pkg.slt in: {pkg_slt_path}")
+                pkg_slt_file.write(_pkg_slt_content(package_names, matter_version, release_stream))
+            logger.debug(f"Generated {package_names} pkg.slt in: {pkg_slt_path}")
         except Exception as e:
             logger.error(f"Failed to generate pkg.slt in {pkg_slt_path}: {e}")
 
