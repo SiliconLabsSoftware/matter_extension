@@ -162,10 +162,6 @@ include:
     condition: [matter_service_http_offload]
     file_list:
       - path: cacert.h
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
-    condition: [matter_service_mqtt]
-    file_list:
-      - path: cacert.h
   - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/resources
     condition: [matter_service_http_offload]
     file_list:
