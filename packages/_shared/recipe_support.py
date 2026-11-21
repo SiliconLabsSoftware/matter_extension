@@ -158,7 +158,7 @@ def matter_get_version(conanfile) -> str:
 
     Calls ``silabs_package_assistant.get_version`` with ``slce_path``. The
     assistant reads the ``X.Y.Z`` line from ``matter.slce`` and appends the
-    ``SL_PRERELEASE`` suffix (``-0.dev`` when that variable is unset).
+    ``SL_PRERELEASE`` suffix (``-dev.0`` when that variable is unset).
     """
     return _assistant(conanfile).get_version(slce_path(conanfile))
 

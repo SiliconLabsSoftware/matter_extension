@@ -56,10 +56,10 @@
 #       output in: out/brd4187c/matter_thread_soc_lighting_app_series_2_freertos_solution/ (builds only application)
 #
 #   Create packages in local Conan cache:
-#   ./slc/build.sh --create-package-version 2.10.0-0.dev [--channel 2026-12] [--clean]
+#   ./slc/build.sh --create-package-version 2.10.0-dev.0 [--channel 2026-12] [--clean]
 #
 #   Export from repo and build via packages/build_app.sh:
-#   ./slc/build.sh --build-from-package-version 2.10.0-0.dev [--channel 2026-12] [--clean] \
+#   ./slc/build.sh --build-from-package-version 2.10.0-dev.0 [--channel 2026-12] [--clean] \
 #       matter_wifi_soc_lock_app_freertos.slcw brd4338a
 #
 #   --channel : Conan channel for package refs (default: packages/_shared/release_stream_channel

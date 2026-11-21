@@ -13,9 +13,9 @@ OVERVIEW
 MATTER VERSION RESOLUTION (priority)
     1. Explicit --matter-version CLI argument.
     2. slc/script/matter_package_version
-    3. Version field from the matter.slce file in the extension root (auto-appended with "-0.dev").
+    3. Version field from the matter.slce file in the extension root (auto-appended with "-dev.0").
 
-    The written constraint is the line-version range. ``2.10.0-0.dev`` becomes
+    The written constraint is the line-version range. ``2.10.0-dev.0`` becomes
     ``>=2.10.0 <2.10.1``, with prerelease = true.
 
 RELEASE-STREAM
@@ -79,7 +79,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
     Priority:
       1. --matter-version CLI argument if provided
       2. slc/script/matter_package_version
-      3. Version field from matter.slce (+ "-0.dev")
+      3. Version field from matter.slce (+ "-dev.0")
     Exits with error if neither source provides a version.
     """
     if cli_version:
@@ -109,7 +109,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
             if slce_data and "version" in slce_data:
                 version = str(slce_data["version"]).strip()
                 if version:
-                    version = version + "-0.dev"
+                    version = version + "-dev.0"
                     logger.debug("Matter version read from matter.slce: %s", version)
                     return version
                 logger.warning("Version field in %s is empty", slce_file)
@@ -125,7 +125,7 @@ def resolve_matter_version(cli_version: Optional[str]) -> str:
     sys.exit(1)
 
 def _line_version_range(matter_version):
-    """``2.10.0`` or ``2.10.0-0.dev`` becomes ``>=2.10.0 <2.10.1``."""
+    """``2.10.0`` or ``2.10.0-dev.0`` becomes ``>=2.10.0 <2.10.1``."""
     base = matter_version.split("-", 1)[0]
     major, minor, patch = base.split(".")
     upper = f"{major}.{minor}.{int(patch) + 1}"

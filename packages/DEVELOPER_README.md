@@ -23,12 +23,12 @@ Pass `--channel` only when you need a non-default channel.
 ### Recommended: `slc/build-pkg.sh`
 ```bash
 # Channel defaults from packages/_shared/release_stream_channel (or MATTER_PACKAGE_CHANNEL).
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev --channel 2026-12
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev --channel 2026-12 --clean
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0 --channel 2026-12
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0 --channel 2026-12 --clean
 
 # Export then build a sample via packages/build_app.sh
-./slc/build-pkg.sh --build-from-package-version 2.10.0-0.dev --channel 2026-12 \
+./slc/build-pkg.sh --build-from-package-version 2.10.0-dev.0 --channel 2026-12 \
   matter_wifi_soc_lock_app_freertos.slcw brd4338a
 ```
 
@@ -56,7 +56,7 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 - Centralized utility to generate consistent `pkg.slt` files across SLC projects and solutions.
 - A project `pkg.slt` under `slc/` depends on `matter`. All-`quality: internal` directories also depend on `matter_internal`.
 - Generates `pkg.slt` for every directory containing a `.slcp` or `.slcw` file.
-- Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-0.dev`).
+- Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-dev.0`).
 - Release-stream comes from `packages/_shared/release_stream_channel`.
 
 ---
