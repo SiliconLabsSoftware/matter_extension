@@ -2,6 +2,8 @@ import sys
 from pathlib import Path
 
 from conan import ConanFile
+from conan.tools.files import update_conandata
+from conan.tools.scm import Git
 
 # Cache recipes import e/_shared. Checkout recipes import packages/_shared.
 _recipe_dir = Path(__file__).resolve().parent
@@ -11,21 +13,6 @@ for _base in (_recipe_dir, _recipe_dir.parent):
         break
 
 from _shared import recipe_support
-
-# Platform dependency versions. requirements() requires both groups.
-# App pkg.slt files depend only on matter_app; these stay on the matter package.
-THREAD_DEPENDENCIES = {
-    "thread": "[>=3.2.0 <3.2.1,include_prerelease]",
-    "multiprotocol": "[>=1.2.0 <1.2.1,include_prerelease]",
-    "zigbee": "[>=9.2.0 <9.2.1,include_prerelease]",
-    "bluetooth_le_host": "[>=11.2.0 <11.2.1,include_prerelease]",
-    "cpc": "[>=4.10.0 <4.10.1,include_prerelease]",
-}
-
-WIFI_DEPENDENCIES = {
-    "wifi": "[>=4.2.0 <4.2.1,include_prerelease]",
-    "bluetooth_le_siwx91x": "[>=4.2.0 <4.2.1,include_prerelease]",
-}
 
 _QUALITIES = ("production", "evaluation", "experimental")
 
@@ -56,7 +43,7 @@ class matterRecipe(ConanFile):
         "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
         "maintainers": [],
     }
-    revision_mode = "hash"
+    revision_mode = "scm"
 
     options = {
         "compatibleVersion": ["ANY"],
@@ -81,8 +68,15 @@ class matterRecipe(ConanFile):
 
     def requirements(self):
         channel = self.release_stream_channel
-        for name, version in {**THREAD_DEPENDENCIES, **WIFI_DEPENDENCIES}.items():
-            self.requires(f"{name}/{version}@{self.user}/{channel}")
+        # Thread / multiprotocol stack
+        self.requires(f"thread/[>=3.2.0 <3.2.1,include_prerelease]@{self.user}/{channel}")
+        self.requires(f"multiprotocol/[>=1.2.0 <1.2.1,include_prerelease]@{self.user}/{channel}")
+        self.requires(f"zigbee/[>=9.2.0 <9.2.1,include_prerelease]@{self.user}/{channel}")
+        self.requires(f"bluetooth_le_host/[>=11.2.0 <11.2.1,include_prerelease]@{self.user}/{channel}")
+        self.requires(f"cpc/[>=4.10.0 <4.10.1,include_prerelease]@{self.user}/{channel}")
+        # Wi-Fi
+        self.requires(f"wifi/[>=4.2.0 <4.2.1,include_prerelease]@{self.user}/{channel}")
+        self.requires(f"bluetooth_le_siwx91x/[>=4.2.0 <4.2.1,include_prerelease]@{self.user}/{channel}")
 
     def slt_requirements(self):
         return {"zap": "~", "slc-cli": "~"}
@@ -94,6 +88,19 @@ class matterRecipe(ConanFile):
         recipe_support.export_recipe_files(
             self,
             extra_filename="matter.slce.extra",
+        )
+        # Add commit info to the package for revision / git commit correspondence
+        git = Git(self)
+        scm_commit = git.get_commit(repository=False)
+        self.output.info(f"Obtained commit {scm_commit}")
+        update_conandata(
+            self,
+            {
+                "sources": {
+                    "commit": scm_commit,
+                    "url": "git@github.com:SiliconLabsSoftware/matter_extension.git",
+                }
+            },
         )
 
     def package_id(self):

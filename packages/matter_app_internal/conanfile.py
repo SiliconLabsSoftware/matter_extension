@@ -44,7 +44,7 @@ class matter_app_internalRecipe(ConanFile):
         "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
         "maintainers": [],
     }
-    revision_mode = "hash"
+    revision_mode = "scm"
 
     options = {
         "compatibleVersion": ["ANY"],

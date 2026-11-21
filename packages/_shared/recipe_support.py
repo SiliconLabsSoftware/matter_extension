@@ -36,8 +36,6 @@ from typing import Iterable, Optional
 
 import yaml
 
-LINE_VERSION_RE = re.compile(r"^\d+\.\d+\.\d+$")
-
 # Consumed as separate Conan packages (SiSDK / Wi-Fi / AWS OTA). SLC
 # components may list files under these trees; never ship the trees themselves.
 EXCLUDED_PATH_PREFIXES = (
@@ -192,56 +190,6 @@ def _path_pairs(path_mappings: Iterable[str]) -> list[tuple[str, str]]:
         src, dst = rule.split("=>", 1)
         pairs.append((src, dst))
     return pairs
-
-
-def matter_get_base_version(conanfile) -> str:
-    """``X.Y.Z`` line version from ``matter.slce``, without a prerelease suffix.
-
-    Calls ``get_base_version``, then rejects anything that is not ``X.Y.Z``.
-    ``matter_conan_range`` builds dependency ranges from the result.
-    """
-    line = _assistant(conanfile).get_base_version(slce_path(conanfile))
-    if not LINE_VERSION_RE.match(line):
-        raise RuntimeError(f"matter.slce version must be X.Y.Z, got {line!r}")
-    return line
-
-
-def matter_conan_range(line_version: str) -> str:
-    """Conan range that matches one line version, including prereleases.
-
-    ``2.10.0`` becomes ``[>=2.10.0 <2.10.1,include_prerelease]``. Sibling
-    packages such as ``matter_app`` require ``matter`` with this range.
-    """
-    major, minor, patch = line_version.split(".")
-    upper = f"{major}.{minor}.{int(patch) + 1}"
-    return f"[>={line_version} <{upper},include_prerelease]"
-
-
-def apply_requirements(
-    conanfile,
-    *,
-    require_matter: bool = False,
-    also_require: tuple[str, ...] = (),
-) -> None:
-    """Declare sibling Conan requirements for this recipe.
-
-    ``require_matter`` and ``also_require`` add those packages at the
-    ``matter`` line-version range. They use ``user`` and
-    ``release_stream_channel``, not the channel ``get_channel`` computed for
-    this package. A feature-branch package still requires the release stream.
-    The ``matter`` recipe declares its own platform dependencies.
-    """
-    channel = conanfile.release_stream_channel
-    user = conanfile.user
-    if not require_matter and not also_require:
-        return
-    rng = matter_conan_range(matter_get_base_version(conanfile))
-    names = []
-    if require_matter:
-        names.append("matter")
-    names.extend(also_require)
-    for dep_name in names:
-        conanfile.requires(f"{dep_name}/{rng}@{user}/{channel}")
 
 
 # ---------------------------------------------------------------------------

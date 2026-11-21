@@ -39,7 +39,7 @@ class matter_internalRecipe(ConanFile):
         "jira_project": "https://jira.silabs.com/projects/MATTER/summary",
         "maintainers": [],
     }
-    revision_mode = "hash"
+    revision_mode = "scm"
 
     options = {
         "compatibleVersion": ["ANY"],
@@ -63,7 +63,7 @@ class matter_internalRecipe(ConanFile):
         recipe_support.set_version(self)
 
     def requirements(self):
-        recipe_support.apply_requirements(self, require_matter=True)
+        self.requires(f"matter/[>=2.10.0 <2.10.1,include_prerelease]@{self.user}/{self.release_stream_channel}")
 
     def layout(self):
         recipe_support.apply_layout(self)
