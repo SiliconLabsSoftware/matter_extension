@@ -204,6 +204,7 @@ components:
   - matter_mmic
   - matter_mode_base
   - matter_mode_select
+  - matter_mqtt_bridge
   - matter_multi_image_custom_processor
   - matter_multi_image_ota
   - matter_multi_image_ota_encryption
@@ -373,6 +374,7 @@ extra_files:
   - jenkins_integration/artifacts/artifact_processor.py
   - jenkins_integration/artifacts/artifactory_client.py
   - jenkins_integration/artifacts/download_coverage_artifact.py
+  - jenkins_integration/artifacts/publish_skill_pack.py
   - jenkins_integration/artifacts/ubai_client.py
   - jenkins_integration/artifacts/upload_artifacts.py
   - jenkins_integration/artifacts/upload_zephyr_artifacts.py
@@ -752,6 +754,7 @@ extra_files:
   - slc/component/matter-wifi/matter_lwip_modified.slcc
   - slc/component/matter-wifi/matter_lwip_support.slcc
   - slc/component/matter-wifi/matter_minimal_mdns.slcc
+  - slc/component/matter-wifi/matter_mqtt_bridge.slcc
   - slc/component/matter-wifi/matter_neutral_less_switch_wifi.slcc
   - slc/component/matter-wifi/matter_service_http_offload.slcc
   - slc/component/matter-wifi/matter_service_mqtt.slcc
