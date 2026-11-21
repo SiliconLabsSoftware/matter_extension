@@ -16,6 +16,14 @@ from _shared import recipe_support
 
 _QUALITIES = ("production", "evaluation", "experimental")
 
+# TODO: revert promote_internal_to_experimental once using internal components
+# with a production .slcp (matter_internal + pkg.slt) is resolved.
+# Temp: keep source quality:internal; ship as experimental in the matter package.
+_PROMOTE_INTERNAL_TO_EXPERIMENTAL = (
+    "slc/component/matter-platform/bluetooth/matter_ble_dmp_test_gatt.slcc",
+    "slc/component/matter-platform/bluetooth/matter_internal_ble_side_channel.slcc",
+)
+
 _REQUIRED_ROOT_FILES = (
     "matter.slsdk",
     "src/app/zap-templates/app-templates.json",
@@ -114,6 +122,7 @@ class matterRecipe(ConanFile):
             extra_filename="matter.slce.extra",
             skip_sample_apps=True,
             qualities=_QUALITIES,
+            promote_internal_to_experimental=_PROMOTE_INTERNAL_TO_EXPERIMENTAL,
         )
 
     def build(self):
@@ -124,6 +133,7 @@ class matterRecipe(ConanFile):
             extra_filename="matter.slce.extra",
             skip_sample_apps=True,
             qualities=_QUALITIES,
+            promote_internal_to_experimental=_PROMOTE_INTERNAL_TO_EXPERIMENTAL,
         )
 
     def package_info(self):

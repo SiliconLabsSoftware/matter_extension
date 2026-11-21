@@ -24,6 +24,12 @@ Two Conan contexts matter:
 Adding ``matter_internal`` / ``matter_app_internal`` later means a new
 ``conanfile.py`` and one entry in ``packages.yaml``.
 Internal content is selected by SLC ``quality: internal``, not by path.
+
+Temp workaround: ``promote_internal_to_experimental`` force-includes listed
+``.slcc`` assets into the customer ``matter`` package and rewrites those
+packaged ``.slcc`` files from ``quality: internal`` to ``experimental``.
+TODO: remove once using internal components with a production ``.slcp``
+(``matter_internal`` + ``pkg.slt``) is resolved.
 """
 
 from __future__ import annotations
@@ -49,6 +55,22 @@ _WISECONNECT_EXTENSION = re.compile(
     r"^(\s*- id: )wiseconnect3_sdk(\r?\n\s+version:)",
     re.MULTILINE,
 )
+
+# TODO: remove with promote_internal_to_experimental once internal+production
+# .slcp packaging is resolved.
+# Temp: assets for SQA BLE components kept quality:internal in source.
+_PROMOTE_INTERNAL_ASSETS = {
+    "slc/component/matter-platform/bluetooth/matter_ble_dmp_test_gatt.slcc": (
+        "third_party/matter_sdk/examples/platform/silabs/cmp/config/btconf/"
+        "gatt_configuration.btconf",
+    ),
+    "slc/component/matter-platform/bluetooth/matter_internal_ble_side_channel.slcc": (
+        "third_party/matter_sdk/src/platform/silabs/efr32/BLEChannelImpl.h",
+        "third_party/matter_sdk/src/platform/silabs/efr32/BLEChannelImpl.cpp",
+    ),
+}
+
+_QUALITY_INTERNAL_LINE = re.compile(r"^([ \t]*quality:[ \t]*)internal[ \t]*$", re.MULTILINE)
 
 
 # ---------------------------------------------------------------------------
@@ -558,6 +580,18 @@ class PackagePlan:
     pathmap: list[str]
 
 
+def _files_for_promoted_internal(
+    root: Path, promote_internal_to_experimental: tuple[str, ...]
+) -> set[str]:
+    """Force-include temp-promoted ``.slcc`` paths and their known assets."""
+    collected: set[str] = set()
+    for slcc in promote_internal_to_experimental:
+        collected.add(slcc)
+        for asset in _PROMOTE_INTERNAL_ASSETS.get(slcc, ()):
+            collected.add(asset)
+    return _existing_relative(root, collected)
+
+
 def collect_files(
     conanfile,
     *,
@@ -568,6 +602,7 @@ def collect_files(
     skip_sample_apps: bool,
     path_mappings: tuple[str, ...],
     qualities: tuple[str, ...],
+    promote_internal_to_experimental: tuple[str, ...] = (),
 ) -> PackagePlan:
     """Repo-relative files for ``package()``, or the filter-repo list from ``build()``.
 
@@ -598,6 +633,11 @@ def collect_files(
         files.update(_matter_list_files_in_slc_file(conanfile, root, qualities))
     else:
         raise RuntimeError(f"Unknown package kind {kind!r} on {conanfile.name}")
+
+    if promote_internal_to_experimental:
+        files.update(
+            _files_for_promoted_internal(root, promote_internal_to_experimental)
+        )
 
     files.update(_required_present(root, required_root_files))
     files = _existing_relative(root, files)
@@ -638,6 +678,29 @@ def _rewrite_wiseconnect(conanfile, files: set[str]) -> None:
     conanfile.output.info(f"Mapped {changed} sdk_extension wiseconnect3_sdk id(s) to wifi")
 
 
+def _rewrite_quality_to_experimental(
+    conanfile, promote_internal_to_experimental: tuple[str, ...]
+) -> None:
+    """Temp: rewrite packaged ``.slcc`` quality from internal to experimental."""
+    package_root = Path(conanfile.package_folder)
+    changed = 0
+    for rel in promote_internal_to_experimental:
+        slc_file = package_root / rel
+        if not slc_file.is_file():
+            conanfile.output.warning(
+                f"Temp promote: packaged .slcc missing, skip quality rewrite: {rel}"
+            )
+            continue
+        text = slc_file.read_text(encoding="utf-8")
+        new_text, count = _QUALITY_INTERNAL_LINE.subn(r"\1experimental", text)
+        if count:
+            slc_file.write_text(new_text, encoding="utf-8")
+            changed += count
+    conanfile.output.info(
+        f"Temp: rewrote quality internal->experimental in {changed} packaged .slcc"
+    )
+
+
 def matter_package_files(
     conanfile,
     *,
@@ -648,6 +711,7 @@ def matter_package_files(
     path_mappings: tuple[str, ...] = (),
     rewrite_wiseconnect: bool = False,
     qualities: tuple[str, ...],
+    promote_internal_to_experimental: tuple[str, ...] = (),
 ) -> None:
     """Build the Conan package for one recipe.
 
@@ -667,6 +731,7 @@ def matter_package_files(
         skip_sample_apps=skip_sample_apps,
         path_mappings=path_mappings,
         qualities=qualities,
+        promote_internal_to_experimental=promote_internal_to_experimental,
     )
     files = set(plan.files)
     for src, _dst in _path_pairs(path_mappings):
@@ -688,6 +753,8 @@ def matter_package_files(
     )
     if rewrite_wiseconnect:
         _rewrite_wiseconnect(conanfile, files)
+    if promote_internal_to_experimental:
+        _rewrite_quality_to_experimental(conanfile, promote_internal_to_experimental)
 
     lock_name = f"conan-{conanfile.name}.lock"
     if (root / lock_name).is_file():
@@ -704,6 +771,7 @@ def write_filelists(
     skip_sample_apps: bool = False,
     path_mappings: tuple[str, ...] = (),
     qualities: tuple[str, ...],
+    promote_internal_to_experimental: tuple[str, ...] = (),
 ) -> None:
     """Write the filter-repo lists at the checkout root.
 
@@ -721,6 +789,7 @@ def write_filelists(
         skip_sample_apps=skip_sample_apps,
         path_mappings=path_mappings,
         qualities=qualities,
+        promote_internal_to_experimental=promote_internal_to_experimental,
     )
     list_path = root / f"{conanfile.name}-filter-repo-filelist.txt"
     map_path = root / f"{conanfile.name}-filter-repo-pathmap.txt"
