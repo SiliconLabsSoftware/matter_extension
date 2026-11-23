@@ -16,6 +16,7 @@ component_path:
   - path: slc/component/matter-platform/nvm3
   - path: slc/component/matter-platform/bluetooth
   - path: slc/component/matter-platform/display
+  - path: slc/component/matter-platform/generator-firmware
   - path: slc/component/matter-platform/device-attestation-credentials
   - path: slc/component/matter-platform/low-power
   - path: slc/component/matter-platform/logging

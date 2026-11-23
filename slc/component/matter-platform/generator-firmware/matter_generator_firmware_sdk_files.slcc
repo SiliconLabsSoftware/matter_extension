@@ -6,7 +6,7 @@ description: >
   headers, so the files the linked build resolves from the SDK tree are listed
   here with their directory layout.
 package: matter
-category: Stack
+category: Matter|Platform
 quality: production
 metadata:
   sbom:

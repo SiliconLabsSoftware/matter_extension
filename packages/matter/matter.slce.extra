@@ -162,6 +162,7 @@ components:
   - matter_gatt_static
   - matter_general_commissioning
   - matter_general_diagnostics
+  - matter_generator_firmware_sdk_files
   - matter_group_key_mgmt
   - matter_groupcast
   - matter_groups
@@ -204,6 +205,7 @@ components:
   - matter_mmic
   - matter_mode_base
   - matter_mode_select
+  - matter_mqtt_bridge
   - matter_multi_image_custom_processor
   - matter_multi_image_ota
   - matter_multi_image_ota_encryption
@@ -346,10 +348,14 @@ components:
   - types
 extra_files:
   - .clang-format
+  - AGENTS.md
   - CODEOWNERS
   - LICENSE
+  - MATTER-7050/DUT.logs
+  - MATTER-7050/provider.logs
   - README.md
   - board_compatibility_matrix.html
+  - diff.txt
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
   - docs/MATTER_MQTT_HTTPS_EXAMPLE.md
@@ -373,6 +379,7 @@ extra_files:
   - jenkins_integration/artifacts/artifact_processor.py
   - jenkins_integration/artifacts/artifactory_client.py
   - jenkins_integration/artifacts/download_coverage_artifact.py
+  - jenkins_integration/artifacts/publish_skill_pack.py
   - jenkins_integration/artifacts/ubai_client.py
   - jenkins_integration/artifacts/upload_artifacts.py
   - jenkins_integration/artifacts/upload_zephyr_artifacts.py
@@ -697,6 +704,7 @@ extra_files:
   - slc/component/matter-platform/display/matter_lcd.slcc
   - slc/component/matter-platform/display/matter_lcd_917SOC.slcc
   - slc/component/matter-platform/display/matter_qr_code.slcc
+  - slc/component/matter-platform/generator-firmware/matter_generator_firmware_sdk_files.slcc
   - slc/component/matter-platform/logging/matter_log_rtt.slcc
   - slc/component/matter-platform/logging/matter_log_uart.slcc
   - slc/component/matter-platform/logging/stack_monitoring.slcc
@@ -756,6 +764,7 @@ extra_files:
   - slc/component/matter-wifi/matter_lwip_modified.slcc
   - slc/component/matter-wifi/matter_lwip_support.slcc
   - slc/component/matter-wifi/matter_minimal_mdns.slcc
+  - slc/component/matter-wifi/matter_mqtt_bridge.slcc
   - slc/component/matter-wifi/matter_neutral_less_switch_wifi.slcc
   - slc/component/matter-wifi/matter_service_http_offload.slcc
   - slc/component/matter-wifi/matter_service_mqtt.slcc
