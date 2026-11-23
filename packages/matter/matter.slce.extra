@@ -352,7 +352,6 @@ extra_files:
   - board_compatibility_matrix.html
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
-  - docs/MATTER_MQTT_HTTPS_EXAMPLE.md
   - docs/images/add-extension-settings.png
   - docs/images/add-matter-extension.png
   - docs/images/add-wifi-extension.png
