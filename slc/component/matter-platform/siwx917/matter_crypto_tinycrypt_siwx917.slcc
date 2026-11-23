@@ -68,3 +68,7 @@ define:
   # Using mbedtls_config forces the MBEDTLS_CONFIG_FILE defines to the generated header.
   - name: MBEDTLS_USER_CONFIG_FILE
     value: <siwx917-chip-mbedtls-config.h>
+  # Same header also supplies the #undef of MBEDTLS_PSA_ACCEL_ALG_ECB_NO_PADDING.
+  # MBEDTLS_USER_CONFIG_FILE is included after builtins are already selected.
+  - name: TF_PSA_CRYPTO_USER_CONFIG_FILE
+    value: <siwx917-chip-mbedtls-config.h>

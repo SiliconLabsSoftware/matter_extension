@@ -95,3 +95,5 @@ examples/*/esp32/dependencies.lock
 # jupyter temporary files
 .ipynb_checkpoints
 
+# Generated agent skill packages
+/jenkins_integration/dist/

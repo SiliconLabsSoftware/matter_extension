@@ -48,15 +48,18 @@ def sendSlackNotification(String messageType, String status, String summary = ""
 *Timestamp:* ${currentTime} UTC
 
 📋 *Details:*"""
+
+    if (status == "PASS" && env.MATTER_PACKAGE_VERSION?.trim()) {
+        message += "\n• *Package Version:* `${env.MATTER_PACKAGE_VERSION}`"
+    }
     
     if (reportedCommitSha) {
         message += "\n• *Commit SHA:* `${reportedCommitSha}`"
     }
-    if (runNumber) {
+    if (runNumber && workflowId) {
+        message += "\n• *GitHub Workflow Run:* <https://github.com/SiliconLabsSoftware/matter_extension/actions/runs/${workflowId}|#${runNumber}>"
+    } else if (runNumber) {
         message += "\n• *GitHub Workflow Run:* #${runNumber}"
-    }
-    if (workflowId) {
-        message += "\n• *Workflow ID:* ${workflowId}"
     }
     
     if (summary && summary.trim()) {
@@ -120,10 +123,10 @@ pipeline
                                 build_description += "\nGitHub Workflow Run Number: ${run_number}"
                                 buildDescription(build_description)
 
-                                try{
-                                    pipelineFunctions.upload_zephyr_artifacts(workflow_id)
-                                } catch (e) {
-                                    unstable("Zephyr artifact upload to UBAI failed: ${e.message}")
+                                def zephyr_revisions = pipelineFunctions.upload_zephyr_artifacts(workflow_id)
+                                if (zephyr_revisions) {
+                                    build_description += "\nZephyr-Silabs Commit SHA: ${zephyr_revisions.join(', ')}"
+                                    buildDescription(build_description)
                                 }
                             }
                         }
@@ -290,22 +293,29 @@ pipeline
                         pipelineFunctions.writePrereleaseLabel()
 
                         def refs = []
-                        [
-                            [name: 'matter',     recipe: "${env.WORKSPACE}/packages/matter/conanfile.py"],
-                            [name: 'matter_app', recipe: "${env.WORKSPACE}/packages/matter_app/conanfile.py"],
-                        ].each { pkg ->
+                        def recipeLines = sh(
+                            script: "python3 \"${env.WORKSPACE}/packages/pkgctl.py\" recipes",
+                            returnStdout: true
+                        ).trim().split('\n')
+                        recipeLines.each { line ->
+                            def parts = line.split('\t')
+                            if (parts.length < 2) {
+                                return
+                            }
+                            def pkgName = parts[0]
+                            def pkgRecipe = "${env.WORKSPACE}/${parts[1]}"
                             pipelineFunctions.runActionConanCreatePublish(
-                                pkg.name, pkg.recipe, remoteName, remoteUrl, actionDir
+                                pkgName, pkgRecipe, remoteName, remoteUrl, actionDir
                             )
                             def pkgInfo = pipelineFunctions.readConanPackageOutputJson()
                             def fullRef = pkgInfo.full_package_ref
                             if (!fullRef) {
-                                error("full_package_ref missing from conan_package_output.json for ${pkg.name}")
+                                error("full_package_ref missing from conan_package_output.json for ${pkgName}")
                             }
                             refs << fullRef
-                            echo "Captured full_package_ref for ${pkg.name}: ${fullRef}"
+                            echo "Captured full_package_ref for ${pkgName}: ${fullRef}"
 
-                            // Share prerelease number with matter_app so versions match
+                            // First package (matter) publishes the prerelease number the rest reuse.
                             if (!env.SL_PRERELEASE_NUMBER?.trim() && pkgInfo.prerelease_number) {
                                 env.SL_PRERELEASE_NUMBER = pkgInfo.prerelease_number.toString()
                                 echo "SL_PRERELEASE_NUMBER=${env.SL_PRERELEASE_NUMBER}"

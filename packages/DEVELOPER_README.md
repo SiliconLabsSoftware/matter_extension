@@ -23,27 +23,22 @@ Pass `--channel` only when you need a non-default channel.
 ### Recommended: `slc/build-pkg.sh`
 ```bash
 # Channel defaults from packages/_shared/release_stream_channel (or MATTER_PACKAGE_CHANNEL).
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev --channel 2026-12
-./slc/build-pkg.sh --create-package-version 2.10.0-0.dev --channel 2026-12 --clean
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0 --channel 2026-12
+./slc/build-pkg.sh --create-package-version 2.10.0-dev.0 --channel 2026-12 --clean
 
 # Export then build a sample via packages/build_app.sh
-./slc/build-pkg.sh --build-from-package-version 2.10.0-0.dev --channel 2026-12 \
+./slc/build-pkg.sh --build-from-package-version 2.10.0-dev.0 --channel 2026-12 \
   matter_wifi_soc_lock_app_freertos.slcw brd4338a
 ```
 
-### Direct Conan export-pkg
+### Direct export
+
+`packages/pkgctl.py` reads `packages/packages.yaml` and exports each recipe in order.
+
 ```bash
 CHANNEL="$(tr -d '[:space:]' < packages/_shared/release_stream_channel)"
-# or: CHANNEL=2026-12
-
-conan export-pkg packages/matter/conanfile.py \
-  --name=matter --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
-
-conan export-pkg packages/matter_app/conanfile.py \
-  --name=matter_app --version=<matter_extension_version> \
-  --user=silabs --channel="${CHANNEL}"
+python3 packages/pkgctl.py export --version <matter_extension_version> --channel "${CHANNEL}"
 ```
 
 ---
@@ -59,10 +54,9 @@ root/slc/script/
 Generates `pkg.slt`, which is used by SLT to determine dependencies to download for development.
 
 - Centralized utility to generate consistent `pkg.slt` files across SLC projects and solutions.
-- Removes manual maintenance and prevents version drift in dependencies.
-- Supports switching between single- or multi-dependency models for sample apps (option 2 or 3 in [Matter Package Manager design doc](https://confluence.silabs.com/spaces/MATTER/pages/594744893/Matter+Package+Manager), decision still pending).
-- Generates `pkg.slt` for all directories containing a `.slcp` or `.slcw` file (Design option 3).
-- Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-0.dev`).
+- A project `pkg.slt` under `slc/` depends on `matter`. All-`quality: internal` directories also depend on `matter_internal`.
+- Generates `pkg.slt` for every directory containing a `.slcp` or `.slcw` file.
+- Matter package version comes from `slc/script/matter_package_version` (fallback: `matter.slce` + `-dev.0`).
 - Release-stream comes from `packages/_shared/release_stream_channel`.
 
 ---
@@ -85,15 +79,18 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 
 ## File Descriptions
 
-- **`packages/matter/conanfile.py`** – Defines the Matter component package and its dependencies, including OpenThread, Zigbee, Wi-Fi, and required tooling (SLC, ZAP, etc.). Incorporates `matter.slce.extra`, which lists all Matter components and source files not directly referenced by a component.
-- **`packages/matter/matter.slce.extra`** – Contains references to all components under `matter.slce`, and sample apps. Also intended to include all source files required for development.
-- **`packages/matter_app/conanfile.py`** – Used to package Matter sample applications and workspaces as seen in Studio.
-- **`packages/remotes.json`** – File containing URLs needed for Conan to search packages.
-- **`slc/script/dependency_versions.yaml`** – Used as a single source of truth for dependencies
-- **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin
-- **`packages/_shared/release_stream_channel`** – One-liner Conan channel / pkg.slt release-stream
-- **`pkg.slt`** – Exists in multiple locations with identical contents, dictating dependency on the Matter component/stack package.
-- **`sample_app_pkg.slt`** – Dictates dependency on the Matter app package.
+- **`packages/packages.yaml`** – Package names and recipes, in export order. `pkgctl.py`, `slc/build-pkg.sh`, GitHub Actions, and Jenkins read this list.
+- **`packages/pkgctl.py`** – `export`, `remove`, `names`, `recipes`, and `prune-cache` for every entry in `packages.yaml`.
+- **`packages/matter/conanfile.py`** – Matter stack package. Lists Thread and Wi-Fi Conan `requires` inline in `requirements()`, and passes packaging options to `recipe_support`.
+- **`packages/matter/matter.slce.extra`** – Extra files for the stack package. Sample-app paths are skipped; those belong to `matter_app`.
+- **`packages/matter_app/conanfile.py`** – Sample-app package. Declares package fields and packaging options for `recipe_support`. Projects are selected by SLC `quality` (`production`, `evaluation`, `experimental`). No Conan sibling `requires`; SLT project `pkg.slt` pulls `matter`.
+- **`packages/matter_internal/conanfile.py`** – Internal stack package. `requirements()` requires `matter` with a fixed line-version range. Selects components with SLC `quality: internal`.
+- **`packages/matter_app_internal/conanfile.py`** – Internal sample-app package. Selects projects with SLC `quality: internal`. No Conan sibling `requires`; SLT project `pkg.slt` pulls `matter` and `matter_internal`.
+- **`packages/_shared/recipe_support.py`** – Shared packaging logic and calls into `silabs_package_assistant` (`get_version`, `get_channel`, `find_slc_files_to_release`, `list_files_in_slc_file`, `trim_paths`, `copy_files`). See the module docstring.
+- **`packages/_shared/release_stream_channel`** – One-liner Conan channel / pkg.slt release-stream.
+- **`packages/remotes.json`** – URLs Conan uses to search packages.
+- **`slc/script/matter_package_version`** – Conan/SLT Matter package version pin.
+- **`pkg.slt`** – Generated next to projects under `slc/` (not under `packages/`). Declares `matter`, and also `matter_internal` when every project in that directory is `quality: internal`.
 
 ---
 
@@ -102,16 +99,23 @@ Generates `pkg.slt`, which is used by SLT to determine dependencies to download 
 ```
 root/
 ├── matter.slce
-├── packages
-│   ├── _shared
-│   │   ├── base_recipe.py
+├── packages/
+│   ├── _shared/
+│   │   ├── recipe_support.py
 │   │   └── release_stream_channel
-│   ├── matter
+│   ├── packages.yaml
+│   ├── pkgctl.py
+│   ├── build_app.sh
+│   ├── matter/
 │   │   ├── conanfile.py
 │   │   └── matter.slce.extra
-│   ├── matter_app
-│   │   ├── conanfile.py
-│   ├── DEVELOPER_README.md
+│   ├── matter_app/
+│   │   └── conanfile.py
+│   ├── matter_internal/
+│   │   └── conanfile.py
+│   ├── matter_app_internal/
+│   │   └── conanfile.py
+│   └── DEVELOPER_README.md
 └── slc/
     └── script/
 ```

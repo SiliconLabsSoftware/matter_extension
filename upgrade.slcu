@@ -371,6 +371,7 @@ upgrade:
   - sdk:
       id: matter
       version: "2.10.0"
+      vendor: silabs
     component:
       - trigger: matter_thread
         description: >
@@ -383,3 +384,16 @@ upgrade:
           Adding matter_use_ctm component to Matter MG projects using matter_provision_default
         add:
            - id: matter_use_ctm
+      - trigger: matter
+        description: >
+          Migrate existing persistent subscription configuration to the matter_subscription_persistence component.
+        add:
+           - id: matter_subscription_persistence
+    configuration:
+      - name: CHIP_CONFIG_PERSIST_SUBSCRIPTIONS
+        replacement: CHIP_CONFIG_PERSIST_SUBSCRIPTIONS
+        description: >
+          Reset the header fallback to zero; the matter_subscription_persistence component enables persistent subscriptions.
+        value:
+          "0": "0"
+          "1": "0"

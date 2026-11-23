@@ -1,11 +1,11 @@
 #ifndef APP_APPBUILDCONFIG_H_
 #define APP_APPBUILDCONFIG_H_
 
-// <<< Use Configuration Wizard in Context Menu >>>
+#ifndef CHIP_CONFIG_PERSIST_SUBSCRIPTIONS
+#define CHIP_CONFIG_PERSIST_SUBSCRIPTIONS 0
+#endif
 
-// <i> Default: 1
-// <q CHIP_CONFIG_PERSIST_SUBSCRIPTIONS> Matter Persistent Subscriptions
-#define CHIP_CONFIG_PERSIST_SUBSCRIPTIONS 1
+// <<< Use Configuration Wizard in Context Menu >>>
 
 // <i> Default: 1
 // <q CHIP_CONFIG_SUBSCRIPTION_TIMEOUT_RESUMPTION> Matter Subscription Timeout Resumption

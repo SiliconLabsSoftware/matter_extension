@@ -10,7 +10,7 @@ import html
 import json
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 CategoryData = Dict[str, List[Tuple[str, int]]]
 
@@ -18,7 +18,7 @@ _TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Code Size Comparison - __TITLE__</title>
+<title>__HEADING__ - __TITLE__</title>
 <style>
   body {
     background-color: #1e1e1e;
@@ -88,7 +88,7 @@ _TEMPLATE = """<!DOCTYPE html>
 </head>
 <body>
 <div class="toolbar">
-  <div>Code Size Comparison</div>
+  <div>__HEADING__</div>
   <div class="meta">Generated __DATE__</div>
 </div>
 <div class="content" id="content"></div>
@@ -113,47 +113,58 @@ _TEMPLATE = """<!DOCTYPE html>
     return e;
   }
 
-  var a = data.a.categories, b = data.b.categories;
-  var names = Object.keys(a).concat(Object.keys(b).filter(function (k) { return !(k in a); }));
+  var a = data.a.categories, b = data.b ? data.b.categories : null;
+  var compare = b !== null;
+  var COLLAPSED = "\\u25B6 ", EXPANDED = "\\u25BC ";
+  var names = Object.keys(a);
+  if (compare) names = names.concat(Object.keys(b).filter(function (k) { return !(k in a); }));
   names.sort();
 
   var totalA = 0, totalB = 0, countA = 0, countB = 0;
   Object.keys(a).forEach(function (k) { totalA += sum(a[k]); countA += a[k].length; });
-  Object.keys(b).forEach(function (k) { totalB += sum(b[k]); countB += b[k].length; });
+  if (compare) Object.keys(b).forEach(function (k) { totalB += sum(b[k]); countB += b[k].length; });
   var totalDelta = totalA - totalB;
 
-  // Column headers identifying the two inputs
+  // Column headers identifying the inputs
   var hdr = el("div", "row col-headers");
   hdr.appendChild(el("div", "col-name", ""));
-  hdr.appendChild(el("div", "col", "Latest" + (data.a.name ? "\\n" + data.a.name : "")));
-  hdr.appendChild(el("div", "col", "Reference" + (data.b.name ? "\\n" + data.b.name : "")));
-  hdr.appendChild(el("div", "col", "Delta"));
+  if (compare) {
+    hdr.appendChild(el("div", "col", "Latest" + (data.a.name ? "\\n" + data.a.name : "")));
+    hdr.appendChild(el("div", "col", "Reference" + (data.b.name ? "\\n" + data.b.name : "")));
+    hdr.appendChild(el("div", "col", "Delta"));
+  } else {
+    hdr.appendChild(el("div", "col", "Size" + (data.a.name ? "\\n" + data.a.name : "")));
+  }
   content.appendChild(hdr);
 
   var total = el("div", "row total");
-  total.appendChild(el("div", "col-name", "TOTAL CODE SIZE (" + countA + "/" + countB + ")"));
+  total.appendChild(el("div", "col-name", "TOTAL CODE SIZE (" + countA + (compare ? "/" + countB : "") + ")"));
   total.appendChild(el("div", "col", fmt(totalA) + " bytes\\n(100.0%)"));
-  total.appendChild(el("div", "col", fmt(totalB) + " bytes\\n(100.0%)"));
-  total.appendChild(el("div", "col " + deltaClass(totalDelta), deltaText(totalDelta)));
+  if (compare) {
+    total.appendChild(el("div", "col", fmt(totalB) + " bytes\\n(100.0%)"));
+    total.appendChild(el("div", "col " + deltaClass(totalDelta), deltaText(totalDelta)));
+  }
   content.appendChild(total);
 
   names.forEach(function (name, index) {
-    var objsA = a[name] || [], objsB = b[name] || [];
+    var objsA = a[name] || [], objsB = compare ? (b[name] || []) : [];
     var sizeA = sum(objsA), sizeB = sum(objsB), delta = sizeA - sizeB;
-    var color = index % 2 === 0 ? "#E57373" : "#CCCCCC";
-    var label = name + " (" + objsA.length + "/" + objsB.length + ")";
+    var color = index % 2 === 0 ? "#FFFFFF" : "#B0B0B0";
+    var label = name + " (" + objsA.length + (compare ? "/" + objsB.length : "") + ")";
 
     var wrapper = el("div");
     var header = el("div", "row category");
     var nameCol = el("div", "col-name");
-    var btn = el("button", null, label);
+    var btn = el("button", null, COLLAPSED + label);
     btn.style.color = color;
     btn.style.borderLeft = "3px solid " + color;
     nameCol.appendChild(btn);
     header.appendChild(nameCol);
     header.appendChild(el("div", "col", fmt(sizeA) + " bytes\\n(" + pct(sizeA, totalA) + "%)"));
-    header.appendChild(el("div", "col", fmt(sizeB) + " bytes\\n(" + pct(sizeB, totalB) + "%)"));
-    header.appendChild(el("div", "col delta " + deltaClass(delta), deltaText(delta)));
+    if (compare) {
+      header.appendChild(el("div", "col", fmt(sizeB) + " bytes\\n(" + pct(sizeB, totalB) + "%)"));
+      header.appendChild(el("div", "col delta " + deltaClass(delta), deltaText(delta)));
+    }
     wrapper.appendChild(header);
 
     var details = null;
@@ -161,7 +172,19 @@ _TEMPLATE = """<!DOCTYPE html>
       if (details) {
         wrapper.removeChild(details);
         details = null;
-        btn.textContent = label;
+        btn.textContent = COLLAPSED + label;
+        return;
+      }
+      details = el("div", "details");
+      if (!compare) {
+        objsA.slice().sort(function (x, y) { return y[1] - x[1]; }).slice(0, MAX_OBJECTS).forEach(function (o) {
+          var row = el("div", "row obj");
+          row.appendChild(el("div", "col-name", o[0]));
+          row.appendChild(el("div", "col", fmt(o[1]) + " bytes"));
+          details.appendChild(row);
+        });
+        wrapper.appendChild(details);
+        btn.textContent = EXPANDED + label;
         return;
       }
       var mapA = {}, mapB = {};
@@ -175,7 +198,6 @@ _TEMPLATE = """<!DOCTYPE html>
       });
       rows.sort(function (x, y) { return Math.abs(y[3]) - Math.abs(x[3]); });
 
-      details = el("div", "details");
       rows.slice(0, MAX_OBJECTS).forEach(function (r) {
         var row = el("div", "row obj");
         row.appendChild(el("div", "col-name", r[0]));
@@ -185,7 +207,7 @@ _TEMPLATE = """<!DOCTYPE html>
         details.appendChild(row);
       });
       wrapper.appendChild(details);
-      btn.textContent = "\\u25BC " + label;
+      btn.textContent = EXPANDED + label;
     });
 
     content.appendChild(wrapper);
@@ -199,17 +221,17 @@ _TEMPLATE = """<!DOCTYPE html>
 
 def generate_diff_report(
     data_a: CategoryData,
-    data_b: CategoryData,
+    data_b: Optional[CategoryData],
     name_a: str,
     name_b: str,
     output_path: Path,
 ) -> Path:
     """
-    Write a self-contained HTML comparison report.
+    Write a self-contained HTML report (a comparison when data_b is provided).
 
     Args:
         data_a: Parsed category data for the first folder.
-        data_b: Parsed category data for the second folder.
+        data_b: Parsed category data for the second folder, or None for a single report.
         name_a: Display name for the first folder.
         name_b: Display name for the second folder.
         output_path: Destination HTML file.
@@ -219,14 +241,22 @@ def generate_diff_report(
     """
     payload = {
         "a": {"name": name_a, "categories": data_a},
-        "b": {"name": name_b, "categories": data_b},
+        "b": {"name": name_b, "categories": data_b} if data_b is not None else None,
     }
     # Escape '<' so embedded strings can never terminate the <script> block.
     data_json = json.dumps(payload).replace("<", "\\u003c")
 
+    if data_b is None:
+        heading = "Code Size Report"
+        title = name_a or "Latest"
+    else:
+        heading = "Code Size Comparison"
+        title = f"{name_a} vs {name_b}" if name_a or name_b else "Latest vs Reference"
+
     report = (
         _TEMPLATE
-        .replace("__TITLE__", html.escape(f"{name_a} vs {name_b}" if name_a or name_b else "Latest vs Reference"))
+        .replace("__HEADING__", heading)
+        .replace("__TITLE__", html.escape(title))
         .replace("__DATE__", html.escape(datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
         .replace("__DATA__", data_json)
     )
