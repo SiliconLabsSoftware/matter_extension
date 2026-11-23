@@ -27,13 +27,14 @@ The simulation runs:
 
 ## Common vs runtime artifacts
 
-Artifacts are split into two GHCR packages sharing the same version `N`:
+Artifacts are split into two GHCR packages. Both use `COMMON_VERSION` `N`. Runtime tags
+also carry the first 7 characters of `renode.commit` so a Renode bump needs no version bump:
 
 | Tag | Contents |
 |-----|----------|
 | `vN-common` | rootfs, tools image, DTB, RCP ELFs, resc files |
-| `vN-runtime-linux-x64` | Renode build + checkpoint (CI, Linux, WSL2) |
-| `vN-runtime-osx-arm64` | Renode build + checkpoint (macOS for local development) |
+| `vN-runtime-<renode>-linux-x64` | Renode build + test_lib + checkpoint (CI, Linux, WSL2) |
+| `vN-runtime-<renode>-osx-arm64` | Renode build + test_lib + checkpoint (macOS for local development) |
 
 Checkpoints are tied to the Renode build that created them. Each host runtime
 is built independently from the same common inputs.
@@ -80,35 +81,44 @@ chip-tool pairing ble-thread 101 "hex:$(cat /tmp/thread-dataset.hex)" 20202021 3
 To form a new Thread network instead, run `matter-thread-init --force` on the hub console.
 
 If no runtime exists for your host on GHCR, `scripts/fetch_bundle.py` downloads the common
-artifact only. Dispatch `renode-sim-artifacts` to publish a runtime, or rebuild on that host
-when developing the pipeline (`build_renode.py`, then `assemble_bundle.py`).
+artifact only. Dispatch `renode-runtime` to publish a runtime, or build one locally (below).
+
+### Local runtime (custom Renode)
+
+Builds the runtime exactly as CI does, from the pinned commit or a local Renode checkout
+(`--src`, must contain `tests/test_lib`):
+
+```sh
+cd renode_integration
+python3 scripts/fetch_bundle.py
+python3 scripts/build_renode.py --src ~/src/renode
+python3 scripts/assemble_bundle.py
+python3 -m pip install -r harness/requirements.txt
+python3 -m pip install --no-deps -e out/bundle/test_lib
+PYTHONPATH=harness python3 harness/generate_checkpoint.py
+```
 
 ### Rebuilding artifacts (maintainers)
 
-Use workflow [renode-sim-artifacts](../.github/workflows/renode-sim-artifacts.yaml)
-(`publish=true` after bumping `BUNDLE_VERSION`). Individual scripts under `scripts/`
-are for CI and pipeline development; `build_tools_image.py` requires the
-`ubuntu-24.04-arm` runner.
-
-### Cold boot (no checkpoint)
-
-```sh
-cd renode_integration/out/bundle
-./renode/renode resc/matter-sim-full.resc
-```
+Individual scripts under `scripts/` are for CI and pipeline development,
+`build_tools_image.py` requires the `ubuntu-24.04-arm` runner.
 
 ## CI
 
-Workflow: [`.github/workflows/renode-sim-artifacts.yaml`](../.github/workflows/renode-sim-artifacts.yaml)
+Both workflows are triggered manually via `workflow_dispatch`. Set `publish=true` to push to GHCR.
 
-Triggered manually via `workflow_dispatch`. Set `publish=true` to push to GHCR.
+- [`renode-matter-hub.yaml`](../.github/workflows/renode-matter-hub.yaml): common bundle, then
+  calls `renode-runtime` (runtime still pulls common from GHCR, use `publish=true` so the new
+  common tag exists before the chained runtime build).
+- [`renode-runtime.yaml`](../.github/workflows/renode-runtime.yaml): runtime only, always fetches
+  common from GHCR. Use for Renode bumps or after common is already published.
 
 ```
 build-rcps ─────────────┐
 build-rootfs-dtb ───────┼─► assemble-common ─► publish-common (optional)
 build-tools-image ──────┘         │
                                   ▼
-                          build-runtime matrix
+                          renode-runtime: build-runtime matrix
                           (linux-x64 and osx-arm64)
                                   │
                                   ▼
@@ -125,8 +135,10 @@ The future Matter commissioning CI job will:
 
 1. Edit `sim-manifest.json`, overlays, or resc files.
 2. Validate with a CI run or targeted script changes on the appropriate runner
-3. Bump `BUNDLE_VERSION` in `scripts/common.py` when publishing a new GHCR tag.
-4. Dispatch `renode-sim-artifacts` with `publish=true`.
+3. Guest or RCP changes: bump `COMMON_VERSION` in `scripts/common.py` and dispatch
+   `renode-matter-hub` with `publish=true`.
+4. Renode changes: update `renode.commit` in `sim-manifest.json` and dispatch
+   `renode-runtime` with `publish=true`.
 
 Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCPs.
 
@@ -152,5 +164,5 @@ Regenerate the checkpoint after any change to Renode, rootfs, tools, DTB, or RCP
 
   The guest is Buildroot, so `S99matter-services` runs these binaries through the bundled loader
   and copies the D-Bus configs into place at boot.
-- **Checkpoint:** `harness/generate_checkpoint.py` drives Renode through pyrenode3 (`MatterSim`). It includes `matter-sim-full.resc`, waits for `matter-services: READY`, logs in, runs `matter-thread-init`, and saves `linux-booted-thread.save`. The macOS smoke test loads that checkpoint with the same harness. Dependencies are pinned in `harness/requirements.txt`.
+- **Checkpoint:** `harness/generate_checkpoint.py` drives Renode through pyrenode3 (`MatterSim`). `MatterSim.boot()` creates the hub and RCP machines, waits for `matter-services: READY`, logs in, runs `matter-thread-init`, and saves `linux-booted-thread.save`. The macOS smoke test loads that checkpoint with the same harness. Dependencies are pinned in `harness/requirements.txt`.
 - **Storage:** ORAS artifacts on `ghcr.io/siliconlabssoftware/matter-renode-sim`.

@@ -18,7 +18,7 @@ RENODE_INTEGRATION_DIR = os.path.dirname(SCRIPT_DIR)
 REPO_ROOT = os.path.dirname(RENODE_INTEGRATION_DIR)
 MANIFEST_PATH = os.path.join(RENODE_INTEGRATION_DIR, "sim-manifest.json")
 CACHE_DIR = os.path.join(RENODE_INTEGRATION_DIR, ".cache")
-BUNDLE_VERSION = "26q4"
+COMMON_VERSION = "26q4"
 
 
 def bundle_dir():
@@ -40,10 +40,6 @@ def ensure_renode_source_tree():
     if fetched.returncode != 0:
         subprocess.run(["git", "-C", src_dir, "fetch", "--unshallow"], check=False)
     subprocess.run(["git", "-C", src_dir, "checkout", commit], check=True)
-
-
-def test_lib_source_dir():
-    return os.path.join(RENODE_SRC_DIR, "tests", "test_lib")
 
 
 def die(message):
@@ -72,9 +68,10 @@ def manifest_lookup(path):
 
 def artifact_tag(kind, host=None):
     if kind == "common":
-        return f"{BUNDLE_VERSION}-common"
+        return f"{COMMON_VERSION}-common"
     if kind == "runtime":
-        return f"{BUNDLE_VERSION}-runtime-{host or detect_host()}"
+        renode = manifest_lookup("renode.commit")[:7]
+        return f"{COMMON_VERSION}-runtime-{renode}-{host or detect_host()}"
     die(f"unknown bundle kind: {kind}")
 
 

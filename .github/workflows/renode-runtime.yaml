@@ -1,0 +1,132 @@
+name: Renode Runtime
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: "Publish runtime artifacts to GHCR"
+        required: true
+        type: boolean
+        default: false
+  workflow_call:
+    inputs:
+      publish:
+        description: "Publish runtime artifacts to GHCR"
+        required: true
+        type: boolean
+
+permissions:
+  contents: read
+  packages: read
+
+concurrency:
+  group: renode-runtime
+  cancel-in-progress: false
+
+jobs:
+  build-runtime:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: linux-x64
+            runner: ubuntu-latest
+          - host: osx-arm64
+            runner: macos-26
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Fetch common bundle from GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+          ./renode_integration/scripts/fetch_bundle.py
+
+      - name: Build Renode
+        run: |
+          ./renode_integration/scripts/build_renode.py
+          ./renode_integration/scripts/assemble_bundle.py
+
+      - name: Install harness dependencies
+        run: |
+          python3 -m pip install -r renode_integration/harness/requirements.txt
+          python3 -m pip install --no-deps -e renode_integration/out/bundle/test_lib
+
+      - name: Generate checkpoint
+        env:
+          PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
+        run: ./renode_integration/harness/generate_checkpoint.py
+
+      # Test checkpoint load on macOS to verify that the bundle is working
+      # Not needed on Linux (will be tested in CI commissioning tests)
+      - name: Smoke test checkpoint load
+        if: matrix.host == 'osx-arm64'
+        env:
+          PYTHONPATH: ${{ github.workspace }}/renode_integration/harness
+        run: ./renode_integration/harness/smoke_test_checkpoint.py
+
+      - name: Package runtime bundle
+        run: ./renode_integration/scripts/publish_bundle.py --bundle runtime --action prepare
+
+      - name: Upload runtime bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: renode-runtime-${{ matrix.host }}
+          path: renode_integration/out/publish/runtime/runtime.tar
+          if-no-files-found: error
+
+  publish-runtime:
+    needs: build-runtime
+    if: inputs.publish
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - host: linux-x64
+            runner: ubuntu-latest
+          - host: osx-arm64
+            runner: macos-26
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+
+      - name: Download runtime bundle
+        uses: actions/download-artifact@v7
+        with:
+          name: renode-runtime-${{ matrix.host }}
+          path: renode_integration/out/publish/runtime
+
+      - name: Install ORAS
+        uses: oras-project/setup-oras@v2
+
+      - name: Publish runtime to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
+          ./renode_integration/scripts/publish_bundle.py --bundle runtime --action push
