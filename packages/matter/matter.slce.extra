@@ -385,19 +385,23 @@ extra_files:
   - matter.slce
   - matter.slsdk
   - matter_app.slsdk
+  - matter_app_internal.slsdk
   - matter_demos.xml
   - matter_docs.xml
+  - matter_internal.slsdk
   - matter_templates.xml
   - packages/.prerelease
   - packages/DEVELOPER_README.md
-  - packages/_shared/base_recipe.py
+  - packages/_shared/recipe_support.py
   - packages/_shared/release_stream_channel
   - packages/build_app.sh
   - packages/matter/conanfile.py
   - packages/matter/matter.slce.extra
-  - packages/matter/pkg.slt
   - packages/matter_app/conanfile.py
-  - packages/matter_app/pkg.slt
+  - packages/matter_app_internal/conanfile.py
+  - packages/matter_internal/conanfile.py
+  - packages/packages.yaml
+  - packages/pkgctl.py
   - packages/remotes.json
   - provision.mattpconf
   - provision/support/JLinkDevices.xml
@@ -778,7 +782,6 @@ extra_files:
   - slc/script/code_size_diff_check.py
   - slc/script/code_size_result.sh
   - slc/script/demos.xml.j2
-  - slc/script/dependency_versions.yaml
   - slc/script/em1-augmentation.py
   - slc/script/enable_copy_contents.py
   - slc/script/file_path_length_analyzer.py

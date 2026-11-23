@@ -1,0 +1,11 @@
+# Export order. matter is first so CI can reuse its prerelease number.
+# matter_internal and matter_app_internal hold quality:internal content.
+packages:
+  - name: matter
+    recipe: packages/matter/conanfile.py
+  - name: matter_app
+    recipe: packages/matter_app/conanfile.py
+  - name: matter_internal
+    recipe: packages/matter_internal/conanfile.py
+  - name: matter_app_internal
+    recipe: packages/matter_app_internal/conanfile.py

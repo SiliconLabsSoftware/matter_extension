@@ -54,9 +54,20 @@ import yaml
 from pathlib import Path
 from typing import Iterable, List, Optional, Set
 
+# Separate Conan packages. Keep in sync with packages/_shared/recipe_support.py.
+_EXCLUDED_SDK_PREFIXES = (
+    "third_party/simplicity_sdk",
+    "third_party/aws_ota_sdk",
+    "third_party/wifi_sdk",
+)
+
+
 def _exclusion_reason(path: str) -> Optional[str]:
     """Return skip reason for paths that should not appear in the matter package."""
     parts = path.split("/")
+    for prefix in _EXCLUDED_SDK_PREFIXES:
+        if path == prefix or path.startswith(prefix + "/"):
+            return "separate Conan package (not shipped in matter)"
     # Sample apps belong in the matter_app package, not matter.
     if parts[:2] == ["slc", "apps"]:
         return "sample-app content (owned by matter_app package)"

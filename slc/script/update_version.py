@@ -14,7 +14,7 @@
 #   matter.slsdk / matter_app.slsdk prop.subLabel and matter_package_version.
 #   Examples for matter_package_version:
 #     with AUX   -> 2.10.0-1.6.1
-#     without    -> 2.10.0-0.dev
+#     without    -> 2.10.0-dev.0
 
 import os
 import sys
@@ -115,24 +115,24 @@ if __name__ == '__main__':
     #   version: 4.3.0
     replace_text(str(ROOT)+"/matter.slce","  *id: simplicity_sdk\n  *version: "+VERSION_REGEX_FORMAT,"  id: simplicity_sdk\n  version: "+SISDK_NEW_VERSION)
 
-    # Update matter.slsdk and matter_app.slsdk
+    # Update the *.slsdk root markers
     #
     # REGEX FORMAT:
     # version=0.0.4
     # prop.subLabel=Silicon Labs Matter\\ 1.0.4-1.0
-    for slsdk in ("matter.slsdk", "matter_app.slsdk"):
+    for slsdk in ("matter.slsdk", "matter_app.slsdk", "matter_internal.slsdk", "matter_app_internal.slsdk"):
         slsdk_path = str(ROOT) + "/" + slsdk
         if FULL_VERSION:
             replace_text(slsdk_path, FULL_VERSION_REGEX, EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
         replace_text(slsdk_path, "version="+VERSION_REGEX_FORMAT, "version="+EXTENSION_NEW_VERSION)
 
     # Update slc/script/matter_package_version (Conan/SLT package version source of truth).
-    # Local/dev default is X.Y.Z-0.dev; release-style aux becomes X.Y.Z-A.B(.C).
+    # Local/dev default is X.Y.Z-dev.0; release-style aux becomes X.Y.Z-A.B(.C).
     package_version_path = str(ROOT) + "/slc/script/matter_package_version"
     if FULL_VERSION:
         package_version = EXTENSION_NEW_VERSION + "-" + AUX_VERSION
     else:
-        package_version = EXTENSION_NEW_VERSION + "-0.dev"
+        package_version = EXTENSION_NEW_VERSION + "-dev.0"
     with open(package_version_path, "w", encoding="utf-8") as package_version_file:
         package_version_file.write(package_version + "\n")
     print("Updating the matter_package_version to " + package_version)
