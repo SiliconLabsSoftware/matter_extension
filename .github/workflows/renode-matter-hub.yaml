@@ -224,4 +224,5 @@ jobs:
     uses: ./.github/workflows/renode-runtime.yaml
     with:
       publish: ${{ inputs.publish }}
+      common_artifact: renode-common-bundle
     secrets: inherit

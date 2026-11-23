@@ -14,6 +14,11 @@ on:
         description: "Publish runtime artifacts to GHCR"
         required: true
         type: boolean
+      common_artifact:
+        description: "Common bundle artifact from the calling run (fetched from GHCR when empty)"
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -50,10 +55,19 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Download common bundle
+        if: inputs.common_artifact != ''
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.common_artifact }}
+          path: renode_integration/out/bundle
+
       - name: Install ORAS
+        if: inputs.common_artifact == ''
         uses: oras-project/setup-oras@v2
 
       - name: Fetch common bundle from GHCR
+        if: inputs.common_artifact == ''
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
           ./renode_integration/scripts/fetch_bundle.py

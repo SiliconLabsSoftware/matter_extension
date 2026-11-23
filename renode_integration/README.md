@@ -108,10 +108,9 @@ Individual scripts under `scripts/` are for CI and pipeline development,
 Both workflows are triggered manually via `workflow_dispatch`. Set `publish=true` to push to GHCR.
 
 - [`renode-matter-hub.yaml`](../.github/workflows/renode-matter-hub.yaml): common bundle, then
-  calls `renode-runtime` (runtime still pulls common from GHCR, use `publish=true` so the new
-  common tag exists before the chained runtime build).
-- [`renode-runtime.yaml`](../.github/workflows/renode-runtime.yaml): runtime only, always fetches
-  common from GHCR. Use for Renode bumps or after common is already published.
+  calls `renode-runtime` with the common bundle artifact from the same run.
+- [`renode-runtime.yaml`](../.github/workflows/renode-runtime.yaml): runtime only, fetches
+  common from GHCR when dispatched directly. Use for Renode bumps after common is published.
 
 ```
 build-rcps ─────────────┐
