@@ -38,11 +38,33 @@
 #define SL_MATTER_HTTPS_OTA_DEFAULT_URL ""
 #endif
 
+// <s.128 SL_MATTER_HTTP_TLS_HOSTNAME> HTTPS OTA TLS hostname
+// <i> Hostname for TLS SNI / Host header. Should match server cert CN/SAN.
+// <i> Leave empty ("") to use the host from the OTA URL.
+// <i> Default: ""
+#ifndef SL_MATTER_HTTP_TLS_HOSTNAME
+#define SL_MATTER_HTTP_TLS_HOSTNAME ""
+#endif
+
 // <s.2048 SL_MATTER_HTTP_TLS_CA_CERTIFICATE> HTTPS OTA TLS CA certificate
 // <i> PEM CA used by the HTTPS OTA downloader to verify the server.
 // <i> Leave empty ("") to use the CA already at the default NWP certificate index.
 #ifndef SL_MATTER_HTTP_TLS_CA_CERTIFICATE
 #define SL_MATTER_HTTP_TLS_CA_CERTIFICATE ""
+#endif
+
+// <s.64 SL_MATTER_HTTP_CLIENT_USERNAME> HTTPS OTA HTTP username
+// <i> Optional basic-auth username. Leave empty if unused.
+// <i> Default: ""
+#ifndef SL_MATTER_HTTP_CLIENT_USERNAME
+#define SL_MATTER_HTTP_CLIENT_USERNAME ""
+#endif
+
+// <s.64 SL_MATTER_HTTP_CLIENT_PASSWORD> HTTPS OTA HTTP password
+// <i> Optional basic-auth password. Leave empty if unused.
+// <i> Default: ""
+#ifndef SL_MATTER_HTTP_CLIENT_PASSWORD
+#define SL_MATTER_HTTP_CLIENT_PASSWORD ""
 #endif
 
 // <<< end of configuration section >>>
