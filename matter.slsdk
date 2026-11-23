@@ -4,4 +4,4 @@ prop.file.zcl.matterTemplateJsonFile=src/app/zap-templates/app-templates.json
 prop.file.zcl.matterZclJsonFile=src/app/zap-templates/zcl/zcl.json
 
 
-prop.file.adapterPacks=provision
+prop.file.adapterPacks=third_party/matter_support/provision
