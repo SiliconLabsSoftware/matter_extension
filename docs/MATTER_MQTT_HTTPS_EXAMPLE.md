@@ -5,25 +5,20 @@
 Build a SiWx917 BRD4338A Wi-Fi Thermostat app to evaluate:
 
 - **Matter thermostat** — BLE commission, control over Wi-Fi
-- **Dual stack** — Matter + MQTTS on host LwIP; HTTPS on NWP
+- **Dual stack** — Matter + MQTTS on host LwIP; HTTPS OTA on NWP
 - **Live MQTT** — stay connected (idle auto-yield); subscribe/publish via Matter shell; receive inbound publishes
-- **HTTPS** — GET / PUT / POST via Matter shell after client init
 - **HTTPS OTA** — vendor OTA over HTTPS (`https-ota` shell) alongside Matter BDX
 
 This demo uses TLS 1.2 for authentication and FreeRTOS Heap3 for memory management.
-TLS 1.3 is only supported for the HTTPs client, but not on the MQTTs client.
+TLS 1.3 is only supported for the HTTPS client, but not on the MQTTs client.
 
 **Project name:** `matter_wifi_soc_thermostat_dual_stack_freertos`
 
-### Runtime flow (AppTask + Matter shell)
+### Runtime flow (MQTT + HTTPS OTA)
 
-Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
-
-1. On `kInternetConnectivityChange` (IPv4, or IPv6 when dual-stack is enabled), `AppTask::MatterServicesEventHandler` posts work to the AppTask thread.
-2. `mqtt_client_demo_start()` — Start / Init; Connect runs from `OnInitDone`. The MQTT service thread idle-yields for keepalive and inbound messages; the session stays up.
-3. `https_client_demo_start()` — Start / Init only (default NWP certificate index; no hardcoded index).
-4. On `kWiFiConnectivityChange` with `kConnectivity_Lost`, `mqtt_client_demo_stop()` disconnects MQTT (Start/Init kept for reconnect).
-5. Matter shell (`demo mqtt` / `demo http`) posts Subscribe/Publish or HTTPS PUT/GET/POST onto the AppTask thread so blocking work does not starve the CHIP stack.
+1. MQTT demo start/stop follows Wi-Fi / internet connectivity in the MQTT example path (`mqtt_client_demo_start` / `mqtt_client_demo_stop`).
+2. `VendorOTARequestor` owns the NWP `HttpClient`. On IPv4 up (`VendorOTARequestorDriver`), it runs Start + Init using `SL_MATTER_HTTP_TLS_CA_CERTIFICATE` (empty string keeps the default NWP certificate index).
+3. Matter shell `https-ota` starts / aborts vendor OTA and sets the RAM-only periodic URL.
 
 ## Adding Wi-Fi and Matter Extension in Studio
 
@@ -43,9 +38,7 @@ Service demos are owned by the thermostat `AppTask` (not `BaseApplication`):
 - `slc/config/sl_matter_mqtt_config.h` (broker endpoint, port, client id, client port, TLS, TLS credentials, username, password)
 - `third_party/matter_sdk/examples/thermostat/silabs/src/mqtt_example.cpp`
 - `third_party/matter_sdk/examples/thermostat/silabs/include/mqtt_example.h` (topic and publish message only)
-- `third_party/matter_sdk/examples/thermostat/silabs/include/https_offload_example.h`
-- `third_party/matter_sdk/examples/thermostat/silabs/certs/cacert.h` (HTTPS CA)
-- `slc/config/sl_matter_https_ota_config.h` (HTTPS OTA periodic timeout / default URL)
+- `slc/config/sl_matter_https_ota_config.h` (HTTPS OTA periodic timeout / default URL / TLS CA)
 
 ### Changes for `OnPlatform` events based on the `CHIPDeviceEvent.h`
 
@@ -148,47 +141,22 @@ TLS credential macros are PEM string literals with `\n` at the end of each line.
 
 Inbound publishes are delivered through `MqttClient::SetSubscriptionCallback` (`OnMqttMessage` in `mqtt_example.cpp`). While connected and idle, the MQTT service thread auto-runs `MQTTYield` for keepalive and receive — no explicit Yield from the demo is required after subscribe/publish.
 
-### HTTPS certificate (`certs/cacert.h`)
-
-- `kCaCertExample[]` — Trusted CA used by the HTTPS demo. Fill with PEM of the CA that signed the server cert (same format as the sample: `-----BEGIN CERTIFICATE-----` …). The sample CA will not work with your server.
-- MQTTS does not use this file. Set its CA in `SL_MATTER_MQTT_TLS_CA_CERTIFICATE`.
-
-### HTTPS changes (`https_offload_example.h`)
-
-Add these `#define`s near the top of the file (before the `#ifndef` / `#error` checks). Values must match your LAN HTTPS server:
-
-| Symbol                 | Description                                                                                                                                                  |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `HTTP_SERVER_ENDPOINT` | DNS name or IPv4 of the HTTPS server. Literals use `sl_net_inet_addr`; otherwise DNS resolve. Must be reachable from the board.                              |
-| `HTTP_TLS_HOSTNAME`    | Hostname for TLS SNI / Host header (CN/SAN). If not provided (`nullptr`), `HttpClient` uses `HTTP_SERVER_ENDPOINT`. Must match the server cert or TLS fails. |
-| `HTTP_PORT`            | HTTPS TCP port.                                                                                                                                              |
-
-Optional overrides (defaults exist via `#ifndef`): `HTTP_USER`, `HTTP_PASS`, `HTTP_URL`, `HTTP_POST_DATA`.
-
-Example (replace with your server values):
-
-```c
-#define HTTP_SERVER_ENDPOINT ""
-#define HTTP_TLS_HOSTNAME ""
-#define HTTP_PORT 8443
-```
-
-The HTTPS demo leaves `HttpClientConfig::certificateIndex` at the default (`SL_HTTPS_CLIENT_DEFAULT_CERTIFICATE_INDEX`, typically `0`). Do not hardcode a non-default index unless your NWP credential layout requires it.
-
 ### HTTPS OTA changes (`slc/config/sl_matter_https_ota_config.h`)
 
 Update these defines to match your HTTPS OTA server. Dual-stack thermostat includes `matter_https_ota`. Host in the URL may be DNS or IPv4 (no IPv6): `https://host[:port]/path`.
 
-| Symbol                                 | Description                                                                                            |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | Periodic HTTPS OTA check interval (seconds). Default: same as `OTA_PERIODIC_TIMEOUT` (`86400`).        |
-| `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | Compile-time default periodic URL. Leave `""` to skip periodic checks until shell `https-ota default`. |
+| Symbol                                 | Description                                                                                                                     |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | Periodic HTTPS OTA check interval (seconds). Default: same as `OTA_PERIODIC_TIMEOUT` (`86400`).                                 |
+| `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | Compile-time default periodic URL. Leave `""` to skip periodic checks until shell `https-ota default`.                          |
+| `SL_MATTER_HTTP_TLS_CA_CERTIFICATE`    | PEM CA for the HTTPS OTA downloader. Leave `""` to use the CA already at the default NWP certificate index.                     |
 
 Example (replace with your server values):
 
 ```c
 #define SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT (24 * 60 * 60)
 #define SL_MATTER_HTTPS_OTA_DEFAULT_URL "https://otaserver.com:8443/otafile.ota"
+#define SL_MATTER_HTTP_TLS_CA_CERTIFICATE "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----"
 ```
 
 ## Creating Thermostat Demo in Studio
@@ -238,22 +206,13 @@ Topic and publish body stay in `mqtt_example.h`:
 | Topic        | `MQTT_TOPIC`           | `MQTT_TOPIC`           | Align with MQTT Explorer |
 | Publish body | `MQTT_PUBLISH_MESSAGE` | `MQTT_PUBLISH_MESSAGE` | Payload you expect       |
 
-### HTTPS — `https_offload_example.h`
-
-| Field           | `#define`                        | Demo default   | Customer need to set                    |
-| --------------- | -------------------------------- | -------------- | --------------------------------------- |
-| Server endpoint | `HTTP_SERVER_ENDPOINT`           | ``             | HTTPS DNS name or IPv4                  |
-| TLS hostname    | `HTTP_TLS_HOSTNAME`              | ``             | Matches server cert; else endpoint used |
-| Port            | `HTTP_PORT`                      | ``             | HTTPS port                              |
-| Auth            | `HTTP_USER` / `HTTP_PASS`        | `john` / `doe` | Auth                                    |
-| CA              | `kCaCertExample[]` in `cacert.h` | Server CA      |                                         |
-
 ### HTTPS OTA — `slc/config/sl_matter_https_ota_config.h`
 
-| Field            | `#define`                              | Demo default                 | Customer need to set                                             |
-| ---------------- | -------------------------------------- | ---------------------------- | ---------------------------------------------------------------- |
-| Periodic timeout | `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | `86400` (same as Matter OTA) | Periodic check interval (seconds)                                |
-| OTA default URL  | `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | ``                           | `https://host[:port]/path` (DNS or IPv4); or set later via shell |
+| Field            | `#define`                              | Demo default                 | Customer need to set                                                                   |
+| ---------------- | -------------------------------------- | ---------------------------- | -------------------------------------------------------------------------------------- |
+| Periodic timeout | `SL_MATTER_HTTPS_OTA_PERIODIC_TIMEOUT` | `86400` (same as Matter OTA) | Periodic check interval (seconds)                                                      |
+| OTA default URL  | `SL_MATTER_HTTPS_OTA_DEFAULT_URL`      | ``                           | `https://host[:port]/path` (DNS or IPv4); or set later via shell                       |
+| TLS CA           | `SL_MATTER_HTTP_TLS_CA_CERTIFICATE`    | ``                           | PEM of the CA that signed the OTA server cert; empty uses default NWP certificate index |
 
 ## Software and Hardware Requirements
 
@@ -288,23 +247,14 @@ chip-tool thermostat read occupied-cooling-setpoint 1 1
 # Expect "2500" value as output in chip-tool log
 ```
 
-### Matter shell (required for MQTT / HTTPS / HTTPS OTA demos)
+### Matter shell (required for MQTT / HTTPS OTA demos)
 
 Open a serial terminal to the device console (Matter shell is enabled for this dual-stack thermostat build). After Wi-Fi / internet is up, wait for service start logs, then run demos from the shell. This shell runs over UART, meanwhile logs are directed to JLink RTT.
 
 Help:
 
 ```text
-demo
 https-ota
-```
-
-Expected `demo` help text (when both services are enabled):
-
-```text
-Usage: demo <service>
-  http  Run HTTPS PUT/GET/POST on the AppTask thread
-  mqtt  Run MQTT connect/subscribe/publish on the AppTask thread
 ```
 
 Expected `https-ota` help text:
@@ -317,23 +267,11 @@ Usage: https-ota <url|abort|default|status>
   status          Show state / progress / last result
 ```
 
-| Shell command | What runs on AppTask                                       |
-| ------------- | ---------------------------------------------------------- |
-| `demo mqtt`   | `mqtt_client_demo_run()` — Subscribe + Publish             |
-| `demo http`   | `https_client_demo_run()` — HTTPS PUT, then GET, then POST |
-| `https-ota …` | Vendor HTTPS OTA (`url` / `abort` / `default` / `status`)  |
+| Shell command | What runs                                                              |
+| ------------- | ---------------------------------------------------------------------- |
+| `https-ota …` | Vendor HTTPS OTA (`url` / `abort` / `default` / `status`) via AppTask |
 
-Shell replies immediately with a post confirmation; results appear in the device log:
-
-```text
-> demo mqtt
-Posting MQTT connect/subscribe/publish to AppTask
-
-> demo http
-Posting HTTPS PUT/GET/POST to AppTask
-```
-
-Do not run these from the shell thread expectation of blocking completion — the shell only queues AppTask work. This is a trigger based operation, shell will say success once the operation is queued. Then the scheduler is responsible for execution of the task, and corresponding output will be shown.
+Shell replies immediately with a post confirmation for `https-ota url`; results appear in the device log. Do not expect blocking completion on the shell thread.
 
 ### MQTT
 
@@ -375,35 +313,7 @@ Connect runs from the Init completion callback (`OnInitDone`) during `mqtt_clien
 
 You can run `demo mqtt` again later; if already connected, Connect is skipped and Subscribe/Publish run again.
 
-### HTTPS
-
-After Wi-Fi is up, `https_client_demo_start()` loads the CA at the default certificate index and inits the client. Then run the request sequence from the Matter shell:
-
-```text
-demo http
-```
-
-Validate with logs similar to:
-
-```text
-[info][DL] HTTPS loaded TLS CA at index 0
-[info][DL] HTTPS client init success
-[info][DL] HTTPS starting on offload stack
-[info][DL] HTTPS PUT response: status=0x0 end_of_data=0 data_len=0
-[info][DL] HTTPS PUT response: status=0x0 end_of_data=1 data_len=0
-[info][DL] HTTPS PUT response: status=0x0 end_of_data=9 data_len=59
-[info][DL] HTTPS PUT request success
-[info][DL] HTTPS GET response: status=0x0 http_code=200 data_len=1024 end_of_data=...
-[info][DL] HTTPS GET request success
-[info][DL] HTTPS POST response: status=0x0 http_code=200 data_len=38
-[info][DL] HTTPS POST request success
-[info][DL] HTTPS demo completed
-```
-
-Init (`HTTPS loaded TLS CA…` / `HTTPS client init success`) happens on connectivity; PUT/GET/POST lines appear after `demo http`.
-
 ### HTTPS OTA
-
 #### Pre-conditions
 
 1. Generate a multi image ota file with SW version greater than the flashed SW version.
@@ -413,7 +323,7 @@ Init (`HTTPS loaded TLS CA…` / `HTTPS client init success`) happens on connect
 
 #### Steps
 
-1. After WiFi is up, wait for the device log: `HTTPS client init success` (~10s after connectivity) for HTTPS client to be initialized.
+1. After WiFi is up, wait for the device log: `[HTTPS-OTA] client start: started` (~10s after connectivity) for the HTTPS OTA client to be initialized.
 2. From Matter Shell, send a command of the format `https-ota url <url>`. For example using the url from precondition, the command will be `https-ota url https://otaserver.com:8443/otafile_v2.0.ota`
 3. Verify the Matter Shell responds Done.
 4. Verify the device log is as below for a successful ota download start:
@@ -534,7 +444,6 @@ Same flash image:
 
 - Matter commission and thermostat R/W work
 - MQTT connects on internet up; `demo mqtt` can publish and the device can receive inbound messages while the session stays alive
-- `demo http` HTTPS PUT / GET / POST succeed
 - `https-ota url <url>` downloads a newer multi-image OTA over HTTPS (Range / HTTP 206) and applies after reset
 
 Evaluation demo only.
@@ -554,3 +463,4 @@ Changes reflected in this guide:
 | `39f97878` (#1190)    | HTTPS vendor OTA (`matter_https_ota`) on dual-stack thermostat: shell `https-ota`, periodic URL config, coexistence with Matter BDX.                                                                                                      |
 | `4b4024cd` (#1235)    | Doc coverage for HTTPS OTA how-to-test / config.                                                                                                                                                                                          |
 | Doc update            | Guide re-verified after rebase: endpoint + DNS, TLS-hostname fallback, Heap3, Matter-shell MQTT/HTTPS, HTTPS OTA shell/logs/config path, pass criteria.                                                                                   |
+| Feature branch        | Removed HTTPS PUT/GET/POST demo (`https_offload_example`, `demo http`). `VendorOTARequestor` owns HttpClient + URL parse; CA from `SL_MATTER_HTTP_TLS_CA_CERTIFICATE`.                                                                    |

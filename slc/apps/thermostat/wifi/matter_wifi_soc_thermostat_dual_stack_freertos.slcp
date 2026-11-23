@@ -141,11 +141,6 @@ include:
       - path: CHIPProjectConfig.h
       - path: ThermostatConfig.h
     directory: include
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/include
-    condition: [matter_service_http_offload]
-    file_list:
-      - path: https_offload_example.h
-    directory: include
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer
     file_list:
       - path: CustomerAppTask.h
@@ -154,14 +149,6 @@ include:
     file_list:
       - path: thermostat-delegate-impl.h
     directory: include
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/certs
-    condition: [matter_service_http_offload]
-    file_list:
-      - path: cacert.h
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/resources
-    condition: [matter_service_http_offload]
-    file_list:
-      - path: index_html.h
 
 source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/customer/CustomerAppTask.cpp
@@ -170,9 +157,6 @@ source:
     directory: src
   - path: ../../../../third_party/matter_sdk/examples/thermostat/thermostat-common/src/thermostat-delegate-impl.cpp
     directory: src
-  - path: ../../../../third_party/matter_sdk/examples/thermostat/silabs/src/https_offload_example.cpp
-    condition: [matter_service_http_offload]
-
 define:
   - name: CCP_SI917_BRINGUP
   - name: CHIP_CRYPTO_PLATFORM
