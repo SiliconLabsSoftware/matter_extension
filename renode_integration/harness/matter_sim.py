@@ -2,8 +2,8 @@
 @file matter_sim.py
 @brief pyrenode3 harness for the Matter Renode simulation.
 
-Configures PYRENODE_PATH from the assembled bundle, builds the hub topology, drives Renode
-monitor/resc scripts, and exposes UART testers for the simulated Matter hub and SoC.
+Configures PYRENODE_PATH from the assembled bundle, builds the hub topology through Renode
+monitor commands, and exposes UART testers for the simulated Matter hub and SoC.
 """
 
 from __future__ import annotations
@@ -135,13 +135,6 @@ class MatterSim:
         test_lib._m = self._monitor
         self._uart_testers: list[tuple[object, str]] = []
         self._console_ports: set[int] = set()
-
-    def load(self, resc: str, variables: dict[str, str] | None = None) -> None:
-        """Set monitor variables, then include ``resc/<resc>`` from the bundle."""
-        for key, value in (variables or {}).items():
-            test_lib.execute_monitor_command(f"${key} = @{value}")
-        resc_path = self.bundle_dir / "resc" / resc
-        test_lib.execute_monitor_command(f"include @{resc_path}")
 
     def boot(self) -> None:
         """Create the hub and RCP machines and cold-boot the hub Linux guest."""

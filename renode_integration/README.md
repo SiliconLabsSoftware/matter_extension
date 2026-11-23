@@ -18,7 +18,6 @@ The simulation runs:
 | Path | Purpose |
 |------|---------|
 | `sim-manifest.json` | Pinned versions (Renode, base rootfs, ot-br-posix, RCPs, GHCR package) |
-| `resc/` | Renode startup scripts |
 | `guest/dts/` | ZynqMP device tree source |
 | `guest/rootfs-overlay/` | Matter-specific files injected into the boot rootfs |
 | `scripts/` | Python scripts that build, assemble, fetch, and publish the bundle |
@@ -32,7 +31,7 @@ also carry the first 7 characters of `renode.commit` so a Renode bump needs no v
 
 | Tag | Contents |
 |-----|----------|
-| `vN-common` | rootfs, tools image, DTB, RCP ELFs, resc files |
+| `vN-common` | rootfs, tools image, DTB, RCP ELFs |
 | `vN-runtime-<renode>-linux-x64` | Renode build + test_lib + checkpoint (CI, Linux, WSL2) |
 | `vN-runtime-<renode>-osx-arm64` | Renode build + test_lib + checkpoint (macOS for local development) |
 
@@ -43,7 +42,7 @@ is built independently from the same common inputs.
 
 The expected workflow is to pull published artifacts from GHCR, not to rebuild
 rootfs, tools image, RCPs, or Renode locally. The **common** bundle includes
-`matter-rootfs.ext2`, `matter-tools.ext2`, DTB, RCP ELFs, and resc files. The
+`matter-rootfs.ext2`, `matter-tools.ext2`, DTB, and RCP ELFs. The
 **runtime** bundle for your host adds portable Renode and the checkpoint.
 
 ### Prerequisites
@@ -158,7 +157,7 @@ Jobs run in parallel (`fail-fast: false`), one per app and board: 13 apps × nin
 
 ## Updating the bundle
 
-1. Edit `sim-manifest.json`, overlays, or resc files.
+1. Edit `sim-manifest.json`, overlays, or the hub topology in `harness/matter_sim.py`.
 2. Validate with a CI run or targeted script changes on the appropriate runner
 3. Guest or RCP changes: bump `COMMON_VERSION` in `scripts/common.py` and dispatch
    `renode-matter-hub` with `publish=true`.

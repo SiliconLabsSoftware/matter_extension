@@ -3,7 +3,7 @@
 @file assemble_bundle.py
 @brief Copy built artifacts into the published bundle layout.
 
-Collects guest rootfs/tools images and DTB, RCP ELFs, resc scripts, and (when built)
+Collects guest rootfs/tools images and DTB, RCP ELFs, and (when built)
 the host-specific portable Renode tree and its test_lib into renode_integration/out/bundle.
 """
 
@@ -39,11 +39,6 @@ def main():
         os.makedirs(rcp_dest, exist_ok=True)
         for elf in glob.glob(os.path.join(rcp_out, "*.out")):
             shutil.copy2(elf, os.path.join(rcp_dest, os.path.basename(elf)))
-
-    resc_dest = os.path.join(bundle, "resc")
-    os.makedirs(resc_dest, exist_ok=True)
-    for resc in glob.glob(os.path.join(common.RENODE_INTEGRATION_DIR, "resc", "*.resc")):
-        shutil.copy2(resc, os.path.join(resc_dest, os.path.basename(resc)))
 
     out = os.path.join(common.RENODE_INTEGRATION_DIR, "out")
     built = os.path.join(out, "renode", common.detect_host())

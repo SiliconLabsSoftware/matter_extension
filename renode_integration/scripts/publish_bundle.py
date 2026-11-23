@@ -21,7 +21,7 @@ SOURCE_ANNOTATION = "https://github.com/SiliconLabsSoftware/matter_extension"
 
 def bundle_contents(bundle, kind):
     if kind == "common":
-        directories = ("guest-rootfs", "rcp", "resc")
+        directories = ("guest-rootfs", "rcp")
         filenames = ()
     elif kind == "runtime":
         directories = ("renode", "test_lib")
