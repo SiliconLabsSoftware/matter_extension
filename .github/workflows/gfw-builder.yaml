@@ -96,7 +96,7 @@ jobs:
 
       - name: Build ${{ matrix.family }} (copy-sources)
         run: |
-          ./slc/build.sh slc/apps/generator_firmware/${{ matrix.project }}.slcw "${{ matrix.board }}" --clean --copy-sources --new-project
+          ./slc/build.sh slc/apps/generator_firmware/${{ matrix.project }}.slcw "${{ matrix.board }}" --output_suffix copy-sources --copy-sources
 
       - name: Upload image
         uses: actions/upload-artifact@v7
