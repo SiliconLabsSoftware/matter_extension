@@ -19,6 +19,20 @@ on:
         required: false
         type: string
         default: ""
+  pull_request:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/sim-manifest.json"
+      - "renode_integration/scripts/build_renode.py"
+  push:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/sim-manifest.json"
+      - "renode_integration/scripts/build_renode.py"
 
 permissions:
   contents: read
@@ -110,7 +124,7 @@ jobs:
 
   publish-runtime:
     needs: build-runtime
-    if: inputs.publish
+    if: inputs.publish || github.event_name == 'pull_request' || github.event_name == 'push'
     strategy:
       fail-fast: false
       matrix:

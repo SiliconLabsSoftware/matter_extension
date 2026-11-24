@@ -14,12 +14,14 @@ on:
       - release_*
     paths:
       - "renode_integration/guest/**"
+      - "renode_integration/scripts/build_rootfs_image.py"
   push:
     branches:
       - main
       - release_*
     paths:
       - "renode_integration/guest/**"
+      - "renode_integration/scripts/build_rootfs_image.py"
 
 permissions:
   contents: read

@@ -191,10 +191,12 @@ Individual scripts under `scripts/` are for CI and pipeline development,
 
 - [`renode-matter-hub.yaml`](../.github/workflows/renode-matter-hub.yaml): common bundle, then
   calls `renode-runtime` with the common bundle artifact from the same run. Runs on pull
-  requests and pushes to `main` and `release_*` that change `renode_integration/guest/`,
-  and via `workflow_dispatch` with `publish=true` to push to GHCR.
+  requests and pushes to `main` and `release_*` that change `guest/`
+  or `scripts/build_rootfs_image.py`, and via `workflow_dispatch` with `publish=true`.
+  RCP and chip-tool updates are published by dispatch.
 - [`renode-runtime.yaml`](../.github/workflows/renode-runtime.yaml): runtime only, fetches
-  common from GHCR when dispatched directly.
+  common from GHCR when not called by `renode-matter-hub`. Runs on pull requests and pushes
+  that change `sim-manifest.json` or `scripts/build_renode.py`, and via `workflow_dispatch`.
 - [`renode-pr-artifacts-cleanup.yaml`](../.github/workflows/renode-pr-artifacts-cleanup.yaml):
   deletes the `-pr-<PR-NUM>` tags of every bundle when the PR closes.
 
@@ -234,9 +236,9 @@ Will be implemented in future PRs.
 1. Edit `sim-manifest.json`, overlays, or the hub topology in `harness/matter_sim.py`.
 2. Guest or RCP changes: bump `COMMON_VERSION` in `scripts/common.py`.
    Renode changes: update `renode.commit` in `sim-manifest.json`.
-3. Open a PR. Changes under `guest/` make `renode-matter-hub` publish the rebuilt
-   bundles as `-pr-<PR-NUM>` tags, which CI tests in the PR and `fetch_bundle.py -p PR-NUM`
-   pick up. Merging publishes the base tags.
+3. Open a PR. The workflows above publish the rebuilt bundles as `-pr-<PR-NUM>` tags,
+   which CI tests in the PR and `fetch_bundle.py -p PR-NUM` pick up. Merging publishes
+   the base tags. A `renode.commit` bump rebuilds only the runtime.
 4. Other changes: dispatch `renode-matter-hub` or `renode-runtime` with `publish=true`
    on an active branch.
 
