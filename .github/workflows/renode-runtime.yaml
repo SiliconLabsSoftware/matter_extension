@@ -87,7 +87,7 @@ jobs:
         if: inputs.common_artifact == ''
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          ./renode_integration/scripts/fetch_bundle.py
+          ./renode_integration/scripts/fetch_bundle.py ${GITHUB_PR_NUMBER:+-p "$GITHUB_PR_NUMBER"}
 
       - name: Build Renode
         run: |

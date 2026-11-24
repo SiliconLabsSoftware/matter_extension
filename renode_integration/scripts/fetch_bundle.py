@@ -4,7 +4,7 @@
 @brief Pull the published common bundle and this host's runtime from GHCR.
 
 Uses ORAS to download versioned artifacts tagged in sim-manifest.json into
-renode_integration/out/bundle. For a PR, each bundle's -pr-N tag is preferred
+renode_integration/out/bundle. With -p N, each bundle's -pr-N tag is preferred
 over the base tag. Skips runtime fetch if no artifact exists for the host.
 """
 
@@ -54,6 +54,8 @@ def pull_first(oras, package, tags, bundle, kind):
             capture_output=True,
         )
         if exists.returncode == 0:
+            if tag != tags[0]:
+                print(f"warning: no {tags[0]}, using {tag}")
             print(f"Fetching {package}:{tag} -> {bundle}")
             pull_bundle(oras, package, tag, bundle, kind)
             return tag
@@ -68,8 +70,7 @@ def main():
         "-p", "--pr",
         type=str,
         default=None,
-        help="prefer bundles built for this PR number, falling back to the published ones "
-        "(defaults to the PR of a GHA pull_request run).",
+        help="prefer bundles built for this PR number, falling back to the published ones.",
     )
     parser.add_argument(
         "--require-provision",

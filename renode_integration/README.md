@@ -40,9 +40,9 @@ also carry the first 7 characters of `renode.commit` so a Renode bump needs no v
 Checkpoints are tied to the Renode build that created them. Each host runtime
 is built independently from the same common inputs.
 
-`scripts/fetch_bundle.py` prefers the `-pr-<PR-NUM>` tag of each bundle and falls back
-to the base tag. The PR comes from `-p PR-NUM`, or from the pull request in CI. PR tags
-are deleted when the PR closes.
+`scripts/fetch_bundle.py -p PR-NUM` prefers the `-pr-<PR-NUM>` tag of each bundle and falls
+back to the base tag. Without `-p` only base tags are fetched. PR tags are deleted when the
+PR closes.
 
 ## Local development
 

@@ -36,10 +36,8 @@ def pr_tag_suffix(pr_num):
     return f"-pr-{pr_num}"
 
 
-def pr_number(pr_num=None):
-    """PR number from the CLI, or from the GHA pull_request context."""
-    if pr_num:
-        return str(pr_num)
+def pr_number():
+    """PR number from the GHA pull_request context."""
     if os.environ.get("GITHUB_EVENT_NAME") == "pull_request":
         return os.environ.get("GITHUB_PR_NUMBER") or None
     return None
@@ -74,10 +72,9 @@ def publish_tag(kind, host=None):
 
 
 def fetch_tags(kind, host=None, pr_num=None):
-    """OCI tags to try when fetching a bundle, PR tag first when a PR is known."""
+    """OCI tags to try when fetching a bundle, PR tag first when one is requested."""
     base_tag = artifact_tag(kind, host)
-    pr = pr_number(pr_num)
-    return [base_tag + pr_tag_suffix(pr), base_tag] if pr else [base_tag]
+    return [base_tag + pr_tag_suffix(pr_num), base_tag] if pr_num else [base_tag]
 
 
 def ensure_renode_source_tree():
