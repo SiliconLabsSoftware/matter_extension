@@ -3,10 +3,12 @@
 @file build_renode.py
 @brief Build the pinned Renode fork for the current host.
 
-Clones or updates renode-src per sim-manifest.json, runs build.sh, and installs the
-portable package under out/renode/<host>. On macOS arm64, verifies native libraries.
+Clones or updates renode-src per sim-manifest.json (or uses --src), runs build.sh,
+installs the portable package under out/renode/<host>, and stages test_lib under
+out/test_lib. On macOS arm64, verifies native libraries.
 """
 
+import argparse
 import os
 import shutil
 import subprocess
@@ -89,11 +91,21 @@ def install_portable(artifact, out_dir):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Build Renode and stage it for the bundle.")
+    parser.add_argument("--src", type=Path, help="local Renode checkout to build instead of the pinned commit")
+    args = parser.parse_args()
+
     host = common.detect_host()
-    out_dir = Path(common.RENODE_INTEGRATION_DIR) / "out" / "renode" / host
-    common.ensure_renode_source_tree()
-    src_dir = Path(common.RENODE_SRC_DIR)
-    commit = common.manifest_lookup("renode.commit")
+    out_root = Path(common.RENODE_INTEGRATION_DIR) / "out"
+    out_dir = out_root / "renode" / host
+    if args.src:
+        src_dir = args.src.expanduser().resolve()
+    else:
+        common.ensure_renode_source_tree()
+        src_dir = Path(common.RENODE_SRC_DIR)
+    test_lib = src_dir / "tests" / "test_lib"
+    if not test_lib.is_dir():
+        common.die(f"Renode test_lib not found at {test_lib}")
 
     build_args = ["-t"]
     env = os.environ.copy()
@@ -101,9 +113,11 @@ def main():
         env["MACOSX_DEPLOYMENT_TARGET"] = str(common.manifest_lookup("macos.deployment_target"))
         build_args = ["-t", "--host-arch", "arm64"]
 
-    print(f"Building Renode for {host} at {commit}...")
+    print(f"Building Renode for {host} from {src_dir}...")
     subprocess.run(["./build.sh", *build_args], cwd=src_dir, env=env, check=True)
     install_portable(portable_artifact(src_dir), out_dir)
+    shutil.rmtree(out_root / "test_lib", ignore_errors=True)
+    shutil.copytree(test_lib, out_root / "test_lib", ignore=shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache"))
     for link in out_dir.rglob("libgdiplus.dylib"):
         if link.is_symlink():
             link.unlink()
