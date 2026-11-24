@@ -3,9 +3,9 @@
 @file fetch_bundle.py
 @brief Pull the published common bundle and this host's runtime from GHCR.
 
-Uses ORAS to download versioned artifacts tagged in sim-manifest.json into 
-renode_integration/out/bundle. Skips runtime fetch if no artifact exists for 
-the host.
+Uses ORAS to download versioned artifacts tagged in sim-manifest.json into
+renode_integration/out/bundle. For a PR, each bundle's -pr-N tag is preferred
+over the base tag. Skips runtime fetch if no artifact exists for the host.
 """
 
 import argparse
@@ -46,6 +46,20 @@ def pull_bundle(oras, package, tag, bundle, kind):
         extract_bundle(archive_path, bundle)
 
 
+def pull_first(oras, package, tags, bundle, kind):
+    """Pull the first tag that exists on GHCR, returns it or None."""
+    for tag in tags:
+        exists = subprocess.run(
+            [oras, "manifest", "fetch", f"{package}:{tag}"],
+            capture_output=True,
+        )
+        if exists.returncode == 0:
+            print(f"Fetching {package}:{tag} -> {bundle}")
+            pull_bundle(oras, package, tag, bundle, kind)
+            return tag
+    return None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="pull required common, runtime, and provisioning bundle"
@@ -54,15 +68,15 @@ def main():
         "-p", "--pr",
         type=str,
         default=None,
-        help="explicitly request provisioning bundle built for a specific PR number.",
+        help="prefer bundles built for this PR number, falling back to the published ones "
+        "(defaults to the PR of a GHA pull_request run).",
     )
     parser.add_argument(
         "--require-provision",
         action="store_true",
-        help="fail if the provisioning artifact is missing (implied by -p).",
+        help="fail if the provisioning artifact is missing.",
     )
     args = parser.parse_args()
-    require_provision = args.require_provision or args.pr is not None
 
     oras = common.require_cmd("oras")
     host = common.detect_host()
@@ -70,46 +84,24 @@ def main():
     bundle = common.bundle_dir()
     os.makedirs(bundle, exist_ok=True)
 
-    common_tag = common.artifact_tag("common")
-    print(f"Fetching {package}:{common_tag} -> {bundle}")
-    pull_bundle(oras, package, common_tag, bundle, "common")
+    common_tags = common.fetch_tags("common", pr_num=args.pr)
+    common_tag = pull_first(oras, package, common_tags, bundle, "common")
+    if common_tag is None:
+        common.die(f"no common artifact found, tried: {', '.join(common_tags)}")
 
-    runtime_tag = common.artifact_tag("runtime", host)
-    fetched = subprocess.run(
-        [oras, "manifest", "fetch", f"{package}:{runtime_tag}"],
-        capture_output=True,
-    )
-    if fetched.returncode == 0:
-        print(f"Fetching {package}:{runtime_tag} -> {bundle}")
-        pull_bundle(oras, package, runtime_tag, bundle, "runtime")
-    else:
+    runtime_tags = common.fetch_tags("runtime", host, pr_num=args.pr)
+    runtime_tag = pull_first(oras, package, runtime_tags, bundle, "runtime")
+    if runtime_tag is None:
         print(f"warning: no runtime artifact for {host}, build Renode and run harness/generate_checkpoint.py")
+    elif common_tag != common_tags[-1] and runtime_tag == runtime_tags[-1]:
+        print(f"warning: {runtime_tag} checkpoint was not built against {common_tag}")
 
-    provision_tag = common.resolve_provision_tag(is_publish=False, pr_num=args.pr)
-    provision_missing_msg = (
-        f"provisioning artifact '{package}:{provision_tag}' not found. "
-        "verify PR number or wait for the CI build pipeline to finish"
-    )
-
-    if provision_tag is None:
-        if require_provision:
-            common.die(
-                "provisioning artifact tag could not be resolved in this CI context. "
-                "use -p PR-NUM or run fetch locally"
-            )
-        print("warning: skipping provision bundle (no provision tag for this context)")
-    else:
-        fetched_provision = subprocess.run(
-            [oras, "manifest", "fetch", f"{package}:{provision_tag}"],
-            capture_output=True,
-        )
-        if fetched_provision.returncode == 0:
-            print(f"Fetching {package}:{provision_tag} -> {bundle}")
-            pull_bundle(oras, package, provision_tag, bundle, "provision")
-        elif require_provision:
-            common.die(f"error: {provision_missing_msg}")
-        else:
-            print(f"warning: no {provision_missing_msg}")
+    provision_tags = common.fetch_tags("provision", pr_num=args.pr)
+    if pull_first(oras, package, provision_tags, bundle, "provision") is None:
+        message = f"no provisioning artifact found, tried: {', '.join(provision_tags)}"
+        if args.require_provision:
+            common.die(message)
+        print(f"warning: {message}")
 
     print(f"Bundle fetched to {bundle}")
 

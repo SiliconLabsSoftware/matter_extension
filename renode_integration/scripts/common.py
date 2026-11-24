@@ -32,41 +32,52 @@ RENODE_SRC_DIR = os.path.join(RENODE_INTEGRATION_DIR, "renode-src")
 ACTIVE_BRANCHES = {"main", "release_2.10-1.6.1"}
 
 
-def resolve_provision_tag(is_publish: bool = False, pr_num: str = None) -> str:
-    """
-    Resolves single targeted OCI artifact tags for the provision bundle.
-    Returns None if the branch context is inactive.
-    """
-    base_tag = artifact_tag("provision")
+def pr_tag_suffix(pr_num):
+    return f"-pr-{pr_num}"
 
-    # CLI arg for PR num
+
+def pr_number(pr_num=None):
+    """PR number from the CLI, or from the GHA pull_request context."""
     if pr_num:
-        print(f"Explicit target requested -> PR #{pr_num}")
-        return f"{base_tag}-pr-{pr_num}"
+        return str(pr_num)
+    if os.environ.get("GITHUB_EVENT_NAME") == "pull_request":
+        return os.environ.get("GITHUB_PR_NUMBER") or None
+    return None
 
-    # GHA CI context
-    event_name = os.environ.get("GITHUB_EVENT_NAME","")
-    if event_name:
-        if event_name == "pull_request":
-            active_branch = os.environ.get("GITHUB_BASE_REF")
-        else:
-            active_branch = os.environ.get("GITHUB_REF_NAME")
 
-        if active_branch not in ACTIVE_BRANCHES:
-            print(f"Skipping registration: '{active_branch}' is not an active branch.")
-            return None
-
-        if event_name == "pull_request":
-            env_pr = os.environ.get("GITHUB_PR_NUMBER")
-            if env_pr:
-                return f"{base_tag}-pr-{env_pr}"
-            if is_publish:
-                print("Skipping provision publish: pull_request without GITHUB_PR_NUMBER set")
-                return None
+def publish_tag(kind, host=None):
+    """
+    OCI tag to publish a bundle under. Pull requests against an active branch get a
+    -pr-N tag, pushes and dispatches on an active branch get the base tag.
+    Returns None if the CI context must not publish.
+    """
+    base_tag = artifact_tag(kind, host)
+    event_name = os.environ.get("GITHUB_EVENT_NAME")
+    if not event_name:
         return base_tag
 
-    # Standard local context
+    if event_name == "pull_request":
+        active_branch = os.environ.get("GITHUB_BASE_REF")
+    else:
+        active_branch = os.environ.get("GITHUB_REF_NAME")
+    if active_branch not in ACTIVE_BRANCHES:
+        print(f"Skipping publish: '{active_branch}' is not an active branch")
+        return None
+
+    if event_name == "pull_request":
+        pr = pr_number()
+        if not pr:
+            print("Skipping publish: pull_request without GITHUB_PR_NUMBER set")
+            return None
+        return base_tag + pr_tag_suffix(pr)
     return base_tag
+
+
+def fetch_tags(kind, host=None, pr_num=None):
+    """OCI tags to try when fetching a bundle, PR tag first when a PR is known."""
+    base_tag = artifact_tag(kind, host)
+    pr = pr_number(pr_num)
+    return [base_tag + pr_tag_suffix(pr), base_tag] if pr else [base_tag]
 
 
 def ensure_renode_source_tree():

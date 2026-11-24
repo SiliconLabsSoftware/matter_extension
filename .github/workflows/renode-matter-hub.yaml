@@ -8,13 +8,25 @@ on:
         required: true
         type: boolean
         default: false
+  pull_request:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/guest/**"
+  push:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/guest/**"
 
 permissions:
   contents: read
 
 concurrency:
-  group: renode-matter-hub
-  cancel-in-progress: false
+  group: renode-matter-hub-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-rcps:
@@ -178,8 +190,10 @@ jobs:
 
   publish-common:
     needs: assemble-common
-    if: inputs.publish
+    if: github.event_name != 'workflow_dispatch' || inputs.publish
     runs-on: ubuntu-latest
+    env:
+      GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
     permissions:
       contents: read
       packages: write
@@ -223,6 +237,6 @@ jobs:
       packages: write
     uses: ./.github/workflows/renode-runtime.yaml
     with:
-      publish: ${{ inputs.publish }}
+      publish: ${{ github.event_name != 'workflow_dispatch' || inputs.publish }}
       common_artifact: renode-common-bundle
     secrets: inherit
