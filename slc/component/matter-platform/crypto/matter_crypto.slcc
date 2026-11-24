@@ -114,18 +114,3 @@ template_contribution:
     value: MBEDTLS_MPI_WINDOW_SIZE 1
   - name: mbedtls_config
     value: MBEDTLS_X509_REMOVE_INFO
-
-source:
-  # The non-secure TrustZone image cannot include psa_crypto_source because it
-  # conflicts with the secure-key-library interface. CHIP's SPAKE2+ fallback
-  # still uses these Mbed TLS bignum and ECP APIs directly.
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/bignum_core.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/bignum.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp_curves.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp_curves_new.c
-    condition: [trustzone_nonsecure]
-  - path: third_party/simplicity_sdk/mbedtls/tf-psa-crypto/drivers/builtin/src/ecp.c
-    condition: [trustzone_nonsecure]
