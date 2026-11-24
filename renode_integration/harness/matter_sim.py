@@ -2,8 +2,8 @@
 @file matter_sim.py
 @brief pyrenode3 harness for the Matter Renode simulation.
 
-Configures PYRENODE_PATH from the assembled bundle, drives Renode monitor/resc scripts,
-and exposes UART testers for the simulated Matter hub and SoC.
+Configures PYRENODE_PATH from the assembled bundle, builds the hub topology, drives Renode
+monitor/resc scripts, and exposes UART testers for the simulated Matter hub and SoC.
 """
 
 from __future__ import annotations
@@ -14,6 +14,16 @@ from pathlib import Path
 
 DEFAULT_BUNDLE = Path(__file__).resolve().parent.parent / "out" / "bundle"
 DEFAULT_UART_TIMEOUT_S = 600
+HUB_CONSOLE_PORT = 4540
+
+# ZynqMP guest boot firmware (ATF, U-Boot, Linux) for the matter_hub machine
+_FW = "https://dl.antmicro.com/projects/renode"
+ATF_ELF = f"{_FW}/zynq-us_plus--bl31.elf-s_770984-aad9c28d989600caa8fd436bca66eb500e0606dd"
+UBOOT_BIN = f"{_FW}/zynq-us_plus--u-boot.bin-s_1351888-8291c2fd5e7fed3bda101e4c0694991fb40af277"
+UBOOT_ELF = f"{_FW}/zynq-us_plus--u-boot.elf-s_1418000-23d4b0115d096ce9ed85c7e146f687a528382326"
+LINUX_BIN = f"{_FW}/Image-s_22458880-2573cb5cd76576081947b8ec1aebcf631b6d4bb6"
+LINUX_ELF = f"{_FW}/vmlinux-s_28175880-4d25e9de8b56d28e76e3a58e1a45089ac08c4cd5"
+LINUX_BOOTARGS = "earlycon console=ttyPS1,115200n8 root=/dev/ram0 rw initrd=0x20000000,64M maxcpus=1 idle=halt"
 
 
 def resolve_renode(bundle_dir: Path) -> Path:
@@ -95,6 +105,21 @@ def run_shell(tester: object, cmd: str, timeout_s: float = DEFAULT_UART_TIMEOUT_
     return int(rc_matches[-1]), report
 
 
+def _rcp_commands(name: str, elf: Path, uart_hub: str, medium: str) -> list[str]:
+    return [
+        f'mach create "{name}"',
+        "using sysbus",
+        "machine LoadPlatformDescription @platforms/boards/silabs/brd4186c.repl",
+        f"sysbus LoadELF @{elf}",
+        'cpu VectorTableOffset `sysbus GetSymbolAddress "__Vectors"`',
+        "cpu PerformanceInMips 50",
+        f"connector Connect sysbus.usart0 {uart_hub}",
+        f"connector Connect sysbus.radio {medium}",
+        "logLevel 3",
+        "mach clear",
+    ]
+
+
 class MatterSim:
     """In-process Renode session for one bundle directory."""
 
@@ -115,6 +140,54 @@ class MatterSim:
             test_lib.execute_monitor_command(f"${key} = @{value}")
         resc_path = self.bundle_dir / "resc" / resc
         test_lib.execute_monitor_command(f"include @{resc_path}")
+
+    def boot(self) -> None:
+        """Create the hub and RCP machines and cold-boot the hub Linux guest."""
+        guest = self.bundle_dir / "guest-rootfs"
+        rcp = self.bundle_dir / "rcp"
+        commands = [
+            "emulation SetGlobalSerialExecution true",
+            'emulation CreateIEEE802_15_4Medium "wireless"',
+            'emulation CreateBLEMedium "ble"',
+            'emulation CreateSwitch "backbone"',
+            'emulation SetGlobalQuantum "0.000020"',
+            'emulation CreateUARTHub "spinel"',
+            'emulation CreateUARTHub "hci"',
+            # matter_hub: uart0 -> spinel (Thread RCP), uart2 -> hci (BLE RCP), uart1 -> console
+            'mach create "matter_hub"',
+            "machine RealTimeClockMode HostTimeUTC",
+            "using sysbus.cluster0",
+            "using sysbus.cluster1",
+            "machine LoadPlatformDescription @platforms/boards/silabs/matter_hub.repl",
+            "machine SetSerialExecution true",
+            f'emulation CreateServerSocketTerminal {HUB_CONSOLE_PORT} "matter_hub_console" false',
+            "connector Connect sysbus.uart1 matter_hub_console",
+            # Pace UART TX at the 8N1 wire rate so the EFR32 USART RX buffer is not overrun
+            "sysbus.uart0 CharacterTransmitDelayMicroseconds 22",
+            "sysbus.uart2 CharacterTransmitDelayMicroseconds 87",
+            "connector Connect sysbus.uart0 spinel",
+            "connector Connect sysbus.uart2 hci",
+            "connector Connect gem3 backbone",
+            "mach clear",
+            *_rcp_commands("thread_rcp", rcp / "ot-rcp.out", "spinel", "wireless"),
+            *_rcp_commands("ble_rcp", rcp / "bt_rcp_freertos.out", "hci", "ble"),
+            'mach set "matter_hub"',
+            "apu0 PC 0x1000000",
+            "cluster0 ForEach IsHalted true",
+            "apu0 IsHalted false",
+            "cluster1 ForEach IsHalted true",
+            f"sysbus LoadELF @{ATF_ELF} cpu=apu0",
+            f'sysbus LoadFdt @{guest / "zynqmp-matter-linux.dtb"} 0x100000 "{LINUX_BOOTARGS}" false',
+            f"sysbus LoadBinary @{UBOOT_BIN} 0x8000000",
+            f"sysbus LoadBinary @{LINUX_BIN} 0x10000000",
+            f"sysbus LoadBinary @{guest / 'matter-rootfs.ext2'} 0x20000000",
+            f"matter_virtio LoadImage @{guest / 'matter-tools.ext2'}",
+            f"sysbus LoadSymbolsFrom @{UBOOT_ELF}",
+            f"sysbus LoadSymbolsFrom @{LINUX_ELF}",
+            "start",
+        ]
+        for command in commands:
+            test_lib.execute_monitor_command(command)
 
     def hub_uart(self, timeout_s: float = DEFAULT_UART_TIMEOUT_S) -> object:
         """Attach a tester to matter_hub uart1.

@@ -3,8 +3,8 @@
 @file assemble_bundle.py
 @brief Copy built artifacts into the published bundle layout.
 
-Collects guest rootfs/tools images and DTB, RCP ELFs, resc scripts, Renode test_lib,
-and the host-specific portable Renode tree into renode_integration/out/bundle.
+Collects guest rootfs/tools images and DTB, RCP ELFs, resc scripts, and (when built)
+the host-specific portable Renode tree and its test_lib into renode_integration/out/bundle.
 """
 
 import glob
@@ -13,18 +13,10 @@ import shutil
 
 import common
 
-_TEST_LIB_IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc", ".pytest_cache")
 
-
-def copy_test_lib(bundle):
-    dest = os.path.join(bundle, "test_lib")
-    if os.path.isfile(os.path.join(dest, "pyproject.toml")):
-        return
-    common.ensure_renode_source_tree()
-    src = common.test_lib_source_dir()
-    if not os.path.isdir(src):
-        common.die(f"Renode test_lib not found at {src}")
-    shutil.copytree(src, dest, dirs_exist_ok=True, ignore=_TEST_LIB_IGNORE)
+def copy_tree(src, dest):
+    shutil.rmtree(dest, ignore_errors=True)
+    shutil.copytree(src, dest)
 
 
 def copy_if_exists(src, dest_dir):
@@ -36,7 +28,6 @@ def copy_if_exists(src, dest_dir):
 def main():
     bundle = common.bundle_dir()
     os.makedirs(bundle, exist_ok=True)
-    copy_test_lib(bundle)
     guest_out = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "guest-rootfs")
     guest_dest = os.path.join(bundle, "guest-rootfs")
     for name in ("matter-rootfs.ext2", "matter-tools.ext2", "zynqmp-matter-linux.dtb"):
@@ -54,12 +45,11 @@ def main():
     for resc in glob.glob(os.path.join(common.RENODE_INTEGRATION_DIR, "resc", "*.resc")):
         shutil.copy2(resc, os.path.join(resc_dest, os.path.basename(resc)))
 
-    host = common.detect_host()
-    built = os.path.join(common.RENODE_INTEGRATION_DIR, "out", "renode", host)
-    renode_dest = os.path.join(bundle, "renode")
+    out = os.path.join(common.RENODE_INTEGRATION_DIR, "out")
+    built = os.path.join(out, "renode", common.detect_host())
     if os.path.isfile(os.path.join(built, "renode")):
-        shutil.rmtree(renode_dest, ignore_errors=True)
-        shutil.copytree(built, renode_dest)
+        copy_tree(built, os.path.join(bundle, "renode"))
+        copy_tree(os.path.join(out, "test_lib"), os.path.join(bundle, "test_lib"))
 
     print(f"Assembled bundle at {bundle}")
 
