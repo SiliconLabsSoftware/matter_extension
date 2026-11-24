@@ -348,14 +348,10 @@ components:
   - types
 extra_files:
   - .clang-format
-  - AGENTS.md
   - CODEOWNERS
   - LICENSE
-  - MATTER-7050/DUT.logs
-  - MATTER-7050/provider.logs
   - README.md
   - board_compatibility_matrix.html
-  - diff.txt
   - docs/CHERRY_PICKING_CSA_COMMITS.md
   - docs/CONTRIBUTING.md
   - docs/MATTER_MQTT_HTTPS_EXAMPLE.md
