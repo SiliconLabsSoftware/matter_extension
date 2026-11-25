@@ -340,7 +340,7 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                 {
                     def commanderDir = ""
                     checkout scm: [$class                            : 'GitSCM',
-                                    branches                         : [[name: 'main']],
+                                    branches                         : [[name: 'main_ci']],
                                     browser                          : [$class: 'GithubWeb',
                                     repoUrl: 'https://github.com/SiliconLabsInternal/utf_app_matter'],
                                     extensions                       : [
