@@ -96,11 +96,10 @@ jobs:
           sudo -n apt-get install -y --no-install-recommends cmake ninja-build device-tree-compiler libgl1 libusb-1.0-0
 
       - name: Checkout Zephyr manifest
-        # Instead of main, replace with the official 4.5 tag once created.
         uses: actions/checkout@v7
         with:
           repository: SiliconLabsSoftware/zephyr-silabs
-          ref: main
+          ref: v2026.10.0
           path: zephyrproject/zephyr-silabs
           fetch-depth: 1
           persist-credentials: false
