@@ -3,10 +3,18 @@
 # This script updates Matter extension version in our various files.
 # Example usage:
 # ./slc/script/update_version.py 2.2.0-1.2 4.4.0 4.0.0 readme=True/False
-# param 1: New version for sdk_extension
+# param 1: New version for sdk_extension (X.Y.Z or X.Y.Z-A.B(.C))
 # param 2: New version for simplicity_sdk
 # param 3: New version for wiseconnect (Wi-Fi SDK)
 # param 4: Choose to update/not update the readme files with "param 1"
+#
+# Auxiliary suffix (AUX_VERSION):
+#   When param 1 includes a hyphenated suffix (e.g. 2.11.0-1.7.0), the part after
+#   the hyphen is AUX_VERSION. It is used for full release-style identifiers such as
+#   matter.slsdk / matter_app.slsdk prop.subLabel and matter_package_version.
+#   Examples for matter_package_version:
+#     with AUX   -> 2.11.0-1.7.0
+#     without    -> 2.11.0-dev.0
 
 import os
 import sys
@@ -107,14 +115,30 @@ if __name__ == '__main__':
     #   version: 4.3.0
     replace_text(str(ROOT)+"/matter.slce","  *id: simplicity_sdk\n  *version: "+VERSION_REGEX_FORMAT,"  id: simplicity_sdk\n  version: "+SISDK_NEW_VERSION)
 
-    # Update matter.slsdk
+    # Update the *.slsdk root markers
     #
     # REGEX FORMAT:
     # version=0.0.4
     # prop.subLabel=Silicon Labs Matter\\ 1.0.4-1.0
+    for slsdk in ("matter.slsdk", "matter_app.slsdk", "matter_internal.slsdk", "matter_app_internal.slsdk"):
+        slsdk_path = str(ROOT) + "/" + slsdk
+        if not os.path.isfile(slsdk_path):
+            print("Warning: " + slsdk + " not found; skipping")
+            continue
+        if FULL_VERSION:
+            replace_text(slsdk_path, FULL_VERSION_REGEX, EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
+        replace_text(slsdk_path, "version="+VERSION_REGEX_FORMAT, "version="+EXTENSION_NEW_VERSION)
+
+    # Update slc/script/matter_package_version (Conan/SLT package version source of truth).
+    # Local/dev default is X.Y.Z-dev.0; release-style aux becomes X.Y.Z-A.B(.C).
+    package_version_path = str(ROOT) + "/slc/script/matter_package_version"
     if FULL_VERSION:
-        replace_text(str(ROOT)+"/matter.slsdk",FULL_VERSION_REGEX,EXTENSION_NEW_VERSION+"-"+AUX_VERSION)
-    replace_text(str(ROOT)+"/matter.slsdk","version="+VERSION_REGEX_FORMAT,"version="+EXTENSION_NEW_VERSION)
+        package_version = EXTENSION_NEW_VERSION + "-" + AUX_VERSION
+    else:
+        package_version = EXTENSION_NEW_VERSION + "-dev.0"
+    with open(package_version_path, "w", encoding="utf-8") as package_version_file:
+        package_version_file.write(package_version + "\n")
+    print("Updating the matter_package_version to " + package_version)
 
     # Update .md files in slc/ directory and root README.md
     #

@@ -1,0 +1,8 @@
+# Version defaults to "0" if not defined
+version = 1
+release-stream = "2027-06"
+ 
+ 
+[dependency]
+# Get a specific version of the package
+matter = { version = ">=2.11.0 <2.11.1", installer = "conan", user="silabs", channel="2027-06", prerelease = true }
