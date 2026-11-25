@@ -1,0 +1,169 @@
+id: matter_generator_firmware_sdk_files
+label: Matter Generator Firmware SDK Files
+description: >
+  SDK sources and headers the generator firmware needs in copy-sources mode.
+  Copy-sources flattens files listed in the project and copies only declared
+  headers, so the files the linked build resolves from the SDK tree are listed
+  here with their directory layout.
+package: matter
+category: Matter|Platform
+quality: production
+metadata:
+  sbom:
+    license: Zlib
+
+provides:
+  - name: matter_generator_firmware_sdk_files
+
+requires:
+  - name: matter_static_generated_zap_content
+  - name: matter_nlio
+
+source:
+  - path: third_party/matter_sdk/src/credentials/DeviceAttestationCredsProvider.cpp
+  - path: third_party/matter_sdk/src/lib/support/logging/TextOnlyLogging.cpp
+  - path: third_party/matter_sdk/src/setup_payload/Base38Encode.cpp
+  - path: third_party/matter_sdk/src/crypto/CHIPCryptoPALPSA.cpp
+    unless: [sl_si91x_wireless]
+
+include:
+  - path: third_party/matter_sdk/examples/generator-firmware/silabs/include
+    file_list:
+      - path: app.h
+        condition: [sl_si91x_wireless]
+      - path: sl_matter_provision_config.h
+      - path: sl_matter_test_event_trigger_config.h
+  - path: third_party/matter_sdk/examples/platform/silabs
+    file_list:
+      - path: provision/ProvisionChannel.h
+      - path: provision/ProvisionCrypto.h
+      - path: provision/ProvisionStorageReader.h
+      - path: provision/ProvisionStorageWriter.h
+      - path: provision/flash/ProvisionStorageFlash.h
+        condition: [sl_si91x_wireless]
+      - path: silabs_creds.h
+        unless: [sl_si91x_wireless]
+  - path: third_party/matter_sdk/src
+    file_list:
+      - path: app/TestEventTriggerDelegate.h
+        condition: [sl_si91x_wireless]
+      - path: app/common/CompatEnumNames.h
+      - path: app/icd/server/ICDServerConfig.h
+      - path: ble/BleConfig.h
+      - path: credentials/DeviceAttestationCredsProvider.h
+      - path: credentials/examples/DeviceAttestationCredsExample.h
+      - path: crypto/CHIPCryptoPAL.h
+      - path: crypto/CHIPCryptoPALPSA.h
+        unless: [sl_si91x_wireless]
+      - path: crypto/CHIPCryptoPALmbedTLS.h
+        unless: [sl_si91x_wireless]
+      - path: crypto/PSAKeyAllocator.h
+        unless: [sl_si91x_wireless]
+      - path: inet/InetConfig.h
+      - path: lib/core/CHIPCallback.h
+      - path: lib/core/CHIPConfig.h
+      - path: lib/core/CHIPCore.h
+      - path: lib/core/CHIPEncoding.h
+      - path: lib/core/CHIPError.h
+      - path: lib/core/CHIPSafeCasts.h
+      - path: lib/core/CHIPVendorIdentifiers.hpp
+      - path: lib/core/ClusterEnums.h
+      - path: lib/core/CriticalFailure.h
+      - path: lib/core/DataModelTypes.h
+      - path: lib/core/ErrorStr.h
+      - path: lib/core/GroupId.h
+      - path: lib/core/InPlace.h
+      - path: lib/core/NodeId.h
+      - path: lib/core/Optional.h
+      - path: lib/core/PasscodeId.h
+      - path: lib/core/Unchecked.h
+      - path: lib/support/Assertions.h
+      - path: lib/support/Base64.h
+      - path: lib/support/BitFlags.h
+      - path: lib/support/BufferReader.h
+      - path: lib/support/BufferWriter.h
+      - path: lib/support/BytesToHex.h
+      - path: lib/support/CHIPMem.h
+      - path: lib/support/CHIPMemString.h
+      - path: lib/support/CHIPPlatformMemory.h
+      - path: lib/support/CodeUtils.h
+      - path: lib/support/Compiler.h
+      - path: lib/support/DLLUtil.h
+      - path: lib/support/EnforceFormat.h
+      - path: lib/support/IntrusiveList.h
+      - path: lib/support/LambdaBridge.h
+      - path: lib/support/ObjectDump.h
+      - path: lib/support/SafeInt.h
+      - path: lib/support/SafePointerCast.h
+      - path: lib/support/SafeString.h
+      - path: lib/support/ScopedMemoryBuffer.h
+      - path: lib/support/SetupDiscriminator.h
+      - path: lib/support/Span.h
+      - path: lib/support/StringBuilder.h
+      - path: lib/support/TimeUtils.h
+      - path: lib/support/TypeTraits.h
+      - path: lib/support/logging/BinaryLogging.h
+      - path: lib/support/logging/CHIPLogging.h
+      - path: lib/support/logging/Constants.h
+      - path: lib/support/logging/TextOnlyLogging.h
+      - path: platform/PlatformError.h
+      - path: platform/logging/LogV.h
+      - path: platform/silabs/CHIPDevicePlatformConfig.h
+      - path: platform/silabs/CHIPPlatformConfig.h
+        unless: [sl_si91x_wireless]
+      - path: platform/silabs/Logging.h
+      - path: platform/silabs/SilabsConfig.h
+      - path: platform/silabs/multi-ota/OTATlvProcessor.h
+      - path: platform/silabs/multi-ota/OtaTlvEncryptionKey.h
+      - path: platform/silabs/platformAbstraction/SilabsPlatform.h
+      - path: platform/silabs/platformAbstraction/SilabsPlatformBase.h
+      - path: setup_payload/Base38.h
+      - path: setup_payload/Base38Encode.h
+      - path: setup_payload/QRCodeSetupPayloadGenerator.h
+      - path: setup_payload/SetupPayload.h
+      - path: system/SocketEvents.h
+      - path: system/SystemClock.h
+      - path: system/SystemConfig.h
+      - path: system/SystemError.h
+      - path: system/SystemEvent.h
+      - path: system/SystemLayer.h
+  - path: third_party/matter_sdk/src/include
+    file_list:
+      - path: platform/CHIPDeviceConfig.h
+      - path: platform/CHIPDeviceError.h
+      - path: platform/CommissionableDataProvider.h
+      - path: platform/DeviceInstanceInfoProvider.h
+      - path: platform/internal/testing/ConfigUnitTest.h
+  - path: third_party/matter_sdk/src/lib/support
+    file_list:
+      - path: BufferWriter.h
+        condition: [sl_si91x_wireless]
+      - path: logging/TextOnlyLogging.h
+        condition: [sl_si91x_wireless]
+  - path: third_party/matter_sdk/src/platform/silabs/multi-ota
+    file_list:
+      - path: OtaTlvEncryptionKey.h
+        condition: [sl_si91x_wireless]
+  - path: third_party/matter_sdk/zzz_generated/app-common
+    file_list:
+      - path: app-common/zap-generated/cluster-enums.h
+  - path: third_party/matter_support/provision
+    file_list:
+      - path: headers/ProvisionChannelInterface.h
+      - path: headers/ProvisionCryptoInterface.h
+      - path: headers/ProvisionEncoder.h
+      - path: headers/ProvisionManager.h
+      - path: headers/ProvisionProtocol.h
+      - path: headers/ProvisionStorage.h
+      - path: headers/ProvisionStorageGeneric.h
+      - path: headers/ProvisionStorageInterfaces.h
+  - path: third_party/matter_support/tinycrypt/inc
+    file_list:
+      - path: tinycrypt/ecc.h
+        condition: [sl_si91x_wireless]
+      - path: tinycrypt/ecc_dh.h
+        condition: [sl_si91x_wireless]
+      - path: tinycrypt/ecc_dsa.h
+        condition: [sl_si91x_wireless]
+      - path: tinycrypt/tinycrypt_util.h
+        condition: [sl_si91x_wireless]

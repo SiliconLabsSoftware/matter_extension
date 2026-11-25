@@ -162,6 +162,7 @@ components:
   - matter_gatt_static
   - matter_general_commissioning
   - matter_general_diagnostics
+  - matter_generator_firmware_sdk_files
   - matter_group_key_mgmt
   - matter_groupcast
   - matter_groups
@@ -698,6 +699,7 @@ extra_files:
   - slc/component/matter-platform/display/matter_lcd.slcc
   - slc/component/matter-platform/display/matter_lcd_917SOC.slcc
   - slc/component/matter-platform/display/matter_qr_code.slcc
+  - slc/component/matter-platform/generator-firmware/matter_generator_firmware_sdk_files.slcc
   - slc/component/matter-platform/logging/matter_log_rtt.slcc
   - slc/component/matter-platform/logging/matter_log_uart.slcc
   - slc/component/matter-platform/logging/stack_monitoring.slcc

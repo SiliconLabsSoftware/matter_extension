@@ -12,6 +12,7 @@ sdk_extension:
 
 component:
   - { id: sl_main }
+  - { id: matter_generator_firmware_sdk_files }
   - { id: freertos }
   - { id: cpp_support }
   - { id: iostream_rtt }
@@ -91,7 +92,6 @@ source:
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageFlash.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageReader.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/flash/ProvisionStorageWriter.cpp
-  - path: ../../../../third_party/matter_sdk/src/credentials/DeviceAttestationCredsProvider.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKeyMbed.cpp
   - path: ../../../../third_party/matter_sdk/src/lib/support/Base64.h
   - path: ../../../../third_party/matter_sdk/src/lib/support/Base64.cpp
@@ -100,15 +100,12 @@ source:
   - path: ../../../../third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.h
   - path: ../../../../third_party/matter_sdk/src/lib/support/CHIPMem.cpp
   - path: ../../../../third_party/matter_sdk/src/lib/support/logging/CHIPLogging.h
-  - path: ../../../../third_party/matter_sdk/src/lib/support/logging/TextOnlyLogging.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.h
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/Logging.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/WiseMcuSpam.cpp
   - path: ../../../../third_party/matter_sdk/src/platform/silabs/SiWx/CHIPCryptoPALTinyCrypt.cpp
-  - path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.h
-  - path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.cpp
   - path: ../../../../third_party/matter_sdk/examples/platform/silabs/syscalls_stubs.cpp
   - path: ../../../../third_party/matter_support/tinycrypt/src/ecc.c
   - path: ../../../../third_party/matter_support/tinycrypt/src/ecc_dh.c

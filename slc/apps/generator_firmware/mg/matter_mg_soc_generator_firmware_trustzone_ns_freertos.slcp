@@ -26,6 +26,7 @@ component:
   - { id: psa_crypto_cipher_ctr }
   - { id: mbedtls_x509 }
   - { id: bootloader_app_properties }
+  - { id: matter_generator_firmware_sdk_files }
   - { id: nvm3_default }
   - id: emlib_rmu
     condition: [device_series_2]
@@ -62,7 +63,6 @@ source:
   - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/ProvisionChannelRTT.cpp }
   - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageReader.cpp }
   - { path: ../../../../third_party/matter_sdk/examples/platform/silabs/provision/default/ProvisionStorageWriter.cpp }
-  - { path: ../../../../third_party/matter_sdk/src/crypto/CHIPCryptoPALPSA.cpp }
   - { path: ../../../../third_party/matter_sdk/src/lib/support/Base64.h }
   - { path: ../../../../third_party/matter_sdk/src/lib/support/Base64.cpp }
   - { path: ../../../../third_party/matter_sdk/src/lib/support/BytesToHex.h }
@@ -70,7 +70,6 @@ source:
   - { path: ../../../../third_party/matter_sdk/src/lib/support/CHIPMem.cpp }
   - { path: ../../../../third_party/matter_sdk/src/lib/support/CHIPPlatformMemory.h }
   - { path: ../../../../third_party/matter_sdk/src/lib/support/logging/CHIPLogging.h }
-  - { path: ../../../../third_party/matter_sdk/src/lib/support/logging/TextOnlyLogging.cpp }
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/CHIPMem-Platform.cpp }
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.h }
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/SilabsConfig.cpp }
@@ -78,8 +77,6 @@ source:
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/platformAbstraction/GsdkSpam.cpp }
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKey.h }
   - { path: ../../../../third_party/matter_sdk/src/platform/silabs/multi-ota/OtaTlvEncryptionKeyPSA.cpp }
-  - { path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.h }
-  - { path: ../../../../third_party/matter_sdk/src/setup_payload/Base38Encode.cpp }
 
 library:
   - { path: ../../../../third_party/matter_support/provision/libs/libProvision-m33-hard.a }

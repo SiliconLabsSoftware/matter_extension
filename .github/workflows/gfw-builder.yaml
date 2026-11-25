@@ -94,6 +94,10 @@ jobs:
           cp ${src} "artifacts/generator_firmware/${image}"
           ls -l artifacts/generator_firmware
 
+      - name: Build ${{ matrix.family }} (copy-sources)
+        run: |
+          ./slc/build.sh slc/apps/generator_firmware/${{ matrix.project }}.slcw "${{ matrix.board }}" --output_suffix copy-sources --copy-sources
+
       - name: Upload image
         uses: actions/upload-artifact@v7
         with:
