@@ -61,7 +61,7 @@ component:
   - id: matter_crypto
   - id: matter_provision_default
   - id: matter_use_ctm
-    condition: [matter_provision_default]
+    condition: [matter_provision_default, device_series_3]
   - id: app_common
   - id: bootloader_interface
   - id: bootloader_interface_s2
