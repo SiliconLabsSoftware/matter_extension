@@ -36,7 +36,7 @@ component:
   - id: app_common
   - id: matter_provision_default
   - id: matter_use_ctm
-    condition: [matter_provision_default]
+    condition: [matter_provision_default, device_series_3]
 
   - id: mbedtls_x509_use_aws
     condition: [matter_aws]

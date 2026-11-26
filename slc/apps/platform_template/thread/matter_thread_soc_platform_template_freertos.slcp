@@ -25,7 +25,7 @@ component:
   - id: matter_gatt_static
   - id: matter_provision_default
   - id: matter_use_ctm
-    condition: [matter_provision_default]
+    condition: [matter_provision_default, device_series_3]
   - id: matter_platform_template
 
   - id: app_common

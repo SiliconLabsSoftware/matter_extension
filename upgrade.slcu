@@ -379,11 +379,6 @@ upgrade:
         add:
            - id: watchdog_manager
              vendor: silabs
-      - trigger: matter_provision_default
-        description: >
-          Adding matter_use_ctm component to Matter MG projects using matter_provision_default
-        add:
-           - id: matter_use_ctm
       - trigger: matter
         description: >
           Migrate existing persistent subscription configuration to the matter_subscription_persistence component.
@@ -397,3 +392,4 @@ upgrade:
         value:
           "0": "0"
           "1": "0"
+      - script: slc/config/scripts/upgrade_components_to_2.10.0.lua
