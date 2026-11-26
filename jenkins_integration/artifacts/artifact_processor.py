@@ -545,12 +545,14 @@ def _upload_wifi_firmware_files(board_path, board_folder, branch_name, build_num
         build_number (int): Build number for upload
         package_version (str): Matter package version used as UBAI target
     """
-    ubai_app_name = f"WiFi-Firmware-{board_folder}"
     for dirpath, _, filenames in os.walk(board_path):
         for fw_file in filenames:
             if fw_file.endswith('.rps'):
                 fw_file_path = os.path.join(dirpath, fw_file)
-                print(f"Uploading WiFi firmware: {fw_file_path}")
+                suffix = '-lite' if os.path.basename(dirpath) == 'lite' else ''
+                ubai_app_name = f"WiFi-Firmware-{board_folder}{suffix}"
+
+                print(f"Uploading WiFi firmware: {fw_file_path} as {ubai_app_name}")
                 upload_to_ubai(fw_file_path, ubai_app_name, board_folder, branch_name, build_number)
                 # Upload to UBAI with package version
                 upload_to_ubai(fw_file_path, ubai_app_name, package_version, branch_name, build_number)
