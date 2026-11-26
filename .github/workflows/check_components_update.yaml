@@ -1,0 +1,73 @@
+name: Check Components Update
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "release_*"
+
+concurrency:
+  group: check-components-update-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  detect-sdk-bump:
+    name: Detect SDK submodule bump
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+          fetch-depth: 0
+
+      - name: Detect simplicity_sdk and wifi_sdk hash change
+        id: detect
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          MERGE_BASE=$(git merge-base "${BASE_SHA}" "${HEAD_SHA}")
+          CHANGED=$(git diff --name-only "${MERGE_BASE}" "${HEAD_SHA}" -- \
+            third_party/simplicity_sdk third_party/wifi_sdk)
+          if [[ -n "${CHANGED}" ]]; then
+              echo "SDK submodule hash changed:"
+              echo "${CHANGED}"
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+              echo "No SDK submodule hash change"
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  verify-components-deprecation:
+    name: Verify deprecated components
+    needs: detect-sdk-bump
+    if: needs.detect-sdk-bump.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          submodules: false
+
+      - name: Cache SDKs
+        uses: ./.github/actions/cache-sdks
+
+      - name: Install PyYAML dependency
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install PyYAML
+
+      - name: Verify Matter components against SDK deprecations
+        shell: bash
+        run: |
+          set -e
+          python3 -u './slc/script/verify_matter_components_dep.py'
