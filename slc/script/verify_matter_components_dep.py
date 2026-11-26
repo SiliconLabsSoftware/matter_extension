@@ -143,13 +143,13 @@ def report_deprecated_requires(required, replaced, deleted):
             prefix = "warning: " if new == name else ""
             print(
                 f"{prefix}{name} from {relative} is deprecated since {version}"
-                f"  replace with {new}"
+                f"  replace with {new}\n"
             )
             hits += new != name
         elif name in deletions:
             print(
                 f"{name} from {relative} is deleted since {deletions[name]}"
-                "  removed it."
+                "  removed it.\n"
             )
             hits += 1
     return hits
@@ -174,10 +174,10 @@ def main(argv):
         return 1
 
     required = collect_requires(COMPONENT_ROOT)
-    print(f"\nChecking {len(required)} required components of {COMPONENT_ROOT}:")
+    print(f"\nChecking {len(required)} required components of {COMPONENT_ROOT}:\n")
     hits = report_deprecated_requires(required, replaced, deleted)
     if hits:
-        print(f"\n{hits} deprecated or deleted components are still required")
+        print(f"\n{hits} deprecated or deleted components are still required\n")
         return 1
 
     print("no deprecated or deleted component required")
