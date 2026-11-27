@@ -265,7 +265,7 @@ pipeline
                             sendSlackNotification("SQA Tests Failed", "FAIL", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
                             error("[FAIL] Sanity Tests failed. See summary:\n${sqa_tests_summary}")
                         } else if (nonBlockingFailedTests > 0) {
-                            unstable("[WARN] SiMG301 Zigbee-Light-Conc-App sanity tests failed (non-blocking). See summary:\n${sqa_tests_summary}")
+                            unstable("[WARN] SiMG301 Zigbee-Light-Conc-App Sanity tests failed (non-blocking). See summary:\n${sqa_tests_summary}")
                             sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, sqa_tests_summary), "", commit_sha, run_number, workflow_id)
                         } else {
                             sendSlackNotification("SQA Tests Passed", "PASS", combineSlackSummary(commit_change_summary, "All tests passed successfully."), "", commit_sha, run_number, workflow_id)
