@@ -446,10 +446,50 @@ def execute_sanity_tests(nomadNode, deviceGroup, deviceGroupId, appName, matterT
                             }
                         }
                     }
-                    sh "cp ./reports/pytest-report.html ./reports/pytest-report-${appName}-${board}.html"
-                    archiveArtifacts artifacts: "reports/pytest-report-${appName}-${board}.html"
+                    def testArtifactsId = "${appName}-${board}"
+                    sh """
+                        cp ./reports/pytest-report.html ./reports/pytest-report-${testArtifactsId}.html
+                        if [ -d TestResults ]; then
+                            rm -rf "TestResults-${testArtifactsId}"
+                            cp -a TestResults "TestResults-${testArtifactsId}"
+                            echo "Copied TestResults to TestResults-${testArtifactsId}"
+                        else
+                            echo "TestResults directory not found for ${testArtifactsId}; skipping TestResults archive"
+                        fi
+                        rm -rf "reports-device-logs-${testArtifactsId}"
+                        mkdir -p "reports-device-logs-${testArtifactsId}"
+                        log_list="reports-device-logs-${testArtifactsId}.list"
+                        : > "\$log_list"
+                        # UART logs are reports/<test>_<ip>_<port>.txt. PTI logs are under reports/pti_logs/.
+                        # A top-level reports/*.txt glob misses both when the file is nested or written
+                        # next to the Jenkins workspace instead of utf_app_matter/reports.
+                        for search_dir in ./reports ./manifest /home/dockerUser/qaWorkspace/reports; do
+                            if [ -d "\$search_dir" ]; then
+                                find "\$search_dir" -type f \\( -name '*_4901.txt' -o -name '*_4902.txt' -o -name '*pti_logger*' \\) >> "\$log_list"
+                            fi
+                        done
+                        found_logs=0
+                        while IFS= read -r dut_log; do
+                            if [ -n "\$dut_log" ] && [ -f "\$dut_log" ]; then
+                                cp -a "\$dut_log" "reports-device-logs-${testArtifactsId}/"
+                                echo "Archiving DUT log: \$dut_log"
+                                found_logs=1
+                            fi
+                        done < "\$log_list"
+                        rm -f "\$log_list"
+                        if [ "\$found_logs" -eq 0 ]; then
+                            echo "No DUT serial or PTI logs found for ${testArtifactsId}"
+                            echo "reports tree:"
+                            find ./reports -type f 2>/dev/null | head -n 50
+                        fi
+                    """
+                    archiveArtifacts artifacts: "reports/pytest-report-${testArtifactsId}.html", allowEmptyArchive: true, fingerprint: false
+                    archiveArtifacts artifacts: "TestResults-${testArtifactsId}/**", allowEmptyArchive: true, fingerprint: false
+                    archiveArtifacts artifacts: "reports-device-logs-${testArtifactsId}/**", allowEmptyArchive: true, fingerprint: false
                     junit: 'reports/junit_report.xml'
-                    echo "Download test results here: https://jenkins-cbs-iot-matter.silabs.net/job/Matter_extension_CICD/job/${BRANCH_NAME}/${BUILD_NUMBER}/artifact/reports/pytest-report-${appName}-${board}.html"
+                    echo "Download test results here: ${env.BUILD_URL}artifact/reports/pytest-report-${testArtifactsId}.html"
+                    echo "Download UTF TestResults here: ${env.BUILD_URL}artifact/TestResults-${testArtifactsId}/"
+                    echo "Download UTF device logs here: ${env.BUILD_URL}artifact/reports-device-logs-${testArtifactsId}/"
                 }
             }
         }
