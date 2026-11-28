@@ -1,0 +1,375 @@
+# Matter CI sanity steps ported from Jenkins UTF (node 101, brd4187c lighting).
+test_tc_commission:
+  steps:
+  - command: chip-tool descriptor read device-type-list 101 0xFFFF
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool descriptor read server-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool descriptor read server-list 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool accesscontrol read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_i_1_01:
+  steps:
+  - command: chip-tool identify read cluster-revision 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool identify read feature-map 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool identify read attribute-list 101 1
+    expect: \[1\]:\s*0
+  - command: chip-tool identify read accepted-command-list 101 1
+    expect: \[1\]:\s*0
+  - command: chip-tool identify read generated-command-list 101 1
+    expect: 0 entries
+test_tc_i_2_01:
+  steps:
+  - command: chip-tool identify read identify-time 101 1
+    expect: 'IdentifyTime:'
+  - command: chip-tool identify write identify-time 100 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool identify read identify-time 101 1
+    expect: IdentifyTime:\s*100
+  - type: readonly_pair
+    read: chip-tool identify read identify-type 101 1
+    write: chip-tool identify write-by-id 1 0 101 1
+test_tc_i_2_02:
+  steps:
+  - command: chip-tool identify read identify-type 101 1
+    expect: 'IdentifyType:'
+  - command: chip-tool identify identify 60 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool identify read identify-time 101 1
+    expect: IdentifyTime:\s*([4-5][0-9]|60)
+  - command: sleep 10
+  - command: chip-tool identify read identify-time 101 1
+    expect: IdentifyTime:\s*([3-4][0-9]|50)
+  - command: chip-tool identify identify 0 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool identify read identify-time 101 1
+    expect: IdentifyTime:\s*0
+  - command: chip-tool identify write identify-time 15 101 1
+    expect: status = 0x00 \(SUCCESS\)
+  - command: sleep 15
+  - command: chip-tool identify read identify-time 101 1
+    expect: IdentifyTime:\s*[0-5]\b
+test_tc_binfo_1_01:
+  steps:
+  - command: chip-tool basicinformation read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool basicinformation read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool basicinformation read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool basicinformation read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool basicinformation read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_opcreds_1_02:
+  steps:
+  - command: chip-tool operationalcredentials read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool operationalcredentials read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool operationalcredentials read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool operationalcredentials read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool operationalcredentials read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_cnet_1_03:
+  steps:
+  - command: chip-tool networkcommissioning read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool networkcommissioning read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool networkcommissioning read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool networkcommissioning read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool networkcommissioning read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_dggen_1_01:
+  steps:
+  - command: chip-tool generaldiagnostics read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool generaldiagnostics read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool generaldiagnostics read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool generaldiagnostics read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool generaldiagnostics read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_dgthnw_1_01:
+  steps:
+  - command: chip-tool threadnetworkdiagnostics read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_acl_1_01:
+  steps:
+  - command: chip-tool accesscontrol read cluster-revision 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool accesscontrol read feature-map 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool accesscontrol read attribute-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool accesscontrol read accepted-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool accesscontrol read generated-command-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_binfo_2_01:
+  steps:
+  - type: readonly_pair
+    read: chip-tool basicinformation read data-model-revision 101 0
+    write: chip-tool basicinformation write-by-id 0 100 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read vendor-name 101 0
+    write: chip-tool basicinformation write-by-id 1 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read vendor-id 101 0
+    write: chip-tool basicinformation write-by-id 2 100 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read product-name 101 0
+    write: chip-tool basicinformation write-by-id 3 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read product-id 101 0
+    write: chip-tool basicinformation write-by-id 4 100 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read node-label 101 0
+    write: chip-tool basicinformation write node-label '"abcd"' 101 0
+    writable: true
+    expect_after_write: abcd
+  - type: readonly_pair
+    read: chip-tool basicinformation read location 101 0
+    write: chip-tool basicinformation write location CA 101 0
+    writable: true
+    expect_after_write: CA
+  - type: readonly_pair
+    read: chip-tool basicinformation read hardware-version 101 0
+    write: chip-tool basicinformation write-by-id 7 100 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read hardware-version-string 101 0
+    write: chip-tool basicinformation write-by-id 8 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read software-version 101 0
+    write: chip-tool basicinformation write-by-id 9 1234 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read software-version-string 101 0
+    write: chip-tool basicinformation write-by-id 10 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read manufacturing-date 101 0
+    write: chip-tool basicinformation write-by-id 11 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read part-number 101 0
+    write: chip-tool basicinformation write-by-id 12 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read product-url 101 0
+    write: chip-tool basicinformation write-by-id 13 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read product-label 101 0
+    write: chip-tool basicinformation write-by-id 14 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read serial-number 101 0
+    write: chip-tool basicinformation write-by-id 15 '"abcd"' 101 0
+  - command: chip-tool basicinformation read local-config-disabled 101 0
+    expect: 'LocalConfigDisabled:'
+  - command: chip-tool basicinformation write local-config-disabled 1 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool basicinformation read local-config-disabled 101 0
+    expect: LocalConfigDisabled:\s*1
+  - command: chip-tool basicinformation write local-config-disabled 0 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - type: readonly_pair
+    read: chip-tool basicinformation read reachable 101 0
+    write: chip-tool basicinformation write-by-id 17 1 101 0
+    skip_if_unsupported: true
+  - type: readonly_pair
+    read: chip-tool basicinformation read unique-id 101 0
+    write: chip-tool basicinformation write-by-id 18 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read capability-minima 101 0
+    write: chip-tool basicinformation write-by-id 19 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read product-appearance 101 0
+    write: chip-tool basicinformation write-by-id 20 1 101 0
+    skip_if_unsupported: true
+  - type: readonly_pair
+    read: chip-tool basicinformation read max-paths-per-invoke 101 0
+    write: chip-tool basicinformation write-by-id 22 '"abcd"' 101 0
+  - type: readonly_pair
+    read: chip-tool basicinformation read specification-version 101 0
+    write: chip-tool basicinformation write-by-id 21 1234 101 0
+test_tc_cnet_4_22:
+  steps:
+  - command: chip-tool networkcommissioning scan-networks 101 0 --Breadcrumb 1
+    expect: networkingStatus:\s*0
+  - command: chip-tool generalcommissioning read breadcrumb 101 0
+    expect: Breadcrumb:\s*1
+  - command: chip-tool networkcommissioning scan-networks 101 0 --Breadcrumb 2
+    expect: networkingStatus:\s*0
+  - command: chip-tool generalcommissioning read breadcrumb 101 0
+    expect: Breadcrumb:\s*2
+  - command: chip-tool networkcommissioning scan-networks 101 0 --Breadcrumb 3
+    expect: networkingStatus:\s*0
+  - command: chip-tool generalcommissioning read breadcrumb 101 0
+    expect: Breadcrumb:\s*3
+test_tc_cnet_4_06:
+  steps:
+  - command: chip-tool networkcommissioning read networks 101 0
+    extract:
+      thread_net_id: NetworkID:\s*hex:([0-9A-Fa-f]+)
+  - command: chip-tool descriptor read server-list 101 0
+    expect: \b49\b
+  - command: chip-tool networkcommissioning read feature-map 101 0
+    expect: FeatureMap:\s*2
+  - command: chip-tool networkcommissioning add-or-update-thread-network hex:{thread_net_id} 101 0 --Breadcrumb 1
+    expect_status: FAILSAFE_REQUIRED
+  - command: chip-tool networkcommissioning remove-network hex:{thread_net_id} 101 0 --Breadcrumb 1
+    expect_status: FAILSAFE_REQUIRED
+  - command: chip-tool networkcommissioning connect-network hex:{thread_net_id} 101 0 --Breadcrumb 1
+    expect_status: FAILSAFE_REQUIRED
+test_tc_dgthnw_2_01:
+  steps:
+  - command: chip-tool threadnetworkdiagnostics read channel 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read routing-role 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read network-name 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read pan-id 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read extended-pan-id 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read mesh-local-prefix 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read overrun-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read neighbor-table 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read route-table 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read partition-id 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read weighting 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read data-version 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read stable-data-version 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read leader-router-id 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read detached-role-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read child-role-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read router-role-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read leader-role-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read attach-attempt-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read partition-id-change-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read better-partition-attach-attempt-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read parent-change-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read active-timestamp 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read pending-timestamp 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read delay 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read security-policy 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read channel-page0mask 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read operational-dataset-components 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read active-network-faults-list 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_dgthnw_2_02:
+  steps:
+  - command: chip-tool threadnetworkdiagnostics read tx-total-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-unicast-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-broadcast-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-ack-requested-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-acked-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-no-ack-requested-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-data-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-data-poll-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-beacon-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-beacon-request-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-other-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-retry-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-direct-max-retry-expiry-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-indirect-max-retry-expiry-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-err-cca-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-err-abort-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read tx-err-busy-channel-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_dgthnw_2_03:
+  steps:
+  - command: chip-tool threadnetworkdiagnostics read rx-total-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-unicast-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-broadcast-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-data-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-data-poll-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-beacon-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-beacon-request-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-other-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-address-filtered-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-dest-addr-filtered-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-duplicated-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-no-frame-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-unknown-neighbor-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-invalid-src-addr-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-sec-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-fcs-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read rx-err-other-count 101 0
+    expect: status = 0x00 \(SUCCESS\)
+test_tc_dgthnw_2_04:
+  steps:
+  - command: chip-tool threadnetworkdiagnostics reset-counts 101 0
+    expect: status = 0x00 \(SUCCESS\)
+  - command: chip-tool threadnetworkdiagnostics read overrun-count 101 0
+    expect: 'OverrunCount:'
