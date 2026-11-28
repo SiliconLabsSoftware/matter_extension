@@ -35,10 +35,14 @@ also carry the first 7 characters of `renode.commit` so a Renode bump needs no v
 | `vN-runtime-<renode>-linux-x64` | Renode build + test_lib + checkpoint (CI, Linux, WSL2) |
 | `vN-runtime-<renode>-osx-arm64` | Renode build + test_lib + checkpoint (macOS for local development) |
 | `vN-provision` | `matter_support/provision`, python dependencies |
-| `vN-provision-pr-<PR-NUM>` | `matter_support/provision`, python dependencies for a PR that updates `third_party/matter_support` |
+| `<tag>-pr-<PR-NUM>` | Any of the above, built by a PR that changes that bundle's inputs (see [CI](#ci)) |
 
 Checkpoints are tied to the Renode build that created them. Each host runtime
 is built independently from the same common inputs.
+
+`scripts/fetch_bundle.py -p PR-NUM` prefers the `-pr-<PR-NUM>` tag of each bundle and falls
+back to the base tag. Without `-p` only base tags are fetched. PR tags are deleted when the
+PR closes.
 
 ## Local development
 
@@ -134,12 +138,11 @@ options require `--provision`.
 The harness uses the bundle at `renode_integration/out/bundle`.
 
 From the repository root, fetch the bundle with `--require-provision` so a missing
-provisioning image fails immediately. Use `-p PR-NUM` instead for a PR-specific
-provisioning image:
+provisioning image fails immediately. Add `-p PR-NUM` to prefer bundles built by a PR:
 
 ```sh
 python3 renode_integration/scripts/fetch_bundle.py --require-provision
-# Or: python3 renode_integration/scripts/fetch_bundle.py -p PR-NUM
+# Or: python3 renode_integration/scripts/fetch_bundle.py --require-provision -p PR-NUM
 python3 -m pip install -r renode_integration/harness/requirements.txt
 python3 -m pip install --no-deps -e ./renode_integration/out/bundle/test_lib
 ```
@@ -186,12 +189,22 @@ Individual scripts under `scripts/` are for CI and pipeline development,
 
 ## CI
 
-Both workflows are triggered manually via `workflow_dispatch`. Set `publish=true` to push to GHCR.
-
 - [`renode-matter-hub.yaml`](../.github/workflows/renode-matter-hub.yaml): common bundle, then
-  calls `renode-runtime` with the common bundle artifact from the same run.
+  calls `renode-runtime` with the common bundle artifact from the same run. Runs on pull
+  requests and pushes to `main` and `release_*` that change `guest/`
+  or `scripts/build_rootfs_image.py`, and via `workflow_dispatch` with `publish=true`.
+  RCP and chip-tool updates are published by dispatch.
 - [`renode-runtime.yaml`](../.github/workflows/renode-runtime.yaml): runtime only, fetches
-  common from GHCR when dispatched directly. Use for Renode bumps after common is published.
+  common from GHCR when not called by `renode-matter-hub`. Runs on pull requests and pushes
+  that change `sim-manifest.json` or `scripts/build_renode.py`, and via `workflow_dispatch`.
+- [`renode-pr-artifacts-cleanup.yaml`](../.github/workflows/renode-pr-artifacts-cleanup.yaml):
+  deletes the `-pr-<PR-NUM>` tags of every bundle when the PR closes.
+
+Publishing follows `common.publish_tag`: a pull request against an active branch
+(`ACTIVE_BRANCHES` in `scripts/common.py`) publishes `<tag>-pr-<PR-NUM>`, a push or dispatch
+on an active branch publishes the base tag, and any other branch skips publishing.
+CI jobs in the same PR fetch the PR tags only once they are published, rerun them
+after the bundle workflow finishes.
 
 ```
 build-rcps ─────────────┐
@@ -221,11 +234,13 @@ Will be implemented in future PRs.
 ## Updating the bundle
 
 1. Edit `sim-manifest.json`, overlays, or the hub topology in `harness/matter_sim.py`.
-2. Validate with a CI run or targeted script changes on the appropriate runner
-3. Guest or RCP changes: bump `COMMON_VERSION` in `scripts/common.py` and dispatch
-   `renode-matter-hub` with `publish=true`.
-4. Renode changes: update `renode.commit` in `sim-manifest.json` and dispatch
-   `renode-runtime` with `publish=true`.
+2. Guest or RCP changes: bump `COMMON_VERSION` in `scripts/common.py`.
+   Renode changes: update `renode.commit` in `sim-manifest.json`.
+3. Open a PR. The workflows above publish the rebuilt bundles as `-pr-<PR-NUM>` tags,
+   which CI tests in the PR and `fetch_bundle.py -p PR-NUM` pick up. Merging publishes
+   the base tags. A `renode.commit` bump rebuilds only the runtime.
+4. Other changes: dispatch `renode-matter-hub` or `renode-runtime` with `publish=true`
+   on an active branch.
 
 The provisioning bundle is automatically updated with any updates to `third_party/matter_support`. Can also manually update by dispatching `renode-provisioning-artifacts` with `publish=true`.
 

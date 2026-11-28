@@ -1,10 +1,10 @@
-name: Renode Provisioning Artifacts Cleanup
+name: Renode PR Artifacts Cleanup
 
 on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: "Pull request number whose provision-pr GHCR tag should be deleted"
+        description: "Pull request number whose -pr-N GHCR tags should be deleted"
         required: true
         type: string
   pull_request:
@@ -15,8 +15,8 @@ on:
       - release_*
 
 jobs:
-  delete-pr-provision-package:
-    name: Delete PR provision package
+  delete-pr-packages:
+    name: Delete PR bundle packages
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,8 +27,8 @@ jobs:
         with:
           submodules: false
 
-      - name: Delete provision bundle for closed PR
+      - name: Delete bundles for closed PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr_number }}
-        run: ./renode_integration/scripts/delete_provision_pr_package.py
+        run: ./renode_integration/scripts/delete_pr_packages.py

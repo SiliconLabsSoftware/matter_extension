@@ -19,14 +19,31 @@ on:
         required: false
         type: string
         default: ""
+  pull_request:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/sim-manifest.json"
+      - "renode_integration/scripts/build_renode.py"
+  push:
+    branches:
+      - main
+      - release_*
+    paths:
+      - "renode_integration/sim-manifest.json"
+      - "renode_integration/scripts/build_renode.py"
 
 permissions:
   contents: read
   packages: read
 
 concurrency:
-  group: renode-runtime
+  group: renode-runtime-${{ github.ref }}
   cancel-in-progress: false
+
+env:
+  GITHUB_PR_NUMBER: ${{ github.event.pull_request.number }}
 
 jobs:
   build-runtime:
@@ -70,7 +87,7 @@ jobs:
         if: inputs.common_artifact == ''
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u "${{ github.actor }}" --password-stdin
-          ./renode_integration/scripts/fetch_bundle.py
+          ./renode_integration/scripts/fetch_bundle.py ${GITHUB_PR_NUMBER:+-p "$GITHUB_PR_NUMBER"}
 
       - name: Build Renode
         run: |
@@ -107,7 +124,7 @@ jobs:
 
   publish-runtime:
     needs: build-runtime
-    if: inputs.publish
+    if: github.event_name != 'workflow_dispatch' || inputs.publish
     strategy:
       fail-fast: false
       matrix:

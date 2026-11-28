@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """
 @file publish_bundle.py
-@brief Package a common or runtime bundle and push it to GHCR with ORAS.
+@brief Package a common, runtime, or provision bundle and push it to GHCR with ORAS.
+
+Pull requests publish under a -pr-N tag, see common.publish_tag.
 
 Usage:
   publish_bundle.py --bundle common|runtime|provision
@@ -67,7 +69,7 @@ def push(kind):
         common.die(f"bundle archive missing {path}; run prepare first")
     oras = common.require_cmd("oras")
     package = common.manifest_lookup("ghcr.package")
-    tag = common.resolve_provision_tag(is_publish=True) if kind == "provision" else common.artifact_tag(kind)
+    tag = common.publish_tag(kind)
     if tag is None:
         print("Skipping publish: no OCI tag for this branch/event context")
         return
