@@ -388,7 +388,6 @@ extra_files:
   - renode_integration/harness/matter_sim.py
   - renode_integration/harness/requirements.txt
   - renode_integration/harness/smoke_test_checkpoint.py
-  - renode_integration/resc/matter-sim-full.resc
   - renode_integration/resc/matter-sim.resc
   - renode_integration/scripts/assemble_bundle.py
   - renode_integration/scripts/build_rcps.py
@@ -1220,6 +1219,8 @@ extra_files:
   - third_party/matter_sdk/src/app/ReadHandler.cpp
   - third_party/matter_sdk/src/app/ReadHandler.h
   - third_party/matter_sdk/src/app/ReadPrepareParams.h
+  - third_party/matter_sdk/src/app/RequestSession.cpp
+  - third_party/matter_sdk/src/app/RequestSession.h
   - third_party/matter_sdk/src/app/RequiredPrivilege.h
   - third_party/matter_sdk/src/app/SafeAttributePersistenceProvider.cpp
   - third_party/matter_sdk/src/app/SafeAttributePersistenceProvider.h
