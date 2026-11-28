@@ -3,7 +3,7 @@
         "lighting_app": [
             {
                 "boards": ["brd4116a"],
-                "arguments": [""]
+                "arguments": ["--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"]
             }
         ],
         "zigbee_light": [
@@ -11,7 +11,8 @@
                 "boards": ["brd4116a"],
                 "arguments": [
                     "--output_suffix sequential",
-                    "--with_app matter_zigbee_sequential"
+                    "--with_app matter_zigbee_sequential",
+                    "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"
                 ]
             }
         ]

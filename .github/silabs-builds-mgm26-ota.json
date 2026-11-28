@@ -5,7 +5,8 @@
                 "boards": ["brd4351a_a02"],
                 "arguments": [
                     "--output_suffix sequential",
-                    "--with_app matter_zigbee_sequential"
+                    "--with_app matter_zigbee_sequential",
+                    "--without_app matter_shell,matter_qr_code,matter_lcd,matter_thread_cli,matter_default_lcd_config,matter_uart,matter_log_uart"
                 ]
             }
         ]
