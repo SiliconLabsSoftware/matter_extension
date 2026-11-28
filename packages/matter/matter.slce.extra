@@ -771,6 +771,7 @@ extra_files:
   - slc/component/matter-wifi/mbedtls_x509_use_aws.slcc
   - slc/component/matter.slcc
   - slc/config/app/icd/server/ICDServerBuildConfig.h
+  - slc/config/scripts/upgrade_components_to_2.10.0.lua
   - slc/config/scripts/upgrade_components_to_2.6.0.lua
   - slc/config/scripts/upgrade_config_to_2.5.1.lua
   - slc/config/scripts/upgrade_config_to_2.5.2.lua
