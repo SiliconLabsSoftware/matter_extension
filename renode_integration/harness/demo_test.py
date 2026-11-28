@@ -3,7 +3,7 @@
 @file demo_test.py
 @brief Matter Renode demo CLI (CI and local): checkpoint, ELF, demo flow or interactive hub commands.
 
-Entry point for renode-demo-tests: argument parsing and delegation to demo_runner.run_demo.
+Entry point for demo tests, commissioned interactive sessions, and manual provisioning.
 """
 
 from __future__ import annotations
@@ -13,7 +13,6 @@ import sys
 from pathlib import Path
 
 from demo_config import DEMO_APPS, EXTRA_DEMO_APP
-from demo_runner import run_demo
 
 
 def main() -> int:
@@ -39,27 +38,62 @@ def main() -> int:
         action="store_true",
         help="Commission, then open a hub command prompt instead of running demo steps",
     )
+    parser.add_argument(
+        "--provision", action="store_true",
+        help="Open a manual provisioning prompt before commissioning (requires --nvm3-hex)",
+    )
+    parser.add_argument("--nvm3-hex", type=Path, help="Initial NVM3 image for --provision")
+    parser.add_argument("--provision-image", type=Path, help="Override the provisioning disk")
     args = parser.parse_args()
 
-    if args.app is None and not args.interactive:
-        parser.error("specify --app or --interactive")
+    if args.provision:
+        if args.app or args.extra_elf or args.interactive:
+            parser.error("--provision cannot be combined with --app, --extra-elf, or --interactive")
+        if args.nvm3_hex is None:
+            parser.error("--provision requires --nvm3-hex")
+        if not sys.stdin.isatty():
+            parser.error("manual provisioning requires an interactive terminal")
+    elif args.nvm3_hex is not None or args.provision_image is not None:
+        parser.error("--nvm3-hex and --provision-image require --provision")
+    for name in ("nvm3_hex", "provision_image"):
+        value = getattr(args, name)
+        if value is not None:
+            value = value.resolve()
+            if not value.is_file():
+                parser.error(f"--{name.replace('_', '-')}: file not found: {value}")
+            setattr(args, name, value)
+
+    if args.app is None and not args.interactive and not args.provision:
+        parser.error("specify --app, --interactive, or --provision")
 
     matter_elf = args.matter_elf.resolve()
     if not matter_elf.is_file():
-        raise FileNotFoundError(matter_elf)
+        parser.error(f"--matter-elf: file not found: {matter_elf}")
 
     extra_elf: Path | None = None
     if args.extra_elf.strip():
         extra_elf = Path(args.extra_elf).resolve()
         if not extra_elf.is_file():
-            raise FileNotFoundError(extra_elf)
+            parser.error(f"--extra-elf: file not found: {extra_elf}")
     app = args.app
     if app in EXTRA_DEMO_APP and extra_elf is None:
-        raise FileNotFoundError(f"{app} requires --extra-elf ({EXTRA_DEMO_APP[app]})")
+        parser.error(f"{app} requires --extra-elf ({EXTRA_DEMO_APP[app]})")
     elif extra_elf is not None and app not in EXTRA_DEMO_APP:
-        raise FileNotFoundError("--extra-elf requires a dual-device --app")
+        parser.error("--extra-elf requires a dual-device --app")
 
     try:
+        if args.provision:
+            from demo_runner import run_provision
+
+            run_provision(
+                matter_elf, args.nvm3_hex, board=args.board,
+                provision_image=args.provision_image,
+            )
+            print("Provisioning session completed")
+            return 0
+
+        from demo_runner import run_demo
+
         run_demo(
             matter_elf,
             app,
@@ -73,7 +107,7 @@ def main() -> int:
     except KeyboardInterrupt:
         return 130
     except Exception as exc:
-        print(f"Demo session failed: {exc}", file=sys.stderr)
+        print(f"{'Provisioning' if args.provision else 'Demo'} session failed: {exc}", file=sys.stderr)
         return 1
 
 
